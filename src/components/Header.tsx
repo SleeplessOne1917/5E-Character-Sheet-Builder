@@ -21,14 +21,14 @@ const Header = (): JSX.Element => (
       <ul className="flex justify-around items-center list-none">
         <li className="relative">
           <Link href="/create">
-            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4 font-fantasy">
+            <a className="text-heavens-down text-xl lg:text-2xl xl:text-3xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 active:-translate-y-1 focus:-translate-y-1 absolute -bottom-4 font-fantasy">
               Create
             </a>
           </Link>
         </li>
         <li className="relative">
           <Link href="#">
-            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4 whitespace-nowrap font-fantasy">
+            <a className="text-heavens-down text-xl lg:text-2xl xl:text-3xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 active:-translate-y-1 focus:-translate-y-1 absolute -bottom-4 whitespace-nowrap font-fantasy">
               Log In
             </a>
           </Link>
