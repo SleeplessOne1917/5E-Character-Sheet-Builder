@@ -1,7 +1,12 @@
 module.exports = {
   content: ["./src/components/**/*.tsx", "./pages/**/*.tsx"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        fantasy: ["MedievalSharp", "fantasy", "serif"],
+        display: ["Alegreya", "serif"],
+      },
+    },
     colors: {
       transparent: "transparent",
       current: "currentColor",

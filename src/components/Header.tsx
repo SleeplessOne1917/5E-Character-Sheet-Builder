@@ -13,7 +13,7 @@ const Header = (): JSX.Element => (
           />
         </a>
       </Link>
-      <h1 className="text-heavens-down text-lg md:text-3xl xl:text-5xl ml-3">
+      <h1 className="text-heavens-down text-lg md:text-3xl xl:text-5xl ml-3 font-fantasy">
         D&D 5E Character Sheet Builder
       </h1>
     </div>
@@ -21,14 +21,14 @@ const Header = (): JSX.Element => (
       <ul className="flex justify-around items-center list-none">
         <li className="relative">
           <Link href="/create">
-            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4">
+            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4 font-fantasy">
               Create
             </a>
           </Link>
         </li>
         <li className="relative">
           <Link href="#">
-            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4 whitespace-nowrap">
+            <a className="text-heavens-down text-lg lg:text-xl xl:text-2xl hover:text-cantaloupe-800 active:text-cantaloupe-800 focus:text-cantaloupe-800 hover:-translate-y-1 absolute -bottom-4 whitespace-nowrap font-fantasy">
               Log In
             </a>
           </Link>
