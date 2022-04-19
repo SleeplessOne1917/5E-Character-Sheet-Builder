@@ -1,5 +1,6 @@
 import DiceSVG from "./svgs/DiceSVG";
 import Link from "next/link";
+import { MenuIcon } from "@heroicons/react/solid";
 
 const Header = (): JSX.Element => (
   <header className="flex justify-between bg-davey-jones-800 p-2 items-center fixed md:static w-full">
@@ -35,20 +36,7 @@ const Header = (): JSX.Element => (
         </li>
       </ul>
     </nav>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-12 w-12 stroke-heavens-down cursor-pointer md:hidden hover:stroke-cantaloupe-800 active:stroke-cantaloupe-800 focus:stroke-cantaloupe-800"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M4 6h16M4 12h16M4 18h16"
-      />
-    </svg>
+    <MenuIcon className="h-12 w-12 stroke-heavens-down text-heavens-down cursor-pointer md:hidden hover:stroke-cantaloupe-800 active:stroke-cantaloupe-800 focus:stroke-cantaloupe-800" />
   </header>
 );
 
