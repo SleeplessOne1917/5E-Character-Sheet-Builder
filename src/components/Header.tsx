@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MenuIcon } from "@heroicons/react/solid";
 
 const Header = (): JSX.Element => (
-  <header className="flex justify-between bg-davey-jones-800 p-2 items-center fixed md:static w-full">
+  <header className="flex justify-between bg-davey-jones-800 p-2 items-center z-10 w-full">
     <div className="flex justify-between ml-3 items-center">
       <Link href="/">
         <a>

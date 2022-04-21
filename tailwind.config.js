@@ -11,6 +11,7 @@ module.exports = {
       transparent: "transparent",
       current: "currentColor",
       "heavens-down": "#FFFEBD",
+      "heavens-down-semi-trans": "rgba(255, 254, 189, 0.7)",
       cantaloupe: {
         50: "#fef9ed",
         100: "#fdf4dc",
