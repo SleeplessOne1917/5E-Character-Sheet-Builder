@@ -1,0 +1,56 @@
+.main {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.blurb {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--black);
+  background-color: rgba(255, 254, 189, 0.7);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dnd {
+  color: var(--wine-red);
+  font-weight: bold;
+}
+
+.supertext {
+  vertical-align: super;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.cta-link {
+  font-family: var(--font-fantasy);
+  background-color: var(--wine-red);
+  width: fit-content;
+  padding: 0.75rem;
+  color: var(--heaven);
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 0.75rem;
+}
+
+.cta-link:hover {
+  background-color: var(--wine-red-hover);
+}
+
+.cta-link:active {
+  background-color: var(--wine-red-active);
+  transform: translateY(0.25rem);
+}

@@ -1,12 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer components {
-  #__next {
-    @apply h-full w-full flex flex-col;
-  }
 
-  * {
-    @apply box-border;
-  }
+:root {
+  --font-display: Alegreya, serif;
+  --font-fantasy: MedievalSharp, fantasy, serif;
+  --wine-red: #930c10;
+  --wine-red-hover: #9f272a;
+  --wine-red-active: #ab4245;
+  --black: #030303;
+  --heaven: #fffebd;
+  --small: 640px;
+  --medium: 768px;
+  --large: 1024px;
+  --extra-large: 1280px;
+  --double-extra-large: 1536px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#__next {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
