@@ -47,6 +47,9 @@
   justify-content: space-around;
   align-items: center;
   list-style: none;
+}
+
+.navigation-list-item {
   position: relative;
 }
 
@@ -57,6 +60,7 @@
   position: absolute;
   bottom: -1rem;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .navigation-link:hover,
@@ -65,8 +69,8 @@
   color: var(--highlight);
 }
 
-.navigation:hover,
-.navigation:active {
+.navigation-link:hover,
+.navigation-link:active {
   transform: translateY(-0.25rem);
 }
 
@@ -85,7 +89,7 @@
   color: var(--highlight);
 }
 
-@media screen and (min-width: var(--medium)) {
+@media screen and (min-width: 768px) {
   .logo {
     height: 6rem;
     width: 6rem;
@@ -105,14 +109,14 @@
   }
 }
 
-@media screen and (min-width: var(--large)) {
+@media screen and (min-width: 1024px) {
   .navigation-link {
     font-size: 1.5rem;
     line-height: 2rem;
   }
 }
 
-@media screen and (min-width: var(--extra-large)) {
+@media screen and (min-width: 1280px) {
   .brand-text {
     font-size: 3rem;
     line-height: 1;

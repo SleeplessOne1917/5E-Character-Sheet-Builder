@@ -19,12 +19,12 @@ const Header = (): JSX.Element => (
     </div>
     <nav className={classes.navigation}>
       <ul className={classes["navigation-list"]}>
-        <li className="relative">
+        <li className={classes["navigation-list-item"]}>
           <Link href="/create">
             <a className={classes["navigation-link"]}>Create</a>
           </Link>
         </li>
-        <li className="relative">
+        <li className={classes["navigation-list-item"]}>
           <Link href="#">
             <a className={classes["navigation-link"]}>Log In</a>
           </Link>
