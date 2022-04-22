@@ -37,7 +37,7 @@
 }
 
 .navigation {
-  display: hidden;
+  display: none;
   margin-right: 5rem;
   width: 16.666667%;
 }
