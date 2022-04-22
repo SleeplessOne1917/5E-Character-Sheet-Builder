@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 
 import type { AppProps } from "next/app";
-import Header from "../src/components/Header";
+import Header from "../src/components/Header/Header";
 import Image from "next/image";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
