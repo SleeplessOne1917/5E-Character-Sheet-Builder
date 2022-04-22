@@ -9,7 +9,7 @@ const MyDocument = (): JSX.Element => (
       />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Head>
-    <body className="h-screen w-screen">
+    <body>
       <Main />
       <NextScript />
     </body>

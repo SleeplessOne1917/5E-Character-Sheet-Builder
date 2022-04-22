@@ -25,6 +25,11 @@
   box-sizing: border-box;
 }
 
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
 #__next {
   height: 100%;
   width: 100%;
