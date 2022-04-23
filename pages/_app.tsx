@@ -3,8 +3,12 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "../src/components/Header/Header";
 import Image from "next/image";
+import SectionBar from "../src/components/character-creation/SectionBar";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  const { pathname } = useRouter();
+
   return (
     <>
       <Image
@@ -15,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         priority
       />
       <Header />
+      {pathname.includes("create") && <SectionBar />}
       <Component {...pageProps} />
     </>
   );

@@ -1,6 +1,6 @@
-import classes from "./CreateCharacter.module.css";
+import classes from "./Race.module.css";
 
-const CreateCharacter = (): JSX.Element => {
+const Race = (): JSX.Element => {
   return (
     <>
       <main className={classes.main}>
@@ -10,4 +10,4 @@ const CreateCharacter = (): JSX.Element => {
   );
 };
 
-export default CreateCharacter;
+export default Race;
