@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "../src/components/Header/Header";
 import Image from "next/image";
-import SectionBar from "../src/components/character-creation/SectionBar";
+import SectionBar from "../src/components/character-creation/SectionBar/SectionBar";
 import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
