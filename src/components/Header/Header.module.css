@@ -44,7 +44,7 @@
 
 .navigation-list {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   list-style: none;
 }
@@ -64,8 +64,7 @@
 }
 
 .navigation-link:hover,
-.navigation-link:active,
-.navigation:focus {
+.navigation-link:active {
   color: var(--highlight);
 }
 
@@ -83,8 +82,7 @@
 }
 
 .menu-icon:hover,
-.menu-icon:active,
-.menu-icon:focus {
+.menu-icon:active {
   stroke: var(--highlight);
   color: var(--highlight);
 }
@@ -117,6 +115,10 @@
 }
 
 @media screen and (min-width: 1280px) {
+  .navigation {
+    margin-right: 7rem;
+  }
+
   .brand-text {
     font-size: 3rem;
     line-height: 1;
