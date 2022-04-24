@@ -24,7 +24,7 @@
   transition: background-color 0.4s ease-out;
 }
 
-.logo:hover {
+.logo:active {
   background-color: var(--highlight);
 }
 
@@ -62,14 +62,9 @@
   text-decoration: none;
 }
 
-.navigation-link:hover,
-.navigation-link:active {
-  color: var(--highlight);
-}
-
-.navigation-link:hover,
 .navigation-link:active {
   transform: translateY(-0.25rem);
+  color: var(--highlight);
 }
 
 .menu-icon {
@@ -80,10 +75,25 @@
   cursor: pointer;
 }
 
-.menu-icon:hover,
 .menu-icon:active {
   stroke: var(--highlight);
   color: var(--highlight);
+}
+
+@media (hover: hover) {
+  .navigation-link:hover {
+    transform: translateY(-0.25rem);
+    color: var(--highlight);
+  }
+
+  .logo:hover {
+    background-color: var(--highlight);
+  }
+
+  .menu-icon:hover {
+  stroke: var(--highlight);
+  color: var(--highlight);
+}
 }
 
 @media screen and (min-width: 768px) {
