@@ -1,4 +1,3 @@
-import DiceSVG from '../svgs/DiceSVG';
 import Link from 'next/link';
 import { MenuIcon } from '@heroicons/react/solid';
 import classes from './Header.module.css';
@@ -8,11 +7,9 @@ const Header = (): JSX.Element => (
 		<div className={classes['brand-container']}>
 			<Link href="/">
 				<a>
-					<DiceSVG
-						backgroundClass={classes['logo-background']}
-						foregroundClass={classes['logo-foreground']}
-						className={classes.logo}
-					/>
+					<svg className={classes.logo}>
+						<use xlinkHref="/Icons.svg#logo" />
+					</svg>
 				</a>
 			</Link>
 			<h1 className={classes['brand-text']}>D&D 5E Character Sheet Builder</h1>
