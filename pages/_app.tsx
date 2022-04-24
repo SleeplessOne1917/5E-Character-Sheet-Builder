@@ -1,14 +1,28 @@
 import '../styles/globals.css';
 
+import { useEffect, useState } from 'react';
+
 import type { AppProps } from 'next/app';
 import Footer from '../src/components/Footer/Footer';
 import Header from '../src/components/Header/Header';
 import Image from 'next/image';
+import MobileNav from '../src/components/MobileNav/MobileNav';
 import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
+import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const { pathname } = useRouter();
+	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+
+	useEffect(() => {
+		if (isMediumOrLarger) {
+			closeMobileNav();
+		}
+	}, [isMediumOrLarger]);
+
+	const closeMobileNav = (): void => setIsMobileNavOpen(false);
 
 	return (
 		<>
@@ -19,9 +33,15 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				className="fixed -z-50"
 				priority
 			/>
-			<Header />
-			{pathname.includes('create') && <SectionBar />}
-			<Component {...pageProps} />
+			<Header
+				onMenuIconClick={() => setIsMobileNavOpen(prevState => !prevState)}
+				onLogoIconClick={closeMobileNav}
+			/>
+			<div className="app">
+				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
+				{pathname.includes('create') && <SectionBar />}
+				<Component {...pageProps} />
+			</div>
 			<Footer />
 		</>
 	);

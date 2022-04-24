@@ -2,6 +2,7 @@ import { TouchEvent, TouchEventHandler, useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import classes from './SectionBar.module.css';
+import useMediaQuery from '../../../hooks/useMediaQuery';
 import { useRouter } from 'next/router';
 
 export enum Section {
@@ -47,9 +48,9 @@ const getClosestToSnapPercent = (n: number): number => {
 const SectionBar = (): JSX.Element => {
 	const [translatePercent, setTranslatePercent] = useState(0);
 	const [x0, setX0] = useState(0);
-	const [isMediumOrLarger, setIsMediumOrLarger] = useState(false);
 	const [selectedSection, setSelectedSection] = useState(Section[0]);
 	const { pathname } = useRouter();
+	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 
 	useEffect(() => {
 		const pathRegex = new RegExp(
@@ -61,14 +62,6 @@ const SectionBar = (): JSX.Element => {
 			setSelectedSection(match[1]);
 		}
 	}, [pathname]);
-
-	useEffect(() => {
-		const mediaQuery = window.matchMedia('(min-width: 768px)');
-		setIsMediumOrLarger(mediaQuery.matches);
-		mediaQuery.addEventListener('change', event =>
-			setIsMediumOrLarger(event.matches)
-		);
-	}, []);
 
 	const calculatePercent = (event: TouchEvent<HTMLUListElement>): number => {
 		const dx = (event.changedTouches[0].clientX - x0) / 700;

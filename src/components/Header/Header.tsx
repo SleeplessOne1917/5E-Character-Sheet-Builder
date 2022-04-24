@@ -1,12 +1,21 @@
 import Link from 'next/link';
 import { MenuIcon } from '@heroicons/react/solid';
+import { MouseEventHandler } from 'react';
 import classes from './Header.module.css';
 
-const Header = (): JSX.Element => (
+type HeaderProps = {
+	onMenuIconClick: MouseEventHandler<SVGSVGElement>;
+	onLogoIconClick: MouseEventHandler<HTMLAnchorElement>;
+};
+
+const Header = ({
+	onMenuIconClick,
+	onLogoIconClick
+}: HeaderProps): JSX.Element => (
 	<header className={classes.header}>
 		<div className={classes['brand-container']}>
 			<Link href="/">
-				<a>
+				<a onClick={onLogoIconClick}>
 					<svg className={classes.logo}>
 						<use xlinkHref="/Icons.svg#logo" />
 					</svg>
@@ -28,7 +37,7 @@ const Header = (): JSX.Element => (
 				</li>
 			</ul>
 		</nav>
-		<MenuIcon className={classes['menu-icon']} />
+		<MenuIcon className={classes['menu-icon']} onClick={onMenuIconClick} />
 	</header>
 );
 
