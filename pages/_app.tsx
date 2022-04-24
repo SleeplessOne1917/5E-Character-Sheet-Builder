@@ -29,6 +29,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 		<>
 			<Head>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<meta httpEquiv="ScreenOrientation" content="autoRotate:disabled" />
+				<link rel="icon" type="image/ico" href="/favicon.ico" />
 			</Head>
 			<Image
 				src="/images/character-sheet-with-dice.jpg"
