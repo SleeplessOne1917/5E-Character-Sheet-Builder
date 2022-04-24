@@ -34,3 +34,8 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+::selection {
+  background-color: var(--highlight-light);
+  color: 	#705555;
+}
