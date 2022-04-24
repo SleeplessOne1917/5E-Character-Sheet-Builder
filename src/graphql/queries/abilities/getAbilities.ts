@@ -1,12 +1,12 @@
-import { gql } from "urql";
+import { gql } from 'urql';
 
 const GET_ABILITIES = gql`
-  query Abilities {
-    abilityScores {
-      index
-      name
-    }
-  }
+	query Abilities {
+		abilityScores {
+			index
+			name
+		}
+	}
 `;
 
 export default GET_ABILITIES;

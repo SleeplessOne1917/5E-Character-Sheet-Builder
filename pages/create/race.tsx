@@ -1,27 +1,27 @@
-import { GetStaticPropsResult, NextPage } from "next";
+import { GetStaticPropsResult, NextPage } from 'next';
 
-import RaceView from "../../src/views/create/race/Race";
-import { SrdItem } from "../../src/types/common";
-import { getRaces } from "../../src/graphql/srdClientService";
+import RaceView from '../../src/views/create/race/Race';
+import { SrdItem } from '../../src/types/common';
+import { getRaces } from '../../src/graphql/srdClientService';
 
 type RacePageProps = {
-  races: SrdItem[];
+	races: SrdItem[];
 };
 
 const RacePage: NextPage<RacePageProps> = ({ races }: RacePageProps) => (
-  <RaceView races={races} />
+	<RaceView races={races} />
 );
 
 export default RacePage;
 
 export const getStaticProps = async (): Promise<
-  GetStaticPropsResult<RacePageProps>
+	GetStaticPropsResult<RacePageProps>
 > => {
-  const races: SrdItem[] = await getRaces();
+	const races: SrdItem[] = await getRaces();
 
-  return {
-    props: {
-      races,
-    },
-  };
+	return {
+		props: {
+			races
+		}
+	};
 };

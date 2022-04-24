@@ -1,23 +1,23 @@
-import { GetStaticPropsResult, NextPage } from "next";
+import { GetStaticPropsResult, NextPage } from 'next';
 
-import EquipmentView from "../../src/views/create/equipment/Equipment";
-import { SrdItem } from "../../src/types/common";
-import { getEquipments } from "../../src/graphql/srdClientService";
+import EquipmentView from '../../src/views/create/equipment/Equipment';
+import { SrdItem } from '../../src/types/common';
+import { getEquipments } from '../../src/graphql/srdClientService';
 
 type EquipmentPageProps = {
-  equipments: SrdItem[];
+	equipments: SrdItem[];
 };
 
 const EquipmentPage: NextPage<EquipmentPageProps> = ({
-  equipments,
+	equipments
 }: EquipmentPageProps) => <EquipmentView equipments={equipments} />;
 
 export default EquipmentPage;
 
 export const getStaticProps = async (): Promise<
-  GetStaticPropsResult<EquipmentPageProps>
+	GetStaticPropsResult<EquipmentPageProps>
 > => {
-  const equipments = await getEquipments();
+	const equipments = await getEquipments();
 
-  return { props: { equipments } };
+	return { props: { equipments } };
 };

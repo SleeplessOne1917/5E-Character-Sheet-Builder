@@ -1,23 +1,23 @@
-import { GetStaticPropsResult, NextPage } from "next";
+import { GetStaticPropsResult, NextPage } from 'next';
 
-import ClassView from "../../src/views/create/class/Class";
-import { SrdItem } from "../../src/types/common";
-import { getClasses } from "../../src/graphql/srdClientService";
+import ClassView from '../../src/views/create/class/Class';
+import { SrdItem } from '../../src/types/common';
+import { getClasses } from '../../src/graphql/srdClientService';
 
 type ClassPageProps = {
-  classes: SrdItem[];
+	classes: SrdItem[];
 };
 
 const ClassPage: NextPage<ClassPageProps> = ({ classes }: ClassPageProps) => (
-  <ClassView classes={classes} />
+	<ClassView classes={classes} />
 );
 
 export default ClassPage;
 
 export const getStaticProps = async (): Promise<
-  GetStaticPropsResult<ClassPageProps>
+	GetStaticPropsResult<ClassPageProps>
 > => {
-  const classes = await getClasses();
+	const classes = await getClasses();
 
-  return { props: { classes } };
+	return { props: { classes } };
 };
