@@ -111,10 +111,7 @@ const SectionBar = (): JSX.Element => {
 								className={`${classes.link}${
 									key === selectedSection ? ` ${classes['link-selected']}` : ''
 								}`}
-								onClick={() => {
-									setSelectedSection(key);
-									setTranslatePercent(snapPercents[index]);
-								}}
+								onClick={() => setTranslatePercent(snapPercents[index])}
 								style={
 									key === selectedSection ? { transform: 'translateY(0)' } : {}
 								}
