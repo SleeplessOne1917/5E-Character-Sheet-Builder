@@ -92,7 +92,7 @@ const SectionBar = (): JSX.Element => {
           .filter((key) => isNaN(Number(key)))
           .map((key, index) => (
             <li key={key}>
-              <Link href={`/create/race#`}>
+              <Link href={`/create/${key}`}>
                 <a
                   className={`${classes.link}${
                     key === selectedSection
