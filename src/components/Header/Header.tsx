@@ -35,6 +35,11 @@ const Header = ({
 						<a className={classes['navigation-link']}>Log In</a>
 					</Link>
 				</li>
+				<li className={classes['navigation-list-item']}>
+					<Link href="#">
+						<a className={classes['navigation-link']}>Sign Up</a>
+					</Link>
+				</li>
 			</ul>
 		</nav>
 		<MenuIcon className={classes['menu-icon']} onClick={onMenuIconClick} />

@@ -27,6 +27,13 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => (
 					</a>
 				</Link>
 			</li>
+			<li>
+				<Link href="#">
+					<a className={classes['nav-link']} onClick={onClickLink}>
+						Sign Up
+					</a>
+				</Link>
+			</li>
 		</ul>
 		<hr className={classes.hr} />
 		<ul className={classes['external-list']}>

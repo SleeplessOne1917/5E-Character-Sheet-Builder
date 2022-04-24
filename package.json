@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
+    "apollo-server-micro": "^3.6.7",
     "autoprefixer": "^10.4.4",
     "graphql": "^16.3.0",
+    "graphql-tools": "^8.2.8",
+    "micro": "^9.3.4",
+    "micro-cors": "^0.1.1",
     "next": "12.1.5",
     "postcss": "^8.4.12",
     "react": "18.0.0",
@@ -19,6 +23,7 @@
     "urql": "^2.2.0"
   },
   "devDependencies": {
+    "@types/micro-cors": "^0.1.2",
     "@types/node": "17.0.24",
     "@types/react": "18.0.5",
     "@types/react-dom": "18.0.1",
