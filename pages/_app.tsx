@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import type { AppProps } from 'next/app';
 import Footer from '../src/components/Footer/Footer';
+import Head from 'next/head';
 import Header from '../src/components/Header/Header';
 import Image from 'next/image';
 import MobileNav from '../src/components/MobileNav/MobileNav';
@@ -26,6 +27,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
 	return (
 		<>
+			<Head>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+			</Head>
 			<Image
 				src="/images/character-sheet-with-dice.jpg"
 				alt="Background image"
