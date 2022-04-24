@@ -59,7 +59,9 @@ const SectionBar = (): JSX.Element => {
 		const match = pathname.match(pathRegex);
 
 		if (match) {
-			setSelectedSection(match[1]);
+			const key = match[1];
+			setSelectedSection(key);
+			setTranslatePercent(snapPercents[Section[key]]);
 		}
 	}, [pathname]);
 
