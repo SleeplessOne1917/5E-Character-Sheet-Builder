@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 
 import type { AppProps } from 'next/app';
+import Footer from '../src/components/Footer/Footer';
 import Header from '../src/components/Header/Header';
 import Image from 'next/image';
 import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 			<Header />
 			{pathname.includes('create') && <SectionBar />}
 			<Component {...pageProps} />
+			<Footer />
 		</>
 	);
 }
