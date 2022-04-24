@@ -2,8 +2,9 @@ import { TouchEvent, TouchEventHandler, useEffect, useState } from "react";
 
 import Link from "next/link";
 import classes from "./SectionBar.module.css";
+import { useRouter } from "next/router";
 
-export enum Sections {
+export enum Section {
   "race",
   "class",
   "abilities",
@@ -11,6 +12,9 @@ export enum Sections {
   "equipment",
   "finish",
 }
+
+const getSections = (): string[] =>
+  Object.keys(Section).filter((key) => isNaN(Number(key)));
 
 const snapPercents = [0, 9, 20, 33, 50, 60];
 
@@ -44,7 +48,19 @@ const SectionBar = (): JSX.Element => {
   const [translatePercent, setTranslatePercent] = useState(0);
   const [x0, setX0] = useState(0);
   const [isMediumOrLarger, setIsMediumOrLarger] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(Sections[0]);
+  const [selectedSection, setSelectedSection] = useState(Section[0]);
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    const pathRegex = new RegExp(
+      String.raw`\/create\/(${getSections().join("|")})`
+    );
+    const match = pathname.match(pathRegex);
+
+    if (match) {
+      setSelectedSection(match[1]);
+    }
+  }, []); //eslint-disable-line
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -88,32 +104,26 @@ const SectionBar = (): JSX.Element => {
         onTouchEnd={handleTouchUp}
         onTouchMove={handleSwipe}
       >
-        {Object.keys(Sections)
-          .filter((key) => isNaN(Number(key)))
-          .map((key, index) => (
-            <li key={key}>
-              <Link href={`/create/${key}`}>
-                <a
-                  className={`${classes.link}${
-                    key === selectedSection
-                      ? ` ${classes["link-selected"]}`
-                      : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedSection(key);
-                    setTranslatePercent(snapPercents[index]);
-                  }}
-                  style={
-                    key === selectedSection
-                      ? { transform: "translateY(0)" }
-                      : {}
-                  }
-                >
-                  {capitalize(key)}
-                </a>
-              </Link>
-            </li>
-          ))}
+        {getSections().map((key, index) => (
+          <li key={key}>
+            <Link href={`/create/${key}`}>
+              <a
+                className={`${classes.link}${
+                  key === selectedSection ? ` ${classes["link-selected"]}` : ""
+                }`}
+                onClick={() => {
+                  setSelectedSection(key);
+                  setTranslatePercent(snapPercents[index]);
+                }}
+                style={
+                  key === selectedSection ? { transform: "translateY(0)" } : {}
+                }
+              >
+                {capitalize(key)}
+              </a>
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
