@@ -60,7 +60,7 @@ const SectionBar = (): JSX.Element => {
 		if (match) {
 			setSelectedSection(match[1]);
 		}
-	}, []); //eslint-disable-line
+	}, [pathname]);
 
 	useEffect(() => {
 		const mediaQuery = window.matchMedia('(min-width: 768px)');
