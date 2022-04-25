@@ -1,8 +1,21 @@
 import { gql } from 'urql';
 
 const typeDefs = gql`
+	input AuthRequest {
+		email: String!
+		password: String!
+	}
+
+	type AuthResponse {
+		email: String!
+	}
+
 	type Query {
 		hello: String!
+	}
+
+	type Mutation {
+		signUp(user: AuthRequest): AuthResponse
 	}
 `;
 

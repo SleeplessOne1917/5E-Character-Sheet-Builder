@@ -1,8 +1,9 @@
+import Mutation from './mutation';
+
 const resolvers = {
+	Mutation,
 	Query: {
-		hello() {
-			return 'Hello GraphQL';
-		}
+		hello: () => 'hello graphql'
 	}
 };
 
