@@ -13,7 +13,7 @@
   background-color: var(--heaven);
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1024px) {
   .content {
     width: 40%;
   }
