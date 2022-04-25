@@ -36,7 +36,7 @@ const Header = ({
 					</Link>
 				</li>
 				<li className={classes['navigation-list-item']}>
-					<Link href="#">
+					<Link href="/sign-up">
 						<a className={classes['navigation-link']}>Sign Up</a>
 					</Link>
 				</li>

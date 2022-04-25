@@ -1,5 +1,5 @@
 import { SrdItem } from '../../../types/common';
-import commonClasses from '../Create.module.css';
+import commonClasses from '../../Views.module.css';
 
 type RaceProps = {
 	races: SrdItem[];

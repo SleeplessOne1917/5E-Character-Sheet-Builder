@@ -28,7 +28,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => (
 				</Link>
 			</li>
 			<li>
-				<Link href="#">
+				<Link href="/sign-up">
 					<a className={classes['nav-link']} onClick={onClickLink}>
 						Sign Up
 					</a>

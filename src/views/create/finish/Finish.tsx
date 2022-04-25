@@ -1,4 +1,4 @@
-import commonClasses from '../Create.module.css';
+import commonClasses from '../../Views.module.css';
 
 const Finish = (): JSX.Element => {
 	return (

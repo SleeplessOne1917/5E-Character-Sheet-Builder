@@ -1,5 +1,5 @@
 import { SrdItem } from '../../../types/common';
-import commonStyles from '../Create.module.css';
+import commonStyles from '../../Views.module.css';
 
 type ClassProps = {
 	classes: SrdItem[];

@@ -11,7 +11,9 @@
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "apollo-server-micro": "^3.6.7",
+    "argon2": "^0.28.5",
     "autoprefixer": "^10.4.4",
+    "formik": "^2.2.9",
     "graphql": "^16.3.0",
     "graphql-tools": "^8.2.8",
     "micro": "^9.3.4",
@@ -20,7 +22,8 @@
     "postcss": "^8.4.12",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "urql": "^2.2.0"
+    "urql": "^2.2.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/micro-cors": "^0.1.2",
