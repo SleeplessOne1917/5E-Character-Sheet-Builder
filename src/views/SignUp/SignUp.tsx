@@ -1,13 +1,16 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 
 import { Formik } from 'formik';
+import SIGN_UP from '../../graphql/mutations/user/signUp';
 import classes from './SignUp.module.css';
 import commonClasses from '../Views.module.css';
 import signUpSchema from '../../yup-schemas/signUpSchema';
+import { useMutation } from 'urql';
 import { useState } from 'react';
 
 const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [signUpResult, signUp] = useMutation(SIGN_UP);
 
 	return (
 		<main className={commonClasses.main}>
@@ -16,9 +19,10 @@ const SignUp = () => {
 				<Formik
 					initialValues={{ email: '', password: '' }}
 					validationSchema={signUpSchema}
-					onSubmit={values => {
-						console.log(`Email: ${values.email}`);
-						console.log(`Password: ${values.password}`);
+					onSubmit={(values, { resetForm }) => {
+						const { email, password } = values;
+						signUp({ user: { email, password } });
+						resetForm();
 					}}
 				>
 					{({
@@ -108,7 +112,11 @@ const SignUp = () => {
 									<div className={classes.error}>{errors.password}</div>
 								)}
 							</div>
-							<button className={classes.submit} disabled={!isSubmitting}>
+							<button
+								className={classes.submit}
+								disabled={isSubmitting}
+								type="submit"
+							>
 								Submit
 							</button>
 						</form>

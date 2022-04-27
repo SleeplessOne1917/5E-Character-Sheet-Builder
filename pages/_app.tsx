@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 
+import { Provider as UrqlProvider, createClient } from 'urql';
 import { useEffect, useState } from 'react';
 
 import type { AppProps } from 'next/app';
@@ -11,6 +12,10 @@ import MobileNav from '../src/components/MobileNav/MobileNav';
 import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
+
+const client = createClient({
+	url: `api/graphql`
+});
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const { pathname } = useRouter();
@@ -26,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const closeMobileNav = (): void => setIsMobileNavOpen(false);
 
 	return (
-		<>
+		<UrqlProvider value={client}>
 			<Head>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta httpEquiv="ScreenOrientation" content="autoRotate:disabled" />
@@ -49,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				<Component {...pageProps} />
 			</div>
 			<Footer />
-		</>
+		</UrqlProvider>
 	);
 }
 
