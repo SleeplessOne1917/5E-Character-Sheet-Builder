@@ -1,14 +1,18 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
+import { ToastShowPayload, show } from '../../redux/features/toast';
 
 import { Formik } from 'formik';
 import SIGN_UP from '../../graphql/mutations/user/signUp';
+import { ToastType } from '../../types/toast';
 import classes from './SignUp.module.css';
 import commonClasses from '../Views.module.css';
 import signUpSchema from '../../yup-schemas/signUpSchema';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import { useState } from 'react';
 
 const SignUp = () => {
+	const dispatch = useAppDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const [signUpResult, signUp] = useMutation(SIGN_UP);
 
@@ -21,7 +25,25 @@ const SignUp = () => {
 					validationSchema={signUpSchema}
 					onSubmit={(values, { resetForm }) => {
 						const { email, password } = values;
-						signUp({ user: { email, password } });
+						signUp({ user: { email, password } }).then(result => {
+							let toast: ToastShowPayload;
+							const closeTimeoutSeconds = 10;
+							if (result.error) {
+								toast = {
+									closeTimeoutSeconds,
+									message: result.error.message,
+									type: ToastType.error
+								};
+							} else {
+								toast = {
+									closeTimeoutSeconds,
+									message: 'Successfully signed up! Logging you in now...',
+									type: ToastType.success
+								};
+							}
+
+							dispatch(show(toast));
+						});
 						resetForm();
 					}}
 				>

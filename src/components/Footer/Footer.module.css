@@ -1,6 +1,6 @@
 .footer {
     background-color: var(--black);
-    height: 7%;
+    height: fit-content;
     justify-content: center;
     align-items: center;
     z-index: 10;

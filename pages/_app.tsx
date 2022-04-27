@@ -9,7 +9,10 @@ import Head from 'next/head';
 import Header from '../src/components/Header/Header';
 import Image from 'next/image';
 import MobileNav from '../src/components/MobileNav/MobileNav';
+import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
+import ToastContainer from '../src/components/Toast/ToastContainer';
+import { store } from '../src/redux/store';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
 
@@ -31,30 +34,33 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const closeMobileNav = (): void => setIsMobileNavOpen(false);
 
 	return (
-		<UrqlProvider value={client}>
-			<Head>
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<meta httpEquiv="ScreenOrientation" content="autoRotate:disabled" />
-				<link rel="icon" type="image/ico" href="/favicon.ico" />
-			</Head>
-			<Image
-				src="/images/character-sheet-with-dice.jpg"
-				alt="Background image"
-				layout="fill"
-				className="fixed -z-50"
-				priority
-			/>
-			<Header
-				onMenuIconClick={() => setIsMobileNavOpen(prevState => !prevState)}
-				onLogoIconClick={closeMobileNav}
-			/>
-			<div className="app">
-				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
-				{pathname.includes('create') && <SectionBar />}
-				<Component {...pageProps} />
-			</div>
-			<Footer />
-		</UrqlProvider>
+		<ReduxProvider store={store}>
+			<UrqlProvider value={client}>
+				<Head>
+					<meta name="viewport" content="width=device-width, initial-scale=1" />
+					<meta httpEquiv="ScreenOrientation" content="autoRotate:disabled" />
+					<link rel="icon" type="image/ico" href="/favicon.ico" />
+				</Head>
+				<Image
+					src="/images/character-sheet-with-dice.jpg"
+					alt="Background image"
+					layout="fill"
+					className="fixed -z-50"
+					priority
+				/>
+				<Header
+					onMenuIconClick={() => setIsMobileNavOpen(prevState => !prevState)}
+					onLogoIconClick={closeMobileNav}
+				/>
+				<div className="app">
+					<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
+					{pathname.includes('create') && <SectionBar />}
+					<Component {...pageProps} />
+					<ToastContainer />
+				</div>
+				<Footer />
+			</UrqlProvider>
+		</ReduxProvider>
 	);
 }
 
