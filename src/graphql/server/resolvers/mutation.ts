@@ -2,6 +2,7 @@ import { ApolloError } from 'apollo-server-micro';
 import User from '../../../db/models/user';
 import { hashPassword } from '../../../services/passwordService';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
+import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
 type UserRequest = {
 	email: string;
@@ -23,7 +24,15 @@ const Mutation = {
 		}
 
 		const hash = await hashPassword(user.password);
-		await User.create({ email: user.email, hash });
+
+		try {
+			await User.create({ email: user.email, hash });
+		} catch (error) {
+			throwErrorWithCustomMessageInProd(
+				error as Error,
+				'Could not add user to database'
+			);
+		}
 
 		return { email: user.email };
 	}
