@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "@reduxjs/toolkit": "^1.8.1",
+    "@urql/exchange-auth": "^0.1.7",
     "apollo-server-micro": "^3.6.7",
     "argon2": "^0.28.5",
     "autoprefixer": "^10.4.4",

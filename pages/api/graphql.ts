@@ -21,7 +21,6 @@ const apolloServer = new ApolloServer({
 		try {
 			email = jwt.verify(token, process.env.JWT_SECRET as string).email;
 		} catch (error) {
-			console.log(error);
 			email = null;
 		}
 

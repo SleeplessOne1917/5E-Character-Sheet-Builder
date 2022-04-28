@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import LOG_IN from '../../../graphql/mutations/user/logIn';
 import { ToastType } from '../../../types/toast';
 import commonClasses from '../../Views.module.css';
+import { fetchLoggedInEmail } from '../../../redux/features/viewer';
 import logInClasses from '../LogInSignUp.module.css';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -41,6 +42,7 @@ const LogIn = (): JSX.Element => {
 									'5etoken',
 									'Bearer ' + result.data.logIn.token
 								);
+								dispatch(fetchLoggedInEmail());
 								router.replace('/');
 							}
 						});

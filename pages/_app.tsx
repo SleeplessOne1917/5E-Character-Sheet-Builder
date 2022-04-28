@@ -1,7 +1,6 @@
 import '../styles/globals.css';
 
-import { Provider as UrqlProvider, createClient } from 'urql';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { AppProps } from 'next/app';
 import Footer from '../src/components/Footer/Footer';
@@ -12,24 +11,32 @@ import MobileNav from '../src/components/MobileNav/MobileNav';
 import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
 import ToastContainer from '../src/components/Toast/ToastContainer';
+import { Provider as UrqlProvider } from 'urql';
+import client from '../src/graphql/client';
 import { store } from '../src/redux/store';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
-
-const client = createClient({
-	url: `api/graphql`
-});
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const { pathname } = useRouter();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 
+	const closeMobileNav = useCallback(
+		() => setIsMobileNavOpen(false),
+		[setIsMobileNavOpen]
+	);
+
+	const toggleMobileNav = useCallback(
+		() => setIsMobileNavOpen(prevState => !prevState),
+		[setIsMobileNavOpen]
+	);
+
 	useEffect(() => {
 		if (isMediumOrLarger) {
 			closeMobileNav();
 		}
-	}, [isMediumOrLarger]);
+	}, [isMediumOrLarger, closeMobileNav]);
 
 	useEffect(() => {
 		let resizeTimer: NodeJS.Timeout;
@@ -52,8 +59,6 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 		};
 	}, []);
 
-	const closeMobileNav = (): void => setIsMobileNavOpen(false);
-
 	return (
 		<ReduxProvider store={store}>
 			<UrqlProvider value={client}>
@@ -70,7 +75,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 					priority
 				/>
 				<Header
-					onMenuIconClick={() => setIsMobileNavOpen(prevState => !prevState)}
+					onMenuIconClick={toggleMobileNav}
 					onLogoIconClick={closeMobileNav}
 				/>
 				<div className="app">
