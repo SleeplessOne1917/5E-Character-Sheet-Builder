@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEventHandler, ReactNode, memo } from 'react';
 
 import classes from './Button.module.css';
 
@@ -25,4 +25,4 @@ const Button = ({ disabled, type, onClick, children }: ButtonProps) => (
 	</button>
 );
 
-export default Button;
+export default memo(Button);

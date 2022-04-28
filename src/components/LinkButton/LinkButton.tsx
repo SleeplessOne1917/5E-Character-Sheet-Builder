@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEventHandler, ReactNode, memo } from 'react';
 
 import Link from 'next/link';
 import classes from './LinkButton.module.css';
@@ -21,4 +21,4 @@ LinkButton.defaultProps = {
 	onClick: () => {}
 };
 
-export default LinkButton;
+export default memo(LinkButton);

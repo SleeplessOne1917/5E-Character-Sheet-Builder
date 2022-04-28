@@ -31,6 +31,27 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 		}
 	}, [isMediumOrLarger]);
 
+	useEffect(() => {
+		let resizeTimer: NodeJS.Timeout;
+		const resizeListener = () => {
+			document.body.classList.add('resize-animation-stopper');
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(
+				() => document.body.classList.remove('resize-animation-stopper'),
+				400
+			);
+		};
+
+		window.addEventListener('resize', resizeListener);
+
+		return () => {
+			if (resizeTimer) {
+				clearTimeout(resizeTimer);
+			}
+			window.removeEventListener('resize', resizeListener);
+		};
+	}, []);
+
 	const closeMobileNav = (): void => setIsMobileNavOpen(false);
 
 	return (
