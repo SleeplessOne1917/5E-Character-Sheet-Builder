@@ -1,9 +1,9 @@
 import { gql } from 'urql';
 
 const SIGN_UP = gql`
-	mutation SignUp($user: AuthRequest) {
+	mutation SignUp($user: AuthRequest!) {
 		signUp(user: $user) {
-			email
+			token
 		}
 	}
 `;

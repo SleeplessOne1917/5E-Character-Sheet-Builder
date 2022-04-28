@@ -10,12 +10,14 @@ import logInClasses from '../LogInSignUp.module.css';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const SignUp = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const [signUpResult, signUp] = useMutation(SIGN_UP);
+	const router = useRouter();
 
 	return (
 		<main className={commonClasses.main}>
@@ -41,6 +43,11 @@ const SignUp = (): JSX.Element => {
 									message: 'Successfully signed up! Logging you in now...',
 									type: ToastType.success
 								};
+								localStorage.setItem(
+									'5etoken',
+									'Bearer ' + result.data.signUp.token
+								);
+								router.replace('/');
 							}
 
 							dispatch(show(toast));

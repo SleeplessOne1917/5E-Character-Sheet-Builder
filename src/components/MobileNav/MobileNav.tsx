@@ -20,7 +20,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => (
 				</LinkButton>
 			</li>
 			<li>
-				<LinkButton href="#" onClick={onClickLink}>
+				<LinkButton href="/log-in" onClick={onClickLink}>
 					Log In
 				</LinkButton>
 			</li>

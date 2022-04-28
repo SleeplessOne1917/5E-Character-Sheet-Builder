@@ -7,7 +7,7 @@ const typeDefs = gql`
 	}
 
 	type AuthResponse {
-		email: String!
+		token: String!
 	}
 
 	type Query {
@@ -15,7 +15,8 @@ const typeDefs = gql`
 	}
 
 	type Mutation {
-		signUp(user: AuthRequest): AuthResponse
+		signUp(user: AuthRequest!): AuthResponse!
+		logIn(user: AuthRequest!): AuthResponse!
 	}
 `;
 

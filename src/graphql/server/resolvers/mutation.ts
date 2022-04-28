@@ -1,6 +1,12 @@
+import {
+	hashPassword,
+	verifyPassword
+} from '../../../services/passwordService';
+
 import { ApolloError } from 'apollo-server-micro';
 import User from '../../../db/models/user';
-import { hashPassword } from '../../../services/passwordService';
+import jwt from 'jsonwebtoken';
+import logInSchema from '../../../yup-schemas/logInSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
@@ -9,12 +15,12 @@ type UserRequest = {
 	password: string;
 };
 
-type SignUpArgs = {
+type AuthArgs = {
 	user: UserRequest;
 };
 
 const Mutation = {
-	signUp: async (parent, args: SignUpArgs) => {
+	signUp: async (parent, args: AuthArgs) => {
 		const { user } = args;
 		await signUpSchema.validate(user);
 
@@ -34,7 +40,34 @@ const Mutation = {
 			);
 		}
 
-		return { email: user.email };
+		const token = jwt.sign(
+			{ email: user.email },
+			process.env.JWT_SECRET as string,
+			{
+				expiresIn: '1h'
+			}
+		);
+
+		return { token };
+	},
+	logIn: async (parent, args: AuthArgs) => {
+		const user = args.user;
+		await logInSchema.validate(user);
+
+		const existingUser = await User.findOne({ email: user.email }).lean();
+		if (!(existingUser && verifyPassword(existingUser.hash, user.password))) {
+			throw new ApolloError('Email or password was incorrect');
+		}
+
+		const token = jwt.sign(
+			{ email: user.email },
+			process.env.JWT_SECRET as string,
+			{
+				expiresIn: '1h'
+			}
+		);
+
+		return { token };
 	}
 };
 

@@ -3,17 +3,21 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ToastShowPayload, show } from '../../../redux/features/toast';
 
 import { Formik } from 'formik';
+import LOG_IN from '../../../graphql/mutations/user/logIn';
 import { ToastType } from '../../../types/toast';
 import commonClasses from '../../Views.module.css';
 import logInClasses from '../LogInSignUp.module.css';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const LogIn = (): JSX.Element => {
 	const dispatch = useAppDispatch();
+	const [logInResult, logIn] = useMutation(LOG_IN);
 	const [showPassword, setShowPassword] = useState(false);
+	const router = useRouter();
 
 	return (
 		<main className={commonClasses.main}>
@@ -24,6 +28,22 @@ const LogIn = (): JSX.Element => {
 					validationSchema={logInSchema}
 					onSubmit={(values, { resetForm }) => {
 						const { email, password } = values;
+						logIn({ user: { email, password } }).then(result => {
+							if (result.error) {
+								const toast = {
+									closeTimeoutSeconds: 10,
+									message: result.error.message,
+									type: ToastType.error
+								};
+								dispatch(show(toast));
+							} else {
+								localStorage.setItem(
+									'5etoken',
+									'Bearer ' + result.data.logIn.token
+								);
+								router.replace('/');
+							}
+						});
 						resetForm();
 					}}
 				>
