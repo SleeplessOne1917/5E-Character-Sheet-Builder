@@ -1,3 +1,4 @@
+import Button, { ButtonType } from '../../components/Button/Button';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ToastShowPayload, show } from '../../redux/features/toast';
 
@@ -134,13 +135,9 @@ const SignUp = () => {
 									<div className={classes.error}>{errors.password}</div>
 								)}
 							</div>
-							<button
-								className={classes.submit}
-								disabled={isSubmitting}
-								type="submit"
-							>
+							<Button disabled={isSubmitting} type={ButtonType.submit}>
 								Submit
-							</button>
+							</Button>
 						</form>
 					)}
 				</Formik>

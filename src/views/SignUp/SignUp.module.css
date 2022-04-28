@@ -85,23 +85,6 @@
     border: 3px solid var(--wine-red) !important;
 }
 
-.submit {
-    margin-top: 1rem;
-    background-color: var(--wine-red);
-    color: var(--heaven);
-    font-family: var(--font-fantasy);
-    width: fit-content;
-    font-size: 1.3rem;
-    border-radius: 0.75rem;
-    padding: 0.3rem;
-    cursor: pointer;
-}
-
-.submit:active {
-    background-color: var(--wine-red-active);
-    transform: translateY(0.25rem);
-}
-
 .eye {
     width: 1.3rem;
     height: 1.3rem;
@@ -131,12 +114,6 @@
 
     .input-container {
         padding-top: 1.5rem
-    }
-
-    .submit {
-        margin-top: 1.5rem;
-        padding: 0.5rem;
-        font-size: 2rem;
     }
 
     .big-text {
@@ -174,12 +151,6 @@
         font-size: 1.6rem !important;
     }
 
-    .submit {
-        margin-top: 2rem;
-        font-size: 2.5rem;
-        padding: 1rem;
-    }
-
     .error {
         font-size: 1.5rem;
     }
@@ -192,11 +163,7 @@
     }
 }
 
-@media (hover: hover) {
-    .submit:hover {
-        background-color: var(--wine-red-hover);
-    }
-
+@media (hover: hover) and (pointer: fine) {
     .eye:hover {
         fill: var(--highlight)
     }

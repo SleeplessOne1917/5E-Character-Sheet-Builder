@@ -1,0 +1,20 @@
+.link-button {
+    text-decoration: none;
+    font-family: var(--font-fantasy);
+    font-size: 2.2rem;
+    color: var(--heaven);
+    background-color: var(--wine-red);
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    white-space: nowrap;
+}
+
+.link-button:active {
+    background-color: var(--wine-red-active);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .link-button:hover {
+        background-color: var(--wine-red-hover);
+      }
+}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import LinkButton from '../../components/LinkButton/LinkButton';
 import classes from './Home.module.css';
 
 const Home = (): JSX.Element => {
@@ -12,9 +13,7 @@ const Home = (): JSX.Element => {
 					</span>{' '}
 					character sheets with this free and open-source online tool.
 				</p>
-				<Link href="/create">
-					<a className={classes['cta-link']}>Get Started</a>
-				</Link>
+				<LinkButton href="/create">Get Started</LinkButton>
 			</div>
 		</main>
 	);

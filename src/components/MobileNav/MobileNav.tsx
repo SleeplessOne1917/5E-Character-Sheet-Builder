@@ -1,5 +1,6 @@
 import { GITHUB_URL } from '../../routeConstants';
 import Link from 'next/link';
+import LinkButton from '../LinkButton/LinkButton';
 import { MouseEventHandler } from 'react';
 import classes from './MobileNav.module.css';
 
@@ -14,25 +15,19 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => (
 	>
 		<ul className={classes['nav-list']}>
 			<li>
-				<Link href="/create">
-					<a className={classes['nav-link']} onClick={onClickLink}>
-						Create
-					</a>
-				</Link>
+				<LinkButton href="/create" onClick={onClickLink}>
+					Create
+				</LinkButton>
 			</li>
 			<li>
-				<Link href="#">
-					<a className={classes['nav-link']} onClick={onClickLink}>
-						Log In
-					</a>
-				</Link>
+				<LinkButton href="#" onClick={onClickLink}>
+					Log In
+				</LinkButton>
 			</li>
 			<li>
-				<Link href="/sign-up">
-					<a className={classes['nav-link']} onClick={onClickLink}>
-						Sign Up
-					</a>
-				</Link>
+				<LinkButton href="/sign-up" onClick={onClickLink}>
+					Sign Up
+				</LinkButton>
 			</li>
 		</ul>
 		<hr className={classes.hr} />

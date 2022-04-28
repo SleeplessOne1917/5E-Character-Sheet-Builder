@@ -34,24 +34,3 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-
-.cta-link {
-  font-family: var(--font-fantasy);
-  background-color: var(--wine-red);
-  width: fit-content;
-  padding: 0.75rem;
-  color: var(--heaven);
-  font-size: 1.5rem;
-  line-height: 2rem;
-  border-radius: 0.75rem;
-  text-decoration: none;
-}
-
-.cta-link:hover {
-  background-color: var(--wine-red-hover);
-}
-
-.cta-link:active {
-  background-color: var(--wine-red-active);
-  transform: translateY(0.25rem);
-}
