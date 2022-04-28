@@ -10,7 +10,10 @@ import { authExchange } from '@urql/exchange-auth';
 import jwt from 'jsonwebtoken';
 
 const getAuth = async ({ authState }) => {
-	const token = localStorage.getItem('5etoken');
+	let token: string | null | undefined;
+	if (typeof window !== 'undefined') {
+		token = localStorage.getItem('5etoken');
+	}
 
 	if (!authState) {
 		if (token) {
