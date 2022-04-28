@@ -11,7 +11,7 @@ const typeDefs = gql`
 	}
 
 	type Query {
-		hello: String!
+		viewer: String
 	}
 
 	type Mutation {

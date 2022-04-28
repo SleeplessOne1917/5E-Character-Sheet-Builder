@@ -1,10 +1,9 @@
 import Mutation from './mutation';
+import Query from './query';
 
 const resolvers = {
 	Mutation,
-	Query: {
-		hello: () => 'hello graphql'
-	}
+	Query
 };
 
 export default resolvers;
