@@ -14,7 +14,12 @@ type ButtonProps = {
 	children: ReactNode;
 };
 
-const Button = ({ disabled, type, onClick, children }: ButtonProps) => (
+const Button = ({
+	disabled,
+	type,
+	onClick,
+	children
+}: ButtonProps): JSX.Element => (
 	<button
 		className={classes.button}
 		disabled={disabled}

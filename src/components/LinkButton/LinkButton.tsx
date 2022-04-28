@@ -9,7 +9,11 @@ type LinkButtonProps = {
 	children: ReactNode;
 };
 
-const LinkButton = ({ href, onClick, children }: LinkButtonProps) => (
+const LinkButton = ({
+	href,
+	onClick,
+	children
+}: LinkButtonProps): JSX.Element => (
 	<Link href={href}>
 		<a className={classes['link-button']} onClick={onClick}>
 			{children}

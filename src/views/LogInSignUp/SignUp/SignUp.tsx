@@ -1,26 +1,26 @@
-import Button, { ButtonType } from '../../components/Button/Button';
+import Button, { ButtonType } from '../../../components/Button/Button';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
-import { ToastShowPayload, show } from '../../redux/features/toast';
+import { ToastShowPayload, show } from '../../../redux/features/toast';
 
 import { Formik } from 'formik';
-import SIGN_UP from '../../graphql/mutations/user/signUp';
-import { ToastType } from '../../types/toast';
-import classes from './SignUp.module.css';
-import commonClasses from '../Views.module.css';
-import signUpSchema from '../../yup-schemas/signUpSchema';
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import SIGN_UP from '../../../graphql/mutations/user/signUp';
+import { ToastType } from '../../../types/toast';
+import commonClasses from '../../Views.module.css';
+import logInClasses from '../LogInSignUp.module.css';
+import signUpSchema from '../../../yup-schemas/signUpSchema';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import { useState } from 'react';
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const [signUpResult, signUp] = useMutation(SIGN_UP);
 
 	return (
 		<main className={commonClasses.main}>
-			<div className={`${commonClasses.content} ${classes.content}`}>
-				<h1 className={classes['big-text']}>Sign Up</h1>
+			<div className={`${commonClasses.content} ${logInClasses.content}`}>
+				<h1 className={logInClasses['big-text']}>Sign Up</h1>
 				<Formik
 					initialValues={{ email: '', password: '' }}
 					validationSchema={signUpSchema}
@@ -57,14 +57,14 @@ const SignUp = () => {
 						errors,
 						touched
 					}) => (
-						<form onSubmit={handleSubmit} className={classes.form}>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
+						<form onSubmit={handleSubmit} className={logInClasses.form}>
+							<div className={logInClasses['input-and-error-container']}>
+								<div className={logInClasses['input-and-label-container']}>
+									<div className={logInClasses['input-container']}>
 										<input
-											className={`${classes.input}${
+											className={`${logInClasses.input}${
 												touched.email && errors.email
-													? ` ${classes['input-error']}`
+													? ` ${logInClasses['input-error']}`
 													: ''
 											}`}
 											id="email"
@@ -78,9 +78,9 @@ const SignUp = () => {
 									</div>
 									<label
 										htmlFor="email"
-										className={`${classes.label}${
+										className={`${logInClasses.label}${
 											values.email.length > 0
-												? ` ${classes['label-selected']}`
+												? ` ${logInClasses['label-selected']}`
 												: ''
 										}`}
 									>
@@ -88,16 +88,16 @@ const SignUp = () => {
 									</label>
 								</div>
 								{touched.email && errors.email && (
-									<div className={classes.error}>{errors.email}</div>
+									<div className={logInClasses.error}>{errors.email}</div>
 								)}
 							</div>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
+							<div className={logInClasses['input-and-error-container']}>
+								<div className={logInClasses['input-and-label-container']}>
+									<div className={logInClasses['input-container']}>
 										<input
-											className={`${classes.input}${
+											className={`${logInClasses.input}${
 												touched.password && errors.password
-													? ` ${classes['input-error']}`
+													? ` ${logInClasses['input-error']}`
 													: ''
 											}`}
 											id="password"
@@ -110,21 +110,21 @@ const SignUp = () => {
 										/>
 										{showPassword ? (
 											<EyeOffIcon
-												className={classes.eye}
+												className={logInClasses.eye}
 												onClick={() => setShowPassword(false)}
 											/>
 										) : (
 											<EyeIcon
-												className={classes.eye}
+												className={logInClasses.eye}
 												onClick={() => setShowPassword(true)}
 											/>
 										)}
 									</div>
 									<label
 										htmlFor="password"
-										className={`${classes.label}${
+										className={`${logInClasses.label}${
 											values.password.length > 0
-												? ` ${classes['label-selected']}`
+												? ` ${logInClasses['label-selected']}`
 												: ''
 										}`}
 									>
@@ -132,11 +132,11 @@ const SignUp = () => {
 									</label>
 								</div>
 								{touched.password && errors.password && (
-									<div className={classes.error}>{errors.password}</div>
+									<div className={logInClasses.error}>{errors.password}</div>
 								)}
 							</div>
 							<Button disabled={isSubmitting} type={ButtonType.submit}>
-								Submit
+								Sign Up
 							</Button>
 						</form>
 					)}
