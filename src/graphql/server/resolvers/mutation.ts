@@ -7,6 +7,7 @@ import { ApolloError } from 'apollo-server-micro';
 import User from '../../../db/models/user';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
+import nookies from 'nookies';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
@@ -20,7 +21,7 @@ type AuthArgs = {
 };
 
 const Mutation = {
-	signUp: async (parent, args: AuthArgs) => {
+	signUp: async (parent, args: AuthArgs, { res }) => {
 		const { user } = args;
 		await signUpSchema.validate(user);
 
@@ -48,9 +49,17 @@ const Mutation = {
 			}
 		);
 
+		nookies.set({ res }, 'token', token, {
+			httpOnly: true,
+			maxAge: 60 * 60,
+			secure: process.env.NODE_ENV !== 'development',
+			sameSite: 'Strict',
+			path: '/'
+		});
+
 		return { token };
 	},
-	logIn: async (parent, args: AuthArgs) => {
+	logIn: async (parent, args: AuthArgs, { res }) => {
 		const user = args.user;
 		await logInSchema.validate(user);
 
@@ -66,6 +75,14 @@ const Mutation = {
 				expiresIn: '1h'
 			}
 		);
+
+		nookies.set({ res }, 'token', token, {
+			httpOnly: true,
+			maxAge: 60 * 60,
+			secure: process.env.NODE_ENV !== 'development',
+			sameSite: 'Strict',
+			path: '/'
+		});
 
 		return { token };
 	}

@@ -8,9 +8,11 @@ const initialState = null as string | null;
 export const fetchLoggedInEmail = createAsyncThunk<string | null, void>(
 	'viewer/fetchLoggedInEmail',
 	async () => {
-		const result = (await client.query(GET_VIEWER).toPromise()).data.viewer as
-			| string
-			| null;
+		const result = (
+			await client
+				.query(GET_VIEWER, {}, { requestPolicy: 'network-only' })
+				.toPromise()
+		).data.viewer as string | null;
 		return result;
 	}
 );

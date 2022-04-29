@@ -1,21 +1,18 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
 import dbConnect from '../../src/db/dbConnect';
 import jwt from 'jsonwebtoken';
+import nookies from 'nookies';
 import schema from '../../src/graphql/server/schema';
 
 const cors = Cors();
 
 const apolloServer = new ApolloServer({
 	schema,
-	context: ({ req }) => {
-		let token = req.headers.authorization;
-		if (token) {
-			const regexResult = /(?:Bearer )(.*)/.exec(token);
-			if (regexResult && regexResult[1]) {
-				token = regexResult[1];
-			}
-		}
+	context: ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
+		const token = nookies.get({ req }).token;
 
 		let email: string | null;
 		try {
@@ -24,7 +21,7 @@ const apolloServer = new ApolloServer({
 			email = null;
 		}
 
-		return { email };
+		return { email, req, res };
 	}
 });
 

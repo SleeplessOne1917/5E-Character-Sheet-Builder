@@ -38,10 +38,6 @@ const LogIn = (): JSX.Element => {
 								};
 								dispatch(show(toast));
 							} else {
-								localStorage.setItem(
-									'5etoken',
-									'Bearer ' + result.data.logIn.token
-								);
 								dispatch(fetchLoggedInEmail());
 								router.replace('/');
 							}

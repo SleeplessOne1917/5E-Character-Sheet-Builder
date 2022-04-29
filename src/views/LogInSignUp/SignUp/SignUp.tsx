@@ -44,10 +44,6 @@ const SignUp = (): JSX.Element => {
 									message: 'Successfully signed up! Logging you in now...',
 									type: ToastType.success
 								};
-								localStorage.setItem(
-									'5etoken',
-									'Bearer ' + result.data.signUp.token
-								);
 								dispatch(fetchLoggedInEmail());
 								router.replace('/');
 							}
