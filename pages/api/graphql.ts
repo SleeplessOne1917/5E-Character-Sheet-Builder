@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { ApolloContext } from '../../src/types/apollo';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
 import dbConnect from '../../src/db/dbConnect';
@@ -11,7 +12,13 @@ const cors = Cors();
 
 const apolloServer = new ApolloServer({
 	schema,
-	context: ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
+	context: ({
+		req,
+		res
+	}: {
+		req: NextApiRequest;
+		res: NextApiResponse;
+	}): ApolloContext => {
 		const token = nookies.get({ req }).token;
 
 		let email: string | null;

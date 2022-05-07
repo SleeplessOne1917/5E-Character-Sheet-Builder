@@ -1,5 +1,7 @@
+import { ApolloContext } from './../../../types/apollo';
+
 const Query = {
-	viewer: async (parent, args, { email }) => email
+	viewer: async (parent, args, { email }: ApolloContext) => email
 };
 
 export default Query;

@@ -3,6 +3,7 @@ import {
 	verifyPassword
 } from '../../../services/passwordService';
 
+import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import User from '../../../db/models/user';
 import jwt from 'jsonwebtoken';
@@ -21,7 +22,7 @@ type AuthArgs = {
 };
 
 const Mutation = {
-	signUp: async (parent, args: AuthArgs, { res }) => {
+	signUp: async (parent, args: AuthArgs, { res }: ApolloContext) => {
 		const { user } = args;
 		await signUpSchema.validate(user);
 
@@ -59,7 +60,7 @@ const Mutation = {
 
 		return { token };
 	},
-	logIn: async (parent, args: AuthArgs, { res }) => {
+	logIn: async (parent, args: AuthArgs, { res }: ApolloContext) => {
 		const user = args.user;
 		await logInSchema.validate(user);
 
