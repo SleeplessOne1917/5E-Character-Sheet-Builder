@@ -66,13 +66,13 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 				<div className={classes.component}>
 					<div className={classes.label}>Other Modifier</div>
 					<div className={classes.value}>
-						<input type="number" placeholder="--" />
+						<input type="number" placeholder="&mdash;" />
 					</div>
 				</div>
 				<div className={classes.component}>
 					<div className={classes.label}>Override Score</div>
 					<div className={classes.value}>
-						<input type="number" placeholder="--" />
+						<input type="number" placeholder="&mdash;" />
 					</div>
 				</div>
 			</div>
