@@ -58,4 +58,14 @@
         width: 30%;
         margin: 1rem;
     }
+
+    .component {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .component {
+        font-size: 1rem;
+    }
 }
