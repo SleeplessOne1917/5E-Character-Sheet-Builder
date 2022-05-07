@@ -3,6 +3,7 @@ import LinkButton from '../LinkButton/LinkButton';
 import { MouseEventHandler } from 'react';
 import classes from './MobileNav.module.css';
 import { useAppSelector } from '../../hooks/reduxHooks';
+import useLogout from '../../hooks/useLogout';
 
 type MobileNavProps = {
 	isOpen: boolean;
@@ -11,6 +12,7 @@ type MobileNavProps = {
 
 const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 	const viewer = useAppSelector(state => state.viewer);
+	const logout = useLogout();
 
 	return (
 		<nav
@@ -35,6 +37,13 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 							</LinkButton>
 						</li>
 					</>
+				)}
+				{viewer && (
+					<li>
+						<LinkButton href="#" onClick={logout}>
+							Log Out
+						</LinkButton>
+					</li>
 				)}
 			</ul>
 			<hr className={classes.hr} />

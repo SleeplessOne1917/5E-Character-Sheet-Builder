@@ -86,6 +86,16 @@ const Mutation = {
 		});
 
 		return { token };
+	},
+	logOut: async (parent, args, { res, email }: ApolloContext) => {
+		if (email) {
+			nookies.destroy({ res }, 'token', {
+				path: '/'
+			});
+			return email;
+		} else {
+			return null;
+		}
 	}
 };
 

@@ -3,6 +3,7 @@ import { MenuIcon } from '@heroicons/react/solid';
 import { MouseEventHandler } from 'react';
 import classes from './Header.module.css';
 import { useAppSelector } from '../../hooks/reduxHooks';
+import useLogout from '../../hooks/useLogout';
 
 type HeaderProps = {
 	onMenuIconClick: MouseEventHandler<SVGSVGElement>;
@@ -14,6 +15,7 @@ const Header = ({
 	onLogoIconClick
 }: HeaderProps): JSX.Element => {
 	const viewer = useAppSelector(state => state.viewer);
+	const logout = useLogout();
 
 	return (
 		<header className={classes.header}>
@@ -49,6 +51,15 @@ const Header = ({
 								</Link>
 							</li>
 						</>
+					)}
+					{viewer && (
+						<li className={classes['navigation-list-item']}>
+							<Link href="#">
+								<a className={classes['navigation-link']} onClick={logout}>
+									Log Out
+								</a>
+							</Link>
+						</li>
 					)}
 				</ul>
 			</nav>

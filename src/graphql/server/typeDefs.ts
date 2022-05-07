@@ -17,6 +17,7 @@ const typeDefs = gql`
 	type Mutation {
 		signUp(user: AuthRequest!): AuthResponse!
 		logIn(user: AuthRequest!): AuthResponse!
+		logOut: String
 	}
 `;
 
