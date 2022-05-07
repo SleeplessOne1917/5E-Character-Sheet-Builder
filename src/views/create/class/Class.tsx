@@ -1,4 +1,4 @@
-import { SrdItem } from '../../../types/common';
+import { SrdItem } from '../../../types/srd';
 import commonStyles from '../../Views.module.css';
 
 type ClassProps = {

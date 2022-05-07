@@ -1,7 +1,7 @@
 import { GetStaticPropsResult, NextPage } from 'next';
 
 import ClassView from '../../src/views/create/class/Class';
-import { SrdItem } from '../../src/types/common';
+import { SrdItem } from '../../src/types/srd';
 import { getClasses } from '../../src/graphql/srdClientService';
 
 type ClassPageProps = {

@@ -4,7 +4,7 @@ const GET_ABILITIES = gql`
 	query Abilities {
 		abilityScores {
 			index
-			name
+			full_name
 		}
 	}
 `;

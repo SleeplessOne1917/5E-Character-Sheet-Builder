@@ -1,19 +1,25 @@
-import { SrdItem } from '../../../types/common';
+import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
+import { AbilityItem } from '../../../types/srd';
+import abilitiesClasses from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
 
 type AbilitiesProps = {
-	abilities: SrdItem[];
+	abilities: AbilityItem[];
 };
 
 const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	return (
 		<main className={commonClasses.main}>
 			<div className={commonClasses.content}>
-				<ul>
+				<div className={abilitiesClasses['calculations-container']}>
 					{abilities.map(ability => (
-						<li key={ability.index}>{ability.name}</li>
+						<AbilityCalculation
+							key={ability.index}
+							index={ability.index}
+							name={ability.full_name}
+						/>
 					))}
-				</ul>
+				</div>
 			</div>
 		</main>
 	);

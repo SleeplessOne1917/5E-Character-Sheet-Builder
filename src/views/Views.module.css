@@ -11,6 +11,8 @@
   height: 100%;
   width: 65%;
   background-color: var(--heaven);
+  font-family: var(--font-display);
+  padding: 1rem;
 }
 
 @media screen and (min-width: 1024px) {

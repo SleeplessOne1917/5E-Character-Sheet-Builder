@@ -1,4 +1,4 @@
-import { SrdItem } from '../../../types/common';
+import { SrdItem } from '../../../types/srd';
 import commonClasses from '../../Views.module.css';
 
 type RaceProps = {

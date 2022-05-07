@@ -84,9 +84,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				onMenuIconClick={toggleMobileNav}
 				onLogoIconClick={closeMobileNav}
 			/>
+			{pathname.includes('create') && <SectionBar />}
 			<div className="app">
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
-				{pathname.includes('create') && <SectionBar />}
 				<Component {...pageProps} />
 				<ToastContainer />
 			</div>
