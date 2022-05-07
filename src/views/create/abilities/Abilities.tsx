@@ -31,11 +31,23 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						value={generationMethod}
 						onChange={handleGenerationMethodChange}
 					>
-						<option value="roll">Manual/Rolled</option>
+						<option value="manual">Manual</option>
+						<option value="roll">Roll</option>
 						<option value="point-buy">Point Buy</option>
 						<option value="array">Standard Array</option>
 					</select>
 				</div>
+				{generationMethod === 'manual' && (
+					<div className={classes['manual-scores']}>
+						{abilities.map(ability => (
+							<div key={ability.index} className={classes['manual-score']}>
+								<h3>{ability.full_name}</h3>
+								<input type="text" />
+								<h4>Total: 10</h4>
+							</div>
+						))}
+					</div>
+				)}
 				{generationMethod === 'roll' && 'Roll'}
 				{generationMethod === 'point-buy' && 'Point Buy'}
 				{generationMethod === 'array' && 'Standard Array'}

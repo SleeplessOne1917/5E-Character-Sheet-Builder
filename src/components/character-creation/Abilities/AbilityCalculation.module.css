@@ -56,7 +56,7 @@
 @media screen and (min-width: 768px) {
     .calculation {
         width: 30%;
-        margin: 1rem;
+        margin: 0.6rem;
     }
 
     .component {
