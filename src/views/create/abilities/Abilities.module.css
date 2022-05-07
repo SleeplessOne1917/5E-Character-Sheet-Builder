@@ -32,6 +32,7 @@
 .manual-scores {
     display: flex;
     flex-wrap: wrap;
+    align-self: center;
 }
 
 .manual-score {
@@ -47,6 +48,8 @@
     width: 100%;
     height: 2rem;
     font-family: inherit;
+    border: 1px solid var(--davy);
+    background-color: var(--heaven-light);
 }
 
 .manual-score input:focus {
