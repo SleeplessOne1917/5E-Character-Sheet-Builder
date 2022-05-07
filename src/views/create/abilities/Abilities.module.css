@@ -2,6 +2,32 @@
     display: block;
 }
 
+.title {
+    font-family: var(--font-fantasy);
+    color: var(--davy);
+}
+
+.generation-control {
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+.generation-control label {
+    margin-right: 0.5rem;
+}
+
+.generation-control select {
+    width: 10rem;
+    font-family: inherit;
+    font-size: inherit;
+    background-color: var(--heaven-light);
+    border-radius: 0.5rem;
+}
+
+.generation-control select:focus {
+    outline: 2px solid var(--highlight);
+}
+
 @media screen and (min-width: 768px) {
     .calculations-container {
         display: flex;

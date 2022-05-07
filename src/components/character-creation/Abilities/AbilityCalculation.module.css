@@ -25,7 +25,7 @@
 
 .calculation-component {
     border: 1px solid var(--davy);
-    background-color: #fffee9;
+    background-color: var(--heaven-light);
 }
 
 .label {
