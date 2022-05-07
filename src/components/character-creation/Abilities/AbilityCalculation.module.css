@@ -25,12 +25,14 @@
 
 .calculation-component {
     border: 1px solid var(--davy);
+    background-color: #fffee9;
 }
 
 .label {
     display: inline-block;
     width: 70%;
     padding: 0.5rem;
+    background-color: var(--heaven);
 }
 
 .calculation-label {
@@ -39,7 +41,6 @@
 
 .value {
     display: inline-block;
-    background-color: #fffee9;
     width: 30%;
     padding: 0.5rem;
     text-align: center;
