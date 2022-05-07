@@ -56,6 +56,29 @@
     outline: 2px solid var(--highlight);
 }
 
+.roll-groups-toggle {
+    background-color: #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.roll-groups {
+    display: none;
+}
+
+.open {
+    display: block !important;
+}
+
+.roll-chevron {
+    height: 1.5rem;
+    width: 1.5rem;
+    fill: var(--davy);
+}
+
 @media screen and (min-width: 768px) {
     .calculations-container {
         display: flex;

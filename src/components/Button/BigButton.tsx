@@ -1,6 +1,6 @@
 import { MouseEventHandler, ReactNode, memo } from 'react';
 
-import classes from './Button.module.css';
+import classes from './BigButton.module.css';
 
 export enum ButtonType {
 	button = 'button',
@@ -14,7 +14,7 @@ type ButtonProps = {
 	children: ReactNode;
 };
 
-const Button = ({
+const BigButton = ({
 	disabled,
 	type,
 	onClick,
@@ -30,4 +30,4 @@ const Button = ({
 	</button>
 );
 
-export default memo(Button);
+export default memo(BigButton);

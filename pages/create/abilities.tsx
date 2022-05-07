@@ -1,11 +1,11 @@
 import { GetStaticPropsResult, NextPage } from 'next';
 
 import AbilitiesView from '../../src/views/create/abilities/Abilities';
-import { SrdItem } from '../../src/types/srd';
+import { AbilityItem } from '../../src/types/srd';
 import { getAbilities } from '../../src/graphql/srdClientService';
 
 type AbilitiesPageProps = {
-	abilities: SrdItem[];
+	abilities: AbilityItem[];
 };
 
 const AbilitiesPage: NextPage<AbilitiesPageProps> = ({

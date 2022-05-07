@@ -1,7 +1,15 @@
-import { ChangeEventHandler, useCallback, useState } from 'react';
+import {
+	ChangeEventHandler,
+	MouseEventHandler,
+	useCallback,
+	useState
+} from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
+import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
+import SmallButton from '../../../components/Button/SmallButton';
 import classes from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
 
@@ -11,6 +19,7 @@ type AbilitiesProps = {
 
 const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const [generationMethod, setGenerationMethod] = useState('roll');
+	const [showRollGroups, setShowRollGroups] = useState(true);
 
 	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
 		useCallback(
@@ -19,6 +28,11 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 			},
 			[setGenerationMethod]
 		);
+
+	const toggleShowRollGroups: MouseEventHandler<HTMLDivElement> =
+		useCallback(() => {
+			setShowRollGroups(prevState => !prevState);
+		}, [setShowRollGroups]);
 
 	return (
 		<main className={commonClasses.main}>
@@ -48,7 +62,31 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						))}
 					</div>
 				)}
-				{generationMethod === 'roll' && 'Roll'}
+				{generationMethod === 'roll' && (
+					<>
+						<div
+							className={classes['roll-groups-toggle']}
+							onClick={toggleShowRollGroups}
+						>
+							Dice Roll Groups{' '}
+							{showRollGroups ? (
+								<ChevronUpIcon className={classes['roll-chevron']} />
+							) : (
+								<ChevronDownIcon className={classes['roll-chevron']} />
+							)}
+						</div>
+						<div
+							className={`${classes['roll-groups']}${
+								showRollGroups ? ` ${classes.open}` : ''
+							}`}
+						>
+							<SmallButton positive>+ Add Group</SmallButton>
+							<div>
+								<RollGroup abilities={abilities} />
+							</div>
+						</div>
+					</>
+				)}
 				{generationMethod === 'point-buy' && 'Point Buy'}
 				{generationMethod === 'array' && 'Standard Array'}
 				<div className={classes['calculations-container']}>

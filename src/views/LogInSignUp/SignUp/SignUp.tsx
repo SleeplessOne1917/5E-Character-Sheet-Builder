@@ -1,4 +1,4 @@
-import Button, { ButtonType } from '../../../components/Button/Button';
+import BigButton, { ButtonType } from '../../../components/Button/BigButton';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ToastShowPayload, show } from '../../../redux/features/toast';
 
@@ -140,9 +140,9 @@ const SignUp = (): JSX.Element => {
 									<div className={logInClasses.error}>{errors.password}</div>
 								)}
 							</div>
-							<Button disabled={isSubmitting} type={ButtonType.submit}>
+							<BigButton disabled={isSubmitting} type={ButtonType.submit}>
 								Sign Up
-							</Button>
+							</BigButton>
 						</form>
 					)}
 				</Formik>

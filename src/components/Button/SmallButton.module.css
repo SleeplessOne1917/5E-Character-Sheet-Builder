@@ -1,0 +1,17 @@
+.button {
+    font-size: 0.7rem;
+    padding: 0.3rem;
+    color: var(--heaven-light);
+    border: 0;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-family: inherit;
+}
+
+.negative {
+    background-color: var(--wine-red);
+}
+
+.positive {
+    background-color: var(--positive-green);
+}
