@@ -34,7 +34,7 @@
 
 .display-container select {
     margin-top: 0.5rem;
-    width: 60%;
+    width: 100%;
     font-size: 1.5rem;
     font-family: inherit;
 }
