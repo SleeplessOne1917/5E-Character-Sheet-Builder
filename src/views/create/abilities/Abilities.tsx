@@ -8,6 +8,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
+import PointBuy from '../../../components/character-creation/Abilities/PointBuy';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
 import SmallButton from '../../../components/Button/SmallButton';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray';
@@ -37,12 +38,11 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 		}, [setShowRollGroups]);
 
 	const addRollGroup: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
-		const copy = rollGroups.slice();
-		const newGroup = copy[copy.length - 1] + 1;
-		copy.push(newGroup);
-
-		setRollGroups(copy);
-	}, [rollGroups, setRollGroups]);
+		setRollGroups(prevState => [
+			...prevState,
+			prevState[prevState.length - 1] + 1
+		]);
+	}, [setRollGroups]);
 
 	const deleteRollGroup = useCallback(
 		(group: number) => {
@@ -123,7 +123,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						</div>
 					</>
 				)}
-				{generationMethod === 'point-buy' && 'Point Buy'}
+				{generationMethod === 'point-buy' && <PointBuy abilities={abilities} />}
 				{generationMethod === 'array' && (
 					<StandardArray abilities={abilities} />
 				)}

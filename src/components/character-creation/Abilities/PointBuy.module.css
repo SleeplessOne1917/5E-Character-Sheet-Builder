@@ -1,0 +1,67 @@
+.abilities {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+    width: 100%;
+}
+
+.ability {
+    width: 28%;
+    color: var(--davy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.5rem;
+}
+
+.point-adjuster {
+    display: flex;
+    align-items: center;
+}
+
+.point-adjuster h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.icon {
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+}
+
+.minus {
+    fill: var(--wine-red);
+}
+
+.plus {
+    fill: var(--positive-green);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--davy);
+}
+
+.points-remaining {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.points-remaining h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.points-remaining div {
+    font-size: 2rem;;
+}
+
+@media screen and (min-width: 1024px) {
+    .ability {
+        width: 14%;
+    }
+}
