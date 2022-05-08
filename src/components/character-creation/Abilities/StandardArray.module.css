@@ -1,0 +1,28 @@
+.abilities {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+    width: 100%;
+}
+
+.ability {
+    width: 28%;
+    color: var(--davy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.5rem;
+}
+
+.ability select {
+    width: 50%;
+    border: 1px solid var(--davy);
+    font-size: 1.5rem;
+    font-family: inherit;
+}
+
+@media screen and (min-width: 1024px) {
+    .ability {
+        width: 14%;
+    }
+}

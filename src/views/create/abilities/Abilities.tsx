@@ -10,6 +10,7 @@ import AbilityCalculation from '../../../components/character-creation/Abilities
 import { AbilityItem } from '../../../types/srd';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
 import SmallButton from '../../../components/Button/SmallButton';
+import StandardArray from '../../../components/character-creation/Abilities/StandardArray';
 import classes from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
 
@@ -123,7 +124,9 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 					</>
 				)}
 				{generationMethod === 'point-buy' && 'Point Buy'}
-				{generationMethod === 'array' && 'Standard Array'}
+				{generationMethod === 'array' && (
+					<StandardArray abilities={abilities} />
+				)}
 				<div className={classes['calculations-container']}>
 					{abilities.map(ability => (
 						<AbilityCalculation
