@@ -8,6 +8,11 @@
     font-family: inherit;
 }
 
+.button:disabled {
+    background-color: #ddd;
+    color: #555;
+}
+
 .negative {
     background-color: var(--wine-red);
 }

@@ -67,6 +67,7 @@
 
 .roll-groups {
     display: none;
+    margin-top: 1rem;
 }
 
 .open {
@@ -77,6 +78,10 @@
     height: 1.5rem;
     width: 1.5rem;
     fill: var(--davy);
+}
+
+.add-group-container {
+    font-size: 0.8rem;
 }
 
 @media screen and (min-width: 768px) {

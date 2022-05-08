@@ -47,7 +47,7 @@ const RollDisplay = ({
 			<div className={classes['display-container']}>
 				<h2>&mdash;</h2>
 				<SmallButton
-					style={{ padding: '1rem', fontSize: '1rem' }}
+					style={{ padding: '1rem', fontSize: '1.5rem' }}
 					positive
 					onClick={roll}
 				>

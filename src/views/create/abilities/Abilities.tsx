@@ -20,6 +20,7 @@ type AbilitiesProps = {
 const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const [generationMethod, setGenerationMethod] = useState('roll');
 	const [showRollGroups, setShowRollGroups] = useState(true);
+	const [rollGroups, setRollGroups] = useState([1]);
 
 	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
 		useCallback(
@@ -33,6 +34,21 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 		useCallback(() => {
 			setShowRollGroups(prevState => !prevState);
 		}, [setShowRollGroups]);
+
+	const addRollGroup: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+		const copy = rollGroups.slice();
+		const newGroup = copy[copy.length - 1] + 1;
+		copy.push(newGroup);
+
+		setRollGroups(copy);
+	}, [rollGroups, setRollGroups]);
+
+	const deleteRollGroup = useCallback(
+		(group: number) => {
+			setRollGroups(prevState => prevState.filter(g => g !== group));
+		},
+		[setRollGroups]
+	);
 
 	return (
 		<main className={commonClasses.main}>
@@ -80,9 +96,28 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 								showRollGroups ? ` ${classes.open}` : ''
 							}`}
 						>
-							<SmallButton positive>+ Add Group</SmallButton>
+							<div className={classes['add-group-container']}>
+								<SmallButton
+									positive
+									style={{ marginRight: '0.5rem' }}
+									onClick={addRollGroup}
+								>
+									+ Add Group
+								</SmallButton>
+								Groups: {rollGroups.length}
+							</div>
 							<div>
-								<RollGroup abilities={abilities} />
+								{rollGroups.map(group => (
+									<RollGroup
+										abilities={abilities}
+										key={group}
+										onDeleteGroup={
+											rollGroups.length > 1
+												? () => deleteRollGroup(group)
+												: null
+										}
+									/>
+								))}
 							</div>
 						</div>
 					</>

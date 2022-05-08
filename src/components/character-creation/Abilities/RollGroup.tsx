@@ -6,7 +6,7 @@ import SmallButton from '../../Button/SmallButton';
 import classes from './RollGroup.module.css';
 
 type RollGroupProps = {
-	onDeleteGroup?: MouseEventHandler<HTMLButtonElement>;
+	onDeleteGroup?: MouseEventHandler<HTMLButtonElement> | null;
 	onApplyGroup?: MouseEventHandler<HTMLButtonElement>;
 	abilities: AbilityItem[];
 };
@@ -98,10 +98,26 @@ const RollGroup = ({
 				))}
 			</div>
 			<div>
-				<SmallButton onClick={resetGroups} style={{ marginRight: '1rem' }}>
+				<SmallButton
+					onClick={resetGroups}
+					style={{ marginRight: '1rem' }}
+					disabled={
+						!rollInfos.some(info => {
+							if (info.total) {
+								return true;
+							} else {
+								return false;
+							}
+						})
+					}
+				>
 					Reset Group
 				</SmallButton>
-				<SmallButton positive onClick={onApplyGroup}>
+				<SmallButton
+					positive
+					onClick={onApplyGroup}
+					disabled={rollInfos.every(info => info.ability === 'blank')}
+				>
 					Apply Ability Scores
 				</SmallButton>
 			</div>
