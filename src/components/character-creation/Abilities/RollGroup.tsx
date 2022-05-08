@@ -80,9 +80,14 @@ const RollGroup = ({
 				{rollInfos.map((info, index) => (
 					<RollDisplay
 						key={index}
-						abilities={abilities.filter(
-							ability =>
-								!rollInfos.map(rInfo => rInfo.ability).includes(ability.index)
+						abilities={(info.ability === 'blank'
+							? []
+							: abilities.filter(a => a.index === info.ability)
+						).concat(
+							abilities.filter(
+								ability =>
+									!rollInfos.map(rInfo => rInfo.ability).includes(ability.index)
+							)
 						)}
 						roll={() => roll(index)}
 						rolls={info.rolls}

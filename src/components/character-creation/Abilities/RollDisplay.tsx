@@ -1,11 +1,4 @@
-import {
-	ChangeEvent,
-	ChangeEventHandler,
-	MouseEventHandler,
-	memo,
-	useCallback,
-	useState
-} from 'react';
+import { ChangeEventHandler, MouseEventHandler, memo } from 'react';
 
 import { AbilityItem } from '../../../types/srd';
 import SmallButton from '../../Button/SmallButton';
