@@ -8,12 +8,16 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
+import AbilityScores from '../../../types/abilityScores';
+import ManualScores from '../../../components/character-creation/Abilities/ManualScores';
 import PointBuy from '../../../components/character-creation/Abilities/PointBuy';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
 import SmallButton from '../../../components/Button/SmallButton';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray';
 import classes from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
+import { updateBase } from '../../../redux/features/abilityScores';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
@@ -23,13 +27,35 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const [generationMethod, setGenerationMethod] = useState('roll');
 	const [showRollGroups, setShowRollGroups] = useState(true);
 	const [rollGroups, setRollGroups] = useState([1]);
+	const dispatch = useAppDispatch();
 
 	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
 		useCallback(
 			event => {
-				setGenerationMethod(event.target.value);
+				{
+					const value = event.target.value;
+
+					if (value === 'point-buy') {
+						for (const { index } of abilities) {
+							dispatch(
+								updateBase({ value: 8, abilityIndex: index as AbilityScores })
+							);
+						}
+					} else {
+						for (const { index } of abilities) {
+							dispatch(
+								updateBase({
+									value: null,
+									abilityIndex: index as AbilityScores
+								})
+							);
+						}
+					}
+
+					setGenerationMethod(value);
+				}
 			},
-			[setGenerationMethod]
+			[setGenerationMethod, dispatch, abilities]
 		);
 
 	const toggleShowRollGroups: MouseEventHandler<HTMLDivElement> =
@@ -69,15 +95,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 					</select>
 				</div>
 				{generationMethod === 'manual' && (
-					<div className={classes['manual-scores']}>
-						{abilities.map(ability => (
-							<div key={ability.index} className={classes['manual-score']}>
-								<h3>{ability.full_name}</h3>
-								<input type="text" />
-								<h4>Total: 10</h4>
-							</div>
-						))}
-					</div>
+					<ManualScores abilities={abilities} />
 				)}
 				{generationMethod === 'roll' && (
 					<>

@@ -1,11 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import toastReducer from './features/toast';
-import viewerReducer from './features/viewer';
+import { AnyAction, Reducer, configureStore } from '@reduxjs/toolkit';
+import editingCharacter, {
+	EditingCharacterState
+} from './features/editingCharacter';
+
+import toast from './features/toast';
+import viewer from './features/viewer';
 
 export const store = configureStore({
 	reducer: {
-		toast: toastReducer,
-		viewer: viewerReducer
+		toast,
+		viewer,
+		editingCharacter: editingCharacter as Reducer<
+			EditingCharacterState,
+			AnyAction
+		>
 	}
 });
 

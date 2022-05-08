@@ -1,4 +1,19 @@
+import {
+	ChangeEventHandler,
+	FocusEventHandler,
+	useCallback,
+	useState
+} from 'react';
+import {
+	updateOtherBonus,
+	updateOverride
+} from '../../../redux/features/abilityScores';
+
+import AbilityScores from '../../../types/abilityScores';
 import classes from './AbilityCalculation.module.css';
+import { getTotalScore } from '../../../services/abilityScoreService';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
 
 type AbilityCalculationProps = {
 	index: string;
@@ -6,6 +21,75 @@ type AbilityCalculationProps = {
 };
 
 const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
+	const [otherBonus, setOtherBonus] = useState<number | undefined>(undefined);
+	const [overrideScore, setOverrideScore] = useState<number | undefined>(
+		undefined
+	);
+	const dispatch = useAppDispatch();
+	const getAbilityScore = useGetAbilityScore();
+
+	const onChangeOtherBonus: ChangeEventHandler<HTMLInputElement> = useCallback(
+		event => {
+			setOtherBonus(parseInt(event.target.value));
+		},
+		[setOtherBonus]
+	);
+
+	const onBlurOtherBonus: FocusEventHandler<HTMLInputElement> = useCallback(
+		event => {
+			let value: number | null = parseInt(event.target.value);
+
+			if (isNaN(value)) {
+				value = null;
+			} else {
+				if (value < -10) {
+					value = -10;
+				}
+
+				if (value > 10) {
+					value = 10;
+				}
+			}
+
+			setOtherBonus(value ? value : undefined);
+			dispatch(
+				updateOtherBonus({ value, abilityIndex: index as AbilityScores })
+			);
+		},
+		[dispatch, index, setOtherBonus]
+	);
+
+	const onChangeOverrideScore: ChangeEventHandler<HTMLInputElement> =
+		useCallback(
+			event => {
+				setOverrideScore(parseInt(event.target.value));
+			},
+			[setOverrideScore]
+		);
+
+	const onBlurOverrideScore: FocusEventHandler<HTMLInputElement> = useCallback(
+		event => {
+			let value: number | null = parseInt(event.target.value);
+
+			if (isNaN(value)) {
+				value = null;
+			} else {
+				if (value < 3) {
+					value = 3;
+				}
+
+				if (value > 30) {
+					value = 30;
+				}
+			}
+
+			setOverrideScore(value ? value : undefined);
+			dispatch(updateOverride({ value, abilityIndex: index as AbilityScores }));
+		},
+		[dispatch, index, setOverrideScore]
+	);
+
+	const abilityScore = getAbilityScore(index as AbilityScores);
 	return (
 		<div className={classes.calculation}>
 			<div className={classes.header}>
@@ -21,7 +105,9 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Total Score
 					</div>
-					<div className={classes.value}>10</div>
+					<div className={classes.value}>
+						{abilityScore.base ? getTotalScore(abilityScore) : '\u2014'}
+					</div>
 				</div>
 				<div
 					className={`${classes.component} ${classes['calculation-component']}`}
@@ -37,7 +123,9 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Base Score
 					</div>
-					<div className={classes.value}>10</div>
+					<div className={classes.value}>
+						{abilityScore.base ? abilityScore.base : '\u2014'}
+					</div>
 				</div>
 				<div
 					className={`${classes.component} ${classes['calculation-component']}`}
@@ -45,7 +133,9 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Racial Bonus
 					</div>
-					<div className={classes.value}>+0</div>
+					<div className={classes.value}>
+						+{abilityScore.raceBonus ? abilityScore.raceBonus : 0}
+					</div>
 				</div>
 				<div
 					className={`${classes.component} ${classes['calculation-component']}`}
@@ -53,7 +143,12 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Ability Improvements
 					</div>
-					<div className={classes.value}>+0</div>
+					<div className={classes.value}>
+						+
+						{abilityScore.abilityImprovement
+							? abilityScore.abilityImprovement
+							: 0}
+					</div>
 				</div>
 				<div
 					className={`${classes.component} ${classes['calculation-component']}`}
@@ -61,18 +156,38 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Misc Bonus
 					</div>
-					<div className={classes.value}>+0</div>
-				</div>
-				<div className={classes.component}>
-					<div className={classes.label}>Other Modifier</div>
 					<div className={classes.value}>
-						<input type="number" placeholder="&mdash;" />
+						+{abilityScore.miscBonus ? abilityScore.miscBonus : 0}
 					</div>
 				</div>
 				<div className={classes.component}>
-					<div className={classes.label}>Override Score</div>
+					<div className={classes.label}>
+						<label htmlFor={`other-${index}`}>Other Modifier</label>
+					</div>
 					<div className={classes.value}>
-						<input type="number" placeholder="&mdash;" />
+						<input
+							id={`other-${index}`}
+							type="number"
+							placeholder="&mdash;"
+							value={otherBonus}
+							onChange={onChangeOtherBonus}
+							onBlur={onBlurOtherBonus}
+						/>
+					</div>
+				</div>
+				<div className={classes.component}>
+					<div className={classes.label}>
+						<label htmlFor={`override-${index}`}>Override Score</label>
+					</div>
+					<div className={classes.value}>
+						<input
+							id={`override-${index}`}
+							type="number"
+							placeholder="&mdash;"
+							value={overrideScore}
+							onChange={onChangeOverrideScore}
+							onBlur={onBlurOverrideScore}
+						/>
 					</div>
 				</div>
 			</div>

@@ -1,0 +1,37 @@
+.manual-scores {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+}
+
+.manual-score {
+    width: 28%;
+    color: var(--davy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.5rem;
+}
+
+.manual-score input {
+    width: 100%;
+    font-size: 1.5rem;
+    font-family: inherit;
+    border: 1px solid var(--davy);
+    background-color: var(--heaven-light);
+}
+
+.manual-score input:focus {
+    outline: 2px solid var(--highlight);
+}
+
+.manual-score label {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 1024px) {
+    .manual-score {
+        width: 14%;
+    }
+}
