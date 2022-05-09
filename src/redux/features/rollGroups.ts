@@ -36,9 +36,8 @@ const rollGroupsSlice = createSlice({
 	initialState,
 	reducers: {
 		addGroup: state => {
-			const newGroup = parseInt(
-				Object.keys(state)[Object.keys(state).length - 1] + 1
-			);
+			const newGroup =
+				parseInt(Object.keys(state)[Object.keys(state).length - 1]) + 1;
 			state[newGroup] = [{}, {}, {}, {}, {}, {}];
 		},
 		removeGroup: (state, action: PayloadAction<GroupPayload>) => {
