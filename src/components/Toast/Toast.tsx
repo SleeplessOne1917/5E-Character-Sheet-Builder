@@ -73,7 +73,7 @@ const Toast = (): JSX.Element => {
 				<XIcon
 					className={classes['x-icon']}
 					onClick={hideToast}
-					tabIndex={0}
+					tabIndex={isOpen ? 0 : -1}
 					aria-hidden="false"
 					aria-label="Close toast"
 				/>
