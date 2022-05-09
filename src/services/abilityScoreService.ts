@@ -13,5 +13,8 @@ export const getTotalScore = (ability: AbilityScore) => {
 		score = 30;
 	}
 
-	return score;
+	return score as number;
 };
+
+export const calculateModifier = (score: number) =>
+	Math.floor((score - 10) / 2);

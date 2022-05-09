@@ -5,13 +5,16 @@ import {
 	useState
 } from 'react';
 import {
+	calculateModifier,
+	getTotalScore
+} from '../../../services/abilityScoreService';
+import {
 	updateOtherBonus,
 	updateOverride
 } from '../../../redux/features/abilityScores';
 
 import AbilityScores from '../../../types/abilityScores';
 import classes from './AbilityCalculation.module.css';
-import { getTotalScore } from '../../../services/abilityScoreService';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
 
@@ -90,6 +93,9 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 	);
 
 	const abilityScore = getAbilityScore(index as AbilityScores);
+	const modifier = abilityScore.base
+		? calculateModifier(getTotalScore(abilityScore))
+		: null;
 	return (
 		<div className={classes.calculation}>
 			<div className={classes.header}>
@@ -115,7 +121,11 @@ const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Modifier
 					</div>
-					<div className={classes.value}>+0</div>
+					<div className={classes.value}>
+						{modifier !== null
+							? `${modifier < 0 ? '-' : '+'}${Math.abs(modifier)}`
+							: '\u2014'}
+					</div>
 				</div>
 				<div
 					className={`${classes.component} ${classes['calculation-component']}`}
