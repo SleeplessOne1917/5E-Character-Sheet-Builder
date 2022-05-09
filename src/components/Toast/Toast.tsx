@@ -49,7 +49,7 @@ const Toast = (): JSX.Element => {
 	const hideToast = useCallback(() => dispatch(hide()), [dispatch]);
 
 	return (
-		<div className={getClassName()}>
+		<div className={getClassName()} aria-label="toast" role="region">
 			<div className={classes['icon-container']}>
 				{type === ToastType.error ? (
 					<ExclamationCircleIcon
@@ -70,7 +70,13 @@ const Toast = (): JSX.Element => {
 				<p className={classes.message}>{cleanMessage(message)}</p>
 			</div>
 			<div className={classes['x-container']}>
-				<XIcon className={classes['x-icon']} onClick={hideToast} />
+				<XIcon
+					className={classes['x-icon']}
+					onClick={hideToast}
+					tabIndex={0}
+					aria-hidden="false"
+					aria-label="Close toast"
+				/>
 			</div>
 		</div>
 	);

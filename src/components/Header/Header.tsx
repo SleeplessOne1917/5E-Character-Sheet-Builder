@@ -18,10 +18,10 @@ const Header = ({
 	const logout = useLogout();
 
 	return (
-		<header className={classes.header}>
+		<header className={classes.header} aria-label="Header" role="region">
 			<div className={classes['brand-container']}>
 				<Link href="/">
-					<a onClick={onLogoIconClick}>
+					<a onClick={onLogoIconClick} aria-label="Home">
 						<svg className={classes.logo}>
 							<use xlinkHref="/Icons.svg#logo" />
 						</svg>

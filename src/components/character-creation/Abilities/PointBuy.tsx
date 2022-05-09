@@ -95,6 +95,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										onClick={() => subtractScore(indexKey)}
 										tabIndex={0}
 										onKeyUp={event => handleSubtractScoreKeyUp(event, indexKey)}
+										aria-hidden="false"
+										aria-label={`${ability.full_name} minus 1`}
 									/>
 								)}
 								<h1>{abilityScore}</h1>
@@ -106,6 +108,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 											onClick={() => addScore(indexKey)}
 											tabIndex={0}
 											onKeyUp={event => handleAddScoreKeyUp(event, indexKey)}
+											aria-hidden="false"
+											aria-label={`${ability.full_name} plus 1`}
 										/>
 									)}
 							</div>
