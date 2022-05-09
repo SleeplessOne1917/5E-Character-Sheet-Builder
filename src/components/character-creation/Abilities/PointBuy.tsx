@@ -1,5 +1,5 @@
+import { KeyboardEvent, useCallback, useState } from 'react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid';
-import { useCallback, useState } from 'react';
 
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
@@ -34,6 +34,18 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 		[setPoints, dispatch, getAbilityScore]
 	);
 
+	const handleSubtractScoreKeyUp = useCallback(
+		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
+			event.preventDefault();
+			const code = event.code;
+
+			if (code === 'Enter') {
+				subtractScore(abilityIndex);
+			}
+		},
+		[subtractScore]
+	);
+
 	const addScore = useCallback(
 		(abilityIndex: AbilityScores) => {
 			const oldScore = getAbilityScore(abilityIndex).base as number;
@@ -46,6 +58,18 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 			dispatch(updateBase({ value: oldScore + 1, abilityIndex }));
 		},
 		[setPoints, dispatch, getAbilityScore]
+	);
+
+	const handleAddScoreKeyUp = useCallback(
+		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
+			event.preventDefault();
+			const code = event.code;
+
+			if (code === 'Enter') {
+				addScore(abilityIndex);
+			}
+		},
+		[addScore]
 	);
 
 	return (
@@ -69,6 +93,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 									<MinusIcon
 										className={`${classes.icon} ${classes.minus}`}
 										onClick={() => subtractScore(indexKey)}
+										tabIndex={0}
+										onKeyUp={event => handleSubtractScoreKeyUp(event, indexKey)}
 									/>
 								)}
 								<h1>{abilityScore}</h1>
@@ -78,6 +104,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										<PlusIcon
 											className={`${classes.icon} ${classes.plus}`}
 											onClick={() => addScore(indexKey)}
+											tabIndex={0}
+											onKeyUp={event => handleAddScoreKeyUp(event, indexKey)}
 										/>
 									)}
 							</div>

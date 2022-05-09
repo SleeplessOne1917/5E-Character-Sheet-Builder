@@ -24,10 +24,18 @@
     padding: 0;
 }
 
+.point-adjuster label {
+    display: none;
+}
+
 .icon {
     height: 2rem;
     width: 2rem;
     cursor: pointer;
+}
+
+.icon:focus {
+    outline: 2px solid var(--highlight);
 }
 
 .minus {
