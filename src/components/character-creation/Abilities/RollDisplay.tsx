@@ -8,7 +8,7 @@ type RollDisplayProps = {
 	rolls?: number[] | null;
 	abilities: AbilityItem[];
 	roll: MouseEventHandler<HTMLButtonElement>;
-	ability: string;
+	ability?: string | null;
 	total?: number;
 	onSelectAbility: ChangeEventHandler<HTMLSelectElement>;
 };
@@ -32,7 +32,7 @@ const RollDisplay = ({
 						</div>
 					))}
 				</div>
-				<select onChange={onSelectAbility} value={ability}>
+				<select onChange={onSelectAbility} value={ability ? ability : 'blank'}>
 					<option value="blank">&mdash;</option>
 					{abilities.map(a => (
 						<option value={a.index} key={a.index}>

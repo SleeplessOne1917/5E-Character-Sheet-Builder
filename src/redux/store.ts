@@ -3,6 +3,7 @@ import editingCharacter, {
 	EditingCharacterState
 } from './features/editingCharacter';
 
+import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
 
@@ -13,7 +14,8 @@ export const store = configureStore({
 		editingCharacter: editingCharacter as Reducer<
 			EditingCharacterState,
 			AnyAction
-		>
+		>,
+		rollGroups
 	}
 });
 

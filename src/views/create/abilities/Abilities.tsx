@@ -5,6 +5,8 @@ import {
 	useState
 } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { addGroup, removeGroup } from '../../../redux/features/rollGroups';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
@@ -17,7 +19,6 @@ import StandardArray from '../../../components/character-creation/Abilities/Stan
 import classes from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
@@ -26,7 +27,7 @@ type AbilitiesProps = {
 const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const [generationMethod, setGenerationMethod] = useState('roll');
 	const [showRollGroups, setShowRollGroups] = useState(true);
-	const [rollGroups, setRollGroups] = useState([1]);
+	const rollGroups = useAppSelector(state => state.rollGroups);
 	const dispatch = useAppDispatch();
 
 	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
@@ -64,17 +65,14 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 		}, [setShowRollGroups]);
 
 	const addRollGroup: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
-		setRollGroups(prevState => [
-			...prevState,
-			prevState[prevState.length - 1] + 1
-		]);
-	}, [setRollGroups]);
+		dispatch(addGroup());
+	}, [dispatch]);
 
 	const deleteRollGroup = useCallback(
 		(group: number) => {
-			setRollGroups(prevState => prevState.filter(g => g !== group));
+			dispatch(removeGroup({ group }));
 		},
-		[setRollGroups]
+		[dispatch]
 	);
 
 	return (
@@ -123,18 +121,19 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 								>
 									+ Add Group
 								</SmallButton>
-								Groups: {rollGroups.length}
+								Groups: {Object.keys(rollGroups).length}
 							</div>
 							<div>
-								{rollGroups.map(group => (
+								{Object.keys(rollGroups).map(group => (
 									<RollGroup
 										abilities={abilities}
 										key={group}
 										onDeleteGroup={
-											rollGroups.length > 1
-												? () => deleteRollGroup(group)
+											Object.keys(rollGroups).length > 1
+												? () => deleteRollGroup(parseInt(group))
 												: null
 										}
+										group={parseInt(group)}
 									/>
 								))}
 							</div>

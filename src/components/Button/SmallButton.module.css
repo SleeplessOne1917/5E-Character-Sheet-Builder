@@ -11,6 +11,7 @@
 .button:disabled {
     background-color: #ddd;
     color: #555;
+    cursor: auto;
 }
 
 .negative {
