@@ -1,19 +1,32 @@
 import { AbilityScore } from '../redux/features/abilityScores';
 
 export const getTotalScore = (ability: AbilityScore) => {
-	let score = ability.override
-		? ability.override
-		: Object.values(ability).reduce((prev, cur) => prev + (cur ? cur : 0), 0);
+	let score = (
+		ability.override
+			? ability.override
+			: (ability.base || 0) +
+			  (ability.raceBonus || 0) +
+			  (ability.abilityImprovement || 0) +
+			  (ability.miscBonus || 0)
+	) as number;
 
-	if (!ability.override && score && score < 1) {
-		score = 1;
+	if (!ability.override) {
+		if (score > 20) {
+			score = 20;
+		}
+
+		score += ability.otherBonus || 0;
 	}
 
-	if (score && score > 30) {
+	if (score > 30) {
 		score = 30;
 	}
 
-	return score as number;
+	if (score < 1) {
+		score = 1;
+	}
+
+	return score;
 };
 
 export const calculateModifier = (score: number) =>
