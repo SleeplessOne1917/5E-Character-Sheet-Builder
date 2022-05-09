@@ -2,7 +2,12 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/solid';
 import { useCallback, useState } from 'react';
 
 import { AbilityItem } from '../../../types/srd';
+import AbilityScores from '../../../types/abilityScores';
 import classes from './PointBuy.module.css';
+import { getTotalScore } from '../../../services/abilityScoreService';
+import { updateBase } from '../../../redux/features/abilityScores';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
 
 type PointBuyProps = {
 	abilities: AbilityItem[];
@@ -11,43 +16,36 @@ type PointBuyProps = {
 const MAX_POINTS = 27;
 
 const PointBuy = ({ abilities }: PointBuyProps) => {
-	const [abilityScores, setAbilityScores] = useState(
-		abilities.reduce((prev, cur) => ({ ...prev, [cur.index]: 8 }), {})
-	);
+	const getAbilityScore = useGetAbilityScore();
+	const dispatch = useAppDispatch();
 	const [points, setPoints] = useState(MAX_POINTS);
 
 	const subtractScore = useCallback(
-		(abilityIndex: keyof typeof abilityScores) => {
-			const oldScore = abilityScores[abilityIndex];
+		(abilityIndex: AbilityScores) => {
+			const oldScore = getAbilityScore(abilityIndex).base as number;
 			if (oldScore == 15 || oldScore == 14) {
 				setPoints(prevState => prevState + 2);
 			} else {
 				setPoints(prevState => prevState + 1);
 			}
 
-			setAbilityScores(prevState => ({
-				...prevState,
-				[abilityIndex]: oldScore - 1
-			}));
+			dispatch(updateBase({ value: oldScore - 1, abilityIndex }));
 		},
-		[abilityScores, setPoints, setAbilityScores]
+		[setPoints, dispatch, getAbilityScore]
 	);
 
 	const addScore = useCallback(
-		(abilityIndex: keyof typeof abilityScores) => {
-			const oldScore = abilityScores[abilityIndex];
+		(abilityIndex: AbilityScores) => {
+			const oldScore = getAbilityScore(abilityIndex).base as number;
 			if (oldScore == 13 || oldScore == 14) {
 				setPoints(prevState => prevState - 2);
 			} else {
 				setPoints(prevState => prevState - 1);
 			}
 
-			setAbilityScores(prevState => ({
-				...prevState,
-				[abilityIndex]: oldScore + 1
-			}));
+			dispatch(updateBase({ value: oldScore + 1, abilityIndex }));
 		},
-		[abilityScores, setPoints, setAbilityScores]
+		[setPoints, dispatch, getAbilityScore]
 	);
 
 	return (
@@ -60,8 +58,8 @@ const PointBuy = ({ abilities }: PointBuyProps) => {
 			</div>
 			<div className={classes.abilities}>
 				{abilities.map(ability => {
-					const indexKey = ability.index as keyof typeof abilityScores;
-					const abilityScore = abilityScores[indexKey];
+					const indexKey = ability.index as AbilityScores;
+					const abilityScore = getAbilityScore(indexKey).base as number;
 
 					return (
 						<div key={ability.index} className={classes.ability}>
@@ -83,7 +81,7 @@ const PointBuy = ({ abilities }: PointBuyProps) => {
 										/>
 									)}
 							</div>
-							<h4>Total: 10</h4>
+							<h4>Total: {getTotalScore(getAbilityScore(indexKey))}</h4>
 						</div>
 					);
 				})}
