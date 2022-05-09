@@ -20,19 +20,19 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 		>
 			<ul className={classes['nav-list']}>
 				<li>
-					<LinkButton href="/create" onClick={onClickLink}>
+					<LinkButton href="/create" onClick={onClickLink} tabIndex={-1}>
 						Create
 					</LinkButton>
 				</li>
 				{!viewer && (
 					<>
 						<li>
-							<LinkButton href="/log-in" onClick={onClickLink}>
+							<LinkButton href="/log-in" onClick={onClickLink} tabIndex={-1}>
 								Log In
 							</LinkButton>
 						</li>
 						<li>
-							<LinkButton href="/sign-up" onClick={onClickLink}>
+							<LinkButton href="/sign-up" onClick={onClickLink} tabIndex={-1}>
 								Sign Up
 							</LinkButton>
 						</li>
@@ -40,7 +40,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 				)}
 				{viewer && (
 					<li>
-						<LinkButton href="#" onClick={logout}>
+						<LinkButton href="#" onClick={logout} tabIndex={-1}>
 							Log Out
 						</LinkButton>
 					</li>
@@ -53,6 +53,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 						href={GITHUB_URL}
 						className={classes['external-link']}
 						onClick={onClickLink}
+						tabIndex={-1}
 					>
 						<svg className={classes.icon}>
 							<use xlinkHref="/Icons.svg#github" />

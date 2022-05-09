@@ -7,15 +7,21 @@ type LinkButtonProps = {
 	href: string;
 	onClick?: MouseEventHandler<HTMLAnchorElement>;
 	children: ReactNode;
+	tabIndex?: number;
 };
 
 const LinkButton = ({
 	href,
 	onClick,
-	children
+	children,
+	tabIndex
 }: LinkButtonProps): JSX.Element => (
 	<Link href={href}>
-		<a className={classes['link-button']} onClick={onClick}>
+		<a
+			className={classes['link-button']}
+			onClick={onClick}
+			tabIndex={tabIndex ? tabIndex : 0}
+		>
 			{children}
 		</a>
 	</Link>
