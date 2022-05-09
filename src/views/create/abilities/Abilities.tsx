@@ -19,15 +19,16 @@ import StandardArray from '../../../components/character-creation/Abilities/Stan
 import classes from './Abilities.module.css';
 import commonClasses from '../../Views.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
+import { updateGenerationMethod } from '../../../redux/features/generationMethod';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
 };
 
 const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
-	const [generationMethod, setGenerationMethod] = useState('roll');
 	const [showRollGroups, setShowRollGroups] = useState(true);
 	const rollGroups = useAppSelector(state => state.rollGroups);
+	const generationMethod = useAppSelector(state => state.generationMethod);
 	const dispatch = useAppDispatch();
 
 	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
@@ -53,10 +54,10 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						}
 					}
 
-					setGenerationMethod(value);
+					dispatch(updateGenerationMethod({ generationMethod: value }));
 				}
 			},
-			[setGenerationMethod, dispatch, abilities]
+			[dispatch, abilities]
 		);
 
 	const toggleShowRollGroups: MouseEventHandler<HTMLDivElement> =

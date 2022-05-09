@@ -3,6 +3,7 @@ import editingCharacter, {
 	EditingCharacterState
 } from './features/editingCharacter';
 
+import generationMethod from './features/generationMethod';
 import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
@@ -15,7 +16,8 @@ export const store = configureStore({
 			EditingCharacterState,
 			AnyAction
 		>,
-		rollGroups
+		rollGroups,
+		generationMethod
 	}
 });
 
