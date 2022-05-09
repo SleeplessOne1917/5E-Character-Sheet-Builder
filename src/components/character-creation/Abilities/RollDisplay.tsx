@@ -20,7 +20,7 @@ const RollDisplay = ({
 	onSelectAbility,
 	ability,
 	total
-}: RollDisplayProps) => {
+}: RollDisplayProps): JSX.Element => {
 	if (rolls) {
 		return (
 			<div className={classes['display-container']}>

@@ -14,7 +14,7 @@ type StandardArrayProps = {
 	abilities: AbilityItem[];
 };
 
-const StandardArray = ({ abilities }: StandardArrayProps) => {
+const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const getAbilityScore = useGetAbilityScore();
 	const abilityScores = useAppSelector(

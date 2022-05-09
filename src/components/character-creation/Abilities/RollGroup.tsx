@@ -22,7 +22,11 @@ const getRolls = () => [rollD6(), rollD6(), rollD6(), rollD6()];
 const sumRolls = (rolls: number[]) =>
 	rolls.slice(0, 3).reduce((prev, cur) => prev + cur, 0);
 
-const RollGroup = ({ onDeleteGroup, abilities, group }: RollGroupProps) => {
+const RollGroup = ({
+	onDeleteGroup,
+	abilities,
+	group
+}: RollGroupProps): JSX.Element => {
 	const rollInfos = useAppSelector(state => state.rollGroups[group]);
 	const dispatch = useAppDispatch();
 

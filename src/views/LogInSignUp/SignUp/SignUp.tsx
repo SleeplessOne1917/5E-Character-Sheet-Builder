@@ -3,6 +3,7 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ToastShowPayload, show } from '../../../redux/features/toast';
 
 import { Formik } from 'formik';
+import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import SIGN_UP from '../../../graphql/mutations/user/signUp';
 import { ToastType } from '../../../types/toast';
 import commonClasses from '../../Views.module.css';
@@ -136,9 +137,7 @@ const SignUp = (): JSX.Element => {
 										Password
 									</label>
 								</div>
-								{touched.password && errors.password && (
-									<div className={logInClasses.error}>{errors.password}</div>
-								)}
+								<PasswordValidator password={values.password} />
 							</div>
 							<BigButton disabled={isSubmitting} type={ButtonType.submit}>
 								Sign Up

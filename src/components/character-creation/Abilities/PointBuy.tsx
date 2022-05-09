@@ -15,7 +15,7 @@ type PointBuyProps = {
 
 const MAX_POINTS = 27;
 
-const PointBuy = ({ abilities }: PointBuyProps) => {
+const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 	const getAbilityScore = useGetAbilityScore();
 	const dispatch = useAppDispatch();
 	const [points, setPoints] = useState(MAX_POINTS);

@@ -21,7 +21,7 @@ type AbilityScoreStrings = {
 	cha?: string | null;
 };
 
-const ManualScores = ({ abilities }: ManualScoresProps) => {
+const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const getAbilityScore = useGetAbilityScore();
 	const [abilityScoreStrings, setAbilityScoreStrings] =

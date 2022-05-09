@@ -23,7 +23,10 @@ type AbilityCalculationProps = {
 	name: string;
 };
 
-const AbilityCalculation = ({ index, name }: AbilityCalculationProps) => {
+const AbilityCalculation = ({
+	index,
+	name
+}: AbilityCalculationProps): JSX.Element => {
 	const [otherBonus, setOtherBonus] = useState<number | undefined>(undefined);
 	const [overrideScore, setOverrideScore] = useState<number | undefined>(
 		undefined
