@@ -17,6 +17,10 @@
     box-shadow: 0 0.25rem #999;
 }
 
+.button:focus {
+    outline: 5px solid var(--highlight);
+}
+
 @media screen and (min-width: 768px) {
     .button {
         margin-top: 1.5rem;

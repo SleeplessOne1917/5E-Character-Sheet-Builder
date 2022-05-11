@@ -1,5 +1,6 @@
 import BigButton, { ButtonType } from '../../../components/Button/BigButton';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
+import { KeyboardEventHandler, useCallback, useState } from 'react';
 
 import { Formik } from 'formik';
 import LOG_IN from '../../../graphql/mutations/user/logIn';
@@ -12,13 +13,26 @@ import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 const LogIn = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [logInResult, logIn] = useMutation(LOG_IN);
 	const [showPassword, setShowPassword] = useState(false);
 	const router = useRouter();
+
+	const toggleShowPassword = useCallback(() => {
+		setShowPassword(prevState => !prevState);
+	}, [setShowPassword]);
+
+	const toggleShowPasswordKeyUp: KeyboardEventHandler<SVGSVGElement> =
+		useCallback(
+			event => {
+				if (event.code === 'Enter') {
+					toggleShowPassword();
+				}
+			},
+			[toggleShowPassword]
+		);
 
 	return (
 		<main className={commonClasses.main}>
@@ -108,12 +122,20 @@ const LogIn = (): JSX.Element => {
 										{showPassword ? (
 											<EyeOffIcon
 												className={logInClasses.eye}
-												onClick={() => setShowPassword(false)}
+												onClick={toggleShowPassword}
+												onKeyUp={toggleShowPasswordKeyUp}
+												tabIndex={0}
+												aria-hidden="false"
+												aria-label="Hide Password"
 											/>
 										) : (
 											<EyeIcon
 												className={logInClasses.eye}
-												onClick={() => setShowPassword(true)}
+												onClick={toggleShowPassword}
+												onKeyUp={toggleShowPasswordKeyUp}
+												tabIndex={0}
+												aria-hidden="false"
+												aria-label="Show Password"
 											/>
 										)}
 									</div>

@@ -97,8 +97,12 @@
     cursor: pointer;
 }
 
-.eye:active {
+.eye:active, .eye:focus {
     fill: var(--highlight)
+}
+
+.eye:focus {
+    outline: 2px solid var(--highlight);
 }
 
 @media screen and (min-width: 768px) {
