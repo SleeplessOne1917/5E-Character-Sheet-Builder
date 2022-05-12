@@ -1,0 +1,42 @@
+.chevron {
+    height: 3rem;
+    width: 3rem;
+}
+
+.race-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--davy);
+    color: var(--heaven);
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+}
+
+.race-container:focus {
+    outline: 10px solid var(--highlight);
+}
+
+.race-title {
+    font-family: var(--font-fantasy);
+    font-size: 1.5rem;
+}
+
+.race-li {
+    margin: 1rem 0;
+}
+
+.subrace-list {
+    list-style: none;
+}
+
+.subrace-list li {
+    margin: 1rem 0;
+}
+
+@media screen and (min-width: 768px) {
+    .race-title {
+        font-size: 2rem;
+    }
+}

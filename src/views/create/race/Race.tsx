@@ -1,17 +1,28 @@
-import { SrdItem } from '../../../types/srd';
+import { SrdItem, SubraceItem } from '../../../types/srd';
+
+import RaceOption from '../../../components/character-creation/Race/RaceOption';
+import classes from './Race.module.css';
 import commonClasses from '../../Views.module.css';
 
 type RaceProps = {
 	races: SrdItem[];
+	subraces: SubraceItem[];
 };
 
-const Race = ({ races }: RaceProps): JSX.Element => {
+const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	return (
 		<main className={commonClasses.main}>
 			<div className={commonClasses.content}>
-				<ul>
+				<h1 className={classes.title}>Choose Race</h1>
+				<ul className={classes['race-list']}>
 					{races.map(race => (
-						<li key={race.index}>{race.name}</li>
+						<RaceOption
+							race={race}
+							subraces={subraces.filter(
+								subrace => subrace.race.index === race.index
+							)}
+							key={race.index}
+						/>
 					))}
 				</ul>
 			</div>
