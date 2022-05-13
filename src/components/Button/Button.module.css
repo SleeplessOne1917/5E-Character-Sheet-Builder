@@ -20,6 +20,22 @@
     background-color: var(--wine-red);
 }
 
+.negative:hover {
+    background-color: var(--wine-red-hover);
+}
+
+.negative:active {
+    background-color: var(--wine-red-active);
+}
+
 .positive {
     background-color: var(--positive-green);
+}
+
+.positive:hover {
+    background-color: var(--positive-green-hover);
+}
+
+.positive:active {
+    background-color: var(--positive-green-active);
 }

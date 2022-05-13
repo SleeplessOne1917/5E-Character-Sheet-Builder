@@ -3,7 +3,7 @@
   --font-fantasy: MedievalSharp, fantasy, serif;
   --wine-red: #930c10;
   --wine-red-hover: #9f272a;
-  --wine-red-active: #ab4245;
+  --wine-red-active: #72090c;
   --davy: #290000;
   --davy-light: #9f8d8d;
   --highlight: #f7ce65;
@@ -15,6 +15,8 @@
   --heaven-light: #fffee9;
   --error-red: #ff9494;
   --positive-green: #96bf6b;
+  --positive-green-hover: #adcd8b;
+  --positive-green-active: #749453;
   --small: 640px;
   --medium: 768px;
   --large: 1024px;

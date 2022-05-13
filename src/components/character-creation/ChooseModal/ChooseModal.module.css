@@ -61,8 +61,24 @@
     background-color: var(--positive-green);
 }
 
+.choose:hover {
+    background-color: var(--positive-green-hover);
+}
+
+.choose:active {
+    background-color: var(--positive-green-active);
+}
+
 .cancel {
     background-color: var(--wine-red);
+}
+
+.cancel:hover {
+    background-color: var(--wine-red-hover);
+}
+
+.cancel:active {
+    background-color: var(--wine-red-active);
 }
 
 @media screen and (min-width: 768px) {
