@@ -9,7 +9,7 @@ export enum ButtonType {
 
 type ButtonSize = 'small' | 'medium' | 'large';
 
-type ButtonProps = {
+export type ButtonProps = {
 	disabled?: boolean;
 	onClick?: MouseEventHandler<HTMLButtonElement>;
 	children: ReactNode;
@@ -60,7 +60,7 @@ const Button = ({
 			padding: `${getPadding(size)}rem`,
 			margin: `${0.25 * (spacing || 1)}rem`
 		}}
-		type={type}
+		type={type ? type : 'button'}
 	>
 		{children}
 	</button>

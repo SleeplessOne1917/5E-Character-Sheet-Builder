@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<button
+  class="button negative"
+  style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+  type="button"
+>
+  Button Text
+</button>
+`;

@@ -28,6 +28,10 @@
     background-color: var(--wine-red-active);
 }
 
+.negative:disabled {
+    background-color: #ddd;
+}
+
 .positive {
     background-color: var(--positive-green);
 }
@@ -38,4 +42,8 @@
 
 .positive:active {
     background-color: var(--positive-green-active);
+}
+
+.positive:disabled {
+    background-color: #ddd;
 }
