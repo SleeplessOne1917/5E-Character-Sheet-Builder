@@ -131,9 +131,20 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const toggleDescriptor = useCallback(
 		(index: number) => {
 			if (descriptors) {
-				const copy = [...descriptors];
-				copy[index].isOpen = !copy[index].isOpen;
-				setDescriptors(copy);
+				setDescriptors(prevState =>
+					prevState
+						? prevState.map((descriptor, i) => {
+								if (i === index) {
+									return {
+										...descriptor,
+										isOpen: !descriptor.isOpen
+									};
+								} else {
+									return descriptor;
+								}
+						  })
+						: null
+				);
 			}
 		},
 		[descriptors, setDescriptors]
