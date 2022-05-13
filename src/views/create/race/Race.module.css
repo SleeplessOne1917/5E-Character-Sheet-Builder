@@ -11,6 +11,11 @@
     color: var(--davy)
 }
 
+.modal-title {
+    color: var(--davy);
+    font-family: var(--font-fantasy);
+}
+
 @media screen and (min-width: 768px) {
     .title {
         align-self: flex-start;

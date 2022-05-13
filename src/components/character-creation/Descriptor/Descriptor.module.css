@@ -1,0 +1,40 @@
+.descriptor {
+    width: 70%;
+    margin: 1rem 0;
+}
+
+.title {
+    background-color: var(--davy);
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.7rem;
+    color: var(--heaven);
+    font-family: var(--font-fantasy);
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+
+.title:focus {
+    outline: 5px solid var(--highlight);
+}
+
+.content {
+    background-color: var(--davy-light);
+    height: fit-content;
+    padding: 1rem;
+    color: var(--heaven-light);
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.chevron {
+    height: 3rem;
+    width: 3rem;
+}
+
+.content p:first-child {
+    margin-block-start: 0;
+}
