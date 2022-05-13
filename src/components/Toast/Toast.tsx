@@ -63,9 +63,9 @@ const Toast = (): JSX.Element => {
 			</div>
 			<div className={classes['toast-text']}>
 				{type === ToastType.error ? (
-					<h1 className={classes['toast-title']}>Error</h1>
+					<div className={classes['toast-title']}>Error</div>
 				) : (
-					<h1 className={classes['toast-title']}>Success!</h1>
+					<div className={classes['toast-title']}>Success!</div>
 				)}
 				<p className={classes.message}>{cleanMessage(message)}</p>
 			</div>

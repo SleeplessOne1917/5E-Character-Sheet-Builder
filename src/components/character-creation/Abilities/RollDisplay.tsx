@@ -24,7 +24,7 @@ const RollDisplay = ({
 	if (rolls) {
 		return (
 			<div className={classes['display-container']}>
-				<h1>{total}</h1>
+				<div className={classes.total}>{total}</div>
 				<div className={classes.rolls}>
 					{rolls.map((roll, index) => (
 						<div key={index} className={classes.roll}>
@@ -45,7 +45,7 @@ const RollDisplay = ({
 	} else {
 		return (
 			<div className={classes['display-container']}>
-				<h2>&mdash;</h2>
+				<div className={classes.total}>&mdash;</div>
 				<SmallButton
 					style={{ padding: '1rem', fontSize: '1.5rem' }}
 					positive

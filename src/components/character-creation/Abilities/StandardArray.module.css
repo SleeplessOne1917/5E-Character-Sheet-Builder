@@ -14,6 +14,15 @@
     margin: 0 0.5rem;
 }
 
+.ability div {
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.ability div:first-child {
+    font-size: 1.2rem;
+}
+
 .ability select {
     width: 50%;
     border: 1px solid var(--davy);

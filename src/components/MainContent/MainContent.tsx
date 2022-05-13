@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ReactNode, memo } from 'react';
+
 import classes from './MainContent.module.css';
 
 type MainContentProps = {
@@ -11,4 +12,4 @@ const MainContent = ({ children }: MainContentProps) => (
 	</main>
 );
 
-export default MainContent;
+export default memo(MainContent);

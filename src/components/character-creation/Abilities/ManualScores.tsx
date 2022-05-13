@@ -71,20 +71,20 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 						type="text"
 						onBlur={event => handleBlur(event, ability.index as AbilityScores)}
 						value={
-							abilityScoreStrings[ability.index as AbilityScores]
+							(abilityScoreStrings[ability.index as AbilityScores]
 								? abilityScoreStrings[ability.index as AbilityScores]
-								: ''
+								: '') as string
 						}
 						onChange={event =>
 							handleChange(event, ability.index as AbilityScores)
 						}
 					/>
-					<h4>
+					<div className={classes.total}>
 						Total:{' '}
 						{getAbilityScore(ability.index as AbilityScores).base
 							? getTotalScore(getAbilityScore(ability.index as AbilityScores))
 							: '\u2014'}
-					</h4>
+					</div>
 				</div>
 			))}
 		</div>

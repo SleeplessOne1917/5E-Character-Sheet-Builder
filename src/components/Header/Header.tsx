@@ -27,9 +27,9 @@ const Header = ({
 						</svg>
 					</a>
 				</Link>
-				<h1 className={classes['brand-text']}>
+				<div className={classes['brand-text']}>
 					D&D 5E Character Sheet Builder
-				</h1>
+				</div>
 			</div>
 			<nav className={classes.navigation}>
 				<ul className={classes['navigation-list']}>

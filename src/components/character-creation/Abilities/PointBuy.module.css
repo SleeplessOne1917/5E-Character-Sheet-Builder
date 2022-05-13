@@ -14,9 +14,19 @@
     margin: 0 0.5rem;
 }
 
+.ability div:first-child {
+    font-size: 1.2rem
+}
+
+.ability div {
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
 .point-adjuster {
     display: flex;
     align-items: center;
+    font-size: 2.2rem;
 }
 
 .point-adjuster h1 {
@@ -64,8 +74,13 @@
     padding: 0;
 }
 
-.points-remaining div {
+.points-remaining {
     font-size: 2rem;;
+}
+
+.points-title {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 @media screen and (min-width: 1024px) {

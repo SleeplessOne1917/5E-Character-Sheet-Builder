@@ -74,9 +74,9 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 
 	return (
 		<div className={classes.container}>
-			<div className={classes['points-remaining']}>
-				<h3>Points Remaining</h3>
-				<div>
+			<div>
+				<div className={classes['points-title']}>Points Remaining</div>
+				<div className={classes['points-remaining']}>
 					{points}/{MAX_POINTS}
 				</div>
 			</div>
@@ -87,7 +87,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 
 					return (
 						<div key={ability.index} className={classes.ability}>
-							<h3>{ability.full_name}</h3>
+							<div>{ability.full_name}</div>
 							<div className={classes['point-adjuster']}>
 								{abilityScore > 8 && (
 									<MinusIcon
@@ -99,7 +99,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										aria-label={`${ability.full_name} minus 1`}
 									/>
 								)}
-								<h1>{abilityScore}</h1>
+								{abilityScore}
 								{((abilityScore > 13 && points > 1) ||
 									(abilityScore <= 13 && points > 0)) &&
 									abilityScore < 15 && (
@@ -113,7 +113,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										/>
 									)}
 							</div>
-							<h4>Total: {getTotalScore(getAbilityScore(indexKey))}</h4>
+							<div>Total: {getTotalScore(getAbilityScore(indexKey))}</div>
 						</div>
 					);
 				})}

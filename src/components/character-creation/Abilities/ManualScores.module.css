@@ -28,6 +28,12 @@
 .manual-score label {
     font-size: 1.3rem;
     font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.total {
+    font-weight: bold;
+    margin-top: 1rem;
 }
 
 @media screen and (min-width: 1024px) {

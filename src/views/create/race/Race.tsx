@@ -141,7 +141,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	const modalContent = (
 		<>
-			<h1 className={classes['modal-title']}>{consideredRace?.name}</h1>
+			<h2 className={classes['modal-title']}>{consideredRace?.name}</h2>
 			{descriptors &&
 				descriptors.map((descriptor, index) => (
 					<DescriptorComponent

@@ -40,7 +40,7 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 
 				return (
 					<div key={ability.index} className={classes.ability}>
-						<h3>{ability.full_name}</h3>
+						<div>{ability.full_name}</div>
 						<select
 							onChange={event =>
 								handleValueSelect(event, ability.index as AbilityScores)
@@ -72,10 +72,10 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 									</option>
 								))}
 						</select>
-						<h4>
+						<div>
 							Total:{' '}
 							{abilityScore.base ? getTotalScore(abilityScore) : '\u2014'}
-						</h4>
+						</div>
 					</div>
 				);
 			})}
