@@ -2,7 +2,7 @@
     padding: 1rem;
     display: grid;
     font-family: var(--font-display);
-    color: white;
+    color: var(--heaven-light);
     grid-template-columns: 2fr 5fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: "icon text x"
@@ -18,11 +18,11 @@
 }
 
 .toast-error {
-    background-color: red;
+    background-color: var(--wine-red);
 }
 
 .toast-success {
-    background-color: green;
+    background-color: var(--positive-green);
 }
 
 .toast-title {
