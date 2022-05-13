@@ -1,4 +1,4 @@
-import BigButton, { ButtonType } from '../../../components/Button/BigButton';
+import Button, { ButtonType } from '../../../components/Button/Button';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 import { ToastShowPayload, show } from '../../../redux/features/toast';
@@ -160,9 +160,15 @@ const SignUp = (): JSX.Element => {
 							</div>
 							<PasswordValidator password={values.password} />
 						</div>
-						<BigButton disabled={isSubmitting} type={ButtonType.submit}>
+						<Button
+							disabled={isSubmitting}
+							type={ButtonType.submit}
+							positive
+							size="large"
+							spacing={4}
+						>
 							Sign Up
-						</BigButton>
+						</Button>
 					</form>
 				)}
 			</Formik>

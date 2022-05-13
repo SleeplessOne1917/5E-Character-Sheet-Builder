@@ -1,7 +1,7 @@
 import { ChangeEventHandler, MouseEventHandler, memo } from 'react';
 
 import { AbilityItem } from '../../../types/srd';
-import SmallButton from '../../Button/SmallButton';
+import Button from '../../Button/Button';
 import classes from './RollDisplay.module.css';
 
 type RollDisplayProps = {
@@ -46,13 +46,9 @@ const RollDisplay = ({
 		return (
 			<div className={classes['display-container']}>
 				<div className={classes.total}>&mdash;</div>
-				<SmallButton
-					style={{ padding: '1rem', fontSize: '1.5rem' }}
-					positive
-					onClick={roll}
-				>
+				<Button positive onClick={roll} size="medium">
 					Roll
-				</SmallButton>
+				</Button>
 			</div>
 		);
 	}

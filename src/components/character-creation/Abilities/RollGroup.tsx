@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
+import Button from '../../Button/Button';
 import RollDisplay from './RollDisplay';
-import SmallButton from '../../Button/SmallButton';
 import classes from './RollGroup.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
 
@@ -86,7 +86,9 @@ const RollGroup = ({
 	return (
 		<div className={classes['roll-group']}>
 			{onDeleteGroup && (
-				<SmallButton onClick={onDeleteGroup}>Delete Group</SmallButton>
+				<Button onClick={onDeleteGroup} size="small">
+					Delete Group
+				</Button>
 			)}
 			<div className={classes.rolls}>
 				{rollInfos.map((info, index) => (
@@ -112,9 +114,10 @@ const RollGroup = ({
 				))}
 			</div>
 			<div>
-				<SmallButton
+				<Button
 					onClick={resetGroups}
-					style={{ marginRight: '1rem' }}
+					size="small"
+					spacing={4}
 					disabled={
 						!rollInfos.some(info => {
 							if (info.rolls) {
@@ -126,14 +129,15 @@ const RollGroup = ({
 					}
 				>
 					Reset Group
-				</SmallButton>
-				<SmallButton
+				</Button>
+				<Button
 					positive
 					onClick={onApplyGroup}
 					disabled={!rollInfos.some(info => info.ability)}
+					size="small"
 				>
 					Apply Ability Scores
-				</SmallButton>
+				</Button>
 			</div>
 		</div>
 	);

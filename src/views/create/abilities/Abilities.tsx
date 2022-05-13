@@ -11,11 +11,11 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
+import Button from '../../../components/Button/Button';
 import MainContent from '../../../components/MainContent/MainContent';
 import ManualScores from '../../../components/character-creation/Abilities/ManualScores';
 import PointBuy from '../../../components/character-creation/Abilities/PointBuy';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
-import SmallButton from '../../../components/Button/SmallButton';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray';
 import classes from './Abilities.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
@@ -112,13 +112,9 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						}`}
 					>
 						<div className={classes['add-group-container']}>
-							<SmallButton
-								positive
-								style={{ marginRight: '0.5rem' }}
-								onClick={addRollGroup}
-							>
+							<Button positive size="small" spacing={2} onClick={addRollGroup}>
 								+ Add Group
-							</SmallButton>
+							</Button>
 							Groups: {Object.keys(rollGroups).length}
 						</div>
 						<div>

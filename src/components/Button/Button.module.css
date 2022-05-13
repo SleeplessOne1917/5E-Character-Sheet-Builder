@@ -1,6 +1,4 @@
 .button {
-    font-size: 0.7rem;
-    padding: 0.3rem;
     color: var(--heaven-light);
     border: 0;
     cursor: pointer;
@@ -12,6 +10,10 @@
     background-color: #ddd;
     color: #555;
     cursor: auto;
+}
+
+.button:focus {
+    outline: 5px solid var(--highlight);
 }
 
 .negative {

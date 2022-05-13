@@ -1,4 +1,4 @@
-import BigButton, { ButtonType } from '../../../components/Button/BigButton';
+import Button, { ButtonType } from '../../../components/Button/Button';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 
@@ -153,9 +153,15 @@ const LogIn = (): JSX.Element => {
 								<div className={logInClasses.error}>{errors.password}</div>
 							)}
 						</div>
-						<BigButton disabled={isSubmitting} type={ButtonType.submit}>
+						<Button
+							disabled={isSubmitting}
+							type={ButtonType.submit}
+							positive
+							size="large"
+							spacing={4}
+						>
 							Log In
-						</BigButton>
+						</Button>
 					</form>
 				)}
 			</Formik>
