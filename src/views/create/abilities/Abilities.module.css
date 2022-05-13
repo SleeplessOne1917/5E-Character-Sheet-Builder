@@ -30,12 +30,17 @@
 }
 
 .roll-groups-toggle {
-    background-color: #ddd;
+    background-color: var(--davy-light);
+    color: var(--heaven-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem;
     cursor: pointer;
+}
+
+.roll-groups-toggle:focus {
+    outline: 5px solid var(--highlight);
 }
 
 .roll-groups {

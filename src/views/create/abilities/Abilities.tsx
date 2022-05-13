@@ -1,5 +1,6 @@
 import {
 	ChangeEventHandler,
+	KeyboardEventHandler,
 	MouseEventHandler,
 	useCallback,
 	useState
@@ -60,10 +61,19 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 			[dispatch, abilities]
 		);
 
-	const toggleShowRollGroups: MouseEventHandler<HTMLDivElement> =
-		useCallback(() => {
-			setShowRollGroups(prevState => !prevState);
-		}, [setShowRollGroups]);
+	const toggleShowRollGroups = useCallback(() => {
+		setShowRollGroups(prevState => !prevState);
+	}, [setShowRollGroups]);
+
+	const toggleShowRollGroupsKeyUp: KeyboardEventHandler<HTMLDivElement> =
+		useCallback(
+			event => {
+				if (event.code === 'Enter') {
+					toggleShowRollGroups();
+				}
+			},
+			[toggleShowRollGroups]
+		);
 
 	const addRollGroup: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
 		dispatch(addGroup());
@@ -98,6 +108,9 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 					<div
 						className={classes['roll-groups-toggle']}
 						onClick={toggleShowRollGroups}
+						onKeyUp={toggleShowRollGroupsKeyUp}
+						tabIndex={0}
+						aria-label={`${showRollGroups ? 'Hide' : 'Show'} Roll Groups`}
 					>
 						Dice Roll Groups{' '}
 						{showRollGroups ? (
