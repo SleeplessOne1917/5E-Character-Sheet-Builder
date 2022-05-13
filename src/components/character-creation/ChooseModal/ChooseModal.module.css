@@ -54,7 +54,7 @@
 }
 
 .button:focus {
-    outline: 5px solid var(--highlight);
+    outline: var(--focus-outline);
 }
 
 .choose {

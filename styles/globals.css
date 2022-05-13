@@ -20,6 +20,7 @@
   --large: 1024px;
   --extra-large: 1280px;
   --double-extra-large: 1536px;
+  --focus-outline: 5px solid var(--highlight);
 }
 
 * {

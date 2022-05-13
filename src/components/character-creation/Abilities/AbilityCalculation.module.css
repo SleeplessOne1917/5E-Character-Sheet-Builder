@@ -55,6 +55,10 @@
     border: 1px solid var(--davy);
 }
 
+.value input:focus {
+    outline: var(--focus-outline);
+}
+
 @media screen and (min-width: 768px) {
     .calculation {
         width: 30%;

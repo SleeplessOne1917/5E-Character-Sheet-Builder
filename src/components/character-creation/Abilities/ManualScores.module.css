@@ -22,7 +22,7 @@
 }
 
 .manual-score input:focus {
-    outline: 2px solid var(--highlight);
+    outline: var(--focus-outline);
 }
 
 .manual-score label {

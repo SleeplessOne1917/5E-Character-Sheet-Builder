@@ -35,13 +35,16 @@
     align-items: center;
 }
 
+.link:focus {
+    outline: 5px solid var(--heaven-light);
+}
+
 .link:hover {
     background-color: var(--highlight-hover);
 }
 
 .link:active {
     background-color: var(--highlight-active);
-    transform: translateY(0.25rem);
 }
 
 @media screen and (min-width: 768px) {

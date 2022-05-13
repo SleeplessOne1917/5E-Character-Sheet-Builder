@@ -35,6 +35,10 @@
   z-index: 20;
 }
 
+.link:focus {
+  outline: var(--focus-outline);
+}
+
 .link-selected {
   color: var(--highlight-active);
   border-bottom: 5px solid var(--highlight-active);

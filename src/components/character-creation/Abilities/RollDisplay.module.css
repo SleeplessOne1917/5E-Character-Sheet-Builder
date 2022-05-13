@@ -40,6 +40,10 @@
     border: 1px solid var(--davy);
 }
 
+.display-container select:focus {
+    outline: var(--focus-outline);
+}
+
 .total {
     font-size: 2.2rem;
     font-weight: bold;

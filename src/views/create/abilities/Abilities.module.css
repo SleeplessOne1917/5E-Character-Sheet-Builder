@@ -26,7 +26,7 @@
 }
 
 .generation-control select:focus {
-    outline: 2px solid var(--highlight);
+    outline: var(--focus-outline);
 }
 
 .roll-groups-toggle {
@@ -40,7 +40,7 @@
 }
 
 .roll-groups-toggle:focus {
-    outline: 5px solid var(--highlight);
+    outline: var(--focus-outline);
 }
 
 .roll-groups {
@@ -55,7 +55,6 @@
 .roll-chevron {
     height: 1.5rem;
     width: 1.5rem;
-    fill: var(--davy);
 }
 
 .add-group-container {

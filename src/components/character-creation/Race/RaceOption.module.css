@@ -15,7 +15,7 @@
 }
 
 .race-container:focus {
-    outline: 10px solid var(--highlight);
+    outline: var(--focus-outline);
 }
 
 .race-title {
