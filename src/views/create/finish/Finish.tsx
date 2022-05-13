@@ -1,11 +1,7 @@
-import commonClasses from '../../Views.module.css';
+import MainContent from '../../../components/MainContent/MainContent';
 
 const Finish = (): JSX.Element => {
-	return (
-		<main className={commonClasses.main}>
-			<div className={commonClasses.content}>Finish</div>
-		</main>
-	);
+	return <MainContent>Finish</MainContent>;
 };
 
 export default Finish;

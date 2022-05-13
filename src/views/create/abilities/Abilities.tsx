@@ -11,13 +11,13 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
+import MainContent from '../../../components/MainContent/MainContent';
 import ManualScores from '../../../components/character-creation/Abilities/ManualScores';
 import PointBuy from '../../../components/character-creation/Abilities/PointBuy';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
 import SmallButton from '../../../components/Button/SmallButton';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray';
 import classes from './Abilities.module.css';
-import commonClasses from '../../Views.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
 import { updateGenerationMethod } from '../../../redux/features/generationMethod';
 
@@ -77,85 +77,79 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	);
 
 	return (
-		<main className={commonClasses.main}>
-			<div className={commonClasses.content}>
-				<h1 className={classes.title}>Ability Scores</h1>
-				<div className={classes['generation-control']}>
-					<label htmlFor="generation-methods">Generation Method</label>
-					<select
-						id="generation-methods"
-						value={generationMethod}
-						onChange={handleGenerationMethodChange}
-					>
-						<option value="manual">Manual</option>
-						<option value="roll">Roll</option>
-						<option value="point-buy">Point Buy</option>
-						<option value="array">Standard Array</option>
-					</select>
-				</div>
-				{generationMethod === 'manual' && (
-					<ManualScores abilities={abilities} />
-				)}
-				{generationMethod === 'roll' && (
-					<>
-						<div
-							className={classes['roll-groups-toggle']}
-							onClick={toggleShowRollGroups}
-						>
-							Dice Roll Groups{' '}
-							{showRollGroups ? (
-								<ChevronUpIcon className={classes['roll-chevron']} />
-							) : (
-								<ChevronDownIcon className={classes['roll-chevron']} />
-							)}
-						</div>
-						<div
-							className={`${classes['roll-groups']}${
-								showRollGroups ? ` ${classes.open}` : ''
-							}`}
-						>
-							<div className={classes['add-group-container']}>
-								<SmallButton
-									positive
-									style={{ marginRight: '0.5rem' }}
-									onClick={addRollGroup}
-								>
-									+ Add Group
-								</SmallButton>
-								Groups: {Object.keys(rollGroups).length}
-							</div>
-							<div>
-								{Object.keys(rollGroups).map(group => (
-									<RollGroup
-										abilities={abilities}
-										key={group}
-										onDeleteGroup={
-											Object.keys(rollGroups).length > 1
-												? () => deleteRollGroup(parseInt(group))
-												: null
-										}
-										group={parseInt(group)}
-									/>
-								))}
-							</div>
-						</div>
-					</>
-				)}
-				{generationMethod === 'point-buy' && <PointBuy abilities={abilities} />}
-				{generationMethod === 'array' && (
-					<StandardArray abilities={abilities} />
-				)}
-				<div className={classes['calculations-container']}>
-					{abilities.map(ability => (
-						<AbilityCalculation
-							key={ability.index}
-							index={ability.index}
-							name={ability.full_name}
-						/>
-					))}
-				</div>
+		<MainContent>
+			<h1 className={classes.title}>Ability Scores</h1>
+			<div className={classes['generation-control']}>
+				<label htmlFor="generation-methods">Generation Method</label>
+				<select
+					id="generation-methods"
+					value={generationMethod}
+					onChange={handleGenerationMethodChange}
+				>
+					<option value="manual">Manual</option>
+					<option value="roll">Roll</option>
+					<option value="point-buy">Point Buy</option>
+					<option value="array">Standard Array</option>
+				</select>
 			</div>
-		</main>
+			{generationMethod === 'manual' && <ManualScores abilities={abilities} />}
+			{generationMethod === 'roll' && (
+				<>
+					<div
+						className={classes['roll-groups-toggle']}
+						onClick={toggleShowRollGroups}
+					>
+						Dice Roll Groups{' '}
+						{showRollGroups ? (
+							<ChevronUpIcon className={classes['roll-chevron']} />
+						) : (
+							<ChevronDownIcon className={classes['roll-chevron']} />
+						)}
+					</div>
+					<div
+						className={`${classes['roll-groups']}${
+							showRollGroups ? ` ${classes.open}` : ''
+						}`}
+					>
+						<div className={classes['add-group-container']}>
+							<SmallButton
+								positive
+								style={{ marginRight: '0.5rem' }}
+								onClick={addRollGroup}
+							>
+								+ Add Group
+							</SmallButton>
+							Groups: {Object.keys(rollGroups).length}
+						</div>
+						<div>
+							{Object.keys(rollGroups).map(group => (
+								<RollGroup
+									abilities={abilities}
+									key={group}
+									onDeleteGroup={
+										Object.keys(rollGroups).length > 1
+											? () => deleteRollGroup(parseInt(group))
+											: null
+									}
+									group={parseInt(group)}
+								/>
+							))}
+						</div>
+					</div>
+				</>
+			)}
+			{generationMethod === 'point-buy' && <PointBuy abilities={abilities} />}
+			{generationMethod === 'array' && <StandardArray abilities={abilities} />}
+			<div className={classes['calculations-container']}>
+				{abilities.map(ability => (
+					<AbilityCalculation
+						key={ability.index}
+						index={ability.index}
+						name={ability.full_name}
+					/>
+				))}
+			</div>
+		</MainContent>
 	);
 };
 

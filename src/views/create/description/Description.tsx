@@ -1,11 +1,7 @@
-import commonClasses from '../../Views.module.css';
+import MainContent from '../../../components/MainContent/MainContent';
 
 const Description = (): JSX.Element => {
-	return (
-		<main className={commonClasses.main}>
-			<div className={commonClasses.content}>Description</div>
-		</main>
-	);
+	return <MainContent>Description</MainContent>;
 };
 
 export default Description;

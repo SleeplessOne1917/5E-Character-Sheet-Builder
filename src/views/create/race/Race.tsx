@@ -5,9 +5,9 @@ import { useCallback, useEffect, useState } from 'react';
 import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
 import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../../../components/character-creation/Descriptor/Descriptor';
+import MainContent from '../../../components/MainContent/MainContent';
 import RaceOption from '../../../components/character-creation/Race/RaceOption';
 import classes from './Race.module.css';
-import commonClasses from '../../Views.module.css';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -157,23 +157,21 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	return (
 		<>
-			<main className={commonClasses.main}>
-				<div className={commonClasses.content}>
-					<h1 className={classes.title}>Choose Race</h1>
-					<ul className={classes['race-list']}>
-						{races.map(race => (
-							<RaceOption
-								race={race}
-								subraces={subraces.filter(
-									subrace => subrace.race.index === race.index
-								)}
-								key={race.index}
-								onChoose={getConsiderRaceHandler(race.index)}
-							/>
-						))}
-					</ul>
-				</div>
-			</main>
+			<MainContent>
+				<h1 className={classes.title}>Choose Race</h1>
+				<ul className={classes['race-list']}>
+					{races.map(race => (
+						<RaceOption
+							race={race}
+							subraces={subraces.filter(
+								subrace => subrace.race.index === race.index
+							)}
+							key={race.index}
+							onChoose={getConsiderRaceHandler(race.index)}
+						/>
+					))}
+				</ul>
+			</MainContent>
 			<ChooseModal
 				show={showModal}
 				mainContent={modalContent}

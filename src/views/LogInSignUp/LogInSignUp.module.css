@@ -53,6 +53,7 @@
 .big-text {
     font-family: var(--font-fantasy);
     color: var(--davy);
+    align-self: center;
 }
 
 .label {
@@ -93,7 +94,6 @@
     fill: transparent;
     stroke: var(--davy);
     margin-left: 0.5rem;
-    transition: fill 0.5s;
     cursor: pointer;
 }
 
