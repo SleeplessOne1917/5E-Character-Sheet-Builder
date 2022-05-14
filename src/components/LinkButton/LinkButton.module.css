@@ -9,6 +9,14 @@
     white-space: nowrap;
 }
 
+.link-button:focus {
+    outline: var(--focus-outline)
+}
+
+.link-button:hover {
+    background-color: var(--wine-red-hover);
+}
+
 .link-button:active {
     background-color: var(--wine-red-active);
 }

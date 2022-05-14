@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<a
+  class="link-button"
+  href="/foo/bar"
+  tabindex="0"
+>
+  Link Text
+</a>
+`;
