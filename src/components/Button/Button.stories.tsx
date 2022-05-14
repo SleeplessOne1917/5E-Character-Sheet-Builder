@@ -6,6 +6,11 @@ const ButtonSb = {
 	component: Button,
 	args: {
 		children: 'Button Text'
+	},
+	argTypes: {
+		positive: { type: 'boolean' },
+		disabled: { type: 'boolean' },
+		spacing: { type: 'number' }
 	}
 } as ComponentMeta<typeof Button>;
 

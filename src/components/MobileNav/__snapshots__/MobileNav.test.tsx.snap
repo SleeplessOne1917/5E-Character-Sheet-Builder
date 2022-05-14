@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<nav
+  class="mobile-nav open"
+>
+  <ul
+    class="nav-list"
+  >
+    <li>
+      <a
+        class="link-button"
+        href="/create"
+        tabindex="-1"
+      >
+        Create
+      </a>
+    </li>
+    <li>
+      <a
+        class="link-button"
+        href="/log-in"
+        tabindex="-1"
+      >
+        Log In
+      </a>
+    </li>
+    <li>
+      <a
+        class="link-button"
+        href="/sign-up"
+        tabindex="-1"
+      >
+        Sign Up
+      </a>
+    </li>
+  </ul>
+  <hr
+    class="hr"
+  />
+  <ul
+    class="external-list"
+  >
+    <li>
+      <a
+        class="external-link"
+        href="https://github.com/abias1122/5E-Character-Sheet-Builder"
+        tabindex="-1"
+      >
+        <svg
+          class="icon"
+        >
+          <use
+            xlink:href="/Icons.svg#github"
+          />
+        </svg>
+        Check out the source code!
+      </a>
+    </li>
+  </ul>
+</nav>
+`;

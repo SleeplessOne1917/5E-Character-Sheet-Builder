@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import * as stories from './Toast.stories';
 
-import { render, screen } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 
 import { Provider } from 'react-redux';
 import Toast from './Toast';
@@ -14,19 +14,27 @@ import { store } from '../../redux/store';
 const { Success, Error } = composeStories(stories);
 
 it('renders correctly', () => {
-	const { container } = render(
-		<Provider store={store}>
-			<Toast />
-		</Provider>
-	);
+	let container: HTMLElement;
+
+	act(() => {
+		container = render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		).container;
+	});
+
 	expect(container.firstChild).toMatchSnapshot();
 });
 
 it('success renders expected content', () => {
-	const { container } = render(<Success />);
+	let container: HTMLElement;
+
+	act(() => {
+		container = render(<Success />).container;
+	});
 
 	const toast = container.firstChild as HTMLElement;
-
 	expect(toast.classList).toContain('toast-success');
 	expect(toast.classList).not.toContain('toast-error');
 	expect(container.querySelector('.error-icon')).not.toBeInTheDocument();
@@ -34,10 +42,13 @@ it('success renders expected content', () => {
 });
 
 it('error renders expected content', () => {
-	const { container } = render(<Error />);
+	let container: HTMLElement;
+
+	act(() => {
+		container = render(<Error />).container;
+	});
 
 	const toast = container.firstChild as HTMLElement;
-
 	expect(toast.classList).not.toContain('toast-success');
 	expect(toast.classList).toContain('toast-error');
 	expect(container.querySelector('.error-icon')).toBeInTheDocument();
@@ -45,31 +56,44 @@ it('error renders expected content', () => {
 });
 
 it('does not contain open class when closed', () => {
-	const { container } = render(
-		<Provider store={store}>
-			<Toast />
-		</Provider>
-	);
+	let container: HTMLElement;
+
+	act(() => {
+		container = render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		).container;
+	});
 
 	expect(container.querySelector('.open')).not.toBeInTheDocument();
 });
 
 it('contains open class when open', () => {
-	const { container } = render(<Success />);
+	let container: HTMLElement;
+
+	act(() => {
+		container = render(<Success />).container;
+	});
 
 	expect(container.querySelector('.open')).toBeInTheDocument();
 });
 
 it('closes itself after closeTimeoutSeconds seconds', async () => {
-	const { container } = render(
-		<Provider store={store}>
-			<Toast />
-		</Provider>
-	);
+	let container: HTMLElement;
 
-	store.dispatch(
-		show({ type: ToastType.success, closeTimeoutSeconds: 3, message: 'foo' })
-	);
+	act(() => {
+		container = render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		).container;
+
+		store.dispatch(
+			show({ type: ToastType.success, closeTimeoutSeconds: 3, message: 'foo' })
+		);
+	});
+
 	await new Promise(resolve => setTimeout(resolve, 1000));
 	expect(container.querySelector('.open')).toBeInTheDocument();
 	await new Promise(resolve => setTimeout(resolve, 2000));
