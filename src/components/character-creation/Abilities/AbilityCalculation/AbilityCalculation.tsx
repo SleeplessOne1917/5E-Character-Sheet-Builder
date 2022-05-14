@@ -7,18 +7,18 @@ import {
 import {
 	calculateModifier,
 	getTotalScore
-} from '../../../services/abilityScoreService';
+} from '../../../../services/abilityScoreService';
 import {
 	updateOtherBonus,
 	updateOverride
-} from '../../../redux/features/abilityScores';
+} from '../../../../redux/features/abilityScores';
 
-import AbilityScores from '../../../types/abilityScores';
+import AbilityScores from '../../../../types/abilityScores';
 import classes from './AbilityCalculation.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
-import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
 
-type AbilityCalculationProps = {
+export type AbilityCalculationProps = {
 	index: string;
 	name: string;
 };
@@ -27,12 +27,15 @@ const AbilityCalculation = ({
 	index,
 	name
 }: AbilityCalculationProps): JSX.Element => {
-	const [otherBonus, setOtherBonus] = useState<number | undefined>(undefined);
+	const getAbilityScore = useGetAbilityScore();
+	const abilityScore = getAbilityScore(index as AbilityScores);
+	const [otherBonus, setOtherBonus] = useState<number | undefined>(
+		abilityScore.otherBonus || undefined
+	);
 	const [overrideScore, setOverrideScore] = useState<number | undefined>(
-		undefined
+		abilityScore.override || undefined
 	);
 	const dispatch = useAppDispatch();
-	const getAbilityScore = useGetAbilityScore();
 
 	const onChangeOtherBonus: ChangeEventHandler<HTMLInputElement> = useCallback(
 		event => {
@@ -95,7 +98,6 @@ const AbilityCalculation = ({
 		[dispatch, index, setOverrideScore]
 	);
 
-	const abilityScore = getAbilityScore(index as AbilityScores);
 	const modifier = abilityScore.base
 		? calculateModifier(getTotalScore(abilityScore))
 		: null;
@@ -175,9 +177,9 @@ const AbilityCalculation = ({
 				</div>
 				<div className={classes.component}>
 					<div className={classes.label}>
-						<label htmlFor={`other-${index}`}>Other Modifier</label>
+						<label htmlFor={`other-${index}`}>Other Bonus</label>
 					</div>
-					<div className={classes.value}>
+					<div className={`${classes.value} ${classes['input-value']}`}>
 						<input
 							id={`other-${index}`}
 							type="number"
@@ -192,7 +194,7 @@ const AbilityCalculation = ({
 					<div className={classes.label}>
 						<label htmlFor={`override-${index}`}>Override Score</label>
 					</div>
-					<div className={classes.value}>
+					<div className={`${classes.value} ${classes['input-value']}`}>
 						<input
 							id={`override-${index}`}
 							type="number"

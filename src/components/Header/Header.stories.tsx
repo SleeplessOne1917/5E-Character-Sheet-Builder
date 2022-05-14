@@ -26,10 +26,6 @@ const HeaderSb = {
 	argTypes: {
 		onLogoIconClick: { type: 'function' },
 		onMenuIconClick: { type: 'function' }
-	},
-	args: {
-		onLogoIconClick: () => {},
-		onMenuIconClick: () => {}
 	}
 } as ComponentMeta<typeof Header>;
 

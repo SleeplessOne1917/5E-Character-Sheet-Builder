@@ -9,7 +9,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import { addGroup, removeGroup } from '../../../redux/features/rollGroups';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
-import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation';
+import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation/AbilityCalculation';
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
 import Button from '../../../components/Button/Button';

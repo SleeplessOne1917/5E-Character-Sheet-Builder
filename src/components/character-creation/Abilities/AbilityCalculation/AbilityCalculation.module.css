@@ -20,19 +20,21 @@
 }
 
 .component {
+    display: flex;
     font-size: 1.2rem;
+    background-color: var(--heaven);
 }
 
 .calculation-component {
     border: 1px solid var(--davy);
-    background-color: var(--heaven-light);
 }
 
 .label {
-    display: inline-block;
     width: 70%;
     padding: 0.5rem;
     background-color: var(--heaven);
+    display: flex;
+    align-items: center;
 }
 
 .calculation-label {
@@ -40,11 +42,15 @@
 }
 
 .value {
-    display: inline-block;
     width: 30%;
     padding: 0.5rem;
     text-align: center;
     font-size: 1.5rem;
+    background-color: var(--heaven-light);
+}
+
+.input-value {
+    background-color: var(--heaven) !important;
 }
 
 .value input {
@@ -53,6 +59,7 @@
     font-family: var(--font-display);
     text-align: center;
     border: 1px solid var(--davy);
+    background-color: var(--heaven-light);
 }
 
 .value input:focus {

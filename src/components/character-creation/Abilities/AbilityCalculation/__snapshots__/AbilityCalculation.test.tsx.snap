@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="calculation"
+>
+  <div
+    class="header"
+  >
+    <svg
+      class="icon"
+    >
+      <use
+        xlink:href="/Icons.svg#str"
+      />
+    </svg>
+    Strength
+  </div>
+  <div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Total Score
+      </div>
+      <div
+        class="value"
+      >
+        5
+      </div>
+    </div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Modifier
+      </div>
+      <div
+        class="value"
+      >
+        -3
+      </div>
+    </div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Base Score
+      </div>
+      <div
+        class="value"
+      >
+        15
+      </div>
+    </div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Racial Bonus
+      </div>
+      <div
+        class="value"
+      >
+        +
+        1
+      </div>
+    </div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Ability Improvements
+      </div>
+      <div
+        class="value"
+      >
+        +
+        2
+      </div>
+    </div>
+    <div
+      class="component calculation-component"
+    >
+      <div
+        class="label calculation-label"
+      >
+        Misc Bonus
+      </div>
+      <div
+        class="value"
+      >
+        +
+        3
+      </div>
+    </div>
+    <div
+      class="component"
+    >
+      <div
+        class="label"
+      >
+        <label
+          for="other-str"
+        >
+          Other Bonus
+        </label>
+      </div>
+      <div
+        class="value input-value"
+      >
+        <input
+          id="other-str"
+          placeholder="—"
+          type="number"
+          value="1"
+        />
+      </div>
+    </div>
+    <div
+      class="component"
+    >
+      <div
+        class="label"
+      >
+        <label
+          for="override-str"
+        >
+          Override Score
+        </label>
+      </div>
+      <div
+        class="value input-value"
+      >
+        <input
+          id="override-str"
+          placeholder="—"
+          type="number"
+          value="5"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
