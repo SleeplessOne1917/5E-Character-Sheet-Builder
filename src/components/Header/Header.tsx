@@ -5,7 +5,7 @@ import classes from './Header.module.css';
 import { useAppSelector } from '../../hooks/reduxHooks';
 import useLogout from '../../hooks/useLogout';
 
-type HeaderProps = {
+export type HeaderProps = {
 	onMenuIconClick: MouseEventHandler<SVGSVGElement>;
 	onLogoIconClick: MouseEventHandler<HTMLAnchorElement>;
 };
@@ -18,7 +18,7 @@ const Header = ({
 	const logout = useLogout();
 
 	return (
-		<header className={classes.header} aria-label="Header" role="region">
+		<header className={classes.header} aria-label="Header" role="banner">
 			<div className={classes['brand-container']}>
 				<Link href="/">
 					<a onClick={onLogoIconClick} aria-label="Home">

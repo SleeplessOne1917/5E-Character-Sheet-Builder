@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<header
+  aria-label="Header"
+  class="header"
+  role="banner"
+>
+  <div
+    class="brand-container"
+  >
+    <a
+      aria-label="Home"
+      href="/"
+    >
+      <svg
+        class="logo"
+      >
+        <use
+          xlink:href="/Icons.svg#logo"
+        />
+      </svg>
+    </a>
+    <div
+      class="brand-text"
+    >
+      D&D 5E Character Sheet Builder
+    </div>
+  </div>
+  <nav
+    class="navigation"
+  >
+    <ul
+      class="navigation-list"
+    >
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/create"
+        >
+          Create
+        </a>
+      </li>
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/log-in"
+        >
+          Log In
+        </a>
+      </li>
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/sign-up"
+        >
+          Sign Up
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <svg
+    aria-hidden="true"
+    class="menu-icon"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clip-rule="evenodd"
+      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+      fill-rule="evenodd"
+    />
+  </svg>
+</header>
+`;
