@@ -53,7 +53,7 @@ const Toast = (): JSX.Element => {
 			<div className={classes['icon-container']}>
 				{type === ToastType.error ? (
 					<ExclamationCircleIcon
-						className={`${classes.icon} ${classes['error-icon']}}`}
+						className={`${classes.icon} ${classes['error-icon']}`}
 					/>
 				) : (
 					<CheckCircleIcon

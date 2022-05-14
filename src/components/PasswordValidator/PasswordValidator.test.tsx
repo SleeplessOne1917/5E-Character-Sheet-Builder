@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom';
+
 import * as stories from './PasswordValidator.stories';
 
 import { render, screen } from '@testing-library/react';
@@ -58,8 +60,8 @@ describe('has expected matches for', () => {
 
 		expect(element.classList).toContain('match');
 		expect(element.classList).not.toContain('no-match');
-		expect(element.querySelector('.x')).toBeFalsy();
-		expect(element.querySelector('.check')).toBeTruthy();
+		expect(element.querySelector('.x')).not.toBeInTheDocument();
+		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('uppercase letters', () => {
@@ -69,8 +71,8 @@ describe('has expected matches for', () => {
 
 		expect(element.classList).toContain('match');
 		expect(element.classList).not.toContain('no-match');
-		expect(element.querySelector('.x')).toBeFalsy();
-		expect(element.querySelector('.check')).toBeTruthy();
+		expect(element.querySelector('.x')).not.toBeInTheDocument();
+		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('min length letters', () => {
@@ -80,8 +82,8 @@ describe('has expected matches for', () => {
 
 		expect(element.classList).toContain('match');
 		expect(element.classList).not.toContain('no-match');
-		expect(element.querySelector('.x')).toBeFalsy();
-		expect(element.querySelector('.check')).toBeTruthy();
+		expect(element.querySelector('.x')).not.toBeInTheDocument();
+		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('numbers', () => {
@@ -91,8 +93,8 @@ describe('has expected matches for', () => {
 
 		expect(element.classList).toContain('match');
 		expect(element.classList).not.toContain('no-match');
-		expect(element.querySelector('.x')).toBeFalsy();
-		expect(element.querySelector('.check')).toBeTruthy();
+		expect(element.querySelector('.x')).not.toBeInTheDocument();
+		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('special characters', () => {
@@ -102,8 +104,8 @@ describe('has expected matches for', () => {
 
 		expect(element.classList).toContain('match');
 		expect(element.classList).not.toContain('no-match');
-		expect(element.querySelector('.x')).toBeFalsy();
-		expect(element.querySelector('.check')).toBeTruthy();
+		expect(element.querySelector('.x')).not.toBeInTheDocument();
+		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 });
 
