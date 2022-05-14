@@ -9,7 +9,7 @@ import {
 import classes from './PasswordValidator.module.css';
 import { memo } from 'react';
 
-type PasswordValidatorProps = {
+export type PasswordValidatorProps = {
 	password?: string;
 };
 
@@ -20,7 +20,7 @@ const PasswordValidator = ({
 		<div className={classes.container}>
 			<div
 				className={`${classes.validator} ${
-					classes[`${password && password.length > 8 ? '' : 'no-'}match`]
+					classes[`${password && password.length >= 8 ? '' : 'no-'}match`]
 				}`}
 			>
 				{password && password.length >= 8 ? (
