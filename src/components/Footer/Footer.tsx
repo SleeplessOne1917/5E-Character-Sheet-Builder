@@ -1,5 +1,6 @@
 import { GITHUB_URL } from '../../routeConstants';
 import classes from './Footer.module.css';
+import { memo } from 'react';
 
 const Footer = (): JSX.Element => (
 	<footer className={classes.footer}>
@@ -16,4 +17,4 @@ const Footer = (): JSX.Element => (
 	</footer>
 );
 
-export default Footer;
+export default memo(Footer);
