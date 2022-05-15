@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  aria-label="Manual Scores"
+  class="manual-scores"
+  role="region"
+>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-str"
+    >
+      Strength
+    </label>
+    <input
+      id="manual-str"
+      type="text"
+      value="12"
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      12
+    </div>
+  </div>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-dex"
+    >
+      Dexterity
+    </label>
+    <input
+      id="manual-dex"
+      type="text"
+      value="8"
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      12
+    </div>
+  </div>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-con"
+    >
+      Constitution
+    </label>
+    <input
+      id="manual-con"
+      type="text"
+      value=""
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      —
+    </div>
+  </div>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-int"
+    >
+      Intelligence
+    </label>
+    <input
+      id="manual-int"
+      type="text"
+      value=""
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      —
+    </div>
+  </div>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-wis"
+    >
+      Wisdom
+    </label>
+    <input
+      id="manual-wis"
+      type="text"
+      value="14"
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      25
+    </div>
+  </div>
+  <div
+    class="manual-score"
+  >
+    <label
+      for="manual-cha"
+    >
+      Charisma
+    </label>
+    <input
+      id="manual-cha"
+      type="text"
+      value="15"
+    />
+    <div
+      class="total"
+    >
+      Total:
+       
+      17
+    </div>
+  </div>
+</div>
+`;

@@ -19,6 +19,7 @@
     font-family: inherit;
     border: 1px solid var(--davy);
     background-color: var(--heaven-light);
+    text-align: center;
 }
 
 .manual-score input:focus {

@@ -11,6 +11,7 @@ exports[`renders correctly 1`] = `
   >
     <svg
       aria-hidden="false"
+      aria-label="Success"
       class="icon success-icon"
       fill="currentColor"
       role="img"

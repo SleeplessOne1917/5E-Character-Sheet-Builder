@@ -1,14 +1,17 @@
+import {
+	AbilityScoresState,
+	updateBase
+} from '../../../../redux/features/abilityScores';
 import { ChangeEvent, FocusEvent, useCallback, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import { AbilityItem } from '../../../types/srd';
-import AbilityScores from '../../../types/abilityScores';
+import { AbilityItem } from '../../../../types/srd';
+import AbilityScores from '../../../../types/abilityScores';
 import classes from './ManualScores.module.css';
-import { getTotalScore } from '../../../services/abilityScoreService';
-import { updateBase } from '../../../redux/features/abilityScores';
-import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
+import { getTotalScore } from '../../../../services/abilityScoreService';
+import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
 
-type ManualScoresProps = {
+export type ManualScoresProps = {
 	abilities: AbilityItem[];
 };
 
@@ -21,11 +24,23 @@ type AbilityScoreStrings = {
 	cha?: string | null;
 };
 
+const getInitialAbilityScoreStrings = (abilityScores: AbilityScoresState) =>
+	Object.entries(abilityScores).reduce(
+		(prev, [key, value]) => ({
+			...prev,
+			[key]: value.base ? `${value.base}` : null
+		}),
+		{}
+	);
+
 const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
 	const dispatch = useAppDispatch();
 	const getAbilityScore = useGetAbilityScore();
 	const [abilityScoreStrings, setAbilityScoreStrings] =
-		useState<AbilityScoreStrings>({});
+		useState<AbilityScoreStrings>(getInitialAbilityScoreStrings(abilityScores));
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>, abilityIndex: AbilityScores) => {
@@ -62,7 +77,11 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 	);
 
 	return (
-		<div className={classes['manual-scores']}>
+		<div
+			className={classes['manual-scores']}
+			role="region"
+			aria-label="Manual Scores"
+		>
 			{abilities.map(ability => (
 				<div key={ability.index} className={classes['manual-score']}>
 					<label htmlFor={`manual-${ability.index}`}>{ability.full_name}</label>
@@ -78,6 +97,7 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 						onChange={event =>
 							handleChange(event, ability.index as AbilityScores)
 						}
+						placeholder="&mdash;"
 					/>
 					<div className={classes.total}>
 						Total:{' '}

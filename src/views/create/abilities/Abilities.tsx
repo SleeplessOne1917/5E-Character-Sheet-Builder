@@ -14,7 +14,7 @@ import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
 import Button from '../../../components/Button/Button';
 import MainContent from '../../../components/MainContent/MainContent';
-import ManualScores from '../../../components/character-creation/Abilities/ManualScores';
+import ManualScores from '../../../components/character-creation/Abilities/ManualScores/ManualScores';
 import PointBuy from '../../../components/character-creation/Abilities/PointBuy';
 import RollGroup from '../../../components/character-creation/Abilities/RollGroup';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray';

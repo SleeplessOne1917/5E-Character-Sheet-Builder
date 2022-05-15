@@ -68,12 +68,14 @@ const Toast = (): JSX.Element => {
 						className={`${classes.icon} ${classes['error-icon']}`}
 						role="img"
 						aria-hidden="false"
+						aria-label="Error"
 					/>
 				) : (
 					<CheckCircleIcon
 						className={`${classes.icon} ${classes['success-icon']}`}
 						role="img"
 						aria-hidden="false"
+						aria-label="Success"
 					/>
 				)}
 			</div>
