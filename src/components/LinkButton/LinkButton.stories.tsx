@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import LinkButton, { LinkButtonProps } from './LinkButton';
 
-const LinkButtonSb = {
+export default {
 	title: 'Components/LinkButton',
 	component: LinkButton,
 	args: {
@@ -9,8 +9,6 @@ const LinkButtonSb = {
 		href: 'foo/bar'
 	}
 } as ComponentMeta<typeof LinkButton>;
-
-export default LinkButtonSb;
 
 const Template: ComponentStory<typeof LinkButton> = (args: LinkButtonProps) => (
 	<LinkButton {...args} />

@@ -20,7 +20,7 @@ const MockStore = ({ mockState, children }) => (
 	</Provider>
 );
 
-const MobileNaveSb = {
+export default {
 	title: 'Components/MobileNav',
 	component: MobileNav,
 	argTypes: {
@@ -28,8 +28,6 @@ const MobileNaveSb = {
 		onClickLink: { type: 'function' }
 	}
 } as ComponentMeta<typeof MobileNav>;
-
-export default MobileNaveSb;
 
 const Template: ComponentStory<typeof MobileNav> = args => (
 	<MobileNav {...args} />

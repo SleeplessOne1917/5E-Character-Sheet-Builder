@@ -13,15 +13,13 @@ const defaultState: AbilityScoresState = {
 	wis: { base: 8 }
 };
 
-const PointBuySb = {
+export default {
 	title: 'Components/PointBuy',
 	component: PointBuy,
 	args: {
 		abilities: mockAbilities
 	}
 } as ComponentMeta<typeof PointBuy>;
-
-export default PointBuySb;
 
 const Template: ComponentStory<typeof PointBuy> = (args: PointBuyProps) => (
 	<PointBuy {...args} />

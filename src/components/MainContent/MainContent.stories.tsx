@@ -2,12 +2,10 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import MainContent from './MainContent';
 
-const MainContentSb = {
+export default {
 	title: 'Components/MainContent',
 	component: MainContent
 } as ComponentMeta<typeof MainContent>;
-
-export default MainContentSb;
 
 export const Content: ComponentStory<typeof MainContent> = () => (
 	<MainContent>Content</MainContent>

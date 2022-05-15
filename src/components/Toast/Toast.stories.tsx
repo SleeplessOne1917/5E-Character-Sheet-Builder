@@ -25,12 +25,10 @@ const MockStore = ({ mockState, children }) => (
 	</Provider>
 );
 
-const ToastSb = {
+export default {
 	name: 'Components/Toast',
 	component: Toast
 } as ComponentMeta<typeof Toast>;
-
-export default ToastSb;
 
 const Template: ComponentStory<typeof Toast> = () => <Toast />;
 

@@ -5,12 +5,10 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import MockStore from '../MockAbilitiesStore';
 
-const AbilityCalculationSb = {
+export default {
 	title: 'Components/AbilityCalculation',
 	component: AbilityCalculation
 } as ComponentMeta<typeof AbilityCalculation>;
-
-export default AbilityCalculationSb;
 
 const Template: ComponentStory<typeof AbilityCalculation> = (
 	args: AbilityCalculationProps

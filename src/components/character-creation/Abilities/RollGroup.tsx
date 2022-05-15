@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { AbilityItem } from '../../../types/srd';
 import AbilityScores from '../../../types/abilityScores';
 import Button from '../../Button/Button';
-import RollDisplay from './RollDisplay';
+import RollDisplay from './Rolls/RollDisplay/RollDisplay';
 import classes from './RollGroup.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
 

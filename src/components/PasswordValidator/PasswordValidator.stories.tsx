@@ -1,12 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import PasswordValidator, { PasswordValidatorProps } from './PasswordValidator';
 
-const PasswordValidatorSb = {
+export default {
 	title: 'Components/PasswordValidator',
 	component: PasswordValidator
 } as ComponentMeta<typeof PasswordValidator>;
-
-export default PasswordValidatorSb;
 
 const Template: ComponentStory<typeof PasswordValidator> = (
 	args: PasswordValidatorProps

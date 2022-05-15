@@ -2,15 +2,13 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import MockStore, { mockAbilities } from '../MockAbilitiesStore';
 import StandardArray, { StandardArrayProps } from './StandardArray';
 
-const StandardArraySb = {
+export default {
 	title: 'Components/StandardArray',
 	component: StandardArray,
 	args: {
 		abilities: mockAbilities
 	}
 } as ComponentMeta<typeof StandardArray>;
-
-export default StandardArraySb;
 
 const Template: ComponentStory<typeof StandardArray> = (
 	args: StandardArrayProps

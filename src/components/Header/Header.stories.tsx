@@ -20,7 +20,7 @@ const MockStore = ({ mockState, children }) => (
 	</Provider>
 );
 
-const HeaderSb = {
+export default {
 	title: 'Components/Header',
 	component: Header,
 	argTypes: {
@@ -28,8 +28,6 @@ const HeaderSb = {
 		onMenuIconClick: { type: 'function' }
 	}
 } as ComponentMeta<typeof Header>;
-
-export default HeaderSb;
 
 const Template: ComponentStory<typeof Header> = (args: HeaderProps) => (
 	<Header {...args} />
