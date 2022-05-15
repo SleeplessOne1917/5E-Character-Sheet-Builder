@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import * as stories from './Toast.stories';
 
-import { act, render } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 
 import { Provider } from 'react-redux';
 import Toast from './Toast';
@@ -10,92 +10,180 @@ import { ToastType } from '../../types/toast';
 import { composeStories } from '@storybook/testing-react';
 import { show } from '../../redux/features/toast';
 import { store } from '../../redux/store';
+import userEvent from '@testing-library/user-event';
 
 const { Success, Error } = composeStories(stories);
 
 it('renders correctly', () => {
-	let container: HTMLElement;
+	render(
+		<Provider store={store}>
+			<Toast />
+		</Provider>
+	);
 
-	act(() => {
-		container = render(
-			<Provider store={store}>
-				<Toast />
-			</Provider>
-		).container;
-	});
-
-	expect(container.firstChild).toMatchSnapshot();
+	expect(screen.getByRole('alert')).toMatchSnapshot();
 });
 
 it('success renders expected content', () => {
-	let container: HTMLElement;
+	render(<Success />);
 
-	act(() => {
-		container = render(<Success />).container;
-	});
-
-	const toast = container.firstChild as HTMLElement;
-	expect(toast.classList).toContain('toast-success');
-	expect(toast.classList).not.toContain('toast-error');
-	expect(container.querySelector('.error-icon')).not.toBeInTheDocument();
-	expect(container.querySelector('.success-icon')).toBeInTheDocument();
+	const toast = screen.getByRole('alert');
+	expect(toast).toHaveClass('toast-success');
+	expect(toast).not.toHaveClass('toast-error');
+	expect(screen.getByRole('img')).not.toHaveClass('error-icon');
+	expect(screen.getByRole('img')).toHaveClass('success-icon');
 });
 
 it('error renders expected content', () => {
-	let container: HTMLElement;
+	render(<Error />);
 
-	act(() => {
-		container = render(<Error />).container;
-	});
-
-	const toast = container.firstChild as HTMLElement;
-	expect(toast.classList).not.toContain('toast-success');
-	expect(toast.classList).toContain('toast-error');
-	expect(container.querySelector('.error-icon')).toBeInTheDocument();
-	expect(container.querySelector('.success-icon')).not.toBeInTheDocument();
+	const toast = screen.getByRole('alert');
+	expect(toast).not.toHaveClass('toast-success');
+	expect(toast).toHaveClass('toast-error');
+	expect(screen.getByRole('img')).toHaveClass('error-icon');
+	expect(screen.getByRole('img')).not.toHaveClass('success-icon');
 });
 
 it('does not contain open class when closed', () => {
-	let container: HTMLElement;
+	render(
+		<Provider store={store}>
+			<Toast />
+		</Provider>
+	);
 
-	act(() => {
-		container = render(
-			<Provider store={store}>
-				<Toast />
-			</Provider>
-		).container;
-	});
-
-	expect(container.querySelector('.open')).not.toBeInTheDocument();
+	expect(screen.getByRole('alert')).not.toHaveClass('open');
 });
 
 it('contains open class when open', () => {
-	let container: HTMLElement;
+	render(<Success />);
 
-	act(() => {
-		container = render(<Success />).container;
-	});
-
-	expect(container.querySelector('.open')).toBeInTheDocument();
+	expect(screen.getByRole('alert')).toHaveClass('open');
 });
 
 it('closes itself after closeTimeoutSeconds seconds', async () => {
-	let container: HTMLElement;
+	jest.useFakeTimers();
+
+	render(
+		<Provider store={store}>
+			<Toast />
+		</Provider>
+	);
+
+	await waitFor(() =>
+		store.dispatch(
+			show({ type: ToastType.success, closeTimeoutSeconds: 3, message: 'foo' })
+		)
+	);
+
+	expect(screen.getByRole('alert')).toHaveClass('open');
 
 	act(() => {
-		container = render(
+		jest.advanceTimersByTime(3000);
+	});
+	expect(screen.getByRole('alert')).not.toHaveClass('open');
+});
+
+describe('x button tab index', () => {
+	it('is -1 when closed', () => {
+		render(
 			<Provider store={store}>
 				<Toast />
 			</Provider>
-		).container;
-
-		store.dispatch(
-			show({ type: ToastType.success, closeTimeoutSeconds: 3, message: 'foo' })
 		);
+
+		expect(screen.getByRole('button').tabIndex).toBe(-1);
 	});
 
-	await new Promise(resolve => setTimeout(resolve, 1000));
-	expect(container.querySelector('.open')).toBeInTheDocument();
-	await new Promise(resolve => setTimeout(resolve, 2000));
-	expect(container.querySelector('.open')).not.toBeInTheDocument();
+	it('is 0 when open', () => {
+		render(<Success />);
+
+		expect(screen.getByRole('button').tabIndex).toBe(0);
+	});
+});
+
+describe('closes the toast when x button is pressed', () => {
+	beforeEach(() => {
+		jest.useFakeTimers();
+		userEvent.setup({ delay: null });
+	});
+
+	it('with click', async () => {
+		render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		);
+
+		await waitFor(() =>
+			store.dispatch(
+				show({
+					type: ToastType.success,
+					closeTimeoutSeconds: 999,
+					message: 'foo'
+				})
+			)
+		);
+
+		expect(screen.getByRole('alert')).toHaveClass('open');
+
+		await waitFor(async () => {
+			await userEvent.click(screen.getByRole('button'));
+		});
+
+		expect(screen.getByRole('alert')).not.toHaveClass('open');
+	});
+
+	it('with enter', async () => {
+		render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		);
+
+		await waitFor(() =>
+			store.dispatch(
+				show({
+					type: ToastType.success,
+					closeTimeoutSeconds: 999,
+					message: 'foo'
+				})
+			)
+		);
+
+		expect(screen.getByRole('alert')).toHaveClass('open');
+
+		await waitFor(async () => {
+			await userEvent.tab();
+			await userEvent.keyboard('{Enter}');
+		});
+
+		expect(screen.getByRole('alert')).not.toHaveClass('open');
+	});
+
+	it('with space', async () => {
+		render(
+			<Provider store={store}>
+				<Toast />
+			</Provider>
+		);
+
+		await waitFor(() =>
+			store.dispatch(
+				show({
+					type: ToastType.success,
+					closeTimeoutSeconds: 999,
+					message: 'foo'
+				})
+			)
+		);
+
+		expect(screen.getByRole('alert')).toHaveClass('open');
+
+		await waitFor(async () => {
+			await userEvent.tab();
+			await userEvent.keyboard(' ');
+		});
+
+		expect(screen.getByRole('alert')).not.toHaveClass('open');
+	});
 });

@@ -3,8 +3,8 @@ import {
 	ExclamationCircleIcon,
 	XIcon
 } from '@heroicons/react/solid';
+import { KeyboardEventHandler, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { useCallback, useEffect } from 'react';
 
 import { ToastType } from '../../types/toast';
 import classes from './Toast.module.css';
@@ -48,16 +48,32 @@ const Toast = (): JSX.Element => {
 
 	const hideToast = useCallback(() => dispatch(hide()), [dispatch]);
 
+	const hideToastKeyUp: KeyboardEventHandler<SVGSVGElement> = useCallback(
+		event => {
+			event.stopPropagation();
+			event.preventDefault();
+
+			if (event.code === 'Enter' || event.code === 'Space') {
+				hideToast();
+			}
+		},
+		[hideToast]
+	);
+
 	return (
-		<div className={getClassName()} aria-label="toast" role="region">
+		<div className={getClassName()} aria-label="toast" role="alert">
 			<div className={classes['icon-container']}>
 				{type === ToastType.error ? (
 					<ExclamationCircleIcon
 						className={`${classes.icon} ${classes['error-icon']}`}
+						role="img"
+						aria-hidden="false"
 					/>
 				) : (
 					<CheckCircleIcon
 						className={`${classes.icon} ${classes['success-icon']}`}
+						role="img"
+						aria-hidden="false"
 					/>
 				)}
 			</div>
@@ -72,10 +88,12 @@ const Toast = (): JSX.Element => {
 			<div className={classes['x-container']}>
 				<XIcon
 					className={classes['x-icon']}
+					onKeyUp={hideToastKeyUp}
 					onClick={hideToast}
 					tabIndex={isOpen ? 0 : -1}
 					aria-hidden="false"
 					aria-label="Close toast"
+					role="button"
 				/>
 			</div>
 		</div>

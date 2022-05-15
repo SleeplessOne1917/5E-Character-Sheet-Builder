@@ -19,59 +19,39 @@ beforeAll(() => {
 });
 
 it('renders correctly', () => {
-	let container: HTMLElement;
+	render(<LoggedOut />).container;
 
-	act(() => {
-		container = render(<LoggedOut />).container;
-	});
-
-	expect(container.firstChild).toMatchSnapshot();
+	expect(screen.getByRole('navigation')).toMatchSnapshot();
 });
 
 it('is closed when closed', () => {
-	let container: HTMLElement;
+	render(<Closed />).container;
 
-	act(() => {
-		container = render(<Closed />).container;
-	});
-
-	const { classList } = container.querySelector('nav') as HTMLElement;
-
-	expect(classList).not.toContain('open');
+	expect(screen.getByRole('navigation')).not.toHaveClass('open');
 });
 
 it('is open when open', () => {
-	let container;
+	render(<LoggedIn />).container;
 
-	act(() => {
-		container = render(<LoggedIn />).container;
-	});
-
-	const { classList } = container.querySelector('nav') as HTMLElement;
-
-	expect(classList).toContain('open');
+	expect(screen.getByRole('navigation')).toHaveClass('open');
 });
 
 describe('contains expected links', () => {
 	it('when logged in', () => {
-		act(() => {
-			render(<LoggedIn />);
-		});
+		render(<LoggedIn />);
 
-		expect(screen.queryByText(/Create/i)).toBeInTheDocument();
+		expect(screen.getByText(/Create/i)).toBeInTheDocument();
 		expect(screen.queryByText(/Log In/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/Sign Up/i)).not.toBeInTheDocument();
-		expect(screen.queryByText(/Log Out/i)).toBeInTheDocument();
+		expect(screen.getByText(/Log Out/i)).toBeInTheDocument();
 	});
 
 	it('when logged out', () => {
-		act(() => {
-			render(<LoggedOut />);
-		});
+		render(<LoggedOut />);
 
-		expect(screen.queryByText(/Create/i)).toBeInTheDocument();
-		expect(screen.queryByText(/Log In/i)).toBeInTheDocument();
-		expect(screen.queryByText(/Sign Up/i)).toBeInTheDocument();
+		expect(screen.getByText(/Create/i)).toBeInTheDocument();
+		expect(screen.getByText(/Log In/i)).toBeInTheDocument();
+		expect(screen.getByText(/Sign Up/i)).toBeInTheDocument();
 		expect(screen.queryByText(/Log Out/i)).not.toBeInTheDocument();
 	});
 });
@@ -79,12 +59,8 @@ describe('contains expected links', () => {
 it('calls onClickLink when link is clicked', async () => {
 	const mockOnClickLink = jest.fn();
 
-	act(() => {
-		render(<LoggedOut onClickLink={mockOnClickLink} />);
-	});
-	await act(async () => {
-		await userEvent.click(screen.getAllByRole('link').at(0) as HTMLElement);
-	});
+	render(<LoggedOut onClickLink={mockOnClickLink} />);
+	await userEvent.click(screen.getAllByRole('link').at(0) as HTMLElement);
 
 	expect(mockOnClickLink).toHaveBeenCalled();
 });

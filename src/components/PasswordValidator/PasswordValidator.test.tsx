@@ -18,22 +18,14 @@ const {
 } = composeStories(stories);
 
 it('renders correctly', () => {
-	let container: HTMLElement;
+	render(<ValidPassword />).container;
 
-	act(() => {
-		container = render(<ValidPassword />).container;
-	});
-
-	expect(container.getElementsByClassName('container')[0]).toMatchSnapshot();
+	expect(screen.getByTestId('container')).toMatchSnapshot();
 });
 
 describe('has no matching sections', () => {
 	it('when password is not passed in', () => {
-		let container: HTMLElement;
-
-		act(() => {
-			container = render(<NoPassword />).container;
-		});
+		const container = render(<NoPassword />).container;
 
 		const noMatches = container.getElementsByClassName('no-match');
 		const xs = container.getElementsByClassName('x');
@@ -46,11 +38,7 @@ describe('has no matching sections', () => {
 	});
 
 	it('when password is empty', () => {
-		let container: HTMLElement;
-
-		act(() => {
-			container = render(<EmptyPassword />).container;
-		});
+		const container = render(<EmptyPassword />).container;
 
 		const noMatches = container.getElementsByClassName('no-match');
 		const xs = container.getElementsByClassName('x');
@@ -65,72 +53,58 @@ describe('has no matching sections', () => {
 
 describe('has expected matches for', () => {
 	it('lowercase letters', () => {
-		act(() => {
-			render(<LowercaseLetterPassword />);
-		});
+		render(<LowercaseLetterPassword />);
 
 		const element = screen.getByText(/lowercase/i);
-		expect(element.classList).toContain('match');
-		expect(element.classList).not.toContain('no-match');
+		expect(element).toHaveClass('match');
+		expect(element).not.toHaveClass('no-match');
 		expect(element.querySelector('.x')).not.toBeInTheDocument();
 		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('uppercase letters', () => {
-		act(() => {
-			render(<UppercaseLetterPassword />);
-		});
+		render(<UppercaseLetterPassword />);
 
 		const element = screen.getByText(/uppercase/i);
-		expect(element.classList).toContain('match');
-		expect(element.classList).not.toContain('no-match');
+		expect(element).toHaveClass('match');
+		expect(element).not.toHaveClass('no-match');
 		expect(element.querySelector('.x')).not.toBeInTheDocument();
 		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('min length letters', () => {
-		act(() => {
-			render(<MinLengthPassword />);
-		});
+		render(<MinLengthPassword />);
 
 		const element = screen.getByText(/characters long/i);
-		expect(element.classList).toContain('match');
-		expect(element.classList).not.toContain('no-match');
+		expect(element).toHaveClass('match');
+		expect(element).not.toHaveClass('no-match');
 		expect(element.querySelector('.x')).not.toBeInTheDocument();
 		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('numbers', () => {
-		act(() => {
-			render(<NumberPassword />);
-		});
+		render(<NumberPassword />);
 
 		const element = screen.getByText(/number/i);
-		expect(element.classList).toContain('match');
-		expect(element.classList).not.toContain('no-match');
+		expect(element).toHaveClass('match');
+		expect(element).not.toHaveClass('no-match');
 		expect(element.querySelector('.x')).not.toBeInTheDocument();
 		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 
 	it('special characters', () => {
-		act(() => {
-			render(<SpecialCharPassword />);
-		});
+		render(<SpecialCharPassword />);
 
 		const element = screen.getByText(/special character/i);
-		expect(element.classList).toContain('match');
-		expect(element.classList).not.toContain('no-match');
+		expect(element).toHaveClass('match');
+		expect(element).not.toHaveClass('no-match');
 		expect(element.querySelector('.x')).not.toBeInTheDocument();
 		expect(element.querySelector('.check')).toBeInTheDocument();
 	});
 });
 
 it('has all matches when password is valid', () => {
-	let container: HTMLElement;
-
-	act(() => {
-		container = render(<ValidPassword />).container;
-	});
+	const container = render(<ValidPassword />).container;
 
 	const noMatches = container.getElementsByClassName('no-match');
 	const xs = container.getElementsByClassName('x');

@@ -4,15 +4,16 @@ exports[`renders correctly 1`] = `
 <div
   aria-label="toast"
   class="toast toast-success"
-  role="region"
+  role="alert"
 >
   <div
     class="icon-container"
   >
     <svg
-      aria-hidden="true"
+      aria-hidden="false"
       class="icon success-icon"
       fill="currentColor"
+      role="img"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -43,6 +44,7 @@ exports[`renders correctly 1`] = `
       aria-label="Close toast"
       class="x-icon"
       fill="currentColor"
+      role="button"
       tabindex="-1"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"

@@ -17,7 +17,7 @@ const PasswordValidator = ({
 	password
 }: PasswordValidatorProps): JSX.Element => {
 	return (
-		<div className={classes.container}>
+		<div className={classes.container} data-testid="container">
 			<div
 				className={`${classes.validator} ${
 					classes[`${password && password.length >= 8 ? '' : 'no-'}match`]

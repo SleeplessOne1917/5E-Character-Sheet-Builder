@@ -21,7 +21,7 @@ const Header = ({
 		<header className={classes.header} aria-label="Header" role="banner">
 			<div className={classes['brand-container']}>
 				<Link href="/">
-					<a onClick={onLogoIconClick} aria-label="Home">
+					<a onClick={onLogoIconClick} aria-label="Home" data-testid="home">
 						<svg className={classes.logo}>
 							<use xlinkHref="/Icons.svg#logo" />
 						</svg>
@@ -63,7 +63,11 @@ const Header = ({
 					)}
 				</ul>
 			</nav>
-			<MenuIcon className={classes['menu-icon']} onClick={onMenuIconClick} />
+			<MenuIcon
+				className={classes['menu-icon']}
+				onClick={onMenuIconClick}
+				data-testid="menu"
+			/>
 		</header>
 	);
 };

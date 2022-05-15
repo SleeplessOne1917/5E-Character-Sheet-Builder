@@ -19,33 +19,27 @@ beforeAll(() => {
 });
 
 it('renders correctly', () => {
-	act(() => {
-		render(<LoggedOut />);
-	});
+	render(<LoggedOut />);
 
 	expect(screen.getByRole('banner')).toMatchSnapshot();
 });
 
 describe('has expected links', () => {
 	it('when logged in', () => {
-		act(() => {
-			render(<LoggedIn />);
-		});
+		render(<LoggedIn />);
 
-		expect(screen.queryByText(/Create/i)).toBeInTheDocument();
+		expect(screen.getByText(/Create/i)).toBeInTheDocument();
 		expect(screen.queryByText(/Log In/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/Sign Up/i)).not.toBeInTheDocument();
-		expect(screen.queryByText(/Log Out/i)).toBeInTheDocument();
+		expect(screen.getByText(/Log Out/i)).toBeInTheDocument();
 	});
 
 	it('when logged out', () => {
-		act(() => {
-			render(<LoggedOut />);
-		});
+		render(<LoggedOut />);
 
-		expect(screen.queryByText(/Create/i)).toBeInTheDocument();
-		expect(screen.queryByText(/Log In/i)).toBeInTheDocument();
-		expect(screen.queryByText(/Sign Up/i)).toBeInTheDocument();
+		expect(screen.getByText(/Create/i)).toBeInTheDocument();
+		expect(screen.getByText(/Log In/i)).toBeInTheDocument();
+		expect(screen.getByText(/Sign Up/i)).toBeInTheDocument();
 		expect(screen.queryByText(/Log Out/i)).not.toBeInTheDocument();
 	});
 });
@@ -53,13 +47,8 @@ describe('has expected links', () => {
 it('calls onLogoIconClick when logo icon is clicked', async () => {
 	const mockOnLogoIconClick = jest.fn();
 
-	act(() => {
-		render(<LoggedOut onLogoIconClick={mockOnLogoIconClick} />);
-	});
-	await act(async () => {
-		const header = screen.getByRole('banner');
-		await userEvent.click(header.querySelector('.logo') as HTMLElement);
-	});
+	render(<LoggedOut onLogoIconClick={mockOnLogoIconClick} />);
+	await userEvent.click(screen.getByTestId('home'));
 
 	expect(mockOnLogoIconClick).toHaveBeenCalled();
 });
@@ -67,13 +56,8 @@ it('calls onLogoIconClick when logo icon is clicked', async () => {
 it('calls onMenuIconClick when menu icon is clicked', async () => {
 	const mockOnMenuIconClick = jest.fn();
 
-	act(() => {
-		render(<LoggedOut onMenuIconClick={mockOnMenuIconClick} />);
-	});
-	await act(async () => {
-		const header = screen.getByRole('banner');
-		await userEvent.click(header.querySelector('.menu-icon') as HTMLElement);
-	});
+	render(<LoggedOut onMenuIconClick={mockOnMenuIconClick} />);
+	await userEvent.click(screen.getByTestId('menu'));
 
 	expect(mockOnMenuIconClick).toHaveBeenCalled();
 });

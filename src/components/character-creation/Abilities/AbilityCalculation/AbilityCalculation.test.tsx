@@ -20,19 +20,13 @@ const getCalculationNumberDiv = (text: string) => {
 };
 
 it('renders correctly', () => {
-	let container: HTMLElement;
-
-	act(() => {
-		container = render(<Everything />).container;
-	});
+	const container = render(<Everything />).container;
 
 	expect(container.firstChild).toMatchSnapshot();
 });
 
 it('displays total score and modifier when base score is set', () => {
-	act(() => {
-		render(<OnlyBaseScore />).container;
-	});
+	render(<OnlyBaseScore />);
 
 	expect(getCalculationNumberDiv('Total Score')).not.toHaveTextContent(
 		'\u2014'
@@ -41,9 +35,7 @@ it('displays total score and modifier when base score is set', () => {
 });
 
 it('does not display total score when base score is not set', () => {
-	act(() => {
-		render(<AllBonusesAndOverrideButNoBase />).container;
-	});
+	render(<AllBonusesAndOverrideButNoBase />);
 
 	expect(getCalculationNumberDiv('Total Score')).toHaveTextContent('\u2014');
 	expect(getCalculationNumberDiv('Modifier')).toHaveTextContent('\u2014');
@@ -51,9 +43,7 @@ it('does not display total score when base score is not set', () => {
 });
 
 it('uses default values when bonuses not passed in', () => {
-	act(() => {
-		render(<OnlyBaseScore />);
-	});
+	render(<OnlyBaseScore />);
 
 	expect(getCalculationNumberDiv('Racial Bonus')).toHaveTextContent('+0');
 	expect(getCalculationNumberDiv('Ability Improvements')).toHaveTextContent(
@@ -64,39 +54,31 @@ it('uses default values when bonuses not passed in', () => {
 
 describe('other bonus', () => {
 	it('does not allow input lower than -10', async () => {
-		let otherBonusInput: HTMLInputElement;
-
-		act(() => {
-			render(
-				<Provider store={store}>
-					<AbilityCalculation index="str" name="Strength" />
-				</Provider>
-			);
-		});
-		await act(async () => {
-			otherBonusInput = screen.getByLabelText(/Other Bonus/i);
-			await userEvent.type(otherBonusInput, '-11');
-			await userEvent.click(screen.getByText(/Other Bonus/i));
-		});
+		render(
+			<Provider store={store}>
+				<AbilityCalculation index="str" name="Strength" />
+			</Provider>
+		);
+		const otherBonusInput = screen.getByLabelText(
+			/Other Bonus/i
+		) as HTMLInputElement;
+		await userEvent.type(otherBonusInput, '-11');
+		await userEvent.click(screen.getByText(/Other Bonus/i));
 
 		expect(otherBonusInput.value).toBe('-10');
 	});
 
 	it('does not allow input greater than 10', async () => {
-		let otherBonusInput: HTMLInputElement;
-
-		act(() => {
-			render(
-				<Provider store={store}>
-					<AbilityCalculation index="dex" name="Dexterity" />
-				</Provider>
-			);
-		});
-		await act(async () => {
-			otherBonusInput = screen.getByLabelText(/Other Bonus/i);
-			await userEvent.type(otherBonusInput, '11');
-			await userEvent.click(screen.getByText(/Other Bonus/i));
-		});
+		render(
+			<Provider store={store}>
+				<AbilityCalculation index="dex" name="Dexterity" />
+			</Provider>
+		);
+		const otherBonusInput = screen.getByLabelText(
+			/Other Bonus/i
+		) as HTMLInputElement;
+		await userEvent.type(otherBonusInput, '11');
+		await userEvent.click(screen.getByText(/Other Bonus/i));
 
 		expect(otherBonusInput.value).toBe('10');
 	});
@@ -104,39 +86,31 @@ describe('other bonus', () => {
 
 describe('override', () => {
 	it('does not allow input lower than 3', async () => {
-		let overrideBonusInput: HTMLInputElement;
-
-		act(() => {
-			render(
-				<Provider store={store}>
-					<AbilityCalculation index="con" name="Constitution" />
-				</Provider>
-			);
-		});
-		await act(async () => {
-			overrideBonusInput = screen.getByLabelText(/Override Score/i);
-			await userEvent.type(overrideBonusInput, '2');
-			await userEvent.click(screen.getByText(/Override Score/i));
-		});
+		render(
+			<Provider store={store}>
+				<AbilityCalculation index="con" name="Constitution" />
+			</Provider>
+		);
+		const overrideBonusInput = screen.getByLabelText(
+			/Override Score/i
+		) as HTMLInputElement;
+		await userEvent.type(overrideBonusInput, '2');
+		await userEvent.click(screen.getByText(/Override Score/i));
 
 		expect(overrideBonusInput.value).toBe('3');
 	});
 
 	it('does not allow input greater than 30', async () => {
-		let overrideBonusInput: HTMLInputElement;
-
-		act(() => {
-			render(
-				<Provider store={store}>
-					<AbilityCalculation index="con" name="Constitution" />
-				</Provider>
-			);
-		});
-		await act(async () => {
-			overrideBonusInput = screen.getByLabelText(/Override Score/i);
-			await userEvent.type(overrideBonusInput, '31');
-			await userEvent.click(screen.getByText(/Override Score/i));
-		});
+		render(
+			<Provider store={store}>
+				<AbilityCalculation index="con" name="Constitution" />
+			</Provider>
+		);
+		const overrideBonusInput = screen.getByLabelText(
+			/Override Score/i
+		) as HTMLInputElement;
+		await userEvent.type(overrideBonusInput, '31');
+		await userEvent.click(screen.getByText(/Override Score/i));
 
 		expect(overrideBonusInput.value).toBe('30');
 	});

@@ -17,25 +17,19 @@ beforeAll(() => {
 });
 
 it('renders correctly', () => {
-	act(() => {
-		render(<Default />);
-	});
+	render(<Default />);
 
 	expect(screen.getByRole('link')).toMatchSnapshot();
 });
 
 it('sets default tab index when not passed in', () => {
-	act(() => {
-		render(<Default />);
-	});
+	render(<Default />);
 
 	expect(screen.getByRole('link').tabIndex).toBe(0);
 });
 
 it('sets passed in properties', () => {
-	act(() => {
-		render(<Untabbable />);
-	});
+	render(<Untabbable />);
 
 	const { tabIndex, href } = screen.getByRole('link') as HTMLLinkElement;
 	expect(tabIndex).toBe(Untabbable.args?.tabIndex);
@@ -45,14 +39,10 @@ it('sets passed in properties', () => {
 it('calls onClick', async () => {
 	const onClickMock = jest.fn();
 
-	act(() => {
-		render(<Default onClick={onClickMock} />);
-	});
-	await act(async () => {
-		const link = screen.getByRole('link');
+	render(<Default onClick={onClickMock} />);
+	const link = screen.getByRole('link');
 
-		await userEvent.click(link);
-	});
+	await userEvent.click(link);
 
 	expect(onClickMock).toHaveBeenCalled();
 });

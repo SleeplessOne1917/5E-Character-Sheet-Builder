@@ -11,6 +11,7 @@ exports[`renders correctly 1`] = `
   >
     <a
       aria-label="Home"
+      data-testid="home"
       href="/"
     >
       <svg
@@ -68,6 +69,7 @@ exports[`renders correctly 1`] = `
   <svg
     aria-hidden="true"
     class="menu-icon"
+    data-testid="menu"
     fill="currentColor"
     viewBox="0 0 20 20"
     xmlns="http://www.w3.org/2000/svg"
