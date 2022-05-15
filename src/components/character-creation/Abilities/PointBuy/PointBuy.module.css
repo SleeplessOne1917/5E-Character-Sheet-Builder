@@ -1,7 +1,6 @@
 .abilities {
     display: flex;
     flex-wrap: wrap;
-    align-self: center;
     width: 100%;
 }
 
@@ -86,5 +85,11 @@
 @media screen and (min-width: 1024px) {
     .ability {
         width: 14%;
+    }
+}
+
+@media screen and (min-width: 1536px) {
+    .ability {
+        width: 15%
     }
 }

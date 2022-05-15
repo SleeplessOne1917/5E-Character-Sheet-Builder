@@ -1,24 +1,47 @@
+import {
+	AbilityScoresState,
+	updateBase
+} from '../../../../redux/features/abilityScores';
 import { KeyboardEvent, useCallback, useState } from 'react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import { AbilityItem } from '../../../types/srd';
-import AbilityScores from '../../../types/abilityScores';
+import { AbilityItem } from '../../../../types/srd';
+import AbilityScores from '../../../../types/abilityScores';
 import classes from './PointBuy.module.css';
-import { getTotalScore } from '../../../services/abilityScoreService';
-import { updateBase } from '../../../redux/features/abilityScores';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
-import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
+import { getTotalScore } from '../../../../services/abilityScoreService';
+import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
 
-type PointBuyProps = {
+export type PointBuyProps = {
 	abilities: AbilityItem[];
 };
 
 const MAX_POINTS = 27;
 
+const calculateInitialPoints = (base: number, total: number): number => {
+	if (base > 13) {
+		return calculateInitialPoints(base - 1, total - 2);
+	}
+	if (base > 8) {
+		return calculateInitialPoints(base - 1, total - 1);
+	}
+
+	return total;
+};
+
+const getInitialPoints = (abilityScores: AbilityScoresState) =>
+	Object.values(abilityScores).reduce(
+		(prev: number, { base }) => calculateInitialPoints(base as number, prev),
+		MAX_POINTS
+	);
+
 const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
 	const getAbilityScore = useGetAbilityScore();
 	const dispatch = useAppDispatch();
-	const [points, setPoints] = useState(MAX_POINTS);
+	const [points, setPoints] = useState(getInitialPoints(abilityScores));
 
 	const subtractScore = useCallback(
 		(abilityIndex: AbilityScores) => {
@@ -73,7 +96,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 	);
 
 	return (
-		<div className={classes.container}>
+		<div className={classes.container} role="region" aria-label="Point Buy">
 			<div>
 				<div className={classes['points-title']}>Points Remaining</div>
 				<div className={classes['points-remaining']}>
@@ -97,6 +120,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										onKeyUp={event => handleSubtractScoreKeyUp(event, indexKey)}
 										aria-hidden="false"
 										aria-label={`${ability.full_name} minus 1`}
+										role="button"
 									/>
 								)}
 								{abilityScore}
@@ -110,6 +134,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 											onKeyUp={event => handleAddScoreKeyUp(event, indexKey)}
 											aria-hidden="false"
 											aria-label={`${ability.full_name} plus 1`}
+											role="button"
 										/>
 									)}
 							</div>

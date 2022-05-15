@@ -20,7 +20,7 @@ export type AbilityScore = {
 	override?: number | null;
 };
 
-type AbilityPayload = {
+export type AbilityPayload = {
 	value: number | null;
 	abilityIndex: AbilityScores;
 };

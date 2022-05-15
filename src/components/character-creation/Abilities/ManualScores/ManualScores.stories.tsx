@@ -15,4 +15,4 @@ export default ManualScoresSb;
 export const Default: ComponentStory<typeof ManualScores> = (
 	args: ManualScoresProps
 ) => <ManualScores {...args} />;
-Default.decorators = [story => <MockStore index="dex">{story()}</MockStore>];
+Default.decorators = [story => <MockStore>{story()}</MockStore>];

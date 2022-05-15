@@ -1,0 +1,252 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  aria-label="Point Buy"
+  class="container"
+  role="region"
+>
+  <div>
+    <div
+      class="points-title"
+    >
+      Points Remaining
+    </div>
+    <div
+      class="points-remaining"
+    >
+      16
+      /
+      27
+    </div>
+  </div>
+  <div
+    class="abilities"
+  >
+    <div
+      class="ability"
+    >
+      <div>
+        Strength
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        <svg
+          aria-hidden="false"
+          aria-label="Strength minus 1"
+          class="icon minus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        12
+        <svg
+          aria-hidden="false"
+          aria-label="Strength plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        12
+      </div>
+    </div>
+    <div
+      class="ability"
+    >
+      <div>
+        Dexterity
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        8
+        <svg
+          aria-hidden="false"
+          aria-label="Dexterity plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        8
+      </div>
+    </div>
+    <div
+      class="ability"
+    >
+      <div>
+        Constitution
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        8
+        <svg
+          aria-hidden="false"
+          aria-label="Constitution plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        8
+      </div>
+    </div>
+    <div
+      class="ability"
+    >
+      <div>
+        Intelligence
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        8
+        <svg
+          aria-hidden="false"
+          aria-label="Intelligence plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        8
+      </div>
+    </div>
+    <div
+      class="ability"
+    >
+      <div>
+        Wisdom
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        <svg
+          aria-hidden="false"
+          aria-label="Wisdom minus 1"
+          class="icon minus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        14
+        <svg
+          aria-hidden="false"
+          aria-label="Wisdom plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        14
+      </div>
+    </div>
+    <div
+      class="ability"
+    >
+      <div>
+        Charisma
+      </div>
+      <div
+        class="point-adjuster"
+      >
+        8
+        <svg
+          aria-hidden="false"
+          aria-label="Charisma plus 1"
+          class="icon plus"
+          fill="currentColor"
+          role="button"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div>
+        Total: 
+        8
+      </div>
+    </div>
+  </div>
+</div>
+`;

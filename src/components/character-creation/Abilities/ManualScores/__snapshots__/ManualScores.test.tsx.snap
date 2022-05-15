@@ -16,6 +16,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-str"
+      placeholder="—"
       type="text"
       value="12"
     />
@@ -37,6 +38,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-dex"
+      placeholder="—"
       type="text"
       value="8"
     />
@@ -58,6 +60,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-con"
+      placeholder="—"
       type="text"
       value=""
     />
@@ -79,6 +82,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-int"
+      placeholder="—"
       type="text"
       value=""
     />
@@ -100,6 +104,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-wis"
+      placeholder="—"
       type="text"
       value="14"
     />
@@ -121,6 +126,7 @@ exports[`renders correctly 1`] = `
     </label>
     <input
       id="manual-cha"
+      placeholder="—"
       type="text"
       value="15"
     />
