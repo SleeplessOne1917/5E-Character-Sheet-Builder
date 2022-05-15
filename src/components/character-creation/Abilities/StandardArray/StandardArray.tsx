@@ -1,16 +1,16 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import { AbilityItem } from '../../../types/srd';
-import AbilityScores from '../../../types/abilityScores';
+import { AbilityItem } from '../../../../types/srd';
+import AbilityScores from '../../../../types/abilityScores';
 import classes from './StandardArray.module.css';
-import { getTotalScore } from '../../../services/abilityScoreService';
-import { updateBase } from '../../../redux/features/abilityScores';
-import useGetAbilityScore from '../../../hooks/useGetAbilityScore';
+import { getTotalScore } from '../../../../services/abilityScoreService';
+import { updateBase } from '../../../../redux/features/abilityScores';
+import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
 
 const arrayValues = [8, 10, 12, 13, 14, 15];
 
-type StandardArrayProps = {
+export type StandardArrayProps = {
 	abilities: AbilityItem[];
 };
 
@@ -34,14 +34,21 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 	);
 
 	return (
-		<div className={classes.abilities}>
+		<div
+			className={classes.abilities}
+			role="region"
+			aria-label="Standard Array"
+		>
 			{abilities.map(ability => {
 				const abilityScore = getAbilityScore(ability.index as AbilityScores);
 
 				return (
 					<div key={ability.index} className={classes.ability}>
-						<div>{ability.full_name}</div>
+						<label htmlFor={`${ability.index}-select`}>
+							{ability.full_name}
+						</label>
 						<select
+							id={`${ability.index}-select`}
 							onChange={event =>
 								handleValueSelect(event, ability.index as AbilityScores)
 							}

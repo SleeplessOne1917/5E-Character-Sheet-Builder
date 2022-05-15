@@ -19,8 +19,10 @@
     margin: 1rem 0;
 }
 
-.ability div:first-child {
+.ability label {
     font-size: 1.2rem;
+    font-weight: bold;
+    margin: 1rem 0;
 }
 
 .ability select {
@@ -28,10 +30,29 @@
     border: 1px solid var(--davy);
     font-size: 1.5rem;
     font-family: inherit;
+    background-color: var(--heaven-light);
+}
+
+@media screen and (min-width: 768px) {
+    .ability {
+        width: 30%;
+    }
 }
 
 @media screen and (min-width: 1024px) {
     .ability {
+        width: 14.5%;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .ability {
         width: 14%;
+    }
+}
+
+@media screen and (min-width: 1984px) {
+    .ability {
+        width: 15%;
     }
 }

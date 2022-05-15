@@ -29,7 +29,7 @@ it('has no plus buttons when all points are spent', () => {
 	expect(screen.queryByLabelText(/plus 1/i)).not.toBeInTheDocument();
 });
 
-it('subtracts the expected number of points on increment', async () => {
+it('subtracts the expected number of points on increment and shows/hides expected buttons', async () => {
 	render(<Default />);
 
 	const plusButton = screen.getAllByLabelText(/plus 1/i).at(0) as HTMLElement;
@@ -65,4 +65,7 @@ it('subtracts the expected number of points on increment', async () => {
 	await userEvent.click(plusButton);
 	// Score = 15
 	expect(pointsRemaining).toHaveTextContent('18/27');
+
+	expect(plusButton).not.toBeInTheDocument();
+	expect(screen.getByLabelText(/minus 1/i)).toBeInTheDocument();
 });
