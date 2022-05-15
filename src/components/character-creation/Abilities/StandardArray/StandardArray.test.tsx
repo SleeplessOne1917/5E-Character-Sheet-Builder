@@ -21,7 +21,7 @@ const getSelectOptions = (select: HTMLSelectElement) => {
 it('renders correctly', () => {
 	render(<HalfSelected />);
 
-	expect(screen.getByRole('region')).toBeInTheDocument();
+	expect(screen.getByRole('region')).toMatchSnapshot();
 });
 
 it('only renders total score when score is selected', async () => {
