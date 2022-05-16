@@ -38,6 +38,7 @@
     font-size: 1.5rem;
     font-family: inherit;
     border: 1px solid var(--davy);
+    background-color: var(--heaven-light);
 }
 
 .display-container select:focus {

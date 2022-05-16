@@ -27,6 +27,7 @@ exports[`renders correctly when roll is showing 1`] = `
 >
   <div
     class="total"
+    data-testid="roll-total"
   >
     11
   </div>
@@ -35,21 +36,25 @@ exports[`renders correctly when roll is showing 1`] = `
   >
     <div
       class="roll"
+      data-testid="roll-die"
     >
       6
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       4
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       1
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       1
     </div>
@@ -103,6 +108,7 @@ exports[`renders correctly when roll is showing and ability is selected 1`] = `
 >
   <div
     class="total"
+    data-testid="roll-total"
   >
     18
   </div>
@@ -111,21 +117,25 @@ exports[`renders correctly when roll is showing and ability is selected 1`] = `
   >
     <div
       class="roll"
+      data-testid="roll-die"
     >
       6
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       6
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       6
     </div>
     <div
       class="roll"
+      data-testid="roll-die"
     >
       3
     </div>

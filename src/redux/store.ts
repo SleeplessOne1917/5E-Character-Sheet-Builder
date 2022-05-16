@@ -8,18 +8,21 @@ import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
 
-export const store = configureStore({
-	reducer: {
-		toast,
-		viewer,
-		editingCharacter: editingCharacter as Reducer<
-			EditingCharacterState,
-			AnyAction
-		>,
-		rollGroups,
-		generationMethod
-	}
-});
+export const getStore = () =>
+	configureStore({
+		reducer: {
+			toast,
+			viewer,
+			editingCharacter: editingCharacter as Reducer<
+				EditingCharacterState,
+				AnyAction
+			>,
+			rollGroups,
+			generationMethod
+		}
+	});
+
+const store = getStore();
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = typeof store.dispatch;

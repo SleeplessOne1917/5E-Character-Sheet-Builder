@@ -24,10 +24,12 @@ const RollDisplay = ({
 	if (rolls) {
 		return (
 			<div className={classes['display-container']} data-testid="roll-display">
-				<div className={classes.total}>{total}</div>
+				<div className={classes.total} data-testid="roll-total">
+					{total}
+				</div>
 				<div className={classes.rolls}>
 					{rolls.map((roll, index) => (
-						<div key={index} className={classes.roll}>
+						<div key={index} className={classes.roll} data-testid="roll-die">
 							{roll}
 						</div>
 					))}

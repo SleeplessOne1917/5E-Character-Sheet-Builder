@@ -7,8 +7,8 @@ import { render, screen } from '@testing-library/react';
 import ManualScores from './ManualScores';
 import { Provider } from 'react-redux';
 import { composeStories } from '@storybook/testing-react';
+import { getStore } from '../../../../redux/store';
 import { mockAbilities } from '../MockAbilitiesStore';
-import { store } from '../../../../redux/store';
 import userEvent from '@testing-library/user-event';
 
 const { Default } = composeStories(stories);
@@ -62,7 +62,7 @@ describe('text boxes', () => {
 
 it('only shows total when base score is set', async () => {
 	render(
-		<Provider store={store}>
+		<Provider store={getStore()}>
 			<ManualScores abilities={mockAbilities} />
 		</Provider>
 	);

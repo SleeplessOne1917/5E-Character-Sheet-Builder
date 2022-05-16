@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import AbilityScores from '../../types/abilityScores';
 
-type RollGroupsState = {
+export type RollGroupsState = {
 	[key: number]: Roll[];
 };
 
@@ -12,7 +12,7 @@ type Roll = {
 };
 
 const initialState: RollGroupsState = {
-	1: [{}, {}, {}, {}, {}, {}]
+	0: [{}, {}, {}, {}, {}, {}]
 };
 
 type AddRollsPayload = {

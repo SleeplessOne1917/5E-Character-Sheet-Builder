@@ -1,15 +1,18 @@
-import { ChangeEvent, MouseEventHandler, useCallback, useState } from 'react';
-import { addAbility, addRolls } from '../../../redux/features/rollGroups';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { ChangeEvent, MouseEventHandler, useCallback } from 'react';
+import { addAbility, addRolls } from '../../../../../redux/features/rollGroups';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
 
-import { AbilityItem } from '../../../types/srd';
-import AbilityScores from '../../../types/abilityScores';
-import Button from '../../Button/Button';
-import RollDisplay from './Rolls/RollDisplay/RollDisplay';
+import { AbilityItem } from '../../../../../types/srd';
+import AbilityScores from '../../../../../types/abilityScores';
+import Button from '../../../../Button/Button';
+import RollDisplay from '../RollDisplay/RollDisplay';
 import classes from './RollGroup.module.css';
-import { updateBase } from '../../../redux/features/abilityScores';
+import { updateBase } from '../../../../../redux/features/abilityScores';
 
-type RollGroupProps = {
+export type RollGroupProps = {
 	onDeleteGroup?: MouseEventHandler<HTMLButtonElement> | null;
 	group: number;
 	abilities: AbilityItem[];
@@ -84,7 +87,7 @@ const RollGroup = ({
 	}, [dispatch, rollInfos]);
 
 	return (
-		<div className={classes['roll-group']}>
+		<div className={classes['roll-group']} data-testid="roll-group">
 			{onDeleteGroup && (
 				<Button onClick={onDeleteGroup} size="small">
 					Delete Group
