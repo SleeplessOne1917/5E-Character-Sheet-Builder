@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when closed 1`] = `
+<div
+  class="descriptor"
+  data-testid="descriptor"
+>
+  <div
+    aria-label="Foo"
+    class="title"
+    role="button"
+    style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+    tabindex="0"
+  >
+    Foo
+    <svg
+      aria-hidden="true"
+      class="chevron"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when open with multiple paragraphs 1`] = `
+<div
+  class="descriptor"
+  data-testid="descriptor"
+>
+  <div
+    aria-label="Baz"
+    class="title"
+    role="button"
+    style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
+    tabindex="0"
+  >
+    Baz
+    <svg
+      aria-hidden="true"
+      class="chevron"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+  <div
+    class="content"
+  >
+    <p>
+      This is a paragraph.
+    </p>
+    <p>
+      This is another paragraph.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when open with single paragraph 1`] = `
+<div
+  class="descriptor"
+  data-testid="descriptor"
+>
+  <div
+    aria-label="Bar"
+    class="title"
+    role="button"
+    style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
+    tabindex="0"
+  >
+    Bar
+    <svg
+      aria-hidden="true"
+      class="chevron"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+  <div
+    class="content"
+  >
+    <p>
+      This is a paragraph.
+    </p>
+  </div>
+</div>
+`;

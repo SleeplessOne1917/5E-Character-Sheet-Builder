@@ -1,9 +1,9 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
-import { KeyboardEventHandler, useCallback, useEffect, useState } from 'react';
+import { KeyboardEventHandler, memo, useCallback } from 'react';
 
 import classes from './Descriptor.module.css';
 
-type DescriptorProps = {
+export type DescriptorProps = {
 	title: string;
 	description: string | string[];
 	isOpen: boolean;
@@ -18,7 +18,10 @@ const Descriptor = ({
 }: DescriptorProps) => {
 	const toggleOpenKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
-			if (event.code === 'Enter') {
+			event.stopPropagation();
+			event.preventDefault();
+
+			if (event.code === 'Enter' || event.code === 'Space') {
 				toggleOpen();
 			}
 		},
@@ -26,7 +29,7 @@ const Descriptor = ({
 	);
 
 	return (
-		<div className={classes.descriptor}>
+		<div className={classes.descriptor} data-testid="descriptor">
 			<div
 				className={classes.title}
 				tabIndex={0}
@@ -37,6 +40,7 @@ const Descriptor = ({
 					borderBottomLeftRadius: isOpen ? '0' : '0.5rem',
 					borderBottomRightRadius: isOpen ? '0' : '0.5rem'
 				}}
+				role="button"
 			>
 				{title}
 				{isOpen ? (
@@ -58,4 +62,4 @@ const Descriptor = ({
 	);
 };
 
-export default Descriptor;
+export default memo(Descriptor);
