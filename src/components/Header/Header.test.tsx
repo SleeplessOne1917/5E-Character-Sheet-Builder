@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import * as stories from './Header.stories';
 
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';

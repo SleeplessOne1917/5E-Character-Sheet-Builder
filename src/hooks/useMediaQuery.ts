@@ -5,7 +5,13 @@ const useMediaQuery = (query: string): boolean => {
 	useEffect(() => {
 		const mediaQuery = window.matchMedia(query);
 		setMatches(mediaQuery.matches);
-		mediaQuery.addEventListener('change', event => setMatches(event.matches));
+		const mediaListener = (event: MediaQueryListEvent): void =>
+			setMatches(event.matches);
+		mediaQuery.addEventListener('change', mediaListener);
+
+		return () => {
+			mediaQuery.removeEventListener('change', mediaListener);
+		};
 	}, []); //eslint-disable-line
 
 	return matches;

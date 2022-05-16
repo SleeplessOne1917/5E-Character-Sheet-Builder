@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<nav
+  class="section-bar"
+>
+  <ul
+    class="section-list"
+    data-testid="section-list"
+    style=""
+  >
+    <li>
+      <a
+        class="link link-selected"
+        href="/create/race"
+        style="transform: translateY(0);"
+      >
+        Race
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/class"
+      >
+        Class
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/abilities"
+      >
+        Abilities
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/description"
+      >
+        Description
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/equipment"
+      >
+        Equipment
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/finish"
+      >
+        Finish
+      </a>
+    </li>
+  </ul>
+</nav>
+`;

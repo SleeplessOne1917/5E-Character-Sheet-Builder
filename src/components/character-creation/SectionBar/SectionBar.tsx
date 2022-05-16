@@ -98,6 +98,7 @@ const SectionBar = (): JSX.Element => {
 				onTouchStart={event => setX0(event.changedTouches[0].clientX)}
 				onTouchEnd={handleTouchUp}
 				onTouchMove={handleSwipe}
+				data-testid="section-list"
 			>
 				{getSections().map((key, index) => (
 					<li key={key}>
