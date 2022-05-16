@@ -1,13 +1,15 @@
-import { KeyboardEventHandler, ReactNode, useCallback } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
 import classes from './ChooseModal.module.css';
 
-type ChooseModalProps = {
+export type ChooseModalProps = {
 	show: boolean;
 	mainContent: ReactNode;
 	onClose: () => void;
 	onChoose: () => void;
 };
+
+// TODO: Automatically tab to modal
 
 const ChooseModal = ({
 	show,
@@ -15,51 +17,28 @@ const ChooseModal = ({
 	onClose,
 	onChoose
 }: ChooseModalProps): JSX.Element => {
-	const onCloseKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
-		event => {
-			if (event.code === 'Enter') {
-				onClose();
-			}
-		},
-		[onClose]
-	);
-
-	const onChooseKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
-		event => {
-			if (event.code === 'Enter') {
-				onChoose();
-			}
-		},
-		[onChoose]
-	);
-
 	return (
 		<div
 			style={{ display: show ? 'flex' : 'none' }}
 			className={classes['modal-container']}
+			data-testid="choose-modal"
 		>
 			<div className={classes.modal}>
 				<div className={classes['icon-container']}></div>
 				<div className={classes['content-container']}>{mainContent}</div>
 				<div className={classes['buttons-container']}>
-					<div
+					<button
 						className={`${classes.button} ${classes.choose}`}
-						tabIndex={0}
-						aria-label="Choose"
 						onClick={onChoose}
-						onKeyUp={onChooseKeyUp}
 					>
 						Choose
-					</div>
-					<div
+					</button>
+					<button
 						className={`${classes.button} ${classes.cancel}`}
-						tabIndex={0}
-						aria-label="Cancel"
 						onClick={onClose}
-						onKeyUp={onCloseKeyUp}
 					>
 						Cancel
-					</div>
+					</button>
 				</div>
 			</div>
 		</div>

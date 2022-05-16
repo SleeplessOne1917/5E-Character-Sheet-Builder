@@ -51,6 +51,9 @@
     align-items: center;
     cursor: pointer;
     font-size: 2rem;
+    border: 0;
+    color: inherit;
+    font-family: inherit;
 }
 
 .button:focus {

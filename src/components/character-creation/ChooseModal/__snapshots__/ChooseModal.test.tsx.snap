@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="modal-container"
+  data-testid="choose-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="icon-container"
+    />
+    <div
+      class="content-container"
+    >
+      Content
+    </div>
+    <div
+      class="buttons-container"
+    >
+      <button
+        class="button choose"
+      >
+        Choose
+      </button>
+      <button
+        class="button cancel"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+`;
