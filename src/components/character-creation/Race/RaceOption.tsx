@@ -13,7 +13,7 @@ import { SrdItem, SubraceItem } from '../../../types/srd';
 
 import classes from './RaceOption.module.css';
 
-type RaceOptionProps = {
+export type RaceOptionProps = {
 	race: SrdItem;
 	subraces?: SubraceItem[];
 	onChoose: (subraceIndex?: string) => void;
@@ -41,7 +41,10 @@ const RaceOption = ({
 
 	const handleRaceKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
-			if (event.code === 'Enter') {
+			event.preventDefault();
+			event.stopPropagation();
+
+			if (event.code === 'Enter' || event.code === 'Space') {
 				handleRaceClick();
 			}
 		},
@@ -57,7 +60,10 @@ const RaceOption = ({
 
 	const handleSubraceKeyUp = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>, subraceIndex: string) => {
-			if (event.code === 'Enter') {
+			event.preventDefault();
+			event.stopPropagation();
+
+			if (event.code === 'Enter' || event.code === 'Space') {
 				onChoose(subraceIndex);
 			}
 		},
@@ -65,7 +71,7 @@ const RaceOption = ({
 	);
 
 	return (
-		<li className={classes['race-li']}>
+		<li className={classes['race-li']} data-testid="race-option">
 			<div>
 				<div
 					className={classes['race-container']}
@@ -73,16 +79,26 @@ const RaceOption = ({
 					onClick={handleRaceClick}
 					onKeyUp={handleRaceKeyUp}
 					aria-label={raceTitle}
+					role="button"
 				>
 					<div className={classes['race-title']}>{raceTitle}</div>
 					{hasMultipleSubraces ? (
 						showSubraces ? (
-							<ChevronUpIcon className={classes.chevron} />
+							<ChevronUpIcon
+								className={classes.chevron}
+								data-testid="chevron-up"
+							/>
 						) : (
-							<ChevronDownIcon className={classes.chevron} />
+							<ChevronDownIcon
+								className={classes.chevron}
+								data-testid="chevron-down"
+							/>
 						)
 					) : (
-						<ChevronRightIcon className={classes.chevron} />
+						<ChevronRightIcon
+							className={classes.chevron}
+							data-testid="chevron-right"
+						/>
 					)}
 				</div>
 				{showSubraces && (
