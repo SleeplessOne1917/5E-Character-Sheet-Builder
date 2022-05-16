@@ -16,12 +16,11 @@ const Descriptor = ({
 	isOpen,
 	toggleOpen
 }: DescriptorProps) => {
-	const toggleOpenKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
+	const toggleOpenKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
-			event.stopPropagation();
-			event.preventDefault();
-
 			if (event.code === 'Enter' || event.code === 'Space') {
+				event.stopPropagation();
+				event.preventDefault();
 				toggleOpen();
 			}
 		},
@@ -35,7 +34,7 @@ const Descriptor = ({
 				tabIndex={0}
 				aria-label={title}
 				onClick={toggleOpen}
-				onKeyUp={toggleOpenKeyUp}
+				onKeyDown={toggleOpenKeyDown}
 				style={{
 					borderBottomLeftRadius: isOpen ? '0' : '0.5rem',
 					borderBottomRightRadius: isOpen ? '0' : '0.5rem'

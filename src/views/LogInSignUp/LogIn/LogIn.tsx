@@ -24,10 +24,12 @@ const LogIn = (): JSX.Element => {
 		setShowPassword(prevState => !prevState);
 	}, [setShowPassword]);
 
-	const toggleShowPasswordKeyUp: KeyboardEventHandler<SVGSVGElement> =
+	const toggleShowPasswordKeyDown: KeyboardEventHandler<SVGSVGElement> =
 		useCallback(
 			event => {
-				if (event.code === 'Enter') {
+				if (event.code === 'Enter' || event.code === 'Space') {
+					event.preventDefault();
+					event.stopPropagation();
 					toggleShowPassword();
 				}
 			},
@@ -122,7 +124,7 @@ const LogIn = (): JSX.Element => {
 										<EyeOffIcon
 											className={logInClasses.eye}
 											onClick={toggleShowPassword}
-											onKeyUp={toggleShowPasswordKeyUp}
+											onKeyDown={toggleShowPasswordKeyDown}
 											tabIndex={0}
 											aria-hidden="false"
 											aria-label="Hide Password"
@@ -131,7 +133,7 @@ const LogIn = (): JSX.Element => {
 										<EyeIcon
 											className={logInClasses.eye}
 											onClick={toggleShowPassword}
-											onKeyUp={toggleShowPasswordKeyUp}
+											onKeyDown={toggleShowPasswordKeyDown}
 											tabIndex={0}
 											aria-hidden="false"
 											aria-label="Show Password"

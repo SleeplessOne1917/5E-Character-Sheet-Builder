@@ -65,10 +65,12 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 		setShowRollGroups(prevState => !prevState);
 	}, [setShowRollGroups]);
 
-	const toggleShowRollGroupsKeyUp: KeyboardEventHandler<HTMLDivElement> =
+	const toggleShowRollGroupsKeyDown: KeyboardEventHandler<HTMLDivElement> =
 		useCallback(
 			event => {
-				if (event.code === 'Enter') {
+				if (event.code === 'Enter' || event.code === 'Space') {
+					event.preventDefault();
+					event.stopPropagation();
 					toggleShowRollGroups();
 				}
 			},
@@ -108,7 +110,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 					<div
 						className={classes['roll-groups-toggle']}
 						onClick={toggleShowRollGroups}
-						onKeyUp={toggleShowRollGroupsKeyUp}
+						onKeyDown={toggleShowRollGroupsKeyDown}
 						tabIndex={0}
 						aria-label={`${showRollGroups ? 'Hide' : 'Show'} Roll Groups`}
 					>

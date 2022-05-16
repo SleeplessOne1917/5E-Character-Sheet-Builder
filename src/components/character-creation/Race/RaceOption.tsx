@@ -39,12 +39,11 @@ const RaceOption = ({
 		}
 	}, [setShowSubraces, hasMultipleSubraces, onChoose, hasOneSubrace, subraces]);
 
-	const handleRaceKeyUp: KeyboardEventHandler<HTMLDivElement> = useCallback(
+	const handleRaceKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
-			event.preventDefault();
-			event.stopPropagation();
-
 			if (event.code === 'Enter' || event.code === 'Space') {
+				event.preventDefault();
+				event.stopPropagation();
 				handleRaceClick();
 			}
 		},
@@ -58,12 +57,11 @@ const RaceOption = ({
 		[onChoose]
 	);
 
-	const handleSubraceKeyUp = useCallback(
+	const handleSubraceKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>, subraceIndex: string) => {
-			event.preventDefault();
-			event.stopPropagation();
-
 			if (event.code === 'Enter' || event.code === 'Space') {
+				event.preventDefault();
+				event.stopPropagation();
 				onChoose(subraceIndex);
 			}
 		},
@@ -77,7 +75,7 @@ const RaceOption = ({
 					className={classes['race-container']}
 					tabIndex={0}
 					onClick={handleRaceClick}
-					onKeyUp={handleRaceKeyUp}
+					onKeyDown={handleRaceKeyDown}
 					aria-label={raceTitle}
 					role="button"
 				>
@@ -110,7 +108,9 @@ const RaceOption = ({
 									tabIndex={0}
 									aria-label={subrace.name}
 									onClick={() => handleSubraceClick(subrace.index)}
-									onKeyUp={event => handleSubraceKeyUp(event, subrace.index)}
+									onKeyDown={event =>
+										handleSubraceKeyDown(event, subrace.index)
+									}
 								>
 									<div className={classes['race-title']}>{subrace.name}</div>
 									<ChevronRightIcon className={classes.chevron} />

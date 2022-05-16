@@ -48,12 +48,11 @@ const Toast = (): JSX.Element => {
 
 	const hideToast = useCallback(() => dispatch(hide()), [dispatch]);
 
-	const hideToastKeyUp: KeyboardEventHandler<SVGSVGElement> = useCallback(
+	const hideToastKeyDown: KeyboardEventHandler<SVGSVGElement> = useCallback(
 		event => {
-			event.stopPropagation();
-			event.preventDefault();
-
 			if (event.code === 'Enter' || event.code === 'Space') {
+				event.stopPropagation();
+				event.preventDefault();
 				hideToast();
 			}
 		},
@@ -90,7 +89,7 @@ const Toast = (): JSX.Element => {
 			<div className={classes['x-container']}>
 				<XIcon
 					className={classes['x-icon']}
-					onKeyUp={hideToastKeyUp}
+					onKeyDown={hideToastKeyDown}
 					onClick={hideToast}
 					tabIndex={isOpen ? 0 : -1}
 					aria-hidden="false"

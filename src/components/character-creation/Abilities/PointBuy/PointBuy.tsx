@@ -57,12 +57,13 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 		[setPoints, dispatch, getAbilityScore]
 	);
 
-	const handleSubtractScoreKeyUp = useCallback(
+	const handleSubtractScoreKeyDown = useCallback(
 		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
-			event.preventDefault();
 			const code = event.code;
 
-			if (code === 'Enter') {
+			if (code === 'Enter' || code === 'Space') {
+				event.preventDefault();
+				event.stopPropagation();
 				subtractScore(abilityIndex);
 			}
 		},
@@ -83,12 +84,13 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 		[setPoints, dispatch, getAbilityScore]
 	);
 
-	const handleAddScoreKeyUp = useCallback(
+	const handleAddScoreKeyDown = useCallback(
 		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
-			event.preventDefault();
 			const code = event.code;
 
-			if (code === 'Enter') {
+			if (code === 'Enter' || code === 'Space') {
+				event.preventDefault();
+				event.stopPropagation();
 				addScore(abilityIndex);
 			}
 		},
@@ -117,7 +119,9 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 										className={`${classes.icon} ${classes.minus}`}
 										onClick={() => subtractScore(indexKey)}
 										tabIndex={0}
-										onKeyUp={event => handleSubtractScoreKeyUp(event, indexKey)}
+										onKeyDown={event =>
+											handleSubtractScoreKeyDown(event, indexKey)
+										}
 										aria-hidden="false"
 										aria-label={`${ability.full_name} minus 1`}
 										role="button"
@@ -131,7 +135,9 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 											className={`${classes.icon} ${classes.plus}`}
 											onClick={() => addScore(indexKey)}
 											tabIndex={0}
-											onKeyUp={event => handleAddScoreKeyUp(event, indexKey)}
+											onKeyDown={event =>
+												handleAddScoreKeyDown(event, indexKey)
+											}
 											aria-hidden="false"
 											aria-label={`${ability.full_name} plus 1`}
 											role="button"
