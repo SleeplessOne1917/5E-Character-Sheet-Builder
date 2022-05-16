@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom';
+
 import * as stories from './Descriptor.stories';
 
 import { render, screen } from '@testing-library/react';
@@ -58,5 +60,25 @@ describe('calls toggleOpen', () => {
 		await userEvent.keyboard(' ');
 
 		expect(toggleOpenMock).toHaveBeenCalled();
+	});
+});
+
+describe('has expected styles', () => {
+	it('when closed', () => {
+		render(<Closed />);
+
+		expect(screen.getByText(/Foo/i)).toHaveStyle({
+			'border-bottom-left-radius': '0.5rem',
+			'border-bottom-right-radius': '0.5rem'
+		});
+	});
+
+	it('when open', () => {
+		render(<OneParagraph />);
+
+		expect(screen.getByText(/Bar/i)).toHaveStyle({
+			'border-bottom-left-radius': '0',
+			'border-bottom-right-radius': '0'
+		});
 	});
 });
