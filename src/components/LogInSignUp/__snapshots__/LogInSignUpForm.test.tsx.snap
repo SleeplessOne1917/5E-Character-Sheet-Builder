@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when log in 1`] = `
+<form
+  class="form"
+  role="form"
+>
+  <div
+    class="input-and-error-container"
+  >
+    <div
+      class="input-and-label-container"
+    >
+      <div
+        class="input-container"
+      >
+        <input
+          class="input"
+          id="email"
+          name="email"
+          placeholder="Email"
+          type="text"
+          value=""
+        />
+         
+      </div>
+      <label
+        class="label"
+        for="email"
+      >
+        Email
+      </label>
+    </div>
+  </div>
+  <div
+    class="input-and-error-container"
+  >
+    <div
+      class="input-and-label-container"
+    >
+      <div
+        class="input-container"
+      >
+        <input
+          class="input"
+          id="password"
+          name="password"
+          placeholder="Password"
+          type="password"
+          value=""
+        />
+        <svg
+          aria-hidden="false"
+          aria-label="Show Password"
+          class="eye"
+          fill="currentColor"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+          />
+          <path
+            clip-rule="evenodd"
+            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <label
+        class="label"
+        for="password"
+      >
+        Password
+      </label>
+    </div>
+  </div>
+  <button
+    class="button positive"
+    style="font-size: 2.5rem; padding: 1rem; margin: 1rem;"
+    type="submit"
+  >
+    Log In
+  </button>
+</form>
+`;
+
+exports[`renders correctly when sign up 1`] = `
+<form
+  class="form"
+  role="form"
+>
+  <div
+    class="input-and-error-container"
+  >
+    <div
+      class="input-and-label-container"
+    >
+      <div
+        class="input-container"
+      >
+        <input
+          class="input"
+          id="email"
+          name="email"
+          placeholder="Email"
+          type="text"
+          value=""
+        />
+         
+      </div>
+      <label
+        class="label"
+        for="email"
+      >
+        Email
+      </label>
+    </div>
+  </div>
+  <div
+    class="input-and-error-container"
+  >
+    <div
+      class="input-and-label-container"
+    >
+      <div
+        class="input-container"
+      >
+        <input
+          class="input"
+          id="password"
+          name="password"
+          placeholder="Password"
+          type="password"
+          value=""
+        />
+        <svg
+          aria-hidden="false"
+          aria-label="Show Password"
+          class="eye"
+          fill="currentColor"
+          tabindex="0"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+          />
+          <path
+            clip-rule="evenodd"
+            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <label
+        class="label"
+        for="password"
+      >
+        Password
+      </label>
+    </div>
+    <div
+      class="container"
+      data-testid="container"
+    >
+      <div
+        class="validator no-match"
+      >
+        <svg
+          aria-hidden="true"
+          class="icon x"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+         
+        At least 8 characters long
+      </div>
+      <div
+        class="validator no-match"
+      >
+        <svg
+          aria-hidden="true"
+          class="icon x"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+         
+        At least 1 lowercase letter
+      </div>
+      <div
+        class="validator no-match"
+      >
+        <svg
+          aria-hidden="true"
+          class="icon x"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+         
+        At least 1 uppercase letter
+      </div>
+      <div
+        class="validator no-match"
+      >
+        <svg
+          aria-hidden="true"
+          class="icon x"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+         
+        At least 1 number
+      </div>
+      <div
+        class="validator no-match"
+      >
+        <svg
+          aria-hidden="true"
+          class="icon x"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+         
+        At least 1 special character
+      </div>
+    </div>
+  </div>
+  <button
+    class="button positive"
+    style="font-size: 2.5rem; padding: 1rem; margin: 1rem;"
+    type="submit"
+  >
+    Sign Up
+  </button>
+</form>
+`;
