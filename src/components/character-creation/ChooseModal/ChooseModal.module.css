@@ -15,7 +15,7 @@
     height: 100%;
     background-color: var(--heaven);
     display: grid;
-    grid-template-columns: 4fr 3fr;
+    grid-template-columns: 5fr 2fr;
     grid-template-rows: 2fr 4fr 1fr;
     grid-template-areas: "icon icon"
                         "content content"
@@ -30,16 +30,24 @@
     align-items: center;
     overflow: auto;
     padding-bottom: 2rem;
+    padding-top: 1rem;
 }
 
 .icon-container {
+    padding: 1rem;
     grid-area: icon;
-    background-color: chartreuse;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    height: 10rem;
+    width: 10rem;
 }
 
 .buttons-container {
     grid-area: buttons;
-    background-color: gold;
     display: flex;
     color: var(--heaven-light);
 }
@@ -99,5 +107,10 @@
                              "content ."
                              "buttons buttons";
         grid-template-rows: 3fr 3fr 1fr;
+    }
+
+    .icon {
+        height: 20rem;
+        width: 20rem;
     }
 }

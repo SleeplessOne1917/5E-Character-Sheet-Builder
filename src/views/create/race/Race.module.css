@@ -14,6 +14,7 @@
 .modal-title {
     color: var(--davy);
     font-family: var(--font-fantasy);
+    font-size: 2rem;
 }
 
 @media screen and (min-width: 768px) {

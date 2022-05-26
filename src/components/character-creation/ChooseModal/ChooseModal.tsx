@@ -7,6 +7,7 @@ export type ChooseModalProps = {
 	mainContent: ReactNode;
 	onClose: () => void;
 	onChoose: () => void;
+	iconId: string;
 };
 
 // TODO: Automatically tab to modal
@@ -15,7 +16,8 @@ const ChooseModal = ({
 	show,
 	mainContent,
 	onClose,
-	onChoose
+	onChoose,
+	iconId
 }: ChooseModalProps): JSX.Element => {
 	return (
 		<div
@@ -24,7 +26,11 @@ const ChooseModal = ({
 			data-testid="choose-modal"
 		>
 			<div className={classes.modal}>
-				<div className={classes['icon-container']}></div>
+				<div className={classes['icon-container']}>
+					<svg className={classes.icon}>
+						<use xlinkHref={`/Icons.svg#${iconId}`} />
+					</svg>
+				</div>
 				<div className={classes['content-container']}>{mainContent}</div>
 				<div className={classes['buttons-container']}>
 					<button

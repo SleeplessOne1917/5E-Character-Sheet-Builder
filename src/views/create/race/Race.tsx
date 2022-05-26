@@ -184,6 +184,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 			<ChooseModal
 				show={showModal}
 				mainContent={modalContent}
+				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
 				onChoose={chooseRace}
 				onClose={closeModal}
 			/>
