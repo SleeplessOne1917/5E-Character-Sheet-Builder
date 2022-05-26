@@ -2,10 +2,10 @@ import '@testing-library/jest-dom';
 
 import * as stories from './RollGroup.stories';
 
+import RollGroup, { sumRolls } from './RollGroup';
 import { render, screen } from '@testing-library/react';
 
 import { Provider } from 'react-redux';
-import RollGroup from './RollGroup';
 import { composeStories } from '@storybook/testing-react';
 import { getStore } from '../../../../../redux/store';
 import { mockAbilities } from '../../MockAbilitiesStore';
@@ -66,6 +66,20 @@ describe('reset group', () => {
 
 		expect(screen.getByText(/Reset Group/i)).toBeEnabled();
 	});
+
+	it('resets groups', async () => {
+		render(
+			<Provider store={getStore()}>
+				<RollGroup group={0} abilities={mockAbilities} />
+			</Provider>
+		);
+
+		await clickAllRollButtons();
+		await userEvent.click(screen.getByText(/Reset Group/i));
+
+		expect(screen.getAllByText(/Roll/i)).toHaveLength(6);
+		expect(screen.queryByLabelText(/Select ability/i)).not.toBeInTheDocument();
+	});
 });
 
 describe('apply ability scores', () => {
@@ -79,6 +93,44 @@ describe('apply ability scores', () => {
 		render(<HalfHaveAbilities />);
 
 		expect(screen.getByText(/Apply Ability Scores/i)).toBeEnabled();
+	});
+
+	it('applies ability scores', async () => {
+		const store = getStore();
+		render(
+			<Provider store={store}>
+				<RollGroup group={0} abilities={mockAbilities} />
+			</Provider>
+		);
+
+		await clickAllRollButtons();
+		const dropdowns = screen.getAllByLabelText(/Select ability/i);
+		await userEvent.selectOptions(dropdowns.at(0) as HTMLElement, 'CON');
+		await userEvent.selectOptions(dropdowns.at(1) as HTMLElement, 'STR');
+		await userEvent.selectOptions(dropdowns.at(2) as HTMLElement, 'DEX');
+		await userEvent.selectOptions(dropdowns.at(3) as HTMLElement, 'INT');
+		await userEvent.selectOptions(dropdowns.at(4) as HTMLElement, 'WIS');
+		await userEvent.selectOptions(dropdowns.at(5) as HTMLElement, 'CHA');
+		await userEvent.click(screen.getByText(/Apply Ability Scores/i));
+
+		expect(store.getState().editingCharacter.abilityScores.con.base).toBe(
+			sumRolls(store.getState().rollGroups[0][0].rolls as number[])
+		);
+		expect(store.getState().editingCharacter.abilityScores.str.base).toBe(
+			sumRolls(store.getState().rollGroups[0][1].rolls as number[])
+		);
+		expect(store.getState().editingCharacter.abilityScores.dex.base).toBe(
+			sumRolls(store.getState().rollGroups[0][2].rolls as number[])
+		);
+		expect(store.getState().editingCharacter.abilityScores.int.base).toBe(
+			sumRolls(store.getState().rollGroups[0][3].rolls as number[])
+		);
+		expect(store.getState().editingCharacter.abilityScores.wis.base).toBe(
+			sumRolls(store.getState().rollGroups[0][4].rolls as number[])
+		);
+		expect(store.getState().editingCharacter.abilityScores.cha.base).toBe(
+			sumRolls(store.getState().rollGroups[0][5].rolls as number[])
+		);
 	});
 });
 

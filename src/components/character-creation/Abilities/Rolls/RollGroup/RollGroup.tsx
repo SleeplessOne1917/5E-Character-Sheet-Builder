@@ -22,7 +22,7 @@ const rollD6 = () => Math.floor(Math.random() * (6 - 1 + 1) + 1);
 
 const getRolls = () => [rollD6(), rollD6(), rollD6(), rollD6()];
 
-const sumRolls = (rolls: number[]) =>
+export const sumRolls = (rolls: number[]) =>
 	rolls.slice(0, 3).reduce((prev, cur) => prev + cur, 0);
 
 const RollGroup = ({
