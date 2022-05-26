@@ -19,15 +19,12 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [selectedRace, setSelectedRace] = useState<SrdRace | null>(null);
 	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace | null>();
 	const [consideredRace, setConsideredRace] = useState<SrdRace | null>(null);
-	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace | null>(
-		null
-	);
-	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string | null>(
-		null
-	);
-	const [consideredSubraceIndex, setConsideredSubraceIndex] = useState<
-		string | null
-	>(null);
+	const [consideredSubrace, setConsideredSubrace] =
+		useState<SrdSubrace | null>(null);
+	const [consideredRaceIndex, setConsideredRaceIndex] =
+		useState<string | null>(null);
+	const [consideredSubraceIndex, setConsideredSubraceIndex] =
+		useState<string | null>(null);
 	const [descriptors, setDescriptors] = useState<Descriptor[] | null>(null);
 
 	useEffect(() => {
@@ -179,6 +176,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 							)}
 							key={race.index}
 							onChoose={getConsiderRaceHandler(race.index)}
+							iconId={race.index}
 						/>
 					))}
 				</ul>

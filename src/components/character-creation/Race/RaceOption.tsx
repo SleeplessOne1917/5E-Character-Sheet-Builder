@@ -17,12 +17,14 @@ export type RaceOptionProps = {
 	race: SrdItem;
 	subraces?: SubraceItem[];
 	onChoose: (subraceIndex?: string) => void;
+	iconId: string;
 };
 
 const RaceOption = ({
 	race,
 	subraces,
-	onChoose
+	onChoose,
+	iconId
 }: RaceOptionProps): JSX.Element => {
 	const [showSubraces, setShowSubraces] = useState(false);
 	const hasMultipleSubraces = subraces && subraces.length > 1;
@@ -79,7 +81,14 @@ const RaceOption = ({
 					aria-label={raceTitle}
 					role="button"
 				>
-					<div className={classes['race-title']}>{raceTitle}</div>
+					<div className={classes['race-title']}>
+						<div className={classes['icon-container']}>
+							<svg className={classes.icon}>
+								<use xlinkHref={`/Icons.svg#${iconId}`} />
+							</svg>
+						</div>{' '}
+						{raceTitle}
+					</div>
 					{hasMultipleSubraces ? (
 						showSubraces ? (
 							<ChevronUpIcon

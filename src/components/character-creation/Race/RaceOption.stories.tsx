@@ -7,6 +7,9 @@ export default {
 	argTypes: {
 		onChoose: { type: 'function' }
 	},
+	args: {
+		iconId: 'dwarf'
+	},
 	decorators: [story => <ul style={{ listStyle: 'none' }}>{story()}</ul>]
 } as ComponentMeta<typeof RaceOption>;
 
