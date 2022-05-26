@@ -15,6 +15,18 @@ exports[`renders correctly 1`] = `
       <div
         class="race-title"
       >
+        <div
+          class="icon-container"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#dwarf"
+            />
+          </svg>
+        </div>
+         
         Dwarf
       </div>
       <svg

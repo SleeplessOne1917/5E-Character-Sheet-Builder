@@ -1,0 +1,1131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="abilities"
+>
+  <div
+    class="content"
+  >
+    <h1
+      class="title"
+    >
+      Ability Scores
+    </h1>
+    <div
+      class="generation-control"
+    >
+      <label
+        for="generation-methods"
+      >
+        Generation Method
+      </label>
+      <select
+        id="generation-methods"
+      >
+        <option
+          value="manual"
+        >
+          Manual
+        </option>
+        <option
+          value="roll"
+        >
+          Roll
+        </option>
+        <option
+          value="point-buy"
+        >
+          Point Buy
+        </option>
+        <option
+          value="array"
+        >
+          Standard Array
+        </option>
+      </select>
+    </div>
+    <div
+      aria-label="Hide Roll Groups"
+      class="roll-groups-toggle"
+      tabindex="0"
+    >
+      Dice Roll Groups
+       
+      <svg
+        aria-hidden="true"
+        class="roll-chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+    <div
+      class="roll-groups open"
+      data-testid="roll-groups"
+    >
+      <div
+        class="add-group-container"
+      >
+        <button
+          class="button positive"
+          style="font-size: 0.7rem; padding: 0.3rem; margin: 0.5rem;"
+          type="button"
+        >
+          + Add Group
+        </button>
+        Groups: 
+        1
+      </div>
+      <div>
+        <div
+          class="roll-group"
+          data-testid="roll-group"
+        >
+          <div
+            class="rolls"
+          >
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+            <div
+              class="display-container"
+              data-testid="roll-display"
+            >
+              <div
+                class="total"
+              >
+                —
+              </div>
+              <button
+                class="button positive"
+                style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+                type="button"
+              >
+                Roll
+              </button>
+            </div>
+          </div>
+          <div>
+            <button
+              class="button negative"
+              disabled=""
+              style="font-size: 0.7rem; padding: 0.3rem; margin: 1rem;"
+              type="button"
+            >
+              Reset Group
+            </button>
+            <button
+              class="button positive"
+              disabled=""
+              style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+              type="button"
+            >
+              Apply Ability Scores
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="calculations-container"
+    >
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#str"
+            />
+          </svg>
+          Strength
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-str"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-str"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-str"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-str"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#dex"
+            />
+          </svg>
+          Dexterity
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-dex"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-dex"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-dex"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-dex"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#con"
+            />
+          </svg>
+          Constitution
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-con"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-con"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-con"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-con"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#int"
+            />
+          </svg>
+          Intelligence
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-int"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-int"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-int"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-int"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#wis"
+            />
+          </svg>
+          Wisdom
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-wis"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-wis"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-wis"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-wis"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="calculation"
+      >
+        <div
+          class="header"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#cha"
+            />
+          </svg>
+          Charisma
+        </div>
+        <div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Total Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Modifier
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Base Score
+            </div>
+            <div
+              class="value"
+            >
+              —
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Racial Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Ability Improvements
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component calculation-component"
+          >
+            <div
+              class="label calculation-label"
+            >
+              Misc Bonus
+            </div>
+            <div
+              class="value"
+            >
+              +
+              0
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="other-cha"
+              >
+                Other Bonus
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="other-cha"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="component"
+          >
+            <div
+              class="label"
+            >
+              <label
+                for="override-cha"
+              >
+                Override Score
+              </label>
+            </div>
+            <div
+              class="value input-value"
+            >
+              <input
+                id="override-cha"
+                placeholder="—"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+`;

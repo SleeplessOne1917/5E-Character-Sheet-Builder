@@ -6,6 +6,10 @@ import {
 	useState
 } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import {
+	GenerationMethodState,
+	updateGenerationMethod
+} from '../../../redux/features/generationMethod';
 import { addGroup, removeGroup } from '../../../redux/features/rollGroups';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
@@ -20,7 +24,6 @@ import RollGroup from '../../../components/character-creation/Abilities/Rolls/Ro
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { updateBase } from '../../../redux/features/abilityScores';
-import { updateGenerationMethod } from '../../../redux/features/generationMethod';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
@@ -55,7 +58,11 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						}
 					}
 
-					dispatch(updateGenerationMethod({ generationMethod: value }));
+					dispatch(
+						updateGenerationMethod({
+							generationMethod: value as GenerationMethodState
+						})
+					);
 				}
 			},
 			[dispatch, abilities]
@@ -89,7 +96,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	);
 
 	return (
-		<MainContent>
+		<MainContent testId="abilities">
 			<h1 className={classes.title}>Ability Scores</h1>
 			<div className={classes['generation-control']}>
 				<label htmlFor="generation-methods">Generation Method</label>
@@ -125,6 +132,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						className={`${classes['roll-groups']}${
 							showRollGroups ? ` ${classes.open}` : ''
 						}`}
+						data-testid="roll-groups"
 					>
 						<div className={classes['add-group-container']}>
 							<Button positive size="small" spacing={2} onClick={addRollGroup}>

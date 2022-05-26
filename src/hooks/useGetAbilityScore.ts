@@ -1,4 +1,5 @@
 import AbilityScores from '../types/abilityScores';
+import { AbilityScoresState } from '../redux/features/abilityScores';
 import { useAppSelector } from './reduxHooks';
 import { useCallback } from 'react';
 
@@ -31,3 +32,23 @@ const useGetAbilityScore = () => {
 };
 
 export default useGetAbilityScore;
+
+export const getAbilityScoresTest = (
+	abilityScores: AbilityScoresState,
+	abilityIndex: AbilityScores
+) => {
+	switch (abilityIndex) {
+		case 'str':
+			return abilityScores.str;
+		case 'dex':
+			return abilityScores.dex;
+		case 'con':
+			return abilityScores.con;
+		case 'int':
+			return abilityScores.int;
+		case 'wis':
+			return abilityScores.wis;
+		case 'cha':
+			return abilityScores.cha;
+	}
+};
