@@ -7,7 +7,7 @@ import GET_CLASSES from './queries/class/getClasses';
 import GET_EQUIPMENTS from './queries/equipment/getEquipments';
 import GET_RACE from './queries/race/getRace';
 import GET_RACES from './queries/race/getRaces';
-import GET_SUBRACE from './queries/race/getSubrace';
+import GET_SUBRACE from './queries/subrace/getSubrace';
 import GET_SUBRACES from './queries/subrace/getSubraces';
 import { SrdRace } from './../types/srd';
 

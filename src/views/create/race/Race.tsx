@@ -14,6 +14,29 @@ type RaceProps = {
 	subraces: SubraceItem[];
 };
 
+export const mockRaces = [
+	{ index: 'dragonborn', name: 'DragonBorn' },
+	{ index: 'dwarf', name: 'Dwarf' },
+	{ index: 'elf', name: 'Elf' },
+	{ index: 'gnome', name: 'Gnome' },
+	{ index: 'half-elf', name: 'Half Elf' },
+	{ index: 'half-orc', name: 'Half Orc' },
+	{ index: 'halfling', name: 'Halfling' },
+	{ index: 'human', name: 'Human' },
+	{ index: 'tiefling', name: 'Tiefling' }
+];
+
+export const mockSubraces = [
+	{ index: 'rock-gnome', name: 'Rock Gnome', race: { index: 'gnome' } },
+	{ index: 'hill-dwarf', name: 'Hill Dwarf', race: { index: 'dwarf' } },
+	{ index: 'high-elf', name: 'High Elf', race: { index: 'elf' } },
+	{
+		index: 'lightfoot-halfling',
+		name: 'Lightfoot Halfling',
+		race: { index: 'halfling' }
+	}
+];
+
 const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [showModal, setShowModal] = useState(false);
 	const [selectedRace, setSelectedRace] = useState<SrdRace | null>(null);
@@ -165,7 +188,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	return (
 		<>
-			<MainContent>
+			<MainContent testId="race">
 				<h1 className={classes.title}>Choose Race</h1>
 				<ul className={classes['race-list']}>
 					{races.map(race => (

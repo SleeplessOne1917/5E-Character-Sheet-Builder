@@ -3,7 +3,10 @@ import '../styles/globals.css';
 import * as NextImage from 'next/image';
 
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { addDecorator } from '@storybook/react';
+import { urqlDecorator } from '@urql/storybook-addon';
 
+addDecorator(urqlDecorator);
 const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, 'default', {
