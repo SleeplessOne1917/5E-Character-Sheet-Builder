@@ -67,6 +67,11 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 					title: 'Size',
 					description: consideredRace.size_description,
 					isOpen: false
+				},
+				{
+					title: 'Alignment',
+					description: consideredRace.alignment,
+					isOpen: false
 				}
 			];
 			theDescriptors = theDescriptors.concat(
