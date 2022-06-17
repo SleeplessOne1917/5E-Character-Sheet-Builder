@@ -3462,6 +3462,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-html-email@^3.0.1":
+  version "3.0.1"
+  resolved "https://proget.ema.emoneyadvisor.com/npm/npm/@types/react-html-email/-/react-html-email-3.0.1.tgz#0169231b3e72e3e7ec1cf21148ade90a95817b6f"
+  integrity sha512-SddMwMqMu6s4sVVlcXoHurm45VHosZMFSsMdoGgCOgPU25QqYOLVd0dy+P/2VkKKfBHLA+FIhJuenBKhBany5A==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-syntax-highlighter@11.0.5":
   version "11.0.5"
   resolved "https://registry.npmjs.org/@types/react-syntax-highlighter/-/react-syntax-highlighter-11.0.5.tgz"
@@ -10945,7 +10952,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.0.0, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.0.0, prop-types@^15.5.10, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -11158,6 +11165,13 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-html-email@^3.0.0:
+  version "3.0.0"
+  resolved "https://proget.ema.emoneyadvisor.com/npm/npm/react-html-email/-/react-html-email-3.0.0.tgz#a5a51b78271a33daf9b14638e9e4c5df93f691aa"
+  integrity sha512-eIBmZjqoS1SLAOi/QYTHLnZSmBM5AhP/cScJGhVDHlBJFtMyiR4qBUQYQDCqRtNPDKHWGMbbS/+XHSgD+C2hng==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-inspector@^5.1.0:
   version "5.1.1"
