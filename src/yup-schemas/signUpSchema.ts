@@ -6,10 +6,19 @@ import {
 } from './../services/passwordValidatorService';
 import { object, string } from 'yup';
 
+import { hasValidUsername } from './../services/usernameValidatorService';
+
 const signUpSchema = object({
-	email: string()
-		.email('Enter your email in the format: yourname@example.com')
-		.required('Email is required'),
+	username: string()
+		.required('Username is required')
+		.test(
+			'is-valid-username',
+			'Username must begin with a letter and contain only letters and numbers.',
+			function (value) {
+				return !!value && hasValidUsername(value);
+			}
+		),
+	email: string().email('Enter your email in the format: yourname@example.com'),
 	password: string()
 		.min(8, 'Password must be at least 8 characters long')
 		.required('Password is required')

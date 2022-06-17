@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export type ApolloContext = {
-	email: string | null;
+	username: string | null;
 	req: NextApiRequest;
 	res: NextApiResponse;
 };

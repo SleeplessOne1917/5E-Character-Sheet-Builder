@@ -23,8 +23,8 @@ const SignUp = (): JSX.Element => {
 				schema={signUpSchema}
 				type="signUp"
 				onSubmit={async (values, { resetForm }) => {
-					const { email, password } = values;
-					const result = await signUp({ user: { email, password } });
+					const { email, password, username } = values;
+					const result = await signUp({ user: { email, password, username } });
 					let toast: ToastShowPayload;
 					const closeTimeoutSeconds = 10;
 

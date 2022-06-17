@@ -1,14 +1,15 @@
 import LOG_OUT from '../graphql/mutations/user/logOut';
+import { fetchLoggedInEmail } from './../redux/features/viewer';
+import { useAppDispatch } from './reduxHooks';
 import { useMutation } from 'urql';
-import { useRouter } from 'next/router';
 
 const useLogout = () => {
-	const router = useRouter();
 	const [logOutResult, logOut] = useMutation(LOG_OUT);
+	const dispatch = useAppDispatch();
 
 	return () => {
 		logOut().then(result => {
-			router.reload();
+			dispatch(fetchLoggedInEmail());
 		});
 	};
 };

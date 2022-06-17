@@ -22,8 +22,8 @@ const LogIn = (): JSX.Element => {
 				schema={logInSchema}
 				type="logIn"
 				onSubmit={async (values, { resetForm }) => {
-					const { email, password } = values;
-					const result = await logIn({ user: { email, password } });
+					const { username, password } = values;
+					const result = await logIn({ user: { username, password } });
 					if (result.error) {
 						const toast = {
 							closeTimeoutSeconds: 10,

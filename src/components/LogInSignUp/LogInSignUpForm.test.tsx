@@ -5,7 +5,6 @@ import * as stories from './LogInSignUpForm.stories';
 import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
-import logInSchema from '../../yup-schemas/logInSchema';
 import userEvent from '@testing-library/user-event';
 
 const { LogIn, SignUp } = composeStories(stories);
@@ -14,13 +13,13 @@ describe('renders correctly', () => {
 	it('when log in', () => {
 		render(<LogIn />);
 
-		expect(screen.getByRole('form')).toMatchSnapshot();
+		expect(screen.getByTestId('form')).toMatchSnapshot();
 	});
 
 	it('when sign up', () => {
 		render(<SignUp />);
 
-		expect(screen.getByRole('form')).toMatchSnapshot();
+		expect(screen.getByTestId('form')).toMatchSnapshot();
 	});
 });
 
@@ -43,20 +42,20 @@ it('toggles show password when eye icon is pressed', async () => {
 });
 
 describe('error text', () => {
-	it('only shows for email after blur', async () => {
-		render(<LogIn schema={logInSchema} />);
+	it('only shows for username after blur', async () => {
+		render(<LogIn />);
 
-		expect(screen.queryByText(/Email is required/i)).not.toBeInTheDocument();
+		expect(screen.queryByText(/Username is required/i)).not.toBeInTheDocument();
 
 		await userEvent.tab();
 		await userEvent.tab();
 		await userEvent.tab();
 
-		expect(screen.getByText(/Email is required/i)).toBeInTheDocument();
+		expect(screen.getByText(/Username is required/i)).toBeInTheDocument();
 	});
 
 	it('only shows for password after blur', async () => {
-		render(<LogIn schema={logInSchema} />);
+		render(<LogIn />);
 
 		expect(screen.queryByText(/Password is required/i)).not.toBeInTheDocument();
 
@@ -65,5 +64,20 @@ describe('error text', () => {
 		await userEvent.tab();
 
 		expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
+	});
+
+	it('only shows for email after blur', async () => {
+		render(<SignUp />);
+
+		expect(
+			screen.queryByText(/Enter your email in the format/i)
+		).not.toBeInTheDocument();
+
+		await userEvent.type(screen.getByLabelText(/Email/i), 'notAnEmail');
+		await userEvent.tab();
+
+		expect(
+			screen.getByText(/Enter your email in the format/i)
+		).toBeInTheDocument();
 	});
 });

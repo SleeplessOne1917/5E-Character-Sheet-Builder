@@ -21,16 +21,18 @@ const apolloServer = new ApolloServer({
 	}): ApolloContext => {
 		const token = nookies.get({ req }).token;
 
-		let email: string | null;
+		let username: string | null;
 		try {
-			email = (
-				jwt.verify(token, process.env.JWT_SECRET as string) as { email: string }
-			).email;
+			username = (
+				jwt.verify(token, process.env.JWT_SECRET as string) as {
+					username: string;
+				}
+			).username;
 		} catch (error) {
-			email = null;
+			username = null;
 		}
 
-		return { email, req, res };
+		return { username, req, res };
 	}
 });
 

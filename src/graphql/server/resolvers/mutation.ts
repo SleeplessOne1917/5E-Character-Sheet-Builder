@@ -1,40 +1,51 @@
-import {
-	hashPassword,
-	verifyPassword
-} from '../../../services/passwordService';
+import User, { IUser } from '../../../db/models/user';
+import { hashValue, verifyValue } from '../../../services/hashService';
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
-import User from '../../../db/models/user';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import nookies from 'nookies';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
-type UserRequest = {
-	email: string;
+interface LoginUserRequest {
+	username: string;
 	password: string;
+}
+
+interface SignUpUserRequest extends LoginUserRequest {
+	email?: string;
+}
+
+type LoginArgs = {
+	user: LoginUserRequest;
 };
 
-type AuthArgs = {
-	user: UserRequest;
+type SignUpArgs = {
+	user: SignUpUserRequest;
 };
 
 const Mutation = {
-	signUp: async (parent, args: AuthArgs, { res }: ApolloContext) => {
+	signUp: async (parent, args: SignUpArgs, { res }: ApolloContext) => {
 		const { user } = args;
 		await signUpSchema.validate(user);
 
-		const existingUser = await User.findOne({ email: user.email }).lean();
+		const existingUser = await User.findOne({ username: user.username }).lean();
 		if (existingUser) {
 			throw new ApolloError('User already exists');
 		}
 
-		const hash = await hashPassword(user.password);
+		const passwordHash = await hashValue(user.password);
+		const newUser: IUser = { username: user.username, passwordHash };
+
+		if (user.email) {
+			const emailHash = await hashValue(user.email);
+			newUser.emailHash = emailHash;
+		}
 
 		try {
-			await User.create({ email: user.email, hash });
+			await User.create(newUser);
 		} catch (error) {
 			throwErrorWithCustomMessageInProd(
 				error as Error,
@@ -43,7 +54,7 @@ const Mutation = {
 		}
 
 		const token = jwt.sign(
-			{ email: user.email },
+			{ username: user.username },
 			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '1h'
@@ -60,17 +71,21 @@ const Mutation = {
 
 		return { token };
 	},
-	logIn: async (parent, args: AuthArgs, { res }: ApolloContext) => {
+	logIn: async (parent, args: LoginArgs, { res }: ApolloContext) => {
 		const user = args.user;
 		await logInSchema.validate(user);
 
-		const existingUser = await User.findOne({ email: user.email }).lean();
-		if (!(existingUser && verifyPassword(existingUser.hash, user.password))) {
-			throw new ApolloError('Email or password was incorrect');
+		const existingUser = await User.findOne<IUser>({
+			username: user.username
+		}).lean();
+		if (
+			!(existingUser && verifyValue(existingUser.passwordHash, user.password))
+		) {
+			throw new ApolloError('Username or password was incorrect');
 		}
 
 		const token = jwt.sign(
-			{ email: user.email },
+			{ username: user.username },
 			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '1h'
@@ -87,12 +102,12 @@ const Mutation = {
 
 		return { token };
 	},
-	logOut: async (parent, args, { res, email }: ApolloContext) => {
-		if (email) {
+	logOut: async (parent, args, { res, username }: ApolloContext) => {
+		if (username) {
 			nookies.destroy({ res }, 'token', {
 				path: '/'
 			});
-			return email;
+			return username;
 		} else {
 			return null;
 		}

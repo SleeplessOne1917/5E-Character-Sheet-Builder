@@ -1,9 +1,15 @@
 import { gql } from 'urql';
 
 const typeDefs = gql`
-	input AuthRequest {
-		email: String!
+	input LoginRequest {
+		username: String!
 		password: String!
+	}
+
+	input SignUpRequest {
+		username: String!
+		password: String!
+		email: String
 	}
 
 	type AuthResponse {
@@ -15,8 +21,8 @@ const typeDefs = gql`
 	}
 
 	type Mutation {
-		signUp(user: AuthRequest!): AuthResponse!
-		logIn(user: AuthRequest!): AuthResponse!
+		signUp(user: SignUpRequest!): AuthResponse!
+		logIn(user: LoginRequest!): AuthResponse!
 		logOut: String
 	}
 `;

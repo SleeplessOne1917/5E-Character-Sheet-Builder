@@ -7,8 +7,9 @@ import PasswordValidator from '../PasswordValidator/PasswordValidator';
 import classes from './LogInSignUpForm.module.css';
 
 type LogInSignUpValues = {
-	email: string;
+	username: string;
 	password: string;
+	email?: string;
 };
 
 export type LogInSignUpProps = {
@@ -41,7 +42,7 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 
 	return (
 		<Formik
-			initialValues={{ email: '', password: '' }}
+			initialValues={{ username: '', password: '' }}
 			validationSchema={schema}
 			onSubmit={onSubmit}
 		>
@@ -54,36 +55,42 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 				errors,
 				touched
 			}) => (
-				<form onSubmit={handleSubmit} className={classes.form} role="form">
+				<form
+					onSubmit={handleSubmit}
+					className={classes.form}
+					data-testid="form"
+				>
 					<div className={classes['input-and-error-container']}>
 						<div className={classes['input-and-label-container']}>
 							<div className={classes['input-container']}>
 								<input
 									className={`${classes.input}${
-										touched.email && errors.email
+										touched.username && errors.username
 											? ` ${classes['input-error']}`
 											: ''
 									}`}
-									id="email"
-									name="email"
+									id="username"
+									name="username"
 									type="text"
-									value={values.email}
-									placeholder="Email"
+									value={values.username}
+									placeholder="Username"
 									onChange={handleChange}
 									onBlur={handleBlur}
 								/>{' '}
 							</div>
 							<label
-								htmlFor="email"
+								htmlFor="username"
 								className={`${classes.label}${
-									values.email.length > 0 ? ` ${classes['label-selected']}` : ''
+									values.username.length > 0
+										? ` ${classes['label-selected']}`
+										: ''
 								}`}
 							>
-								Email
+								Username
 							</label>
 						</div>
-						{touched.email && errors.email && (
-							<div className={classes.error}>{errors.email}</div>
+						{touched.username && errors.username && (
+							<div className={classes.error}>{errors.username}</div>
 						)}
 					</div>
 					<div className={classes['input-and-error-container']}>
@@ -143,6 +150,50 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 							<PasswordValidator password={values.password} />
 						)}
 					</div>
+					{type === 'signUp' && (
+						<div className={classes['input-and-error-container']}>
+							<div className={classes['input-and-label-container']}>
+								<div className={classes['input-container']}>
+									<input
+										className={`${classes.input}${
+											touched.email && errors.email
+												? ` ${classes['input-error']}`
+												: ''
+										}`}
+										id="email"
+										name="email"
+										type="text"
+										value={values.email}
+										placeholder="Email (optional)"
+										onChange={handleChange}
+										onBlur={handleBlur}
+									/>{' '}
+								</div>
+								<label
+									htmlFor="email"
+									className={`${classes.label}${
+										values.email && values.email.length > 0
+											? ` ${classes['label-selected']}`
+											: ''
+									}`}
+								>
+									Email{' '}
+									<span className={classes['optional-text']}>(optional)</span>
+								</label>
+							</div>
+							{touched.email && errors.email && (
+								<div className={classes.error}>{errors.email}</div>
+							)}
+							<p className={classes['email-blurb']}>
+								Forgetful? Providing your email will allow you to request a
+								password reset or a reminder of your username. It will be
+								encrypted so your data will still be secure in the event of a
+								data breach. If you don&apos;t provide an email, make sure to
+								put extra points into INT to help you with your remember
+								credentials checks!
+							</p>
+						</div>
+					)}
 					<Button
 						disabled={isSubmitting}
 						type={ButtonType.submit}

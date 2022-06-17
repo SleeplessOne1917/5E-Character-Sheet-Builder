@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import LogInSignUpForm, { LogInSignUpProps } from './LogInSignUpForm';
 
+import logInSchema from '../../yup-schemas/logInSchema';
+import signUpSchema from '../../yup-schemas/signUpSchema';
+
 export default {
 	title: 'Components/LogInSignUpForm',
 	component: LogInSignUpForm,
-	args: {
-		schema: {}
-	},
 	argTypes: {
 		onSubmit: { type: 'function' }
 	}
@@ -18,10 +18,12 @@ const Template: ComponentStory<typeof LogInSignUpForm> = (
 
 export const LogIn = Template.bind({});
 LogIn.args = {
-	type: 'logIn'
+	type: 'logIn',
+	schema: logInSchema
 };
 
 export const SignUp = Template.bind({});
 SignUp.args = {
-	type: 'signUp'
+	type: 'signUp',
+	schema: signUpSchema
 };

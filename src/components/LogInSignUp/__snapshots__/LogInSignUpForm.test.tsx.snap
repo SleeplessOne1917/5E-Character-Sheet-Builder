@@ -3,7 +3,7 @@
 exports[`renders correctly when log in 1`] = `
 <form
   class="form"
-  role="form"
+  data-testid="form"
 >
   <div
     class="input-and-error-container"
@@ -16,9 +16,9 @@ exports[`renders correctly when log in 1`] = `
       >
         <input
           class="input"
-          id="email"
-          name="email"
-          placeholder="Email"
+          id="username"
+          name="username"
+          placeholder="Username"
           type="text"
           value=""
         />
@@ -26,9 +26,9 @@ exports[`renders correctly when log in 1`] = `
       </div>
       <label
         class="label"
-        for="email"
+        for="username"
       >
-        Email
+        Username
       </label>
     </div>
   </div>
@@ -89,7 +89,7 @@ exports[`renders correctly when log in 1`] = `
 exports[`renders correctly when sign up 1`] = `
 <form
   class="form"
-  role="form"
+  data-testid="form"
 >
   <div
     class="input-and-error-container"
@@ -102,9 +102,9 @@ exports[`renders correctly when sign up 1`] = `
       >
         <input
           class="input"
-          id="email"
-          name="email"
-          placeholder="Email"
+          id="username"
+          name="username"
+          placeholder="Username"
           type="text"
           value=""
         />
@@ -112,9 +112,9 @@ exports[`renders correctly when sign up 1`] = `
       </div>
       <label
         class="label"
-        for="email"
+        for="username"
       >
-        Email
+        Username
       </label>
     </div>
   </div>
@@ -261,6 +261,44 @@ exports[`renders correctly when sign up 1`] = `
         At least 1 special character
       </div>
     </div>
+  </div>
+  <div
+    class="input-and-error-container"
+  >
+    <div
+      class="input-and-label-container"
+    >
+      <div
+        class="input-container"
+      >
+        <input
+          class="input"
+          id="email"
+          name="email"
+          placeholder="Email (optional)"
+          type="text"
+          value=""
+        />
+         
+      </div>
+      <label
+        class="label"
+        for="email"
+      >
+        Email
+         
+        <span
+          class="optional-text"
+        >
+          (optional)
+        </span>
+      </label>
+    </div>
+    <p
+      class="email-blurb"
+    >
+      Forgetful? Providing your email will allow you to request a password reset or a reminder of your username. It will be encrypted so your data will still be secure in the event of a data breach. If you don't provide an email, make sure to put extra points into INT to help you with your remember credentials checks!
+    </p>
   </div>
   <button
     class="button positive"
