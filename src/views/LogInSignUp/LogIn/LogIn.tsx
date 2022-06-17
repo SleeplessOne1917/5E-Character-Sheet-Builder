@@ -21,21 +21,20 @@ const LogIn = (): JSX.Element => {
 			<LogInSignUpForm
 				schema={logInSchema}
 				type="logIn"
-				onSubmit={(values, { resetForm }) => {
+				onSubmit={async (values, { resetForm }) => {
 					const { email, password } = values;
-					logIn({ user: { email, password } }).then(result => {
-						if (result.error) {
-							const toast = {
-								closeTimeoutSeconds: 10,
-								message: result.error.message,
-								type: ToastType.error
-							};
-							dispatch(show(toast));
-						} else {
-							dispatch(fetchLoggedInEmail());
-							router.replace('/');
-						}
-					});
+					const result = await logIn({ user: { email, password } });
+					if (result.error) {
+						const toast = {
+							closeTimeoutSeconds: 10,
+							message: result.error.message,
+							type: ToastType.error
+						};
+						dispatch(show(toast));
+					} else {
+						await dispatch(fetchLoggedInEmail());
+						router.replace('/');
+					}
 					resetForm();
 				}}
 			/>

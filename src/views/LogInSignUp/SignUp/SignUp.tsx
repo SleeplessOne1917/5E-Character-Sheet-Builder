@@ -22,30 +22,31 @@ const SignUp = (): JSX.Element => {
 			<LogInSignUpForm
 				schema={signUpSchema}
 				type="signUp"
-				onSubmit={(values, { resetForm }) => {
+				onSubmit={async (values, { resetForm }) => {
 					const { email, password } = values;
-					signUp({ user: { email, password } }).then(result => {
-						let toast: ToastShowPayload;
-						const closeTimeoutSeconds = 10;
-						if (result.error) {
-							toast = {
-								closeTimeoutSeconds,
-								message: result.error.message,
-								type: ToastType.error
-							};
-						} else {
-							toast = {
-								closeTimeoutSeconds,
-								message: 'Successfully signed up! Logging you in now...',
-								type: ToastType.success
-							};
-							dispatch(fetchLoggedInEmail());
-							router.replace('/');
-						}
+					const result = await signUp({ user: { email, password } });
+					let toast: ToastShowPayload;
+					const closeTimeoutSeconds = 10;
 
+					if (result.error) {
+						toast = {
+							closeTimeoutSeconds,
+							message: result.error.message,
+							type: ToastType.error
+						};
 						dispatch(show(toast));
-					});
-					resetForm();
+						resetForm();
+					} else {
+						toast = {
+							closeTimeoutSeconds,
+							message: 'Successfully signed up! Logging you in now...',
+							type: ToastType.success
+						};
+						await dispatch(fetchLoggedInEmail());
+						dispatch(show(toast));
+						resetForm();
+						router.replace('/');
+					}
 				}}
 			/>
 		</MainContent>

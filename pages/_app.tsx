@@ -14,7 +14,7 @@ import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
 import { fetchLoggedInEmail } from '../src/redux/features/viewer';
-import { getStore } from '../src/redux/store';
+import { store } from '../src/redux/store';
 import { useAppDispatch } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
@@ -96,7 +96,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 }
 
 const WrappedApp = (props: AppProps) => (
-	<ReduxProvider store={getStore()}>
+	<ReduxProvider store={store}>
 		<MyApp {...props} />
 	</ReduxProvider>
 );

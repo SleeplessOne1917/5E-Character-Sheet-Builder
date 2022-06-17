@@ -22,7 +22,7 @@ export const getStore = () =>
 		}
 	});
 
-const store = getStore();
+export const store = getStore();
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = typeof store.dispatch;

@@ -12,14 +12,10 @@ type LogInSignUpValues = {
 };
 
 export type LogInSignUpProps = {
-	onSubmit: ((
+	onSubmit: (
 		values: LogInSignUpValues,
 		formikHelpers: FormikHelpers<LogInSignUpValues>
-	) => void | Promise<any>) &
-		((
-			values: LogInSignUpValues,
-			{ resetForm }: FormikHelpers<LogInSignUpValues>
-		) => void);
+	) => void | Promise<any>;
 	schema: any;
 	type: 'logIn' | 'signUp';
 };

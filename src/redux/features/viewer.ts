@@ -1,19 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import GET_VIEWER from '../../graphql/queries/getViewer';
+import { ToastType } from '../../types/toast';
 import client from '../../graphql/client';
+import { show } from './toast';
 
 const initialState = null as string | null;
 
-export const fetchLoggedInEmail = createAsyncThunk<string | null, void>(
+export const fetchLoggedInEmail = createAsyncThunk(
 	'viewer/fetchLoggedInEmail',
-	async () => {
-		const result = (
-			await client
-				.query(GET_VIEWER, {}, { requestPolicy: 'network-only' })
-				.toPromise()
-		).data.viewer as string | null;
-		return result;
+	async (arg, { rejectWithValue, dispatch }) => {
+		const result = await client
+			.query(GET_VIEWER, undefined, { requestPolicy: 'cache-and-network' })
+			.toPromise();
+
+		if (result.error) {
+			const toast = {
+				closeTimeoutSeconds: 10,
+				message: result.error.message,
+				type: ToastType.error
+			};
+			dispatch(show(toast));
+			return rejectWithValue(`${result.error.message}`);
+		}
+
+		return result.data.viewer as string;
 	}
 );
 
@@ -24,8 +35,9 @@ const viewerSlice = createSlice({
 	extraReducers: builder => {
 		builder.addCase(
 			fetchLoggedInEmail.fulfilled,
-			(state, action) => action.payload
+			(state, { payload }) => payload
 		);
+		builder.addCase(fetchLoggedInEmail.rejected, () => null);
 	}
 });
 
