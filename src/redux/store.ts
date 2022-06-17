@@ -88,7 +88,7 @@ export const useStore = () => {
 	return theStore;
 };
 
-export const getTestStore = () => configureStore({ reducer });
+export const getTestStore = () => configureStore({ reducer, devTools: false });
 
 const store = getTestStore();
 
