@@ -14,10 +14,10 @@ import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
 import { fetchLoggedInEmail } from '../src/redux/features/viewer';
-import { store } from '../src/redux/store';
 import { useAppDispatch } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
+import { useStore } from '../src/redux/store';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const { pathname } = useRouter();
@@ -95,10 +95,14 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	);
 }
 
-const WrappedApp = (props: AppProps) => (
-	<ReduxProvider store={store}>
-		<MyApp {...props} />
-	</ReduxProvider>
-);
+const WrappedApp = (props: AppProps) => {
+	const store = useStore();
+
+	return (
+		<ReduxProvider store={store}>
+			<MyApp {...props} />
+		</ReduxProvider>
+	);
+};
 
 export default WrappedApp;

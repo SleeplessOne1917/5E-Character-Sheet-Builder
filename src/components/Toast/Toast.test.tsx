@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import Toast from './Toast';
 import { ToastType } from '../../types/toast';
 import { composeStories } from '@storybook/testing-react';
-import { getStore } from '../../redux/store';
+import { getTestStore } from '../../redux/store';
 import { show } from '../../redux/features/toast';
 import userEvent from '@testing-library/user-event';
 
@@ -16,7 +16,7 @@ const { Success, Error } = composeStories(stories);
 
 it('renders correctly', () => {
 	render(
-		<Provider store={getStore()}>
+		<Provider store={getTestStore()}>
 			<Toast />
 		</Provider>
 	);
@@ -46,7 +46,7 @@ it('error renders expected content', () => {
 
 it('does not contain open class when closed', () => {
 	render(
-		<Provider store={getStore()}>
+		<Provider store={getTestStore()}>
 			<Toast />
 		</Provider>
 	);
@@ -62,7 +62,7 @@ it('contains open class when open', () => {
 
 it('closes itself after closeTimeoutSeconds seconds', async () => {
 	jest.useFakeTimers();
-	const store = getStore();
+	const store = getTestStore();
 
 	render(
 		<Provider store={store}>
@@ -87,7 +87,7 @@ it('closes itself after closeTimeoutSeconds seconds', async () => {
 describe('x button tab index', () => {
 	it('is -1 when closed', () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<Toast />
 			</Provider>
 		);
@@ -109,7 +109,7 @@ describe('closes the toast when x button is pressed', () => {
 	});
 
 	it('with click', async () => {
-		const store = getStore();
+		const store = getTestStore();
 
 		render(
 			<Provider store={store}>
@@ -137,7 +137,7 @@ describe('closes the toast when x button is pressed', () => {
 	});
 
 	it('with enter', async () => {
-		const store = getStore();
+		const store = getTestStore();
 
 		render(
 			<Provider store={store}>
@@ -166,7 +166,7 @@ describe('closes the toast when x button is pressed', () => {
 	});
 
 	it('with space', async () => {
-		const store = getStore();
+		const store = getTestStore();
 
 		render(
 			<Provider store={store}>

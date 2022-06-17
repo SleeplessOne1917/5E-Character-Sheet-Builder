@@ -7,7 +7,7 @@ import { render, screen } from '@testing-library/react';
 
 import { Provider } from 'react-redux';
 import { composeStories } from '@storybook/testing-react';
-import { getStore } from '../../../../../redux/store';
+import { getTestStore } from '../../../../../redux/store';
 import { mockAbilities } from '../../MockAbilitiesStore';
 import userEvent from '@testing-library/user-event';
 
@@ -69,7 +69,7 @@ describe('reset group', () => {
 
 	it('resets groups', async () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<RollGroup group={0} abilities={mockAbilities} />
 			</Provider>
 		);
@@ -96,7 +96,7 @@ describe('apply ability scores', () => {
 	});
 
 	it('applies ability scores', async () => {
-		const store = getStore();
+		const store = getTestStore();
 		render(
 			<Provider store={store}>
 				<RollGroup group={0} abilities={mockAbilities} />
@@ -137,7 +137,7 @@ describe('apply ability scores', () => {
 describe('delete group', () => {
 	it('is not rendered when no onDeleteGroup prop is passed in', () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<RollGroup group={0} abilities={mockAbilities} />
 			</Provider>
 		);
@@ -147,7 +147,7 @@ describe('delete group', () => {
 
 	it('is rendered when onDeleteGroup prop is passed in', () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<RollGroup
 					group={0}
 					abilities={mockAbilities}
@@ -163,7 +163,7 @@ describe('delete group', () => {
 		const mockOnDeleteGroup = jest.fn();
 
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<RollGroup
 					group={0}
 					abilities={mockAbilities}
@@ -180,7 +180,7 @@ describe('delete group', () => {
 
 describe('rolls', () => {
 	it('are ordered', async () => {
-		const store = getStore();
+		const store = getTestStore();
 
 		render(
 			<Provider store={store}>
@@ -200,7 +200,7 @@ describe('rolls', () => {
 	});
 
 	it('are between 1 and 6', async () => {
-		const store = getStore();
+		const store = getTestStore();
 
 		render(
 			<Provider store={store}>
@@ -224,7 +224,7 @@ describe('rolls', () => {
 
 it('removes selected options from options of other dropdowns', async () => {
 	render(
-		<Provider store={getStore()}>
+		<Provider store={getTestStore()}>
 			<RollGroup group={0} abilities={mockAbilities} />
 		</Provider>
 	);

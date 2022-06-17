@@ -7,7 +7,7 @@ import { act, render, screen } from '@testing-library/react';
 import AbilityCalculation from './AbilityCalculation';
 import { Provider } from 'react-redux';
 import { composeStories } from '@storybook/testing-react';
-import { getStore } from '../../../../redux/store';
+import { getTestStore } from '../../../../redux/store';
 import userEvent from '@testing-library/user-event';
 
 const { AllBonusesAndOverrideButNoBase, Everything, OnlyBaseScore } =
@@ -55,7 +55,7 @@ it('uses default values when bonuses not passed in', () => {
 describe('other bonus', () => {
 	it('does not allow input lower than -10', async () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<AbilityCalculation index="str" name="Strength" />
 			</Provider>
 		);
@@ -70,7 +70,7 @@ describe('other bonus', () => {
 
 	it('does not allow input greater than 10', async () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<AbilityCalculation index="dex" name="Dexterity" />
 			</Provider>
 		);
@@ -87,7 +87,7 @@ describe('other bonus', () => {
 describe('override', () => {
 	it('does not allow input lower than 3', async () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<AbilityCalculation index="con" name="Constitution" />
 			</Provider>
 		);
@@ -102,7 +102,7 @@ describe('override', () => {
 
 	it('does not allow input greater than 30', async () => {
 		render(
-			<Provider store={getStore()}>
+			<Provider store={getTestStore()}>
 				<AbilityCalculation index="con" name="Constitution" />
 			</Provider>
 		);

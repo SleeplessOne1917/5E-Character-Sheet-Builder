@@ -9,7 +9,7 @@ import AbilityScores from '../../../types/abilityScores';
 import { Provider } from 'react-redux';
 import { composeStories } from '@storybook/testing-react';
 import { getAbilityScoresTest } from '../../../hooks/useGetAbilityScore';
-import { getStore } from '../../../redux/store';
+import { getTestStore } from '../../../redux/store';
 import { mockAbilities } from '../../../components/character-creation/Abilities/MockAbilitiesStore';
 import userEvent from '@testing-library/user-event';
 
@@ -78,7 +78,7 @@ it('add group adds group', async () => {
 });
 
 it('has expected default ability score values on generation method switch', async () => {
-	const store = getStore();
+	const store = getTestStore();
 	render(
 		<Provider store={store}>
 			<Abilities abilities={mockAbilities} />

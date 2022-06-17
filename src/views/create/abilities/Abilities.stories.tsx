@@ -3,11 +3,11 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Abilities from './Abilities';
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';
-import { getStore } from '../../../redux/store';
+import { getTestStore } from '../../../redux/store';
 import { mockAbilities } from '../../../components/character-creation/Abilities/MockAbilitiesStore';
 
 const MockStore = ({ children }: { children: ReactNode }) => (
-	<Provider store={getStore()}>{children}</Provider>
+	<Provider store={getTestStore()}>{children}</Provider>
 );
 
 export default {
