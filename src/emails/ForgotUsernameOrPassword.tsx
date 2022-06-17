@@ -32,6 +32,12 @@ const buttonStyle: CSSProperties = {
 	textDecoration: 'none'
 };
 
+const linkStyle: CSSProperties = {
+	color: '#fffee9',
+	textDecoration: 'none',
+	display: 'block'
+};
+
 const ForgotUsernameOrPassword = ({
 	subject,
 	type
@@ -46,12 +52,15 @@ const ForgotUsernameOrPassword = ({
 						{subject}
 					</Span>
 				</Item>
-				<Item style={{ height: 40 }} />
+				<Item style={{ height: 20 }} />
+				<Item style={{ color: '#290000', fontSize: 16 }}>
+					Everyone forgets things sometimes. Click the link to{' '}
+					{type === 'username' ? 'get your username' : 'reset your password'}.
+				</Item>
+				<Item style={{ height: 20 }} />
 				<Item style={buttonStyle}>
-					<A href="#">
-						{type === 'password'
-							? 'Reset your password'
-							: 'Get username reminder'}
+					<A href="#" style={linkStyle}>
+						{type === 'password' ? 'Reset your password' : 'Get username'}
 					</A>
 				</Item>
 				<Item style={{ height: 40 }} />
