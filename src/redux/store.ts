@@ -39,8 +39,6 @@ const updateCache: ListenerEffect<
 	ThunkDispatch<unknown, unknown, AnyAction>,
 	unknown
 > = (action, { getState }) => {
-	console.log('state updated, saving to cache');
-	console.log(getState());
 	set(REDUX_CACHE_KEY, getState());
 };
 
