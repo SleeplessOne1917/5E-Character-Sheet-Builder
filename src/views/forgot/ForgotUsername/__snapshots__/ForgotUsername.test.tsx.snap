@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="forgot-username"
+>
+  <div
+    class="content"
+  >
+    <div
+      class="content"
+    >
+      <h1
+        class="big-text"
+      >
+        Forgot username
+      </h1>
+      <p
+        class="blurb"
+      >
+        Enter your email address. If it's in the system, you'll receive an email with a link to view your username.
+      </p>
+      <form
+        class="form"
+      >
+        <div
+          class="input-and-error-container"
+        >
+          <div
+            class="input-and-label-container"
+          >
+            <div
+              class="input-container"
+            >
+              <input
+                class="input"
+                id="email"
+                name="email"
+                placeholder="Email"
+                type="text"
+                value=""
+              />
+               
+            </div>
+            <label
+              class="label"
+              for="email"
+            >
+              Email
+            </label>
+          </div>
+        </div>
+        <button
+          class="button positive"
+          style="font-size: 1.3rem; padding: 1rem; margin: 1rem;"
+          type="submit"
+        >
+          Send username reminder
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+`;

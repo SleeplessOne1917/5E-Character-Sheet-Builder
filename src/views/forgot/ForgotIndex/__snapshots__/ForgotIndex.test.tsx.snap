@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="forgot-index"
+>
+  <div
+    class="content"
+  >
+    <div
+      class="content"
+    >
+      <h1
+        class="header-text"
+      >
+        Forgot Something?
+      </h1>
+      <div
+        class="button-container"
+      >
+        <a
+          class="link-button"
+          href="/forgot/username"
+          tabindex="0"
+        >
+          Forgot username
+        </a>
+        <a
+          class="link-button"
+          href="/forgot/password"
+          tabindex="0"
+        >
+          Forgot password
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+`;

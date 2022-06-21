@@ -1,0 +1,13 @@
+import * as stories from './ForgotPassword.stories';
+
+import { render, screen } from '@testing-library/react';
+
+import { composeStories } from '@storybook/testing-react';
+
+const { Default } = composeStories(stories);
+
+it('renders correctly', () => {
+	render(<Default />);
+
+	expect(screen.getByTestId('forgot-password')).toMatchSnapshot();
+});

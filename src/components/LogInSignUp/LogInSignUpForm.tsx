@@ -3,6 +3,7 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { Formik, FormikHelpers } from 'formik';
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 
+import Link from 'next/link';
 import PasswordValidator from '../PasswordValidator/PasswordValidator';
 import classes from './LogInSignUpForm.module.css';
 
@@ -203,6 +204,13 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 					>
 						{type === 'logIn' ? 'Log In' : 'Sign Up'}
 					</Button>
+					{type === 'logIn' && (
+						<Link href="/forgot">
+							<a className={classes['forgot-link']}>
+								Forgot your username or password
+							</a>
+						</Link>
+					)}
 				</form>
 			)}
 		</Formik>

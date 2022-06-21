@@ -1,3 +1,14 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.big-text {
+    font-family: var(--font-fantasy);
+    color: var(--davy);
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -45,12 +56,6 @@
     color: transparent;
 }
 
-.big-text {
-    font-family: var(--font-fantasy);
-    color: var(--davy);
-    align-self: center;
-}
-
 .label {
     position: absolute;
     bottom: 0.25rem;
@@ -82,41 +87,20 @@
     border: 3px solid var(--error-red) !important;
 }
 
-.eye {
-    width: 1.3rem;
-    height: 1.3rem;
-    fill: transparent;
-    stroke: var(--davy);
-    margin-left: 0.5rem;
-    cursor: pointer;
-}
-
-.eye:active, .eye:focus {
-    fill: var(--highlight)
-}
-
-.eye:focus {
-    outline: var(--focus-outline);
-}
-
-.email-blurb {
+.blurb {
     color: var(--davy);
     font-size: 0.8rem;
-    padding: 0.5rem 5rem;
-}
-
-.optional-text {
-    font-size: 0.7rem;
-}
-
-.forgot-link {
-    color: var(--davy-light);
-    text-decoration: none;
+    padding: 0.5rem 4rem;
+    margin: 0;
 }
 
 @media screen and (min-width: 768px) {
     .input {
         font-size: 1.6rem
+    }
+
+    .big-text {
+        font-size: 2.5rem;
     }
 
     .label {
@@ -127,30 +111,18 @@
         font-size: 1.2rem !important;
     }
 
-    .optional-text {
-        font-size: 1.05rem
-    }
-
     .input-container {
         padding-top: 1.5rem
-    }
-
-    .big-text {
-        font-size: 2.5rem;
     }
 
     .error {
         font-size: 1rem;
     }
 
-    .eye {
-        height: 1.6rem;
-        width: 1.6rem;
-    }
-
-    .email-blurb {
+    .blurb {
         font-size: 1rem;
     }
+
 }
 
 @media screen and (min-width: 1024px) {
@@ -158,12 +130,12 @@
         font-size: 2rem;
     }
 
-    .big-text {
-        font-size: 3rem;
-    }
-
     .label {
         font-size: 2rem;
+    }
+
+    .big-text {
+        font-size: 3rem;
     }
 
     .input-container {
@@ -174,36 +146,13 @@
         font-size: 1.6rem !important;
     }
 
-    .optional-text {
-        font-size: 1.4rem;
-    }
-
     .error {
         font-size: 1.5rem;
     }
 }
 
-@media screen and (min-width: 1280px) {
-    .eye {
-        height: 2rem;
-        width: 2rem;
-    }
-}
-
 @media screen and (min-width: 1536px) {
-    .email-blurb {
+    .blurb {
         font-size: 1.3rem;
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .eye:hover {
-        fill: var(--highlight)
-    }
-
-    .forgot-link:hover {
-        color: var(--highlight);
-        background-color: var(--davy-light);
-        border-radius: 0.5rem;
     }
 }
