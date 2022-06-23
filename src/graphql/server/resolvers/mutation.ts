@@ -1,8 +1,14 @@
 import User, { IUser } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
+import {
+	sendResetPassword,
+	sendUsernameReminder
+} from './../../../services/sendEmailService';
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
+import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
+import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import nookies from 'nookies';
@@ -24,6 +30,22 @@ type LoginArgs = {
 
 type SignUpArgs = {
 	user: SignUpUserRequest;
+};
+
+interface ForgotRequest {
+	email: string;
+}
+
+interface ForgotPasswordRequest extends ForgotRequest {
+	username: string;
+}
+
+type ForgotUsernameArgs = {
+	request: ForgotRequest;
+};
+
+type ForgotPasswordArgs = {
+	request: ForgotPasswordRequest;
 };
 
 const Mutation = {
@@ -111,6 +133,49 @@ const Mutation = {
 		} else {
 			return null;
 		}
+	},
+	forgotUsername: async (parent, { request }: ForgotUsernameArgs) => {
+		await forgotUsernameSchema.validate(request);
+
+		const users = await User.find<IUser>().lean();
+		for (const user of users) {
+			if (
+				user.emailHash &&
+				(await verifyValue(user.emailHash, request.email))
+			) {
+				sendUsernameReminder(request.email);
+				break;
+			}
+		}
+
+		return {
+			message: 'Email was sent if it exists.'
+		};
+	},
+	forgotPassword: async (parent, { request }: ForgotPasswordArgs) => {
+		await forgotPasswordSchema.validate(request);
+
+		const user = await User.findOne<IUser>({
+			username: request.username
+		}).lean();
+		if (user) {
+			if (user.emailHash) {
+				if (await verifyValue(user.emailHash, request.email)) {
+					sendResetPassword(request.email);
+				}
+			} else {
+				throw new ApolloError(
+					'Provided user does not have email address in the system'
+				);
+			}
+		} else {
+			throw new ApolloError('User does not exist');
+		}
+
+		return {
+			message:
+				'Email was sent if the provided email matches the email in the system.'
+		};
 	}
 };
 

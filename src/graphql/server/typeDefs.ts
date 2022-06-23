@@ -20,10 +20,25 @@ const typeDefs = gql`
 		viewer: String
 	}
 
+	type ForgotResponse {
+		message: String!
+	}
+
+	input ForgotUsernameRequest {
+		email: String!
+	}
+
+	input ForgotPasswordRequest {
+		email: String!
+		username: String!
+	}
+
 	type Mutation {
 		signUp(user: SignUpRequest!): AuthResponse!
 		logIn(user: LoginRequest!): AuthResponse!
 		logOut: String
+		forgotUsername(request: ForgotUsernameRequest!): ForgotResponse!
+		forgotPassword(request: ForgotPasswordRequest!): ForgotResponse!
 	}
 `;
 

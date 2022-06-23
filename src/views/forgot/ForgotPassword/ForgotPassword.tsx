@@ -1,5 +1,6 @@
 import Button, { ButtonType } from '../../../components/Button/Button';
 
+import FORGOT_PASSWORD from '../../../graphql/mutations/user/forgotPassword';
 import { Formik } from 'formik';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
@@ -7,9 +8,13 @@ import classes from './ForgotPassword.module.css';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useMutation } from 'urql';
+import { useRouter } from 'next/router';
 
 const ForgotPassword = () => {
 	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const [forgotPasswordResult, forgotPassword] = useMutation(FORGOT_PASSWORD);
 
 	return (
 		<MainContent testId="forgot-password">
@@ -22,15 +27,28 @@ const ForgotPassword = () => {
 				<Formik
 					initialValues={{ email: '', username: '' }}
 					validationSchema={forgotPasswordSchema}
-					onSubmit={({}, { resetForm }) => {
+					onSubmit={async (values, { resetForm }) => {
+						const result = await forgotPassword({ request: values });
+
+						if (result.error) {
+							dispatch(
+								show({
+									closeTimeoutSeconds: 10,
+									message: result.error.message,
+									type: ToastType.error
+								})
+							);
+							resetForm();
+						}
 						dispatch(
 							show({
-								closeTimeoutSeconds: 10,
-								message: 'Email sent!',
+								closeTimeoutSeconds: 15,
+								message: result.data.forgotPassword.message,
 								type: ToastType.success
 							})
 						);
 						resetForm();
+						router.replace('/');
 					}}
 				>
 					{({
