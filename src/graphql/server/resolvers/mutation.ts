@@ -1,4 +1,7 @@
-import User, { IUser } from '../../../db/models/user';
+import User, { IUser, IUserDocument } from '../../../db/models/user';
+import UsernameOTL, {
+	IUsernameOTLDocument
+} from '../../../db/models/usernameOTL';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
@@ -7,6 +10,7 @@ import {
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
+import { Types } from 'mongoose';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
@@ -46,6 +50,10 @@ type ForgotUsernameArgs = {
 
 type ForgotPasswordArgs = {
 	request: ForgotPasswordRequest;
+};
+
+type OTLArgs = {
+	otlId: string;
 };
 
 const Mutation = {
@@ -137,13 +145,18 @@ const Mutation = {
 	forgotUsername: async (parent, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request);
 
-		const users = await User.find<IUser>().lean();
+		const users = await User.find<IUserDocument>().lean();
 		for (const user of users) {
 			if (
 				user.emailHash &&
 				(await verifyValue(user.emailHash, request.email))
 			) {
-				sendUsernameReminder(request.email);
+				const otl = await UsernameOTL.create<IUsernameOTLDocument>({
+					userId: user._id,
+					createdAt: Date.now()
+				});
+				const link = `${process.env.PROTOCOL_AND_DOMAIN}/forgot/username/${otl.id}`;
+				sendUsernameReminder(request.email, link);
 				break;
 			}
 		}
@@ -176,6 +189,37 @@ const Mutation = {
 			message:
 				'Email was sent if the provided email matches the email in the system.'
 		};
+	},
+	remindUsername: async (parent, { otlId }: OTLArgs) => {
+		const errorMessage = 'Link either expired or was incorrect';
+		let otlIdObjId: Types.ObjectId;
+
+		try {
+			otlIdObjId = new Types.ObjectId(otlId);
+		} catch (e) {
+			throw new ApolloError(errorMessage);
+		}
+
+		if (otlIdObjId.toString() !== otlId) {
+			throw new ApolloError(errorMessage);
+		}
+
+		const otl = await UsernameOTL.findById<IUsernameOTLDocument>(otlIdObjId);
+
+		if (!otl) {
+			throw new ApolloError(errorMessage);
+		}
+
+		await UsernameOTL.deleteOne({ _id: otlIdObjId });
+
+		// eslint-disable-next-line testing-library/await-async-query
+		const user = await User.findById<IUser>(otl.userId).lean();
+
+		if (!user) {
+			throw new ApolloError('User does not exist');
+		}
+
+		return user.username;
 	}
 };
 

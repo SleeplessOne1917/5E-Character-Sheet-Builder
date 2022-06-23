@@ -8,17 +8,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 import { ToastType } from '../../types/toast';
 import classes from './Toast.module.css';
+import { cleanMessage } from '../../services/messageCleanerService';
 import { hide } from '../../redux/features/toast';
-
-const cleanMessage = (message: string) => {
-	const regexResult = /(?:\[GraphQL\] )?(.*)/.exec(message);
-
-	if (regexResult && regexResult[1]) {
-		return regexResult[1];
-	} else {
-		return '';
-	}
-};
 
 const Toast = (): JSX.Element => {
 	const dispatch = useAppDispatch();

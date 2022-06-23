@@ -11,6 +11,7 @@ const emailHeadCSS = `
 type ForgotUsernameOrPasswordProps = {
 	subject: string;
 	type: 'username' | 'password';
+	link: string;
 };
 
 const backgroundStyle: CSSProperties = {
@@ -40,7 +41,8 @@ const linkStyle: CSSProperties = {
 
 const ForgotUsernameOrPassword = ({
 	subject,
-	type
+	type,
+	link
 }: ForgotUsernameOrPasswordProps) => (
 	<Box align="center" style={{ width: '100%' }}>
 		<Email headCSS={emailHeadCSS} title={subject}>
@@ -56,10 +58,11 @@ const ForgotUsernameOrPassword = ({
 				<Item style={{ color: '#290000', fontSize: 16 }}>
 					Everyone forgets things sometimes. Click the link to{' '}
 					{type === 'username' ? 'get your username' : 'reset your password'}.
+					Your link will expire in an hour.
 				</Item>
 				<Item style={{ height: 20 }} />
 				<Item style={buttonStyle}>
-					<A href="#" style={linkStyle}>
+					<A href={link} style={linkStyle}>
 						{type === 'password' ? 'Reset your password' : 'Get username'}
 					</A>
 				</Item>

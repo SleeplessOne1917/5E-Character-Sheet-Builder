@@ -39,6 +39,7 @@ const typeDefs = gql`
 		logOut: String
 		forgotUsername(request: ForgotUsernameRequest!): ForgotResponse!
 		forgotPassword(request: ForgotPasswordRequest!): ForgotResponse!
+		remindUsername(otlId: String!): String!
 	}
 `;
 

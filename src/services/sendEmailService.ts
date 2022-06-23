@@ -25,12 +25,12 @@ const getTransporter = (): Transporter => {
 	return transporter;
 };
 
-export const sendUsernameReminder = (email: string) => {
+export const sendUsernameReminder = (email: string, link: string) => {
 	getTransporter().sendMail({
 		from: `"5E Character Sheet Builder No Reply" <${process.env.FROM_EMAIL}>`,
 		to: email,
 		subject: 'Username reminder',
-		html: renderForgotUsername()
+		html: renderForgotUsername(link)
 	});
 };
 
