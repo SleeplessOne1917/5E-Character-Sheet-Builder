@@ -82,7 +82,7 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 	return (
 		<MainContent>
 			<div className={classes.content}>
-				<h1 className={classes['big-text']}>{headerText}</h1>
+				<h1>{headerText}</h1>
 				{content}
 			</div>
 		</MainContent>

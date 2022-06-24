@@ -6,12 +6,6 @@
     font-family: var(--font-display);
 }
 
-.big-text {
-    font-family: var(--font-fantasy);
-    color: var(--davy);
-    align-self: center;
-}
-
 .email-blurb {
     color: var(--davy);
     font-size: 0.8rem;
@@ -38,20 +32,12 @@
         font-size: 1.05rem
     }
 
-    .big-text {
-        font-size: 2.5rem;
-    }
-
     .email-blurb {
         font-size: 1rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    .big-text {
-        font-size: 3rem;
-    }
-
     .optional-text {
         font-size: 1.4rem;
     }

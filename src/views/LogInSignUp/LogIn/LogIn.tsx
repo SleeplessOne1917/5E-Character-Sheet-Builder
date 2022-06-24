@@ -17,7 +17,7 @@ const LogIn = (): JSX.Element => {
 
 	return (
 		<MainContent>
-			<h1 className={classes['big-text']}>Log In</h1>
+			<h1>Log In</h1>
 			<LogInSignUpForm
 				schema={logInSchema}
 				type="logIn"

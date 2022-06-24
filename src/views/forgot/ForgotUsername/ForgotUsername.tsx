@@ -20,7 +20,7 @@ const ForgotUsername = () => {
 	return (
 		<MainContent testId="forgot-username">
 			<div className={classes.content}>
-				<h1 className={classes['big-text']}>Forgot username</h1>
+				<h1>Forgot username</h1>
 				<p className={classes.blurb}>
 					Enter your email address. If it&apos;s in the system, you&apos;ll
 					receive an email with a link to view your username.

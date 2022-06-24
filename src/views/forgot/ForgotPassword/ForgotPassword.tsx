@@ -20,7 +20,7 @@ const ForgotPassword = () => {
 	return (
 		<MainContent testId="forgot-password">
 			<div className={classes.content}>
-				<h1 className={classes['big-text']}>Reset your password</h1>
+				<h1>Reset your password</h1>
 				<p className={classes.blurb}>
 					Enter your username and email address. If they&apos;re in the system,
 					you&apos;ll receive an email with a link to reset your password.

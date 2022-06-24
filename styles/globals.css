@@ -36,6 +36,12 @@ body {
   margin: 0;
 }
 
+h1 {
+  font-family: var(--font-fantasy);
+  color: var(--davy);
+  align-self: center;
+}
+
 #__next {
   height: 100%;
   width: 100%;
@@ -62,4 +68,16 @@ body {
 .resize-animation-stopper * {
   transition: none !important;
   animation: none !important;
+}
+
+@media screen and (min-width: 768px) {
+  h1 {
+      font-size: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  h1 {
+      font-size: 3rem;
+  }
 }
