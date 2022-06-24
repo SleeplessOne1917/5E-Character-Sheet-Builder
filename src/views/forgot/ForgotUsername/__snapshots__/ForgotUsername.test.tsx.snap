@@ -26,6 +26,7 @@ exports[`renders correctly 1`] = `
       >
         <div
           class="input-and-error-container"
+          data-testid="text-input"
         >
           <div
             class="input-and-label-container"
@@ -37,11 +38,9 @@ exports[`renders correctly 1`] = `
                 class="input"
                 id="email"
                 name="email"
-                placeholder="Email"
                 type="text"
                 value=""
               />
-               
             </div>
             <label
               class="label"

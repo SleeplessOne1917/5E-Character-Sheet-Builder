@@ -7,6 +7,7 @@ exports[`renders correctly when log in 1`] = `
 >
   <div
     class="input-and-error-container"
+    data-testid="text-input"
   >
     <div
       class="input-and-label-container"
@@ -18,11 +19,9 @@ exports[`renders correctly when log in 1`] = `
           class="input"
           id="username"
           name="username"
-          placeholder="Username"
           type="text"
           value=""
         />
-         
       </div>
       <label
         class="label"
@@ -34,6 +33,7 @@ exports[`renders correctly when log in 1`] = `
   </div>
   <div
     class="input-and-error-container"
+    data-testid="text-input"
   >
     <div
       class="input-and-label-container"
@@ -45,7 +45,6 @@ exports[`renders correctly when log in 1`] = `
           class="input"
           id="password"
           name="password"
-          placeholder="Password"
           type="password"
           value=""
         />
@@ -99,6 +98,7 @@ exports[`renders correctly when sign up 1`] = `
 >
   <div
     class="input-and-error-container"
+    data-testid="text-input"
   >
     <div
       class="input-and-label-container"
@@ -110,11 +110,9 @@ exports[`renders correctly when sign up 1`] = `
           class="input"
           id="username"
           name="username"
-          placeholder="Username"
           type="text"
           value=""
         />
-         
       </div>
       <label
         class="label"
@@ -126,6 +124,7 @@ exports[`renders correctly when sign up 1`] = `
   </div>
   <div
     class="input-and-error-container"
+    data-testid="text-input"
   >
     <div
       class="input-and-label-container"
@@ -137,7 +136,6 @@ exports[`renders correctly when sign up 1`] = `
           class="input"
           id="password"
           name="password"
-          placeholder="Password"
           type="password"
           value=""
         />
@@ -270,6 +268,7 @@ exports[`renders correctly when sign up 1`] = `
   </div>
   <div
     class="input-and-error-container"
+    data-testid="text-input"
   >
     <div
       class="input-and-label-container"
@@ -281,11 +280,9 @@ exports[`renders correctly when sign up 1`] = `
           class="input"
           id="email"
           name="email"
-          placeholder="Email (optional)"
           type="text"
           value=""
         />
-         
       </div>
       <label
         class="label"
@@ -300,12 +297,12 @@ exports[`renders correctly when sign up 1`] = `
         </span>
       </label>
     </div>
-    <p
-      class="email-blurb"
-    >
-      Forgetful? Providing your email will allow you to request a password reset or a reminder of your username. It will be encrypted so your data will still be secure in the event of a data breach. If you don't provide an email, make sure to put extra points into INT to help you with your remember credentials checks!
-    </p>
   </div>
+  <p
+    class="email-blurb"
+  >
+    Forgetful? Providing your email will allow you to request a password reset or a reminder of your username. It will be encrypted so your data will still be secure in the event of a data breach. If you don't provide an email, make sure to put extra points into INT to help you with your remember credentials checks!
+  </p>
   <button
     class="button positive"
     style="font-size: 2.5rem; padding: 1rem; margin: 1rem;"
