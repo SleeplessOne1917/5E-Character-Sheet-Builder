@@ -118,7 +118,10 @@ const Mutation = {
 			username: user.username
 		}).lean();
 		if (
-			!(existingUser && verifyValue(existingUser.passwordHash, user.password))
+			!(
+				existingUser &&
+				(await verifyValue(existingUser.passwordHash, user.password))
+			)
 		) {
 			throw new ApolloError('Username or password was incorrect');
 		}
