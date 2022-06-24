@@ -87,7 +87,7 @@ exports[`renders correctly when log in 1`] = `
     class="forgot-link"
     href="/forgot"
   >
-    Forgot your username or password
+    Forgot your username or password?
   </a>
 </form>
 `;
