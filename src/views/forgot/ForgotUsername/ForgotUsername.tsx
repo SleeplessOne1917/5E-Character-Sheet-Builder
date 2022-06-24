@@ -59,7 +59,8 @@ const ForgotUsername = () => {
 						handleChange,
 						handleBlur,
 						handleSubmit,
-						isSubmitting
+						isSubmitting,
+						setTouched
 					}) => (
 						<form onSubmit={handleSubmit} className={classes.form}>
 							<div className={classes['input-and-error-container']}>
@@ -76,7 +77,10 @@ const ForgotUsername = () => {
 											type="text"
 											value={values.email}
 											placeholder="Email"
-											onChange={handleChange}
+											onChange={event => {
+												setTouched({ ...touched, email: false });
+												handleChange(event);
+											}}
 											onBlur={handleBlur}
 										/>{' '}
 									</div>

@@ -54,7 +54,8 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 				handleSubmit,
 				isSubmitting,
 				errors,
-				touched
+				touched,
+				setTouched
 			}) => (
 				<form
 					onSubmit={handleSubmit}
@@ -75,7 +76,10 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 									type="text"
 									value={values.username}
 									placeholder="Username"
-									onChange={handleChange}
+									onChange={event => {
+										setTouched({ ...touched, username: false });
+										handleChange(event);
+									}}
 									onBlur={handleBlur}
 								/>{' '}
 							</div>
@@ -108,7 +112,10 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 									type={showPassword ? 'text' : 'password'}
 									value={values.password}
 									placeholder="Password"
-									onChange={handleChange}
+									onChange={event => {
+										setTouched({ ...touched, password: false });
+										handleChange(event);
+									}}
 									onBlur={handleBlur}
 								/>
 								{showPassword ? (
@@ -166,7 +173,10 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => {
 										type="text"
 										value={values.email}
 										placeholder="Email (optional)"
-										onChange={handleChange}
+										onChange={event => {
+											setTouched({ ...touched, email: false });
+											handleChange(event);
+										}}
 										onBlur={handleBlur}
 									/>{' '}
 								</div>
