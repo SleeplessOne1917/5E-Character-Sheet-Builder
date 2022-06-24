@@ -19,13 +19,13 @@ export default RacePage;
 export const getStaticProps = async (): Promise<
 	GetStaticPropsResult<RacePageProps>
 > => {
-	const races: SrdItem[] = await getRaces();
-	const subraces: SubraceItem[] = await getSubraces();
+	const racesResult = await getRaces();
+	const subracesResult = await getSubraces();
 
 	return {
 		props: {
-			races,
-			subraces
+			races: racesResult?.data?.races ?? [],
+			subraces: subracesResult?.data?.subraces ?? []
 		}
 	};
 };

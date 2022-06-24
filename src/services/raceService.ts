@@ -3,6 +3,6 @@ import {
 	getSubrace as getSrdSubrace
 } from '../graphql/srdClientService';
 
-export const getRace = (index: string) => getSrdRace(index);
+export const getRace = async (index: string) => await getSrdRace(index);
 
-export const getSubrace = (index: string) => getSrdSubrace(index);
+export const getSubrace = async (index: string) => await getSrdSubrace(index);

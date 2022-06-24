@@ -16,26 +16,23 @@ const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 const query = async (
 	queryString: string | DocumentNode | TypedDocumentNode,
 	variables?: any
-): Promise<any> =>
-	(await client.query(queryString, variables).toPromise()).data;
+) => await client.query(queryString, variables).toPromise();
 
-export const getRaces = async (): Promise<SrdItem[]> =>
-	(await query(GET_RACES)).races;
+export const getRaces = async () => await query(GET_RACES);
 
-export const getRace = async (index: string): Promise<SrdRace> =>
-	(await query(GET_RACE, { filter: { index } })).race;
+export const getRace = async (index: string) =>
+	await query(GET_RACE, { filter: { index } });
 
-export const getClasses = async (): Promise<SrdItem[]> =>
-	(await query(GET_CLASSES)).classes;
+export const getClasses = async (): Promise<SrdItem[] | undefined> =>
+	(await query(GET_CLASSES))?.data?.classes;
 
-export const getAbilities = async (): Promise<AbilityItem[]> =>
-	(await query(GET_ABILITIES)).abilityScores;
+export const getAbilities = async (): Promise<AbilityItem[] | undefined> =>
+	(await query(GET_ABILITIES))?.data?.abilityScores;
 
-export const getEquipments = async (): Promise<SrdItem[]> =>
-	(await query(GET_EQUIPMENTS)).equipments;
+export const getEquipments = async (): Promise<SrdItem[] | undefined> =>
+	(await query(GET_EQUIPMENTS))?.data?.equipments;
 
-export const getSubraces = async (): Promise<SubraceItem[]> =>
-	(await query(GET_SUBRACES)).subraces;
+export const getSubraces = async () => await query(GET_SUBRACES);
 
-export const getSubrace = async (index: string): Promise<SrdSubrace> =>
-	(await query(GET_SUBRACE, { filter: { index } })).subrace;
+export const getSubrace = async (index: string) =>
+	await query(GET_SUBRACE, { filter: { index } });

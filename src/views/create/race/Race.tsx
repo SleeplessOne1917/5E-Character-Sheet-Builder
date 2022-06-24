@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
 import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../../../components/character-creation/Descriptor/Descriptor';
+import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceOption from '../../../components/character-creation/Race/RaceOption';
 import classes from './Race.module.css';
@@ -38,6 +39,8 @@ export const mockSubraces = [
 ];
 
 const Race = ({ races, subraces }: RaceProps): JSX.Element => {
+	const [error, setError] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [selectedRace, setSelectedRace] = useState<SrdRace | null>(null);
 	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace | null>();
@@ -90,21 +93,37 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	useEffect(() => {
 		if (consideredRaceIndex) {
+			setLoading(true);
+			setError(false);
 			getRace(consideredRaceIndex).then(result => {
-				setConsideredRace(result);
-			});
+				if (result.data) {
+					setConsideredRace(result.data.race);
 
-			if (consideredSubraceIndex) {
-				getSubrace(consideredSubraceIndex).then(result => {
-					setConsideredSubrace(result);
-				});
-			}
+					if (consideredSubraceIndex) {
+						getSubrace(consideredSubraceIndex).then(result => {
+							if (result.data) {
+								setConsideredSubrace(result.data.subrace);
+							} else {
+								setError(true);
+							}
+							setLoading(false);
+						});
+					} else {
+						setLoading(false);
+					}
+				} else {
+					setLoading(false);
+					setError(true);
+				}
+			});
 		}
 	}, [
 		setConsideredRace,
 		setConsideredSubrace,
 		consideredRaceIndex,
-		consideredSubraceIndex
+		consideredSubraceIndex,
+		setLoading,
+		setError
 	]);
 
 	const getConsiderRaceHandler = useCallback(
@@ -177,8 +196,15 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	const modalContent = (
 		<>
-			<h2 className={classes['modal-title']}>{consideredRace?.name}</h2>
-			{descriptors &&
+			<h2 className={classes['modal-title']}>
+				{loading ? 'Loading...' : error ? 'Error' : consideredRace?.name}
+			</h2>
+			{loading ? (
+				<LoadingSpinner />
+			) : error ? (
+				<p className={classes['error-message']}>Could not load race details</p>
+			) : (
+				descriptors &&
 				descriptors.map((descriptor, index) => (
 					<DescriptorComponent
 						key={descriptor.title}
@@ -187,7 +213,8 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 						isOpen={descriptor.isOpen}
 						toggleOpen={() => toggleDescriptor(index)}
 					/>
-				))}
+				))
+			)}
 		</>
 	);
 
