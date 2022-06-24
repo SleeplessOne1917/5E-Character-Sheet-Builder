@@ -18,13 +18,15 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 	const { secondsLeft, startCountdown } = useRedirectCountdown({
 		path: '/',
 		replace: true,
-		seconds: 5
+		seconds: 10
 	});
 
 	useEffect(() => {
-		remindUsername({ otlId }).then(() => {
-			setLoading(false);
-		});
+		if (otlId) {
+			remindUsername({ otlId }).then(() => {
+				setLoading(false);
+			});
+		}
 	}, [otlId, setLoading, remindUsername]);
 
 	useEffect(() => {
@@ -50,7 +52,10 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 					</div>
 					<p className={classes['countdown-message']}>
 						You will be redirected back to the home page in{' '}
-						<span className={classes.countdown}>{secondsLeft} seconds</span>.
+						<span className={classes.countdown}>
+							{secondsLeft} second{secondsLeft === 1 ? '' : 's'}
+						</span>
+						.
 					</p>
 				</>
 			);

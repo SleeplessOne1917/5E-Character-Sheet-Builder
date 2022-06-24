@@ -1,3 +1,6 @@
+import ResetPasswordOTL, {
+	IResetPasswordOTLDocument
+} from '../../../db/models/resetPasswordOTL';
 import User, { IUser, IUserDocument } from '../../../db/models/user';
 import UsernameOTL, {
 	IUsernameOTLDocument
@@ -16,6 +19,7 @@ import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import nookies from 'nookies';
+import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
@@ -52,9 +56,14 @@ type ForgotPasswordArgs = {
 	request: ForgotPasswordRequest;
 };
 
-type OTLArgs = {
+interface OTLArgs {
 	otlId: string;
-};
+}
+
+interface ResetPasswordArgs extends OTLArgs {
+	password: string;
+	confirmPassword: string;
+}
 
 const Mutation = {
 	signUp: async (parent, args: SignUpArgs, { res }: ApolloContext) => {
@@ -168,13 +177,18 @@ const Mutation = {
 	forgotPassword: async (parent, { request }: ForgotPasswordArgs) => {
 		await forgotPasswordSchema.validate(request);
 
-		const user = await User.findOne<IUser>({
+		const user = await User.findOne<IUserDocument>({
 			username: request.username
 		}).lean();
 		if (user) {
 			if (user.emailHash) {
 				if (await verifyValue(user.emailHash, request.email)) {
-					sendResetPassword(request.email);
+					const otl = await ResetPasswordOTL.create({
+						userId: user._id,
+						createdAt: Date.now()
+					});
+					const link = `${process.env.PROTOCOL_AND_DOMAIN}/forgot/password/${otl.id}`;
+					sendResetPassword(request.email, link);
 				}
 			} else {
 				throw new ApolloError(
@@ -220,6 +234,70 @@ const Mutation = {
 		}
 
 		return user.username;
+	},
+	validateResetPassword: async (parent, { otlId }: OTLArgs) => {
+		const errorMessage = 'Link either expired or was incorrect';
+		let otlIdObjId: Types.ObjectId;
+
+		try {
+			otlIdObjId = new Types.ObjectId(otlId);
+		} catch (e) {
+			console.error('invalid otl');
+			throw new ApolloError(errorMessage);
+		}
+
+		if (otlIdObjId.toString() !== otlId) {
+			console.error('invalid otl');
+			throw new ApolloError(errorMessage);
+		}
+
+		const otl = await ResetPasswordOTL.findById<IResetPasswordOTLDocument>(
+			otlIdObjId
+		);
+
+		if (!otl) {
+			console.error('could not find otl');
+			throw new ApolloError(errorMessage);
+		}
+
+		return 'One time link is valid';
+	},
+	resetPassword: async (parent, { otlId, ...args }: ResetPasswordArgs) => {
+		const errorMessage = 'Link either expired or was incorrect';
+		let otlIdObjId: Types.ObjectId;
+
+		try {
+			otlIdObjId = new Types.ObjectId(otlId);
+		} catch (e) {
+			throw new ApolloError(errorMessage);
+		}
+
+		if (otlIdObjId.toString() !== otlId) {
+			throw new ApolloError(errorMessage);
+		}
+
+		await resetPasswordSchema.validate(args);
+
+		const otl = await ResetPasswordOTL.findById<IResetPasswordOTLDocument>(
+			otlIdObjId
+		);
+
+		if (!otl) {
+			throw new ApolloError(errorMessage);
+		}
+
+		const passwordHash = await hashValue(args.password);
+		const updateResponse = await User.updateOne(
+			{ _id: otl.userId },
+			{ passwordHash }
+		);
+		await ResetPasswordOTL.deleteOne({ _id: otlIdObjId });
+
+		if (updateResponse.matchedCount === 0) {
+			throw new ApolloError('User does not exist');
+		}
+
+		return 'Password was reset';
 	}
 };
 

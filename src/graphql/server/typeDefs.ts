@@ -40,6 +40,12 @@ const typeDefs = gql`
 		forgotUsername(request: ForgotUsernameRequest!): ForgotResponse!
 		forgotPassword(request: ForgotPasswordRequest!): ForgotResponse!
 		remindUsername(otlId: String!): String!
+		validateResetPassword(otlId: String!): String!
+		resetPassword(
+			otlId: String!
+			password: String!
+			confirmPassword: String!
+		): String!
 	}
 `;
 

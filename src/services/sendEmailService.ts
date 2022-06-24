@@ -34,11 +34,11 @@ export const sendUsernameReminder = (email: string, link: string) => {
 	});
 };
 
-export const sendResetPassword = (email: string) => {
+export const sendResetPassword = (email: string, link: string) => {
 	getTransporter().sendMail({
 		from: `"5E Character Sheet Builder No Reply" <${process.env.FROM_EMAIL}>`,
 		to: email,
 		subject: 'Reset your password',
-		html: renderForgotPassword()
+		html: renderForgotPassword(link)
 	});
 };

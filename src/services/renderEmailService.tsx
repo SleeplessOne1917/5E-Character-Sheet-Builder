@@ -10,11 +10,11 @@ export const renderForgotUsername = (link: string) =>
 		/>
 	);
 
-export const renderForgotPassword = () =>
+export const renderForgotPassword = (link: string) =>
 	renderEmail(
 		<ForgotUsernameOrPassword
 			subject="Reset your password"
 			type="password"
-			link=""
+			link={link}
 		/>
 	);
