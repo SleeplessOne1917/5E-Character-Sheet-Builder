@@ -64,7 +64,7 @@
     font-family: inherit;
 }
 
-.button:focus {
+.button:focus-visible {
     outline: var(--focus-outline);
 }
 

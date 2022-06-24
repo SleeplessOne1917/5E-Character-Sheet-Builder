@@ -24,7 +24,7 @@
     text-align: center;
 }
 
-.manual-score input:focus {
+.manual-score input:focus-visible {
     outline: var(--focus-outline);
 }
 

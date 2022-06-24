@@ -16,7 +16,7 @@
   margin-left: 0.75rem;
 }
 
-.brand-container a:focus {
+.brand-container a:focus-visible {
   outline: var(--focus-outline);
 }
 
@@ -53,7 +53,7 @@
   padding-inline-start: 0;
 }
 
-.navigation-list a:focus {
+.navigation-list a:focus-visible {
   outline: var(--focus-outline);
 }
 

@@ -27,6 +27,12 @@
     text-decoration: none;
 }
 
+.forgot-link:focus-visible {
+    color: var(--highlight);
+    background-color: var(--davy-light);
+    border-radius: 0.5rem;
+}
+
 @media screen and (min-width: 768px) {
     .optional-text {
         font-size: 1.05rem

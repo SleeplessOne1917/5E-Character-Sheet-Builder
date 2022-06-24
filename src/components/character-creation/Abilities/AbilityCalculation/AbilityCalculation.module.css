@@ -62,7 +62,7 @@
     background-color: var(--heaven-light);
 }
 
-.value input:focus {
+.value input:focus-visible {
     outline: var(--focus-outline);
 }
 

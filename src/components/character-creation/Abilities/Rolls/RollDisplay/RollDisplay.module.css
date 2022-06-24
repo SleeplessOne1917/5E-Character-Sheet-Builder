@@ -41,7 +41,7 @@
     background-color: var(--heaven-light);
 }
 
-.display-container select:focus {
+.display-container select:focus-visible {
     outline: var(--focus-outline);
 }
 

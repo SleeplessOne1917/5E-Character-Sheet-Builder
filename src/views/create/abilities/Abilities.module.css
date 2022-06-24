@@ -25,7 +25,7 @@
     border-radius: 0.5rem;
 }
 
-.generation-control select:focus {
+.generation-control select:focus-visible {
     outline: var(--focus-outline);
 }
 
@@ -39,7 +39,7 @@
     cursor: pointer;
 }
 
-.roll-groups-toggle:focus {
+.roll-groups-toggle:focus-visible {
     outline: var(--focus-outline);
 }
 

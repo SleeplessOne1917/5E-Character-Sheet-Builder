@@ -17,7 +17,7 @@
     border-top-right-radius: 0.75rem;
 }
 
-.title:focus {
+.title:focus-visible {
     outline: var(--focus-outline);
 }
 

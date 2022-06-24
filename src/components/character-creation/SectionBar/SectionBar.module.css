@@ -35,7 +35,7 @@
   z-index: 20;
 }
 
-.link:focus {
+.link:focus-visible {
   outline: var(--focus-outline);
 }
 

@@ -28,7 +28,7 @@
     color: var(--davy);
 }
 
-.input:focus,
+.input:focus-visible,
 .input:active {
     outline: var(--focus-outline);
 }
@@ -77,11 +77,11 @@
     cursor: pointer;
 }
 
-.eye:active, .eye:focus {
+.eye:active, .eye:focus-visible {
     fill: var(--highlight)
 }
 
-.eye:focus {
+.eye:focus-visible {
     outline: var(--focus-outline);
 }
 

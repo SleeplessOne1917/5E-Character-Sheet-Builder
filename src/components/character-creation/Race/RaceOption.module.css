@@ -14,7 +14,7 @@
     border-radius: 0.5rem;
 }
 
-.race-container:focus {
+.race-container:focus-visible {
     border: var(--focus-outline);
     outline: 2px solid var(--davy)
 }

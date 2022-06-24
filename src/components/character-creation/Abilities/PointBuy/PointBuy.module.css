@@ -43,7 +43,7 @@
     cursor: pointer;
 }
 
-.icon:focus {
+.icon:focus-visible {
     outline: var(--focus-outline);
 }
 

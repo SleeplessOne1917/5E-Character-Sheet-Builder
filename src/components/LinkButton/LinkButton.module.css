@@ -10,7 +10,7 @@
     text-align: center;
 }
 
-.link-button:focus {
+.link-button:focus-visible {
     outline: var(--focus-outline)
 }
 
