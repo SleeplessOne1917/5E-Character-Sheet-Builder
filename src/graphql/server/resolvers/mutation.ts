@@ -75,6 +75,15 @@ const Mutation = {
 			throw new ApolloError('User already exists');
 		}
 
+		if (user.email) {
+			const users = await User.find<IUserDocument>().lean();
+			for (const u of users) {
+				if (await verifyValue(u.emailHash, user.email)) {
+					throw new ApolloError('User already exists');
+				}
+			}
+		}
+
 		const passwordHash = await hashValue(user.password);
 		const newUser: IUser = { username: user.username, passwordHash };
 
