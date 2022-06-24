@@ -1,12 +1,11 @@
 import Button, { ButtonType } from '../../components/Button/Button';
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
-import { KeyboardEventHandler, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Formik } from 'formik';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../components/MainContent/MainContent';
-import PasswordValidator from '../../components/PasswordValidator/PasswordValidator';
 import RESET_PASSWORD from '../../graphql/mutations/user/resetPassword';
+import TextInput from '../../components/TextInput/TextInput';
 import { ToastType } from '../../types/toast';
 import VALIDATE_RESET_PASSWORD from '../../graphql/mutations/user/validateResetPassword';
 import classes from './ResetPassword.module.css';
@@ -25,8 +24,6 @@ type ResetPasswordProps = {
 const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [showPassword, setShowPassword] = useState(false);
-	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [{ error: validateError }, validateResetPassword] = useMutation(
 		VALIDATE_RESET_PASSWORD
@@ -51,38 +48,6 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 			startCountdown();
 		}
 	}, [validateError, startCountdown, resetError, otlId]);
-
-	const toggleShowPassword = useCallback(() => {
-		setShowPassword(prevState => !prevState);
-	}, [setShowPassword]);
-
-	const toggleShowPasswordKeyDown: KeyboardEventHandler<SVGSVGElement> =
-		useCallback(
-			event => {
-				if (event.code === 'Enter' || event.code === 'Space') {
-					event.preventDefault();
-					event.stopPropagation();
-					toggleShowPassword();
-				}
-			},
-			[toggleShowPassword]
-		);
-
-	const toggleShowConfirmPassword = useCallback(() => {
-		setShowConfirmPassword(prevState => !prevState);
-	}, [setShowConfirmPassword]);
-
-	const toggleShowConfirmPasswordKeyDown: KeyboardEventHandler<SVGSVGElement> =
-		useCallback(
-			event => {
-				if (event.code === 'Enter' || event.code === 'Space') {
-					event.preventDefault();
-					event.stopPropagation();
-					toggleShowConfirmPassword();
-				}
-			},
-			[toggleShowConfirmPassword]
-		);
 
 	let headerText = 'Loading...';
 	let content = (
@@ -142,114 +107,32 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 						setTouched
 					}) => (
 						<form onSubmit={handleSubmit} className={classes.form}>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
-										<input
-											className={`${classes.input}${
-												touched.password && errors.password
-													? ` ${classes['input-error']}`
-													: ''
-											}`}
-											id="password"
-											name="password"
-											type={showPassword ? 'text' : 'password'}
-											value={values.password}
-											placeholder="New Password"
-											onChange={event => {
-												setTouched({ ...touched, password: false });
-												handleChange(event);
-											}}
-											onBlur={handleBlur}
-										/>
-										{showPassword ? (
-											<EyeOffIcon
-												className={classes.eye}
-												onClick={toggleShowPassword}
-												onKeyDown={toggleShowPasswordKeyDown}
-												tabIndex={0}
-												aria-hidden="false"
-												aria-label="Hide Password"
-											/>
-										) : (
-											<EyeIcon
-												className={classes.eye}
-												onClick={toggleShowPassword}
-												onKeyDown={toggleShowPasswordKeyDown}
-												tabIndex={0}
-												aria-hidden="false"
-												aria-label="Show Password"
-											/>
-										)}
-									</div>
-									<label
-										htmlFor="password"
-										className={`${classes.label}${
-											values.password.length > 0
-												? ` ${classes['label-selected']}`
-												: ''
-										}`}
-									>
-										New Password
-									</label>
-								</div>
-								<PasswordValidator password={values.password} />
-							</div>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
-										<input
-											className={`${classes.input}${
-												touched.confirmPassword && errors.confirmPassword
-													? ` ${classes['input-error']}`
-													: ''
-											}`}
-											id="confirmPassword"
-											name="confirmPassword"
-											type={showConfirmPassword ? 'text' : 'password'}
-											value={values.confirmPassword}
-											placeholder="Confirm Password"
-											onChange={event => {
-												setTouched({ ...touched, confirmPassword: false });
-												handleChange(event);
-											}}
-											onBlur={handleBlur}
-										/>
-										{showConfirmPassword ? (
-											<EyeOffIcon
-												className={classes.eye}
-												onClick={toggleShowConfirmPassword}
-												onKeyDown={toggleShowConfirmPasswordKeyDown}
-												tabIndex={0}
-												aria-hidden="false"
-												aria-label="Hide Confirm Password"
-											/>
-										) : (
-											<EyeIcon
-												className={classes.eye}
-												onClick={toggleShowConfirmPassword}
-												onKeyDown={toggleShowConfirmPasswordKeyDown}
-												tabIndex={0}
-												aria-hidden="false"
-												aria-label="Show Confirm Password"
-											/>
-										)}
-									</div>
-									<label
-										htmlFor="confirmPassword"
-										className={`${classes.label}${
-											values.confirmPassword.length > 0
-												? ` ${classes['label-selected']}`
-												: ''
-										}`}
-									>
-										Confirm Password
-									</label>
-								</div>
-								{touched.confirmPassword && errors.confirmPassword && (
-									<div className={classes.error}>{errors.confirmPassword}</div>
-								)}
-							</div>
+							<TextInput
+								id="password"
+								label="New Password"
+								onBlur={handleBlur}
+								onChange={event => {
+									setTouched({ ...touched, password: false });
+									handleChange(event);
+								}}
+								value={values.password}
+								error={errors.password}
+								touched={touched.password}
+								type="validate-password"
+							/>
+							<TextInput
+								id="confirmPassword"
+								label="Confirm Password"
+								onBlur={handleBlur}
+								onChange={event => {
+									setTouched({ ...touched, confirmPassword: false });
+									handleChange(event);
+								}}
+								value={values.confirmPassword}
+								error={errors.confirmPassword}
+								touched={touched.confirmPassword}
+								type="password"
+							/>
 							<Button
 								disabled={isSubmitting}
 								type={ButtonType.submit}

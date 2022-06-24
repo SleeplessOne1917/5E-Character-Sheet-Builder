@@ -3,6 +3,7 @@ import Button, { ButtonType } from '../../../components/Button/Button';
 import FORGOT_PASSWORD from '../../../graphql/mutations/user/forgotPassword';
 import { Formik } from 'formik';
 import MainContent from '../../../components/MainContent/MainContent';
+import TextInput from '../../../components/TextInput/TextInput';
 import { ToastType } from '../../../types/toast';
 import classes from './ForgotPassword.module.css';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
@@ -62,78 +63,30 @@ const ForgotPassword = () => {
 						setTouched
 					}) => (
 						<form onSubmit={handleSubmit} className={classes.form}>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
-										<input
-											className={`${classes.input}${
-												touched.username && errors.username
-													? ` ${classes['input-error']}`
-													: ''
-											}`}
-											id="username"
-											name="username"
-											type="text"
-											value={values.username}
-											placeholder="Username"
-											onChange={event => {
-												setTouched({ ...touched, username: false });
-												handleChange(event);
-											}}
-											onBlur={handleBlur}
-										/>{' '}
-									</div>
-									<label
-										htmlFor="username"
-										className={`${classes.label}${
-											values.username && values.username.length > 0
-												? ` ${classes['label-selected']}`
-												: ''
-										}`}
-									>
-										Username
-									</label>
-								</div>
-								{touched.username && errors.username && (
-									<div className={classes.error}>{errors.username}</div>
-								)}
-							</div>
-							<div className={classes['input-and-error-container']}>
-								<div className={classes['input-and-label-container']}>
-									<div className={classes['input-container']}>
-										<input
-											className={`${classes.input}${
-												touched.email && errors.email
-													? ` ${classes['input-error']}`
-													: ''
-											}`}
-											id="email"
-											name="email"
-											type="text"
-											value={values.email}
-											placeholder="Email"
-											onChange={event => {
-												setTouched({ ...touched, email: false });
-												handleChange(event);
-											}}
-											onBlur={handleBlur}
-										/>{' '}
-									</div>
-									<label
-										htmlFor="email"
-										className={`${classes.label}${
-											values.email && values.email.length > 0
-												? ` ${classes['label-selected']}`
-												: ''
-										}`}
-									>
-										Email
-									</label>
-								</div>
-								{touched.email && errors.email && (
-									<div className={classes.error}>{errors.email}</div>
-								)}
-							</div>
+							<TextInput
+								id="username"
+								label="Username"
+								onBlur={handleBlur}
+								onChange={event => {
+									setTouched({ ...touched, username: false });
+									handleChange(event);
+								}}
+								value={values.username}
+								error={errors.username}
+								touched={touched.username}
+							/>
+							<TextInput
+								id="email"
+								label="Email"
+								onBlur={handleBlur}
+								onChange={event => {
+									setTouched({ ...touched, email: false });
+									handleChange(event);
+								}}
+								value={values.email}
+								error={errors.email}
+								touched={touched.email}
+							/>
 							<Button
 								disabled={isSubmitting}
 								type={ButtonType.submit}
