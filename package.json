@@ -28,7 +28,7 @@
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "mongoose": "^6.3.1",
-    "next": "12.1.5",
+    "next": "12.1.6",
     "nodemailer": "^6.7.5",
     "nookies": "^2.5.2",
     "postcss": "^8.4.12",
