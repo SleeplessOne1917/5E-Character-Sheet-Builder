@@ -28,7 +28,7 @@ jobs:
 
       - name: Run tests
         run: yarn test
-  test:
+  lint:
     name: Lint the App
     runs-on: ubuntu-latest
     steps:
