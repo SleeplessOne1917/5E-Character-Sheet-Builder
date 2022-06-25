@@ -1,5 +1,5 @@
 import LOG_OUT from '../graphql/mutations/user/logOut';
-import { fetchLoggedInEmail } from './../redux/features/viewer';
+import { fetchLoggedInUsername } from './../redux/features/viewer';
 import { useAppDispatch } from './reduxHooks';
 import { useMutation } from 'urql';
 
@@ -9,7 +9,7 @@ const useLogout = () => {
 
 	return () => {
 		logOut().then(result => {
-			dispatch(fetchLoggedInEmail());
+			dispatch(fetchLoggedInUsername());
 		});
 	};
 };

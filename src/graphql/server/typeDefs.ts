@@ -46,6 +46,11 @@ const typeDefs = gql`
 			password: String!
 			confirmPassword: String!
 		): String!
+		createNewPassword(
+			currentPassword: String!
+			newPassword: String!
+			confirmPassword: String!
+		): String!
 	}
 `;
 

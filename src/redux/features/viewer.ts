@@ -7,8 +7,8 @@ import { show } from './toast';
 
 const initialState = null as string | null;
 
-export const fetchLoggedInEmail = createAsyncThunk(
-	'viewer/fetchLoggedInEmail',
+export const fetchLoggedInUsername = createAsyncThunk(
+	'viewer/fetchLoggedInUsername',
 	async (arg, { rejectWithValue, dispatch }) => {
 		const result = await client
 			.query(GET_VIEWER, undefined, { requestPolicy: 'cache-and-network' })
@@ -34,10 +34,10 @@ const viewerSlice = createSlice({
 	reducers: {},
 	extraReducers: builder => {
 		builder.addCase(
-			fetchLoggedInEmail.fulfilled,
+			fetchLoggedInUsername.fulfilled,
 			(state, { payload }) => payload
 		);
-		builder.addCase(fetchLoggedInEmail.rejected, () => null);
+		builder.addCase(fetchLoggedInUsername.rejected, () => null);
 	}
 });
 

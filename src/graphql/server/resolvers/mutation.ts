@@ -18,6 +18,7 @@ import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
+import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
 import nookies from 'nookies';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
@@ -64,6 +65,12 @@ interface ResetPasswordArgs extends OTLArgs {
 	password: string;
 	confirmPassword: string;
 }
+
+type CreateNewPasswordArgs = {
+	currentPassword: string;
+	newPassword: string;
+	confirmPassword: string;
+};
 
 const Mutation = {
 	signUp: async (parent, args: SignUpArgs, { res }: ApolloContext) => {
@@ -310,6 +317,28 @@ const Mutation = {
 		}
 
 		return 'Password was reset';
+	},
+	createNewPassword: async (
+		parent,
+		args: CreateNewPasswordArgs,
+		{ username }: ApolloContext
+	) => {
+		await newPasswordSchema.validate(args);
+
+		const user = await User.findOne<IUser>({ username });
+
+		if (!user) {
+			throw new ApolloError('Must be logged on');
+		}
+
+		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
+			throw new ApolloError('Incorrect password provided');
+		}
+
+		const newPasswordHash = await hashValue(args.newPassword);
+		await User.updateOne({ username }, { passwordHash: newPasswordHash });
+
+		return 'Password successfully changed';
 	}
 };
 

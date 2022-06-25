@@ -1,0 +1,276 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="account"
+>
+  <div
+    class="content"
+  >
+    <h1>
+      Account
+    </h1>
+    <div
+      class="username-blurb"
+    >
+      Your username is 
+      <span
+        class="username"
+      />
+    </div>
+    <h2
+      class="reset-text"
+    >
+      Create New Password
+    </h2>
+    <form
+      class="form"
+    >
+      <div
+        class="input-and-error-container"
+        data-testid="text-input"
+      >
+        <div
+          class="input-and-label-container"
+        >
+          <div
+            class="input-container"
+          >
+            <input
+              class="input"
+              id="currentPassword"
+              name="currentPassword"
+              type="password"
+              value=""
+            />
+            <svg
+              aria-hidden="false"
+              aria-label="Show Current Password"
+              class="eye"
+              fill="currentColor"
+              tabindex="0"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+              />
+              <path
+                clip-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <label
+            class="label"
+            for="currentPassword"
+          >
+            Current Password
+          </label>
+        </div>
+      </div>
+      <div
+        class="input-and-error-container"
+        data-testid="text-input"
+      >
+        <div
+          class="input-and-label-container"
+        >
+          <div
+            class="input-container"
+          >
+            <input
+              class="input"
+              id="newPassword"
+              name="newPassword"
+              type="password"
+              value=""
+            />
+            <svg
+              aria-hidden="false"
+              aria-label="Show New Password"
+              class="eye"
+              fill="currentColor"
+              tabindex="0"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+              />
+              <path
+                clip-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <label
+            class="label"
+            for="newPassword"
+          >
+            New Password
+          </label>
+        </div>
+        <div
+          class="container"
+          data-testid="container"
+        >
+          <div
+            class="validator no-match"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon x"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+             
+            At least 8 characters long
+          </div>
+          <div
+            class="validator no-match"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon x"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+             
+            At least 1 lowercase letter
+          </div>
+          <div
+            class="validator no-match"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon x"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+             
+            At least 1 uppercase letter
+          </div>
+          <div
+            class="validator no-match"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon x"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+             
+            At least 1 number
+          </div>
+          <div
+            class="validator no-match"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon x"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+             
+            At least 1 special character
+          </div>
+        </div>
+      </div>
+      <div
+        class="input-and-error-container"
+        data-testid="text-input"
+      >
+        <div
+          class="input-and-label-container"
+        >
+          <div
+            class="input-container"
+          >
+            <input
+              class="input"
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value=""
+            />
+            <svg
+              aria-hidden="false"
+              aria-label="Show Confirm Password"
+              class="eye"
+              fill="currentColor"
+              tabindex="0"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+              />
+              <path
+                clip-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <label
+            class="label"
+            for="confirmPassword"
+          >
+            Confirm Password
+          </label>
+        </div>
+      </div>
+      <div
+        style="margin-top: 1rem;"
+      >
+        <button
+          class="button positive"
+          style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+          type="submit"
+        >
+          Create new password
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+`;

@@ -39,11 +39,18 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 					</>
 				)}
 				{viewer && (
-					<li>
-						<LinkButton href="#" onClick={logout} tabIndex={-1}>
-							Log Out
-						</LinkButton>
-					</li>
+					<>
+						<li>
+							<LinkButton href="/account" tabIndex={-1}>
+								Account
+							</LinkButton>
+						</li>
+						<li>
+							<LinkButton href="#" onClick={logout} tabIndex={-1}>
+								Log Out
+							</LinkButton>
+						</li>
+					</>
 				)}
 			</ul>
 			<hr className={classes.hr} />

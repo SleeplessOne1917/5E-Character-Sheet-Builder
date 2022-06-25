@@ -13,7 +13,7 @@ import SectionBar from '../src/components/character-creation/SectionBar/SectionB
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
-import { fetchLoggedInEmail } from '../src/redux/features/viewer';
+import { fetchLoggedInUsername } from '../src/redux/features/viewer';
 import { useAppDispatch } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 
 	useEffect(() => {
-		dispatch(fetchLoggedInEmail());
+		dispatch(fetchLoggedInUsername());
 	}, [dispatch]);
 
 	const closeMobileNav = useCallback(

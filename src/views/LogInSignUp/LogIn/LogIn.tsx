@@ -3,7 +3,7 @@ import LogInSignUpForm from '../../../components/LogInSignUp/LogInSignUpForm';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
 import classes from '../LogInSignUp.module.css';
-import { fetchLoggedInEmail } from '../../../redux/features/viewer';
+import { fetchLoggedInUsername } from '../../../redux/features/viewer';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -32,7 +32,7 @@ const LogIn = (): JSX.Element => {
 						};
 						dispatch(show(toast));
 					} else {
-						await dispatch(fetchLoggedInEmail());
+						await dispatch(fetchLoggedInUsername());
 						router.replace('/');
 					}
 					resetForm();

@@ -5,7 +5,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import SIGN_UP from '../../../graphql/mutations/user/signUp';
 import { ToastType } from '../../../types/toast';
 import classes from '../LogInSignUp.module.css';
-import { fetchLoggedInEmail } from '../../../redux/features/viewer';
+import { fetchLoggedInUsername } from '../../../redux/features/viewer';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
@@ -42,7 +42,7 @@ const SignUp = (): JSX.Element => {
 							message: 'Successfully signed up! Logging you in now...',
 							type: ToastType.success
 						};
-						await dispatch(fetchLoggedInEmail());
+						await dispatch(fetchLoggedInUsername());
 						dispatch(show(toast));
 						resetForm();
 						router.replace('/');

@@ -53,13 +53,20 @@ const Header = ({
 						</>
 					)}
 					{viewer && (
-						<li className={classes['navigation-list-item']}>
-							<Link href="#">
-								<a className={classes['navigation-link']} onClick={logout}>
-									Log Out
-								</a>
-							</Link>
-						</li>
+						<>
+							<li className={classes['navigation-list-item']}>
+								<Link href="/account">
+									<a className={classes['navigation-link']}>Account</a>
+								</Link>
+							</li>
+							<li className={classes['navigation-list-item']}>
+								<Link href="#">
+									<a className={classes['navigation-link']} onClick={logout}>
+										Log Out
+									</a>
+								</Link>
+							</li>
+						</>
 					)}
 				</ul>
 			</nav>
