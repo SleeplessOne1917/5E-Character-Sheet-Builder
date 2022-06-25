@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { ToastType } from '../../types/toast';
 import classes from './Toast.module.css';
 import { cleanMessage } from '../../services/messageCleanerService';
+import { handleKeyDownEvent } from '../../services/handlerService';
 import { hide } from '../../redux/features/toast';
 
 const Toast = (): JSX.Element => {
@@ -41,11 +42,7 @@ const Toast = (): JSX.Element => {
 
 	const hideToastKeyDown: KeyboardEventHandler<SVGSVGElement> = useCallback(
 		event => {
-			if (event.code === 'Enter' || event.code === 'Space') {
-				event.stopPropagation();
-				event.preventDefault();
-				hideToast();
-			}
+			handleKeyDownEvent<SVGSVGElement>(event, hideToast);
 		},
 		[hideToast]
 	);

@@ -10,6 +10,7 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 
 import PasswordValidator from '../PasswordValidator/PasswordValidator';
 import classes from './TextInput.module.css';
+import { handleKeyDownEvent } from '../../services/handlerService';
 
 type TextInputProps = {
 	touched?: boolean;
@@ -41,11 +42,7 @@ const TextInput = ({
 	const toggleShowPasswordKeyDown: KeyboardEventHandler<SVGSVGElement> =
 		useCallback(
 			event => {
-				if (event.code === 'Enter' || event.code === 'Space') {
-					event.preventDefault();
-					event.stopPropagation();
-					toggleShowPassword();
-				}
+				handleKeyDownEvent<SVGSVGElement>(event, toggleShowPassword);
 			},
 			[toggleShowPassword]
 		);

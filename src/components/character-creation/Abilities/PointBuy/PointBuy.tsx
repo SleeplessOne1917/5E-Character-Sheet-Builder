@@ -10,6 +10,7 @@ import { AbilityItem } from '../../../../types/srd';
 import AbilityScores from '../../../../types/abilityScores';
 import classes from './PointBuy.module.css';
 import { getTotalScore } from '../../../../services/abilityScoreService';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
 import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
 
 export type PointBuyProps = {
@@ -59,13 +60,9 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 
 	const handleSubtractScoreKeyDown = useCallback(
 		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
-			const code = event.code;
-
-			if (code === 'Enter' || code === 'Space') {
-				event.preventDefault();
-				event.stopPropagation();
-				subtractScore(abilityIndex);
-			}
+			handleKeyDownEvent<SVGSVGElement>(event, () =>
+				subtractScore(abilityIndex)
+			);
 		},
 		[subtractScore]
 	);
@@ -86,13 +83,7 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 
 	const handleAddScoreKeyDown = useCallback(
 		(event: KeyboardEvent<SVGSVGElement>, abilityIndex: AbilityScores) => {
-			const code = event.code;
-
-			if (code === 'Enter' || code === 'Space') {
-				event.preventDefault();
-				event.stopPropagation();
-				addScore(abilityIndex);
-			}
+			handleKeyDownEvent<SVGSVGElement>(event, () => addScore(abilityIndex));
 		},
 		[addScore]
 	);

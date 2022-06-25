@@ -23,6 +23,7 @@ import PointBuy from '../../../components/character-creation/Abilities/PointBuy/
 import RollGroup from '../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
 import StandardArray from '../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
+import { handleKeyDownEvent } from '../../../services/handlerService';
 import { updateBase } from '../../../redux/features/abilityScores';
 
 type AbilitiesProps = {
@@ -75,11 +76,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const toggleShowRollGroupsKeyDown: KeyboardEventHandler<HTMLDivElement> =
 		useCallback(
 			event => {
-				if (event.code === 'Enter' || event.code === 'Space') {
-					event.preventDefault();
-					event.stopPropagation();
-					toggleShowRollGroups();
-				}
+				handleKeyDownEvent<HTMLDivElement>(event, toggleShowRollGroups);
 			},
 			[toggleShowRollGroups]
 		);

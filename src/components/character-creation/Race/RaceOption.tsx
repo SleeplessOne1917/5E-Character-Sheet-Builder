@@ -12,6 +12,7 @@ import {
 import { SrdItem, SubraceItem } from '../../../types/srd';
 
 import classes from './RaceOption.module.css';
+import { handleKeyDownEvent } from '../../../services/handlerService';
 
 export type RaceOptionProps = {
 	race: SrdItem;
@@ -43,11 +44,7 @@ const RaceOption = ({
 
 	const handleRaceKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
-			if (event.code === 'Enter' || event.code === 'Space') {
-				event.preventDefault();
-				event.stopPropagation();
-				handleRaceClick();
-			}
+			handleKeyDownEvent<HTMLDivElement>(event, handleRaceClick);
 		},
 		[handleRaceClick]
 	);
@@ -61,11 +58,7 @@ const RaceOption = ({
 
 	const handleSubraceKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>, subraceIndex: string) => {
-			if (event.code === 'Enter' || event.code === 'Space') {
-				event.preventDefault();
-				event.stopPropagation();
-				onChoose(subraceIndex);
-			}
+			handleKeyDownEvent<HTMLDivElement>(event, () => onChoose(subraceIndex));
 		},
 		[onChoose]
 	);
