@@ -1,0 +1,34 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    flex-direction: column;
+}
+
+.text {
+    font-family: var(--font-fantasy);
+    color: var(--davy);
+    text-align: center;
+}
+
+.four04 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.not-found {
+    padding: 0.5rem;
+    font-size: 2rem;
+}
+
+.blurb {
+    font-size: 1.5rem;
+    font-family: var(--font-display) !important;
+    padding: 1.5rem;
+}
+
+.countdown {
+    font-weight: bold;
+    color: var(--wine-red);
+}

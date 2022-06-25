@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="404"
+>
+  <div
+    class="content"
+  >
+    <div
+      class="content"
+    >
+      <div
+        class="text four04"
+      >
+        404
+      </div>
+      <div
+        class="text not-found"
+      >
+        Page not found.
+      </div>
+      <div
+        class="text blurb"
+      >
+        Redirecting to the home page in
+         
+        <span
+          class="countdown"
+        >
+          10
+           second
+          s
+        </span>
+        .
+      </div>
+    </div>
+  </div>
+</main>
+`;
