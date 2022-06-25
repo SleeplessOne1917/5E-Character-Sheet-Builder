@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import * as stories from './AbilityCalculation.stories';
 
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import AbilityCalculation from './AbilityCalculation';
 import { Provider } from 'react-redux';
@@ -13,43 +13,33 @@ import userEvent from '@testing-library/user-event';
 const { AllBonusesAndOverrideButNoBase, Everything, OnlyBaseScore } =
 	composeStories(stories);
 
-const getCalculationNumberDiv = (text: string) => {
-	const componentChildren = screen.getByText(new RegExp(text)).parentElement
-		?.childNodes;
-	return componentChildren?.item(componentChildren.length - 1) as HTMLElement;
-};
-
 it('renders correctly', () => {
-	const container = render(<Everything />).container;
+	render(<Everything />);
 
-	expect(container.firstChild).toMatchSnapshot();
+	expect(screen.getByTestId('ability-calculation')).toMatchSnapshot();
 });
 
 it('displays total score and modifier when base score is set', () => {
 	render(<OnlyBaseScore />);
 
-	expect(getCalculationNumberDiv('Total Score')).not.toHaveTextContent(
-		'\u2014'
-	);
-	expect(getCalculationNumberDiv('Modifier')).not.toHaveTextContent('\u2014');
+	expect(screen.getByTestId('total-score')).not.toHaveTextContent('\u2014');
+	expect(screen.getByTestId('modifier')).not.toHaveTextContent('\u2014');
 });
 
 it('does not display total score when base score is not set', () => {
 	render(<AllBonusesAndOverrideButNoBase />);
 
-	expect(getCalculationNumberDiv('Total Score')).toHaveTextContent('\u2014');
-	expect(getCalculationNumberDiv('Modifier')).toHaveTextContent('\u2014');
-	expect(getCalculationNumberDiv('Base Score')).toHaveTextContent('\u2014');
+	expect(screen.getByTestId('total-score')).toHaveTextContent('\u2014');
+	expect(screen.getByTestId('modifier')).toHaveTextContent('\u2014');
+	expect(screen.getByTestId('base-score')).toHaveTextContent('\u2014');
 });
 
 it('uses default values when bonuses not passed in', () => {
 	render(<OnlyBaseScore />);
 
-	expect(getCalculationNumberDiv('Racial Bonus')).toHaveTextContent('+0');
-	expect(getCalculationNumberDiv('Ability Improvements')).toHaveTextContent(
-		'+0'
-	);
-	expect(getCalculationNumberDiv('Misc Bonus')).toHaveTextContent('+0');
+	expect(screen.getByTestId('racial-bonus')).toHaveTextContent('+0');
+	expect(screen.getByTestId('ability-improvements')).toHaveTextContent('+0');
+	expect(screen.getByTestId('misc-bonus')).toHaveTextContent('+0');
 });
 
 describe('other bonus', () => {

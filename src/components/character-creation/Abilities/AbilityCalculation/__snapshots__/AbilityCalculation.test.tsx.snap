@@ -3,6 +3,7 @@
 exports[`renders correctly 1`] = `
 <div
   class="calculation"
+  data-testid="ability-calculation"
 >
   <div
     class="header"
@@ -27,6 +28,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="total-score"
       >
         5
       </div>
@@ -41,6 +43,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="modifier"
       >
         -3
       </div>
@@ -55,6 +58,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="base-score"
       >
         15
       </div>
@@ -69,6 +73,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="racial-bonus"
       >
         +
         1
@@ -84,6 +89,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="ability-improvements"
       >
         +
         2
@@ -99,6 +105,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="value"
+        data-testid="misc-bonus"
       >
         +
         3

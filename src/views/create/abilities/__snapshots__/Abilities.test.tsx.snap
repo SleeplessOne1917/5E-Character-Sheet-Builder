@@ -221,6 +221,7 @@ exports[`renders correctly 1`] = `
     >
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -245,6 +246,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -259,6 +261,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -273,6 +276,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -287,6 +291,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -302,6 +307,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -317,6 +323,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0
@@ -372,6 +379,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -396,6 +404,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -410,6 +419,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -424,6 +434,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -438,6 +449,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -453,6 +465,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -468,6 +481,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0
@@ -523,6 +537,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -547,6 +562,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -561,6 +577,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -575,6 +592,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -589,6 +607,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -604,6 +623,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -619,6 +639,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0
@@ -674,6 +695,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -698,6 +720,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -712,6 +735,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -726,6 +750,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -740,6 +765,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -755,6 +781,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -770,6 +797,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0
@@ -825,6 +853,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -849,6 +878,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -863,6 +893,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -877,6 +908,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -891,6 +923,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -906,6 +939,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -921,6 +955,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0
@@ -976,6 +1011,7 @@ exports[`renders correctly 1`] = `
       </div>
       <div
         class="calculation"
+        data-testid="ability-calculation"
       >
         <div
           class="header"
@@ -1000,6 +1036,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="total-score"
             >
               —
             </div>
@@ -1014,6 +1051,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="modifier"
             >
               —
             </div>
@@ -1028,6 +1066,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="base-score"
             >
               —
             </div>
@@ -1042,6 +1081,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="racial-bonus"
             >
               +
               0
@@ -1057,6 +1097,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="ability-improvements"
             >
               +
               0
@@ -1072,6 +1113,7 @@ exports[`renders correctly 1`] = `
             </div>
             <div
               class="value"
+              data-testid="misc-bonus"
             >
               +
               0

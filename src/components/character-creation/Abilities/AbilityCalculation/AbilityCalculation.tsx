@@ -102,7 +102,7 @@ const AbilityCalculation = ({
 		? calculateModifier(getTotalScore(abilityScore))
 		: null;
 	return (
-		<div className={classes.calculation}>
+		<div className={classes.calculation} data-testid="ability-calculation">
 			<div className={classes.header}>
 				<svg className={classes.icon}>
 					<use xlinkHref={`/Icons.svg#${index}`} />
@@ -116,7 +116,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Total Score
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="total-score">
 						{abilityScore.base ? getTotalScore(abilityScore) : '\u2014'}
 					</div>
 				</div>
@@ -126,7 +126,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Modifier
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="modifier">
 						{modifier !== null
 							? `${modifier < 0 ? '-' : '+'}${Math.abs(modifier)}`
 							: '\u2014'}
@@ -138,7 +138,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Base Score
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="base-score">
 						{abilityScore.base ? abilityScore.base : '\u2014'}
 					</div>
 				</div>
@@ -148,7 +148,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Racial Bonus
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="racial-bonus">
 						+{abilityScore.raceBonus ? abilityScore.raceBonus : 0}
 					</div>
 				</div>
@@ -158,7 +158,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Ability Improvements
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="ability-improvements">
 						+
 						{abilityScore.abilityImprovement
 							? abilityScore.abilityImprovement
@@ -171,7 +171,7 @@ const AbilityCalculation = ({
 					<div className={`${classes.label} ${classes['calculation-label']}`}>
 						Misc Bonus
 					</div>
-					<div className={classes.value}>
+					<div className={classes.value} data-testid="misc-bonus">
 						+{abilityScore.miscBonus ? abilityScore.miscBonus : 0}
 					</div>
 				</div>
