@@ -1,6 +1,6 @@
 import * as stories from './LinkButton.stories';
 
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
@@ -34,15 +34,4 @@ it('sets passed in properties', () => {
 	const { tabIndex, href } = screen.getByRole('link') as HTMLLinkElement;
 	expect(tabIndex).toBe(Untabbable.args?.tabIndex);
 	expect(href).toContain(Untabbable.args?.href);
-});
-
-it('calls onClick', async () => {
-	const onClickMock = jest.fn();
-
-	render(<Default onClick={onClickMock} />);
-	const link = screen.getByRole('link');
-
-	await userEvent.click(link);
-
-	expect(onClickMock).toHaveBeenCalled();
 });
