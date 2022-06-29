@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import * as stories from './MobileNav.stories';
 
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
@@ -54,13 +54,4 @@ describe('contains expected links', () => {
 		expect(screen.getByText(/Sign Up/i)).toBeInTheDocument();
 		expect(screen.queryByText(/Log Out/i)).not.toBeInTheDocument();
 	});
-});
-
-it('calls onClickLink when link is clicked', async () => {
-	const mockOnClickLink = jest.fn();
-
-	render(<LoggedOut onClickLink={mockOnClickLink} />);
-	await userEvent.click(screen.getAllByRole('link').at(0) as HTMLElement);
-
-	expect(mockOnClickLink).toHaveBeenCalled();
 });

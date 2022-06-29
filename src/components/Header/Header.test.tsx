@@ -44,15 +44,6 @@ describe('has expected links', () => {
 	});
 });
 
-it('calls onLogoIconClick when logo icon is clicked', async () => {
-	const mockOnLogoIconClick = jest.fn();
-
-	render(<LoggedOut onLogoIconClick={mockOnLogoIconClick} />);
-	await userEvent.click(screen.getByTestId('home'));
-
-	expect(mockOnLogoIconClick).toHaveBeenCalled();
-});
-
 it('calls onMenuIconClick when menu icon is clicked', async () => {
 	const mockOnMenuIconClick = jest.fn();
 
