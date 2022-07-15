@@ -232,6 +232,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 							key={race.index}
 							onChoose={getConsiderRaceHandler(race.index)}
 							iconId={race.index}
+							selectable={!showModal}
 						/>
 					))}
 				</ul>

@@ -19,13 +19,15 @@ export type RaceOptionProps = {
 	subraces?: SubraceItem[];
 	onChoose: (subraceIndex?: string) => void;
 	iconId: string;
+	selectable?: boolean;
 };
 
 const RaceOption = ({
 	race,
 	subraces,
 	onChoose,
-	iconId
+	iconId,
+	selectable = true
 }: RaceOptionProps): JSX.Element => {
 	const [showSubraces, setShowSubraces] = useState(false);
 	const hasMultipleSubraces = subraces && subraces.length > 1;
@@ -68,7 +70,7 @@ const RaceOption = ({
 			<div>
 				<div
 					className={classes['race-container']}
-					tabIndex={0}
+					tabIndex={selectable ? 0 : -1}
 					onClick={handleRaceClick}
 					onKeyDown={handleRaceKeyDown}
 					aria-label={raceTitle}
@@ -107,7 +109,7 @@ const RaceOption = ({
 							<li key={subrace.index}>
 								<div
 									className={classes['race-container']}
-									tabIndex={0}
+									tabIndex={selectable ? 0 : -1}
 									aria-label={subrace.name}
 									onClick={() => handleSubraceClick(subrace.index)}
 									onKeyDown={event =>
