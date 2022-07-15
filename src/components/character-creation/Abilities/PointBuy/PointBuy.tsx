@@ -119,8 +119,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 									/>
 								)}
 								{abilityScore}
-								{((abilityScore > 13 && points > 1) ||
-									(abilityScore <= 13 && points > 0)) &&
+								{((abilityScore > 12 && points > 1) ||
+									(abilityScore <= 12 && points > 0)) &&
 									abilityScore < 15 && (
 										<PlusIcon
 											className={`${classes.icon} ${classes.plus}`}
