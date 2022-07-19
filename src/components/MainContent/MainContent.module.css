@@ -3,16 +3,18 @@
   justify-content: center;
   flex-grow: 1;
   z-index: 10;
+  overflow-y: auto;
 }
 
 .content {
   display: flex;
-  flex-direction: column;
   height: 100%;
+  flex-direction: column;
   width: 100%;
   background-color: var(--heaven);
   font-family: var(--font-display);
   padding: 1rem;
+  overflow: auto;
 }
 
 @media screen and (min-width: 768px) {

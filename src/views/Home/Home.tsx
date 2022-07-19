@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import LinkButton from '../../components/LinkButton/LinkButton';
 import classes from './Home.module.css';
 
