@@ -77,7 +77,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				src="/images/character-sheet-with-dice.jpg"
 				alt="Background image"
 				layout="fill"
-				style={{ position: 'fixed', zIndex: -50 }}
+				style={{ zIndex: -50 }}
 				priority
 			/>
 			<Header
