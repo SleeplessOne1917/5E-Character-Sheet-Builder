@@ -37,7 +37,7 @@
     "react-html-email": "^3.0.0",
     "react-redux": "^8.0.1",
     "reduce-reducers": "^1.0.4",
-    "urql": "^2.2.0",
+    "urql": "^2.2.3",
     "yup": "^0.32.11"
   },
   "devDependencies": {
