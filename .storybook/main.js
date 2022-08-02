@@ -20,5 +20,10 @@ module.exports = {
 			propFilter: prop =>
 				prop.parent ? !/node_modules/.test(prop.parent.fileName) : true
 		}
+	},
+	// This is needed avoid an error with webpack. See https://issuehunt.io/r/storybookjs/storybook/issues/13795
+	managerWebpack: (config, options) => {
+		options.cache.set = () => Promise.resolve();
+		return config;
 	}
 };
