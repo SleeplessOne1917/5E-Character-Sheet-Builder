@@ -8,7 +8,7 @@ export type AbilityItem = {
 	full_name: string;
 };
 
-export type SubraceItem = {
+export type SrdSubraceItem = {
 	index: string;
 	name: string;
 	race: {
@@ -22,6 +22,11 @@ export type SrdTrait = {
 	desc: string[];
 };
 
+export type AbilityBonus = {
+	ability_score: { index: string; full_name: string };
+	bonus: number;
+};
+
 export type SrdRace = {
 	index: string;
 	name: string;
@@ -30,7 +35,13 @@ export type SrdRace = {
 	size_description: string;
 	alignment: string;
 	language_desc: string;
-	ability_bonuses: { ability_score: { index: string }; bonus: number }[];
+	ability_bonuses: AbilityBonus[];
+	ability_bonus_options?: {
+		choose: number;
+		from: {
+			options: AbilityBonus[];
+		};
+	};
 	traits: SrdTrait[];
 };
 
@@ -38,4 +49,5 @@ export type SrdSubrace = {
 	index: string;
 	name: string;
 	desc: string;
+	ability_bonuses: AbilityBonus[];
 };

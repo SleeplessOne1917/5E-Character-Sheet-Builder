@@ -6,6 +6,13 @@ const GET_SUBRACE = gql`
 			desc
 			index
 			name
+			ability_bonuses {
+				bonus
+				ability_score {
+					index
+					full_name
+				}
+			}
 		}
 	}
 `;

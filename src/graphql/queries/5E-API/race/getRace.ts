@@ -6,8 +6,21 @@ const GET_RACE = gql`
 			ability_bonuses {
 				ability_score {
 					index
+					full_name
 				}
 				bonus
+			}
+			ability_bonus_options {
+				choose
+				from {
+					options {
+						bonus
+						ability_score {
+							index
+							full_name
+						}
+					}
+				}
 			}
 			age
 			alignment

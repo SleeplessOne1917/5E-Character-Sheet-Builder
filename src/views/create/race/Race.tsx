@@ -1,4 +1,10 @@
-import { SrdItem, SrdRace, SrdSubrace, SubraceItem } from '../../../types/srd';
+import {
+	AbilityBonus,
+	SrdItem,
+	SrdRace,
+	SrdSubrace,
+	SrdSubraceItem
+} from '../../../types/srd';
 import { getRace, getSubrace } from '../../../services/raceService';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -12,7 +18,7 @@ import classes from './Race.module.css';
 
 type RaceProps = {
 	races: SrdItem[];
-	subraces: SubraceItem[];
+	subraces: SrdSubraceItem[];
 };
 
 export const mockRaces = [
@@ -38,24 +44,152 @@ export const mockSubraces = [
 	}
 ];
 
+const reduceAbilityBonuses = (
+	bonuses: AbilityBonus[],
+	startDesc: string = ''
+) =>
+	bonuses.reduce(
+		(acc, cur) =>
+			`${acc}${acc === '' ? '' : ', '}+${cur.bonus} ${
+				cur.ability_score.full_name
+			}`,
+		startDesc
+	);
+
+const getAbilityScoreDescription = (race: SrdRace, subrace?: SrdSubrace) => {
+	let description: string;
+
+	const allSameBonuses = race.ability_bonuses.reduce(
+		(acc: { isSame: boolean; value?: number }, cur) => {
+			if (!acc.value) {
+				return {
+					...acc,
+					value: cur.bonus
+				};
+			} else {
+				return {
+					...acc,
+					isSame: acc.value === cur.bonus
+				};
+			}
+		},
+		{ isSame: true, value: undefined }
+	);
+
+	if (allSameBonuses.isSame && race.ability_bonuses.length > 1) {
+		description = `+${allSameBonuses.value} to ${race.ability_bonuses.reduce(
+			(acc, cur, index) =>
+				`${acc}${index === race.ability_bonuses.length - 1 ? 'and ' : ''}${
+					cur.ability_score.full_name
+				}${index === race.ability_bonuses.length - 1 ? '' : ', '}`,
+			''
+		)}`;
+	} else {
+		description = reduceAbilityBonuses(race.ability_bonuses);
+	}
+
+	if (subrace) {
+		description = reduceAbilityBonuses(subrace.ability_bonuses, description);
+	}
+
+	if (race.ability_bonus_options) {
+		const allSameBonusChoices = race.ability_bonus_options.from.options.reduce(
+			(acc: { isSame: boolean; value?: number }, cur) => {
+				if (!acc.value) {
+					return {
+						...acc,
+						value: cur.bonus
+					};
+				} else {
+					return {
+						...acc,
+						isSame: acc.value === cur.bonus
+					};
+				}
+			},
+			{ isSame: true, value: undefined }
+		);
+
+		if (allSameBonusChoices.isSame) {
+			description = `${description}, and +${allSameBonusChoices.value} to ${
+				race.ability_bonus_options.choose
+			} from ${race.ability_bonus_options.from.options.reduce(
+				(acc, cur, index) =>
+					`${acc}${
+						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
+							? 'and '
+							: ''
+					}${cur.ability_score.full_name}${
+						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
+							? '.'
+							: ', '
+					}`,
+				''
+			)}`;
+		} else {
+			description = `${description}, and ${
+				race.ability_bonus_options.choose
+			} from ${race.ability_bonus_options.from.options.reduce(
+				(acc, cur, index) =>
+					`${acc}${
+						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
+							? 'and '
+							: ''
+					}+${cur.bonus} to ${cur.ability_score.full_name}}${
+						cur.ability_score.full_name
+					}${
+						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
+							? '.'
+							: ', '
+					}`,
+				''
+			)}`;
+		}
+	}
+
+	if (!description.includes(' and ') && description.includes(',')) {
+		const lastIndexOfComma = description.lastIndexOf(',');
+		description =
+			description.slice(0, lastIndexOfComma) +
+			' and' +
+			description.slice(lastIndexOfComma);
+	}
+
+	if (description.indexOf(',') === description.lastIndexOf(',')) {
+		description = description.replace(/,/g, '');
+	}
+
+	if (!description.endsWith('.')) {
+		description = description + '.';
+	}
+
+	return description;
+};
+
 const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
-	const [selectedRace, setSelectedRace] = useState<SrdRace | null>(null);
-	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace | null>();
-	const [consideredRace, setConsideredRace] = useState<SrdRace | null>(null);
-	const [consideredSubrace, setConsideredSubrace] =
-		useState<SrdSubrace | null>(null);
-	const [consideredRaceIndex, setConsideredRaceIndex] =
-		useState<string | null>(null);
+	const [selectedRace, setSelectedRace] = useState<SrdRace>();
+	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace>();
+	const [consideredRace, setConsideredRace] = useState<SrdRace>();
+	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace>();
+	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string>();
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
-		useState<string | null>(null);
-	const [descriptors, setDescriptors] = useState<Descriptor[] | null>(null);
+		useState<string>();
+	const [descriptors, setDescriptors] = useState<Descriptor[]>();
 
 	useEffect(() => {
 		if (consideredRace) {
 			let theDescriptors: Descriptor[] = [
+				{
+					title: 'Ability Score Bonuses',
+					description: getAbilityScoreDescription(
+						consideredRace,
+						consideredSubrace
+					),
+					isOpen: false
+				},
 				{
 					title: 'Age',
 					description: consideredRace.age,
@@ -87,9 +221,9 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 			setDescriptors(theDescriptors);
 		} else {
-			setDescriptors(null);
+			setDescriptors(undefined);
 		}
-	}, [consideredRace, setDescriptors]);
+	}, [consideredRace, setDescriptors, consideredSubrace]);
 
 	useEffect(() => {
 		if (consideredRaceIndex) {
@@ -142,10 +276,10 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	);
 
 	const deselectConsideredRace = useCallback(() => {
-		setConsideredRace(null);
-		setConsideredRaceIndex(null);
-		setConsideredSubrace(null);
-		setConsideredSubraceIndex(null);
+		setConsideredRace(undefined);
+		setConsideredRaceIndex(undefined);
+		setConsideredSubrace(undefined);
+		setConsideredSubraceIndex(undefined);
 	}, [
 		setConsideredRace,
 		setConsideredRaceIndex,
@@ -187,7 +321,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 									return descriptor;
 								}
 						  })
-						: null
+						: undefined
 				);
 			}
 		},

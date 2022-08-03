@@ -9,14 +9,14 @@ import {
 	useCallback,
 	useState
 } from 'react';
-import { SrdItem, SubraceItem } from '../../../types/srd';
+import { SrdItem, SrdSubraceItem } from '../../../types/srd';
 
 import classes from './RaceOption.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
 
 export type RaceOptionProps = {
 	race: SrdItem;
-	subraces?: SubraceItem[];
+	subraces?: SrdSubraceItem[];
 	onChoose: (subraceIndex?: string) => void;
 	iconId: string;
 	selectable?: boolean;

@@ -1,12 +1,12 @@
 import { GetStaticPropsResult, NextPage } from 'next';
-import { SrdItem, SubraceItem } from '../../src/types/srd';
+import { SrdItem, SrdSubraceItem } from '../../src/types/srd';
 import { getRaces, getSubraces } from '../../src/graphql/srdClientService';
 
 import RaceView from '../../src/views/create/race/Race';
 
 type RacePageProps = {
 	races: SrdItem[];
-	subraces: SubraceItem[];
+	subraces: SrdSubraceItem[];
 };
 
 const RacePage: NextPage<RacePageProps> = ({
