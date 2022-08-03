@@ -21,7 +21,7 @@ const query = async (
 export const getRaces = async () => await query(GET_RACES);
 
 export const getRace = async (index: string) =>
-	await query(GET_RACE, { filter: { index } });
+	await query(GET_RACE, { index });
 
 export const getClasses = async (): Promise<SrdItem[] | undefined> =>
 	(await query(GET_CLASSES))?.data?.classes;
@@ -35,4 +35,4 @@ export const getEquipments = async (): Promise<SrdItem[] | undefined> =>
 export const getSubraces = async () => await query(GET_SUBRACES);
 
 export const getSubrace = async (index: string) =>
-	await query(GET_SUBRACE, { filter: { index } });
+	await query(GET_SUBRACE, { index });

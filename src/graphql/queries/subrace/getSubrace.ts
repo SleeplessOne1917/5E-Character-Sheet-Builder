@@ -1,8 +1,8 @@
 import { gql } from 'urql';
 
 const GET_SUBRACE = gql`
-	query GetSubrace($filter: FilterFindOneSubraceInput) {
-		subrace(filter: $filter) {
+	query GetSubrace($index: String) {
+		subrace(index: $index) {
 			desc
 			index
 			name

@@ -1,8 +1,8 @@
 import { gql } from 'urql';
 
 const GET_RACE = gql`
-	query GetRace($filter: FilterFindOneRaceInput) {
-		race(filter: $filter) {
+	query GetRace($index: String) {
+		race(index: $index) {
 			ability_bonuses {
 				ability_score {
 					index
