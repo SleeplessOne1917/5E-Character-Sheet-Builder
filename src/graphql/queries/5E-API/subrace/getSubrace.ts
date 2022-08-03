@@ -13,6 +13,11 @@ const GET_SUBRACE = gql`
 					full_name
 				}
 			}
+			racial_traits {
+				name
+				index
+				desc
+			}
 		}
 	}
 `;

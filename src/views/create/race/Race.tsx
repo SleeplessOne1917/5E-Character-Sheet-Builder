@@ -219,6 +219,16 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 				}))
 			);
 
+			if (consideredSubrace) {
+				theDescriptors = theDescriptors.concat(
+					consideredSubrace.racial_traits.map(trait => ({
+						title: trait.name,
+						description: trait.desc,
+						isOpen: false
+					}))
+				);
+			}
+
 			setDescriptors(theDescriptors);
 		} else {
 			setDescriptors(undefined);

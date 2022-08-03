@@ -50,4 +50,5 @@ export type SrdSubrace = {
 	name: string;
 	desc: string;
 	ability_bonuses: AbilityBonus[];
+	racial_traits: SrdTrait[];
 };
