@@ -9,10 +9,10 @@ import {
 	useCallback,
 	useState
 } from 'react';
-import { SrdItem, SrdSubraceItem } from '../../../types/srd';
+import { SrdItem, SrdSubraceItem } from '../../../../types/srd';
 
 import classes from './RaceOption.module.css';
-import { handleKeyDownEvent } from '../../../services/handlerService';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
 
 export type RaceOptionProps = {
 	race: SrdItem;

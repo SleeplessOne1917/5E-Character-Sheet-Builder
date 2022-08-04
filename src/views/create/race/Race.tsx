@@ -7,14 +7,17 @@ import {
 import { getRace, getSubrace } from '../../../services/raceService';
 import { useCallback, useEffect, useState } from 'react';
 
+import Button from '../../../components/Button/Button';
 import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
 import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../../../components/character-creation/Descriptor/Descriptor';
 import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../components/MainContent/MainContent';
-import RaceOption from '../../../components/character-creation/Race/RaceOption';
+import RaceOption from '../../../components/character-creation/Race/RaceOption/RaceOption';
+import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityScoreDescriptionService';
+import useMediaQuery from '../../../hooks/useMediaQuery';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -48,16 +51,15 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
-	/* eslint-disable unused-imports/no-unused-vars */
 	const [selectedRace, setSelectedRace] = useState<SrdRace>();
 	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace>();
-	/* eslint-enable unused-imports/no-unused-vars */
 	const [consideredRace, setConsideredRace] = useState<SrdRace>();
 	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace>();
 	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string>();
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
 		useState<string>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
+	const isSmallOrLarger = useMediaQuery('(min-width: 640px)');
 
 	useEffect(() => {
 		if (consideredRace) {
@@ -196,6 +198,11 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 		deselectConsideredRace
 	]);
 
+	const deselectRace = useCallback(() => {
+		setSelectedRace(undefined);
+		setSelectedSubrace(undefined);
+	}, [setSelectedRace, setSelectedSubrace]);
+
 	const toggleDescriptor = useCallback(
 		(index: number) => {
 			if (descriptors) {
@@ -251,21 +258,44 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	return (
 		<>
 			<MainContent testId="race">
-				<h1 className={classes.title}>Choose Race</h1>
-				<ul className={classes['race-list']}>
-					{races.map(race => (
-						<RaceOption
-							race={race}
-							subraces={subraces.filter(
-								subrace => subrace.race.index === race.index
-							)}
-							key={race.index}
-							onChoose={getConsiderRaceHandler(race.index)}
-							iconId={race.index}
-							selectable={!showModal}
+				{selectedRace && (
+					<>
+						<div className={classes['deselect-button-div']}>
+							<h1 className={classes.title}>
+								{selectedSubrace ? selectedSubrace.name : selectedRace.name}
+							</h1>
+							<Button
+								size={isSmallOrLarger ? 'medium' : 'small'}
+								onClick={deselectRace}
+							>
+								Deselect Race
+							</Button>
+						</div>
+						<SelectedRaceDisplay
+							race={selectedRace}
+							subrace={selectedSubrace}
 						/>
-					))}
-				</ul>
+					</>
+				)}
+				{!selectedRace && (
+					<>
+						<h1 className={classes.title}>Choose Race</h1>
+						<ul className={classes['race-list']}>
+							{races.map(race => (
+								<RaceOption
+									race={race}
+									subraces={subraces.filter(
+										subrace => subrace.race.index === race.index
+									)}
+									key={race.index}
+									onChoose={getConsiderRaceHandler(race.index)}
+									iconId={race.index}
+									selectable={!showModal}
+								/>
+							))}
+						</ul>
+					</>
+				)}
 			</MainContent>
 			<ChooseModal
 				show={showModal}

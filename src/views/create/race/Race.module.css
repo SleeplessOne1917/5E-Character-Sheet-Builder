@@ -21,6 +21,11 @@
     font-size: 1.3rem;
 }
 
+.deselect-button-div {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media screen and (min-width: 768px) {
     .title {
         align-self: flex-start;

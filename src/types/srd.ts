@@ -20,6 +20,11 @@ export type SrdTrait = {
 	index: string;
 	name: string;
 	desc: string[];
+	proficiencies: SrdItem[];
+	proficiency_choices?: {
+		choose: number;
+		from: { options: { item: SrdItem }[] };
+	};
 };
 
 export type AbilityBonus = {
@@ -35,6 +40,12 @@ export type SrdRace = {
 	size_description: string;
 	alignment: string;
 	language_desc: string;
+	speed: number;
+	languages: SrdItem[];
+	language_options?: {
+		choose: number;
+		from: { options: { item: SrdItem }[] };
+	};
 	ability_bonuses: AbilityBonus[];
 	ability_bonus_options?: {
 		choose: number;

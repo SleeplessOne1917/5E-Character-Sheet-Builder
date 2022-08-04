@@ -26,6 +26,21 @@ const GET_RACE = gql`
 			alignment
 			index
 			language_desc
+			languages {
+				index
+				name
+			}
+			language_options {
+				from {
+					options {
+						item {
+							name
+							index
+						}
+					}
+				}
+				choose
+			}
 			name
 			size
 			size_description
@@ -34,6 +49,23 @@ const GET_RACE = gql`
 				name
 				index
 				desc
+				proficiencies {
+					index
+					name
+				}
+				proficiency_choices {
+					choose
+					from {
+						options {
+							... on ProficiencyReferenceOption {
+								item {
+									name
+									index
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

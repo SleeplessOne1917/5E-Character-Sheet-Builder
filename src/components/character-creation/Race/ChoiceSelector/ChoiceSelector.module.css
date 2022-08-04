@@ -1,0 +1,32 @@
+.selector {
+	background-color: var(--davy);
+	font-family: var(--font-display);
+	padding: 0.5rem;
+}
+
+.select-div {
+	display: flex;
+	justify-content: space-around;
+	padding: 0.5rem;
+}
+
+.button-div {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.5rem;
+	color: var(--heaven-light);
+}
+
+.select {
+	min-width: 5rem;
+	font-family: inherit;
+    font-size: inherit;
+    background-color: var(--heaven-light);
+    border-radius: 0.5rem;
+}

@@ -42,6 +42,14 @@ h1 {
   align-self: center;
 }
 
+select {
+  cursor: pointer;
+}
+
+option {
+  cursor: pointer;
+}
+
 #__next {
   height: 100%;
   width: 100%;

@@ -17,6 +17,23 @@ const GET_SUBRACE = gql`
 				name
 				index
 				desc
+				proficiencies {
+					name
+					index
+				}
+				proficiency_choices {
+					choose
+					from {
+						options {
+							... on ProficiencyReferenceOption {
+								item {
+									index
+									name
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

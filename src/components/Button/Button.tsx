@@ -15,7 +15,7 @@ export type ButtonProps = {
 	children: ReactNode;
 	positive?: boolean;
 	type?: ButtonType;
-	size: ButtonSize;
+	size?: ButtonSize;
 	spacing?: number;
 };
 
@@ -45,8 +45,8 @@ const Button = ({
 	onClick,
 	children,
 	positive,
-	type,
-	size,
+	type = ButtonType.button,
+	size = 'medium',
 	spacing
 }: ButtonProps): JSX.Element => (
 	<button
@@ -60,7 +60,7 @@ const Button = ({
 			padding: `${getPadding(size)}rem`,
 			margin: `${0.25 * (spacing || 1)}rem`
 		}}
-		type={type ? type : 'button'}
+		type={type}
 	>
 		{children}
 	</button>
