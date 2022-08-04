@@ -22,7 +22,8 @@
 
 .hr {
     border: 3px solid var(--davy);
-    width: 75%;
+    background-color: var(--davy);
+    width: 100%;
 }
 
 .nav-list {
