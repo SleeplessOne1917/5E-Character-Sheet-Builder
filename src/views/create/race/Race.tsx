@@ -1,5 +1,4 @@
 import {
-	AbilityBonus,
 	SrdItem,
 	SrdRace,
 	SrdSubrace,
@@ -15,6 +14,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceOption from '../../../components/character-creation/Race/RaceOption';
 import classes from './Race.module.css';
+import { getAbilityScoreDescription } from '../../../services/abilityScoreDescriptionService';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -43,125 +43,6 @@ export const mockSubraces = [
 		race: { index: 'halfling' }
 	}
 ];
-
-const reduceAbilityBonuses = (bonuses: AbilityBonus[], startDesc = '') =>
-	bonuses.reduce(
-		(acc, cur) =>
-			`${acc}${acc === '' ? '' : ', '}+${cur.bonus} ${
-				cur.ability_score.full_name
-			}`,
-		startDesc
-	);
-
-const getAbilityScoreDescription = (race: SrdRace, subrace?: SrdSubrace) => {
-	let description: string;
-
-	const allSameBonuses = race.ability_bonuses.reduce(
-		(acc: { isSame: boolean; value?: number }, cur) => {
-			if (!acc.value) {
-				return {
-					...acc,
-					value: cur.bonus
-				};
-			} else {
-				return {
-					...acc,
-					isSame: acc.value === cur.bonus
-				};
-			}
-		},
-		{ isSame: true, value: undefined }
-	);
-
-	if (allSameBonuses.isSame && race.ability_bonuses.length > 1) {
-		description = `+${allSameBonuses.value} to ${race.ability_bonuses.reduce(
-			(acc, cur, index) =>
-				`${acc}${index === race.ability_bonuses.length - 1 ? 'and ' : ''}${
-					cur.ability_score.full_name
-				}${index === race.ability_bonuses.length - 1 ? '' : ', '}`,
-			''
-		)}`;
-	} else {
-		description = reduceAbilityBonuses(race.ability_bonuses);
-	}
-
-	if (subrace) {
-		description = reduceAbilityBonuses(subrace.ability_bonuses, description);
-	}
-
-	if (race.ability_bonus_options) {
-		const allSameBonusChoices = race.ability_bonus_options.from.options.reduce(
-			(acc: { isSame: boolean; value?: number }, cur) => {
-				if (!acc.value) {
-					return {
-						...acc,
-						value: cur.bonus
-					};
-				} else {
-					return {
-						...acc,
-						isSame: acc.value === cur.bonus
-					};
-				}
-			},
-			{ isSame: true, value: undefined }
-		);
-
-		if (allSameBonusChoices.isSame) {
-			description = `${description}, and +${allSameBonusChoices.value} to ${
-				race.ability_bonus_options.choose
-			} from ${race.ability_bonus_options.from.options.reduce(
-				(acc, cur, index) =>
-					`${acc}${
-						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
-							? 'and '
-							: ''
-					}${cur.ability_score.full_name}${
-						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
-							? '.'
-							: ', '
-					}`,
-				''
-			)}`;
-		} else {
-			description = `${description}, and ${
-				race.ability_bonus_options.choose
-			} from ${race.ability_bonus_options.from.options.reduce(
-				(acc, cur, index) =>
-					`${acc}${
-						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
-							? 'and '
-							: ''
-					}+${cur.bonus} to ${cur.ability_score.full_name}}${
-						cur.ability_score.full_name
-					}${
-						index === (race.ability_bonus_options?.from.options.length ?? 1) - 1
-							? '.'
-							: ', '
-					}`,
-				''
-			)}`;
-		}
-	}
-
-	if (!description.includes(' and ') && description.includes(',')) {
-		const lastIndexOfComma = description.lastIndexOf(',');
-		description =
-			description.slice(0, lastIndexOfComma) +
-			' and' +
-			description.slice(lastIndexOfComma);
-	}
-
-	if (description.indexOf(',') === description.lastIndexOf(',')) {
-		description = description.replace(/,/g, '');
-	}
-
-	if (!description.endsWith('.')) {
-		description = description + '.';
-	}
-
-	return description;
-};
 
 const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
