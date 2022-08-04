@@ -221,7 +221,13 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const modalContent = (
 		<>
 			<h2 className={classes['modal-title']}>
-				{loading ? 'Loading...' : error ? 'Error' : consideredRace?.name}
+				{loading
+					? 'Loading...'
+					: error
+					? 'Error'
+					: consideredSubrace
+					? consideredSubrace?.name
+					: consideredRace?.name}
 			</h2>
 			{loading ? (
 				<LoadingSpinner />
