@@ -2,7 +2,6 @@ import * as stories from './RollDisplay.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import RollDisplay from './RollDisplay';
 import { composeStories } from '@storybook/testing-react';
 
 const { ButtonShowing, RollNoAbilitySelected, RollWithAbilitySelected } =

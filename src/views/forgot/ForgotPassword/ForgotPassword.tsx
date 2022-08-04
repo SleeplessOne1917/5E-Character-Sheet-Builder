@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 const ForgotPassword = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [forgotPasswordResult, forgotPassword] = useMutation(FORGOT_PASSWORD);
+	const [_, forgotPassword] = useMutation(FORGOT_PASSWORD);
 
 	return (
 		<MainContent testId="forgot-password">

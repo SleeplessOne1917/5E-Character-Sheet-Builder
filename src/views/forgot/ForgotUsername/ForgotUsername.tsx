@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 const ForgotUsername = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [forgotUsernameResult, forgotUsername] = useMutation(FORGOT_USERNAME);
+	const [_, forgotUsername] = useMutation(FORGOT_USERNAME);
 
 	return (
 		<MainContent testId="forgot-username">

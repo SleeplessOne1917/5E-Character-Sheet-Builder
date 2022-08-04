@@ -5,15 +5,29 @@ import * as stories from './MobileNav.stories';
 import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
-import userEvent from '@testing-library/user-event';
 
 const { Closed, LoggedIn, LoggedOut } = composeStories(stories);
+import * as Router from 'next/router';
 
 beforeAll(() => {
-	const useRouter = jest.spyOn(require('next/router'), 'useRouter');
-	const router = {
-		push: () => Promise.resolve(),
-		prefetch: () => Promise.resolve()
+	const useRouter = jest.spyOn(Router, 'useRouter');
+	const router: Router.NextRouter = {
+		push: () => Promise.resolve(true),
+		prefetch: () => Promise.resolve(),
+		route: '',
+		query: {},
+		pathname: '',
+		asPath: '',
+		basePath: '',
+		isLocaleDomain: true,
+		reload: jest.fn(),
+		replace: jest.fn(),
+		back: jest.fn(),
+		beforePopState: jest.fn(),
+		events: { emit: jest.fn(), on: jest.fn(), off: jest.fn() },
+		isFallback: false,
+		isPreview: false,
+		isReady: true
 	};
 	useRouter.mockReturnValue(router);
 });

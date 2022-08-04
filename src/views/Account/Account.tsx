@@ -13,8 +13,7 @@ import { useMutation } from 'urql';
 
 const Account = () => {
 	const username = useAppSelector(state => state.viewer);
-	const [createNewPasswordResult, createNewPassword] =
-		useMutation(CREATE_NEW_PASSWORD);
+	const [_, createNewPassword] = useMutation(CREATE_NEW_PASSWORD);
 	const dispatch = useAppDispatch();
 
 	return (

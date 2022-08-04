@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import { AbilityItem } from '../../../../types/srd';

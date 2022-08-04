@@ -146,12 +146,13 @@ describe('delete group', () => {
 	});
 
 	it('is rendered when onDeleteGroup prop is passed in', () => {
+		const onDeleteGroup = jest.fn();
 		render(
 			<Provider store={getTestStore()}>
 				<RollGroup
 					group={0}
 					abilities={mockAbilities}
-					onDeleteGroup={() => {}}
+					onDeleteGroup={onDeleteGroup}
 				/>
 			</Provider>
 		);

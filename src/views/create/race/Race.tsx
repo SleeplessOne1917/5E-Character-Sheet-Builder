@@ -44,10 +44,7 @@ export const mockSubraces = [
 	}
 ];
 
-const reduceAbilityBonuses = (
-	bonuses: AbilityBonus[],
-	startDesc: string = ''
-) =>
+const reduceAbilityBonuses = (bonuses: AbilityBonus[], startDesc = '') =>
 	bonuses.reduce(
 		(acc, cur) =>
 			`${acc}${acc === '' ? '' : ', '}+${cur.bonus} ${
@@ -170,8 +167,10 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
+	/* eslint-disable unused-imports/no-unused-vars */
 	const [selectedRace, setSelectedRace] = useState<SrdRace>();
 	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace>();
+	/* eslint-enable unused-imports/no-unused-vars */
 	const [consideredRace, setConsideredRace] = useState<SrdRace>();
 	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace>();
 	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string>();

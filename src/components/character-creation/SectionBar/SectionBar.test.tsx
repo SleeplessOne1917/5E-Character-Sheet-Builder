@@ -4,12 +4,28 @@ import { render, screen } from '@testing-library/react';
 
 import SectionBar from './SectionBar';
 
+import * as Router from 'next/router';
+
 const mockRouter = (pathname: string) => {
-	const useRouter = jest.spyOn(require('next/router'), 'useRouter');
-	const router = {
-		push: () => Promise.resolve(),
+	const useRouter = jest.spyOn(Router, 'useRouter');
+
+	const router: Router.NextRouter = {
+		push: () => Promise.resolve(true),
 		prefetch: () => Promise.resolve(),
-		pathname
+		pathname,
+		route: '',
+		query: {},
+		asPath: '',
+		basePath: '',
+		isLocaleDomain: true,
+		reload: jest.fn(),
+		replace: jest.fn(),
+		back: jest.fn(),
+		beforePopState: jest.fn(),
+		events: { emit: jest.fn(), on: jest.fn(), off: jest.fn() },
+		isFallback: false,
+		isPreview: false,
+		isReady: true
 	};
 	useRouter.mockReturnValue(router);
 };
@@ -17,8 +33,8 @@ const mockRouter = (pathname: string) => {
 const mockMatchMedia = (matches: boolean) => {
 	window.matchMedia = jest.fn().mockImplementationOnce(() => ({
 		matches,
-		addEventListener: () => {},
-		removeEventListener: () => {}
+		addEventListener: jest.fn(),
+		removeEventListener: jest.fn()
 	}));
 };
 

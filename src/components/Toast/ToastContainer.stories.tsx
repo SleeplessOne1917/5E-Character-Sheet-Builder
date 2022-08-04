@@ -6,7 +6,6 @@ import ToastContainer from './ToastContainer';
 import { ToastType } from '../../types/toast';
 import { getTestStore } from '../../redux/store';
 import { show } from '../../redux/features/toast';
-import { useAppDispatch } from '../../hooks/reduxHooks';
 
 export default {
 	title: 'Components/ToastContainer',

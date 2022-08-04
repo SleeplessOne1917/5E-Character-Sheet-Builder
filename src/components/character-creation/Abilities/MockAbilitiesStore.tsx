@@ -1,6 +1,5 @@
 import {
 	AbilityPayload,
-	AbilityScore,
 	AbilityScoresState
 } from '../../../redux/features/abilityScores';
 import {
@@ -11,7 +10,6 @@ import {
 	createSlice
 } from '@reduxjs/toolkit';
 
-import AbilityScores from '../../../types/abilityScores';
 import { EditingCharacterState } from '../../../redux/features/editingCharacter';
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';

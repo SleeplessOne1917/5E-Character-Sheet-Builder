@@ -4,7 +4,6 @@ import LogInSignUpForm from '../../../components/LogInSignUp/LogInSignUpForm';
 import MainContent from '../../../components/MainContent/MainContent';
 import SIGN_UP from '../../../graphql/mutations/user/signUp';
 import { ToastType } from '../../../types/toast';
-import classes from '../LogInSignUp.module.css';
 import { fetchLoggedInUsername } from '../../../redux/features/viewer';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -13,7 +12,7 @@ import { useRouter } from 'next/router';
 
 const SignUp = (): JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [signUpResult, signUp] = useMutation(SIGN_UP);
+	const [_, signUp] = useMutation(SIGN_UP);
 	const router = useRouter();
 
 	return (

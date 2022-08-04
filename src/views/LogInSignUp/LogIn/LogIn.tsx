@@ -2,7 +2,6 @@ import LOG_IN from '../../../graphql/mutations/user/logIn';
 import LogInSignUpForm from '../../../components/LogInSignUp/LogInSignUpForm';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
-import classes from '../LogInSignUp.module.css';
 import { fetchLoggedInUsername } from '../../../redux/features/viewer';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { show } from '../../../redux/features/toast';
@@ -12,7 +11,7 @@ import { useRouter } from 'next/router';
 
 const LogIn = (): JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [logInResult, logIn] = useMutation(LOG_IN);
+	const [_, logIn] = useMutation(LOG_IN);
 	const router = useRouter();
 
 	return (

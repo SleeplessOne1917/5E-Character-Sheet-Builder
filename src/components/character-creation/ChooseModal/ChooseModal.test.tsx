@@ -4,7 +4,6 @@ import * as stories from './ChooseModal.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import ChooseModal from './ChooseModal';
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
 
@@ -30,15 +29,9 @@ it('has display flex when show is true', () => {
 
 it('calls onChoose when choose button is clicked', async () => {
 	const onChooseMock = jest.fn();
+	const oncloseMock = jest.fn();
 
-	render(
-		<ChooseModal
-			mainContent="foo"
-			show
-			onChoose={onChooseMock}
-			onClose={() => {}}
-		/>
-	);
+	render(<Default onChoose={onChooseMock} onClose={oncloseMock} />);
 
 	await userEvent.click(screen.getByText(/choose/i));
 
@@ -47,15 +40,9 @@ it('calls onChoose when choose button is clicked', async () => {
 
 it('calls onClose when cancel button is clicked', async () => {
 	const onCloseMock = jest.fn();
+	const onChooseMock = jest.fn();
 
-	render(
-		<ChooseModal
-			mainContent="foo"
-			show
-			onChoose={() => {}}
-			onClose={onCloseMock}
-		/>
-	);
+	render(<Default onChoose={onChooseMock} onClose={onCloseMock} />);
 
 	await userEvent.click(screen.getByText(/cancel/i));
 
