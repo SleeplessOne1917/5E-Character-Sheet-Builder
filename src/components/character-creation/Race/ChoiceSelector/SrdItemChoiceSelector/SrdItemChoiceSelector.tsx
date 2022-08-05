@@ -1,12 +1,12 @@
 import { ChangeEvent, useCallback, useState } from 'react';
+import { SrdItem, SrdItemChoice } from '../../../../../types/srd';
 
 import Button from '../../../../Button/Button';
-import { SrdItem, SrdItemChoice } from '../../../../../types/srd';
 import classes from '../ChoiceSelector.module.css';
 
 type OptionSelectorProps = {
 	choice: SrdItemChoice;
-	onReset?: () => void;
+	onReset?: (items: SrdItem[]) => void;
 	onApply?: (items: SrdItem[]) => void;
 	label: string;
 	initialValues?: string[];
@@ -53,8 +53,12 @@ const SrdItemChoiceSelector = ({
 
 	const handleReset = useCallback(() => {
 		setSelectValues(getInitialSelectValues());
-		onReset();
-	}, [setSelectValues, getInitialSelectValues, onReset]);
+		onReset(
+			choice.from.options
+				.filter(option => selectValues.includes(option.item.index))
+				.map(option => option.item)
+		);
+	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
 
 	const selects: JSX.Element[] = [];
 
@@ -84,7 +88,12 @@ const SrdItemChoiceSelector = ({
 	}
 
 	return (
-		<div className={classes.selector} data-testid="choice-selector">
+		<div
+			className={`${classes.selector}${
+				initialValues ? ` ${classes.selected}` : ''
+			}`}
+			data-testid="choice-selector"
+		>
 			<div className={classes.label}>{label}</div>
 			<div className={classes['select-div']}>{selects}</div>
 			<div className={classes['button-div']}>
@@ -100,6 +109,11 @@ const SrdItemChoiceSelector = ({
 					Apply
 				</Button>
 			</div>
+			{initialValues && (
+				<svg className={classes['dice-icon']}>
+					<use xlinkHref="/Icons.svg#logo" />
+				</svg>
+			)}
 		</div>
 	);
 };

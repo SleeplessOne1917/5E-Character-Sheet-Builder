@@ -1,32 +1,39 @@
 import {
+	AbilityBonus,
+	ProficiencyType,
+	SrdItem,
 	SrdItemChoice,
 	SrdProficiencyItem,
 	SrdRace,
-	SrdSubrace,
-	ProficiencyType,
-	AbilityBonus
+	SrdSubrace
 } from '../../../../types/srd';
-import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
-import SrdItemChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/SrdItemChoiceSelector';
-
-import classes from './SelectedRaceDisplay.module.css';
-import Descriptor from '../../Descriptor/Descriptor';
-import useMediaQuery from '../../../../hooks/useMediaQuery';
 import {
 	CSSProperties,
 	MutableRefObject,
-	useRef,
-	useState,
+	useCallback,
 	useEffect,
-	useCallback
+	useRef,
+	useState
 } from 'react';
-import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import {
+	addLanguage,
+	removeLanguage
+} from '../../../../redux/features/languages';
 import {
 	deselectAbilityBonuses,
-	selectAbilityBonuses
+	deselectLanguages,
+	selectAbilityBonuses,
+	selectLanguages
 } from '../../../../redux/features/raceInfo';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+
+import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
+import Descriptor from '../../Descriptor/Descriptor';
+import SrdItemChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/SrdItemChoiceSelector';
+import classes from './SelectedRaceDisplay.module.css';
+import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
+import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -104,6 +111,26 @@ const SelectedRaceDisplay = ({
 		[dispatch]
 	);
 
+	const handleLanguageOptionsApply = useCallback(
+		(items: SrdItem[]) => {
+			dispatch(selectLanguages(items));
+			for (const language of items) {
+				dispatch(addLanguage(language));
+			}
+		},
+		[dispatch]
+	);
+
+	const handleLanguageOptionsReset = useCallback(
+		(items: SrdItem[]) => {
+			dispatch(deselectLanguages());
+			for (const { index } of items) {
+				dispatch(removeLanguage(index));
+			}
+		},
+		[dispatch]
+	);
+
 	return (
 		<div className={classes.container} style={containerStyle}>
 			<div
@@ -168,6 +195,11 @@ const SelectedRaceDisplay = ({
 						label={`Select ${race.language_options.choose} language${
 							race.language_options.choose > 1 ? 's' : ''
 						}`}
+						onApply={handleLanguageOptionsApply}
+						onReset={handleLanguageOptionsReset}
+						initialValues={raceInfo.selectedLanguages?.map(
+							language => language.index
+						)}
 					/>
 				)}
 				{traits

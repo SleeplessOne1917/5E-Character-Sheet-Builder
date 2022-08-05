@@ -5,7 +5,6 @@ import {
 	SrdSubrace,
 	SrdSubraceItem
 } from '../../../types/srd';
-import { getRace, getSubrace } from '../../../services/raceService';
 import {
 	MutableRefObject,
 	useCallback,
@@ -13,22 +12,24 @@ import {
 	useRef,
 	useState
 } from 'react';
+import { addLanguage, removeLanguage } from '../../../redux/features/languages';
+import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
+import { getRace, getSubrace } from '../../../services/raceService';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import Button from '../../../components/Button/Button';
 import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
+import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../../../components/character-creation/Descriptor/Descriptor';
 import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceOption from '../../../components/character-creation/Race/RaceOption/RaceOption';
 import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
+import { XCircleIcon } from '@heroicons/react/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
-import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { updateRaceBonus } from '../../../redux/features/abilityScores';
-import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
-import { XCircleIcon } from '@heroicons/react/solid';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -204,6 +205,9 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				updateRaceBonus({ abilityIndex: ability_score.index, value: bonus })
 			);
 		}
+		for (const language of consideredRace?.languages ?? []) {
+			dispatch(addLanguage(language));
+		}
 		dispatch(
 			selectRace({
 				race: consideredRace as SrdRace,
@@ -221,12 +225,17 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	]);
 
 	const deselectSelectedRace = useCallback(() => {
+		for (const { index } of (raceInfo.race?.languages ?? []).concat(
+			raceInfo.selectedLanguages ?? []
+		)) {
+			dispatch(removeLanguage(index));
+		}
 		dispatch(deselectRace());
 		setShowDeselectModal(false);
 		for (const { index } of abilities) {
 			dispatch(updateRaceBonus({ abilityIndex: index, value: null }));
 		}
-	}, [setShowDeselectModal, dispatch, abilities]);
+	}, [setShowDeselectModal, dispatch, abilities, raceInfo]);
 
 	const tryDeselectRace = useCallback(() => {
 		setShowDeselectModal(true);

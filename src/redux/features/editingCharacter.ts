@@ -2,22 +2,26 @@ import abilityScores, {
 	AbilityScoresState,
 	initialState as abilityScoresInitialState
 } from './abilityScores';
+import { combineReducers, createSlice } from '@reduxjs/toolkit';
+import languages, { initialState as languagesInitialState } from './languages';
 import raceInfo, {
 	RaceInfoState,
 	initialState as raceInitialState
 } from './raceInfo';
-import { combineReducers, createSlice } from '@reduxjs/toolkit';
 
+import { SrdItem } from '../../types/srd';
 import reduceReducers from 'reduce-reducers';
 
 export type EditingCharacterState = {
 	abilityScores: AbilityScoresState;
 	raceInfo: RaceInfoState;
+	languages: SrdItem[];
 };
 
 const initialState: EditingCharacterState = {
 	abilityScores: abilityScoresInitialState,
-	raceInfo: raceInitialState
+	raceInfo: raceInitialState,
+	languages: languagesInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -28,7 +32,8 @@ const editingCharacterSlice = createSlice({
 
 const wholeReducer = combineReducers({
 	abilityScores,
-	raceInfo
+	raceInfo,
+	languages
 });
 
 export default reduceReducers<EditingCharacterState>(
