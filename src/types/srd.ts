@@ -1,3 +1,5 @@
+import AbilityScores from './abilityScores';
+
 export interface SrdItem {
 	index: string;
 	name: string;
@@ -19,7 +21,7 @@ export interface SrdProficiencyItem extends SrdItem {
 }
 
 export type AbilityItem = {
-	index: string;
+	index: AbilityScores;
 	full_name: string;
 };
 
@@ -50,7 +52,7 @@ export type SrdTrait = {
 };
 
 export type AbilityBonus = {
-	ability_score: { index: string; full_name: string };
+	ability_score: AbilityItem;
 	bonus: number;
 };
 

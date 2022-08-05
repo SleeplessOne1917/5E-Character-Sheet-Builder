@@ -61,6 +61,9 @@ export const getAbilityScoreDescription = (
 				}`,
 			''
 		)}`;
+	} else if (abilityBonuses.length === 1) {
+		const abilityBonus = abilityBonuses[0];
+		description = `+${abilityBonus.bonus} to ${abilityBonus.ability_score.full_name}`;
 	} else {
 		description = abilityBonuses.reduce(
 			(acc, cur, index) =>

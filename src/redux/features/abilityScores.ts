@@ -49,10 +49,14 @@ const abilityScoresSlice = createSlice({
 		updateOverride: (state, action: PayloadAction<AbilityPayload>) => {
 			const { value, abilityIndex } = action.payload;
 			state[abilityIndex].override = value;
+		},
+		updateRaceBonus: (state, action: PayloadAction<AbilityPayload>) => {
+			const { value, abilityIndex } = action.payload;
+			state[abilityIndex].raceBonus = value;
 		}
 	}
 });
 
-export const { updateBase, updateOtherBonus, updateOverride } =
+export const { updateBase, updateOtherBonus, updateOverride, updateRaceBonus } =
 	abilityScoresSlice.actions;
 export default abilityScoresSlice.reducer;

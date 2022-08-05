@@ -1,4 +1,5 @@
 import {
+	AbilityItem,
 	SrdItem,
 	SrdRace,
 	SrdSubrace,
@@ -23,12 +24,16 @@ import RaceOption from '../../../components/character-creation/Race/RaceOption/R
 import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
-import useMediaQuery from '../../../hooks/useMediaQuery';
 import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { updateRaceBonus } from '../../../redux/features/abilityScores';
+import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
+import { XIcon } from '@heroicons/react/solid';
 
 type RaceProps = {
 	races: SrdItem[];
 	subraces: SrdSubraceItem[];
+	abilities: AbilityItem[];
 };
 
 export const mockRaces = [
@@ -54,21 +59,20 @@ export const mockSubraces = [
 	}
 ];
 
-const Race = ({ races, subraces }: RaceProps): JSX.Element => {
+const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [showSelectModal, setShowSelectModal] = useState(false);
 	const [showDeselectModal, setShowDeselectModal] = useState(false);
-	const [selectedRace, setSelectedRace] = useState<SrdRace>();
-	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace>();
 	const [consideredRace, setConsideredRace] = useState<SrdRace>();
 	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace>();
 	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string>();
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
 		useState<string>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
-	const isSmallOrLarger = useMediaQuery('(min-width: 640px)');
 	const mainRef = useRef<HTMLDivElement>();
+	const dispatch = useAppDispatch();
+	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
 
 	useEffect(() => {
 		if (consideredRace) {
@@ -155,10 +159,10 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	]);
 
 	useEffect(() => {
-		if (selectedRace) {
+		if (raceInfo.race) {
 			mainRef.current?.scrollTo(0, 0);
 		}
-	}, [selectedRace, mainRef]);
+	}, [raceInfo, mainRef]);
 
 	const getConsiderRaceHandler = useCallback(
 		(raceIndex: string) => {
@@ -193,24 +197,36 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	}, [setShowSelectModal, deselectConsideredRace]);
 
 	const chooseRace = useCallback(() => {
-		setSelectedRace(consideredRace);
-		setSelectedSubrace(consideredSubrace);
+		for (const { bonus, ability_score } of (
+			consideredRace?.ability_bonuses ?? []
+		).concat(consideredSubrace?.ability_bonuses ?? [])) {
+			dispatch(
+				updateRaceBonus({ abilityIndex: ability_score.index, value: bonus })
+			);
+		}
+		dispatch(
+			selectRace({
+				race: consideredRace as SrdRace,
+				subrace: consideredSubrace
+			})
+		);
 		setShowSelectModal(false);
 		deselectConsideredRace();
 	}, [
-		setSelectedRace,
 		consideredRace,
-		setSelectedSubrace,
 		consideredSubrace,
 		setShowSelectModal,
-		deselectConsideredRace
+		deselectConsideredRace,
+		dispatch
 	]);
 
 	const deselectSelectedRace = useCallback(() => {
-		setSelectedRace(undefined);
-		setSelectedSubrace(undefined);
+		dispatch(deselectRace());
 		setShowDeselectModal(false);
-	}, [setSelectedRace, setSelectedSubrace, setShowDeselectModal]);
+		for (const { index } of abilities) {
+			dispatch(updateRaceBonus({ abilityIndex: index, value: null }));
+		}
+	}, [setShowDeselectModal, dispatch, abilities]);
 
 	const tryDeselectRace = useCallback(() => {
 		setShowDeselectModal(true);
@@ -254,26 +270,32 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 				testId="race"
 				ref={mainRef as MutableRefObject<HTMLDivElement>}
 			>
-				{selectedRace && (
+				{raceInfo.race && (
 					<>
 						<div className={classes['deselect-button-div']}>
 							<h1 className={classes.title}>
-								{selectedSubrace ? selectedSubrace.name : selectedRace.name}
+								{raceInfo.subrace ? raceInfo.subrace.name : raceInfo.race.name}
 							</h1>
 							<Button
-								size={isSmallOrLarger ? 'medium' : 'small'}
 								onClick={tryDeselectRace}
+								style={{
+									display: 'flex',
+									alignItems: 'center'
+								}}
 							>
+								<div className={classes['deselect-icon-wrapper']}>
+									<XIcon className={classes['deselect-icon']} />
+								</div>
 								Deselect Race
 							</Button>
 						</div>
 						<SelectedRaceDisplay
-							race={selectedRace}
-							subrace={selectedSubrace}
+							race={raceInfo.race}
+							subrace={raceInfo.subrace}
 						/>
 					</>
 				)}
-				{!selectedRace && (
+				{!raceInfo.race && (
 					<>
 						<h1 className={classes.title}>Choose Race</h1>
 						<ul className={classes['race-list']}>
