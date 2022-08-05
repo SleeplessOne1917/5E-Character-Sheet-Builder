@@ -7,7 +7,7 @@ import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService
 
 type OptionSelectorProps = {
 	choice: AbilityBonusChoice;
-	onReset?: () => void;
+	onReset?: (items: AbilityBonus[]) => void;
 	onApply?: (items: AbilityBonus[]) => void;
 	initialValues?: string[];
 };
@@ -53,8 +53,12 @@ const AbilityBonusChoiceSelector = ({
 
 	const handleReset = useCallback(() => {
 		setSelectValues(getInitialSelectValues());
-		onReset();
-	}, [setSelectValues, getInitialSelectValues, onReset]);
+		onReset(
+			choice.from.options.filter(option =>
+				selectValues.includes(option.ability_score.index)
+			)
+		);
+	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
 
 	const selects: JSX.Element[] = [];
 
@@ -92,7 +96,12 @@ const AbilityBonusChoiceSelector = ({
 	} to ${choice.choose} ability score${choice.choose > 1 ? 's' : ''}`;
 
 	return (
-		<div className={classes.selector} data-testid="choice-selector">
+		<div
+			className={`${classes.selector}${
+				initialValues ? ` ${classes.selected}` : ''
+			}`}
+			data-testid="choice-selector"
+		>
 			<div className={classes.label}>{label}</div>
 			<div className={classes['select-div']}>{selects}</div>
 			<div className={classes['button-div']}>
@@ -108,6 +117,11 @@ const AbilityBonusChoiceSelector = ({
 					Apply
 				</Button>
 			</div>
+			{initialValues && (
+				<svg className={classes['dice-icon']}>
+					<use xlinkHref="/Icons.svg#logo" />
+				</svg>
+			)}
 		</div>
 	);
 };

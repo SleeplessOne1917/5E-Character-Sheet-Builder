@@ -1,9 +1,11 @@
+import { AbilityBonus } from './../../types/srd';
 import { SrdRace, SrdSubrace } from '../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type RaceInfoState = {
 	race?: SrdRace;
 	subrace?: SrdSubrace;
+	selectedAbilityScoreBonuses?: AbilityBonus[];
 };
 
 type SelectPayload = {
@@ -31,9 +33,21 @@ const raceInfoSlice = createSlice({
 		deselectRace: state => {
 			state.race = undefined;
 			state.subrace = undefined;
+			state.selectedAbilityScoreBonuses = undefined;
+		},
+		selectAbilityBonuses: (state, action: PayloadAction<AbilityBonus[]>) => {
+			state.selectedAbilityScoreBonuses = action.payload;
+		},
+		deselectAbilityBonuses: state => {
+			state.selectedAbilityScoreBonuses = undefined;
 		}
 	}
 });
 
-export const { selectRace, deselectRace } = raceInfoSlice.actions;
+export const {
+	selectRace,
+	deselectRace,
+	selectAbilityBonuses,
+	deselectAbilityBonuses
+} = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;

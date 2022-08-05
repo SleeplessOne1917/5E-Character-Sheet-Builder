@@ -4,7 +4,8 @@ import {
 	SrdRace,
 	SrdSubrace,
 	ProficiencyType,
-	SrdTrait
+	SrdTrait,
+	AbilityBonus
 } from '../../../../types/srd';
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
 import SrdItemChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/SrdItemChoiceSelector';
@@ -17,9 +18,16 @@ import {
 	MutableRefObject,
 	useRef,
 	useState,
-	useEffect
+	useEffect,
+	useCallback
 } from 'react';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import {
+	deselectAbilityBonuses,
+	selectAbilityBonuses
+} from '../../../../redux/features/raceInfo';
+import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -58,6 +66,8 @@ const SelectedRaceDisplay = ({
 	const summaryRef = useRef<HTMLDivElement>();
 	const iconRef = useRef<HTMLDivElement>();
 	const [containerStyle, setContainerStyle] = useState<CSSProperties>();
+	const dispatch = useAppDispatch();
+	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
 
 	useEffect(() => {
 		if (isLargeOrLarger) {
@@ -69,6 +79,31 @@ const SelectedRaceDisplay = ({
 			});
 		}
 	}, [isLargeOrLarger, setContainerStyle, summaryRef, iconRef]);
+
+	const handleAbilityScoreBonusApply = useCallback(
+		(bonuses: AbilityBonus[]) => {
+			dispatch(selectAbilityBonuses(bonuses));
+
+			for (const {
+				bonus,
+				ability_score: { index }
+			} of bonuses) {
+				dispatch(updateRaceBonus({ value: bonus, abilityIndex: index }));
+			}
+		},
+		[dispatch]
+	);
+
+	const handleAbilityScoreBonusReset = useCallback(
+		(bonuses: AbilityBonus[]) => {
+			dispatch(deselectAbilityBonuses());
+
+			for (const index of bonuses.map(bonus => bonus.ability_score.index)) {
+				dispatch(updateRaceBonus({ value: null, abilityIndex: index }));
+			}
+		},
+		[dispatch]
+	);
 
 	return (
 		<div className={classes.container} style={containerStyle}>
@@ -119,7 +154,14 @@ const SelectedRaceDisplay = ({
 			</div>
 			<div className={classes.select}>
 				{race.ability_bonus_options && (
-					<AbilityBonusChoiceSelector choice={race.ability_bonus_options} />
+					<AbilityBonusChoiceSelector
+						choice={race.ability_bonus_options}
+						onApply={handleAbilityScoreBonusApply}
+						initialValues={raceInfo.selectedAbilityScoreBonuses?.map(
+							bonus => bonus.ability_score.index
+						)}
+						onReset={handleAbilityScoreBonusReset}
+					/>
 				)}
 				{race.language_options && (
 					<SrdItemChoiceSelector
