@@ -28,7 +28,7 @@ import ConfirmationModal from '../../../components/ConfirmationModal/Confirmatio
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { updateRaceBonus } from '../../../redux/features/abilityScores';
 import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
-import { XIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/solid';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -283,9 +283,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 									alignItems: 'center'
 								}}
 							>
-								<div className={classes['deselect-icon-wrapper']}>
-									<XIcon className={classes['deselect-icon']} />
-								</div>
+								<XCircleIcon className={classes['deselect-icon']} />
 								Deselect Race
 							</Button>
 						</div>
