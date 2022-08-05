@@ -4,7 +4,6 @@ import {
 	SrdRace,
 	SrdSubrace,
 	ProficiencyType,
-	SrdTrait,
 	AbilityBonus
 } from '../../../../types/srd';
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
