@@ -19,6 +19,7 @@ import {
 	useState,
 	useEffect
 } from 'react';
+import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -108,6 +109,17 @@ const SelectedRaceDisplay = ({
 						<div className={classes['summary-item-header']}>Languages</div>
 						<div className={classes['summary-item-data']}>
 							{race.languages.map(language => language.name).join(', ')}
+						</div>
+					</div>
+					<div className={classes['summary-item']}>
+						<div className={classes['summary-item-header']}>
+							Ability Bonuses
+						</div>
+						<div className={classes['summary-item-data']}>
+							{getAbilityScoreDescription(
+								{ ability_bonuses: race.ability_bonuses },
+								subrace
+							)}
 						</div>
 					</div>
 				</div>
