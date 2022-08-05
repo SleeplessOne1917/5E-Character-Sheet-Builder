@@ -17,7 +17,7 @@ export default AbilitiesPage;
 export const getStaticProps = async (): Promise<
 	GetStaticPropsResult<AbilitiesPageProps>
 > => {
-	const abilities = await getAbilities();
+	const abilities = (await getAbilities()) as AbilityItem[];
 
 	return {
 		props: {
