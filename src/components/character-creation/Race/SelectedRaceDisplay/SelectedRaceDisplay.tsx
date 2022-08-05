@@ -10,6 +10,15 @@ import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSele
 import SrdItemChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/SrdItemChoiceSelector';
 
 import classes from './SelectedRaceDisplay.module.css';
+import Descriptor from '../../Descriptor/Descriptor';
+import useMediaQuery from '../../../../hooks/useMediaQuery';
+import {
+	CSSProperties,
+	MutableRefObject,
+	useRef,
+	useState,
+	useEffect
+} from 'react';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -59,9 +68,29 @@ const SelectedRaceDisplay = ({
 	race,
 	subrace
 }: SelectedRaceDisplayProps): JSX.Element => {
+	const traits = race.traits.concat(subrace ? subrace.racial_traits : []);
+	const isLargeOrLarger = useMediaQuery('(min-width: 1024px)');
+	const summaryRef = useRef<HTMLDivElement>();
+	const iconRef = useRef<HTMLDivElement>();
+	const [containerStyle, setContainerStyle] = useState<CSSProperties>();
+
+	useEffect(() => {
+		if (isLargeOrLarger) {
+			setContainerStyle({
+				gridTemplateRows: `${Math.max(
+					summaryRef.current?.offsetHeight as number,
+					iconRef.current?.offsetHeight as number
+				)}px auto`
+			});
+		}
+	}, [isLargeOrLarger, setContainerStyle, summaryRef, iconRef]);
+
 	return (
-		<div className={classes.container}>
-			<div className={classes.summary}>
+		<div className={classes.container} style={containerStyle}>
+			<div
+				className={classes.summary}
+				ref={summaryRef as MutableRefObject<HTMLDivElement>}
+			>
 				<div className={classes['summary-bar']}>
 					<div className={classes['summary-item']}>
 						<div className={classes['summary-item-header']}>Speed</div>
@@ -84,7 +113,10 @@ const SelectedRaceDisplay = ({
 				</div>
 				{subrace && <p>{subrace.desc}</p>}
 			</div>
-			<div className={classes['icon-container']}>
+			<div
+				className={classes['icon-container']}
+				ref={iconRef as MutableRefObject<HTMLDivElement>}
+			>
 				<svg className={classes.icon}>
 					<use xlinkHref={`/Icons.svg#${race.index}`} />
 				</svg>
@@ -102,12 +134,17 @@ const SelectedRaceDisplay = ({
 					/>
 				)}
 				{mapTraitsToProficiencySelectors(
-					race.traits.filter(trait => trait.proficiency_choices)
+					traits.filter(trait => trait.proficiency_choices)
 				)}
-				{subrace &&
-					mapTraitsToProficiencySelectors(
-						subrace.racial_traits.filter(trait => trait.proficiency_choices)
-					)}
+			</div>
+			<div className={classes.traits}>
+				{traits.map(trait => (
+					<Descriptor
+						key={trait.index}
+						title={trait.name}
+						description={trait.desc}
+					/>
+				))}
 			</div>
 		</div>
 	);

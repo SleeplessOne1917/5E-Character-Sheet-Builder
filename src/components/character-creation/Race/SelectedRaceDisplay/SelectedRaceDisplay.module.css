@@ -4,7 +4,7 @@
 						"select select"
 						"traits traits";
 	grid-template-columns: 2fr 1fr;
-	grid-template-rows: 1fr auto auto;
+	grid-template-rows: min-content auto auto;
 	row-gap: 2rem;
 	margin-top: 2rem;
 }
@@ -13,22 +13,22 @@
 	grid-area: select;
 	display: grid;
 	grid-template-columns: 100%;
-	grid-auto-rows: 8rem;
 	gap: 1rem;
 }
 
 .summary {
 	grid-area: summary;
 	text-align: center;
+	height: fit-content;
 }
 
 .icon-container {
 	grid-area: icon;
+	height: fit-content;
 }
 
 .icon {
 	width: 100%;
-	height: 100%;
 }
 
 .summary-bar {
@@ -51,4 +51,19 @@
 
 .summary-item-data {
 	font-size: 1.2rem;
+}
+
+.traits {
+	grid-area: traits;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+		grid-template-areas: "summary icon traits"
+							  "select select traits";
+		grid-template-columns: 2fr 1fr 2.5fr;
+	}
 }

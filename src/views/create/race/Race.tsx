@@ -76,35 +76,29 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 					description: getAbilityScoreDescription(
 						consideredRace,
 						consideredSubrace
-					),
-					isOpen: false
+					)
 				},
 				{
 					title: 'Age',
-					description: consideredRace.age,
-					isOpen: false
+					description: consideredRace.age
 				},
 				{
 					title: 'Language',
-					description: consideredRace.language_desc,
-					isOpen: false
+					description: consideredRace.language_desc
 				},
 				{
 					title: 'Size',
-					description: consideredRace.size_description,
-					isOpen: false
+					description: consideredRace.size_description
 				},
 				{
 					title: 'Alignment',
-					description: consideredRace.alignment,
-					isOpen: false
+					description: consideredRace.alignment
 				}
 			];
 			theDescriptors = theDescriptors.concat(
 				consideredRace.traits.map(trait => ({
 					title: trait.name,
-					description: trait.desc,
-					isOpen: false
+					description: trait.desc
 				}))
 			);
 
@@ -112,8 +106,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 				theDescriptors = theDescriptors.concat(
 					consideredSubrace.racial_traits.map(trait => ({
 						title: trait.name,
-						description: trait.desc,
-						isOpen: false
+						description: trait.desc
 					}))
 				);
 			}
@@ -216,28 +209,6 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 		setSelectedSubrace(undefined);
 	}, [setSelectedRace, setSelectedSubrace]);
 
-	const toggleDescriptor = useCallback(
-		(index: number) => {
-			if (descriptors) {
-				setDescriptors(prevState =>
-					prevState
-						? prevState.map((descriptor, i) => {
-								if (i === index) {
-									return {
-										...descriptor,
-										isOpen: !descriptor.isOpen
-									};
-								} else {
-									return descriptor;
-								}
-						  })
-						: undefined
-				);
-			}
-		},
-		[descriptors, setDescriptors]
-	);
-
 	const modalContent = (
 		<>
 			<h2 className={classes['modal-title']}>
@@ -255,13 +226,11 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 				<p className={classes['error-message']}>Could not load race details</p>
 			) : (
 				descriptors &&
-				descriptors.map((descriptor, index) => (
+				descriptors.map(descriptor => (
 					<DescriptorComponent
 						key={descriptor.title}
 						title={descriptor.title}
 						description={descriptor.description}
-						isOpen={descriptor.isOpen}
-						toggleOpen={() => toggleDescriptor(index)}
 					/>
 				))
 			)}

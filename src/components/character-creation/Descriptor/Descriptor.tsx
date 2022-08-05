@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
-import { KeyboardEventHandler, memo, useCallback } from 'react';
+import { KeyboardEventHandler, memo, useCallback, useState } from 'react';
 
 import classes from './Descriptor.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
@@ -7,16 +7,14 @@ import { handleKeyDownEvent } from '../../../services/handlerService';
 export type DescriptorProps = {
 	title: string;
 	description: string | string[];
-	isOpen: boolean;
-	toggleOpen: () => void;
 };
 
-const Descriptor = ({
-	title,
-	description,
-	isOpen,
-	toggleOpen
-}: DescriptorProps) => {
+const Descriptor = ({ title, description }: DescriptorProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const toggleOpen = useCallback(
+		() => setIsOpen(prevState => !prevState),
+		[setIsOpen]
+	);
 	const toggleOpenKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
 		event => {
 			handleKeyDownEvent<HTMLDivElement>(event, toggleOpen);
