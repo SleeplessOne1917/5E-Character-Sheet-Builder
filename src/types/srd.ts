@@ -49,6 +49,7 @@ export type SrdTrait = {
 	desc: string[];
 	proficiencies: SrdItem[];
 	proficiency_choices?: SrdItemChoice;
+	language_options?: SrdItemChoice;
 };
 
 export type AbilityBonus = {

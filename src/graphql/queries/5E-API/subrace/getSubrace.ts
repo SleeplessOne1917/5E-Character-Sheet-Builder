@@ -36,6 +36,17 @@ const GET_SUBRACE = gql`
 						}
 					}
 				}
+				language_options {
+					choose
+					from {
+						options {
+							item {
+								name
+								index
+							}
+						}
+					}
+				}
 			}
 		}
 	}

@@ -145,6 +145,17 @@ const SelectedRaceDisplay = ({
 						}`}
 					/>
 				)}
+				{traits
+					.filter(trait => trait.language_options)
+					.map(trait => (
+						<SrdItemChoiceSelector
+							key={trait.index}
+							choice={trait.language_options as SrdItemChoice}
+							label={`${trait.name}: select language${
+								(trait.language_options as SrdItemChoice)?.choose > 1 ? 's' : ''
+							}`}
+						/>
+					))}
 				{mapTraitsToProficiencySelectors(
 					traits.filter(trait => trait.proficiency_choices)
 				)}
