@@ -1,22 +1,27 @@
-import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
 import { ChangeEvent, useCallback, useState } from 'react';
+import {
+	SrdProficiencyItem,
+	SrdProficiencyItemChoice
+} from '../../../../../types/srd';
 
 import ChoiceSelector from '../ChoiceSelector';
 import classes from '../ChoiceSelector.module.css';
-import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
+import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
 type OptionSelectorProps = {
-	choice: AbilityBonusChoice;
-	onReset?: (items: AbilityBonus[]) => void;
-	onApply?: (items: AbilityBonus[]) => void;
+	choice: SrdProficiencyItemChoice;
+	onReset?: (items: SrdProficiencyItem[]) => void;
+	onApply?: (items: SrdProficiencyItem[]) => void;
 	initialValues?: string[];
+	label: string;
 };
 
-const AbilityBonusChoiceSelector = ({
+const ProficiencyChoiceSelector = ({
 	choice,
 	onReset = () => {},
 	onApply = () => {},
-	initialValues
+	initialValues,
+	label
 }: OptionSelectorProps): JSX.Element => {
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
@@ -27,10 +32,13 @@ const AbilityBonusChoiceSelector = ({
 
 		return returnValues;
 	}, [choice]);
-	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
 		initialValues ?? getInitialSelectValues()
+	);
+
+	const proficiencies = useAppSelector(
+		state => state.editingCharacter.proficiencies
 	);
 
 	const handleChangeSelect = useCallback(
@@ -44,9 +52,9 @@ const AbilityBonusChoiceSelector = ({
 	const handleApply = useCallback(
 		() =>
 			onApply(
-				choice.from.options.filter(option =>
-					selectValues.includes(option.ability_score.index)
-				)
+				choice.from.options
+					.filter(option => selectValues.includes(option.item.index))
+					.map(option => option.item)
 			),
 		[onApply, choice, selectValues]
 	);
@@ -54,9 +62,9 @@ const AbilityBonusChoiceSelector = ({
 	const handleReset = useCallback(() => {
 		setSelectValues(getInitialSelectValues());
 		onReset(
-			choice.from.options.filter(option =>
-				selectValues.includes(option.ability_score.index)
-			)
+			choice.from.options
+				.filter(option => selectValues.includes(option.item.index))
+				.map(option => option.item)
 		);
 	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
 
@@ -75,25 +83,21 @@ const AbilityBonusChoiceSelector = ({
 				{choice.from.options
 					.filter(
 						option =>
-							!selectValues.includes(option.ability_score.index) ||
-							option.ability_score.index === selectValues[i]
+							!(
+								selectValues.includes(option.item.index) ||
+								proficiencies
+									.map(proficiency => proficiency.index)
+									.includes(option.item.index)
+							) || option.item.index === selectValues[i]
 					)
 					.map(option => (
-						<option
-							value={option.ability_score.index}
-							key={option.ability_score.index}
-						>
-							{allSameBonus.isSame ? '' : `+${option.bonus} `}
-							{option.ability_score.full_name}
+						<option value={option.item.index} key={option.item.index}>
+							{option.item.name.replace(/Skill: /g, '')}
 						</option>
 					))}
 			</select>
 		);
 	}
-
-	const label = `Add${
-		allSameBonus.isSame ? ` +${allSameBonus.value}` : ''
-	} to ${choice.choose} ability score${choice.choose > 1 ? 's' : ''}`;
 
 	return (
 		<ChoiceSelector
@@ -107,4 +111,4 @@ const AbilityBonusChoiceSelector = ({
 	);
 };
 
-export default AbilityBonusChoiceSelector;
+export default ProficiencyChoiceSelector;

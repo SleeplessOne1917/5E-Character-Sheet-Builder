@@ -1,4 +1,4 @@
-import * as stories from './SrdItemChoiceSelector.stories';
+import * as stories from './LanguageChoiceSelector.stories';
 
 import { render, screen } from '@testing-library/react';
 

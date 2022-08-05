@@ -36,6 +36,11 @@ export type SrdItemChoice = {
 	from: { options: { item: SrdItem }[] };
 };
 
+export type SrdProficiencyItemChoice = {
+	choose: number;
+	from: { options: { item: SrdProficiencyItem }[] };
+};
+
 export type AbilityBonusChoice = {
 	choose: number;
 	from: {
@@ -47,8 +52,8 @@ export type SrdTrait = {
 	index: string;
 	name: string;
 	desc: string[];
-	proficiencies: SrdItem[];
-	proficiency_choices?: SrdItemChoice;
+	proficiencies: SrdProficiencyItem[];
+	proficiency_choices?: SrdProficiencyItemChoice;
 	language_options?: SrdItemChoice;
 };
 

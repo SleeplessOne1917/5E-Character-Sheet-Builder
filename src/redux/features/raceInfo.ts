@@ -1,5 +1,5 @@
-import { AbilityBonus, SrdItem } from './../../types/srd';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AbilityBonus, SrdItem, SrdProficiencyItem } from './../../types/srd';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdRace, SrdSubrace } from '../../types/srd';
 
 export type RaceInfoState = {
@@ -7,6 +7,7 @@ export type RaceInfoState = {
 	subrace?: SrdSubrace;
 	selectedAbilityScoreBonuses?: AbilityBonus[];
 	selectedLanguages?: SrdItem[];
+	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
 };
 
 type SelectPayload = {
@@ -14,10 +15,12 @@ type SelectPayload = {
 	subrace?: SrdSubrace;
 };
 
-export const initialState: RaceInfoState = {
-	race: undefined,
-	subrace: undefined
+type SelectTraitProficienciesPayload = {
+	index: string;
+	proficiencies: SrdProficiencyItem[];
 };
+
+export const initialState: RaceInfoState = { selectedTraitProficiencies: {} };
 
 const raceInfoSlice = createSlice({
 	name: 'raceInfo',
@@ -32,7 +35,7 @@ const raceInfoSlice = createSlice({
 			}
 		},
 		deselectRace: () => {
-			return {};
+			return initialState;
 		},
 		selectAbilityBonuses: (state, action: PayloadAction<AbilityBonus[]>) => {
 			state.selectedAbilityScoreBonuses = action.payload;
@@ -45,6 +48,24 @@ const raceInfoSlice = createSlice({
 		},
 		deselectLanguages: state => {
 			state.selectedLanguages = undefined;
+		},
+		selectTraitProficiencies: (
+			state,
+			action: PayloadAction<SelectTraitProficienciesPayload>
+		) => {
+			const { index, proficiencies } = action.payload;
+			(
+				state.selectedTraitProficiencies as Draft<{
+					[key: string]: SrdProficiencyItem[];
+				}>
+			)[index] = proficiencies;
+		},
+		deselectTraitProficiencies: (state, { payload }: PayloadAction<string>) => {
+			delete (
+				state.selectedTraitProficiencies as Draft<{
+					[key: string]: SrdProficiencyItem[];
+				}>
+			)[payload];
 		}
 	}
 });
@@ -55,6 +76,8 @@ export const {
 	selectAbilityBonuses,
 	deselectAbilityBonuses,
 	selectLanguages,
-	deselectLanguages
+	deselectLanguages,
+	selectTraitProficiencies,
+	deselectTraitProficiencies
 } = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;

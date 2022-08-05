@@ -1,6 +1,7 @@
 import {
 	AbilityItem,
 	SrdItem,
+	SrdProficiencyItem,
 	SrdRace,
 	SrdSubrace,
 	SrdSubraceItem
@@ -13,6 +14,10 @@ import {
 	useState
 } from 'react';
 import { addLanguage, removeLanguage } from '../../../redux/features/languages';
+import {
+	addProficiency,
+	removeProficiency
+} from '../../../redux/features/proficiencies';
 import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
 import { getRace, getSubrace } from '../../../services/raceService';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
@@ -205,9 +210,17 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				updateRaceBonus({ abilityIndex: ability_score.index, value: bonus })
 			);
 		}
+
 		for (const language of consideredRace?.languages ?? []) {
 			dispatch(addLanguage(language));
 		}
+
+		for (const proficiency of (consideredRace?.traits ?? []).flatMap(
+			trait => trait.proficiencies
+		)) {
+			dispatch(addProficiency(proficiency));
+		}
+
 		dispatch(
 			selectRace({
 				race: consideredRace as SrdRace,
@@ -230,8 +243,23 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		)) {
 			dispatch(removeLanguage(index));
 		}
+
+		for (const { index } of (raceInfo.race?.traits ?? [])
+			.flatMap(trait => trait.proficiencies)
+			.concat(
+				Object.keys(raceInfo.selectedTraitProficiencies).reduce<
+					SrdProficiencyItem[]
+				>(
+					(acc, cur) => acc.concat(raceInfo.selectedTraitProficiencies[cur]),
+					[]
+				)
+			)) {
+			dispatch(removeProficiency(index));
+		}
+
 		dispatch(deselectRace());
 		setShowDeselectModal(false);
+
 		for (const { index } of abilities) {
 			dispatch(updateRaceBonus({ abilityIndex: index, value: null }));
 		}

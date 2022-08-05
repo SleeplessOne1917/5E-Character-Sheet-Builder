@@ -1,8 +1,9 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { SrdItem, SrdItemChoice } from '../../../../../types/srd';
 
-import Button from '../../../../Button/Button';
+import ChoiceSelector from '../ChoiceSelector';
 import classes from '../ChoiceSelector.module.css';
+import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
 type OptionSelectorProps = {
 	choice: SrdItemChoice;
@@ -12,7 +13,7 @@ type OptionSelectorProps = {
 	initialValues?: string[];
 };
 
-const SrdItemChoiceSelector = ({
+const LanguageChoiceSelector = ({
 	choice,
 	onReset = () => {},
 	onApply = () => {},
@@ -32,6 +33,8 @@ const SrdItemChoiceSelector = ({
 	const [selectValues, setSelectValues] = useState<string[]>(
 		initialValues ?? getInitialSelectValues()
 	);
+
+	const languages = useAppSelector(state => state.editingCharacter.languages);
 
 	const handleChangeSelect = useCallback(
 		(index: number, event: ChangeEvent<HTMLSelectElement>) =>
@@ -75,12 +78,16 @@ const SrdItemChoiceSelector = ({
 				{choice.from.options
 					.filter(
 						option =>
-							!selectValues.includes(option.item.index) ||
-							option.item.index === selectValues[i]
+							!(
+								selectValues.includes(option.item.index) ||
+								languages
+									.map(language => language.index)
+									.includes(option.item.index)
+							) || option.item.index === selectValues[i]
 					)
 					.map(option => (
 						<option value={option.item.index} key={option.item.index}>
-							{option.item.name.replace(/Skill: /g, '')}
+							{option.item.name}
 						</option>
 					))}
 			</select>
@@ -88,34 +95,15 @@ const SrdItemChoiceSelector = ({
 	}
 
 	return (
-		<div
-			className={`${classes.selector}${
-				initialValues ? ` ${classes.selected}` : ''
-			}`}
-			data-testid="choice-selector"
-		>
-			<div className={classes.label}>{label}</div>
-			<div className={classes['select-div']}>{selects}</div>
-			<div className={classes['button-div']}>
-				<Button size="small" onClick={handleReset}>
-					Reset
-				</Button>
-				<Button
-					size="small"
-					positive
-					onClick={handleApply}
-					disabled={selectValues.includes('blank')}
-				>
-					Apply
-				</Button>
-			</div>
-			{initialValues && (
-				<svg className={classes['dice-icon']}>
-					<use xlinkHref="/Icons.svg#logo" />
-				</svg>
-			)}
-		</div>
+		<ChoiceSelector
+			label={label}
+			selectValues={selectValues}
+			selects={selects}
+			isSelected={!!initialValues}
+			onApply={handleApply}
+			onReset={handleReset}
+		/>
 	);
 };
 
-export default SrdItemChoiceSelector;
+export default LanguageChoiceSelector;

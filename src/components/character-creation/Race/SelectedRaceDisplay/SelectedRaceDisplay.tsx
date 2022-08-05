@@ -4,6 +4,7 @@ import {
 	SrdItem,
 	SrdItemChoice,
 	SrdProficiencyItem,
+	SrdProficiencyItemChoice,
 	SrdRace,
 	SrdSubrace
 } from '../../../../types/srd';
@@ -20,16 +21,23 @@ import {
 	removeLanguage
 } from '../../../../redux/features/languages';
 import {
+	addProficiency,
+	removeProficiency
+} from '../../../../redux/features/proficiencies';
+import {
 	deselectAbilityBonuses,
 	deselectLanguages,
+	deselectTraitProficiencies,
 	selectAbilityBonuses,
-	selectLanguages
+	selectLanguages,
+	selectTraitProficiencies
 } from '../../../../redux/features/raceInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
 import Descriptor from '../../Descriptor/Descriptor';
-import SrdItemChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/SrdItemChoiceSelector';
+import LanguageChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/LanguageChoiceSelector';
+import ProficiencyChoiceSelector from '../ChoiceSelector/ProficiencyChoiceSelector.tsx/ProficiencyChoiceSelector';
 import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
@@ -131,6 +139,32 @@ const SelectedRaceDisplay = ({
 		[dispatch]
 	);
 
+	const handleTraitProficienciesApply = useCallback(
+		(index: string) => {
+			return (proficiencies: SrdProficiencyItem[]) => {
+				dispatch(selectTraitProficiencies({ index, proficiencies }));
+
+				for (const proficiency of proficiencies) {
+					dispatch(addProficiency(proficiency));
+				}
+			};
+		},
+		[dispatch]
+	);
+
+	const handleTraitProficienciesReset = useCallback(
+		(index: string) => {
+			return (proficiencies: SrdProficiencyItem[]) => {
+				dispatch(deselectTraitProficiencies(index));
+
+				for (const { index } of proficiencies) {
+					dispatch(removeProficiency(index));
+				}
+			};
+		},
+		[dispatch]
+	);
+
 	return (
 		<div className={classes.container} style={containerStyle}>
 			<div
@@ -190,7 +224,7 @@ const SelectedRaceDisplay = ({
 					/>
 				)}
 				{race.language_options && (
-					<SrdItemChoiceSelector
+					<LanguageChoiceSelector
 						choice={race.language_options}
 						label={`Select ${race.language_options.choose} language${
 							race.language_options.choose > 1 ? 's' : ''
@@ -205,7 +239,7 @@ const SelectedRaceDisplay = ({
 				{traits
 					.filter(trait => trait.language_options)
 					.map(trait => (
-						<SrdItemChoiceSelector
+						<LanguageChoiceSelector
 							key={trait.index}
 							choice={trait.language_options as SrdItemChoice}
 							label={`${trait.name}: select ${
@@ -218,19 +252,25 @@ const SelectedRaceDisplay = ({
 				{traits
 					.filter(trait => trait.proficiency_choices)
 					.map(trait => (
-						<SrdItemChoiceSelector
+						<ProficiencyChoiceSelector
 							key={trait.index}
-							choice={trait.proficiency_choices as SrdItemChoice}
+							choice={trait.proficiency_choices as SrdProficiencyItemChoice}
 							label={`${trait.name}: select ${
 								trait.proficiency_choices?.choose
 							} ${getLabelFromProficiencyType(
-								(
-									trait.proficiency_choices?.from.options[0]
-										.item as SrdProficiencyItem
-								).type
+								(trait.proficiency_choices?.from.options ?? [])[0].item.type
 							)} proficienc${
 								(trait.proficiency_choices?.choose ?? 1) > 1 ? 'ies' : 'y'
 							}`}
+							onApply={handleTraitProficienciesApply(trait.index)}
+							onReset={handleTraitProficienciesReset(trait.index)}
+							initialValues={
+								raceInfo.selectedTraitProficiencies[trait.index]
+									? raceInfo.selectedTraitProficiencies[trait.index].map(
+											({ index }) => index
+									  )
+									: undefined
+							}
 						/>
 					))}
 			</div>
