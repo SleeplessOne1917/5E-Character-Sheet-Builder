@@ -24,11 +24,11 @@ import RaceOption from '../../../components/character-creation/Race/RaceOption/R
 import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
-import useMediaQuery from '../../../hooks/useMediaQuery';
 import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { updateRaceBonus } from '../../../redux/features/abilityScores';
 import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
+import { XIcon } from '@heroicons/react/solid';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -70,7 +70,6 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
 		useState<string>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
-	const isSmallOrLarger = useMediaQuery('(min-width: 640px)');
 	const mainRef = useRef<HTMLDivElement>();
 	const dispatch = useAppDispatch();
 	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
@@ -278,9 +277,15 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 								{raceInfo.subrace ? raceInfo.subrace.name : raceInfo.race.name}
 							</h1>
 							<Button
-								size={isSmallOrLarger ? 'medium' : 'small'}
 								onClick={tryDeselectRace}
+								style={{
+									display: 'flex',
+									alignItems: 'center'
+								}}
 							>
+								<div className={classes['deselect-icon-wrapper']}>
+									<XIcon className={classes['deselect-icon']} />
+								</div>
 								Deselect Race
 							</Button>
 						</div>

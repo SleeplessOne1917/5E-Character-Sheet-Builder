@@ -33,6 +33,17 @@ describe('getIsAllBonusesSame', () => {
 });
 
 describe('getAbilityScoreDescription', () => {
+	it('returns expected output when there is one ability bonus', () => {
+		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
+			ability_bonuses: [
+				{ bonus: 2, ability_score: { index: 'dex', full_name: 'Dexterity' } }
+			]
+		};
+
+		const result = getAbilityScoreDescription(mockRace);
+
+		expect(result).toBe('+2 to Dexterity.');
+	});
 	it('returns expected output with just race ability bonuses', () => {
 		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
 			ability_bonuses: [
