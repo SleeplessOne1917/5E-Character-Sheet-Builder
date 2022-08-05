@@ -1,16 +1,22 @@
-import { ReactNode, memo } from 'react';
+import { forwardRef, PropsWithChildren } from 'react';
 
 import classes from './MainContent.module.css';
 
 type MainContentProps = {
-	children: ReactNode;
 	testId?: string;
 };
 
-const MainContent = ({ children, testId }: MainContentProps) => (
+const MainContent = forwardRef<
+	HTMLDivElement,
+	PropsWithChildren<MainContentProps>
+>(({ children, testId }, ref) => (
 	<main className={classes.main} data-testid={testId}>
-		<div className={classes.content}>{children}</div>
+		<div className={classes.content} ref={ref}>
+			{children}
+		</div>
 	</main>
-);
+));
 
-export default memo(MainContent);
+MainContent.displayName = 'MainContent';
+
+export default MainContent;

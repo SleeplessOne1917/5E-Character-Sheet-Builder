@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="selector"
+  data-testid="choice-selector"
+>
+  <div
+    class="label"
+  >
+    Add to 2 ability scores
+  </div>
+  <div
+    class="select-div"
+  >
+    <select
+      aria-label="Select choice"
+      class="select"
+    >
+      <option
+        value="blank"
+      >
+        —
+      </option>
+      <option
+        value="dex"
+      >
+        +1 
+        Dexterity
+      </option>
+      <option
+        value="str"
+      >
+        +2 
+        Strength
+      </option>
+      <option
+        value="wis"
+      >
+        +1 
+        Wisdom
+      </option>
+      <option
+        value="int"
+      >
+        +2 
+        Intelligence
+      </option>
+    </select>
+    <select
+      aria-label="Select choice"
+      class="select"
+    >
+      <option
+        value="blank"
+      >
+        —
+      </option>
+      <option
+        value="dex"
+      >
+        +1 
+        Dexterity
+      </option>
+      <option
+        value="str"
+      >
+        +2 
+        Strength
+      </option>
+      <option
+        value="wis"
+      >
+        +1 
+        Wisdom
+      </option>
+      <option
+        value="int"
+      >
+        +2 
+        Intelligence
+      </option>
+    </select>
+  </div>
+  <div
+    class="button-div"
+  >
+    <button
+      class="button negative"
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Reset
+    </button>
+    <button
+      class="button positive"
+      disabled=""
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Apply
+    </button>
+  </div>
+</div>
+`;
+
+exports[`renders correctly 2`] = `
+<div
+  class="selector"
+  data-testid="choice-selector"
+>
+  <div
+    class="label"
+  >
+    Add +1 to 2 ability scores
+  </div>
+  <div
+    class="select-div"
+  >
+    <select
+      aria-label="Select choice"
+      class="select"
+    >
+      <option
+        value="blank"
+      >
+        —
+      </option>
+      <option
+        value="dex"
+      >
+        Dexterity
+      </option>
+      <option
+        value="str"
+      >
+        Strength
+      </option>
+      <option
+        value="wis"
+      >
+        Wisdom
+      </option>
+      <option
+        value="int"
+      >
+        Intelligence
+      </option>
+    </select>
+    <select
+      aria-label="Select choice"
+      class="select"
+    >
+      <option
+        value="blank"
+      >
+        —
+      </option>
+      <option
+        value="dex"
+      >
+        Dexterity
+      </option>
+      <option
+        value="str"
+      >
+        Strength
+      </option>
+      <option
+        value="wis"
+      >
+        Wisdom
+      </option>
+      <option
+        value="int"
+      >
+        Intelligence
+      </option>
+    </select>
+  </div>
+  <div
+    class="button-div"
+  >
+    <button
+      class="button negative"
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Reset
+    </button>
+    <button
+      class="button positive"
+      disabled=""
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Apply
+    </button>
+  </div>
+</div>
+`;

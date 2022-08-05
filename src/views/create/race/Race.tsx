@@ -5,7 +5,13 @@ import {
 	SrdSubraceItem
 } from '../../../types/srd';
 import { getRace, getSubrace } from '../../../services/raceService';
-import { useCallback, useEffect, useState } from 'react';
+import {
+	MutableRefObject,
+	useCallback,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
 
 import Button from '../../../components/Button/Button';
 import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
@@ -16,7 +22,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import RaceOption from '../../../components/character-creation/Race/RaceOption/RaceOption';
 import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import classes from './Race.module.css';
-import { getAbilityScoreDescription } from '../../../services/abilityScoreDescriptionService';
+import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
 import useMediaQuery from '../../../hooks/useMediaQuery';
 
 type RaceProps = {
@@ -60,6 +66,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 		useState<string>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
 	const isSmallOrLarger = useMediaQuery('(min-width: 640px)');
+	const mainRef = useRef<HTMLDivElement>();
 
 	useEffect(() => {
 		if (consideredRace) {
@@ -151,6 +158,12 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 		setLoading,
 		setError
 	]);
+
+	useEffect(() => {
+		if (selectedRace) {
+			mainRef.current?.scrollTo(0, 0);
+		}
+	}, [selectedRace, mainRef]);
 
 	const getConsiderRaceHandler = useCallback(
 		(raceIndex: string) => {
@@ -257,7 +270,10 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 
 	return (
 		<>
-			<MainContent testId="race">
+			<MainContent
+				testId="race"
+				ref={mainRef as MutableRefObject<HTMLDivElement>}
+			>
 				{selectedRace && (
 					<>
 						<div className={classes['deselect-button-div']}>

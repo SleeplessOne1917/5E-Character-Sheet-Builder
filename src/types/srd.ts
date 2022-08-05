@@ -1,18 +1,43 @@
-export type SrdItem = {
+export interface SrdItem {
 	index: string;
 	name: string;
-};
+}
+
+export type ProficiencyType =
+	| 'WEAPONS'
+	| 'ARTISANS_TOOLS'
+	| 'SKILLS'
+	| 'ARMOR'
+	| 'MUSICAL_INSTRUMENTS'
+	| 'SAVING_THROWS'
+	| 'OTHER'
+	| 'GAMING_SETS'
+	| 'VEHICLES';
+
+export interface SrdProficiencyItem extends SrdItem {
+	type: ProficiencyType;
+}
 
 export type AbilityItem = {
 	index: string;
 	full_name: string;
 };
 
-export type SrdSubraceItem = {
-	index: string;
-	name: string;
+export interface SrdSubraceItem extends SrdItem {
 	race: {
 		index: string;
+	};
+}
+
+export type SrdItemChoice = {
+	choose: number;
+	from: { options: { item: SrdItem }[] };
+};
+
+export type AbilityBonusChoice = {
+	choose: number;
+	from: {
+		options: AbilityBonus[];
 	};
 };
 
@@ -21,10 +46,7 @@ export type SrdTrait = {
 	name: string;
 	desc: string[];
 	proficiencies: SrdItem[];
-	proficiency_choices?: {
-		choose: number;
-		from: { options: { item: SrdItem }[] };
-	};
+	proficiency_choices?: SrdItemChoice;
 };
 
 export type AbilityBonus = {
@@ -42,17 +64,9 @@ export type SrdRace = {
 	language_desc: string;
 	speed: number;
 	languages: SrdItem[];
-	language_options?: {
-		choose: number;
-		from: { options: { item: SrdItem }[] };
-	};
+	language_options?: SrdItemChoice;
 	ability_bonuses: AbilityBonus[];
-	ability_bonus_options?: {
-		choose: number;
-		from: {
-			options: AbilityBonus[];
-		};
-	};
+	ability_bonus_options?: AbilityBonusChoice;
 	traits: SrdTrait[];
 };
 

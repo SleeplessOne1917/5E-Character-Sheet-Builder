@@ -52,6 +52,7 @@ const GET_RACE = gql`
 				proficiencies {
 					index
 					name
+					type
 				}
 				proficiency_choices {
 					choose
@@ -61,6 +62,7 @@ const GET_RACE = gql`
 								item {
 									name
 									index
+									type
 								}
 							}
 						}

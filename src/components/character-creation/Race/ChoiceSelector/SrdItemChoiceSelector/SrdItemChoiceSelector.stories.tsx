@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import ChoiceSelector from './ChoiceSelector';
+import SrdItemChoiceSelector from './SrdItemChoiceSelector';
 
 export default {
-	title: 'Components/ChoiceSelector',
-	component: ChoiceSelector,
+	title: 'Components/ChoiceSelector/SrdItemChoiceSelector',
+	component: SrdItemChoiceSelector,
 	args: {
 		choice: {
 			choose: 2,
@@ -18,10 +18,10 @@ export default {
 		},
 		label: 'Choose stuff'
 	}
-} as ComponentMeta<typeof ChoiceSelector>;
+} as ComponentMeta<typeof SrdItemChoiceSelector>;
 
-const Template: ComponentStory<typeof ChoiceSelector> = args => (
-	<ChoiceSelector {...args} />
+const Template: ComponentStory<typeof SrdItemChoiceSelector> = args => (
+	<SrdItemChoiceSelector {...args} />
 );
 
 export const Default = Template.bind({});

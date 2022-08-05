@@ -72,13 +72,6 @@ exports[`renders correctly 1`] = `
       style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
       type="button"
     >
-      Clear
-    </button>
-    <button
-      class="button negative"
-      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
-      type="button"
-    >
       Reset
     </button>
     <button

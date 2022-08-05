@@ -20,6 +20,7 @@ const GET_SUBRACE = gql`
 				proficiencies {
 					name
 					index
+					type
 				}
 				proficiency_choices {
 					choose
@@ -29,6 +30,7 @@ const GET_SUBRACE = gql`
 								item {
 									index
 									name
+									type
 								}
 							}
 						}

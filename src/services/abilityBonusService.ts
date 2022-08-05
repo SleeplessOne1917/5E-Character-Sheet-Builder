@@ -1,4 +1,23 @@
+import { AbilityBonus } from './../types/srd';
 import { SrdRace, SrdSubrace } from '../types/srd';
+
+export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
+	abilityBonuses.reduce(
+		(acc: { isSame: boolean; value?: number }, cur) => {
+			if (!acc.value) {
+				return {
+					...acc,
+					value: cur.bonus
+				};
+			} else {
+				return {
+					...acc,
+					isSame: acc.value === cur.bonus
+				};
+			}
+		},
+		{ isSame: true, value: undefined }
+	);
 
 export const getAbilityScoreDescription = (
 	race: Partial<SrdRace> & Pick<SrdRace, 'ability_bonuses'>,
@@ -24,22 +43,7 @@ export const getAbilityScoreDescription = (
 		);
 	}
 
-	const allSameBonuses = abilityBonuses.reduce(
-		(acc: { isSame: boolean; value?: number }, cur) => {
-			if (!acc.value) {
-				return {
-					...acc,
-					value: cur.bonus
-				};
-			} else {
-				return {
-					...acc,
-					isSame: acc.value === cur.bonus
-				};
-			}
-		},
-		{ isSame: true, value: undefined }
-	);
+	const allSameBonuses = getIsAllBonusesSame(abilityBonuses);
 
 	if (allSameBonuses.isSame && abilityBonuses.length > 1) {
 		description = `+${allSameBonuses.value} to ${abilityBonuses.reduce(
@@ -76,21 +80,8 @@ export const getAbilityScoreDescription = (
 	}
 
 	if (race.ability_bonus_options) {
-		const allSameBonusChoices = race.ability_bonus_options.from.options.reduce(
-			(acc: { isSame: boolean; value?: number }, cur) => {
-				if (!acc.value) {
-					return {
-						...acc,
-						value: cur.bonus
-					};
-				} else {
-					return {
-						...acc,
-						isSame: acc.value === cur.bonus
-					};
-				}
-			},
-			{ isSame: true, value: undefined }
+		const allSameBonusChoices = getIsAllBonusesSame(
+			race.ability_bonus_options.from.options
 		);
 
 		if (allSameBonusChoices.isSame) {

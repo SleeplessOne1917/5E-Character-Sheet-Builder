@@ -1,27 +1,21 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 
-import Button from '../../../Button/Button';
-import { SrdItem } from '../../../../types/srd';
-import classes from './ChoiceSelector.module.css';
+import Button from '../../../../Button/Button';
+import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
+import classes from '../ChoiceSelector.module.css';
+import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
 
 type OptionSelectorProps = {
-	choice: {
-		choose: number;
-		from: {
-			options: { item: SrdItem }[];
-		};
-	};
-	onClear: () => void;
-	onApply: (items: SrdItem[]) => void;
-	label: string;
+	choice: AbilityBonusChoice;
+	onReset?: () => void;
+	onApply?: (items: AbilityBonus[]) => void;
 	initialValues?: string[];
 };
 
-const ChoiceSelector = ({
+const AbilityBonusChoiceSelector = ({
 	choice,
-	onClear,
-	onApply,
-	label,
+	onReset = () => {},
+	onApply = () => {},
 	initialValues
 }: OptionSelectorProps): JSX.Element => {
 	const getInitialSelectValues = useCallback(() => {
@@ -33,6 +27,7 @@ const ChoiceSelector = ({
 
 		return returnValues;
 	}, [choice]);
+	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
 		initialValues ?? getInitialSelectValues()
@@ -49,21 +44,17 @@ const ChoiceSelector = ({
 	const handleApply = useCallback(
 		() =>
 			onApply(
-				choice.from.options
-					.filter(option => selectValues.includes(option.item.index))
-					.map(option => option.item)
+				choice.from.options.filter(option =>
+					selectValues.includes(option.ability_score.index)
+				)
 			),
 		[onApply, choice, selectValues]
 	);
 
 	const handleReset = useCallback(() => {
-		setSelectValues(initialValues ?? getInitialSelectValues());
-	}, [setSelectValues, getInitialSelectValues, initialValues]);
-
-	const handleClear = useCallback(() => {
 		setSelectValues(getInitialSelectValues());
-		onClear();
-	}, [setSelectValues, getInitialSelectValues, onClear]);
+		onReset();
+	}, [setSelectValues, getInitialSelectValues, onReset]);
 
 	const selects: JSX.Element[] = [];
 
@@ -80,26 +71,31 @@ const ChoiceSelector = ({
 				{choice.from.options
 					.filter(
 						option =>
-							!selectValues.includes(option.item.index) ||
-							option.item.index === selectValues[i]
+							!selectValues.includes(option.ability_score.index) ||
+							option.ability_score.index === selectValues[i]
 					)
 					.map(option => (
-						<option value={option.item.index} key={option.item.index}>
-							{option.item.name}
+						<option
+							value={option.ability_score.index}
+							key={option.ability_score.index}
+						>
+							{allSameBonus.isSame ? '' : `+${option.bonus} `}
+							{option.ability_score.full_name}
 						</option>
 					))}
 			</select>
 		);
 	}
 
+	const label = `Add${
+		allSameBonus.isSame ? ` +${allSameBonus.value}` : ''
+	} to ${choice.choose} ability score${choice.choose > 1 ? 's' : ''}`;
+
 	return (
 		<div className={classes.selector} data-testid="choice-selector">
 			<div className={classes.label}>{label}</div>
 			<div className={classes['select-div']}>{selects}</div>
 			<div className={classes['button-div']}>
-				<Button size="small" onClick={handleClear}>
-					Clear
-				</Button>
 				<Button size="small" onClick={handleReset}>
 					Reset
 				</Button>
@@ -116,4 +112,4 @@ const ChoiceSelector = ({
 	);
 };
 
-export default ChoiceSelector;
+export default AbilityBonusChoiceSelector;
