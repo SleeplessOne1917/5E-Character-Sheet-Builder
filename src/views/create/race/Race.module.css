@@ -26,6 +26,23 @@
     justify-content: space-between;
 }
 
+.deselect-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    fill: var(--wine-red);
+}
+
+.deselect-icon-wrapper {
+    border-radius: 50%;
+    background-color: var(--heaven-light);
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
 @media screen and (min-width: 768px) {
     .title {
         align-self: flex-start;
