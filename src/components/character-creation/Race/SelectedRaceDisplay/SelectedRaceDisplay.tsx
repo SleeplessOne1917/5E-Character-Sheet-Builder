@@ -49,22 +49,6 @@ const getLabelFromProficiencyType = (type: ProficiencyType) => {
 	}
 };
 
-const mapTraitsToProficiencySelectors = (traits: SrdTrait[]) =>
-	traits.map(trait => (
-		<SrdItemChoiceSelector
-			key={trait.index}
-			choice={trait.proficiency_choices as SrdItemChoice}
-			label={`${trait.name}: select ${
-				trait.proficiency_choices?.choose
-			} ${getLabelFromProficiencyType(
-				(trait.proficiency_choices?.from.options[0].item as SrdProficiencyItem)
-					.type
-			)} proficienc${
-				(trait.proficiency_choices?.choose ?? 1) > 1 ? 'ies' : 'y'
-			}`}
-		/>
-	));
-
 const SelectedRaceDisplay = ({
 	race,
 	subrace
@@ -140,7 +124,7 @@ const SelectedRaceDisplay = ({
 				{race.language_options && (
 					<SrdItemChoiceSelector
 						choice={race.language_options}
-						label={`Select language${
+						label={`Select ${race.language_options.choose} language${
 							race.language_options.choose > 1 ? 's' : ''
 						}`}
 					/>
@@ -151,14 +135,31 @@ const SelectedRaceDisplay = ({
 						<SrdItemChoiceSelector
 							key={trait.index}
 							choice={trait.language_options as SrdItemChoice}
-							label={`${trait.name}: select language${
+							label={`${trait.name}: select ${
+								(trait.language_options as SrdItemChoice).choose
+							} language${
 								(trait.language_options as SrdItemChoice)?.choose > 1 ? 's' : ''
 							}`}
 						/>
 					))}
-				{mapTraitsToProficiencySelectors(
-					traits.filter(trait => trait.proficiency_choices)
-				)}
+				{traits
+					.filter(trait => trait.proficiency_choices)
+					.map(trait => (
+						<SrdItemChoiceSelector
+							key={trait.index}
+							choice={trait.proficiency_choices as SrdItemChoice}
+							label={`${trait.name}: select ${
+								trait.proficiency_choices?.choose
+							} ${getLabelFromProficiencyType(
+								(
+									trait.proficiency_choices?.from.options[0]
+										.item as SrdProficiencyItem
+								).type
+							)} proficienc${
+								(trait.proficiency_choices?.choose ?? 1) > 1 ? 'ies' : 'y'
+							}`}
+						/>
+					))}
 			</div>
 			<div className={classes.traits}>
 				{traits.map(trait => (
