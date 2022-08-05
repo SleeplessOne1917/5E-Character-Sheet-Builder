@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { CSSProperties, MouseEventHandler, ReactNode } from 'react';
 
 import classes from './Button.module.css';
 
@@ -17,6 +17,7 @@ export type ButtonProps = {
 	type?: ButtonType;
 	size?: ButtonSize;
 	spacing?: number;
+	style?: CSSProperties;
 };
 
 const getFontSize = (size: ButtonSize) => {
@@ -47,7 +48,8 @@ const Button = ({
 	positive,
 	type = ButtonType.button,
 	size = 'medium',
-	spacing
+	spacing,
+	style = {}
 }: ButtonProps): JSX.Element => (
 	<button
 		disabled={disabled}
@@ -58,7 +60,8 @@ const Button = ({
 		style={{
 			fontSize: `${getFontSize(size)}rem`,
 			padding: `${getPadding(size)}rem`,
-			margin: `${0.25 * (spacing || 1)}rem`
+			margin: `${0.25 * (spacing || 1)}rem`,
+			...style
 		}}
 		type={type}
 	>

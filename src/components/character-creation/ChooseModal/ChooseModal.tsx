@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
+import Button from '../../Button/Button';
 
 import classes from './ChooseModal.module.css';
 
@@ -19,6 +20,17 @@ const ChooseModal = ({
 	onChoose,
 	iconId
 }: ChooseModalProps): JSX.Element => {
+	const buttonStyle: CSSProperties = {
+		flexGrow: 1,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontSize: '2rem',
+		border: 0,
+		margin: 0,
+		borderRadius: 0
+	};
+
 	return (
 		<div
 			style={{ display: show ? 'flex' : 'none' }}
@@ -33,18 +45,12 @@ const ChooseModal = ({
 				</div>
 				<div className={classes['content-container']}>{mainContent}</div>
 				<div className={classes['buttons-container']}>
-					<button
-						className={`${classes.button} ${classes.choose}`}
-						onClick={onChoose}
-					>
+					<Button onClick={onChoose} positive style={buttonStyle}>
 						Choose
-					</button>
-					<button
-						className={`${classes.button} ${classes.cancel}`}
-						onClick={onClose}
-					>
+					</Button>
+					<Button onClick={onClose} style={buttonStyle}>
 						Cancel
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

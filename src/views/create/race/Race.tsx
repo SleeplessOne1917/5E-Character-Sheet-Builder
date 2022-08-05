@@ -24,6 +24,7 @@ import SelectedRaceDisplay from '../../../components/character-creation/Race/Sel
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
 import useMediaQuery from '../../../hooks/useMediaQuery';
+import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -56,7 +57,8 @@ export const mockSubraces = [
 const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [showModal, setShowModal] = useState(false);
+	const [showSelectModal, setShowSelectModal] = useState(false);
+	const [showDeselectModal, setShowDeselectModal] = useState(false);
 	const [selectedRace, setSelectedRace] = useState<SrdRace>();
 	const [selectedSubrace, setSelectedSubrace] = useState<SrdSubrace>();
 	const [consideredRace, setConsideredRace] = useState<SrdRace>();
@@ -167,10 +169,10 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 					setConsideredSubraceIndex(subraceIndex);
 				}
 
-				setShowModal(true);
+				setShowSelectModal(true);
 			};
 		},
-		[setConsideredRaceIndex, setConsideredSubraceIndex, setShowModal]
+		[setConsideredRaceIndex, setConsideredSubraceIndex, setShowSelectModal]
 	);
 
 	const deselectConsideredRace = useCallback(() => {
@@ -185,29 +187,38 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 		setConsideredSubraceIndex
 	]);
 
-	const closeModal = useCallback(() => {
-		setShowModal(false);
+	const closeSelectModal = useCallback(() => {
+		setShowSelectModal(false);
 		deselectConsideredRace();
-	}, [setShowModal, deselectConsideredRace]);
+	}, [setShowSelectModal, deselectConsideredRace]);
 
 	const chooseRace = useCallback(() => {
 		setSelectedRace(consideredRace);
 		setSelectedSubrace(consideredSubrace);
-		setShowModal(false);
+		setShowSelectModal(false);
 		deselectConsideredRace();
 	}, [
 		setSelectedRace,
 		consideredRace,
 		setSelectedSubrace,
 		consideredSubrace,
-		setShowModal,
+		setShowSelectModal,
 		deselectConsideredRace
 	]);
 
-	const deselectRace = useCallback(() => {
+	const deselectSelectedRace = useCallback(() => {
 		setSelectedRace(undefined);
 		setSelectedSubrace(undefined);
-	}, [setSelectedRace, setSelectedSubrace]);
+		setShowDeselectModal(false);
+	}, [setSelectedRace, setSelectedSubrace, setShowDeselectModal]);
+
+	const tryDeselectRace = useCallback(() => {
+		setShowDeselectModal(true);
+	}, [setShowDeselectModal]);
+
+	const cancelDeselectRace = useCallback(() => {
+		setShowDeselectModal(false);
+	}, [setShowDeselectModal]);
 
 	const modalContent = (
 		<>
@@ -251,7 +262,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 							</h1>
 							<Button
 								size={isSmallOrLarger ? 'medium' : 'small'}
-								onClick={deselectRace}
+								onClick={tryDeselectRace}
 							>
 								Deselect Race
 							</Button>
@@ -275,7 +286,7 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 									key={race.index}
 									onChoose={getConsiderRaceHandler(race.index)}
 									iconId={race.index}
-									selectable={!showModal}
+									selectable={!showSelectModal}
 								/>
 							))}
 						</ul>
@@ -283,11 +294,17 @@ const Race = ({ races, subraces }: RaceProps): JSX.Element => {
 				)}
 			</MainContent>
 			<ChooseModal
-				show={showModal}
+				show={showSelectModal}
 				mainContent={modalContent}
 				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
 				onChoose={chooseRace}
-				onClose={closeModal}
+				onClose={closeSelectModal}
+			/>
+			<ConfirmationModal
+				message="Are you sure you want to deselect your race?"
+				show={showDeselectModal}
+				onNo={cancelDeselectRace}
+				onYes={deselectSelectedRace}
 			/>
 		</>
 	);

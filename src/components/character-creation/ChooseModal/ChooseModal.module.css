@@ -49,47 +49,6 @@
 .buttons-container {
     grid-area: buttons;
     display: flex;
-    color: var(--heaven-light);
-}
-
-.button {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 2rem;
-    border: 0;
-    color: inherit;
-    font-family: inherit;
-}
-
-.button:focus-visible {
-    outline: var(--focus-outline);
-}
-
-.choose {
-    background-color: var(--positive-green);
-}
-
-.choose:hover {
-    background-color: var(--positive-green-hover);
-}
-
-.choose:active {
-    background-color: var(--positive-green-active);
-}
-
-.cancel {
-    background-color: var(--wine-red);
-}
-
-.cancel:hover {
-    background-color: var(--wine-red-hover);
-}
-
-.cancel:active {
-    background-color: var(--wine-red-active);
 }
 
 @media screen and (min-width: 768px) {
