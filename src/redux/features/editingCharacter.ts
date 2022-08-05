@@ -2,16 +2,22 @@ import abilityScores, {
 	AbilityScoresState,
 	initialState as abilityScoresInitialState
 } from './abilityScores';
+import raceInfo, {
+	RaceInfoState,
+	initialState as raceInitialState
+} from './raceInfo';
 import { combineReducers, createSlice } from '@reduxjs/toolkit';
 
 import reduceReducers from 'reduce-reducers';
 
 export type EditingCharacterState = {
 	abilityScores: AbilityScoresState;
+	raceInfo: RaceInfoState;
 };
 
 const initialState: EditingCharacterState = {
-	abilityScores: abilityScoresInitialState
+	abilityScores: abilityScoresInitialState,
+	raceInfo: raceInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -21,7 +27,8 @@ const editingCharacterSlice = createSlice({
 });
 
 const wholeReducer = combineReducers({
-	abilityScores
+	abilityScores,
+	raceInfo
 });
 
 export default reduceReducers<EditingCharacterState>(

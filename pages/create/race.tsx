@@ -1,18 +1,26 @@
 import { GetStaticPropsResult, NextPage } from 'next';
-import { SrdItem, SrdSubraceItem } from '../../src/types/srd';
-import { getRaces, getSubraces } from '../../src/graphql/srdClientService';
+import { AbilityItem, SrdItem, SrdSubraceItem } from '../../src/types/srd';
+import {
+	getAbilities,
+	getRaces,
+	getSubraces
+} from '../../src/graphql/srdClientService';
 
 import RaceView from '../../src/views/create/race/Race';
 
 type RacePageProps = {
 	races: SrdItem[];
 	subraces: SrdSubraceItem[];
+	abilities: AbilityItem[];
 };
 
 const RacePage: NextPage<RacePageProps> = ({
 	races,
-	subraces
-}: RacePageProps) => <RaceView races={races} subraces={subraces} />;
+	subraces,
+	abilities
+}: RacePageProps) => (
+	<RaceView races={races} subraces={subraces} abilities={abilities} />
+);
 
 export default RacePage;
 
@@ -21,11 +29,13 @@ export const getStaticProps = async (): Promise<
 > => {
 	const racesResult = await getRaces();
 	const subracesResult = await getSubraces();
+	const abilities = (await getAbilities()) as AbilityItem[];
 
 	return {
 		props: {
 			races: racesResult?.data?.races ?? [],
-			subraces: subracesResult?.data?.subraces ?? []
+			subraces: subracesResult?.data?.subraces ?? [],
+			abilities
 		}
 	};
 };
