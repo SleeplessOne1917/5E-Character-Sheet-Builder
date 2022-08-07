@@ -78,8 +78,6 @@ const GET_RACE = gql`
 									name
 									trait_specific {
 										breath_weapon {
-											name
-											desc
 											damage {
 												damage_type {
 													name

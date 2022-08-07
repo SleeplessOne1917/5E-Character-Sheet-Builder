@@ -49,6 +49,7 @@ import { getAbilityScoreDescription } from '../../../../services/abilityBonusSer
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
 import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconisAncestryChoiceSelector/DraconicAncestryChoiceSelector';
+import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -111,7 +112,13 @@ const SelectedRaceDisplay = ({
 		return () => {
 			window.removeEventListener('resize', adjustRows);
 		};
-	}, [isLargeOrLarger, setContainerStyle, summaryRef, iconRef]);
+	}, [
+		isLargeOrLarger,
+		setContainerStyle,
+		summaryRef,
+		iconRef,
+		raceInfo.draconicAncestry
+	]);
 
 	const handleAbilityScoreBonusApply = useCallback(
 		(bonuses: AbilityBonus[]) => {
@@ -262,6 +269,13 @@ const SelectedRaceDisplay = ({
 						</div>
 					</div>
 				</div>
+				{raceInfo.draconicAncestry && (
+					<BreathWeaponDisplay
+						breathWeapon={
+							raceInfo.draconicAncestry.trait_specific.breath_weapon
+						}
+					/>
+				)}
 				{subrace && <p>{subrace.desc}</p>}
 			</div>
 			<div

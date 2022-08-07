@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="breath-weapon-container"
+  data-testid="breath-weapon"
+>
+  <div
+    class="title"
+  >
+    Breath Weapon
+  </div>
+  <div
+    class="breath-weapon"
+  >
+    <div
+      class="icon-container"
+    >
+      <svg
+        class="icon"
+      >
+        <use
+          xlink:href="/Icons.svg#fire"
+        />
+      </svg>
+    </div>
+    <div
+      class="content"
+    >
+      <div>
+        <span
+          class="breath-weapon-label"
+        >
+          Damage type
+        </span>
+        :
+         
+        <span
+          class="breath-weapon-data"
+        >
+          Fire
+        </span>
+      </div>
+      <div>
+        <span
+          class="breath-weapon-label"
+        >
+          Damage
+        </span>
+        :
+         
+        <span
+          class="breath-weapon-data"
+        >
+          2d6
+        </span>
+      </div>
+      <div>
+        <span
+          class="breath-weapon-label"
+        >
+          Saving throw
+        </span>
+        :
+         
+        <span
+          class="breath-weapon-data"
+        >
+          Dexterity
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

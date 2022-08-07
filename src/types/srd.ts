@@ -60,8 +60,6 @@ export type AbilityBonusChoice = {
 };
 
 export type BreathWeapon = {
-	name: string;
-	desc: string;
 	damage: {
 		damage_type: SrdItem;
 		damage_at_character_level: { damage: string; level: number }[];
@@ -79,7 +77,7 @@ export type SrdTrait = {
 	proficiency_choices?: SrdProficiencyItemChoice;
 	language_options?: SrdItemChoice;
 	trait_specific?: {
-		subtrait_options: SrdSubtraitItemChoice;
+		subtrait_options?: SrdSubtraitItemChoice;
 	};
 };
 
