@@ -86,14 +86,26 @@ const SelectedRaceDisplay = ({
 	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
 
 	useEffect(() => {
-		if (isLargeOrLarger) {
-			setContainerStyle({
-				gridTemplateRows: `${Math.max(
-					summaryRef.current?.offsetHeight as number,
-					iconRef.current?.offsetHeight as number
-				)}px auto`
-			});
-		}
+		const adjustRows = () => {
+			if (isLargeOrLarger) {
+				setContainerStyle({
+					gridTemplateRows: `${Math.max(
+						summaryRef.current?.offsetHeight as number,
+						iconRef.current?.offsetHeight as number
+					)}px auto`
+				});
+			} else {
+				setContainerStyle(undefined);
+			}
+		};
+
+		adjustRows();
+
+		window.addEventListener('resize', adjustRows);
+
+		return () => {
+			window.removeEventListener('resize', adjustRows);
+		};
 	}, [isLargeOrLarger, setContainerStyle, summaryRef, iconRef]);
 
 	const handleAbilityScoreBonusApply = useCallback(
