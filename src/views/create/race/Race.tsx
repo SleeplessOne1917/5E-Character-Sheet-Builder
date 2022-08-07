@@ -238,9 +238,14 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	]);
 
 	const deselectSelectedRace = useCallback(() => {
-		for (const { index } of (raceInfo.race?.languages ?? []).concat(
-			raceInfo.selectedLanguages ?? []
-		)) {
+		for (const { index } of (raceInfo.race?.languages ?? [])
+			.concat(raceInfo.selectedLanguages ?? [])
+			.concat(
+				Object.keys(raceInfo.selectedTraitLanguages).reduce<SrdItem[]>(
+					(acc, cur) => acc.concat(raceInfo.selectedTraitLanguages[cur]),
+					[]
+				)
+			)) {
 			dispatch(removeLanguage(index));
 		}
 

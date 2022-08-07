@@ -27,16 +27,18 @@ import {
 import {
 	deselectAbilityBonuses,
 	deselectLanguages,
+	deselectTraitLanguages,
 	deselectTraitProficiencies,
 	selectAbilityBonuses,
 	selectLanguages,
+	selectTraitLanguages,
 	selectTraitProficiencies
 } from '../../../../redux/features/raceInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
 import Descriptor from '../../Descriptor/Descriptor';
-import LanguageChoiceSelector from '../ChoiceSelector/SrdItemChoiceSelector/LanguageChoiceSelector';
+import LanguageChoiceSelector from '../ChoiceSelector/LanguageChoiceSelector/LanguageChoiceSelector';
 import ProficiencyChoiceSelector from '../ChoiceSelector/ProficiencyChoiceSelector.tsx/ProficiencyChoiceSelector';
 import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
@@ -153,12 +155,38 @@ const SelectedRaceDisplay = ({
 	);
 
 	const handleTraitProficienciesReset = useCallback(
-		(index: string) => {
+		(traitIndex: string) => {
 			return (proficiencies: SrdProficiencyItem[]) => {
-				dispatch(deselectTraitProficiencies(index));
+				dispatch(deselectTraitProficiencies(traitIndex));
 
 				for (const { index } of proficiencies) {
 					dispatch(removeProficiency(index));
+				}
+			};
+		},
+		[dispatch]
+	);
+
+	const handleTraitLanguagesApply = useCallback(
+		(index: string) => {
+			return (languages: SrdItem[]) => {
+				dispatch(selectTraitLanguages({ index, languages }));
+
+				for (const language of languages) {
+					dispatch(addLanguage(language));
+				}
+			};
+		},
+		[dispatch]
+	);
+
+	const handleTraitLanguagesReset = useCallback(
+		(traitIndex: string) => {
+			return (languages: SrdItem[]) => {
+				dispatch(deselectTraitLanguages(traitIndex));
+
+				for (const { index } of languages) {
+					dispatch(removeLanguage(index));
 				}
 			};
 		},
@@ -247,6 +275,11 @@ const SelectedRaceDisplay = ({
 							} language${
 								(trait.language_options as SrdItemChoice)?.choose > 1 ? 's' : ''
 							}`}
+							onApply={handleTraitLanguagesApply(trait.index)}
+							onReset={handleTraitLanguagesReset(trait.index)}
+							initialValues={raceInfo.selectedTraitLanguages[trait.index]?.map(
+								({ index }) => index
+							)}
 						/>
 					))}
 				{traits

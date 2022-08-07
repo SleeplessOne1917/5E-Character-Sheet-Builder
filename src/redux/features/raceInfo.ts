@@ -8,6 +8,7 @@ export type RaceInfoState = {
 	selectedAbilityScoreBonuses?: AbilityBonus[];
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
+	selectedTraitLanguages: { [key: string]: SrdItem[] };
 };
 
 type SelectPayload = {
@@ -20,7 +21,15 @@ type SelectTraitProficienciesPayload = {
 	proficiencies: SrdProficiencyItem[];
 };
 
-export const initialState: RaceInfoState = { selectedTraitProficiencies: {} };
+type SelectTraitLanguagesPayload = {
+	index: string;
+	languages: SrdItem[];
+};
+
+export const initialState: RaceInfoState = {
+	selectedTraitProficiencies: {},
+	selectedTraitLanguages: {}
+};
 
 const raceInfoSlice = createSlice({
 	name: 'raceInfo',
@@ -66,6 +75,24 @@ const raceInfoSlice = createSlice({
 					[key: string]: SrdProficiencyItem[];
 				}>
 			)[payload];
+		},
+		selectTraitLanguages: (
+			state,
+			action: PayloadAction<SelectTraitLanguagesPayload>
+		) => {
+			const { index, languages } = action.payload;
+			(
+				state.selectedTraitLanguages as Draft<{
+					[key: string]: SrdItem[];
+				}>
+			)[index] = languages;
+		},
+		deselectTraitLanguages: (state, { payload }: PayloadAction<string>) => {
+			delete (
+				state.selectedTraitLanguages as Draft<{
+					[key: string]: SrdItem[];
+				}>
+			)[payload];
 		}
 	}
 });
@@ -78,6 +105,8 @@ export const {
 	selectLanguages,
 	deselectLanguages,
 	selectTraitProficiencies,
-	deselectTraitProficiencies
+	deselectTraitProficiencies,
+	selectTraitLanguages,
+	deselectTraitLanguages
 } = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;
