@@ -26,6 +26,7 @@
     border: 1px solid var(--davy);
     border-radius: 0.5rem;
     color: var(--davy);
+    margin-top: 0.25rem;
 }
 
 .input:focus-visible,
