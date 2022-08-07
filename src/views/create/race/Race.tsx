@@ -361,6 +361,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
 				onChoose={chooseRace}
 				onClose={closeSelectModal}
+				disableChoose={error || loading}
 			/>
 			<ConfirmationModal
 				message="Are you sure you want to deselect your race?"

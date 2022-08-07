@@ -9,6 +9,7 @@ export type ChooseModalProps = {
 	onClose: () => void;
 	onChoose: () => void;
 	iconId: string;
+	disableChoose?: boolean;
 };
 
 // TODO: Automatically tab to modal
@@ -18,7 +19,8 @@ const ChooseModal = ({
 	mainContent,
 	onClose,
 	onChoose,
-	iconId
+	iconId,
+	disableChoose
 }: ChooseModalProps): JSX.Element => {
 	const buttonStyle: CSSProperties = {
 		flexGrow: 1,
@@ -45,7 +47,12 @@ const ChooseModal = ({
 				</div>
 				<div className={classes['content-container']}>{mainContent}</div>
 				<div className={classes['buttons-container']}>
-					<Button onClick={onChoose} positive style={buttonStyle}>
+					<Button
+						onClick={onChoose}
+						positive
+						style={buttonStyle}
+						disabled={disableChoose}
+					>
 						Choose
 					</Button>
 					<Button onClick={onClose} style={buttonStyle}>
