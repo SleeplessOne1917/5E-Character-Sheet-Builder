@@ -3,6 +3,9 @@
     flex-direction: column;
     align-items: flex-end;
     padding: 1rem;
+}
+
+.roll-group:not(:last-child) {
     border-bottom: 1px solid var(--davy);
 }
 
