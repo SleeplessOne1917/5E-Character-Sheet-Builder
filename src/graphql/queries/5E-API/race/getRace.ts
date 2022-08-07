@@ -68,6 +68,41 @@ const GET_RACE = gql`
 						}
 					}
 				}
+				trait_specific {
+					subtrait_options {
+						choose
+						from {
+							options {
+								item {
+									index
+									name
+									trait_specific {
+										breath_weapon {
+											name
+											desc
+											damage {
+												damage_type {
+													name
+													index
+												}
+												damage_at_character_level {
+													damage
+													level
+												}
+											}
+											dc {
+												type {
+													index
+													full_name
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

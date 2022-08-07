@@ -6,7 +6,9 @@ import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
 	SrdRace,
-	SrdSubrace
+	SrdSubrace,
+	SrdSubtraitItem,
+	SrdSubtraitItemChoice
 } from '../../../../types/srd';
 import {
 	CSSProperties,
@@ -26,10 +28,12 @@ import {
 } from '../../../../redux/features/proficiencies';
 import {
 	deselectAbilityBonuses,
+	deselectDraconicAncestry,
 	deselectLanguages,
 	deselectTraitLanguages,
 	deselectTraitProficiencies,
 	selectAbilityBonuses,
+	selectDraconicAncestry,
 	selectLanguages,
 	selectTraitLanguages,
 	selectTraitProficiencies
@@ -44,6 +48,7 @@ import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
+import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconisAncestryChoiceSelector/DraconicAncestryChoiceSelector';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -205,6 +210,21 @@ const SelectedRaceDisplay = ({
 		[dispatch]
 	);
 
+	const handleDraconicAncestryApply = useCallback(
+		(ancestry: SrdSubtraitItem) => {
+			dispatch(selectDraconicAncestry(ancestry));
+		},
+		[dispatch]
+	);
+
+	const handleDraconicAncestryReset = useCallback(() => {
+		dispatch(deselectDraconicAncestry());
+	}, [dispatch]);
+
+	const draconicAncestryTrait = traits.find(
+		trait => trait.index === 'draconic-ancestry'
+	);
+
 	return (
 		<div className={classes.container} style={containerStyle}>
 			<div
@@ -280,7 +300,7 @@ const SelectedRaceDisplay = ({
 					.filter(trait => trait.language_options)
 					.map(trait => (
 						<LanguageChoiceSelector
-							key={trait.index}
+							key={`selector-${trait.index}`}
 							choice={trait.language_options as SrdItemChoice}
 							label={`${trait.name}: select ${
 								(trait.language_options as SrdItemChoice).choose
@@ -294,11 +314,22 @@ const SelectedRaceDisplay = ({
 							)}
 						/>
 					))}
+				{draconicAncestryTrait && (
+					<DraconicAncestryChoiceSelector
+						choice={
+							draconicAncestryTrait.trait_specific
+								?.subtrait_options as SrdSubtraitItemChoice
+						}
+						initialValue={raceInfo.draconicAncestry?.index}
+						onApply={handleDraconicAncestryApply}
+						onReset={handleDraconicAncestryReset}
+					/>
+				)}
 				{traits
 					.filter(trait => trait.proficiency_choices)
 					.map(trait => (
 						<ProficiencyChoiceSelector
-							key={trait.index}
+							key={`selector-${trait.index}`}
 							choice={trait.proficiency_choices as SrdProficiencyItemChoice}
 							label={`${trait.name}: select ${
 								trait.proficiency_choices?.choose

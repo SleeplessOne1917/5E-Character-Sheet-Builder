@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/ChoiceSelector/SrdItemChoiceSelector',
+	title: 'Components/ChoiceSelector/LanguageChoiceSelector',
 	component: LanguageChoiceSelector,
 	args: {
 		choice: {

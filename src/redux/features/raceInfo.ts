@@ -1,4 +1,9 @@
-import { AbilityBonus, SrdItem, SrdProficiencyItem } from './../../types/srd';
+import {
+	AbilityBonus,
+	SrdItem,
+	SrdProficiencyItem,
+	SrdSubtraitItem
+} from './../../types/srd';
 import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdRace, SrdSubrace } from '../../types/srd';
 
@@ -9,9 +14,10 @@ export type RaceInfoState = {
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
 	selectedTraitLanguages: { [key: string]: SrdItem[] };
+	draconicAncestry?: SrdSubtraitItem;
 };
 
-type SelectPayload = {
+type SelectRacePayload = {
 	race: SrdRace;
 	subrace?: SrdSubrace;
 };
@@ -35,7 +41,7 @@ const raceInfoSlice = createSlice({
 	name: 'raceInfo',
 	initialState,
 	reducers: {
-		selectRace: (state, action: PayloadAction<SelectPayload>) => {
+		selectRace: (state, action: PayloadAction<SelectRacePayload>) => {
 			const { race, subrace } = action.payload;
 			state.race = race;
 
@@ -43,20 +49,18 @@ const raceInfoSlice = createSlice({
 				state.subrace = subrace;
 			}
 		},
-		deselectRace: () => {
-			return initialState;
-		},
+		deselectRace: () => initialState,
 		selectAbilityBonuses: (state, action: PayloadAction<AbilityBonus[]>) => {
 			state.selectedAbilityScoreBonuses = action.payload;
 		},
 		deselectAbilityBonuses: state => {
-			state.selectedAbilityScoreBonuses = undefined;
+			delete state.selectedAbilityScoreBonuses;
 		},
 		selectLanguages: (state, action: PayloadAction<SrdItem[]>) => {
 			state.selectedLanguages = action.payload;
 		},
 		deselectLanguages: state => {
-			state.selectedLanguages = undefined;
+			delete state.selectedLanguages;
 		},
 		selectTraitProficiencies: (
 			state,
@@ -93,6 +97,15 @@ const raceInfoSlice = createSlice({
 					[key: string]: SrdItem[];
 				}>
 			)[payload];
+		},
+		selectDraconicAncestry: (
+			state,
+			{ payload }: PayloadAction<SrdSubtraitItem>
+		) => {
+			state.draconicAncestry = payload;
+		},
+		deselectDraconicAncestry: state => {
+			delete state.draconicAncestry;
 		}
 	}
 });
@@ -107,6 +120,8 @@ export const {
 	selectTraitProficiencies,
 	deselectTraitProficiencies,
 	selectTraitLanguages,
-	deselectTraitLanguages
+	deselectTraitLanguages,
+	selectDraconicAncestry,
+	deselectDraconicAncestry
 } = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;

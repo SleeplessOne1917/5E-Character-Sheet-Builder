@@ -41,10 +41,33 @@ export type SrdProficiencyItemChoice = {
 	from: { options: { item: SrdProficiencyItem }[] };
 };
 
+export interface SrdSubtraitItem extends SrdItem {
+	trait_specific: { breath_weapon: BreathWeapon };
+}
+
+export type SrdSubtraitItemChoice = {
+	choose: number;
+	from: {
+		options: { item: SrdSubtraitItem }[];
+	};
+};
+
 export type AbilityBonusChoice = {
 	choose: number;
 	from: {
 		options: AbilityBonus[];
+	};
+};
+
+export type BreathWeapon = {
+	name: string;
+	desc: string;
+	damage: {
+		damage_type: SrdItem;
+		damage_at_character_level: { damage: string; level: number }[];
+	}[];
+	dc: {
+		type: AbilityItem;
 	};
 };
 
@@ -55,6 +78,9 @@ export type SrdTrait = {
 	proficiencies: SrdProficiencyItem[];
 	proficiency_choices?: SrdProficiencyItemChoice;
 	language_options?: SrdItemChoice;
+	trait_specific?: {
+		subtrait_options: SrdSubtraitItemChoice;
+	};
 };
 
 export type AbilityBonus = {

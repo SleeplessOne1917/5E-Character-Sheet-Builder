@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="selector"
+  data-testid="choice-selector"
+>
+  <div
+    class="label"
+  >
+    Select draconic ancestry
+  </div>
+  <div
+    class="select-div"
+  >
+    <select
+      aria-label="Select choice"
+      class="select"
+    >
+      <option
+        value="blank"
+      >
+        —
+      </option>
+      <option
+        value="foo"
+      >
+        Foo
+      </option>
+      <option
+        value="bar"
+      >
+        Bar
+      </option>
+      <option
+        value="baz"
+      >
+        Baz
+      </option>
+    </select>
+  </div>
+  <div
+    class="button-div"
+  >
+    <button
+      class="button negative"
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Reset
+    </button>
+    <button
+      class="button positive"
+      disabled=""
+      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      type="button"
+    >
+      Apply
+    </button>
+  </div>
+</div>
+`;
