@@ -41,11 +41,11 @@
 }
 
 @media (hover: hover) {
-    .positive:hover {
+    .positive:not([disabled]):hover {
         background-color: var(--positive-green-hover);
     }
 
-    .negative:hover {
+    .negative:not([disabled]):hover {
         background-color: var(--wine-red-hover);
     }
 }
