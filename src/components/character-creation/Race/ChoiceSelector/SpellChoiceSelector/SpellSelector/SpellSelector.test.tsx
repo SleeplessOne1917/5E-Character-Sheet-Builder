@@ -1,7 +1,5 @@
-import * as stories from './ProficiencyChoiceSelector.stories';
-
 import { render, screen } from '@testing-library/react';
-
+import * as stories from './SpellSelector.stories';
 import { composeStories } from '@storybook/testing-react';
 
 const { Default } = composeStories(stories);
@@ -15,5 +13,5 @@ window.matchMedia = jest.fn().mockImplementation(() => ({
 it('renders correctly', () => {
 	render(<Default />);
 
-	expect(screen.getByTestId('choice-selector')).toMatchSnapshot();
+	expect(screen.getByTestId('spell-selector')).toMatchSnapshot();
 });

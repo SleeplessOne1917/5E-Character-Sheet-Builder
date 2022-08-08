@@ -69,6 +69,39 @@ export type BreathWeapon = {
 	};
 };
 
+type SpellComponent = 'V' | 'S' | 'M';
+
+export type CastingTime =
+	| 'ACTION'
+	| 'MINUTE'
+	| 'HOUR'
+	| 'BONUS_ACTION'
+	| 'MINUTES_10'
+	| 'DAY'
+	| 'REACTION';
+
+export interface SrdSpellItem extends SrdItem {
+	level: number;
+	components: SpellComponent[];
+	casting_time: CastingTime;
+	concentration: boolean;
+	desc: string[];
+	school: SrdItem;
+	damage?: {
+		damage_type: SrdItem;
+	};
+	material?: string;
+	range: string;
+	ritual: boolean;
+}
+
+export type SrdSpellItemChoice = {
+	choose: number;
+	from: {
+		options: { item: SrdSpellItem }[];
+	};
+};
+
 export type SrdTrait = {
 	index: string;
 	name: string;
@@ -78,6 +111,7 @@ export type SrdTrait = {
 	language_options?: SrdItemChoice;
 	trait_specific?: {
 		subtrait_options?: SrdSubtraitItemChoice;
+		spell_options?: SrdSpellItemChoice;
 	};
 };
 

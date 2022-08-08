@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="selector"
+  data-testid="spell-selector"
+>
+  <div
+    aria-label="High Elf Cantrip Ray of Frost"
+    class="selector-label"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="label-name-container"
+    >
+      <svg
+        class="label-icon"
+        style="margin-right: 0.25rem;"
+      >
+        <use
+          xlink:href="/Icons.svg#evocation"
+        />
+      </svg>
+       
+      Ray of Frost
+    </div>
+    <svg
+      aria-hidden="true"
+      class="label-icon"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+  <div
+    class="selector-display"
+    style="display: none;"
+  >
+    <div
+      class="summary"
+    >
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
+          Level
+        </span>
+        :
+         
+        Cantrip
+      </div>
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
+          Casting time
+        </span>
+        :
+         
+        1 action
+      </div>
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
+          Range
+        </span>
+        :
+         
+        60 feet
+      </div>
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
+          Components
+        </span>
+        :
+         
+        V, S
+      </div>
+    </div>
+    <div
+      class="description"
+    >
+      <p>
+        A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn.
+      </p>
+      <p>
+        The spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).
+      </p>
+    </div>
+    <div
+      class="other"
+    >
+      <div
+        class="damage-display"
+      >
+        <div>
+          <span
+            class="summary-item-label"
+          >
+            Damage type
+          </span>
+          : 
+          Cold
+        </div>
+        <svg
+          class="damage-icon"
+        >
+          <use
+            xlink:href="/Icons.svg#cold"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="buttons"
+    >
+      <button
+        class="button positive"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+        type="button"
+      >
+        Add
+      </button>
+      <button
+        class="button negative"
+        disabled=""
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+        type="button"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
+`;

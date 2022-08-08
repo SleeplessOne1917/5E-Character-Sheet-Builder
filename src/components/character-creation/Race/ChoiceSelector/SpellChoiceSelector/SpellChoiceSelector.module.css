@@ -1,0 +1,29 @@
+.spell-selector-container {
+    display: flex;
+    min-height: 4rem;
+    max-height: 15rem;
+    align-items: flex-start;
+    flex-direction: column;
+    overflow-y: scroll;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.container {
+    width: 100%;
+    color: var(--heaven-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+    .label {
+        font-size: 1.6rem;
+    }
+}

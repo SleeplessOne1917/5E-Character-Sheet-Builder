@@ -1,6 +1,7 @@
 import Button from '../../../Button/Button';
 import { ReactNode } from 'react';
 import classes from './ChoiceSelector.module.css';
+import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type ChoiceSelectorProps = {
 	isSelected?: boolean;
@@ -18,31 +19,37 @@ const ChoiceSelector = ({
 	onApply = () => {},
 	onReset = () => {},
 	label
-}: ChoiceSelectorProps) => (
-	<div
-		className={`${classes.selector}${isSelected ? ` ${classes.selected}` : ''}`}
-		data-testid="choice-selector"
-	>
-		<div className={classes.label}>{label}</div>
-		<div className={classes['select-div']}>{selects}</div>
-		<div className={classes['button-div']}>
-			<Button size="small" onClick={onReset}>
-				Reset
-			</Button>
-			<Button
-				size="small"
-				positive
-				onClick={onApply}
-				disabled={selectValues.includes('blank')}
-			>
-				Apply
-			</Button>
+}: ChoiceSelectorProps) => {
+	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+
+	return (
+		<div
+			className={`${classes.selector}${
+				isSelected ? ` ${classes.selected}` : ''
+			}`}
+			data-testid="choice-selector"
+		>
+			<div className={classes.label}>{label}</div>
+			<div className={classes['select-div']}>{selects}</div>
+			<div className={classes['button-div']}>
+				<Button size={isMediumOrLarger ? 'medium' : 'small'} onClick={onReset}>
+					Reset
+				</Button>
+				<Button
+					size={isMediumOrLarger ? 'medium' : 'small'}
+					positive
+					onClick={onApply}
+					disabled={selectValues.includes('blank')}
+				>
+					Apply
+				</Button>
+			</div>
+			{isSelected && (
+				<svg className={classes['dice-icon']}>
+					<use xlinkHref="/Icons.svg#logo" />
+				</svg>
+			)}
 		</div>
-		{isSelected && (
-			<svg className={classes['dice-icon']}>
-				<use xlinkHref="/Icons.svg#logo" />
-			</svg>
-		)}
-	</div>
-);
+	);
+};
 export default ChoiceSelector;

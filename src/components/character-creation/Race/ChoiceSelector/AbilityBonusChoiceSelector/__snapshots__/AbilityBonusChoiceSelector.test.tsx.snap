@@ -87,7 +87,7 @@ exports[`renders correctly 1`] = `
   >
     <button
       class="button negative"
-      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
       type="button"
     >
       Reset
@@ -95,7 +95,7 @@ exports[`renders correctly 1`] = `
     <button
       class="button positive"
       disabled=""
-      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
       type="button"
     >
       Apply
@@ -183,7 +183,7 @@ exports[`renders correctly 2`] = `
   >
     <button
       class="button negative"
-      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
       type="button"
     >
       Reset
@@ -191,7 +191,7 @@ exports[`renders correctly 2`] = `
     <button
       class="button positive"
       disabled=""
-      style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
       type="button"
     >
       Apply

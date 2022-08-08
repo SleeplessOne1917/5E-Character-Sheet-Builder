@@ -47,6 +47,37 @@ const GET_SUBRACE = gql`
 						}
 					}
 				}
+				trait_specific {
+					spell_options {
+						choose
+						from {
+							options {
+								item {
+									index
+									name
+									level
+									components
+									casting_time
+									concentration
+									desc
+									school {
+										name
+										index
+									}
+									damage {
+										damage_type {
+											name
+											index
+										}
+									}
+									material
+									range
+									ritual
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
