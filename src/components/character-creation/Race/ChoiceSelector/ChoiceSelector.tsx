@@ -1,4 +1,5 @@
 import Button from '../../../Button/Button';
+import { CheckIcon } from '@heroicons/react/solid';
 import { ReactNode } from 'react';
 import classes from './ChoiceSelector.module.css';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
@@ -44,11 +45,7 @@ const ChoiceSelector = ({
 					Apply
 				</Button>
 			</div>
-			{isSelected && (
-				<svg className={classes['dice-icon']}>
-					<use xlinkHref="/Icons.svg#logo" />
-				</svg>
-			)}
+			{isSelected && <CheckIcon className={classes['check-icon']} />}
 		</div>
 	);
 };
