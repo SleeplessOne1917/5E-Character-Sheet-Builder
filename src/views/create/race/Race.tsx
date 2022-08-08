@@ -170,7 +170,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		if (raceInfo.race) {
 			mainRef.current?.scrollTo(0, 0);
 		}
-	}, [raceInfo, mainRef]);
+	}, [raceInfo.race, mainRef]);
 
 	const getConsiderRaceHandler = useCallback(
 		(raceIndex: string) => {
