@@ -5,6 +5,10 @@
     padding: 0.5rem;
 }
 
+.selector:not(:last-child) {
+    border-bottom: 1.5px solid var(--davy);
+}
+
 .selector-label {
     display: flex;
     justify-content: space-between;
