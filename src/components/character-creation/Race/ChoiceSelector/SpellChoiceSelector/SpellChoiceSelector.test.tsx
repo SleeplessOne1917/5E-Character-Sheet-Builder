@@ -1,7 +1,5 @@
-import * as stories from './ProficiencyChoiceSelector.stories';
-
 import { render, screen } from '@testing-library/react';
-
+import * as stories from './SpellChoiceSelector.stories';
 import { composeStories } from '@storybook/testing-react';
 
 const { Default } = composeStories(stories);
