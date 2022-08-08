@@ -6,6 +6,7 @@ import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
 	SrdRace,
+	SrdSpellItem,
 	SrdSpellItemChoice,
 	SrdSubrace,
 	SrdSubtraitItem,
@@ -27,31 +28,34 @@ import {
 	addProficiency,
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
+import { addSpell, removeSpell } from '../../../../redux/features/spells';
 import {
 	deselectAbilityBonuses,
 	deselectDraconicAncestry,
 	deselectLanguages,
 	deselectTraitLanguages,
 	deselectTraitProficiencies,
+	deselectTraitSpells,
 	selectAbilityBonuses,
 	selectDraconicAncestry,
 	selectLanguages,
 	selectTraitLanguages,
-	selectTraitProficiencies
+	selectTraitProficiencies,
+	selectTraitSpells
 } from '../../../../redux/features/raceInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
+import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
 import Descriptor from '../../Descriptor/Descriptor';
+import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconicAncestryChoiceSelector/DraconicAncestryChoiceSelector';
 import LanguageChoiceSelector from '../ChoiceSelector/LanguageChoiceSelector/LanguageChoiceSelector';
 import ProficiencyChoiceSelector from '../ChoiceSelector/ProficiencyChoiceSelector.tsx/ProficiencyChoiceSelector';
+import SpellChoiceSelector from '../ChoiceSelector/SpellChoiceSelector/SpellChoiceSelector';
 import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
-import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconicAncestryChoiceSelector/DraconicAncestryChoiceSelector';
-import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
-import SpellChoiceSelector from '../ChoiceSelector/SpellChoiceSelector/SpellChoiceSelector';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -219,6 +223,32 @@ const SelectedRaceDisplay = ({
 		[dispatch]
 	);
 
+	const handleTraitSpellsApply = useCallback(
+		(traitIndex: string) => {
+			return (spells: SrdSpellItem[]) => {
+				dispatch(selectTraitSpells({ index: traitIndex, spells }));
+
+				for (const spell of spells) {
+					dispatch(addSpell(spell));
+				}
+			};
+		},
+		[dispatch]
+	);
+
+	const handleTraitSpellsReset = useCallback(
+		(traitIndex: string) => {
+			return (spells: SrdSpellItem[]) => {
+				dispatch(deselectTraitSpells(traitIndex));
+
+				for (const { index } of spells) {
+					dispatch(removeSpell(index));
+				}
+			};
+		},
+		[dispatch]
+	);
+
 	const handleDraconicAncestryApply = useCallback(
 		(ancestry: SrdSubtraitItem) => {
 			dispatch(selectDraconicAncestry(ancestry));
@@ -372,6 +402,15 @@ const SelectedRaceDisplay = ({
 							key={`${trait.index}-choice-selector`}
 							traitName={trait.name}
 							choice={trait.trait_specific?.spell_options as SrdSpellItemChoice}
+							onApply={handleTraitSpellsApply(trait.index)}
+							onReset={handleTraitSpellsReset(trait.index)}
+							initialValues={
+								raceInfo.selectedTraitSpells[trait.index]
+									? raceInfo.selectedTraitSpells[trait.index].map(
+											({ index }) => index
+									  )
+									: undefined
+							}
 						/>
 					))}
 			</div>

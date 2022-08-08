@@ -1,4 +1,4 @@
-import { SrdItem, SrdProficiencyItem } from '../../types/srd';
+import { SrdItem, SrdProficiencyItem, SrdSpellItem } from '../../types/srd';
 import abilityScores, {
 	AbilityScoresState,
 	initialState as abilityScoresInitialState
@@ -12,6 +12,7 @@ import raceInfo, {
 	RaceInfoState,
 	initialState as raceInitialState
 } from './raceInfo';
+import spells, { initialState as spellsInitialState } from './spells';
 
 import reduceReducers from 'reduce-reducers';
 
@@ -20,13 +21,15 @@ export type EditingCharacterState = {
 	raceInfo: RaceInfoState;
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
+	spells: SrdSpellItem[];
 };
 
 const initialState: EditingCharacterState = {
 	abilityScores: abilityScoresInitialState,
 	raceInfo: raceInitialState,
 	languages: languagesInitialState,
-	proficiencies: proficienciesInitialState
+	proficiencies: proficienciesInitialState,
+	spells: spellsInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -39,7 +42,8 @@ const wholeReducer = combineReducers({
 	abilityScores,
 	raceInfo,
 	languages,
-	proficiencies
+	proficiencies,
+	spells
 });
 
 export default reduceReducers<EditingCharacterState>(

@@ -3,6 +3,7 @@ import {
 	SrdItem,
 	SrdProficiencyItem,
 	SrdRace,
+	SrdSpellItem,
 	SrdSubrace,
 	SrdSubraceItem
 } from '../../../types/srd';
@@ -34,6 +35,7 @@ import SelectedRaceDisplay from '../../../components/character-creation/Race/Sel
 import { XCircleIcon } from '@heroicons/react/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
+import { removeSpell } from '../../../redux/features/spells';
 import { updateRaceBonus } from '../../../redux/features/abilityScores';
 
 type RaceProps = {
@@ -247,6 +249,12 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				)
 			)) {
 			dispatch(removeLanguage(index));
+		}
+
+		for (const { index } of Object.keys(raceInfo.selectedTraitSpells).reduce<
+			SrdSpellItem[]
+		>((acc, cur) => acc.concat(raceInfo.selectedTraitSpells[cur]), [])) {
+			dispatch(removeSpell(index));
 		}
 
 		for (const { index } of (raceInfo.race?.traits ?? [])

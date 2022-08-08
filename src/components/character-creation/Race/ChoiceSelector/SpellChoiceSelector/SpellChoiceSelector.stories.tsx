@@ -1,9 +1,19 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import { Provider } from 'react-redux';
 import SpellChoiceSelector from './SpellChoiceSelector';
+import { getTestStore } from '../../../../../redux/store';
 
 export default {
 	title: 'Components/ChoiceSelector/SpellChoiceSelector',
 	component: SpellChoiceSelector,
+	decorators: [
+		Story => (
+			<Provider store={getTestStore()}>
+				<Story />
+			</Provider>
+		)
+	],
 	args: {
 		traitName: 'High Elf Cantrip',
 		choice: {

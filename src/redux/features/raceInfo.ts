@@ -2,6 +2,7 @@ import {
 	AbilityBonus,
 	SrdItem,
 	SrdProficiencyItem,
+	SrdSpellItem,
 	SrdSubtraitItem
 } from './../../types/srd';
 import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
@@ -14,6 +15,7 @@ export type RaceInfoState = {
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
 	selectedTraitLanguages: { [key: string]: SrdItem[] };
+	selectedTraitSpells: { [key: string]: SrdSpellItem[] };
 	draconicAncestry?: SrdSubtraitItem;
 };
 
@@ -32,9 +34,15 @@ type SelectTraitLanguagesPayload = {
 	languages: SrdItem[];
 };
 
+type SelectTraitSpellsPayload = {
+	index: string;
+	spells: SrdSpellItem[];
+};
+
 export const initialState: RaceInfoState = {
 	selectedTraitProficiencies: {},
-	selectedTraitLanguages: {}
+	selectedTraitLanguages: {},
+	selectedTraitSpells: {}
 };
 
 const raceInfoSlice = createSlice({
@@ -106,6 +114,24 @@ const raceInfoSlice = createSlice({
 		},
 		deselectDraconicAncestry: state => {
 			delete state.draconicAncestry;
+		},
+		selectTraitSpells: (
+			state,
+			action: PayloadAction<SelectTraitSpellsPayload>
+		) => {
+			const { index, spells } = action.payload;
+			(
+				state.selectedTraitSpells as Draft<{
+					[key: string]: SrdSpellItem[];
+				}>
+			)[index] = spells;
+		},
+		deselectTraitSpells: (state, { payload }: PayloadAction<string>) => {
+			delete (
+				state.selectedTraitSpells as Draft<{
+					[key: string]: SrdSpellItem[];
+				}>
+			)[payload];
 		}
 	}
 });
@@ -122,6 +148,8 @@ export const {
 	selectTraitLanguages,
 	deselectTraitLanguages,
 	selectDraconicAncestry,
-	deselectDraconicAncestry
+	deselectDraconicAncestry,
+	selectTraitSpells,
+	deselectTraitSpells
 } = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;
