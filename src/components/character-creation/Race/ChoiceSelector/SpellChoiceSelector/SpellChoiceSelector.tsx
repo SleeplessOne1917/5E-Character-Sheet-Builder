@@ -85,15 +85,8 @@ const SpellChoiceSelector = ({
 				.map(option => option.item)
 				.filter(({ index }) => selectValues.includes(index))
 		);
-		setSelectValues(initialValues ?? getInitialSelectValues());
-	}, [
-		choice,
-		onReset,
-		selectValues,
-		setSelectValues,
-		initialValues,
-		getInitialSelectValues
-	]);
+		setSelectValues(getInitialSelectValues());
+	}, [choice, onReset, selectValues, setSelectValues, getInitialSelectValues]);
 
 	const selects = [
 		<div key={`${traitName}-spell-selector`} className={classes.container}>
