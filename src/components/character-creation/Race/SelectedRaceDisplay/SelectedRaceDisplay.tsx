@@ -6,6 +6,7 @@ import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
 	SrdRace,
+	SrdSpellItemChoice,
 	SrdSubrace,
 	SrdSubtraitItem,
 	SrdSubtraitItemChoice
@@ -48,8 +49,9 @@ import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
-import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconisAncestryChoiceSelector/DraconicAncestryChoiceSelector';
+import DraconicAncestryChoiceSelector from '../ChoiceSelector/DraconicAncestryChoiceSelector/DraconicAncestryChoiceSelector';
 import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
+import SpellChoiceSelector from '../ChoiceSelector/SpellChoiceSelector/SpellChoiceSelector';
 
 type SelectedRaceDisplayProps = {
 	race: SrdRace;
@@ -361,6 +363,15 @@ const SelectedRaceDisplay = ({
 									  )
 									: undefined
 							}
+						/>
+					))}
+				{traits
+					.filter(trait => trait.trait_specific?.spell_options)
+					.map(trait => (
+						<SpellChoiceSelector
+							key={`${trait.index}-choice-selector`}
+							traitName={trait.name}
+							choice={trait.trait_specific?.spell_options as SrdSpellItemChoice}
 						/>
 					))}
 			</div>
