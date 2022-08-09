@@ -1,7 +1,8 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
+
 import Button from '../Button/Button';
-import classes from './ConfirmationModal.module.css';
 import { ExclamationIcon } from '@heroicons/react/outline';
+import classes from './ConfirmationModal.module.css';
 
 type ConfirmationModalProps = {
 	show: boolean;
@@ -10,22 +11,30 @@ type ConfirmationModalProps = {
 	message: string;
 };
 
+const buttonStyle: CSSProperties = {
+	flexGrow: 1,
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
+	fontSize: '2rem',
+	border: 0,
+	margin: 0,
+	borderRadius: 0
+};
+
 const ConfirmationModal = ({
 	show,
 	onYes,
 	onNo,
 	message
 }: ConfirmationModalProps): JSX.Element => {
-	const buttonStyle: CSSProperties = {
-		flexGrow: 1,
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		fontSize: '2rem',
-		border: 0,
-		margin: 0,
-		borderRadius: 0
-	};
+	const yesRef = useRef<HTMLButtonElement>();
+
+	useEffect(() => {
+		if (show) {
+			yesRef.current?.focus();
+		}
+	}, [show, yesRef]);
 
 	return (
 		<div
@@ -38,7 +47,7 @@ const ConfirmationModal = ({
 					<ExclamationIcon className={classes.icon} /> {message}
 				</div>
 				<div className={classes.buttons}>
-					<Button positive style={buttonStyle} onClick={onYes}>
+					<Button positive style={buttonStyle} onClick={onYes} ref={yesRef}>
 						Yes
 					</Button>
 					<Button style={buttonStyle} onClick={onNo}>

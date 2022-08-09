@@ -1,4 +1,4 @@
-import { CSSProperties, MouseEventHandler, ReactNode } from 'react';
+import { CSSProperties, MouseEventHandler, ReactNode, forwardRef } from 'react';
 
 import classes from './Button.module.css';
 
@@ -41,32 +41,40 @@ const getPadding = (size: ButtonSize) => {
 	}
 };
 
-const Button = ({
-	disabled,
-	onClick,
-	children,
-	positive,
-	type = ButtonType.button,
-	size = 'medium',
-	spacing,
-	style = {}
-}: ButtonProps): JSX.Element => (
-	<button
-		disabled={disabled}
-		onClick={onClick}
-		className={`${classes.button} ${
-			positive ? classes.positive : classes.negative
-		}`}
-		style={{
-			fontSize: `${getFontSize(size)}rem`,
-			padding: `${getPadding(size)}rem`,
-			margin: `${0.25 * (spacing || 1)}rem`,
-			...style
-		}}
-		type={type}
-	>
-		{children}
-	</button>
+const Button = forwardRef(
+	(
+		{
+			disabled,
+			onClick,
+			children,
+			positive,
+			type = ButtonType.button,
+			size = 'medium',
+			spacing,
+			style = {}
+		}: ButtonProps,
+		ref
+	): JSX.Element => (
+		<button
+			disabled={disabled}
+			onClick={onClick}
+			className={`${classes.button} ${
+				positive ? classes.positive : classes.negative
+			}`}
+			style={{
+				fontSize: `${getFontSize(size)}rem`,
+				padding: `${getPadding(size)}rem`,
+				margin: `${0.25 * (spacing || 1)}rem`,
+				...style
+			}}
+			type={type}
+			ref={ref}
+		>
+			{children}
+		</button>
+	)
 );
+
+Button.displayName = 'Button';
 
 export default Button;
