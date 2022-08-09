@@ -16,7 +16,7 @@
     background-color: var(--heaven);
     display: grid;
     grid-template-columns: 5fr 2fr;
-    grid-template-rows: 2fr 4fr 1fr;
+    grid-template-rows: 1fr 4fr 1fr;
     grid-template-areas: "icon icon"
                         "content content"
                         "buttons buttons";

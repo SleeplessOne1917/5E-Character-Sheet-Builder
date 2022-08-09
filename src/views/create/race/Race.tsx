@@ -297,20 +297,24 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 					? consideredSubrace?.name
 					: consideredRace?.name}
 			</h2>
-			{loading ? (
-				<LoadingSpinner />
-			) : error ? (
-				<p className={classes['error-message']}>Could not load race details</p>
-			) : (
-				descriptors &&
-				descriptors.map(descriptor => (
-					<DescriptorComponent
-						key={descriptor.title}
-						title={descriptor.title}
-						description={descriptor.description}
-					/>
-				))
-			)}
+			<div className={classes['modal-content-container']}>
+				{loading ? (
+					<LoadingSpinner />
+				) : error ? (
+					<p className={classes['error-message']}>
+						Could not load race details
+					</p>
+				) : (
+					descriptors &&
+					descriptors.map(descriptor => (
+						<DescriptorComponent
+							key={descriptor.title}
+							title={descriptor.title}
+							description={descriptor.description}
+						/>
+					))
+				)}
+			</div>
 		</>
 	);
 
