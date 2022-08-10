@@ -1,5 +1,6 @@
+import { CSSProperties, MutableRefObject, useEffect, useRef } from 'react';
+
 import Button from '../../Button/Button';
-import { CSSProperties } from 'react';
 import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../Descriptor/Descriptor';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
@@ -17,16 +18,14 @@ export type ChooseModalProps = {
 	descriptors?: Descriptor[];
 };
 
-// TODO: Automatically tab to modal
-
 const ChooseModal = ({
 	show,
 	onClose,
 	onChoose,
 	iconId,
 	disableChoose,
-	loading,
-	error,
+	loading = false,
+	error = false,
 	title,
 	descriptors
 }: ChooseModalProps): JSX.Element => {
@@ -40,6 +39,13 @@ const ChooseModal = ({
 		margin: 0,
 		borderRadius: 0
 	};
+	const firstDescriptorRef = useRef<HTMLDivElement>();
+
+	useEffect(() => {
+		if (show && descriptors && descriptors.length > 0) {
+			firstDescriptorRef.current?.focus();
+		}
+	}, [show, descriptors]);
 
 	const contentContainerStyle: CSSProperties = loading
 		? { justifyContent: 'center' }
@@ -73,11 +79,16 @@ const ChooseModal = ({
 							</p>
 						) : (
 							descriptors &&
-							descriptors.map(descriptor => (
+							descriptors.map((descriptor, index) => (
 								<DescriptorComponent
 									key={descriptor.title}
 									title={descriptor.title}
 									description={descriptor.description}
+									ref={
+										(index === 0
+											? firstDescriptorRef
+											: undefined) as MutableRefObject<HTMLDivElement>
+									}
 								/>
 							))
 						)}

@@ -51,3 +51,403 @@ exports[`renders correctly 1`] = `
   </div>
 </div>
 `;
+
+exports[`renders correctly normally 1`] = `
+<div
+  class="modal-container"
+  data-testid="choose-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="icon-container"
+    >
+      <svg
+        class="icon"
+      >
+        <use
+          xlink:href="/Icons.svg#dragonborn"
+        />
+      </svg>
+    </div>
+    <div
+      class="content-container"
+    >
+      <h2
+        class="title"
+      >
+        Dragonborn
+      </h2>
+      <div
+        class="modal-content-container"
+      >
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Breath Weapon"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Breath Weapon
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Damage Resistance"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Damage Resistance
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Draconic Ancestry"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Draconic Ancestry
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="buttons-container"
+    >
+      <button
+        class="button positive"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Choose
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when choose is disabled 1`] = `
+<div
+  class="modal-container"
+  data-testid="choose-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="icon-container"
+    >
+      <svg
+        class="icon"
+      >
+        <use
+          xlink:href="/Icons.svg#dragonborn"
+        />
+      </svg>
+    </div>
+    <div
+      class="content-container"
+    >
+      <h2
+        class="title"
+      >
+        Dragonborn
+      </h2>
+      <div
+        class="modal-content-container"
+      >
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Breath Weapon"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Breath Weapon
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Damage Resistance"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Damage Resistance
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="descriptor"
+          data-testid="descriptor"
+        >
+          <div
+            aria-label="Draconic Ancestry"
+            class="title"
+            role="button"
+            style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+            tabindex="0"
+          >
+            Draconic Ancestry
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="buttons-container"
+    >
+      <button
+        class="button positive"
+        disabled=""
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Choose
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when error 1`] = `
+<div
+  class="modal-container"
+  data-testid="choose-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="icon-container"
+    >
+      <svg
+        class="icon"
+      >
+        <use
+          xlink:href="/Icons.svg#dragonborn"
+        />
+      </svg>
+    </div>
+    <div
+      class="content-container"
+    >
+      <h2
+        class="title"
+      >
+        Error
+      </h2>
+      <div
+        class="modal-content-container"
+      >
+        <p
+          class="error-message"
+        >
+          Could not load race details
+        </p>
+      </div>
+    </div>
+    <div
+      class="buttons-container"
+    >
+      <button
+        class="button positive"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Choose
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when loading 1`] = `
+<div
+  class="modal-container"
+  data-testid="choose-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="icon-container"
+    >
+      <svg
+        class="icon"
+      >
+        <use
+          xlink:href="/Icons.svg#dragonborn"
+        />
+      </svg>
+    </div>
+    <div
+      class="content-container"
+    >
+      <h2
+        class="title"
+      >
+        Loading...
+      </h2>
+      <div
+        class="modal-content-container"
+        style="justify-content: center;"
+      >
+        <div
+          class="container"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#spinner"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="buttons-container"
+    >
+      <button
+        class="button positive"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Choose
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+`;
