@@ -1,5 +1,5 @@
 import { AbilityBonus } from './../types/srd';
-import { SrdRace, SrdSubrace } from '../types/srd';
+import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
 
 export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
 	abilityBonuses.reduce(
@@ -20,8 +20,9 @@ export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
 	);
 
 export const getAbilityScoreDescription = (
-	race: Partial<SrdRace> & Pick<SrdRace, 'ability_bonuses'>,
-	subrace?: Partial<SrdSubrace> & Pick<SrdSubrace, 'ability_bonuses'>
+	race: Partial<SrdFullRaceItem> & Pick<SrdFullRaceItem, 'ability_bonuses'>,
+	subrace?: Partial<SrdFullSubraceItem> &
+		Pick<SrdFullSubraceItem, 'ability_bonuses'>
 ) => {
 	let description: string;
 	let abilityBonuses = race.ability_bonuses;

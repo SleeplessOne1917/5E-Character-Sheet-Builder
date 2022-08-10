@@ -6,11 +6,11 @@ import {
 	SrdSubtraitItem
 } from './../../types/srd';
 import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { SrdRace, SrdSubrace } from '../../types/srd';
+import { SrdFullRaceItem, SrdFullSubraceItem } from '../../types/srd';
 
 export type RaceInfoState = {
-	race?: SrdRace;
-	subrace?: SrdSubrace;
+	race?: SrdFullRaceItem;
+	subrace?: SrdFullSubraceItem;
 	selectedAbilityScoreBonuses?: AbilityBonus[];
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
@@ -20,8 +20,8 @@ export type RaceInfoState = {
 };
 
 type SelectRacePayload = {
-	race: SrdRace;
-	subrace?: SrdSubrace;
+	race: SrdFullRaceItem;
+	subrace?: SrdFullSubraceItem;
 };
 
 type SelectTraitProficienciesPayload = {

@@ -11,16 +11,6 @@
     color: var(--davy)
 }
 
-.modal-title {
-    color: var(--davy);
-    font-family: var(--font-fantasy);
-    font-size: 2rem;
-}
-
-.error-message {
-    font-size: 1.3rem;
-}
-
 .deselect-button-div {
     display: flex;
     justify-content: space-between;
@@ -32,14 +22,6 @@
     color: var(--wine-red);
     fill: var(--heaven-light);
     margin-right: 0.5rem;
-}
-.modal-content-container {
-    width: 100%;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top: 3px solid var(--davy);
 }
 
 .deselect-icon-wrapper {

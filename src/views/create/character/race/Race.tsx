@@ -2,9 +2,9 @@ import {
 	AbilityItem,
 	SrdItem,
 	SrdProficiencyItem,
-	SrdRace,
+	SrdFullRaceItem,
 	SrdSpellItem,
-	SrdSubrace,
+	SrdFullSubraceItem,
 	SrdSubraceItem
 } from '../../../../types/srd';
 import {
@@ -30,8 +30,6 @@ import Button from '../../../../components/Button/Button';
 import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
-import DescriptorComponent from '../../../../components/character-creation/Descriptor/Descriptor';
-import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
 import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
@@ -75,8 +73,9 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	const [loading, setLoading] = useState(false);
 	const [showSelectModal, setShowSelectModal] = useState(false);
 	const [showDeselectModal, setShowDeselectModal] = useState(false);
-	const [consideredRace, setConsideredRace] = useState<SrdRace>();
-	const [consideredSubrace, setConsideredSubrace] = useState<SrdSubrace>();
+	const [consideredRace, setConsideredRace] = useState<SrdFullRaceItem>();
+	const [consideredSubrace, setConsideredSubrace] =
+		useState<SrdFullSubraceItem>();
 	const [consideredRaceIndex, setConsideredRaceIndex] = useState<string>();
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
 		useState<string>();
@@ -129,8 +128,6 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 			}
 
 			setDescriptors(theDescriptors);
-		} else {
-			setDescriptors(undefined);
 		}
 	}, [consideredRace, setDescriptors, consideredSubrace]);
 
@@ -195,11 +192,13 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		setConsideredRaceIndex(undefined);
 		setConsideredSubrace(undefined);
 		setConsideredSubraceIndex(undefined);
+		setDescriptors(undefined);
 	}, [
 		setConsideredRace,
 		setConsideredRaceIndex,
 		setConsideredSubrace,
-		setConsideredSubraceIndex
+		setConsideredSubraceIndex,
+		setDescriptors
 	]);
 
 	const closeSelectModal = useCallback(() => {
@@ -228,7 +227,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 
 		dispatch(
 			selectRace({
-				race: consideredRace as SrdRace,
+				race: consideredRace as SrdFullRaceItem,
 				subrace: consideredSubrace
 			})
 		);
@@ -289,38 +288,6 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		setShowDeselectModal(false);
 	}, [setShowDeselectModal]);
 
-	const modalContent = (
-		<>
-			<h2 className={classes['modal-title']}>
-				{loading
-					? 'Loading...'
-					: error
-					? 'Error'
-					: consideredSubrace
-					? consideredSubrace?.name
-					: consideredRace?.name}
-			</h2>
-			<div className={classes['modal-content-container']}>
-				{loading ? (
-					<LoadingSpinner />
-				) : error ? (
-					<p className={classes['error-message']}>
-						Could not load race details
-					</p>
-				) : (
-					descriptors &&
-					descriptors.map(descriptor => (
-						<DescriptorComponent
-							key={descriptor.title}
-							title={descriptor.title}
-							description={descriptor.description}
-						/>
-					))
-				)}
-			</div>
-		</>
-	);
-
 	return (
 		<>
 			<MainContent
@@ -370,11 +337,18 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 			</MainContent>
 			<ChooseModal
 				show={showSelectModal}
-				mainContent={modalContent}
 				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
 				onChoose={chooseRace}
 				onClose={closeSelectModal}
 				disableChoose={error || loading}
+				loading={loading}
+				error={error}
+				title={
+					consideredSubrace
+						? consideredSubrace?.name
+						: (consideredRace?.name as string)
+				}
+				descriptors={descriptors}
 			/>
 			<ConfirmationModal
 				message="Are you sure you want to deselect your race?"
