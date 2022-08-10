@@ -127,7 +127,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 						}
 					}, [])
 			);
-			setOtherDescriptors([
+			const theOtherDescriptors = [
 				{ title: 'Hit Die', description: `d${consideredClass.hit_die}` },
 				{
 					title: 'Saving Throws',
@@ -135,7 +135,17 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 						.map(({ full_name }) => full_name)
 						.join(' and ')
 				}
-			]);
+			];
+
+			if (consideredClass.spellcasting) {
+				theOtherDescriptors.push({
+					title: 'Spellcasting Ability',
+					description:
+						consideredClass.spellcasting.spellcasting_ability.full_name
+				});
+			}
+
+			setOtherDescriptors(theOtherDescriptors);
 			setDescriptors(theDescriptors);
 		}
 	}, [consideredClass, setDescriptors]);
