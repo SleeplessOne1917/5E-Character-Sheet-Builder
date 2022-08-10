@@ -51,6 +51,25 @@
     display: flex;
 }
 
+.error-message {
+    font-size: 1.3rem;
+}
+
+.modal-content-container {
+    width: 100%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 3px solid var(--davy);
+}
+
+.title {
+    color: var(--davy);
+    font-family: var(--font-fantasy);
+    font-size: 2rem;
+}
+
 @media screen and (min-width: 768px) {
     .modal {
         height: 80%;
