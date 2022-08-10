@@ -61,6 +61,10 @@ const GET_CLASS = gql`
 					index
 					name
 					desc
+					subclass {
+						index
+						name
+					}
 				}
 				level
 			}

@@ -153,6 +153,7 @@ export interface SrdFullSubraceItem extends SrdItem {
 
 export interface SrdFeatureItem extends SrdItem {
 	desc: string[];
+	subclass?: SrdItem;
 }
 
 type ClassSpellcasting = {

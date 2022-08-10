@@ -105,28 +105,30 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 
 	useEffect(() => {
 		if (consideredClass) {
-			let theDescriptors: Descriptor[] = [];
-			theDescriptors = theDescriptors.concat(
-				[...consideredClass.class_levels]
-					.sort((a, b) => a.level - b.level)
-					.flatMap(level =>
-						level.features
-							.filter(
-								feature => !feature.name.match(/Ability Score Improvement/i)
-							)
-							.map<Descriptor>(feature => ({
-								title: feature.name.replace(/\s+\(.*\)/, ''),
-								description: feature.desc
-							}))
-					)
-					.reduce<Descriptor[]>((acc, cur) => {
-						if (!acc.some(descriptor => descriptor.title === cur.title)) {
-							return [...acc, cur];
-						} else {
-							return acc;
-						}
-					}, [])
-			);
+			const theDescriptors: Descriptor[] = [...consideredClass.class_levels]
+				.sort((a, b) => a.level - b.level)
+				.flatMap(level =>
+					level.features
+						.filter(
+							feature =>
+								!(
+									feature.name.match(/Ability Score Improvement/i) ||
+									feature.subclass
+								)
+						)
+						.map<Descriptor>(feature => ({
+							title: feature.name.replace(/\s+\(.*\)/, ''),
+							description: feature.desc
+						}))
+				)
+				.reduce<Descriptor[]>((acc, cur) => {
+					if (!acc.some(descriptor => descriptor.title === cur.title)) {
+						return [...acc, cur];
+					} else {
+						return acc;
+					}
+				}, []);
+
 			const theOtherDescriptors = [
 				{ title: 'Hit Die', description: `d${consideredClass.hit_die}` },
 				{
