@@ -410,6 +410,7 @@ const SelectedRaceDisplay = ({
 					))}
 			</div>
 			<div className={classes.traits}>
+				<h2 className={classes['traits-title']}>Traits</h2>
 				{traits.map(trait => (
 					<Descriptor
 						key={trait.index}
