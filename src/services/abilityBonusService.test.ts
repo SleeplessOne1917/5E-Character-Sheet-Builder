@@ -1,5 +1,5 @@
 import { AbilityBonus } from './../types/srd';
-import { SrdRace, SrdSubrace } from '../types/srd';
+import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
 
 import {
 	getAbilityScoreDescription,
@@ -34,7 +34,7 @@ describe('getIsAllBonusesSame', () => {
 
 describe('getAbilityScoreDescription', () => {
 	it('returns expected output when there is one ability bonus', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
+		const mockRace: Pick<SrdFullRaceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{ bonus: 2, ability_score: { index: 'dex', full_name: 'Dexterity' } }
 			]
@@ -45,7 +45,7 @@ describe('getAbilityScoreDescription', () => {
 		expect(result).toBe('+2 to Dexterity.');
 	});
 	it('returns expected output with just race ability bonuses', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
+		const mockRace: Pick<SrdFullRaceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
 				{ bonus: 2, ability_score: { index: 'str', full_name: 'Strength' } }
@@ -58,7 +58,7 @@ describe('getAbilityScoreDescription', () => {
 	});
 
 	it('returns expected output when all ability bonuses are the same', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
+		const mockRace: Pick<SrdFullRaceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
 				{ bonus: 1, ability_score: { index: 'str', full_name: 'Strength' } },
@@ -80,13 +80,13 @@ describe('getAbilityScoreDescription', () => {
 	});
 
 	it('merges race and subrace ability bonuses', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses'> = {
+		const mockRace: Pick<SrdFullRaceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
 				{ bonus: 1, ability_score: { index: 'str', full_name: 'Strength' } }
 			]
 		};
-		const mockSubrace: Pick<SrdSubrace, 'ability_bonuses'> = {
+		const mockSubrace: Pick<SrdFullSubraceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } }
 			]
@@ -98,25 +98,27 @@ describe('getAbilityScoreDescription', () => {
 	});
 
 	it('returns expected output when dealing with ability score options with same bonus', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses' | 'ability_bonus_options'> =
-			{
-				ability_bonuses: [
-					{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
-					{ bonus: 2, ability_score: { index: 'str', full_name: 'Strength' } }
-				],
-				ability_bonus_options: {
-					choose: 1,
-					from: {
-						options: [
-							{
-								bonus: 1,
-								ability_score: { index: 'int', full_name: 'Intelligence' }
-							},
-							{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } }
-						]
-					}
+		const mockRace: Pick<
+			SrdFullRaceItem,
+			'ability_bonuses' | 'ability_bonus_options'
+		> = {
+			ability_bonuses: [
+				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
+				{ bonus: 2, ability_score: { index: 'str', full_name: 'Strength' } }
+			],
+			ability_bonus_options: {
+				choose: 1,
+				from: {
+					options: [
+						{
+							bonus: 1,
+							ability_score: { index: 'int', full_name: 'Intelligence' }
+						},
+						{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } }
+					]
 				}
-			};
+			}
+		};
 
 		const result = getAbilityScoreDescription(mockRace);
 
@@ -126,25 +128,27 @@ describe('getAbilityScoreDescription', () => {
 	});
 
 	it('returns expected output when dealing with ability score options with same bonuses', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses' | 'ability_bonus_options'> =
-			{
-				ability_bonuses: [
-					{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
-					{ bonus: 2, ability_score: { index: 'str', full_name: 'Strength' } }
-				],
-				ability_bonus_options: {
-					choose: 1,
-					from: {
-						options: [
-							{
-								bonus: 1,
-								ability_score: { index: 'int', full_name: 'Intelligence' }
-							},
-							{ bonus: 2, ability_score: { index: 'wis', full_name: 'Wisdom' } }
-						]
-					}
+		const mockRace: Pick<
+			SrdFullRaceItem,
+			'ability_bonuses' | 'ability_bonus_options'
+		> = {
+			ability_bonuses: [
+				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
+				{ bonus: 2, ability_score: { index: 'str', full_name: 'Strength' } }
+			],
+			ability_bonus_options: {
+				choose: 1,
+				from: {
+					options: [
+						{
+							bonus: 1,
+							ability_score: { index: 'int', full_name: 'Intelligence' }
+						},
+						{ bonus: 2, ability_score: { index: 'wis', full_name: 'Wisdom' } }
+					]
 				}
-			};
+			}
+		};
 
 		const result = getAbilityScoreDescription(mockRace);
 
@@ -154,55 +158,57 @@ describe('getAbilityScoreDescription', () => {
 	});
 
 	it('returns expected output when both ability scores bonuses and options have same bonuses', () => {
-		const mockRace: Pick<SrdRace, 'ability_bonuses' | 'ability_bonus_options'> =
-			{
-				ability_bonuses: [
-					{
-						bonus: 1,
-						ability_score: {
-							index: 'str',
-							full_name: 'Strength'
-						}
-					},
-					{
-						bonus: 1,
-						ability_score: {
-							index: 'dex',
-							full_name: 'Dexterity'
-						}
+		const mockRace: Pick<
+			SrdFullRaceItem,
+			'ability_bonuses' | 'ability_bonus_options'
+		> = {
+			ability_bonuses: [
+				{
+					bonus: 1,
+					ability_score: {
+						index: 'str',
+						full_name: 'Strength'
 					}
-				],
-				ability_bonus_options: {
-					choose: 2,
-					from: {
-						options: [
-							{
-								bonus: 1,
-								ability_score: {
-									index: 'wis',
-									full_name: 'Wisdom'
-								}
-							},
-							{
-								bonus: 1,
-								ability_score: {
-									index: 'int',
-									full_name: 'Intelligence'
-								}
-							},
-							{
-								bonus: 1,
-								ability_score: {
-									index: 'cha',
-									full_name: 'Charisma'
-								}
-							}
-						]
+				},
+				{
+					bonus: 1,
+					ability_score: {
+						index: 'dex',
+						full_name: 'Dexterity'
 					}
 				}
-			};
+			],
+			ability_bonus_options: {
+				choose: 2,
+				from: {
+					options: [
+						{
+							bonus: 1,
+							ability_score: {
+								index: 'wis',
+								full_name: 'Wisdom'
+							}
+						},
+						{
+							bonus: 1,
+							ability_score: {
+								index: 'int',
+								full_name: 'Intelligence'
+							}
+						},
+						{
+							bonus: 1,
+							ability_score: {
+								index: 'cha',
+								full_name: 'Charisma'
+							}
+						}
+					]
+				}
+			}
+		};
 
-		const mockSubrace: Pick<SrdSubrace, 'ability_bonuses'> = {
+		const mockSubrace: Pick<SrdFullSubraceItem, 'ability_bonuses'> = {
 			ability_bonuses: [
 				{
 					bonus: 1,

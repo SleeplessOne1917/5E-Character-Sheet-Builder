@@ -5,10 +5,10 @@ import {
 	SrdItemChoice,
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
-	SrdRace,
+	SrdFullRaceItem,
 	SrdSpellItem,
 	SrdSpellItemChoice,
-	SrdSubrace,
+	SrdFullSubraceItem,
 	SrdSubtraitItem,
 	SrdSubtraitItemChoice
 } from '../../../../types/srd';
@@ -58,8 +58,8 @@ import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type SelectedRaceDisplayProps = {
-	race: SrdRace;
-	subrace?: SrdSubrace;
+	race: SrdFullRaceItem;
+	subrace?: SrdFullSubraceItem;
 };
 
 const getLabelFromProficiencyType = (type: ProficiencyType) => {
@@ -380,7 +380,8 @@ const SelectedRaceDisplay = ({
 							label={`${trait.name}: select ${
 								trait.proficiency_choices?.choose
 							} ${getLabelFromProficiencyType(
-								(trait.proficiency_choices?.from.options ?? [])[0].item.type
+								(trait.proficiency_choices?.from.options ?? [])[0]?.item
+									?.type as ProficiencyType
 							)} proficienc${
 								(trait.proficiency_choices?.choose ?? 1) > 1 ? 'ies' : 'y'
 							}`}
