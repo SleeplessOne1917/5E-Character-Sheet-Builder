@@ -1,14 +1,14 @@
 import {
 	AbilityBonus,
 	ProficiencyType,
+	SrdFullRaceItem,
+	SrdFullSubraceItem,
 	SrdItem,
 	SrdItemChoice,
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
-	SrdFullRaceItem,
 	SrdSpellItem,
 	SrdSpellItemChoice,
-	SrdFullSubraceItem,
 	SrdSubtraitItem,
 	SrdSubtraitItemChoice
 } from '../../../../types/srd';
@@ -118,13 +118,7 @@ const SelectedRaceDisplay = ({
 		return () => {
 			window.removeEventListener('resize', adjustRows);
 		};
-	}, [
-		isLargeOrLarger,
-		setContainerStyle,
-		summaryRef,
-		iconRef,
-		raceInfo.draconicAncestry
-	]);
+	}, [isLargeOrLarger, setContainerStyle, raceInfo.draconicAncestry]);
 
 	const handleAbilityScoreBonusApply = useCallback(
 		(bonuses: AbilityBonus[]) => {

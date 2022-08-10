@@ -34,7 +34,7 @@ const ConfirmationModal = ({
 		if (show) {
 			yesRef.current?.focus();
 		}
-	}, [show, yesRef]);
+	}, [show]);
 
 	return (
 		<div
