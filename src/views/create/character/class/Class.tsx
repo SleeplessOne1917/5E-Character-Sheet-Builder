@@ -1,5 +1,9 @@
 import { SrdFullClassItem, SrdItem } from '../../../../types/srd';
 import {
+	addProficiency,
+	removeProficiency
+} from '../../../../redux/features/proficiencies';
+import {
 	deselectClass,
 	selectClass
 } from '../../../../redux/features/classInfo';
@@ -145,6 +149,11 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 
 	const handleChooseSelectModal = useCallback(() => {
 		dispatch(selectClass(consideredClass as SrdFullClassItem));
+
+		for (const proficiency of consideredClass?.proficiencies ?? []) {
+			dispatch(addProficiency(proficiency));
+		}
+
 		deselectConsideredClass();
 		setShowSelectModal(false);
 	}, [deselectConsideredClass, setShowSelectModal, dispatch, consideredClass]);
@@ -158,9 +167,13 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 	}, [setShowDeselectModal]);
 
 	const deselectSelectedClass = useCallback(() => {
+		for (const { index } of classInfo.class?.proficiencies ?? []) {
+			dispatch(removeProficiency(index));
+		}
+
 		dispatch(deselectClass());
 		setShowDeselectModal(false);
-	}, [dispatch, setShowDeselectModal]);
+	}, [dispatch, setShowDeselectModal, classInfo]);
 
 	return (
 		<>
