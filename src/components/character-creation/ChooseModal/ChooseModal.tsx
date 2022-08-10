@@ -16,6 +16,7 @@ export type ChooseModalProps = {
 	error?: boolean;
 	title: string;
 	descriptors?: Descriptor[];
+	otherDescriptors?: Descriptor[];
 };
 
 const ChooseModal = ({
@@ -27,7 +28,8 @@ const ChooseModal = ({
 	loading = false,
 	error = false,
 	title,
-	descriptors
+	descriptors,
+	otherDescriptors
 }: ChooseModalProps): JSX.Element => {
 	const buttonStyle: CSSProperties = {
 		flexGrow: 1,
@@ -93,6 +95,16 @@ const ChooseModal = ({
 							))
 						)}
 					</div>
+				</div>
+				<div className={classes['other-container']}>
+					{otherDescriptors?.map(descriptor => (
+						<div key={descriptor.title} className={classes.other}>
+							<div className={classes['other-label']}>{descriptor.title}</div>
+							<div className={classes['other-data']}>
+								{descriptor.description}
+							</div>
+						</div>
+					))}
 				</div>
 				<div className={classes['buttons-container']}>
 					<Button

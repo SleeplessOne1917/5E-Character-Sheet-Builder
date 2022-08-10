@@ -81,6 +81,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 	const [consideredClassIndex, setConsideredClassIndex] = useState<string>();
 	const [consideredClass, setConsideredClass] = useState<SrdFullClassItem>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
+	const [otherDescriptors, setOtherDescriptors] = useState<Descriptor[]>();
 	const [showSelectModal, setShowSelectModal] = useState(false);
 	const [showDeselectModal, setShowDeselectModal] = useState(false);
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
@@ -104,26 +105,37 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 
 	useEffect(() => {
 		if (consideredClass) {
-			const theDescriptors: Descriptor[] = [...consideredClass.class_levels]
-				.sort((a, b) => a.level - b.level)
-				.flatMap(level =>
-					level.features
-						.filter(
-							feature => !feature.name.match(/Ability Score Improvement/i)
-						)
-						.map<Descriptor>(feature => ({
-							title: feature.name.replace(/\s+\(.*\)/, ''),
-							description: feature.desc
-						}))
-				)
-				.reduce<Descriptor[]>((acc, cur) => {
-					if (!acc.some(descriptor => descriptor.title === cur.title)) {
-						return [...acc, cur];
-					} else {
-						return acc;
-					}
-				}, []);
-
+			let theDescriptors: Descriptor[] = [];
+			theDescriptors = theDescriptors.concat(
+				[...consideredClass.class_levels]
+					.sort((a, b) => a.level - b.level)
+					.flatMap(level =>
+						level.features
+							.filter(
+								feature => !feature.name.match(/Ability Score Improvement/i)
+							)
+							.map<Descriptor>(feature => ({
+								title: feature.name.replace(/\s+\(.*\)/, ''),
+								description: feature.desc
+							}))
+					)
+					.reduce<Descriptor[]>((acc, cur) => {
+						if (!acc.some(descriptor => descriptor.title === cur.title)) {
+							return [...acc, cur];
+						} else {
+							return acc;
+						}
+					}, [])
+			);
+			setOtherDescriptors([
+				{ title: 'Hit Die', description: `d${consideredClass.hit_die}` },
+				{
+					title: 'Saving Throws',
+					description: consideredClass.saving_throws
+						.map(({ full_name }) => full_name)
+						.join(' and ')
+				}
+			]);
 			setDescriptors(theDescriptors);
 		}
 	}, [consideredClass, setDescriptors]);
@@ -137,10 +149,16 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 	);
 
 	const deselectConsideredClass = useCallback(() => {
+		setOtherDescriptors(undefined);
 		setDescriptors(undefined);
 		setConsideredClass(undefined);
 		setConsideredClassIndex(undefined);
-	}, [setConsideredClassIndex, setConsideredClass, setDescriptors]);
+	}, [
+		setConsideredClassIndex,
+		setConsideredClass,
+		setDescriptors,
+		setOtherDescriptors
+	]);
 
 	const handleCancelSelectModal = useCallback(() => {
 		deselectConsideredClass();
@@ -216,6 +234,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 				onChoose={handleChooseSelectModal}
 				onClose={handleCancelSelectModal}
 				descriptors={descriptors}
+				otherDescriptors={otherDescriptors}
 				title={consideredClass?.name as string}
 				error={error}
 				loading={loading}

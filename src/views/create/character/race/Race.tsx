@@ -80,6 +80,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	const [consideredSubraceIndex, setConsideredSubraceIndex] =
 		useState<string>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
+	const [otherDescriptors, setOtherDescriptors] = useState<Descriptor[]>();
 	const mainRef = useRef<HTMLDivElement>();
 	const dispatch = useAppDispatch();
 	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
@@ -127,6 +128,9 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				);
 			}
 
+			setOtherDescriptors([
+				{ title: 'Speed', description: `${consideredRace.speed} ft.` }
+			]);
 			setDescriptors(theDescriptors);
 		}
 	}, [consideredRace, setDescriptors, consideredSubrace]);
@@ -193,12 +197,14 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		setConsideredSubrace(undefined);
 		setConsideredSubraceIndex(undefined);
 		setDescriptors(undefined);
+		setOtherDescriptors(undefined);
 	}, [
 		setConsideredRace,
 		setConsideredRaceIndex,
 		setConsideredSubrace,
 		setConsideredSubraceIndex,
-		setDescriptors
+		setDescriptors,
+		setOtherDescriptors
 	]);
 
 	const closeSelectModal = useCallback(() => {
@@ -349,6 +355,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 						: (consideredRace?.name as string)
 				}
 				descriptors={descriptors}
+				otherDescriptors={otherDescriptors}
 			/>
 			<ConfirmationModal
 				message="Are you sure you want to deselect your race?"

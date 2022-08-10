@@ -1,57 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
-<div
-  class="modal-container"
-  data-testid="choose-modal"
-  style="display: flex;"
->
-  <div
-    class="modal"
-  >
-    <div
-      class="icon-container"
-    >
-      <svg
-        class="icon"
-      >
-        <use
-          xlink:href="/Icons.svg#dragonborn"
-        />
-      </svg>
-    </div>
-    <div
-      class="content-container"
-    >
-      <h2
-        class="title"
-      />
-      <div
-        class="modal-content-container"
-      />
-    </div>
-    <div
-      class="buttons-container"
-    >
-      <button
-        class="button positive"
-        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
-        type="button"
-      >
-        Choose
-      </button>
-      <button
-        class="button negative"
-        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0;"
-        type="button"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`renders correctly normally 1`] = `
 <div
   class="modal-container"
@@ -166,6 +114,9 @@ exports[`renders correctly normally 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="other-container"
+    />
     <div
       class="buttons-container"
     >
@@ -303,6 +254,9 @@ exports[`renders correctly when choose is disabled 1`] = `
       </div>
     </div>
     <div
+      class="other-container"
+    />
+    <div
       class="buttons-container"
     >
       <button
@@ -363,6 +317,9 @@ exports[`renders correctly when error 1`] = `
         </p>
       </div>
     </div>
+    <div
+      class="other-container"
+    />
     <div
       class="buttons-container"
     >
@@ -430,6 +387,9 @@ exports[`renders correctly when loading 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="other-container"
+    />
     <div
       class="buttons-container"
     >
