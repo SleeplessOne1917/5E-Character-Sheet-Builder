@@ -3,6 +3,10 @@ import abilityScores, {
 	AbilityScoresState,
 	initialState as abilityScoresInitialState
 } from './abilityScores';
+import classInfo, {
+	ClassInfoState,
+	initialState as classInitialState
+} from './classInfo';
 import { combineReducers, createSlice } from '@reduxjs/toolkit';
 import languages, { initialState as languagesInitialState } from './languages';
 import proficiencies, {
@@ -22,6 +26,7 @@ export type EditingCharacterState = {
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
 	spells: SrdSpellItem[];
+	classInfo: ClassInfoState;
 };
 
 const initialState: EditingCharacterState = {
@@ -29,7 +34,8 @@ const initialState: EditingCharacterState = {
 	raceInfo: raceInitialState,
 	languages: languagesInitialState,
 	proficiencies: proficienciesInitialState,
-	spells: spellsInitialState
+	spells: spellsInitialState,
+	classInfo: classInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -43,7 +49,8 @@ const wholeReducer = combineReducers({
 	raceInfo,
 	languages,
 	proficiencies,
-	spells
+	spells,
+	classInfo
 });
 
 export default reduceReducers<EditingCharacterState>(

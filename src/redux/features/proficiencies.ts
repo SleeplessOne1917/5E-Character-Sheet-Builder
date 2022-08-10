@@ -8,10 +8,13 @@ const proficienciesSlice = createSlice({
 	name: 'proficiencies',
 	initialState,
 	reducers: {
-		addProficiency: (state, action: PayloadAction<SrdProficiencyItem>) => [
-			...state,
-			action.payload
-		],
+		addProficiency: (state, { payload }: PayloadAction<SrdProficiencyItem>) => {
+			if (!state.some(proficiency => proficiency.index === payload.index)) {
+				return [...state, payload];
+			} else {
+				return state;
+			}
+		},
 		removeProficiency: (state, action: PayloadAction<string>) =>
 			state.filter(proficiency => proficiency.index !== action.payload)
 	}

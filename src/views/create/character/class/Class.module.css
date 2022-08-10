@@ -11,6 +11,19 @@
     color: var(--davy)
 }
 
+.deselect-button-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.deselect-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--wine-red);
+    fill: var(--heaven-light);
+    margin-right: 0.5rem;
+}
+
 @media screen and (min-width: 768px) {
     .title {
         align-self: flex-start;

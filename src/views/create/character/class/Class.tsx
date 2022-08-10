@@ -1,10 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
-import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
-import Option from '../../../../components/character-creation/Option/Option';
-import MainContent from '../../../../components/MainContent/MainContent';
-import { getClass } from '../../../../services/classService';
-import { Descriptor } from '../../../../types/creation';
 import { SrdFullClassItem, SrdItem } from '../../../../types/srd';
+import {
+	deselectClass,
+	selectClass
+} from '../../../../redux/features/classInfo';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import { useCallback, useEffect, useState } from 'react';
+
+import Button from '../../../../components/Button/Button';
+import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
+import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
+import { Descriptor } from '../../../../types/creation';
+import MainContent from '../../../../components/MainContent/MainContent';
+import Option from '../../../../components/character-creation/Option/Option';
+import { XCircleIcon } from '@heroicons/react/solid';
+import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
 
 type ClassProps = {
@@ -69,6 +78,9 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 	const [consideredClass, setConsideredClass] = useState<SrdFullClassItem>();
 	const [descriptors, setDescriptors] = useState<Descriptor[]>();
 	const [showSelectModal, setShowSelectModal] = useState(false);
+	const [showDeselectModal, setShowDeselectModal] = useState(false);
+	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (consideredClassIndex) {
@@ -88,7 +100,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 
 	useEffect(() => {
 		if (consideredClass) {
-			const theDescriptors: Descriptor[] = consideredClass.class_levels
+			const theDescriptors: Descriptor[] = [...consideredClass.class_levels]
 				.sort((a, b) => a.level - b.level)
 				.flatMap(level =>
 					level.features
@@ -101,7 +113,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 						}))
 				)
 				.reduce<Descriptor[]>((acc, cur) => {
-					if (!acc.map(descriptor => descriptor.title).includes(cur.title)) {
+					if (!acc.some(descriptor => descriptor.title === cur.title)) {
 						return [...acc, cur];
 					} else {
 						return acc;
@@ -132,23 +144,58 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 	}, [deselectConsideredClass, setShowSelectModal]);
 
 	const handleChooseSelectModal = useCallback(() => {
+		dispatch(selectClass(consideredClass as SrdFullClassItem));
 		deselectConsideredClass();
 		setShowSelectModal(false);
-	}, [deselectConsideredClass, setShowSelectModal]);
+	}, [deselectConsideredClass, setShowSelectModal, dispatch, consideredClass]);
+
+	const tryDeselectClass = useCallback(() => {
+		setShowDeselectModal(true);
+	}, [setShowDeselectModal]);
+
+	const cancelDeselectClass = useCallback(() => {
+		setShowDeselectModal(false);
+	}, [setShowDeselectModal]);
+
+	const deselectSelectedClass = useCallback(() => {
+		dispatch(deselectClass());
+		setShowDeselectModal(false);
+	}, [dispatch, setShowDeselectModal]);
 
 	return (
 		<>
 			<MainContent testId="class">
-				<h1 className={styles.title}>Choose Class</h1>
-				<ul className={styles['class-list']}>
-					{classes.map(klass => (
-						<Option
-							key={klass.index}
-							option={klass}
-							onChoose={() => handleChooseClassOption(klass.index)}
-						/>
-					))}
-				</ul>
+				{!classInfo.class && (
+					<>
+						<h1 className={styles.title}>Choose Class</h1>
+						<ul className={styles['class-list']}>
+							{classes.map(klass => (
+								<Option
+									key={klass.index}
+									option={klass}
+									onChoose={() => handleChooseClassOption(klass.index)}
+								/>
+							))}
+						</ul>
+					</>
+				)}
+				{classInfo.class && (
+					<>
+						<div className={styles['deselect-button-div']}>
+							<h1 className={styles.title}>{classInfo.class.name}</h1>
+							<Button
+								onClick={tryDeselectClass}
+								style={{
+									display: 'flex',
+									alignItems: 'center'
+								}}
+							>
+								<XCircleIcon className={styles['deselect-icon']} />
+								Deselect Race
+							</Button>
+						</div>
+					</>
+				)}
 			</MainContent>
 			<ChooseModal
 				iconId={consideredClassIndex as string}
@@ -159,6 +206,12 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 				title={consideredClass?.name as string}
 				error={error}
 				loading={loading}
+			/>
+			<ConfirmationModal
+				message="Are you sure you want to deselect your class?"
+				show={showDeselectModal}
+				onNo={cancelDeselectClass}
+				onYes={deselectSelectedClass}
 			/>
 		</>
 	);
