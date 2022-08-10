@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 const CreatePage: NextPage = () => {
 	const { replace } = useRouter();
 	useEffect(() => {
-		replace('/create/race');
+		replace('/create/character/race');
 	}, [replace]);
 
 	return <CreateIndexView />;

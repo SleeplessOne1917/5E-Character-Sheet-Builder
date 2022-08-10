@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Provider } from 'react-redux';
-import { getTestStore } from '../../../redux/store';
+import { getTestStore } from '../../../../redux/store';
 import Race, { mockRaces, mockSubraces } from './Race';
 
 export default {

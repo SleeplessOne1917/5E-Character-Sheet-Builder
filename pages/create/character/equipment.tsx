@@ -1,8 +1,8 @@
 import { GetStaticPropsResult, NextPage } from 'next';
 
-import EquipmentView from '../../src/views/create/equipment/Equipment';
-import { SrdItem } from '../../src/types/srd';
-import { getEquipments } from '../../src/graphql/srdClientService';
+import EquipmentView from '../../../src/views/create/character/equipment/Equipment';
+import { SrdItem } from '../../../src/types/srd';
+import { getEquipments } from '../../../src/graphql/srdClientService';
 
 type EquipmentPageProps = {
 	equipments: SrdItem[];

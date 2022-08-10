@@ -9,22 +9,22 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import {
 	GenerationMethodState,
 	updateGenerationMethod
-} from '../../../redux/features/generationMethod';
-import { addGroup, removeGroup } from '../../../redux/features/rollGroups';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+} from '../../../../redux/features/generationMethod';
+import { addGroup, removeGroup } from '../../../../redux/features/rollGroups';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import AbilityCalculation from '../../../components/character-creation/Abilities/AbilityCalculation/AbilityCalculation';
-import { AbilityItem } from '../../../types/srd';
-import AbilityScores from '../../../types/abilityScores';
-import Button from '../../../components/Button/Button';
-import MainContent from '../../../components/MainContent/MainContent';
-import ManualScores from '../../../components/character-creation/Abilities/ManualScores/ManualScores';
-import PointBuy from '../../../components/character-creation/Abilities/PointBuy/PointBuy';
-import RollGroup from '../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
-import StandardArray from '../../../components/character-creation/Abilities/StandardArray/StandardArray';
+import AbilityCalculation from '../../../../components/character-creation/Abilities/AbilityCalculation/AbilityCalculation';
+import { AbilityItem } from '../../../../types/srd';
+import AbilityScores from '../../../../types/abilityScores';
+import Button from '../../../../components/Button/Button';
+import MainContent from '../../../../components/MainContent/MainContent';
+import ManualScores from '../../../../components/character-creation/Abilities/ManualScores/ManualScores';
+import PointBuy from '../../../../components/character-creation/Abilities/PointBuy/PointBuy';
+import RollGroup from '../../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
+import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
-import { handleKeyDownEvent } from '../../../services/handlerService';
-import { updateBase } from '../../../redux/features/abilityScores';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
+import { updateBase } from '../../../../redux/features/abilityScores';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];

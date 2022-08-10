@@ -1,12 +1,12 @@
 import { GetStaticPropsResult, NextPage } from 'next';
-import { AbilityItem, SrdItem, SrdSubraceItem } from '../../src/types/srd';
+import { AbilityItem, SrdItem, SrdSubraceItem } from '../../../src/types/srd';
 import {
 	getAbilities,
 	getRaces,
 	getSubraces
-} from '../../src/graphql/srdClientService';
+} from '../../../src/graphql/srdClientService';
 
-import RaceView from '../../src/views/create/race/Race';
+import RaceView from '../../../src/views/create/character/race/Race';
 
 type RacePageProps = {
 	races: SrdItem[];

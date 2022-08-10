@@ -1,5 +1,5 @@
-import MainContent from '../../../components/MainContent/MainContent';
-import { SrdItem } from '../../../types/srd';
+import MainContent from '../../../../components/MainContent/MainContent';
+import { SrdItem } from '../../../../types/srd';
 
 type EquipmentProps = {
 	equipments: SrdItem[];

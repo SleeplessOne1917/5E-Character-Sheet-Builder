@@ -54,7 +54,7 @@ const SectionBar = (): JSX.Element => {
 
 	useEffect(() => {
 		const pathRegex = new RegExp(
-			String.raw`\/create\/(${getSections().join('|')})`
+			String.raw`\/create\/character\/(${getSections().join('|')})`
 		);
 		const match = pathname.match(pathRegex);
 
@@ -102,7 +102,7 @@ const SectionBar = (): JSX.Element => {
 			>
 				{getSections().map((key, index) => (
 					<li key={key}>
-						<Link href={`/create/${key}`}>
+						<Link href={`/create/character/${key}`}>
 							<a
 								className={`${classes.link}${
 									key === selectedSection ? ` ${classes['link-selected']}` : ''

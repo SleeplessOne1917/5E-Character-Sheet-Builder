@@ -6,7 +6,7 @@ import {
 	SrdSpellItem,
 	SrdSubrace,
 	SrdSubraceItem
-} from '../../../types/srd';
+} from '../../../../types/srd';
 import {
 	MutableRefObject,
 	useCallback,
@@ -14,29 +14,32 @@ import {
 	useRef,
 	useState
 } from 'react';
-import { addLanguage, removeLanguage } from '../../../redux/features/languages';
+import {
+	addLanguage,
+	removeLanguage
+} from '../../../../redux/features/languages';
 import {
 	addProficiency,
 	removeProficiency
-} from '../../../redux/features/proficiencies';
-import { deselectRace, selectRace } from '../../../redux/features/raceInfo';
-import { getRace, getSubrace } from '../../../services/raceService';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+} from '../../../../redux/features/proficiencies';
+import { deselectRace, selectRace } from '../../../../redux/features/raceInfo';
+import { getRace, getSubrace } from '../../../../services/raceService';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import Button from '../../../components/Button/Button';
-import ChooseModal from '../../../components/character-creation/ChooseModal/ChooseModal';
-import ConfirmationModal from '../../../components/ConfirmationModal/ConfirmationModal';
-import { Descriptor } from '../../../types/creation';
-import DescriptorComponent from '../../../components/character-creation/Descriptor/Descriptor';
-import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
-import MainContent from '../../../components/MainContent/MainContent';
-import RaceOption from '../../../components/character-creation/Race/RaceOption/RaceOption';
-import SelectedRaceDisplay from '../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
+import Button from '../../../../components/Button/Button';
+import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
+import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
+import { Descriptor } from '../../../../types/creation';
+import DescriptorComponent from '../../../../components/character-creation/Descriptor/Descriptor';
+import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
+import MainContent from '../../../../components/MainContent/MainContent';
+import RaceOption from '../../../../components/character-creation/Race/RaceOption/RaceOption';
+import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
 import classes from './Race.module.css';
-import { getAbilityScoreDescription } from '../../../services/abilityBonusService';
-import { removeSpell } from '../../../redux/features/spells';
-import { updateRaceBonus } from '../../../redux/features/abilityScores';
+import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
+import { removeSpell } from '../../../../redux/features/spells';
+import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 
 type RaceProps = {
 	races: SrdItem[];

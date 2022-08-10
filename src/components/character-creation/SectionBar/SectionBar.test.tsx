@@ -40,7 +40,7 @@ const mockMatchMedia = (matches: boolean) => {
 
 it('renders correctly', () => {
 	mockMatchMedia(true);
-	mockRouter('/create/race/');
+	mockRouter('/create/character/race/');
 
 	render(<SectionBar />);
 
@@ -53,7 +53,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at race', () => {
-		mockRouter('/create/race/');
+		mockRouter('/create/character/race/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -62,7 +62,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at class', () => {
-		mockRouter('/create/class/');
+		mockRouter('/create/character/class/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -71,7 +71,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at abilities', () => {
-		mockRouter('/create/abilities/');
+		mockRouter('/create/character/abilities/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -80,7 +80,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at description', () => {
-		mockRouter('/create/description/');
+		mockRouter('/create/character/description/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -89,7 +89,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at equipment', () => {
-		mockRouter('/create/equipment/');
+		mockRouter('/create/character/equipment/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -98,7 +98,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at finish', () => {
-		mockRouter('/create/finish/');
+		mockRouter('/create/character/finish/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(

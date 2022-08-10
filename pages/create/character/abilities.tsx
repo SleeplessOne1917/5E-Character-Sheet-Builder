@@ -1,8 +1,8 @@
 import { GetStaticPropsResult, NextPage } from 'next';
 
-import AbilitiesView from '../../src/views/create/abilities/Abilities';
-import { AbilityItem } from '../../src/types/srd';
-import { getAbilities } from '../../src/graphql/srdClientService';
+import AbilitiesView from '../../../src/views/create/character/abilities/Abilities';
+import { AbilityItem } from '../../../src/types/srd';
+import { getAbilities } from '../../../src/graphql/srdClientService';
 
 type AbilitiesPageProps = {
 	abilities: AbilityItem[];

@@ -12,7 +12,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link link-selected"
-        href="/create/race"
+        href="/create/character/race"
         style="transform: translateY(0);"
       >
         Race
@@ -21,7 +21,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link"
-        href="/create/class"
+        href="/create/character/class"
       >
         Class
       </a>
@@ -29,7 +29,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link"
-        href="/create/abilities"
+        href="/create/character/abilities"
       >
         Abilities
       </a>
@@ -37,7 +37,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link"
-        href="/create/description"
+        href="/create/character/description"
       >
         Description
       </a>
@@ -45,7 +45,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link"
-        href="/create/equipment"
+        href="/create/character/equipment"
       >
         Equipment
       </a>
@@ -53,7 +53,7 @@ exports[`renders correctly 1`] = `
     <li>
       <a
         class="link"
-        href="/create/finish"
+        href="/create/character/finish"
       >
         Finish
       </a>
