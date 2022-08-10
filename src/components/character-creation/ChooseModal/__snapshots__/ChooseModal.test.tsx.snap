@@ -23,7 +23,12 @@ exports[`renders correctly 1`] = `
     <div
       class="content-container"
     >
-      Content
+      <h2
+        class="title"
+      />
+      <div
+        class="modal-content-container"
+      />
     </div>
     <div
       class="buttons-container"

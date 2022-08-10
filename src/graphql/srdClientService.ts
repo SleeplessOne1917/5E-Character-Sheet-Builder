@@ -1,9 +1,10 @@
+import { SrdFullClassItem } from './../types/srd';
 import {
 	AbilityItem,
 	SrdItem,
-	SrdSubrace,
+	SrdFullSubraceItem,
 	SrdSubraceItem,
-	SrdRace
+	SrdFullRaceItem
 } from '../types/srd';
 import { TypedDocumentNode, createClient } from 'urql';
 
@@ -15,6 +16,7 @@ import GET_RACE from './queries/5E-API/race/getRace';
 import GET_RACES from './queries/5E-API/race/getRaces';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
+import GET_CLASS from './queries/5E-API/class/getClass';
 
 const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 
@@ -27,10 +29,13 @@ export const getRaces = async () =>
 	await query<{ races: SrdItem[] }>(GET_RACES);
 
 export const getRace = async (index: string) =>
-	await query<{ race: SrdRace }>(GET_RACE, { index });
+	await query<{ race: SrdFullRaceItem }>(GET_RACE, { index });
 
 export const getClasses = async (): Promise<SrdItem[] | undefined> =>
 	(await query<{ classes: SrdItem[] }>(GET_CLASSES))?.data?.classes;
+
+export const getClass = async (index: string) =>
+	await query<{ class: SrdFullClassItem }>(GET_CLASS, { index });
 
 export const getAbilities = async (): Promise<AbilityItem[] | undefined> =>
 	(await query<{ abilityScores: AbilityItem[] }>(GET_ABILITIES))?.data
@@ -43,4 +48,4 @@ export const getSubraces = async () =>
 	await query<{ subraces: SrdSubraceItem[] }>(GET_SUBRACES);
 
 export const getSubrace = async (index: string) =>
-	await query<{ subrace: SrdSubrace }>(GET_SUBRACE, { index });
+	await query<{ subrace: SrdFullSubraceItem }>(GET_SUBRACE, { index });

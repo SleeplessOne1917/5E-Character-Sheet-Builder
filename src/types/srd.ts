@@ -36,9 +36,20 @@ export type SrdItemChoice = {
 	from: { options: { item: SrdItem }[] };
 };
 
+type SrdProficiencyItemChoiceOption = {
+	item?: SrdProficiencyItem;
+	choice?: {
+		choose: number;
+		from: {
+			options: SrdProficiencyItemChoiceOption[];
+		};
+	};
+};
+
 export type SrdProficiencyItemChoice = {
 	choose: number;
-	from: { options: { item: SrdProficiencyItem }[] };
+	desc?: string;
+	from: { options: SrdProficiencyItemChoiceOption[] };
 };
 
 export interface SrdSubtraitItem extends SrdItem {
@@ -120,9 +131,7 @@ export type AbilityBonus = {
 	bonus: number;
 };
 
-export type SrdRace = {
-	index: string;
-	name: string;
+export interface SrdFullRaceItem extends SrdItem {
 	size: string;
 	age: string;
 	size_description: string;
@@ -134,12 +143,86 @@ export type SrdRace = {
 	ability_bonuses: AbilityBonus[];
 	ability_bonus_options?: AbilityBonusChoice;
 	traits: SrdTrait[];
-};
+}
 
-export type SrdSubrace = {
-	index: string;
-	name: string;
+export interface SrdFullSubraceItem extends SrdItem {
 	desc: string;
 	ability_bonuses: AbilityBonus[];
 	racial_traits: SrdTrait[];
+}
+
+export interface SrdFeatureItem extends SrdItem {
+	desc: string[];
+}
+
+type ClassSpellcasting = {
+	spellcasting_ability: AbilityItem;
+	level: number;
+	info: { name: string; desc: string[] }[];
 };
+
+type ClassLevelSpellcasting = {
+	cantrips_known?: number;
+	spell_slots_level_1?: number;
+	spell_slots_level_2?: number;
+	spell_slots_level_3?: number;
+	spell_slots_level_4?: number;
+	spell_slots_level_5?: number;
+	spell_slots_level_6?: number;
+	spell_slots_level_7?: number;
+	spell_slots_level_8?: number;
+	spell_slots_level_9?: number;
+	spells_known?: number;
+};
+
+type ClassLevel = {
+	prof_bonus: number;
+	level: number;
+	features: SrdFeatureItem[];
+	spellcasting?: ClassLevelSpellcasting;
+};
+
+interface SrdEquipmentItem extends SrdItem {
+	contents?: { quantity: number; item: SrdItem }[];
+}
+
+type SrdEquipmentCategoryChoiceOption = {
+	choice: {
+		choose: number;
+		from: { equipment_category: SrdItem };
+	};
+};
+
+type SrdCountedReferenceOption = {
+	count: number;
+	of: SrdEquipmentItem;
+	prerequisites: { type: string; proficiency: SrdProficiencyItem }[];
+};
+
+type SrdStartingEquipmentMultipleOption = {
+	items: (SrdCountedReferenceOption | SrdEquipmentCategoryChoiceOption)[];
+};
+
+type SrdStartingEquipmentChoice = {
+	choose: number;
+	desc?: string;
+	from: {
+		equipment_category?: SrdItem;
+		options?: (
+			| SrdCountedReferenceOption
+			| SrdEquipmentCategoryChoiceOption
+			| SrdStartingEquipmentMultipleOption
+		)[];
+	};
+};
+
+export interface SrdFullClassItem extends SrdItem {
+	hit_die: number;
+	proficiencies: SrdProficiencyItem[];
+	saving_throws: AbilityItem[];
+	spellcasting?: ClassSpellcasting;
+	starting_equipment: { quantity: number; equipment: SrdEquipmentItem }[];
+	class_levels: ClassLevel[];
+	proficiency_choices: SrdProficiencyItemChoice[];
+	starting_equipment_options: SrdStartingEquipmentChoice[];
+}
