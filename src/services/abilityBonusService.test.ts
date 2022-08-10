@@ -1,10 +1,10 @@
-import { AbilityBonus } from './../types/srd';
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
-
 import {
 	getAbilityScoreDescription,
 	getIsAllBonusesSame
 } from './abilityBonusService';
+
+import { AbilityBonus } from './../types/srd';
 
 describe('getIsAllBonusesSame', () => {
 	it('isSame is true when all bonuses are the same', () => {
@@ -62,21 +62,13 @@ describe('getAbilityScoreDescription', () => {
 			ability_bonuses: [
 				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
 				{ bonus: 1, ability_score: { index: 'str', full_name: 'Strength' } },
-				{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } },
-				{ bonus: 1, ability_score: { index: 'cha', full_name: 'Charisma' } },
-				{
-					bonus: 1,
-					ability_score: { index: 'con', full_name: 'Constitution' }
-				},
-				{ bonus: 1, ability_score: { index: 'int', full_name: 'Intelligence' } }
+				{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } }
 			]
 		};
 
 		const result = getAbilityScoreDescription(mockRace);
 
-		expect(result).toBe(
-			'+1 to Dexterity, Strength, Wisdom, Charisma, Constitution, and Intelligence.'
-		);
+		expect(result).toBe('+1 to Dexterity, Strength, and Wisdom.');
 	});
 
 	it('merges race and subrace ability bonuses', () => {
@@ -225,5 +217,25 @@ describe('getAbilityScoreDescription', () => {
 		expect(result).toBe(
 			'+1 to Strength, Dexterity, Constitution, and +1 to 2 from Wisdom, Intelligence, and Charisma.'
 		);
+	});
+
+	it('returns expected output when all ability scores have the same bonus', () => {
+		const mockRace: Pick<SrdFullRaceItem, 'ability_bonuses'> = {
+			ability_bonuses: [
+				{ bonus: 1, ability_score: { index: 'dex', full_name: 'Dexterity' } },
+				{ bonus: 1, ability_score: { index: 'str', full_name: 'Strength' } },
+				{ bonus: 1, ability_score: { index: 'wis', full_name: 'Wisdom' } },
+				{ bonus: 1, ability_score: { index: 'cha', full_name: 'Charisma' } },
+				{
+					bonus: 1,
+					ability_score: { index: 'con', full_name: 'Constitution' }
+				},
+				{ bonus: 1, ability_score: { index: 'int', full_name: 'Intelligence' } }
+			]
+		};
+
+		const result = getAbilityScoreDescription(mockRace);
+
+		expect(result).toBe('+1 to all ability scores.');
 	});
 });

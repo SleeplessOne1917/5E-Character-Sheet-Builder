@@ -1,5 +1,6 @@
-import { AbilityBonus } from './../types/srd';
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
+
+import { AbilityBonus } from './../types/srd';
 
 export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
 	abilityBonuses.reduce(
@@ -46,7 +47,10 @@ export const getAbilityScoreDescription = (
 
 	const allSameBonuses = getIsAllBonusesSame(abilityBonuses);
 
-	if (allSameBonuses.isSame && abilityBonuses.length > 1) {
+	// There are 6 ability scores in total
+	if (allSameBonuses.isSame && abilityBonuses.length === 6) {
+		return `+${allSameBonuses.value} to all ability scores.`;
+	} else if (allSameBonuses.isSame && abilityBonuses.length > 1) {
 		description = `+${allSameBonuses.value} to ${abilityBonuses.reduce(
 			(acc, cur, index) =>
 				`${acc}${

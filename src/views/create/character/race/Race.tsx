@@ -89,13 +89,6 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		if (consideredRace) {
 			let theDescriptors: Descriptor[] = [
 				{
-					title: 'Ability Score Bonuses',
-					description: getAbilityScoreDescription(
-						consideredRace,
-						consideredSubrace
-					)
-				},
-				{
 					title: 'Age',
 					description: consideredRace.age
 				},
@@ -129,6 +122,13 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 			}
 
 			setOtherDescriptors([
+				{
+					title: 'Ability Score Bonuses',
+					description: getAbilityScoreDescription(
+						consideredRace,
+						consideredSubrace
+					)
+				},
 				{ title: 'Speed', description: `${consideredRace.speed} ft.` }
 			]);
 			setDescriptors(theDescriptors);
