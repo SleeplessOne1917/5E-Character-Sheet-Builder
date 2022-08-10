@@ -327,16 +327,18 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 					<>
 						<h1 className={classes.title}>Choose Race</h1>
 						<ul className={classes['race-list']}>
-							{races.map(race => (
-								<Option
-									option={race}
-									subOptions={subraces.filter(
-										subrace => subrace.race.index === race.index
-									)}
-									key={race.index}
-									onChoose={getConsiderRaceHandler(race.index)}
-								/>
-							))}
+							{races
+								.sort((a, b) => a.index.localeCompare(b.index))
+								.map(race => (
+									<Option
+										option={race}
+										subOptions={subraces.filter(
+											subrace => subrace.race.index === race.index
+										)}
+										key={race.index}
+										onChoose={getConsiderRaceHandler(race.index)}
+									/>
+								))}
 						</ul>
 					</>
 				)}

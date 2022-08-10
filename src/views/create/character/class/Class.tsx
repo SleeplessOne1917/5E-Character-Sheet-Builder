@@ -200,13 +200,15 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 					<>
 						<h1 className={styles.title}>Choose Class</h1>
 						<ul className={styles['class-list']}>
-							{classes.map(klass => (
-								<Option
-									key={klass.index}
-									option={klass}
-									onChoose={() => handleChooseClassOption(klass.index)}
-								/>
-							))}
+							{classes
+								.sort((a, b) => a.index.localeCompare(b.index))
+								.map(klass => (
+									<Option
+										key={klass.index}
+										option={klass}
+										onChoose={() => handleChooseClassOption(klass.index)}
+									/>
+								))}
 						</ul>
 					</>
 				)}

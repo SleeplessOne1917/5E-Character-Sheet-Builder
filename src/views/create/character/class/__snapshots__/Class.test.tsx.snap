@@ -22,7 +22,7 @@ exports[`renders correctly 1`] = `
       >
         <div>
           <div
-            aria-label="Wizard"
+            aria-label="Barbarian"
             class="option-container"
             role="button"
             tabindex="0"
@@ -37,192 +37,12 @@ exports[`renders correctly 1`] = `
                   class="icon"
                 >
                   <use
-                    xlink:href="/Icons.svg#wizard"
+                    xlink:href="/Icons.svg#barbarian"
                   />
                 </svg>
               </div>
                
-              Wizard
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Paladin"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#paladin"
-                  />
-                </svg>
-              </div>
-               
-              Paladin
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Cleric"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#cleric"
-                  />
-                </svg>
-              </div>
-               
-              Cleric
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Monk"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#monk"
-                  />
-                </svg>
-              </div>
-               
-              Monk
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Rogue"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#rogue"
-                  />
-                </svg>
-              </div>
-               
-              Rogue
+              Barbarian
             </div>
             <svg
               aria-hidden="true"
@@ -292,7 +112,7 @@ exports[`renders correctly 1`] = `
       >
         <div>
           <div
-            aria-label="Ranger"
+            aria-label="Cleric"
             class="option-container"
             role="button"
             tabindex="0"
@@ -307,147 +127,12 @@ exports[`renders correctly 1`] = `
                   class="icon"
                 >
                   <use
-                    xlink:href="/Icons.svg#ranger"
+                    xlink:href="/Icons.svg#cleric"
                   />
                 </svg>
               </div>
                
-              Ranger
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Warlock"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#warlock"
-                  />
-                </svg>
-              </div>
-               
-              Warlock
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Sorcerer"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#sorcerer"
-                  />
-                </svg>
-              </div>
-               
-              Sorcerer
-            </div>
-            <svg
-              aria-hidden="true"
-              class="chevron"
-              data-testid="chevron-right"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </li>
-      <li
-        class="option-li"
-        data-testid="option"
-      >
-        <div>
-          <div
-            aria-label="Barbarian"
-            class="option-container"
-            role="button"
-            tabindex="0"
-          >
-            <div
-              class="option-title"
-            >
-              <div
-                class="icon-container"
-              >
-                <svg
-                  class="icon"
-                >
-                  <use
-                    xlink:href="/Icons.svg#barbarian"
-                  />
-                </svg>
-              </div>
-               
-              Barbarian
+              Cleric
             </div>
             <svg
               aria-hidden="true"
@@ -538,6 +223,321 @@ exports[`renders correctly 1`] = `
               </div>
                
               Fighter
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Monk"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#monk"
+                  />
+                </svg>
+              </div>
+               
+              Monk
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Paladin"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#paladin"
+                  />
+                </svg>
+              </div>
+               
+              Paladin
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Ranger"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#ranger"
+                  />
+                </svg>
+              </div>
+               
+              Ranger
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Rogue"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#rogue"
+                  />
+                </svg>
+              </div>
+               
+              Rogue
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Sorcerer"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#sorcerer"
+                  />
+                </svg>
+              </div>
+               
+              Sorcerer
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Warlock"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#warlock"
+                  />
+                </svg>
+              </div>
+               
+              Warlock
+            </div>
+            <svg
+              aria-hidden="true"
+              class="chevron"
+              data-testid="chevron-right"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </li>
+      <li
+        class="option-li"
+        data-testid="option"
+      >
+        <div>
+          <div
+            aria-label="Wizard"
+            class="option-container"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="option-title"
+            >
+              <div
+                class="icon-container"
+              >
+                <svg
+                  class="icon"
+                >
+                  <use
+                    xlink:href="/Icons.svg#wizard"
+                  />
+                </svg>
+              </div>
+               
+              Wizard
             </div>
             <svg
               aria-hidden="true"
