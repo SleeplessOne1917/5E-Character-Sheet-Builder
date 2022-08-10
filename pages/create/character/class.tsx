@@ -17,7 +17,7 @@ export default ClassPage;
 export const getStaticProps = async (): Promise<
 	GetStaticPropsResult<ClassPageProps>
 > => {
-	const classes = await getClasses();
+	const classes = (await getClasses()) ?? [];
 
 	return { props: { classes } };
 };

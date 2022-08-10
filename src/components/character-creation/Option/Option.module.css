@@ -3,7 +3,7 @@
     width: 3rem;
 }
 
-.race-container {
+.option-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,12 +14,12 @@
     border-radius: 0.5rem;
 }
 
-.race-container:focus-visible {
+.option-container:focus-visible {
     border: var(--focus-outline);
     outline: 2px solid var(--davy)
 }
 
-.race-title {
+.option-title {
     font-family: var(--font-fantasy);
     font-size: 1.5rem;
     display: flex;
@@ -42,15 +42,15 @@
     width: 3.5rem;
 }
 
-.race-li {
+.option-li {
     margin: 1rem 0;
 }
 
-.subrace-list {
+.sub-option-list {
     list-style: none;
 }
 
-.subrace-list li {
+.sub-option-list li {
     margin: 1rem 0;
 }
 

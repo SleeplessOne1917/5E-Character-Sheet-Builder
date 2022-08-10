@@ -2,18 +2,18 @@
 
 exports[`renders correctly 1`] = `
 <li
-  class="race-li"
-  data-testid="race-option"
+  class="option-li"
+  data-testid="option"
 >
   <div>
     <div
       aria-label="Dwarf"
-      class="race-container"
+      class="option-container"
       role="button"
       tabindex="0"
     >
       <div
-        class="race-title"
+        class="option-title"
       >
         <div
           class="icon-container"

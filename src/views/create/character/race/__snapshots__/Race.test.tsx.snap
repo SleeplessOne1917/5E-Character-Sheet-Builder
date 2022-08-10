@@ -17,18 +17,18 @@ exports[`renders correctly 1`] = `
       class="race-list"
     >
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="DragonBorn"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -62,18 +62,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Hill Dwarf"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -107,18 +107,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="High Elf"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -152,18 +152,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Rock Gnome"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -197,18 +197,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Half Elf"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -242,18 +242,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Half Orc"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -287,18 +287,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Lightfoot Halfling"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -332,18 +332,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Human"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"
@@ -377,18 +377,18 @@ exports[`renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="race-li"
-        data-testid="race-option"
+        class="option-li"
+        data-testid="option"
       >
         <div>
           <div
             aria-label="Tiefling"
-            class="race-container"
+            class="option-container"
             role="button"
             tabindex="0"
           >
             <div
-              class="race-title"
+              class="option-title"
             >
               <div
                 class="icon-container"

@@ -33,13 +33,13 @@ import { Descriptor } from '../../../../types/creation';
 import DescriptorComponent from '../../../../components/character-creation/Descriptor/Descriptor';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
-import RaceOption from '../../../../components/character-creation/Race/RaceOption/RaceOption';
 import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { removeSpell } from '../../../../redux/features/spells';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
+import Option from '../../../../components/character-creation/Option/Option';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -355,15 +355,13 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 						<h1 className={classes.title}>Choose Race</h1>
 						<ul className={classes['race-list']}>
 							{races.map(race => (
-								<RaceOption
-									race={race}
-									subraces={subraces.filter(
+								<Option
+									option={race}
+									subOptions={subraces.filter(
 										subrace => subrace.race.index === race.index
 									)}
 									key={race.index}
 									onChoose={getConsiderRaceHandler(race.index)}
-									iconId={race.index}
-									selectable={!showSelectModal}
 								/>
 							))}
 						</ul>

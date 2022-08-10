@@ -1,24 +1,24 @@
 import '@testing-library/jest-dom';
 
-import * as stories from './RaceOption.stories';
+import * as stories from './Option.stories';
 
 import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
 
-const { OnlyRace, RaceWithMultipleSubraces, RaceWithOneSubrace } =
+const { OnlyOption, OptionWithMultipleSubOptions, OptionWithOneSubOption } =
 	composeStories(stories);
 
 it('renders correctly', () => {
-	render(<OnlyRace />);
+	render(<OnlyOption />);
 
-	expect(screen.getByTestId(/race-option/i)).toMatchSnapshot();
+	expect(screen.getByTestId(/option/i)).toMatchSnapshot();
 });
 
 describe('has correct chevron', () => {
 	it('when only race', () => {
-		render(<OnlyRace />);
+		render(<OnlyOption />);
 
 		expect(screen.getByTestId(/chevron-right/i)).toBeInTheDocument();
 		expect(screen.queryByTestId(/chevron-up/i)).not.toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('has correct chevron', () => {
 	});
 
 	it('when only one subrace', () => {
-		render(<RaceWithOneSubrace />);
+		render(<OptionWithOneSubOption />);
 
 		expect(screen.getByTestId(/chevron-right/i)).toBeInTheDocument();
 		expect(screen.queryByTestId(/chevron-up/i)).not.toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('has correct chevron', () => {
 	});
 
 	it('when multiple subraces collapsed', () => {
-		render(<RaceWithMultipleSubraces />);
+		render(<OptionWithMultipleSubOptions />);
 
 		expect(screen.queryByTestId(/chevron-right/i)).not.toBeInTheDocument();
 		expect(screen.queryByTestId(/chevron-up/i)).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('has correct chevron', () => {
 	});
 
 	it('when multiple subraces expanded', async () => {
-		render(<RaceWithMultipleSubraces />);
+		render(<OptionWithMultipleSubOptions />);
 
 		await userEvent.click(screen.getByText(/Dwarf/i));
 
@@ -55,7 +55,7 @@ describe('has correct chevron', () => {
 it('does not call onChoose when race is clicked and there are multiple subraces', async () => {
 	const onChooseMock = jest.fn();
 
-	render(<RaceWithMultipleSubraces onChoose={onChooseMock} />);
+	render(<OptionWithMultipleSubOptions onChoose={onChooseMock} />);
 
 	await userEvent.click(screen.getByText(/Dwarf/i));
 
@@ -67,7 +67,7 @@ describe('onChoose', () => {
 		it('is called with no arguments when no subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<OnlyRace onChoose={onChooseMock} />);
+			render(<OnlyOption onChoose={onChooseMock} />);
 			await userEvent.click(screen.getByText(/Dwarf/i));
 
 			expect(onChooseMock).toHaveBeenCalledWith();
@@ -76,7 +76,7 @@ describe('onChoose', () => {
 		it('is called with subrace when only 1 subrace', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithOneSubrace onChoose={onChooseMock} />);
+			render(<OptionWithOneSubOption onChoose={onChooseMock} />);
 			await userEvent.click(screen.getByText(/Dwarf/i));
 
 			expect(onChooseMock).toHaveBeenCalledWith('hill-dwarf');
@@ -85,7 +85,7 @@ describe('onChoose', () => {
 		it('is called with subrace when multiple subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithMultipleSubraces onChoose={onChooseMock} />);
+			render(<OptionWithMultipleSubOptions onChoose={onChooseMock} />);
 			await userEvent.click(screen.getByText(/Dwarf/i));
 			await userEvent.click(screen.getByText(/Mountain Dwarf/i));
 
@@ -97,7 +97,7 @@ describe('onChoose', () => {
 		it('is called with no arguments when no subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<OnlyRace onChoose={onChooseMock} />);
+			render(<OnlyOption onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard('{Enter}');
 
@@ -107,7 +107,7 @@ describe('onChoose', () => {
 		it('is called with subrace when only 1 subrace', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithOneSubrace onChoose={onChooseMock} />);
+			render(<OptionWithOneSubOption onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard('{Enter}');
 
@@ -117,7 +117,7 @@ describe('onChoose', () => {
 		it('is called with subrace when multiple subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithMultipleSubraces onChoose={onChooseMock} />);
+			render(<OptionWithMultipleSubOptions onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard('{Enter}');
 			await userEvent.tab();
@@ -132,7 +132,7 @@ describe('onChoose', () => {
 		it('is called with no arguments when no subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<OnlyRace onChoose={onChooseMock} />);
+			render(<OnlyOption onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard(' ');
 
@@ -142,7 +142,7 @@ describe('onChoose', () => {
 		it('is called with subrace when only 1 subrace', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithOneSubrace onChoose={onChooseMock} />);
+			render(<OptionWithOneSubOption onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard(' ');
 
@@ -152,7 +152,7 @@ describe('onChoose', () => {
 		it('is called with subrace when multiple subraces', async () => {
 			const onChooseMock = jest.fn();
 
-			render(<RaceWithMultipleSubraces onChoose={onChooseMock} />);
+			render(<OptionWithMultipleSubOptions onChoose={onChooseMock} />);
 			await userEvent.tab();
 			await userEvent.keyboard(' ');
 			await userEvent.tab();
