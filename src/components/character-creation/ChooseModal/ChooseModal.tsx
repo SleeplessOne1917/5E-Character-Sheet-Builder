@@ -1,8 +1,8 @@
+import Button from '../../Button/Button';
 import { CSSProperties } from 'react';
 import { Descriptor } from '../../../types/creation';
-import Button from '../../Button/Button';
-import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import DescriptorComponent from '../Descriptor/Descriptor';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import classes from './ChooseModal.module.css';
 
 export type ChooseModalProps = {
@@ -41,6 +41,10 @@ const ChooseModal = ({
 		borderRadius: 0
 	};
 
+	const contentContainerStyle: CSSProperties = loading
+		? { justifyContent: 'center' }
+		: {};
+
 	return (
 		<div
 			style={{ display: show ? 'flex' : 'none' }}
@@ -57,7 +61,10 @@ const ChooseModal = ({
 					<h2 className={classes.title}>
 						{loading ? 'Loading...' : error ? 'Error' : title}
 					</h2>
-					<div className={classes['modal-content-container']}>
+					<div
+						className={classes['modal-content-container']}
+						style={contentContainerStyle}
+					>
 						{loading ? (
 							<LoadingSpinner />
 						) : error ? (
