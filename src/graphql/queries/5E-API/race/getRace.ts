@@ -88,6 +88,10 @@ const GET_RACE = gql`
 													level
 												}
 											}
+											area_of_effect {
+												type
+												size
+											}
 											dc {
 												type {
 													index

@@ -20,6 +20,10 @@ export default {
 					index: 'dex',
 					full_name: 'Dexterity'
 				}
+			},
+			area_of_effect: {
+				size: 15,
+				type: 'CONE'
 			}
 		}
 	}

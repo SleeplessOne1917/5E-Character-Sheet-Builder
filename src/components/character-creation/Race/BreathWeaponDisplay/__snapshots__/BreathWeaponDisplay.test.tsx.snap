@@ -69,6 +69,31 @@ exports[`renders correctly 1`] = `
           Dexterity
         </span>
       </div>
+      <div
+        class="area-of-effect"
+      >
+        <div>
+          <span
+            class="breath-weapon-label"
+          >
+            Area of effect
+          </span>
+          :
+           
+          <span
+            class="breath-weapon-data"
+          >
+            15 ft. cone
+          </span>
+        </div>
+        <svg
+          class="shape"
+        >
+          <use
+            xlink:href="/Icons.svg#cone"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </div>

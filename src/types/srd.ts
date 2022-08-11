@@ -70,6 +70,11 @@ export type AbilityBonusChoice = {
 	};
 };
 
+type AreaOfEffect = {
+	size: number;
+	type: 'SPHERE' | 'CUBE' | 'CYLINDER' | 'LINE' | 'CONE';
+};
+
 export type BreathWeapon = {
 	damage: {
 		damage_type: SrdItem;
@@ -78,6 +83,7 @@ export type BreathWeapon = {
 	dc: {
 		type: AbilityItem;
 	};
+	area_of_effect: AreaOfEffect;
 };
 
 type SpellComponent = 'V' | 'S' | 'M';

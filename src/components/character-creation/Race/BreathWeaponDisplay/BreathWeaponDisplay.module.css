@@ -40,3 +40,14 @@
     grid-area: content;
     text-align: start;
 }
+
+.shape {
+    fill: var(--wine-red);
+    width: 3rem;
+    height: 3rem;
+}
+
+.area-of-effect {
+    display: flex;
+    align-items: center;
+}

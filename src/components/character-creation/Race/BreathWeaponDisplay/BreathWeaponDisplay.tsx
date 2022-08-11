@@ -44,6 +44,24 @@ const BreathWeaponDisplay = ({ breathWeapon }: BreathWeaponDisplayProps) => {
 							{breathWeapon.dc.type.full_name}
 						</span>
 					</div>
+					<div className={classes['area-of-effect']}>
+						<div>
+							<span className={classes['breath-weapon-label']}>
+								Area of effect
+							</span>
+							:{' '}
+							<span className={classes['breath-weapon-data']}>
+								{`${
+									breathWeapon.area_of_effect.size
+								} ft. ${breathWeapon.area_of_effect.type.toLowerCase()}`}
+							</span>
+						</div>
+						<svg className={classes.shape}>
+							<use
+								xlinkHref={`/Icons.svg#${breathWeapon.area_of_effect.type.toLowerCase()}`}
+							/>
+						</svg>
+					</div>
 				</div>
 			</div>
 		</div>
