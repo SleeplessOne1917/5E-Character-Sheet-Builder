@@ -4,9 +4,10 @@ import { SrdFullClassItem } from '../../types/srd';
 
 export type ClassInfoState = {
 	class?: SrdFullClassItem;
+	level: number;
 };
 
-export const initialState: ClassInfoState = {};
+export const initialState: ClassInfoState = { level: 0 };
 
 const classInfoSlice = createSlice({
 	name: 'classInfo',
@@ -15,10 +16,13 @@ const classInfoSlice = createSlice({
 		selectClass: (state, action: PayloadAction<SrdFullClassItem>) => {
 			state.class = action.payload;
 		},
-		deselectClass: () => initialState
+		deselectClass: () => initialState,
+		setLevel: (state, { payload }: PayloadAction<number>) => {
+			state.level = payload;
+		}
 	}
 });
 
-export const { selectClass, deselectClass } = classInfoSlice.actions;
+export const { selectClass, deselectClass, setLevel } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

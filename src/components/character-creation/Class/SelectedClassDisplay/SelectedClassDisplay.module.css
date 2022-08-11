@@ -8,6 +8,7 @@
     border-collapse: collapse;
     padding: 0.5rem;
     border-radius: 0.3rem;
+    width: 100%;
 }
 
 .table td, .table th {
@@ -25,4 +26,22 @@
 
 .ordinal {
     font-size: 0.75rem;
+}
+
+.level-select-container {
+    display: column;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.level-select-label {
+    font-size: 1.5rem;
+}
+
+.level-select {
+    font-size: 1.5rem;
+}
+
+.current-level-row {
+    background-color: var(--highlight) !important;
 }
