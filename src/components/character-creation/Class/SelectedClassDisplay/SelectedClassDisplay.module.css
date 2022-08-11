@@ -1,0 +1,28 @@
+.head {
+    text-align: start;
+}
+
+.table {
+    color: var(--davy);
+    background-color: var(--heaven-light);
+    border-collapse: collapse;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+}
+
+.table td, .table th {
+    padding: 0.5rem;
+}
+
+.table th {
+    background-color: var(--davy);
+    color: var(--heaven-light);
+}
+
+.odd {
+    background-color: var(--highlight-light);
+}
+
+.ordinal {
+    font-size: 0.75rem;
+}

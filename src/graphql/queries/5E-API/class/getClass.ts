@@ -61,12 +61,12 @@ const GET_CLASS = gql`
 					index
 					name
 					desc
-					subclass {
-						index
-						name
-					}
 				}
 				level
+				subclass {
+					index
+					name
+				}
 			}
 			proficiency_choices {
 				desc

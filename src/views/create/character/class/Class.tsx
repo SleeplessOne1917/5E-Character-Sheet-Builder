@@ -19,6 +19,7 @@ import Option from '../../../../components/character-creation/Option/Option';
 import { XCircleIcon } from '@heroicons/react/solid';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
+import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 
 type ClassProps = {
 	classes: SrdItem[];
@@ -107,14 +108,11 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 		if (consideredClass) {
 			const theDescriptors: Descriptor[] = [...consideredClass.class_levels]
 				.sort((a, b) => a.level - b.level)
+				.filter(level => !level.subclass)
 				.flatMap(level =>
 					level.features
 						.filter(
-							feature =>
-								!(
-									feature.name.match(/Ability Score Improvement/i) ||
-									feature.subclass
-								)
+							feature => !feature.name.match(/Ability Score Improvement/i)
 						)
 						.map<Descriptor>(feature => ({
 							title: feature.name.replace(/\s+\(.*\)/, ''),
@@ -239,6 +237,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 								Deselect Race
 							</Button>
 						</div>
+						<SelectedClassDisplay klass={classInfo.class} />
 					</>
 				)}
 			</MainContent>

@@ -159,7 +159,6 @@ export interface SrdFullSubraceItem extends SrdItem {
 
 export interface SrdFeatureItem extends SrdItem {
 	desc: string[];
-	subclass?: SrdItem;
 }
 
 type ClassSpellcasting = {
@@ -187,6 +186,7 @@ type ClassLevel = {
 	level: number;
 	features: SrdFeatureItem[];
 	spellcasting?: ClassLevelSpellcasting;
+	subclass?: SrdItem;
 };
 
 interface SrdEquipmentItem extends SrdItem {
