@@ -1,6 +1,4 @@
 .container {
-    display: flex;
-    flex-direction: column;
     position: relative;
     width: fit-content;
 }
@@ -16,10 +14,12 @@
     position: absolute;
     z-index: 2;
     border-radius: 0.75rem;
+    overflow-y: auto;
+    max-height: 20rem;
 }
 
 .item {
-    padding: 0.6rem 1.6rem;
+    padding: 0.25rem 0.5rem;
     cursor: pointer;
     text-align: center;
 }
