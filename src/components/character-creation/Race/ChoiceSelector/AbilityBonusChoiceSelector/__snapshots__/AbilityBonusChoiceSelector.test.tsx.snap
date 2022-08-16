@@ -196,14 +196,6 @@ exports[`renders correctly 1`] = `
     >
       Reset
     </button>
-    <button
-      class="button positive"
-      disabled=""
-      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
-      type="button"
-    >
-      Apply
-    </button>
   </div>
 </div>
 `;
@@ -403,14 +395,6 @@ exports[`renders correctly 2`] = `
       type="button"
     >
       Reset
-    </button>
-    <button
-      class="button positive"
-      disabled=""
-      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
-      type="button"
-    >
-      Apply
     </button>
   </div>
 </div>

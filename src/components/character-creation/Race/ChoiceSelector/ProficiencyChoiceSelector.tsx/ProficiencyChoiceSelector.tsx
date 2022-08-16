@@ -129,10 +129,8 @@ const ProficiencyChoiceSelector = ({
 	return (
 		<ChoiceSelector
 			label={label}
-			selectValues={selectValues}
 			selects={selects}
 			isSelected={!selectValues.includes('blank')}
-			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);

@@ -114,9 +114,7 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 			label={`${trait.name}: select ${choice.choose} spell${
 				choice.choose > 1 ? 's' : ''
 			}`}
-			selectValues={selectValues}
 			selects={selects}
-			onApply={() => {}}
 			onReset={handleReset}
 			isSelected={!selectValues.includes('blank')}
 		/>

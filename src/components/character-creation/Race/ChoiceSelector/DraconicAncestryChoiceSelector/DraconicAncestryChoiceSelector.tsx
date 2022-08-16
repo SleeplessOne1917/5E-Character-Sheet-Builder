@@ -69,10 +69,8 @@ const DraconicAncestryChoiceSelector = ({
 	return (
 		<ChoiceSelector
 			label="Select draconic ancestry"
-			selectValues={[selectValue]}
 			selects={selects}
 			isSelected={selectValue !== 'blank'}
-			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);

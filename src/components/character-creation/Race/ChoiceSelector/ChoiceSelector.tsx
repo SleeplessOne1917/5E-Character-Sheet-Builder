@@ -7,8 +7,6 @@ import useMediaQuery from '../../../../hooks/useMediaQuery';
 type ChoiceSelectorProps = {
 	isSelected?: boolean;
 	selects: ReactNode[];
-	selectValues: string[];
-	onApply?: () => void;
 	onReset?: () => void;
 	label: string;
 };
@@ -16,8 +14,6 @@ type ChoiceSelectorProps = {
 const ChoiceSelector = ({
 	isSelected = false,
 	selects,
-	selectValues,
-	onApply = () => {},
 	onReset = () => {},
 	label
 }: ChoiceSelectorProps) => {
@@ -35,14 +31,6 @@ const ChoiceSelector = ({
 			<div className={classes['button-div']}>
 				<Button size={isMediumOrLarger ? 'medium' : 'small'} onClick={onReset}>
 					Reset
-				</Button>
-				<Button
-					size={isMediumOrLarger ? 'medium' : 'small'}
-					positive
-					onClick={onApply}
-					disabled={selectValues.includes('blank')}
-				>
-					Apply
 				</Button>
 			</div>
 			{isSelected && <CheckIcon className={classes['check-icon']} />}
