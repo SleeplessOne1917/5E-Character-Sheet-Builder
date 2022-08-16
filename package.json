@@ -13,11 +13,11 @@
     "test:watch": "jest --watch --config jest.config.js"
   },
   "dependencies": {
-    "@graphql-tools/schema": "^9.0.0",
+    "@graphql-tools/schema": "^9.0.1",
     "@heroicons/react": "^1.0.6",
     "@reduxjs/toolkit": "^1.8.4",
     "@urql/exchange-auth": "^0.1.7",
-    "apollo-server-micro": "^3.10.0",
+    "apollo-server-micro": "^3.10.1",
     "argon2": "^0.28.7",
     "autoprefixer": "^10.4.8",
     "formik": "^2.2.9",
@@ -68,7 +68,7 @@
     "@types/react-dom": "18.0.6",
     "@types/react-html-email": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.1",
     "@typescript-eslint/typescript-estree": "^5.32.0",
     "@urql/storybook-addon": "^1.0.9",
     "babel-jest": "^28.1.3",
