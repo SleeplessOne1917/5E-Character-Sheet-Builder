@@ -10,7 +10,6 @@ import {
 	ProficiencyType,
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
-	SrdItem,
 	SrdItemChoice,
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
@@ -18,25 +17,19 @@ import {
 	SrdSpellItemChoice,
 	SrdSubtraitItemChoice
 } from '../../../../types/srd';
-import {
-	addLanguage,
-	removeLanguage
-} from '../../../../redux/features/languages';
+
+
 import {
 	addProficiency,
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
-import { addSpell, removeSpell } from '../../../../redux/features/spells';
 import {
-	deselectLanguages,
-	deselectTraitLanguages,
 	deselectTraitProficiencies,
 	deselectTraitSpells,
-	selectLanguages,
-	selectTraitLanguages,
 	selectTraitProficiencies,
 	selectTraitSpells
 } from '../../../../redux/features/raceInfo';
+import { addSpell, removeSpell } from '../../../../redux/features/spells';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
@@ -113,26 +106,6 @@ const SelectedRaceDisplay = ({
 		};
 	}, [isLargeOrLarger, setContainerStyle, raceInfo.draconicAncestry]);
 
-	const handleLanguageOptionsApply = useCallback(
-		(items: SrdItem[]) => {
-			dispatch(selectLanguages(items));
-			for (const language of items) {
-				dispatch(addLanguage(language));
-			}
-		},
-		[dispatch]
-	);
-
-	const handleLanguageOptionsReset = useCallback(
-		(items: SrdItem[]) => {
-			dispatch(deselectLanguages());
-			for (const { index } of items) {
-				dispatch(removeLanguage(index));
-			}
-		},
-		[dispatch]
-	);
-
 	const handleTraitProficienciesApply = useCallback(
 		(index: string) => {
 			return (proficiencies: SrdProficiencyItem[]) => {
@@ -153,32 +126,6 @@ const SelectedRaceDisplay = ({
 
 				for (const { index } of proficiencies) {
 					dispatch(removeProficiency(index));
-				}
-			};
-		},
-		[dispatch]
-	);
-
-	const handleTraitLanguagesApply = useCallback(
-		(index: string) => {
-			return (languages: SrdItem[]) => {
-				dispatch(selectTraitLanguages({ index, languages }));
-
-				for (const language of languages) {
-					dispatch(addLanguage(language));
-				}
-			};
-		},
-		[dispatch]
-	);
-
-	const handleTraitLanguagesReset = useCallback(
-		(traitIndex: string) => {
-			return (languages: SrdItem[]) => {
-				dispatch(deselectTraitLanguages(traitIndex));
-
-				for (const { index } of languages) {
-					dispatch(removeLanguage(index));
 				}
 			};
 		},
@@ -279,11 +226,6 @@ const SelectedRaceDisplay = ({
 						label={`Select ${race.language_options.choose} language${
 							race.language_options.choose > 1 ? 's' : ''
 						}`}
-						onApply={handleLanguageOptionsApply}
-						onReset={handleLanguageOptionsReset}
-						initialValues={raceInfo.selectedLanguages?.map(
-							language => language.index
-						)}
 					/>
 				)}
 				{traits
@@ -297,11 +239,7 @@ const SelectedRaceDisplay = ({
 							} language${
 								(trait.language_options as SrdItemChoice)?.choose > 1 ? 's' : ''
 							}`}
-							onApply={handleTraitLanguagesApply(trait.index)}
-							onReset={handleTraitLanguagesReset(trait.index)}
-							initialValues={raceInfo.selectedTraitLanguages[trait.index]?.map(
-								({ index }) => index
-							)}
+							traitIndex={trait.index}
 						/>
 					))}
 				{draconicAncestryTrait && (

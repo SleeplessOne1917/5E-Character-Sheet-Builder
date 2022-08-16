@@ -1,67 +1,135 @@
 import { SrdItem, SrdItemChoice } from '../../../../../types/srd';
-import { useCallback, useState } from 'react';
+import {
+	addLanguage,
+	removeLanguage
+} from '../../../../../redux/features/languages';
+import {
+	addRaceLanguage,
+	addTraitLanguage,
+	removeRaceLanguage,
+	removeTraitLanguage
+} from '../../../../../redux/features/raceInfo';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
+import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
 import Select from '../../../../Select/Select';
-import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
 type OptionSelectorProps = {
 	choice: SrdItemChoice;
-	onReset?: (items: SrdItem[]) => void;
-	onApply?: (items: SrdItem[]) => void;
 	label: string;
-	initialValues?: string[];
+	traitIndex?: string;
 };
 
 const LanguageChoiceSelector = ({
 	choice,
-	onReset = () => {},
-	onApply = () => {},
 	label,
-	initialValues
+	traitIndex
 }: OptionSelectorProps): JSX.Element => {
+	const dispatch = useAppDispatch();
+	const selectedLanguages = useAppSelector(
+		state => state.editingCharacter.raceInfo.selectedLanguages
+	);
+	const traitSelectedLanguages = useAppSelector(state =>
+		traitIndex
+			? state.editingCharacter.raceInfo.selectedTraitLanguages[traitIndex]
+			: undefined
+	);
+	const languages = useAppSelector(state => state.editingCharacter.languages);
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			returnValues.push('blank');
+			if (!traitIndex && selectedLanguages && i < selectedLanguages.length) {
+				returnValues.push(selectedLanguages[i].index);
+			} else if (traitSelectedLanguages && i < traitSelectedLanguages.length) {
+				returnValues.push(traitSelectedLanguages[i].index);
+			} else {
+				returnValues.push('blank');
+			}
 		}
 
 		return returnValues;
-	}, [choice]);
+	}, [choice, traitIndex, selectedLanguages, traitSelectedLanguages]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		initialValues ?? getInitialSelectValues()
+		getInitialSelectValues()
 	);
 
-	const languages = useAppSelector(state => state.editingCharacter.languages);
+	useEffect(() => {
+		setSelectValues(getInitialSelectValues());
+	}, [setSelectValues, getInitialSelectValues]);
 
 	const handleChangeSelect = useCallback(
-		(index: number, selectValue: string) =>
+		(index: number, selectValue: string) => {
+			const language =
+				selectValue !== 'blank'
+					? (choice.from.options
+							.map(option => option.item)
+							.find(option => option.index === selectValue) as SrdItem)
+					: undefined;
+
+			if (selectValues[index] !== 'blank') {
+				dispatch(removeLanguage(selectValues[index]));
+			}
+
+			if (language) {
+				dispatch(addLanguage(language));
+			}
+
+			if (!traitIndex) {
+				if (selectValues[index] !== 'blank') {
+					dispatch(removeRaceLanguage(selectValues[index]));
+				}
+
+				if (language) {
+					dispatch(addRaceLanguage(language));
+				}
+			} else {
+				if (selectValues[index] !== 'blank') {
+					dispatch(
+						removeTraitLanguage({
+							index: traitIndex,
+							language: selectValues[index]
+						})
+					);
+				}
+
+				if (language) {
+					dispatch(addTraitLanguage({ index: traitIndex, language }));
+				}
+			}
+
 			setSelectValues(prevState =>
 				prevState.map((value, i) => (i === index ? selectValue : value))
-			),
-		[setSelectValues]
-	);
-
-	const handleApply = useCallback(
-		() =>
-			onApply(
-				choice.from.options
-					.filter(option => selectValues.includes(option.item.index))
-					.map(option => option.item)
-			),
-		[onApply, choice, selectValues]
+			);
+		},
+		[setSelectValues, dispatch, choice, traitIndex, selectValues]
 	);
 
 	const handleReset = useCallback(() => {
+		for (const { index } of choice.from.options
+			.filter(option => selectValues.includes(option.item.index))
+			.map(option => option.item)) {
+			dispatch(removeLanguage(index));
+			if (!traitIndex) {
+				dispatch(removeRaceLanguage(index));
+			} else {
+				dispatch(removeTraitLanguage({ index: traitIndex, language: index }));
+			}
+		}
 		setSelectValues(getInitialSelectValues());
-		onReset(
-			choice.from.options
-				.filter(option => selectValues.includes(option.item.index))
-				.map(option => option.item)
-		);
-	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
+	}, [
+		setSelectValues,
+		getInitialSelectValues,
+		choice,
+		selectValues,
+		traitIndex,
+		dispatch
+	]);
 
 	const selects: JSX.Element[] = [];
 
@@ -96,8 +164,8 @@ const LanguageChoiceSelector = ({
 			label={label}
 			selectValues={selectValues}
 			selects={selects}
-			isSelected={!!initialValues}
-			onApply={handleApply}
+			isSelected={!selectValues.includes('blank')}
+			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);
