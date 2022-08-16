@@ -24,9 +24,9 @@ type SelectRacePayload = {
 	subrace?: SrdFullSubraceItem;
 };
 
-type SelectTraitProficienciesPayload = {
+type SelectTraitProficiencyPayload = {
 	index: string;
-	proficiencies: SrdProficiencyItem[];
+	proficiency: SrdProficiencyItem;
 };
 
 type SelectTraitLanguagePayload = {
@@ -91,23 +91,65 @@ const raceInfoSlice = createSlice({
 				language => language.index !== payload
 			);
 		},
-		selectTraitProficiencies: (
+		addTraitProficiency: (
 			state,
-			action: PayloadAction<SelectTraitProficienciesPayload>
+			action: PayloadAction<SelectTraitProficiencyPayload>
 		) => {
-			const { index, proficiencies } = action.payload;
+			const { index, proficiency } = action.payload;
+			if (
+				!(
+					state.selectedTraitProficiencies as Draft<{
+						[key: string]: SrdProficiencyItem[];
+					}>
+				)[index]
+			) {
+				(
+					state.selectedTraitProficiencies as Draft<{
+						[key: string]: SrdProficiencyItem[];
+					}>
+				)[index] = [];
+			}
 			(
 				state.selectedTraitProficiencies as Draft<{
 					[key: string]: SrdProficiencyItem[];
 				}>
-			)[index] = proficiencies;
+			)[index] = [
+				...(
+					state.selectedTraitProficiencies as Draft<{
+						[key: string]: SrdProficiencyItem[];
+					}>
+				)[index],
+				proficiency
+			];
 		},
-		deselectTraitProficiencies: (state, { payload }: PayloadAction<string>) => {
-			delete (
+		removeTraitProficiency: (
+			state,
+			{
+				payload: { index, proficiency }
+			}: PayloadAction<{ index: string; proficiency: string }>
+		) => {
+			if (
+				!(
+					state.selectedTraitProficiencies as Draft<{
+						[key: string]: SrdProficiencyItem[];
+					}>
+				)[index]
+			) {
+				(
+					state.selectedTraitProficiencies as Draft<{
+						[key: string]: SrdProficiencyItem[];
+					}>
+				)[index] = [];
+			}
+			(
 				state.selectedTraitProficiencies as Draft<{
 					[key: string]: SrdProficiencyItem[];
 				}>
-			)[payload];
+			)[index] = (
+				state.selectedTraitProficiencies as Draft<{
+					[key: string]: SrdProficiencyItem[];
+				}>
+			)[index].filter(({ index }) => index !== proficiency);
 		},
 		addTraitLanguage: (
 			state,
@@ -208,8 +250,8 @@ export const {
 	removeRaceAbilityBonus,
 	addRaceLanguage,
 	removeRaceLanguage,
-	selectTraitProficiencies,
-	deselectTraitProficiencies,
+	addTraitProficiency,
+	removeTraitProficiency,
 	addTraitLanguage,
 	removeTraitLanguage,
 	selectDraconicAncestry,

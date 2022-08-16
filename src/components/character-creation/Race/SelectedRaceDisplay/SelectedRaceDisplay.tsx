@@ -11,7 +11,6 @@ import {
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
 	SrdItemChoice,
-	SrdProficiencyItem,
 	SrdProficiencyItemChoice,
 	SrdSpellItem,
 	SrdSpellItemChoice,
@@ -19,14 +18,9 @@ import {
 } from '../../../../types/srd';
 
 
+
 import {
-	addProficiency,
-	removeProficiency
-} from '../../../../redux/features/proficiencies';
-import {
-	deselectTraitProficiencies,
 	deselectTraitSpells,
-	selectTraitProficiencies,
 	selectTraitSpells
 } from '../../../../redux/features/raceInfo';
 import { addSpell, removeSpell } from '../../../../redux/features/spells';
@@ -105,32 +99,6 @@ const SelectedRaceDisplay = ({
 			window.removeEventListener('resize', adjustRows);
 		};
 	}, [isLargeOrLarger, setContainerStyle, raceInfo.draconicAncestry]);
-
-	const handleTraitProficienciesApply = useCallback(
-		(index: string) => {
-			return (proficiencies: SrdProficiencyItem[]) => {
-				dispatch(selectTraitProficiencies({ index, proficiencies }));
-
-				for (const proficiency of proficiencies) {
-					dispatch(addProficiency(proficiency));
-				}
-			};
-		},
-		[dispatch]
-	);
-
-	const handleTraitProficienciesReset = useCallback(
-		(traitIndex: string) => {
-			return (proficiencies: SrdProficiencyItem[]) => {
-				dispatch(deselectTraitProficiencies(traitIndex));
-
-				for (const { index } of proficiencies) {
-					dispatch(removeProficiency(index));
-				}
-			};
-		},
-		[dispatch]
-	);
 
 	const handleTraitSpellsApply = useCallback(
 		(traitIndex: string) => {
@@ -264,15 +232,7 @@ const SelectedRaceDisplay = ({
 							)} proficienc${
 								(trait.proficiency_choices?.choose ?? 1) > 1 ? 'ies' : 'y'
 							}`}
-							onApply={handleTraitProficienciesApply(trait.index)}
-							onReset={handleTraitProficienciesReset(trait.index)}
-							initialValues={
-								raceInfo.selectedTraitProficiencies[trait.index]
-									? raceInfo.selectedTraitProficiencies[trait.index].map(
-											({ index }) => index
-									  )
-									: undefined
-							}
+							traitIndex={trait.index}
 						/>
 					))}
 				{traits

@@ -2,71 +2,99 @@ import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice
 } from '../../../../../types/srd';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
 import Select from '../../../../Select/Select';
-import { useAppSelector } from '../../../../../hooks/reduxHooks';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
+import {
+	addTraitProficiency,
+	removeTraitProficiency
+} from '../../../../../redux/features/raceInfo';
+import {
+	addProficiency,
+	removeProficiency
+} from '../../../../../redux/features/proficiencies';
 
 type OptionSelectorProps = {
 	choice: SrdProficiencyItemChoice;
-	onReset?: (items: SrdProficiencyItem[]) => void;
-	onApply?: (items: SrdProficiencyItem[]) => void;
-	initialValues?: string[];
+	traitIndex: string;
 	label: string;
 };
 
 const ProficiencyChoiceSelector = ({
 	choice,
-	onReset = () => {},
-	onApply = () => {},
-	initialValues,
+	traitIndex,
 	label
 }: OptionSelectorProps): JSX.Element => {
+	const dispatch = useAppDispatch();
+	const selectedProficiencies = useAppSelector(
+		state =>
+			state.editingCharacter.raceInfo.selectedTraitProficiencies[traitIndex]
+	);
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			returnValues.push('blank');
+			if (selectedProficiencies && i < selectedProficiencies.length) {
+				returnValues.push(selectedProficiencies[i].index);
+			} else {
+				returnValues.push('blank');
+			}
 		}
 
 		return returnValues;
-	}, [choice]);
+	}, [choice, selectedProficiencies]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		initialValues ?? getInitialSelectValues()
+		getInitialSelectValues()
 	);
 
 	const proficiencies = useAppSelector(
 		state => state.editingCharacter.proficiencies
 	);
 
-	const handleChangeSelect = useCallback(
-		(index: number, selectValue: string) =>
-			setSelectValues(prevState =>
-				prevState.map((value, i) => (i === index ? selectValue : value))
-			),
-		[setSelectValues]
-	);
+	useEffect(() => {
+		setSelectValues(getInitialSelectValues());
+	}, [setSelectValues, getInitialSelectValues]);
 
-	const handleApply = useCallback(
-		() =>
-			onApply(
-				choice.from.options
-					.filter(option => selectValues.includes(option.item.index))
-					.map(option => option.item) as SrdProficiencyItem[]
-			),
-		[onApply, choice, selectValues]
+	const handleChangeSelect = useCallback(
+		(index: number, selectValue: string) => {
+			if (selectValues[index] !== 'blank') {
+				dispatch(
+					removeTraitProficiency({
+						index: traitIndex,
+						proficiency: selectValues[index]
+					})
+				);
+				dispatch(removeProficiency(selectValues[index]));
+			}
+
+			if (selectValue !== 'blank') {
+				const proficiency = (
+					choice.from.options.map(option => option.item) as SrdProficiencyItem[]
+				).find(prof => prof.index === selectValue) as SrdProficiencyItem;
+
+				dispatch(addTraitProficiency({ index: traitIndex, proficiency }));
+				dispatch(addProficiency(proficiency));
+			}
+		},
+		[dispatch, selectValues, traitIndex, choice.from.options]
 	);
 
 	const handleReset = useCallback(() => {
-		setSelectValues(getInitialSelectValues());
-		onReset(
-			choice.from.options
-				.filter(option => selectValues.includes(option.item?.index))
-				.map(option => option.item) as SrdProficiencyItem[]
-		);
-	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
+		for (const { index } of choice.from.options
+			.filter(option => option.item && selectValues.includes(option.item.index))
+			.map(option => option.item) as SrdProficiencyItem[]) {
+			dispatch(
+				removeTraitProficiency({ index: traitIndex, proficiency: index })
+			);
+			dispatch(removeProficiency(index));
+		}
+	}, [choice, selectValues, dispatch, traitIndex]);
 
 	const selects: JSX.Element[] = [];
 
@@ -103,8 +131,8 @@ const ProficiencyChoiceSelector = ({
 			label={label}
 			selectValues={selectValues}
 			selects={selects}
-			isSelected={!!initialValues}
-			onApply={handleApply}
+			isSelected={!selectValues.includes('blank')}
+			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);
