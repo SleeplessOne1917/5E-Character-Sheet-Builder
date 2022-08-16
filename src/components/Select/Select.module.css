@@ -1,6 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .list {
@@ -11,6 +12,8 @@
     padding: 0;
     border: 1px solid var(--davy);
     font-size: 1.5rem;
+    position: absolute;
+    z-index: 2;
 }
 
 .item {
@@ -42,6 +45,7 @@
     color: var(--heaven-light);
     cursor: pointer;
     font-size: 1.5rem;
+    font-family: inherit;
     display: flex;
     align-items: center;
     justify-content: space-between;

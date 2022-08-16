@@ -1,7 +1,8 @@
-import { ChangeEventHandler, MouseEventHandler, memo } from 'react';
+import { MouseEventHandler, memo } from 'react';
 
 import { AbilityItem } from '../../../../../types/srd';
 import Button from '../../../../Button/Button';
+import Select from '../../../../Select/Select';
 import classes from './RollDisplay.module.css';
 
 export type RollDisplayProps = {
@@ -10,7 +11,7 @@ export type RollDisplayProps = {
 	roll: MouseEventHandler<HTMLButtonElement>;
 	ability?: string | null;
 	total?: number;
-	onSelectAbility: ChangeEventHandler<HTMLSelectElement>;
+	onSelectAbility: (value: string) => void;
 };
 
 const RollDisplay = ({
@@ -34,18 +35,16 @@ const RollDisplay = ({
 						</div>
 					))}
 				</div>
-				<select
-					onChange={onSelectAbility}
+				<Select
+					onChange={onSelectAbility as (value: string | number) => void}
 					value={ability ? ability : 'blank'}
-					aria-label="Select ability for score"
-				>
-					<option value="blank">&mdash;</option>
-					{abilities.map(a => (
-						<option value={a.index} key={a.index}>
-							{a.index.toUpperCase()}
-						</option>
-					))}
-				</select>
+					options={[{ value: 'blank', label: '\u2014' }].concat(
+						abilities.map(a => ({
+							value: a.index,
+							label: a.index.toUpperCase()
+						}))
+					)}
+				/>
 			</div>
 		);
 	} else {
