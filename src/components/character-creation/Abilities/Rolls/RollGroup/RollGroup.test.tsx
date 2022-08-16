@@ -19,13 +19,15 @@ const {
 	HalfHaveRolls
 } = composeStories(stories);
 
-const getSelectOptions = (select: HTMLSelectElement) => {
-	const options = [] as HTMLOptionElement[];
-	for (let i = 0; i < select.options.length; ++i) {
-		options.push(select.options.item(i) as HTMLOptionElement);
+const getSelectOptions = (select: HTMLDivElement) => {
+	const options = [] as HTMLLIElement[];
+	/* eslint-disable testing-library/no-node-access */
+	for (let i = 0; i < (select.querySelector('ul')?.children.length ?? 0); ++i) {
+		options.push(select.querySelector('ul')?.children.item(i) as HTMLLIElement);
 	}
+	/* eslint-enable testing-library/no-node-access */
 
-	return options.map(option => option.text);
+	return options.map(option => option.textContent);
 };
 
 const clickAllRollButtons = async () => {
@@ -104,13 +106,18 @@ describe('apply ability scores', () => {
 		);
 
 		await clickAllRollButtons();
-		const dropdowns = screen.getAllByLabelText(/Select ability/i);
-		await userEvent.selectOptions(dropdowns.at(0) as HTMLElement, 'CON');
-		await userEvent.selectOptions(dropdowns.at(1) as HTMLElement, 'STR');
-		await userEvent.selectOptions(dropdowns.at(2) as HTMLElement, 'DEX');
-		await userEvent.selectOptions(dropdowns.at(3) as HTMLElement, 'INT');
-		await userEvent.selectOptions(dropdowns.at(4) as HTMLElement, 'WIS');
-		await userEvent.selectOptions(dropdowns.at(5) as HTMLElement, 'CHA');
+		await userEvent.click(screen.getByTestId('roll-0'));
+		await userEvent.click(screen.getByTestId('roll-0-data-con'));
+		await userEvent.click(screen.getByTestId('roll-1'));
+		await userEvent.click(screen.getByTestId('roll-1-data-str'));
+		await userEvent.click(screen.getByTestId('roll-2'));
+		await userEvent.click(screen.getByTestId('roll-2-data-dex'));
+		await userEvent.click(screen.getByTestId('roll-3'));
+		await userEvent.click(screen.getByTestId('roll-3-data-int'));
+		await userEvent.click(screen.getByTestId('roll-4'));
+		await userEvent.click(screen.getByTestId('roll-4-data-wis'));
+		await userEvent.click(screen.getByTestId('roll-5'));
+		await userEvent.click(screen.getByTestId('roll-5-data-cha'));
 		await userEvent.click(screen.getByText(/Apply Ability Scores/i));
 
 		expect(store.getState().editingCharacter.abilityScores.con.base).toBe(
@@ -232,42 +239,41 @@ it('removes selected options from options of other dropdowns', async () => {
 
 	await clickAllRollButtons();
 
-	const dropdowns = screen.getAllByLabelText(/Select ability/i);
 	const selected = [];
 
-	await userEvent.selectOptions(dropdowns.at(0) as HTMLElement, 'CON');
+	await userEvent.click(screen.getByTestId('roll-0'));
+	await userEvent.click(screen.getByTestId('roll-0-data-con'));
 	selected.push('CON');
 
-	const secondDropdown = dropdowns.at(1) as HTMLSelectElement;
 	for (const s of selected) {
-		expect(getSelectOptions(secondDropdown)).not.toContain(s);
+		expect(getSelectOptions(screen.getByTestId('roll-1'))).not.toContain(s);
 	}
-	await userEvent.selectOptions(secondDropdown, 'STR');
+	await userEvent.click(screen.getByTestId('roll-1'));
+	await userEvent.click(screen.getByTestId('roll-1-data-str'));
 	selected.push('STR');
 
-	const thirdDropdown = dropdowns.at(2) as HTMLSelectElement;
 	for (const s of selected) {
-		expect(getSelectOptions(thirdDropdown)).not.toContain(s);
+		expect(getSelectOptions(screen.getByTestId('roll-2'))).not.toContain(s);
 	}
-	await userEvent.selectOptions(thirdDropdown, 'DEX');
+	await userEvent.click(screen.getByTestId('roll-2'));
+	await userEvent.click(screen.getByTestId('roll-2-data-dex'));
 	selected.push('DEX');
 
-	const fourthDropdown = dropdowns.at(3) as HTMLSelectElement;
 	for (const s of selected) {
-		expect(getSelectOptions(fourthDropdown)).not.toContain(s);
+		expect(getSelectOptions(screen.getByTestId('roll-3'))).not.toContain(s);
 	}
-	await userEvent.selectOptions(fourthDropdown, 'INT');
+	await userEvent.click(screen.getByTestId('roll-3'));
+	await userEvent.click(screen.getByTestId('roll-3-data-int'));
 	selected.push('INT');
 
-	const fifthDropDown = dropdowns.at(4) as HTMLSelectElement;
 	for (const s of selected) {
-		expect(getSelectOptions(fifthDropDown)).not.toContain(s);
+		expect(getSelectOptions(screen.getByTestId('roll-4'))).not.toContain(s);
 	}
-	await userEvent.selectOptions(fifthDropDown, 'CHA');
+	await userEvent.click(screen.getByTestId('roll-4'));
+	await userEvent.click(screen.getByTestId('roll-4-data-cha'));
 	selected.push('CHA');
 
-	const sixthDropdown = dropdowns.at(5) as HTMLSelectElement;
 	for (const s of selected) {
-		expect(getSelectOptions(sixthDropdown)).not.toContain(s);
+		expect(getSelectOptions(screen.getByTestId('roll-5'))).not.toContain(s);
 	}
 });
