@@ -18,6 +18,7 @@ type SelectProps = {
 	onChange: (value: string | number) => void;
 	testId?: string;
 	labelledBy?: string;
+	fontSize?: string;
 };
 
 const Select = ({
@@ -25,7 +26,8 @@ const Select = ({
 	value,
 	onChange,
 	testId,
-	labelledBy
+	labelledBy,
+	fontSize
 }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -153,6 +155,7 @@ const Select = ({
 			ref={containerRef as MutableRefObject<HTMLDivElement>}
 			data-testid={testId ?? 'select'}
 			aria-labelledby={labelledBy}
+			style={{ fontSize: fontSize ? fontSize : '1.2rem' }}
 		>
 			<button
 				type="button"

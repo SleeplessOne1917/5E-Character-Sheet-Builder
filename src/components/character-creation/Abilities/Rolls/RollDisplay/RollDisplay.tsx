@@ -38,6 +38,7 @@ const RollDisplay = ({
 					))}
 				</div>
 				<Select
+					fontSize="1.5rem"
 					onChange={onSelectAbility as (value: string | number) => void}
 					value={ability ? ability : 'blank'}
 					options={[{ value: 'blank', label: '\u2014' }].concat(

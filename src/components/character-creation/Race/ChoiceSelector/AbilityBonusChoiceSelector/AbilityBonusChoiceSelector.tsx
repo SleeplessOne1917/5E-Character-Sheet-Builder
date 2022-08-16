@@ -1,8 +1,8 @@
 import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
-import classes from '../ChoiceSelector.module.css';
+import Select from '../../../../Select/Select';
 import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
 
 type OptionSelectorProps = {
@@ -34,9 +34,9 @@ const AbilityBonusChoiceSelector = ({
 	);
 
 	const handleChangeSelect = useCallback(
-		(index: number, event: ChangeEvent<HTMLSelectElement>) =>
+		(index: number, selectValue: string) =>
 			setSelectValues(prevState =>
-				prevState.map((value, i) => (i === index ? event.target.value : value))
+				prevState.map((value, i) => (i === index ? selectValue : value))
 			),
 		[setSelectValues]
 	);
@@ -64,30 +64,24 @@ const AbilityBonusChoiceSelector = ({
 
 	for (let i = 0; i < choice.choose; ++i) {
 		selects.push(
-			<select
+			<Select
 				value={selectValues[i]}
-				aria-label="Select choice"
-				onChange={event => handleChangeSelect(i, event)}
-				className={classes.select}
+				onChange={value => handleChangeSelect(i, value as string)}
 				key={i}
-			>
-				<option value="blank">&mdash;</option>
-				{choice.from.options
-					.filter(
-						option =>
-							!selectValues.includes(option.ability_score.index) ||
-							option.ability_score.index === selectValues[i]
-					)
-					.map(option => (
-						<option
-							value={option.ability_score.index}
-							key={option.ability_score.index}
-						>
-							{allSameBonus.isSame ? '' : `+${option.bonus} `}
-							{option.ability_score.full_name}
-						</option>
-					))}
-			</select>
+				options={[{ value: 'blank', label: '\u2014' }].concat(
+					choice.from.options
+						.filter(
+							option =>
+								!selectValues.includes(option.ability_score.index) ||
+								option.ability_score.index === selectValues[i]
+						)
+						.map(option => ({
+							value: option.ability_score.index,
+							label: `${allSameBonus.isSame ? '' : `+${option.bonus} `}
+				${option.ability_score.full_name}`
+						}))
+				)}
+			/>
 		);
 	}
 

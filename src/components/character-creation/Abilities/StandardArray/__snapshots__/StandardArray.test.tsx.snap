@@ -18,6 +18,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="str-select-label"
       class="container"
       data-testid="str"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"
@@ -114,6 +115,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="dex-select-label"
       class="container"
       data-testid="dex"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"
@@ -201,6 +203,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="con-select-label"
       class="container"
       data-testid="con"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"
@@ -297,6 +300,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="int-select-label"
       class="container"
       data-testid="int"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"
@@ -393,6 +397,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="wis-select-label"
       class="container"
       data-testid="wis"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"
@@ -480,6 +485,7 @@ exports[`renders correctly 1`] = `
       aria-labelledby="cha-select-label"
       class="container"
       data-testid="cha"
+      style="font-size: 1.5rem;"
     >
       <button
         aria-expanded="false"

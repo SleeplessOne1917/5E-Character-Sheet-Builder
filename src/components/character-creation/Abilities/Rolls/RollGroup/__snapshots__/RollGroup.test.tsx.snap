@@ -181,6 +181,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-0"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -274,6 +275,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-1"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -367,6 +369,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-2"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -460,6 +463,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-3"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -553,6 +557,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-4"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -646,6 +651,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
       <div
         class="container"
         data-testid="roll-5"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -767,6 +773,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-0"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -905,6 +912,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-1"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -1043,6 +1051,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-2"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -1181,6 +1190,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-3"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -1319,6 +1329,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-4"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"
@@ -1457,6 +1468,7 @@ exports[`renders correctly when all scores 1`] = `
       <div
         class="container"
         data-testid="roll-5"
+        style="font-size: 1.5rem;"
       >
         <button
           aria-expanded="false"

@@ -62,6 +62,7 @@ exports[`renders correctly when roll is showing 1`] = `
   <div
     class="container"
     data-testid="select"
+    style="font-size: 1.5rem;"
   >
     <button
       aria-expanded="false"
@@ -203,6 +204,7 @@ exports[`renders correctly when roll is showing and ability is selected 1`] = `
   <div
     class="container"
     data-testid="select"
+    style="font-size: 1.5rem;"
   >
     <button
       aria-expanded="false"

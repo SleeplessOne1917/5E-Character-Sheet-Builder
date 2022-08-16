@@ -49,6 +49,7 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 							{ability.full_name}
 						</label>
 						<Select
+							fontSize="1.5rem"
 							testId={ability.index}
 							labelledBy={`${ability.index}-select-label`}
 							onChange={value =>

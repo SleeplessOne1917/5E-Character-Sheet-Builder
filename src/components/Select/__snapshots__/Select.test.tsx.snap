@@ -4,6 +4,7 @@ exports[`renders correctly 1`] = `
 <div
   class="container"
   data-testid="select"
+  style="font-size: 1.2rem;"
 >
   <button
     aria-expanded="false"

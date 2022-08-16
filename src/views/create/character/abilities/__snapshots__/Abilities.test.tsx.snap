@@ -25,6 +25,7 @@ exports[`renders correctly 1`] = `
         aria-labelledby="generation-methods"
         class="container"
         data-testid="generation-method"
+        style="font-size: 1.2rem;"
       >
         <button
           aria-expanded="false"
