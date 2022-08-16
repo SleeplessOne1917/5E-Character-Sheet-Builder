@@ -21,7 +21,9 @@ export const getStaticProps = async (): Promise<
 
 	return {
 		props: {
-			abilities
+			abilities: [...abilities].sort((a, b) =>
+				a.full_name.localeCompare(b.full_name)
+			)
 		}
 	};
 };
