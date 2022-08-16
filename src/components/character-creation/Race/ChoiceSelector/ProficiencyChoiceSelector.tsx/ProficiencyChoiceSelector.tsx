@@ -35,19 +35,16 @@ const ProficiencyChoiceSelector = ({
 		state =>
 			state.editingCharacter.raceInfo.selectedTraitProficiencies[traitIndex]
 	);
+
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			if (selectedProficiencies && i < selectedProficiencies.length) {
-				returnValues.push(selectedProficiencies[i].index);
-			} else {
-				returnValues.push('blank');
-			}
+			returnValues.push('blank');
 		}
 
 		return returnValues;
-	}, [choice, selectedProficiencies]);
+	}, [choice]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
 		getInitialSelectValues()
@@ -58,8 +55,10 @@ const ProficiencyChoiceSelector = ({
 	);
 
 	useEffect(() => {
-		setSelectValues(getInitialSelectValues());
-	}, [setSelectValues, getInitialSelectValues]);
+		if (!selectedProficiencies || selectedProficiencies.length === 0) {
+			setSelectValues(getInitialSelectValues());
+		}
+	}, [setSelectValues, getInitialSelectValues, selectedProficiencies]);
 
 	const handleChangeSelect = useCallback(
 		(index: number, selectValue: string) => {
@@ -81,8 +80,12 @@ const ProficiencyChoiceSelector = ({
 				dispatch(addTraitProficiency({ index: traitIndex, proficiency }));
 				dispatch(addProficiency(proficiency));
 			}
+
+			setSelectValues(prev =>
+				prev.map((value, i) => (i === index ? selectValue : value))
+			);
 		},
-		[dispatch, selectValues, traitIndex, choice.from.options]
+		[dispatch, selectValues, traitIndex, choice.from.options, setSelectValues]
 	);
 
 	const handleReset = useCallback(() => {
@@ -94,7 +97,16 @@ const ProficiencyChoiceSelector = ({
 			);
 			dispatch(removeProficiency(index));
 		}
-	}, [choice, selectValues, dispatch, traitIndex]);
+
+		setSelectValues(getInitialSelectValues());
+	}, [
+		choice,
+		selectValues,
+		dispatch,
+		traitIndex,
+		setSelectValues,
+		getInitialSelectValues
+	]);
 
 	const selects: JSX.Element[] = [];
 

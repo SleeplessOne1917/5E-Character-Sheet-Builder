@@ -43,25 +43,31 @@ const LanguageChoiceSelector = ({
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			if (!traitIndex && selectedLanguages && i < selectedLanguages.length) {
-				returnValues.push(selectedLanguages[i].index);
-			} else if (traitSelectedLanguages && i < traitSelectedLanguages.length) {
-				returnValues.push(traitSelectedLanguages[i].index);
-			} else {
-				returnValues.push('blank');
-			}
+			returnValues.push('blank');
 		}
 
 		return returnValues;
-	}, [choice, traitIndex, selectedLanguages, traitSelectedLanguages]);
+	}, [choice]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
 		getInitialSelectValues()
 	);
 
 	useEffect(() => {
-		setSelectValues(getInitialSelectValues());
-	}, [setSelectValues, getInitialSelectValues]);
+		if (
+			(!traitIndex && (!selectedLanguages || selectedLanguages.length === 0)) ||
+			(traitIndex &&
+				(!traitSelectedLanguages || traitSelectedLanguages.length === 0))
+		) {
+			setSelectValues(getInitialSelectValues());
+		}
+	}, [
+		setSelectValues,
+		getInitialSelectValues,
+		traitIndex,
+		selectedLanguages,
+		traitSelectedLanguages
+	]);
 
 	const handleChangeSelect = useCallback(
 		(index: number, selectValue: string) => {
@@ -121,6 +127,7 @@ const LanguageChoiceSelector = ({
 				dispatch(removeTraitLanguage({ index: traitIndex, language: index }));
 			}
 		}
+
 		setSelectValues(getInitialSelectValues());
 	}, [
 		setSelectValues,

@@ -29,18 +29,11 @@ const AbilityBonusChoiceSelector = ({
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			if (
-				selectedAbilityScoreBonuses &&
-				i < selectedAbilityScoreBonuses.length
-			) {
-				returnValues.push(selectedAbilityScoreBonuses[i].ability_score.index);
-			} else {
-				returnValues.push('blank');
-			}
+			returnValues.push('blank');
 		}
 
 		return returnValues;
-	}, [choice, selectedAbilityScoreBonuses]);
+	}, [choice]);
 	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
@@ -48,8 +41,13 @@ const AbilityBonusChoiceSelector = ({
 	);
 
 	useEffect(() => {
-		setSelectValues(getInitialSelectValues());
-	}, [setSelectValues, getInitialSelectValues]);
+		if (
+			!selectedAbilityScoreBonuses ||
+			selectedAbilityScoreBonuses.length == 0
+		) {
+			setSelectValues(getInitialSelectValues());
+		}
+	}, [setSelectValues, getInitialSelectValues, selectedAbilityScoreBonuses]);
 
 	const dispatch = useAppDispatch();
 
@@ -87,13 +85,13 @@ const AbilityBonusChoiceSelector = ({
 	);
 
 	const handleReset = useCallback(() => {
-		setSelectValues(getInitialSelectValues());
 		for (const index of choice.from.options
 			.filter(option => selectValues.includes(option.ability_score.index))
 			.map(bonus => bonus.ability_score.index)) {
 			dispatch(updateRaceBonus({ value: null, abilityIndex: index }));
 			dispatch(removeRaceAbilityBonus(index));
 		}
+		setSelectValues(getInitialSelectValues());
 	}, [setSelectValues, getInitialSelectValues, choice, selectValues, dispatch]);
 
 	const selects: JSX.Element[] = [];
