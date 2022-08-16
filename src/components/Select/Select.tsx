@@ -15,25 +15,41 @@ type SelectProps = {
 	options: { value: string | number; label: string }[];
 	value?: string | number;
 	onChange: (value: string | number) => void;
+	testId?: string;
 };
 
-const Select = ({ options, value, onChange }: SelectProps) => {
-	const valueIndex = options
-		.map(({ value }) => value)
-		.indexOf(value as string | number);
+const Select = ({ options, value, onChange, testId }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [focusIndex, setFocusIndex] = useState<number>(valueIndex);
+
 	const [listStyle, setListStyle] = useState<CSSProperties>({
 		display: 'none'
 	});
 	const listRefs = useRef<HTMLLIElement[]>([]);
 	const containerRef = useRef<HTMLDivElement>();
 	const buttonRef = useRef<HTMLButtonElement>();
+	const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+	const getValueIndex = useCallback(
+		(value: string | number) => {
+			const valueIndex = options
+				.map(({ value }) => value)
+				.indexOf(value as string | number);
+
+			return valueIndex >= 0 ? valueIndex : selectedIndex;
+		},
+		[options, selectedIndex]
+	);
+
+	const defaultIndex = value ? getValueIndex(value) : selectedIndex;
+
+	const [focusIndex, setFocusIndex] = useState<number>(
+		value ? getValueIndex(value) : selectedIndex
+	);
 
 	const closeSelect = useCallback(() => {
 		setIsOpen(false);
-		setFocusIndex(valueIndex);
-	}, [setIsOpen, setFocusIndex, valueIndex]);
+		setFocusIndex(defaultIndex);
+	}, [setIsOpen, setFocusIndex, defaultIndex]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: Event) => {
@@ -65,11 +81,13 @@ const Select = ({ options, value, onChange }: SelectProps) => {
 	}, [isOpen, focusIndex, setListStyle]);
 
 	const handleChange = useCallback(
-		(value: number | string) => {
-			onChange(value);
+		(changeValue: number | string) => {
+			onChange(changeValue);
+			setFocusIndex(getValueIndex(changeValue));
+			setSelectedIndex(getValueIndex(changeValue));
 			closeSelect();
 		},
-		[onChange, closeSelect]
+		[onChange, closeSelect, setFocusIndex, setSelectedIndex, getValueIndex]
 	);
 
 	const handleItemKeyDown = useCallback(
@@ -88,7 +106,7 @@ const Select = ({ options, value, onChange }: SelectProps) => {
 			switch (e.code) {
 				case 'Escape':
 					e.preventDefault();
-					setFocusIndex(valueIndex);
+					setFocusIndex(defaultIndex);
 					setIsOpen(false);
 					break;
 				case 'ArrowUp':
@@ -107,14 +125,14 @@ const Select = ({ options, value, onChange }: SelectProps) => {
 					break;
 			}
 		},
-		[setIsOpen, setFocusIndex, options, valueIndex]
+		[setIsOpen, setFocusIndex, options, defaultIndex]
 	);
 
 	return (
 		<div
 			className={classes.container}
 			ref={containerRef as MutableRefObject<HTMLDivElement>}
-			data-testid="select"
+			data-testid={testId ?? 'select'}
 		>
 			<button
 				type="button"
@@ -123,10 +141,10 @@ const Select = ({ options, value, onChange }: SelectProps) => {
 				onClick={handleOpen}
 				className={classes.button}
 				onKeyDown={handleListKeyDown}
-				data-testid="select-button"
 				ref={buttonRef as MutableRefObject<HTMLButtonElement>}
+				data-testid={testId ? `${testId}-button` : 'select-button'}
 			>
-				{options[valueIndex].label}
+				{options[defaultIndex].label}
 				{isOpen ? (
 					<ChevronUpIcon className={classes.icon} />
 				) : (
@@ -137,25 +155,28 @@ const Select = ({ options, value, onChange }: SelectProps) => {
 				tabIndex={-1}
 				style={listStyle}
 				role="listbox"
-				aria-activedescendant={options[valueIndex].label}
+				aria-activedescendant={options[defaultIndex].label}
 				className={classes.list}
 				onKeyDown={handleListKeyDown}
-				data-testid="select-list"
+				data-testid={testId ? `${testId}-list` : 'select-list'}
 			>
 				{options.map((option, index) => (
 					<li
 						key={option.value}
 						tabIndex={0}
 						role="option"
-						aria-selected={valueIndex === index}
+						aria-selected={defaultIndex === index}
 						className={`${classes.item}${
-							valueIndex === index ? ` ${classes.selected}` : ''
+							defaultIndex === index ? ` ${classes.selected}` : ''
 						}`}
 						onClick={() => handleChange(option.value)}
 						onKeyDown={event => handleItemKeyDown(event, option.value)}
 						ref={element => {
 							listRefs.current[index] = element as HTMLLIElement;
 						}}
+						data-testid={
+							testId ? `${testId}-data-${option.value}` : `data-${option.value}`
+						}
 					>
 						{option.label}
 					</li>

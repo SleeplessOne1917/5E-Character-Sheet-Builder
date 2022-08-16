@@ -26,7 +26,7 @@ it('shows other options when open', async () => {
 	expect(screen.getByTestId('select-list')).toHaveStyle({ display: 'block' });
 });
 
-it('changes button text, calls onChange, and closes list when item is selected', async () => {
+it('calls onChange and closes list when item is selected', async () => {
 	const onChangeMock = jest.fn();
 	render(<Default onChange={onChangeMock} />);
 
@@ -34,6 +34,5 @@ it('changes button text, calls onChange, and closes list when item is selected',
 	await userEvent.click(screen.getByText(/Bar/i));
 
 	expect(onChangeMock).toBeCalledWith('bar');
-	expect(screen.getByTestId('select-button')).toHaveTextContent(/Bar/i);
 	expect(screen.getByTestId('select-list')).toHaveStyle({ display: 'none' });
 });

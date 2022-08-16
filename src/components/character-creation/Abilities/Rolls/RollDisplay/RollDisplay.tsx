@@ -11,6 +11,7 @@ export type RollDisplayProps = {
 	roll: MouseEventHandler<HTMLButtonElement>;
 	ability?: string | null;
 	total?: number;
+	selectTestId?: string;
 	onSelectAbility: (value: string) => void;
 };
 
@@ -20,7 +21,8 @@ const RollDisplay = ({
 	roll,
 	onSelectAbility,
 	ability,
-	total
+	total,
+	selectTestId
 }: RollDisplayProps): JSX.Element => {
 	if (rolls) {
 		return (
@@ -44,6 +46,7 @@ const RollDisplay = ({
 							label: a.index.toUpperCase()
 						}))
 					)}
+					testId={selectTestId}
 				/>
 			</div>
 		);

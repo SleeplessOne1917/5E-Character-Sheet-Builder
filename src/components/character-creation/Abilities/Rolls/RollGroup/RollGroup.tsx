@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useCallback } from 'react';
+import { MouseEventHandler, useCallback } from 'react';
 import { addAbility, addRolls } from '../../../../../redux/features/rollGroups';
 import {
 	useAppDispatch,
@@ -111,6 +111,7 @@ const RollGroup = ({
 						onSelectAbility={value => selectAbility(value, index)}
 						ability={info.ability}
 						total={info.rolls ? sumRolls(info.rolls) : undefined}
+						selectTestId={`roll-${index}`}
 					/>
 				))}
 			</div>
