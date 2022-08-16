@@ -1,95 +1,89 @@
-import { SrdSpellItem, SrdSpellItemChoice } from '../../../../../types/srd';
-import { useCallback, useState } from 'react';
+import {
+	SrdItem,
+	SrdSpellItem,
+	SrdSpellItemChoice
+} from '../../../../../types/srd';
+import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
 import SpellSelector from './SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
-import { useAppSelector } from '../../../../../hooks/reduxHooks';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
+import { addSpell, removeSpell } from '../../../../../redux/features/spells';
+import {
+	addTraitSpell,
+	removeTraitSpell
+} from '../../../../../redux/features/raceInfo';
 
 type SpellChoiceSelectorProps = {
-	traitName: string;
+	trait: SrdItem;
 	choice: SrdSpellItemChoice;
-	initialValues?: string[];
-	onApply: (items: SrdSpellItem[]) => void;
-	onReset: (items: SrdSpellItem[]) => void;
 };
 
-const SpellChoiceSelector = ({
-	choice,
-	traitName,
-	initialValues,
-	onApply,
-	onReset
-}: SpellChoiceSelectorProps) => {
+const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
+	const selectedSpells = useAppSelector(
+		state => state.editingCharacter.raceInfo.selectedTraitSpells[trait.index]
+	);
+	const dispatch = useAppDispatch();
+
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			returnValues.push('blank');
+			if (selectedSpells && i < selectedSpells.length) {
+				returnValues.push(selectedSpells[i].index);
+			} else {
+				returnValues.push('blank');
+			}
 		}
 
 		return returnValues;
-	}, [choice]);
+	}, [choice, selectedSpells]);
 
 	const spells = useAppSelector(state => state.editingCharacter.spells);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		initialValues ?? getInitialSelectValues()
+		getInitialSelectValues()
 	);
 
+	useEffect(() => {
+		setSelectValues(getInitialSelectValues());
+	}, [setSelectValues, getInitialSelectValues]);
+
 	const handleAdd = useCallback(
-		(index: string) => {
-			setSelectValues(
-				prevState =>
-					prevState.reduce(
-						(acc: { replaced: boolean; list: string[] }, cur) => {
-							if (!acc.replaced && cur === 'blank') {
-								return {
-									replaced: true,
-									list: [...acc.list, index]
-								};
-							} else {
-								return {
-									...acc,
-									list: [...acc.list, cur]
-								};
-							}
-						},
-						{ replaced: false, list: [] }
-					).list
-			);
+		(value: string) => {
+			const spell = choice.from.options
+				.map(option => option.item)
+				.find(option => option.index === value) as SrdSpellItem;
+
+			dispatch(addSpell(spell));
+			dispatch(addTraitSpell({ index: trait.index, spell }));
 		},
-		[setSelectValues]
+		[choice, dispatch, trait.index]
 	);
 
 	const handleRemove = useCallback(
 		(index: string) => {
-			setSelectValues(prevState =>
-				prevState.map(value => (value === index ? 'blank' : value))
-			);
+			dispatch(removeSpell(index));
+			dispatch(removeTraitSpell({ index: trait.index, spell: index }));
 		},
-		[setSelectValues]
+		[dispatch, trait.index]
 	);
 
-	const handleApply = useCallback(() => {
-		onApply(
-			choice.from.options
-				.map(option => option.item)
-				.filter(({ index }) => selectValues.includes(index))
-		);
-	}, [choice, onApply, selectValues]);
-
 	const handleReset = useCallback(() => {
-		onReset(
-			choice.from.options
-				.map(option => option.item)
-				.filter(({ index }) => selectValues.includes(index))
-		);
-		setSelectValues(getInitialSelectValues());
-	}, [choice, onReset, selectValues, setSelectValues, getInitialSelectValues]);
+		for (const { index } of choice.from.options
+			.map(option => option.item)
+			.filter(({ index }) => selectValues.includes(index))) {
+			dispatch(removeSpell(index));
+			dispatch(removeTraitSpell({ index: trait.index, spell: index }));
+		}
+	}, [choice, selectValues, dispatch, trait.index]);
 
 	const selects = [
-		<div key={`${traitName}-spell-selector`} className={classes.container}>
+		<div key={`${trait.index}-spell-selector`} className={classes.container}>
 			<div className={classes.label}>
 				{selectValues.filter(value => value !== 'blank').length}/{choice.choose}{' '}
 				spells selected
@@ -103,8 +97,8 @@ const SpellChoiceSelector = ({
 					)
 					.map(option => (
 						<SpellSelector
-							key={`${traitName}-${option.item.name}`}
-							traitName={traitName}
+							key={`${trait.index}-${option.item.index}`}
+							trait={trait}
 							spell={option.item}
 							onAdd={() => handleAdd(option.item.index)}
 							onRemove={() => handleRemove(option.item.index)}
@@ -117,14 +111,14 @@ const SpellChoiceSelector = ({
 
 	return (
 		<ChoiceSelector
-			label={`${traitName}: select ${choice.choose} spell${
+			label={`${trait.name}: select ${choice.choose} spell${
 				choice.choose > 1 ? 's' : ''
 			}`}
 			selectValues={selectValues}
 			selects={selects}
-			onApply={handleApply}
+			onApply={() => {}}
 			onReset={handleReset}
-			isSelected={!!initialValues}
+			isSelected={!selectValues.includes('blank')}
 		/>
 	);
 };

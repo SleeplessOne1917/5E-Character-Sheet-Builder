@@ -7,14 +7,14 @@ import { KeyboardEventHandler, useCallback, useState } from 'react';
 import useMediaQuery from '../../../../../../hooks/useMediaQuery';
 import { handleKeyDownEvent } from '../../../../../../services/handlerService';
 import { prettifyCastingTime } from '../../../../../../services/spellService';
-import { SrdSpellItem } from '../../../../../../types/srd';
+import { SrdItem, SrdSpellItem } from '../../../../../../types/srd';
 import Button from '../../../../../Button/Button';
 
 import classes from './SpellSelector.module.css';
 
 type SpellSelectorProps = {
 	spell: SrdSpellItem;
-	traitName: string;
+	trait: SrdItem;
 	onAdd: () => void;
 	onRemove: () => void;
 	selectValues: string[];
@@ -22,7 +22,7 @@ type SpellSelectorProps = {
 
 const SpellSelector = ({
 	spell,
-	traitName,
+	trait,
 	onAdd,
 	onRemove,
 	selectValues
@@ -49,7 +49,7 @@ const SpellSelector = ({
 				className={classes['selector-label']}
 				role="button"
 				tabIndex={0}
-				aria-label={`${traitName} ${spell.name}`}
+				aria-label={`${trait.name} ${spell.name}`}
 				onClick={toggleOpen}
 				onKeyDown={toggleOpenKeyDown}
 			>
@@ -94,7 +94,7 @@ const SpellSelector = ({
 				</div>
 				<div className={classes.description}>
 					{spell.desc.map((desc, index) => (
-						<p key={`${traitName}-${spell.name}-${index}`}>{desc}</p>
+						<p key={`${trait.index}-${spell.name}-${index}`}>{desc}</p>
 					))}
 				</div>
 				<div className={classes.other}>

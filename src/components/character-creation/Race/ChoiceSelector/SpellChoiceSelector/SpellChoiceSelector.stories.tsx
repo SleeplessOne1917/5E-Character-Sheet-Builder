@@ -15,7 +15,10 @@ export default {
 		)
 	],
 	args: {
-		traitName: 'High Elf Cantrip',
+		trait: {
+			name: 'High Elf Cantrip',
+			index: 'high-elf-cantrip'
+		},
 		choice: {
 			choose: 1,
 			from: {

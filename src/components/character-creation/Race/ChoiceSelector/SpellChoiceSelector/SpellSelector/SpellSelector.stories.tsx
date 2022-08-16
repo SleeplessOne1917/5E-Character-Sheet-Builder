@@ -5,7 +5,10 @@ export default {
 	title: 'Components/ChoiceSelector/SpellChoiceSelector/SpellSelector',
 	component: SpellSelector,
 	args: {
-		traitName: 'High Elf Cantrip',
+		trait: {
+			name: 'High Elf Cantrip',
+			index: 'high-elf-cantrip'
+		},
 		spell: {
 			index: 'ray-of-frost',
 			name: 'Ray of Frost',

@@ -1,7 +1,6 @@
 import {
 	CSSProperties,
 	MutableRefObject,
-	useCallback,
 	useEffect,
 	useRef,
 	useState
@@ -12,19 +11,11 @@ import {
 	SrdFullSubraceItem,
 	SrdItemChoice,
 	SrdProficiencyItemChoice,
-	SrdSpellItem,
 	SrdSpellItemChoice,
 	SrdSubtraitItemChoice
 } from '../../../../types/srd';
 
-
-
-import {
-	deselectTraitSpells,
-	selectTraitSpells
-} from '../../../../redux/features/raceInfo';
-import { addSpell, removeSpell } from '../../../../redux/features/spells';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import { useAppSelector } from '../../../../hooks/reduxHooks';
 
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
 import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
@@ -74,7 +65,6 @@ const SelectedRaceDisplay = ({
 	const summaryRef = useRef<HTMLDivElement>();
 	const iconRef = useRef<HTMLDivElement>();
 	const [containerStyle, setContainerStyle] = useState<CSSProperties>();
-	const dispatch = useAppDispatch();
 	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
 
 	useEffect(() => {
@@ -99,32 +89,6 @@ const SelectedRaceDisplay = ({
 			window.removeEventListener('resize', adjustRows);
 		};
 	}, [isLargeOrLarger, setContainerStyle, raceInfo.draconicAncestry]);
-
-	const handleTraitSpellsApply = useCallback(
-		(traitIndex: string) => {
-			return (spells: SrdSpellItem[]) => {
-				dispatch(selectTraitSpells({ index: traitIndex, spells }));
-
-				for (const spell of spells) {
-					dispatch(addSpell(spell));
-				}
-			};
-		},
-		[dispatch]
-	);
-
-	const handleTraitSpellsReset = useCallback(
-		(traitIndex: string) => {
-			return (spells: SrdSpellItem[]) => {
-				dispatch(deselectTraitSpells(traitIndex));
-
-				for (const { index } of spells) {
-					dispatch(removeSpell(index));
-				}
-			};
-		},
-		[dispatch]
-	);
 
 	const draconicAncestryTrait = traits.find(
 		trait => trait.index === 'draconic-ancestry'
@@ -240,17 +204,8 @@ const SelectedRaceDisplay = ({
 					.map(trait => (
 						<SpellChoiceSelector
 							key={`${trait.index}-choice-selector`}
-							traitName={trait.name}
+							trait={trait}
 							choice={trait.trait_specific?.spell_options as SrdSpellItemChoice}
-							onApply={handleTraitSpellsApply(trait.index)}
-							onReset={handleTraitSpellsReset(trait.index)}
-							initialValues={
-								raceInfo.selectedTraitSpells[trait.index]
-									? raceInfo.selectedTraitSpells[trait.index].map(
-											({ index }) => index
-									  )
-									: undefined
-							}
 						/>
 					))}
 			</div>

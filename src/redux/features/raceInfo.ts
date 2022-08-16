@@ -24,19 +24,19 @@ type SelectRacePayload = {
 	subrace?: SrdFullSubraceItem;
 };
 
-type SelectTraitProficiencyPayload = {
+type AddTraitProficiencyPayload = {
 	index: string;
 	proficiency: SrdProficiencyItem;
 };
 
-type SelectTraitLanguagePayload = {
+type AddTraitLanguagePayload = {
 	index: string;
 	language: SrdItem;
 };
 
-type SelectTraitSpellsPayload = {
+type AddTraitSpellPayload = {
 	index: string;
-	spells: SrdSpellItem[];
+	spell: SrdSpellItem;
 };
 
 export const initialState: RaceInfoState = {
@@ -93,7 +93,7 @@ const raceInfoSlice = createSlice({
 		},
 		addTraitProficiency: (
 			state,
-			action: PayloadAction<SelectTraitProficiencyPayload>
+			action: PayloadAction<AddTraitProficiencyPayload>
 		) => {
 			const { index, proficiency } = action.payload;
 			if (
@@ -153,7 +153,7 @@ const raceInfoSlice = createSlice({
 		},
 		addTraitLanguage: (
 			state,
-			action: PayloadAction<SelectTraitLanguagePayload>
+			action: PayloadAction<AddTraitLanguagePayload>
 		) => {
 			const { index, language } = action.payload;
 			if (
@@ -222,23 +222,64 @@ const raceInfoSlice = createSlice({
 		deselectDraconicAncestry: state => {
 			delete state.draconicAncestry;
 		},
-		selectTraitSpells: (
-			state,
-			action: PayloadAction<SelectTraitSpellsPayload>
-		) => {
-			const { index, spells } = action.payload;
+		addTraitSpell: (state, action: PayloadAction<AddTraitSpellPayload>) => {
+			const { index, spell } = action.payload;
+			if (
+				!(
+					state.selectedTraitSpells as Draft<{
+						[key: string]: SrdSpellItem[];
+					}>
+				)[index]
+			) {
+				(
+					state.selectedTraitSpells as Draft<{
+						[key: string]: SrdSpellItem[];
+					}>
+				)[index] = [];
+			}
+
 			(
 				state.selectedTraitSpells as Draft<{
 					[key: string]: SrdSpellItem[];
 				}>
-			)[index] = spells;
+			)[index] = [
+				...(
+					state.selectedTraitSpells as Draft<{
+						[key: string]: SrdSpellItem[];
+					}>
+				)[index],
+				spell
+			];
 		},
-		deselectTraitSpells: (state, { payload }: PayloadAction<string>) => {
-			delete (
+		removeTraitSpell: (
+			state,
+			{
+				payload: { index, spell }
+			}: PayloadAction<{ index: string; spell: string }>
+		) => {
+			if (
+				!(
+					state.selectedTraitSpells as Draft<{
+						[key: string]: SrdSpellItem[];
+					}>
+				)[index]
+			) {
+				(
+					state.selectedTraitSpells as Draft<{
+						[key: string]: SrdSpellItem[];
+					}>
+				)[index] = [];
+			}
+
+			(
 				state.selectedTraitSpells as Draft<{
 					[key: string]: SrdSpellItem[];
 				}>
-			)[payload];
+			)[index] = (
+				state.selectedTraitSpells as Draft<{
+					[key: string]: SrdSpellItem[];
+				}>
+			)[index].filter(({ index }) => index !== spell);
 		}
 	}
 });
@@ -256,7 +297,7 @@ export const {
 	removeTraitLanguage,
 	selectDraconicAncestry,
 	deselectDraconicAncestry,
-	selectTraitSpells,
-	deselectTraitSpells
+	addTraitSpell,
+	removeTraitSpell
 } = raceInfoSlice.actions;
 export default raceInfoSlice.reducer;
