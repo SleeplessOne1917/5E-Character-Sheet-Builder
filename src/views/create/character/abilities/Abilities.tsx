@@ -1,15 +1,14 @@
-import {
-	ChangeEventHandler,
-	KeyboardEventHandler,
-	MouseEventHandler,
-	useCallback,
-	useState
-} from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import {
 	GenerationMethodState,
 	updateGenerationMethod
 } from '../../../../redux/features/generationMethod';
+import {
+	KeyboardEventHandler,
+	MouseEventHandler,
+	useCallback,
+	useState
+} from 'react';
 import { addGroup, removeGroup } from '../../../../redux/features/rollGroups';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
@@ -21,6 +20,7 @@ import MainContent from '../../../../components/MainContent/MainContent';
 import ManualScores from '../../../../components/character-creation/Abilities/ManualScores/ManualScores';
 import PointBuy from '../../../../components/character-creation/Abilities/PointBuy/PointBuy';
 import RollGroup from '../../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
+import Select from '../../../../components/Select/Select';
 import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
@@ -36,38 +36,35 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const generationMethod = useAppSelector(state => state.generationMethod);
 	const dispatch = useAppDispatch();
 
-	const handleGenerationMethodChange: ChangeEventHandler<HTMLSelectElement> =
-		useCallback(
-			event => {
-				{
-					const value = event.target.value;
-
-					if (value === 'point-buy') {
-						for (const { index } of abilities) {
-							dispatch(
-								updateBase({ value: 8, abilityIndex: index as AbilityScores })
-							);
-						}
-					} else {
-						for (const { index } of abilities) {
-							dispatch(
-								updateBase({
-									value: null,
-									abilityIndex: index as AbilityScores
-								})
-							);
-						}
+	const handleGenerationMethodChange = useCallback(
+		(value: string) => {
+			{
+				if (value === 'point-buy') {
+					for (const { index } of abilities) {
+						dispatch(
+							updateBase({ value: 8, abilityIndex: index as AbilityScores })
+						);
 					}
-
-					dispatch(
-						updateGenerationMethod({
-							generationMethod: value as GenerationMethodState
-						})
-					);
+				} else {
+					for (const { index } of abilities) {
+						dispatch(
+							updateBase({
+								value: null,
+								abilityIndex: index as AbilityScores
+							})
+						);
+					}
 				}
-			},
-			[dispatch, abilities]
-		);
+
+				dispatch(
+					updateGenerationMethod({
+						generationMethod: value as GenerationMethodState
+					})
+				);
+			}
+		},
+		[dispatch, abilities]
+	);
 
 	const toggleShowRollGroups = useCallback(() => {
 		setShowRollGroups(prevState => !prevState);
@@ -96,17 +93,19 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 		<MainContent testId="abilities">
 			<h1 className={classes.title}>Ability Scores</h1>
 			<div className={classes['generation-control']}>
-				<label htmlFor="generation-methods">Generation Method</label>
-				<select
-					id="generation-methods"
+				<label id="generation-methods-label">Generation Method</label>
+				<Select
+					testId="generation-method"
+					labelledBy="generation-methods"
 					value={generationMethod}
-					onChange={handleGenerationMethodChange}
-				>
-					<option value="manual">Manual</option>
-					<option value="roll">Roll</option>
-					<option value="point-buy">Point Buy</option>
-					<option value="array">Standard Array</option>
-				</select>
+					onChange={value => handleGenerationMethodChange(value as string)}
+					options={[
+						{ value: 'manual', label: 'Manual' },
+						{ value: 'roll', label: 'Roll' },
+						{ value: 'point-buy', label: 'Point Buy' },
+						{ value: 'array', label: 'Standard Array' }
+					]}
+				/>
 			</div>
 			{generationMethod === 'manual' && <ManualScores abilities={abilities} />}
 			{generationMethod === 'roll' && (

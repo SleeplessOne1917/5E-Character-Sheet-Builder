@@ -32,7 +32,7 @@ const Select = ({
 	const [listStyle, setListStyle] = useState<CSSProperties>({
 		display: 'none'
 	});
-	const listRefs = useRef<HTMLLIElement[]>([]);
+	const listItemRefs = useRef<HTMLLIElement[]>([]);
 	const containerRef = useRef<HTMLDivElement>();
 	const buttonRef = useRef<HTMLButtonElement>();
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -73,16 +73,27 @@ const Select = ({
 	}, [closeSelect]);
 
 	useEffect(() => {
-		listRefs.current = listRefs.current.slice(0, options.length);
+		listItemRefs.current = listItemRefs.current.slice(0, options.length);
 	}, [options]);
 
 	useEffect(() => {
 		if (isOpen) {
-			listRefs.current[focusIndex].focus();
-			setListStyle({
-				display: 'block',
-				top: buttonRef.current?.offsetHeight
-			});
+			listItemRefs.current[focusIndex].focus();
+			if (
+				window.innerHeight -
+					(buttonRef.current?.getBoundingClientRect().y ?? 0) <
+				window.innerHeight / 2
+			) {
+				setListStyle({
+					display: 'block',
+					bottom: buttonRef.current?.offsetHeight
+				});
+			} else {
+				setListStyle({
+					display: 'block',
+					top: buttonRef.current?.offsetHeight
+				});
+			}
 		} else {
 			setListStyle({ display: 'none' });
 		}
@@ -181,7 +192,7 @@ const Select = ({
 						onClick={() => handleChange(option.value)}
 						onKeyDown={event => handleItemKeyDown(event, option.value)}
 						ref={element => {
-							listRefs.current[index] = element as HTMLLIElement;
+							listItemRefs.current[index] = element as HTMLLIElement;
 						}}
 						data-testid={
 							testId ? `${testId}-data-${option.value}` : `data-${option.value}`

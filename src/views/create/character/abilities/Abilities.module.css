@@ -10,23 +10,13 @@
 
 .generation-control {
     padding: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .generation-control label {
     margin-right: 0.5rem;
-}
-
-.generation-control select {
-    width: 10rem;
-    font-family: inherit;
-    font-size: inherit;
-    background-color: var(--heaven-light);
-    border-radius: 0.5rem;
-}
-
-.generation-control select:focus-visible {
-    outline: var(--focus-outline);
 }
 
 .roll-groups-toggle {

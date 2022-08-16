@@ -52,7 +52,7 @@ describe('hides and shows roll groups', () => {
 		expect(screen.getByTestId('roll-groups')).toHaveClass('open');
 	});
 
-	it('on enter press', async () => {
+	it('on space press', async () => {
 		render(<Default />);
 
 		expect(screen.getByTestId('roll-groups')).toHaveClass('open');
@@ -97,8 +97,8 @@ it('has expected default ability score values on generation method switch', asyn
 	}
 
 	await userEvent.selectOptions(
-		screen.getByLabelText(/Generation Method/i),
-		'manual'
+		screen.getByTestId('generation-method-list'),
+		'Manual'
 	);
 
 	for (const key of Object.keys(
@@ -113,8 +113,8 @@ it('has expected default ability score values on generation method switch', asyn
 	}
 
 	await userEvent.selectOptions(
-		screen.getByLabelText(/Generation Method/i),
-		'roll'
+		screen.getByTestId('generation-method-list'),
+		'Roll'
 	);
 
 	for (const key of Object.keys(
@@ -129,8 +129,8 @@ it('has expected default ability score values on generation method switch', asyn
 	}
 
 	await userEvent.selectOptions(
-		screen.getByLabelText(/Generation Method/i),
-		'point-buy'
+		screen.getByTestId('generation-method-list'),
+		'Point Buy'
 	);
 
 	for (const key of Object.keys(
@@ -145,8 +145,8 @@ it('has expected default ability score values on generation method switch', asyn
 	}
 
 	await userEvent.selectOptions(
-		screen.getByLabelText(/Generation Method/i),
-		'array'
+		screen.getByTestId('generation-method-list'),
+		'Standard Array'
 	);
 
 	for (const key of Object.keys(
