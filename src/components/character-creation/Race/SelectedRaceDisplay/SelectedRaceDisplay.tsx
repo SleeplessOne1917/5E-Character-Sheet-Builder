@@ -1,5 +1,4 @@
 import {
-	AbilityBonus,
 	ProficiencyType,
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
@@ -30,13 +29,11 @@ import {
 } from '../../../../redux/features/proficiencies';
 import { addSpell, removeSpell } from '../../../../redux/features/spells';
 import {
-	deselectAbilityBonuses,
 	deselectDraconicAncestry,
 	deselectLanguages,
 	deselectTraitLanguages,
 	deselectTraitProficiencies,
 	deselectTraitSpells,
-	selectAbilityBonuses,
 	selectDraconicAncestry,
 	selectLanguages,
 	selectTraitLanguages,
@@ -54,7 +51,6 @@ import ProficiencyChoiceSelector from '../ChoiceSelector/ProficiencyChoiceSelect
 import SpellChoiceSelector from '../ChoiceSelector/SpellChoiceSelector/SpellChoiceSelector';
 import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
-import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type SelectedRaceDisplayProps = {
@@ -119,31 +115,6 @@ const SelectedRaceDisplay = ({
 			window.removeEventListener('resize', adjustRows);
 		};
 	}, [isLargeOrLarger, setContainerStyle, raceInfo.draconicAncestry]);
-
-	const handleAbilityScoreBonusApply = useCallback(
-		(bonuses: AbilityBonus[]) => {
-			dispatch(selectAbilityBonuses(bonuses));
-
-			for (const {
-				bonus,
-				ability_score: { index }
-			} of bonuses) {
-				dispatch(updateRaceBonus({ value: bonus, abilityIndex: index }));
-			}
-		},
-		[dispatch]
-	);
-
-	const handleAbilityScoreBonusReset = useCallback(
-		(bonuses: AbilityBonus[]) => {
-			dispatch(deselectAbilityBonuses());
-
-			for (const index of bonuses.map(bonus => bonus.ability_score.index)) {
-				dispatch(updateRaceBonus({ value: null, abilityIndex: index }));
-			}
-		},
-		[dispatch]
-	);
 
 	const handleLanguageOptionsApply = useCallback(
 		(items: SrdItem[]) => {
@@ -314,14 +285,7 @@ const SelectedRaceDisplay = ({
 			</div>
 			<div className={classes.select}>
 				{race.ability_bonus_options && (
-					<AbilityBonusChoiceSelector
-						choice={race.ability_bonus_options}
-						onApply={handleAbilityScoreBonusApply}
-						initialValues={raceInfo.selectedAbilityScoreBonuses?.map(
-							bonus => bonus.ability_score.index
-						)}
-						onReset={handleAbilityScoreBonusReset}
-					/>
+					<AbilityBonusChoiceSelector choice={race.ability_bonus_options} />
 				)}
 				{race.language_options && (
 					<LanguageChoiceSelector

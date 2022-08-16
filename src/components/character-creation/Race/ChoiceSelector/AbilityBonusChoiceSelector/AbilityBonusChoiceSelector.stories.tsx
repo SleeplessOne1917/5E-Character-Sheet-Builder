@@ -1,10 +1,19 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import AbilityBonusChoiceSelector from './AbilityBonusChoiceSelector';
+import { Provider } from 'react-redux';
+import { getTestStore } from '../../../../../redux/store';
 
 export default {
 	title: 'Components/ChoiceSelector/AbilityBonusChoiceSelector',
-	component: AbilityBonusChoiceSelector
+	component: AbilityBonusChoiceSelector,
+	decorators: [
+		Story => (
+			<Provider store={getTestStore()}>
+				<Story />
+			</Provider>
+		)
+	]
 } as ComponentMeta<typeof AbilityBonusChoiceSelector>;
 
 const Template: ComponentStory<typeof AbilityBonusChoiceSelector> = args => (

@@ -1,64 +1,100 @@
 import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
-import { useCallback, useState } from 'react';
+import {
+	addRaceAbilityBonus,
+	removeRaceAbilityBonus
+} from '../../../../../redux/features/raceInfo';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
+import { useCallback, useEffect, useState } from 'react';
 
+import AbilityScores from '../../../../../types/abilityScores';
 import ChoiceSelector from '../ChoiceSelector';
 import Select from '../../../../Select/Select';
 import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
+import { updateRaceBonus } from '../../../../../redux/features/abilityScores';
 
 type OptionSelectorProps = {
 	choice: AbilityBonusChoice;
-	onReset?: (items: AbilityBonus[]) => void;
-	onApply?: (items: AbilityBonus[]) => void;
-	initialValues?: string[];
 };
 
 const AbilityBonusChoiceSelector = ({
-	choice,
-	onReset = () => {},
-	onApply = () => {},
-	initialValues
+	choice
 }: OptionSelectorProps): JSX.Element => {
+	const selectedAbilityScoreBonuses = useAppSelector(
+		state => state.editingCharacter.raceInfo.selectedAbilityScoreBonuses
+	);
 	const getInitialSelectValues = useCallback(() => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
-			returnValues.push('blank');
+			if (
+				selectedAbilityScoreBonuses &&
+				i < selectedAbilityScoreBonuses.length
+			) {
+				returnValues.push(selectedAbilityScoreBonuses[i].ability_score.index);
+			} else {
+				returnValues.push('blank');
+			}
 		}
 
 		return returnValues;
-	}, [choice]);
+	}, [choice, selectedAbilityScoreBonuses]);
 	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		initialValues ?? getInitialSelectValues()
+		getInitialSelectValues()
 	);
+
+	useEffect(() => {
+		setSelectValues(getInitialSelectValues());
+	}, [setSelectValues, getInitialSelectValues]);
+
+	const dispatch = useAppDispatch();
 
 	const handleChangeSelect = useCallback(
-		(index: number, selectValue: string) =>
+		(index: number, selectValue: string) => {
+			dispatch(removeRaceAbilityBonus(selectValues[index]));
+
+			if (selectValues[index] !== 'blank') {
+				dispatch(
+					updateRaceBonus({
+						value: null,
+						abilityIndex: selectValues[index] as AbilityScores
+					})
+				);
+			}
+
+			if (selectValue !== 'blank') {
+				const bonus = choice.from.options.find(
+					option => option.ability_score.index === selectValue
+				) as AbilityBonus;
+				dispatch(addRaceAbilityBonus(bonus));
+				dispatch(
+					updateRaceBonus({
+						value: bonus.bonus,
+						abilityIndex: selectValue as AbilityScores
+					})
+				);
+			}
+
 			setSelectValues(prevState =>
 				prevState.map((value, i) => (i === index ? selectValue : value))
-			),
-		[setSelectValues]
-	);
-
-	const handleApply = useCallback(
-		() =>
-			onApply(
-				choice.from.options.filter(option =>
-					selectValues.includes(option.ability_score.index)
-				)
-			),
-		[onApply, choice, selectValues]
+			);
+		},
+		[setSelectValues, dispatch, choice, selectValues]
 	);
 
 	const handleReset = useCallback(() => {
 		setSelectValues(getInitialSelectValues());
-		onReset(
-			choice.from.options.filter(option =>
-				selectValues.includes(option.ability_score.index)
-			)
-		);
-	}, [setSelectValues, getInitialSelectValues, onReset, choice, selectValues]);
+		for (const index of choice.from.options
+			.filter(option => selectValues.includes(option.ability_score.index))
+			.map(bonus => bonus.ability_score.index)) {
+			dispatch(updateRaceBonus({ value: null, abilityIndex: index }));
+			dispatch(removeRaceAbilityBonus(index));
+		}
+	}, [setSelectValues, getInitialSelectValues, choice, selectValues, dispatch]);
 
 	const selects: JSX.Element[] = [];
 
@@ -94,8 +130,8 @@ const AbilityBonusChoiceSelector = ({
 			label={label}
 			selectValues={selectValues}
 			selects={selects}
-			isSelected={!!initialValues}
-			onApply={handleApply}
+			isSelected={!selectValues.includes('blank')}
+			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);

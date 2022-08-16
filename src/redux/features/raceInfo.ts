@@ -58,11 +58,24 @@ const raceInfoSlice = createSlice({
 			}
 		},
 		deselectRace: () => initialState,
-		selectAbilityBonuses: (state, action: PayloadAction<AbilityBonus[]>) => {
-			state.selectedAbilityScoreBonuses = action.payload;
+		addRaceAbilityBonus: (state, action: PayloadAction<AbilityBonus>) => {
+			if (!state.selectedAbilityScoreBonuses) {
+				state.selectedAbilityScoreBonuses = [];
+			}
+			state.selectedAbilityScoreBonuses = [
+				...state.selectedAbilityScoreBonuses,
+				action.payload
+			];
 		},
-		deselectAbilityBonuses: state => {
-			delete state.selectedAbilityScoreBonuses;
+		removeRaceAbilityBonus: (state, { payload }: PayloadAction<string>) => {
+			if (!state.selectedAbilityScoreBonuses) {
+				state.selectedAbilityScoreBonuses = [];
+			} else {
+				state.selectedAbilityScoreBonuses =
+					state.selectedAbilityScoreBonuses.filter(
+						bonus => bonus.ability_score.index !== payload
+					);
+			}
 		},
 		selectLanguages: (state, action: PayloadAction<SrdItem[]>) => {
 			state.selectedLanguages = action.payload;
@@ -139,8 +152,8 @@ const raceInfoSlice = createSlice({
 export const {
 	selectRace,
 	deselectRace,
-	selectAbilityBonuses,
-	deselectAbilityBonuses,
+	addRaceAbilityBonus,
+	removeRaceAbilityBonus,
 	selectLanguages,
 	deselectLanguages,
 	selectTraitProficiencies,
