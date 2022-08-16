@@ -2,47 +2,52 @@ import {
 	SrdSubtraitItem,
 	SrdSubtraitItemChoice
 } from '../../../../../types/srd';
-import { useCallback, useState } from 'react';
+import {
+	deselectDraconicAncestry,
+	selectDraconicAncestry
+} from '../../../../../redux/features/raceInfo';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
 
 import ChoiceSelector from '../ChoiceSelector';
 import Select from '../../../../Select/Select';
+import { useCallback } from 'react';
 
 type OptionSelectorProps = {
 	choice: SrdSubtraitItemChoice;
-	onReset?: () => void;
-	onApply?: (item: SrdSubtraitItem) => void;
-	initialValue?: string;
 };
 
 const DraconicAncestryChoiceSelector = ({
-	choice,
-	onReset = () => {},
-	onApply = () => {},
-	initialValue
+	choice
 }: OptionSelectorProps): JSX.Element => {
-	const [selectValue, setSelectValue] = useState<string>(
-		initialValue ?? 'blank'
-	);
+	const selectValue =
+		useAppSelector(
+			state => state.editingCharacter.raceInfo.draconicAncestry?.index
+		) ?? 'blank';
+	const dispatch = useAppDispatch();
 
 	const handleChangeSelect = useCallback(
-		(value: string) => setSelectValue(value),
-		[setSelectValue]
-	);
-
-	const handleApply = useCallback(
-		() =>
-			onApply(
-				choice.from.options
-					.map(option => option.item)
-					.find(({ index }) => index === selectValue) as SrdSubtraitItem
-			),
-		[onApply, choice, selectValue]
+		(value: string) => {
+			if (value === 'blank') {
+				dispatch(deselectDraconicAncestry());
+			} else {
+				dispatch(
+					selectDraconicAncestry(
+						choice.from.options
+							.map(option => option.item)
+							.find(({ index }) => index === value) as SrdSubtraitItem
+					)
+				);
+			}
+		},
+		[dispatch, choice]
 	);
 
 	const handleReset = useCallback(() => {
-		setSelectValue('blank');
-		onReset();
-	}, [setSelectValue, onReset]);
+		dispatch(deselectDraconicAncestry());
+	}, [dispatch]);
 
 	const selects = [
 		<Select
@@ -66,8 +71,8 @@ const DraconicAncestryChoiceSelector = ({
 			label="Select draconic ancestry"
 			selectValues={[selectValue]}
 			selects={selects}
-			isSelected={!!initialValue}
-			onApply={handleApply}
+			isSelected={selectValue !== 'blank'}
+			onApply={() => {}}
 			onReset={handleReset}
 		/>
 	);

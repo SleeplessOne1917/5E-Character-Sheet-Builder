@@ -1,13 +1,15 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import DraconicAncestryChoiceSelector from './DraconicAncestryChoiceSelector';
+import { Provider } from 'react-redux';
+import { getTestStore } from '../../../../../redux/store';
 
 export default {
 	title: 'Components/ChoiceSelector/DraconicAncestryChoiceSelector',
 	component: DraconicAncestryChoiceSelector,
 	args: {
 		choice: {
-			choose: 2,
+			choose: 1,
 			from: {
 				options: [
 					{
@@ -16,8 +18,10 @@ export default {
 							name: 'Draconic Ancestry (Foo)',
 							trait_specific: {
 								breath_weapon: {
-									name: 'Acid Breath',
-									desc: 'Acid breath.',
+									area_of_effect: {
+										size: 30,
+										type: 'LINE'
+									},
 									damage: [
 										{
 											damage_type: { index: 'acid', name: 'Acid' },
@@ -35,11 +39,13 @@ export default {
 							name: 'Draconic Ancestry (Bar)',
 							trait_specific: {
 								breath_weapon: {
-									name: 'Lightning Breath',
-									desc: 'Lightning breath.',
+									area_of_effect: {
+										size: 15,
+										type: 'CONE'
+									},
 									damage: [
 										{
-											damage_type: { index: 'lightning', name: 'Lightning' },
+											damage_type: { index: 'cold', name: 'COLD' },
 											damage_at_character_level: [{ damage: '2d6', level: 1 }]
 										}
 									],
@@ -47,31 +53,18 @@ export default {
 								}
 							}
 						}
-					},
-					{
-						item: {
-							index: 'baz',
-							name: 'Draconic Ancestry (Baz)',
-							trait_specific: {
-								breath_weapon: {
-									name: 'Fire Breath',
-									desc: 'Fire breath.',
-									damage: [
-										{
-											damage_type: { index: 'fire', name: 'Fire' },
-											damage_at_character_level: [{ damage: '2d6', level: 1 }]
-										}
-									],
-									dc: { type: { index: 'con', full_name: 'Constitution' } }
-								}
-							}
-						}
 					}
 				]
 			}
-		},
-		label: 'Choose stuff'
-	}
+		}
+	},
+	decorators: [
+		Story => (
+			<Provider store={getTestStore()}>
+				<Story />
+			</Provider>
+		)
+	]
 } as ComponentMeta<typeof DraconicAncestryChoiceSelector>;
 
 const Template: ComponentStory<typeof DraconicAncestryChoiceSelector> =

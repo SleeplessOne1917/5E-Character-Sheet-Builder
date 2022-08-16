@@ -1,4 +1,12 @@
 import {
+	CSSProperties,
+	MutableRefObject,
+	useCallback,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
+import {
 	ProficiencyType,
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
@@ -8,17 +16,8 @@ import {
 	SrdProficiencyItemChoice,
 	SrdSpellItem,
 	SrdSpellItemChoice,
-	SrdSubtraitItem,
 	SrdSubtraitItemChoice
 } from '../../../../types/srd';
-import {
-	CSSProperties,
-	MutableRefObject,
-	useCallback,
-	useEffect,
-	useRef,
-	useState
-} from 'react';
 import {
 	addLanguage,
 	removeLanguage
@@ -29,12 +28,10 @@ import {
 } from '../../../../redux/features/proficiencies';
 import { addSpell, removeSpell } from '../../../../redux/features/spells';
 import {
-	deselectDraconicAncestry,
 	deselectLanguages,
 	deselectTraitLanguages,
 	deselectTraitProficiencies,
 	deselectTraitSpells,
-	selectDraconicAncestry,
 	selectLanguages,
 	selectTraitLanguages,
 	selectTraitProficiencies,
@@ -214,17 +211,6 @@ const SelectedRaceDisplay = ({
 		[dispatch]
 	);
 
-	const handleDraconicAncestryApply = useCallback(
-		(ancestry: SrdSubtraitItem) => {
-			dispatch(selectDraconicAncestry(ancestry));
-		},
-		[dispatch]
-	);
-
-	const handleDraconicAncestryReset = useCallback(() => {
-		dispatch(deselectDraconicAncestry());
-	}, [dispatch]);
-
 	const draconicAncestryTrait = traits.find(
 		trait => trait.index === 'draconic-ancestry'
 	);
@@ -324,9 +310,6 @@ const SelectedRaceDisplay = ({
 							draconicAncestryTrait.trait_specific
 								?.subtrait_options as SrdSubtraitItemChoice
 						}
-						initialValue={raceInfo.draconicAncestry?.index}
-						onApply={handleDraconicAncestryApply}
-						onReset={handleDraconicAncestryReset}
 					/>
 				)}
 				{traits

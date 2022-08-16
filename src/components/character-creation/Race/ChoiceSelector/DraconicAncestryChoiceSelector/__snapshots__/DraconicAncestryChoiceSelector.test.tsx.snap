@@ -75,15 +75,6 @@ exports[`renders correctly 1`] = `
         >
           Bar
         </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-baz"
-          role="option"
-          tabindex="0"
-        >
-          Baz
-        </li>
       </ul>
     </div>
   </div>
