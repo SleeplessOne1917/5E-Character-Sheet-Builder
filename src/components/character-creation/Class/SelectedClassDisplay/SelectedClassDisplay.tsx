@@ -1,7 +1,9 @@
-import { ChangeEvent, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
-import { setLevel } from '../../../../redux/features/classInfo';
+
+import Select from '../../../Select/Select';
 import { SrdFullClassItem } from '../../../../types/srd';
+import { setLevel } from '../../../../redux/features/classInfo';
 import styles from './SelectedClassDisplay.module.css';
 
 type SelectedClassDisplayProps = {
@@ -60,8 +62,8 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	}
 
 	const handleLevelChange = useCallback(
-		(event: ChangeEvent<HTMLSelectElement>) => {
-			dispatch(setLevel(parseInt(event.target.value, 10)));
+		(value: number) => {
+			dispatch(setLevel(value));
 		},
 		[dispatch]
 	);
@@ -69,15 +71,17 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	return (
 		<div>
 			<div className={styles['level-select-container']}>
-				<div className={styles['level-select-label']}>Select Level</div>
-				<select className={styles['level-select']} onChange={handleLevelChange}>
-					<option value={0}>&mdash;</option>
-					{levelNumbers.map(num => (
-						<option key={num} value={num}>
-							{num}
-						</option>
-					))}
-				</select>
+				<label className={styles['level-select-label']} id="select-level">
+					Select Level
+				</label>
+				<Select
+					labelledBy="select-level"
+					onChange={value => handleLevelChange(value as number)}
+					options={[{ value: 0, label: '\u2014' }].concat(
+						levelNumbers.map(num => ({ value: num, label: `${num}` }))
+					)}
+					value={classInfo.level}
+				/>
 			</div>
 			<table className={styles.table}>
 				<tr>

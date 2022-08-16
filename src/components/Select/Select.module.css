@@ -16,6 +16,7 @@
     border-radius: 0.75rem;
     overflow-y: auto;
     max-height: 20rem;
+    min-width: 100%;
 }
 
 .item {
