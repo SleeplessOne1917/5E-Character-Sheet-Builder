@@ -25,14 +25,6 @@
     margin: 1rem 0;
 }
 
-.ability select {
-    width: 50%;
-    border: 1px solid var(--davy);
-    font-size: 1.5rem;
-    font-family: inherit;
-    background-color: var(--heaven-light);
-}
-
 @media screen and (min-width: 768px) {
     .ability {
         width: 30%;

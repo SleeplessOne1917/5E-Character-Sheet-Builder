@@ -9,13 +9,15 @@ import userEvent from '@testing-library/user-event';
 
 const { HalfSelected, NoneSelected } = composeStories(stories);
 
-const getSelectOptions = (select: HTMLSelectElement) => {
-	const options = [] as HTMLOptionElement[];
-	for (let i = 0; i < select.options.length; ++i) {
-		options.push(select.options.item(i) as HTMLOptionElement);
+const getSelectOptions = (select: HTMLDivElement) => {
+	const options = [] as HTMLLIElement[];
+	/* eslint-disable testing-library/no-node-access */
+	for (let i = 0; i < (select.querySelector('ul')?.children.length ?? 0); ++i) {
+		options.push(select.querySelector('ul')?.children.item(i) as HTMLLIElement);
 	}
+	/* eslint-enable testing-library/no-node-access */
 
-	return options.map(option => option.text);
+	return options.map(option => option.textContent);
 };
 
 it('renders correctly', () => {
@@ -32,7 +34,7 @@ it('only renders total score when score is selected', async () => {
 		screen.getAllByText(/Total: \u2014/).length;
 	expect(originalNumberOfEmdashTotals).toBeGreaterThan(0);
 
-	await userEvent.selectOptions(screen.getByLabelText(/strength/i), '8');
+	await userEvent.selectOptions(screen.getByTestId('str-list'), '8');
 
 	expect(screen.getByText(/Total: \d/i)).toBeInTheDocument();
 	expect(screen.getAllByText(/Total: \u2014/).length).toBe(
@@ -44,43 +46,38 @@ it('removes selected options from the options of other dropdowns', async () => {
 	render(<NoneSelected />);
 
 	const selected = [];
-	const firstSelect = screen.getByLabelText(/Strength/i);
-	await userEvent.selectOptions(firstSelect, '8');
+	await userEvent.selectOptions(screen.getByTestId('str-list'), '8');
 	selected.push('8');
 
-	const secondSelect = screen.getByLabelText(/Dexterity/i) as HTMLSelectElement;
+	const secondSelect = screen.getByLabelText(/Dexterity/i) as HTMLDivElement;
 	for (const s of selected) {
 		expect(getSelectOptions(secondSelect)).not.toContain(s);
 	}
-	await userEvent.selectOptions(secondSelect, '10');
+	await userEvent.selectOptions(screen.getByTestId('dex-list'), '10');
 	selected.push('10');
 
-	const thirdSelect = screen.getByLabelText(
-		/Constitution/i
-	) as HTMLSelectElement;
+	const thirdSelect = screen.getByLabelText(/Constitution/i) as HTMLDivElement;
 	for (const s of selected) {
 		expect(getSelectOptions(thirdSelect)).not.toContain(s);
 	}
-	await userEvent.selectOptions(thirdSelect, '12');
+	await userEvent.selectOptions(screen.getByTestId('con-list'), '12');
 	selected.push('12');
 
-	const fourthSelect = screen.getByLabelText(
-		/Intelligence/i
-	) as HTMLSelectElement;
+	const fourthSelect = screen.getByLabelText(/Intelligence/i) as HTMLDivElement;
 	for (const s of selected) {
 		expect(getSelectOptions(fourthSelect)).not.toContain(s);
 	}
-	await userEvent.selectOptions(fourthSelect, '13');
+	await userEvent.selectOptions(screen.getByTestId('int-list'), '13');
 	selected.push('13');
 
-	const fifthSelect = screen.getByLabelText(/Wisdom/i) as HTMLSelectElement;
+	const fifthSelect = screen.getByLabelText(/Wisdom/i) as HTMLDivElement;
 	for (const s of selected) {
 		expect(getSelectOptions(fifthSelect)).not.toContain(s);
 	}
-	await userEvent.selectOptions(fifthSelect, '14');
+	await userEvent.selectOptions(screen.getByTestId('wis-list'), '14');
 	selected.push('14');
 
-	const sixthSelect = screen.getByLabelText(/Charisma/i) as HTMLSelectElement;
+	const sixthSelect = screen.getByLabelText(/Charisma/i) as HTMLDivElement;
 	for (const s of selected) {
 		expect(getSelectOptions(sixthSelect)).not.toContain(s);
 	}

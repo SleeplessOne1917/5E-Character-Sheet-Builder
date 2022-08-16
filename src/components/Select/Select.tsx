@@ -1,24 +1,32 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import {
-	useCallback,
-	useState,
+	CSSProperties,
 	KeyboardEvent,
-	useRef,
 	MutableRefObject,
+	useCallback,
 	useEffect,
-	CSSProperties
+	useRef,
+	useState
 } from 'react';
-import { handleKeyDownEvent } from '../../services/handlerService';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+
 import classes from './Select.module.css';
+import { handleKeyDownEvent } from '../../services/handlerService';
 
 type SelectProps = {
 	options: { value: string | number; label: string }[];
 	value?: string | number;
 	onChange: (value: string | number) => void;
 	testId?: string;
+	labelledBy?: string;
 };
 
-const Select = ({ options, value, onChange, testId }: SelectProps) => {
+const Select = ({
+	options,
+	value,
+	onChange,
+	testId,
+	labelledBy
+}: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const [listStyle, setListStyle] = useState<CSSProperties>({
@@ -133,6 +141,7 @@ const Select = ({ options, value, onChange, testId }: SelectProps) => {
 			className={classes.container}
 			ref={containerRef as MutableRefObject<HTMLDivElement>}
 			data-testid={testId ?? 'select'}
+			aria-labelledby={labelledBy}
 		>
 			<button
 				type="button"
