@@ -13,31 +13,79 @@ exports[`renders correctly 1`] = `
   <div
     class="select-div"
   >
-    <select
-      aria-label="Select choice"
-      class="select"
+    <div
+      class="container"
+      data-testid="select"
+      style="font-size: 1.2rem;"
     >
-      <option
-        value="blank"
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="button"
+        data-testid="select-button"
+        type="button"
       >
         —
-      </option>
-      <option
-        value="foo"
+        <svg
+          aria-hidden="true"
+          class="icon"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <ul
+        aria-activedescendant="—"
+        class="list"
+        data-testid="select-list"
+        role="listbox"
+        style="display: none;"
+        tabindex="-1"
       >
-        Foo
-      </option>
-      <option
-        value="bar"
-      >
-        Bar
-      </option>
-      <option
-        value="baz"
-      >
-        Baz
-      </option>
-    </select>
+        <li
+          aria-selected="true"
+          class="item selected"
+          data-testid="data-blank"
+          role="option"
+          tabindex="0"
+        >
+          —
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-foo"
+          role="option"
+          tabindex="0"
+        >
+          Foo
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-bar"
+          role="option"
+          tabindex="0"
+        >
+          Bar
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-baz"
+          role="option"
+          tabindex="0"
+        >
+          Baz
+        </li>
+      </ul>
+    </div>
   </div>
   <div
     class="button-div"

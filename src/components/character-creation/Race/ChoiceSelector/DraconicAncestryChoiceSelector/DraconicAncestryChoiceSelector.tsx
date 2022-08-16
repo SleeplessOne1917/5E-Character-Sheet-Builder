@@ -1,11 +1,11 @@
-import { ChangeEvent, useCallback, useState } from 'react';
 import {
-	SrdSubtraitItemChoice,
-	SrdSubtraitItem
+	SrdSubtraitItem,
+	SrdSubtraitItemChoice
 } from '../../../../../types/srd';
+import { useCallback, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
-import classes from '../ChoiceSelector.module.css';
+import Select from '../../../../Select/Select';
 
 type OptionSelectorProps = {
 	choice: SrdSubtraitItemChoice;
@@ -25,8 +25,7 @@ const DraconicAncestryChoiceSelector = ({
 	);
 
 	const handleChangeSelect = useCallback(
-		(event: ChangeEvent<HTMLSelectElement>) =>
-			setSelectValue(event.target.value),
+		(value: string) => setSelectValue(value),
 		[setSelectValue]
 	);
 
@@ -46,25 +45,20 @@ const DraconicAncestryChoiceSelector = ({
 	}, [setSelectValue, onReset]);
 
 	const selects = [
-		<select
+		<Select
 			value={selectValue}
-			aria-label="Select choice"
-			onChange={handleChangeSelect}
-			className={classes.select}
 			key="draconic-ancestry"
-		>
-			<option value="blank">&mdash;</option>
-			{choice.from.options.map(option => (
-				<option value={option.item.index} key={option.item.index}>
-					{
-						(/Draconic Ancestry \((.*)\)/i.exec(option.item.name) ?? [
-							'',
-							''
-						])[1]
-					}
-				</option>
-			))}
-		</select>
+			onChange={value => handleChangeSelect(value as string)}
+			options={[{ value: 'blank', label: '\u2014' }].concat(
+				choice.from.options.map(option => ({
+					value: option.item.index,
+					label: (/Draconic Ancestry \((.*)\)/i.exec(option.item.name) ?? [
+						'',
+						''
+					])[1]
+				}))
+			)}
+		/>
 	];
 
 	return (
