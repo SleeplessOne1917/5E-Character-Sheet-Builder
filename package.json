@@ -17,7 +17,7 @@
     "@heroicons/react": "^1.0.6",
     "@reduxjs/toolkit": "^1.8.4",
     "@urql/exchange-auth": "^0.1.7",
-    "apollo-server-micro": "^3.10.0",
+    "apollo-server-micro": "^3.10.1",
     "argon2": "^0.28.7",
     "autoprefixer": "^10.4.8",
     "formik": "^2.2.9",
