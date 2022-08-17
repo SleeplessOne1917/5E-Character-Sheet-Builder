@@ -62,6 +62,32 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 		}
 	}
 
+	const warlockSlots: { slotLevel: number; slots: number }[] = [];
+	if (klass.index === 'warlock') {
+		const classLevels = [...klass.class_levels]
+			.filter(level => !level.subclass)
+			.sort((a, b) => a.level - b.level);
+
+		for (let i = 0; i < 20; ++i) {
+			let slotLevel = 0;
+			let slots = 0;
+
+			for (let j = 1; j <= 9; ++j) {
+				/* eslint-disable @typescript-eslint/ban-ts-comment */
+				// @ts-ignore
+				if (classLevels[i].spellcasting[`spell_slots_level_${j}`] > 0) {
+					slotLevel = j;
+					// @ts-ignore
+					slots = classLevels[i].spellcasting[`spell_slots_level_${j}`];
+					break;
+				}
+				/* eslint-enable @typescript-eslint/ban-ts-comment */
+			}
+
+			warlockSlots.push({ slotLevel, slots });
+		}
+	}
+
 	const levelNumbers: number[] = [];
 	for (let i = 1; i <= 20; ++i) {
 		levelNumbers.push(i);
@@ -103,6 +129,12 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 									{getOrdinalString(level)}
 								</th>
 							))}
+							{klass.index === 'warlock' && (
+								<>
+									<th className={styles.head}>Spell Slots</th>
+									<th className={styles.head}>Slot Level</th>
+								</>
+							)}
 						</>
 					)}
 				</tr>
@@ -148,6 +180,14 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 												}
 											</td>
 										))}
+										{klass.index === 'warlock' && (
+											<>
+												<td>{warlockSlots[index].slots}</td>
+												<td>
+													{getOrdinalString(warlockSlots[index].slotLevel)}
+												</td>
+											</>
+										)}
 									</>
 								)}
 							</tr>
