@@ -41,6 +41,11 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 		level => level.spellcasting?.spells_known
 	);
 
+	const subclassFlavor = klass.subclasses[0].subclass_flavor;
+	const subclassLevelNumbers = klass.subclasses[0].subclass_levels
+		.map(sc => sc.level)
+		.sort((a, b) => a - b);
+
 	const spellCastingLevels: number[] = [];
 	if (hasSpellcasting && klass.index !== 'warlock') {
 		for (let i = 1; i <= 9; ++i) {
@@ -48,6 +53,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 				/* eslint-disable @typescript-eslint/ban-ts-comment */
 				// @ts-ignore
 				klass.class_levels[0].spellcasting[`spell_slots_level_${i}`] !== null
+				/* eslint-enable @typescript-eslint/ban-ts-comment */
 			) {
 				spellCastingLevels.push(i);
 			} else {
@@ -104,7 +110,18 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 					.sort((a, b) => a.level - b.level)
 					.filter(level => !level.subclass)
 					.map(({ level, prof_bonus, features, spellcasting }, index) => {
-						const featureNames = features.map(({ name }) => name);
+						const featureNames = features.map(({ name }) =>
+							name.replace(/Spellcasting:.*/i, 'Spellcasting')
+						);
+
+						if (!featureNames.includes(subclassFlavor)) {
+							if (subclassLevelNumbers[0] === level) {
+								featureNames.push(subclassFlavor);
+							} else if (subclassLevelNumbers.includes(level)) {
+								featureNames.push(`${subclassFlavor} feature`);
+							}
+						}
+
 						return (
 							<tr
 								key={`${klass.index}-${level}`}
@@ -127,6 +144,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 													/* eslint-disable @typescript-eslint/ban-ts-comment */
 													// @ts-ignore
 													spellcasting[`spell_slots_level_${level}`]
+													/* eslint-enable @typescript-eslint/ban-ts-comment */
 												}
 											</td>
 										))}
