@@ -223,6 +223,16 @@ type SrdStartingEquipmentChoice = {
 	};
 };
 
+interface SrdSubclassItem extends SrdItem {
+	subclass_flavor: string;
+	desc: string[];
+	spells: {
+		prerequisites: { level?: string; index?: string }[];
+		spell: SrdSpellItem;
+	}[];
+	subclass_levels: { level: number; features: SrdFeatureItem[] }[];
+}
+
 export interface SrdFullClassItem extends SrdItem {
 	hit_die: number;
 	proficiencies: SrdProficiencyItem[];
@@ -232,4 +242,5 @@ export interface SrdFullClassItem extends SrdItem {
 	class_levels: ClassLevel[];
 	proficiency_choices: SrdProficiencyItemChoice[];
 	starting_equipment_options: SrdStartingEquipmentChoice[];
+	subclasses: SrdSubclassItem[];
 }

@@ -189,6 +189,50 @@ const GET_CLASS = gql`
 					}
 				}
 			}
+			subclasses {
+				index
+				name
+				subclass_flavor
+				desc
+				spells {
+					prerequisites {
+						... on Level {
+							level
+						}
+						... on Feature {
+							index
+						}
+					}
+					spell {
+						level
+						components
+						casting_time
+						concentration
+						desc
+						school {
+							index
+							name
+						}
+						damage {
+							damage_type {
+								index
+								name
+							}
+						}
+						material
+						range
+						ritual
+					}
+				}
+				subclass_levels {
+					level
+					features {
+						name
+						index
+						desc
+					}
+				}
+			}
 		}
 	}
 `;
