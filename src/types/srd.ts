@@ -181,6 +181,11 @@ type ClassLevelSpellcasting = {
 	spells_known?: number;
 };
 
+type Dice = {
+	dice_count: number;
+	dice_value: number;
+};
+
 type ClassLevel = {
 	prof_bonus: number;
 	level: number;
@@ -190,12 +195,10 @@ type ClassLevel = {
 	class_specific?: {
 		rage_count?: number;
 		rage_damage_bonus?: number;
-		martial_arts?: {
-			dice_count: number;
-			dice_value: number;
-		};
+		martial_arts?: Dice;
 		ki_points?: number;
 		unarmored_movement?: number;
+		sneak_attack?: Dice;
 	};
 };
 

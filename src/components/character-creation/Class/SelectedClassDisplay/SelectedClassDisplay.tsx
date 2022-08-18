@@ -126,6 +126,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 							<th>Unarmored Movement</th>
 						</>
 					)}
+					{klass.index === 'rogue' && <th>Sneak Attack</th>}
 					<th>Features</th>
 					{klass.index === 'barbarian' && (
 						<>
@@ -192,6 +193,12 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 												: '\u2014'}
 										</td>
 									</>
+								)}
+								{klass.index === 'rogue' && (
+									<td>
+										{class_specific?.sneak_attack?.dice_count}d
+										{class_specific?.sneak_attack?.dice_value}
+									</td>
 								)}
 								<td>
 									{featureNames.length > 0 ? featureNames.join(', ') : '\u2014'}

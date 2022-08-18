@@ -80,6 +80,12 @@ const GET_CLASS = gql`
 						ki_points
 						unarmored_movement
 					}
+					... on RogueSpecific {
+						sneak_attack {
+							dice_count
+							dice_value
+						}
+					}
 				}
 			}
 			proficiency_choices {
