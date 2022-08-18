@@ -26,32 +26,11 @@ import Descriptor from '../../Descriptor/Descriptor';
 import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import styles from './SelectedClassDisplay.module.css';
+import { getOrdinal } from '../../../../services/ordinalService';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
 	abilities: AbilityItem[];
-};
-
-const getOrdinal = (n: number) => {
-	const strNum = `${n}`;
-
-	let ordinal = '';
-	if (strNum.endsWith('1') && !strNum.endsWith('11')) {
-		ordinal = 'st';
-	} else if (strNum.endsWith('2') && !strNum.endsWith('12')) {
-		ordinal = 'nd';
-	} else if (strNum.endsWith('3') && !strNum.endsWith('13')) {
-		ordinal = 'rd';
-	} else {
-		ordinal = 'th';
-	}
-
-	return (
-		<span>
-			{strNum}
-			<span className={styles.ordinal}>{ordinal}</span>
-		</span>
-	);
 };
 
 const SelectedClassDisplay = ({
@@ -417,6 +396,7 @@ const SelectedClassDisplay = ({
 								}
 								onSelect={() => handleSubclassSelect(sc)}
 								onDeselect={handleSubclassDeselect}
+								klassName={klass.name}
 							/>
 						))}
 					</div>

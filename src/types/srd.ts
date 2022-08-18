@@ -243,7 +243,7 @@ export interface SrdSubclassItem extends SrdItem {
 	subclass_flavor: string;
 	desc: string[];
 	spells: {
-		prerequisites: { level?: number; index?: string }[];
+		prerequisites: { level?: number; index?: string; name?: string }[];
 		spell: SrdSpellItem;
 	}[];
 	subclass_levels: { level: number; features: SrdFeatureItem[] }[];

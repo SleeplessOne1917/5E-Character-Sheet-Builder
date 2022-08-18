@@ -37,7 +37,7 @@ body {
   color: var(--davy);
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: var(--font-fantasy);
   color: var(--davy);
   align-self: center;
@@ -90,6 +90,10 @@ option {
   h3 {
     font-size: 1.5rem;
   }
+
+  h4 {
+    font-size: 1.3rem;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -103,5 +107,9 @@ option {
 
   h3 {
     font-size: 2rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
   }
 }

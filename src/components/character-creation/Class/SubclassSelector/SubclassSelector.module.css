@@ -23,3 +23,26 @@
 .selected {
 	background-color: var(--highlight) !important;
 }
+
+.subclass th {
+    background-color: var(--davy);
+    color: var(--heaven-light);
+    text-align: start;
+    padding: 0.5rem;
+}
+
+.subclass table {
+    border-collapse: collapse;
+}
+
+.subclass td {
+    padding: 0.5rem;
+}
+
+.even-row {
+    background-color: var(--highlight-light);
+}
+
+.odd-row {
+    background-color: var(--heaven-light);
+}

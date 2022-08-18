@@ -228,9 +228,11 @@ const GET_CLASS = gql`
 						}
 						... on Feature {
 							index
+							name
 						}
 					}
 					spell {
+						name
 						level
 						components
 						casting_time
