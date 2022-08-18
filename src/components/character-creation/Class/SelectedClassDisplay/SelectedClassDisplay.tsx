@@ -10,11 +10,11 @@ type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
 };
 
-const getOrdinalString = (n: number) => {
+const getOrdinal = (n: number) => {
 	const strNum = `${n}`;
 
 	let ordinal = '';
-	if (strNum.endsWith('1') && !strNum.endsWith('13')) {
+	if (strNum.endsWith('1') && !strNum.endsWith('11')) {
 		ordinal = 'st';
 	} else if (strNum.endsWith('2') && !strNum.endsWith('12')) {
 		ordinal = 'nd';
@@ -140,7 +140,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 							{hasCantrips && <th>Cantrips Known</th>}
 							{hasSpellsKnown && <th>Spells Known</th>}
 							{spellCastingLevels.map(level => (
-								<th key={level}>{getOrdinalString(level)}</th>
+								<th key={level}>{getOrdinal(level)}</th>
 							))}
 							{klass.index === 'warlock' && (
 								<>
@@ -175,7 +175,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 									level === classInfo.level ? styles['current-level-row'] : ''
 								}`}
 							>
-								<td>{getOrdinalString(level)}</td>
+								<td>{getOrdinal(level)}</td>
 								<td>+{prof_bonus}</td>
 								{klass.index === 'monk' && (
 									<>
@@ -236,9 +236,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 										{klass.index === 'warlock' && (
 											<>
 												<td>{warlockSlots[index].slots}</td>
-												<td>
-													{getOrdinalString(warlockSlots[index].slotLevel)}
-												</td>
+												<td>{getOrdinal(warlockSlots[index].slotLevel)}</td>
 											</>
 										)}
 									</>
