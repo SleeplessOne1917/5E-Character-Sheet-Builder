@@ -88,6 +88,21 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 		}
 	}
 
+	const getColumnsForSpellCastersNotIncludingLevels = useCallback(() => {
+		let columns = 3;
+		if (klass.index === 'sorcerer') {
+			++columns;
+		}
+		if (hasCantrips) {
+			++columns;
+		}
+		if (hasSpellsKnown) {
+			++columns;
+		}
+
+		return columns;
+	}, [klass, hasCantrips, hasSpellsKnown]);
+
 	const levelNumbers: number[] = [];
 	for (let i = 1; i <= 20; ++i) {
 		levelNumbers.push(i);
@@ -116,6 +131,19 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 				/>
 			</div>
 			<table className={styles.table}>
+				{spellCastingLevels.length > 0 && (
+					<tr>
+						<th colSpan={getColumnsForSpellCastersNotIncludingLevels()}>
+							&nbsp;
+						</th>
+						<th
+							colSpan={spellCastingLevels.length}
+							style={{ textAlign: 'center' }}
+						>
+							&mdash;Spell Slots per Spell Level&mdash;
+						</th>
+					</tr>
+				)}
 				<tr>
 					<th>Level</th>
 					<th>Proficiency Bonus</th>
