@@ -1,5 +1,4 @@
 import Button from '../../../Button/Button';
-import { CheckIcon } from '@heroicons/react/solid';
 import { ReactNode } from 'react';
 import classes from './ChoiceSelector.module.css';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
@@ -33,7 +32,6 @@ const ChoiceSelector = ({
 					Reset
 				</Button>
 			</div>
-			{isSelected && <CheckIcon className={classes['check-icon']} />}
 		</div>
 	);
 };
