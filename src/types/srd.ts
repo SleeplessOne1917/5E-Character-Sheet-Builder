@@ -186,7 +186,7 @@ type Dice = {
 	dice_value: number;
 };
 
-type ClassLevel = {
+export type ClassLevel = {
 	prof_bonus: number;
 	level: number;
 	features: SrdFeatureItem[];
@@ -238,11 +238,11 @@ type SrdStartingEquipmentChoice = {
 	};
 };
 
-interface SrdSubclassItem extends SrdItem {
+export interface SrdSubclassItem extends SrdItem {
 	subclass_flavor: string;
 	desc: string[];
 	spells: {
-		prerequisites: { level?: string; index?: string }[];
+		prerequisites: { level?: number; index?: string }[];
 		spell: SrdSpellItem;
 	}[];
 	subclass_levels: { level: number; features: SrdFeatureItem[] }[];

@@ -1,11 +1,21 @@
-import { useCallback } from 'react';
+import {
+	ClassLevel,
+	SrdFeatureItem,
+	SrdFullClassItem,
+	SrdSubclassItem
+} from '../../../../types/srd';
+import {
+	deselectSubclass,
+	selectSubclass,
+	setLevel
+} from '../../../../redux/features/classInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import Select from '../../../Select/Select';
-import { SrdFeatureItem, SrdFullClassItem } from '../../../../types/srd';
-import { setLevel } from '../../../../redux/features/classInfo';
-import styles from './SelectedClassDisplay.module.css';
 import Descriptor from '../../Descriptor/Descriptor';
+import Select from '../../../Select/Select';
+import SubclassSelector from '../SubclassSelector/SubclassSelector';
+import styles from './SelectedClassDisplay.module.css';
+import { useCallback } from 'react';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -115,6 +125,17 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 		},
 		[dispatch]
 	);
+
+	const handleSubclassSelect = useCallback(
+		(subclass: SrdSubclassItem) => {
+			dispatch(selectSubclass(subclass));
+		},
+		[dispatch]
+	);
+
+	const handleSubclassDeselect = useCallback(() => {
+		dispatch(deselectSubclass());
+	}, [dispatch]);
 
 	return (
 		<div className={styles.container}>
@@ -286,15 +307,41 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 					)}
 				</table>
 			</div>
+			{classInfo.level >= subclassLevelNumbers[0] && (
+				<>
+					<h2 className={styles.heading}>{subclassFlavor}</h2>
+					<div className={styles['subclass-container']}>
+						{klass.subclasses.map(sc => (
+							<SubclassSelector
+								key={sc.index}
+								subclass={sc}
+								selected={
+									classInfo.subclass && classInfo.subclass.index === sc.index
+								}
+								onSelect={() => handleSubclassSelect(sc)}
+								onDeselect={handleSubclassDeselect}
+							/>
+						))}
+					</div>
+				</>
+			)}
 			<h2 className={styles.heading}>Features</h2>
-			{classLevels
+			{(
+				classLevels as Partial<ClassLevel>[] &
+					Pick<ClassLevel, 'level' | 'features'>[]
+			)
+				.concat(classInfo.subclass?.subclass_levels ?? [])
+				.sort((a, b) => a.level - b.level)
 				.filter(level => level.level <= classInfo.level)
 				.flatMap(level => level.features)
 				.filter(
 					feature =>
-						!feature.name
-							.toLocaleLowerCase()
-							.includes('ability score improvement')
+						!(
+							feature.name
+								.toLocaleLowerCase()
+								.includes('ability score improvement') ||
+							feature.name === subclassFlavor
+						)
 				)
 				.reduce((acc: SrdFeatureItem[], cur) => {
 					const feature = {

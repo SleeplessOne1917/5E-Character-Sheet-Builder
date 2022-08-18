@@ -1,0 +1,267 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly normally 1`] = `
+<div
+  class="subclass"
+  data-testid="subclass-selector"
+>
+  <h3
+    class="subclass-heading"
+  >
+    Fiend
+  </h3>
+  <p
+    class="subclass-description"
+  >
+    You have made a pact with a fiend from the lower planes of existence, a being whose aims are evil, even if you strive against those aims. Such beings desire the corruption or destruction of all things, ultimately including you. Fiends powerful enough to forge a pact include demon lords such as Demogorgon, Orcus, Fraz'Urb-luu, and Baphomet; archdevils such as Asmodeus, Dispater, Mephistopheles, and Belial; pit fiends and balors that are especially mighty; and ultroloths and other lords of the yugoloths.
+  </p>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Dark One's Blessing"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Dark One's Blessing
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Dark One's Own Luck"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Dark One's Own Luck
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Fiendish Resilience"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Fiendish Resilience
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Hurl Through Hell"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Hurl Through Hell
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <button
+    class="button positive"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; position: absolute; top: 0.5rem; right: 0.5rem;"
+    type="button"
+  >
+    Select
+  </button>
+</div>
+`;
+
+exports[`renders correctly when selected 1`] = `
+<div
+  class="subclass selected"
+  data-testid="subclass-selector"
+>
+  <h3
+    class="subclass-heading"
+  >
+    Fiend
+  </h3>
+  <p
+    class="subclass-description"
+  >
+    You have made a pact with a fiend from the lower planes of existence, a being whose aims are evil, even if you strive against those aims. Such beings desire the corruption or destruction of all things, ultimately including you. Fiends powerful enough to forge a pact include demon lords such as Demogorgon, Orcus, Fraz'Urb-luu, and Baphomet; archdevils such as Asmodeus, Dispater, Mephistopheles, and Belial; pit fiends and balors that are especially mighty; and ultroloths and other lords of the yugoloths.
+  </p>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Dark One's Blessing"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Dark One's Blessing
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Dark One's Own Luck"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Dark One's Own Luck
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Fiendish Resilience"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Fiendish Resilience
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="descriptor"
+    data-testid="descriptor"
+  >
+    <div
+      aria-label="Hurl Through Hell"
+      class="title"
+      role="button"
+      style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+      tabindex="0"
+    >
+      Hurl Through Hell
+      <svg
+        aria-hidden="true"
+        class="chevron"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+  <button
+    class="button negative"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; position: absolute; top: 0.5rem; right: 0.5rem;"
+    type="button"
+  >
+    Deselect
+  </button>
+</div>
+`;

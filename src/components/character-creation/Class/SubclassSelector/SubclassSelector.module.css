@@ -1,0 +1,25 @@
+.subclass {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+    border: 4px solid var(--davy);
+    border-radius: 1rem;
+    background-color: var(--heaven-light);
+    padding: 1rem;
+    position: relative;
+}
+
+.subclass-description {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.subclass-heading {
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+}
+
+.selected {
+	background-color: var(--highlight) !important;
+}
