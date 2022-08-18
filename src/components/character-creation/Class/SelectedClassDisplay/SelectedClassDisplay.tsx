@@ -2,9 +2,10 @@ import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import Select from '../../../Select/Select';
-import { SrdFullClassItem } from '../../../../types/srd';
+import { SrdFeatureItem, SrdFullClassItem } from '../../../../types/srd';
 import { setLevel } from '../../../../redux/features/classInfo';
 import styles from './SelectedClassDisplay.module.css';
+import Descriptor from '../../Descriptor/Descriptor';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -116,170 +117,205 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	);
 
 	return (
-		<div>
-			<div className={styles['level-select-container']}>
-				<label className={styles['level-select-label']} id="select-level">
-					Select Level
-				</label>
-				<Select
-					labelledBy="select-level"
-					onChange={value => handleLevelChange(value as number)}
-					options={[{ value: 0, label: '\u2014' }].concat(
-						levelNumbers.map(num => ({ value: num, label: `${num}` }))
-					)}
-					value={classInfo.level}
-				/>
-			</div>
-			<table className={styles.table}>
-				{spellCastingLevels.length > 0 && (
-					<tr>
-						<th colSpan={getColumnsForSpellCastersNotIncludingLevels()}>
-							&nbsp;
-						</th>
-						<th
-							colSpan={spellCastingLevels.length}
-							style={{ textAlign: 'center' }}
-						>
-							&mdash;Spell Slots per Spell Level&mdash;
-						</th>
-					</tr>
-				)}
-				<tr>
-					<th>Level</th>
-					<th>Proficiency Bonus</th>
-					{klass.index === 'monk' && (
-						<>
-							<th>Martial Arts</th>
-							<th>Ki Points</th>
-							<th>Unarmored Movement</th>
-						</>
-					)}
-					{klass.index === 'rogue' && <th>Sneak Attack</th>}
-					{klass.index === 'sorcerer' && <th>Sorcery Points</th>}
-					<th>Features</th>
-					{klass.index === 'barbarian' && (
-						<>
-							<th>Rages</th>
-							<th>Rage Damage</th>
-						</>
-					)}
-					{hasSpellcasting && (
-						<>
-							{hasCantrips && <th>Cantrips Known</th>}
-							{hasSpellsKnown && <th>Spells Known</th>}
-							{spellCastingLevels.map(level => (
-								<th key={level}>{getOrdinal(level)}</th>
-							))}
-							{klass.index === 'warlock' && (
-								<>
-									<th>Spell Slots</th>
-									<th>Slot Level</th>
-									<th>Invocations Known</th>
-								</>
-							)}
-						</>
-					)}
-				</tr>
-				{classLevels.map(
-					(
-						{ level, prof_bonus, features, spellcasting, class_specific },
-						index
-					) => {
-						const featureNames = features.map(({ name }) =>
-							name.replace(/Spellcasting:.*/i, 'Spellcasting')
-						);
-
-						if (!featureNames.includes(subclassFlavor)) {
-							if (subclassLevelNumbers[0] === level) {
-								featureNames.push(subclassFlavor);
-							} else if (subclassLevelNumbers.includes(level)) {
-								featureNames.push(`${subclassFlavor} feature`);
-							}
-						}
-
-						return (
-							<tr
-								key={`${klass.index}-${level}`}
-								className={`${index % 2 === 1 ? styles.odd : ''} ${
-									level === classInfo.level ? styles['current-level-row'] : ''
-								}`}
+		<div className={styles.container}>
+			<h2 className={styles.heading}>Levels</h2>
+			<div>
+				<div className={styles['level-select-container']}>
+					<label className={styles['level-select-label']} id="select-level">
+						Select Level
+					</label>
+					<Select
+						labelledBy="select-level"
+						onChange={value => handleLevelChange(value as number)}
+						options={levelNumbers.map(num => ({ value: num, label: `${num}` }))}
+						value={classInfo.level}
+					/>
+				</div>
+				<table className={styles.table}>
+					{spellCastingLevels.length > 0 && (
+						<tr>
+							<th colSpan={getColumnsForSpellCastersNotIncludingLevels()}>
+								&nbsp;
+							</th>
+							<th
+								colSpan={spellCastingLevels.length}
+								style={{ textAlign: 'center' }}
 							>
-								<td>{getOrdinal(level)}</td>
-								<td>+{prof_bonus}</td>
-								{klass.index === 'monk' && (
+								&mdash;Spell Slots per Spell Level&mdash;
+							</th>
+						</tr>
+					)}
+					<tr>
+						<th>Level</th>
+						<th>Proficiency Bonus</th>
+						{klass.index === 'monk' && (
+							<>
+								<th>Martial Arts</th>
+								<th>Ki Points</th>
+								<th>Unarmored Movement</th>
+							</>
+						)}
+						{klass.index === 'rogue' && <th>Sneak Attack</th>}
+						{klass.index === 'sorcerer' && <th>Sorcery Points</th>}
+						<th>Features</th>
+						{klass.index === 'barbarian' && (
+							<>
+								<th>Rages</th>
+								<th>Rage Damage</th>
+							</>
+						)}
+						{hasSpellcasting && (
+							<>
+								{hasCantrips && <th>Cantrips Known</th>}
+								{hasSpellsKnown && <th>Spells Known</th>}
+								{spellCastingLevels.map(level => (
+									<th key={level}>{getOrdinal(level)}</th>
+								))}
+								{klass.index === 'warlock' && (
 									<>
-										<td>
-											{class_specific?.martial_arts?.dice_count}d
-											{class_specific?.martial_arts?.dice_value}
-										</td>
-										<td>
-											{(class_specific?.ki_points ?? 0) > 0
-												? class_specific?.ki_points
-												: '\u2014'}
-										</td>
-										<td>
-											{(class_specific?.unarmored_movement ?? 0) > 0
-												? `+${class_specific?.unarmored_movement} ft.`
-												: '\u2014'}
-										</td>
+										<th>Spell Slots</th>
+										<th>Slot Level</th>
+										<th>Invocations Known</th>
 									</>
 								)}
-								{klass.index === 'rogue' && (
+							</>
+						)}
+					</tr>
+					{classLevels.map(
+						(
+							{ level, prof_bonus, features, spellcasting, class_specific },
+							index
+						) => {
+							const featureNames = features.map(({ name }) =>
+								name.replace(/Spellcasting:.*/i, 'Spellcasting')
+							);
+
+							if (!featureNames.includes(subclassFlavor)) {
+								if (subclassLevelNumbers[0] === level) {
+									featureNames.push(subclassFlavor);
+								} else if (subclassLevelNumbers.includes(level)) {
+									featureNames.push(`${subclassFlavor} feature`);
+								}
+							}
+
+							return (
+								<tr
+									key={`${klass.index}-${level}`}
+									className={`${index % 2 === 1 ? styles.odd : ''} ${
+										level === classInfo.level ? styles['current-level-row'] : ''
+									}`}
+								>
+									<td>{getOrdinal(level)}</td>
+									<td>+{prof_bonus}</td>
+									{klass.index === 'monk' && (
+										<>
+											<td>
+												{class_specific?.martial_arts?.dice_count}d
+												{class_specific?.martial_arts?.dice_value}
+											</td>
+											<td>
+												{(class_specific?.ki_points ?? 0) > 0
+													? class_specific?.ki_points
+													: '\u2014'}
+											</td>
+											<td>
+												{(class_specific?.unarmored_movement ?? 0) > 0
+													? `+${class_specific?.unarmored_movement} ft.`
+													: '\u2014'}
+											</td>
+										</>
+									)}
+									{klass.index === 'rogue' && (
+										<td>
+											{class_specific?.sneak_attack?.dice_count}d
+											{class_specific?.sneak_attack?.dice_value}
+										</td>
+									)}
+									{klass.index === 'sorcerer' && (
+										<td>
+											{(class_specific?.sorcery_points ?? 0) > 0
+												? class_specific?.sorcery_points
+												: '\u2014'}
+										</td>
+									)}
 									<td>
-										{class_specific?.sneak_attack?.dice_count}d
-										{class_specific?.sneak_attack?.dice_value}
-									</td>
-								)}
-								{klass.index === 'sorcerer' && (
-									<td>
-										{(class_specific?.sorcery_points ?? 0) > 0
-											? class_specific?.sorcery_points
+										{featureNames.length > 0
+											? featureNames.join(', ')
 											: '\u2014'}
 									</td>
-								)}
-								<td>
-									{featureNames.length > 0 ? featureNames.join(', ') : '\u2014'}
-								</td>
-								{klass.index === 'barbarian' && (
-									<>
-										<td>
-											{level === 20 ? 'Unlimited' : class_specific?.rage_count}
-										</td>
-										<td>{`+${class_specific?.rage_damage_bonus}`}</td>
-									</>
-								)}
-								{hasSpellcasting && (
-									<>
-										{hasCantrips && <td>{spellcasting?.cantrips_known}</td>}
-										{hasSpellsKnown && <td>{spellcasting?.spells_known}</td>}
-										{spellCastingLevels.map(level => (
-											<td key={level}>
-												{
-													/* eslint-disable @typescript-eslint/ban-ts-comment */
-													// @ts-ignore
-													spellcasting[`spell_slots_level_${level}`]
-													/* eslint-enable @typescript-eslint/ban-ts-comment */
-												}
+									{klass.index === 'barbarian' && (
+										<>
+											<td>
+												{level === 20
+													? 'Unlimited'
+													: class_specific?.rage_count}
 											</td>
-										))}
-										{klass.index === 'warlock' && (
-											<>
-												<td>{warlockSlots[index].slots}</td>
-												<td>{getOrdinal(warlockSlots[index].slotLevel)}</td>
-												<td>
-													{(class_specific?.invocations_known ?? 0) > 0
-														? class_specific?.invocations_known
-														: '\u2014'}
+											<td>{`+${class_specific?.rage_damage_bonus}`}</td>
+										</>
+									)}
+									{hasSpellcasting && (
+										<>
+											{hasCantrips && <td>{spellcasting?.cantrips_known}</td>}
+											{hasSpellsKnown && <td>{spellcasting?.spells_known}</td>}
+											{spellCastingLevels.map(level => (
+												<td key={level}>
+													{
+														/* eslint-disable @typescript-eslint/ban-ts-comment */
+														// @ts-ignore
+														spellcasting[`spell_slots_level_${level}`]
+														/* eslint-enable @typescript-eslint/ban-ts-comment */
+													}
 												</td>
-											</>
-										)}
-									</>
-								)}
-							</tr>
-						);
+											))}
+											{klass.index === 'warlock' && (
+												<>
+													<td>{warlockSlots[index].slots}</td>
+													<td>{getOrdinal(warlockSlots[index].slotLevel)}</td>
+													<td>
+														{(class_specific?.invocations_known ?? 0) > 0
+															? class_specific?.invocations_known
+															: '\u2014'}
+													</td>
+												</>
+											)}
+										</>
+									)}
+								</tr>
+							);
+						}
+					)}
+				</table>
+			</div>
+			<h2 className={styles.heading}>Features</h2>
+			{classLevels
+				.filter(level => level.level <= classInfo.level)
+				.flatMap(level => level.features)
+				.filter(
+					feature =>
+						!feature.name
+							.toLocaleLowerCase()
+							.includes('ability score improvement')
+				)
+				.reduce((acc: SrdFeatureItem[], cur) => {
+					const feature = {
+						...cur,
+						name: cur.name
+							.replace(/\s*\(.*\)/, '')
+							.replace(/Spellcasting:.*/i, 'Spellcasting')
+					};
+					if (!acc.some(f => f.name === feature.name)) {
+						return [...acc, feature];
+					} else {
+						return acc;
 					}
-				)}
-			</table>
+				}, [])
+				.map(feature => (
+					<Descriptor
+						key={feature.index}
+						description={feature.desc}
+						title={feature.name}
+					/>
+				))}
 		</div>
 	);
 };

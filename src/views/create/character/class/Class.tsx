@@ -234,7 +234,7 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 								}}
 							>
 								<XCircleIcon className={styles['deselect-icon']} />
-								Deselect Race
+								Deselect Class
 							</Button>
 						</div>
 						<SelectedClassDisplay klass={classInfo.class} />

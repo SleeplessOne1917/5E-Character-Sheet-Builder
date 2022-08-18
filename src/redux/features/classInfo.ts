@@ -7,7 +7,7 @@ export type ClassInfoState = {
 	level: number;
 };
 
-export const initialState: ClassInfoState = { level: 0 };
+export const initialState: ClassInfoState = { level: 1 };
 
 const classInfoSlice = createSlice({
 	name: 'classInfo',
