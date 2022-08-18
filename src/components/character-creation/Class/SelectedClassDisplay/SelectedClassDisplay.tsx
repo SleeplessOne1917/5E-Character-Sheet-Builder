@@ -182,6 +182,21 @@ const SelectedClassDisplay = ({
 
 	return (
 		<div className={styles.container}>
+			<div className={styles.summary}>
+				<div>
+					<div className={styles['summary-item-label']}>Hit Die</div>
+					<div className={styles['summary-item-data']}>d{klass.hit_die}</div>
+				</div>
+				<div>
+					<div className={styles['summary-item-label']}>Saving Throws</div>
+					<div className={styles['summary-item-data']}>
+						{klass.saving_throws.map(st => st.full_name).join(' and ')}
+					</div>
+				</div>
+			</div>
+			<svg>
+				<use xlinkHref={`/Icons.svg#${klass.index}`} />
+			</svg>
 			<h2 className={styles.heading}>Levels</h2>
 			<div className={styles['table-container']}>
 				<div className={styles['level-select-container']}>

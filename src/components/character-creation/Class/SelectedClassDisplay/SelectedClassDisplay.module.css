@@ -73,3 +73,29 @@
     flex-direction: column;
     justify-content: space-evenly;
 }
+
+.summary {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.summary div {
+    text-align: center;
+}
+
+.summary-item-label {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.summary-item-data {
+    font-size: 1.2rem;
+}
+
+.icon {
+    width: 7rem;
+    height: 7rem;
+}
