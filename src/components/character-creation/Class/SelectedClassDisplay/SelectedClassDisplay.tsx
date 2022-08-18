@@ -119,6 +119,13 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 				<tr>
 					<th>Level</th>
 					<th>Proficiency Bonus</th>
+					{klass.index === 'monk' && (
+						<>
+							<th>Martial Arts</th>
+							<th>Ki Points</th>
+							<th>Unarmored Movement</th>
+						</>
+					)}
 					<th>Features</th>
 					{klass.index === 'barbarian' && (
 						<>
@@ -168,6 +175,24 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 							>
 								<td>{getOrdinalString(level)}</td>
 								<td>+{prof_bonus}</td>
+								{klass.index === 'monk' && (
+									<>
+										<td>
+											{class_specific?.martial_arts?.dice_count}d
+											{class_specific?.martial_arts?.dice_value}
+										</td>
+										<td>
+											{(class_specific?.ki_points ?? 0) > 0
+												? class_specific?.ki_points
+												: '\u2014'}
+										</td>
+										<td>
+											{(class_specific?.unarmored_movement ?? 0) > 0
+												? `+${class_specific?.unarmored_movement} ft.`
+												: '\u2014'}
+										</td>
+									</>
+								)}
 								<td>
 									{featureNames.length > 0 ? featureNames.join(', ') : '\u2014'}
 								</td>

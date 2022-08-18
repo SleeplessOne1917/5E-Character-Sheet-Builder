@@ -190,6 +190,12 @@ type ClassLevel = {
 	class_specific?: {
 		rage_count?: number;
 		rage_damage_bonus?: number;
+		martial_arts?: {
+			dice_count: number;
+			dice_value: number;
+		};
+		ki_points?: number;
+		unarmored_movement?: number;
 	};
 };
 

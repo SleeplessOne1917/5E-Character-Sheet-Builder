@@ -72,6 +72,14 @@ const GET_CLASS = gql`
 						rage_count
 						rage_damage_bonus
 					}
+					... on MonkSpecific {
+						martial_arts {
+							dice_count
+							dice_value
+						}
+						ki_points
+						unarmored_movement
+					}
 				}
 			}
 			proficiency_choices {
