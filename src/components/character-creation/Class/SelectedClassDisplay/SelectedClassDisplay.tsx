@@ -146,6 +146,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 								<>
 									<th>Spell Slots</th>
 									<th>Slot Level</th>
+									<th>Invocations Known</th>
 								</>
 							)}
 						</>
@@ -237,6 +238,11 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 											<>
 												<td>{warlockSlots[index].slots}</td>
 												<td>{getOrdinal(warlockSlots[index].slotLevel)}</td>
+												<td>
+													{(class_specific?.invocations_known ?? 0) > 0
+														? class_specific?.invocations_known
+														: '\u2014'}
+												</td>
 											</>
 										)}
 									</>

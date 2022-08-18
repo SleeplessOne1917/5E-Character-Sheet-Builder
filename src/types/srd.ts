@@ -200,6 +200,7 @@ type ClassLevel = {
 		unarmored_movement?: number;
 		sneak_attack?: Dice;
 		sorcery_points?: number;
+		invocations_known?: number;
 	};
 };
 

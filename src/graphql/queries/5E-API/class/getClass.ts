@@ -89,6 +89,9 @@ const GET_CLASS = gql`
 					... on SorcererSpecific {
 						sorcery_points
 					}
+					... on WarlockSpecific {
+						invocations_known
+					}
 				}
 			}
 			proficiency_choices {
