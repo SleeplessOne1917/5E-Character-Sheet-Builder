@@ -7,17 +7,11 @@ import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
 
-const { Default, DisabledChoose, Error, Loading } = composeStories(stories);
+const { Default, Error, Loading } = composeStories(stories);
 
 describe('renders correctly', () => {
 	it('normally', () => {
 		render(<Default />);
-
-		expect(screen.getByTestId(/choose-modal/i)).toMatchSnapshot();
-	});
-
-	it('when choose is disabled', () => {
-		render(<DisabledChoose />);
 
 		expect(screen.getByTestId(/choose-modal/i)).toMatchSnapshot();
 	});
@@ -62,7 +56,7 @@ it('does not call onChoose when choose button disabled and clicked', async () =>
 	const onChooseMock = jest.fn();
 	const oncloseMock = jest.fn();
 
-	render(<DisabledChoose onChoose={onChooseMock} onClose={oncloseMock} />);
+	render(<Loading onChoose={onChooseMock} onClose={oncloseMock} />);
 
 	await userEvent.click(screen.getByText(/choose/i));
 

@@ -348,7 +348,6 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
 				onChoose={chooseRace}
 				onClose={closeSelectModal}
-				disableChoose={error || loading}
 				loading={loading}
 				error={error}
 				title={

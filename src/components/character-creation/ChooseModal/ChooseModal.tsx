@@ -11,7 +11,6 @@ export type ChooseModalProps = {
 	onClose: () => void;
 	onChoose: () => void;
 	iconId: string;
-	disableChoose?: boolean;
 	loading?: boolean;
 	error?: boolean;
 	title: string;
@@ -24,7 +23,6 @@ const ChooseModal = ({
 	onClose,
 	onChoose,
 	iconId,
-	disableChoose,
 	loading = false,
 	error = false,
 	title,
@@ -111,7 +109,7 @@ const ChooseModal = ({
 						onClick={onChoose}
 						positive
 						style={buttonStyle}
-						disabled={disableChoose}
+						disabled={loading || error}
 					>
 						Choose
 					</Button>

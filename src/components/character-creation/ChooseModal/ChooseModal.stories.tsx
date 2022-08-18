@@ -41,12 +41,6 @@ const Template: ComponentStory<typeof ChooseModal> = args => (
 
 export const Default = Template.bind({});
 
-export const DisabledChoose = Template.bind({});
-
-DisabledChoose.args = {
-	disableChoose: true
-};
-
 export const Error = Template.bind({});
 
 Error.args = {
