@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 45%;
+    width: 100%;
     border: 4px solid var(--davy);
     border-radius: 1rem;
     background-color: var(--heaven-light);
@@ -45,4 +45,10 @@
 
 .odd-row {
     background-color: var(--heaven-light);
+}
+
+@media screen and (min-width: 1024px) {
+    .subclass {
+        width: 45%;
+    }
 }

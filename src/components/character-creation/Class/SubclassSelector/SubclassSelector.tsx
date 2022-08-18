@@ -165,11 +165,11 @@ const SubclassSelector = ({
 					/>
 				))}
 			{selected ? (
-				<Button style={buttonStyle} onClick={onDeselect}>
+				<Button style={buttonStyle} onClick={onDeselect} size="small">
 					Deselect
 				</Button>
 			) : (
-				<Button style={buttonStyle} positive onClick={onSelect}>
+				<Button style={buttonStyle} positive onClick={onSelect} size="small">
 					Select
 				</Button>
 			)}
