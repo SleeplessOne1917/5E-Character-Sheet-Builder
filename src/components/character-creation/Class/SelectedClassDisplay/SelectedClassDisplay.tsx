@@ -207,9 +207,22 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 							{ level, prof_bonus, features, spellcasting, class_specific },
 							index
 						) => {
-							const featureNames = features.map(({ name }) =>
-								name.replace(/Spellcasting:.*/i, 'Spellcasting')
-							);
+							const featureNames = features.map(({ name }) => {
+								let nameToReturn = name.replace(
+									/Spellcasting:.*/i,
+									'Spellcasting'
+								);
+
+								if (name.toLowerCase().includes('wild shape')) {
+									if (level === 2) {
+										nameToReturn = 'Wild Shape';
+									} else {
+										nameToReturn = 'Wild Shape improvement';
+									}
+								}
+
+								return nameToReturn;
+							});
 
 							if (!featureNames.includes(subclassFlavor)) {
 								if (subclassLevelNumbers[0] === level) {
