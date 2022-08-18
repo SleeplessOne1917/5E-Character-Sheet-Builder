@@ -29,6 +29,7 @@
     color: var(--heaven-light);
     text-align: start;
     padding: 0.5rem;
+    border: 1px solid var(--davy);
 }
 
 .subclass table {

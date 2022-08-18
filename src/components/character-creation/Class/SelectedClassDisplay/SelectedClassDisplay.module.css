@@ -9,6 +9,7 @@
 
 .table th {
     text-align: start;
+    border: 1px solid var(--davy);
 }
 
 .table td, .table th {
