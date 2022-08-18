@@ -57,6 +57,7 @@ const GET_CLASS = gql`
 					spell_slots_level_9
 					spells_known
 				}
+				ability_score_bonuses
 				features {
 					index
 					name

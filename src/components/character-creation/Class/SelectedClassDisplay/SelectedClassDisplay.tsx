@@ -1,24 +1,35 @@
 import {
+	AbilityItem,
 	ClassLevel,
 	SrdFeatureItem,
 	SrdFullClassItem,
 	SrdSubclassItem
 } from '../../../../types/srd';
 import {
+	addAbilityBonus,
 	deselectSubclass,
+	removeAbilityBonus,
 	selectSubclass,
+	setAbilityBonus,
 	setLevel
 } from '../../../../redux/features/classInfo';
+import {
+	decrementAbilityBonus,
+	incrementAbilityBonus
+} from '../../../../redux/features/abilityScores';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import { useCallback, useEffect } from 'react';
 
+import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
+import AbilityScores from '../../../../types/abilityScores';
 import Descriptor from '../../Descriptor/Descriptor';
 import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import styles from './SelectedClassDisplay.module.css';
-import { useCallback } from 'react';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
+	abilities: AbilityItem[];
 };
 
 const getOrdinal = (n: number) => {
@@ -43,7 +54,10 @@ const getOrdinal = (n: number) => {
 	);
 };
 
-const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
+const SelectedClassDisplay = ({
+	klass,
+	abilities
+}: SelectedClassDisplayProps) => {
 	const dispatch = useAppDispatch();
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
 	const hasSpellcasting = !!klass.spellcasting;
@@ -51,6 +65,41 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	const hasSpellsKnown = klass.class_levels.some(
 		level => level.spellcasting?.spells_known
 	);
+	const classLevels = [...klass.class_levels]
+		.sort((a, b) => a.level - b.level)
+		.filter(level => !level.subclass);
+
+	useEffect(() => {
+		const numAbilityScoreBonuses =
+			classLevels[classInfo.level - 1].ability_score_bonuses;
+
+		if (numAbilityScoreBonuses > classInfo.abilityBonuses.length) {
+			for (
+				let i = 0;
+				i < numAbilityScoreBonuses - classInfo.abilityBonuses.length;
+				++i
+			) {
+				dispatch(addAbilityBonus([null, null]));
+			}
+		}
+
+		if (numAbilityScoreBonuses < classInfo.abilityBonuses.length) {
+			for (
+				let i = 0;
+				i < classInfo.abilityBonuses.length - numAbilityScoreBonuses;
+				++i
+			) {
+				const lastImprovement =
+					classInfo.abilityBonuses[classInfo.abilityBonuses.length - (i + 1)];
+				lastImprovement.forEach(improvement => {
+					if (improvement !== null) {
+						dispatch(decrementAbilityBonus(improvement));
+					}
+				});
+				dispatch(removeAbilityBonus());
+			}
+		}
+	}, [dispatch, classInfo.level, classInfo.abilityBonuses, classLevels]);
 
 	const subclassFlavor = klass.subclasses[0].subclass_flavor;
 	const subclassLevelNumbers = klass.subclasses[0].subclass_levels
@@ -72,10 +121,6 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 			}
 		}
 	}
-
-	const classLevels = [...klass.class_levels]
-		.sort((a, b) => a.level - b.level)
-		.filter(level => !level.subclass);
 
 	const warlockSlots: { slotLevel: number; slots: number }[] = [];
 	if (klass.index === 'warlock') {
@@ -136,6 +181,25 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	const handleSubclassDeselect = useCallback(() => {
 		dispatch(deselectSubclass());
 	}, [dispatch]);
+
+	const handleAbilityScoreBonusChange = useCallback(
+		(values: (AbilityScores | null)[], index: number) => {
+			for (const abilityScoreIndex of classInfo.abilityBonuses[index]) {
+				if (abilityScoreIndex !== null) {
+					dispatch(decrementAbilityBonus(abilityScoreIndex));
+				}
+			}
+
+			dispatch(setAbilityBonus({ index, abilityScores: values }));
+
+			for (const abilityScoreIndex of values) {
+				if (abilityScoreIndex !== null) {
+					dispatch(incrementAbilityBonus(abilityScoreIndex));
+				}
+			}
+		},
+		[dispatch, classInfo.abilityBonuses]
+	);
 
 	return (
 		<div className={styles.container}>
@@ -320,6 +384,26 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 					)}
 				</table>
 			</div>
+			{classInfo.abilityBonuses.length > 0 && (
+				<>
+					<h2 className={styles.heading}>
+						Ability Score Improvement
+						{classInfo.abilityBonuses.length > 1 ? 's' : ''}
+					</h2>
+					<div className={styles['ability-bonus-container']}>
+						{classInfo.abilityBonuses.map((bonus, index) => (
+							<AbilityBonusSelector
+								key={index}
+								values={bonus}
+								abilities={abilities}
+								onChange={values =>
+									handleAbilityScoreBonusChange(values, index)
+								}
+							/>
+						))}
+					</div>
+				</>
+			)}
 			{classInfo.level >= subclassLevelNumbers[0] && (
 				<>
 					<h2 className={styles.heading}>{subclassFlavor}</h2>

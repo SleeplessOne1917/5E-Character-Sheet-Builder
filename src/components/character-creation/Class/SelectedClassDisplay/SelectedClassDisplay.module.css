@@ -67,3 +67,9 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
+
+.ability-bonus-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}

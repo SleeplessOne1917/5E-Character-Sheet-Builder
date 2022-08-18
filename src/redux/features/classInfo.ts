@@ -1,13 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdFullClassItem, SrdSubclassItem } from '../../types/srd';
 
+import AbilityScores from '../../types/abilityScores';
+
 export type ClassInfoState = {
 	class?: SrdFullClassItem;
 	level: number;
 	subclass?: SrdSubclassItem;
+	abilityBonuses: (AbilityScores | null)[][];
 };
 
-export const initialState: ClassInfoState = { level: 1 };
+type SetAbilityBonusPayload = {
+	index: number;
+	abilityScores: (AbilityScores | null)[];
+};
+
+export const initialState: ClassInfoState = { level: 1, abilityBonuses: [] };
 
 const classInfoSlice = createSlice({
 	name: 'classInfo',
@@ -25,6 +33,23 @@ const classInfoSlice = createSlice({
 		},
 		deselectSubclass: state => {
 			delete state.subclass;
+		},
+		addAbilityBonus: (
+			state,
+			{ payload }: PayloadAction<(AbilityScores | null)[]>
+		) => {
+			state.abilityBonuses = [...state.abilityBonuses, payload];
+		},
+		setAbilityBonus: (
+			state,
+			{
+				payload: { abilityScores, index }
+			}: PayloadAction<SetAbilityBonusPayload>
+		) => {
+			state.abilityBonuses[index] = abilityScores;
+		},
+		removeAbilityBonus: state => {
+			state.abilityBonuses = state.abilityBonuses.slice(0, -1);
 		}
 	}
 });
@@ -34,7 +59,10 @@ export const {
 	deselectClass,
 	setLevel,
 	selectSubclass,
-	deselectSubclass
+	deselectSubclass,
+	addAbilityBonus,
+	setAbilityBonus,
+	removeAbilityBonus
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

@@ -192,6 +192,7 @@ export type ClassLevel = {
 	features: SrdFeatureItem[];
 	spellcasting?: ClassLevelSpellcasting;
 	subclass?: SrdItem;
+	ability_score_bonuses: number;
 	class_specific?: {
 		rage_count?: number;
 		rage_damage_bonus?: number;

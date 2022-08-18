@@ -14,7 +14,7 @@ export type AbilityScoresState = {
 export type AbilityScore = {
 	base?: number | null;
 	raceBonus?: number | null;
-	abilityImprovement?: number | null;
+	abilityImprovement: number;
 	miscBonus?: number | null;
 	otherBonus?: number | null;
 	override?: number | null;
@@ -26,12 +26,12 @@ export type AbilityPayload = {
 };
 
 export const initialState: AbilityScoresState = {
-	str: {},
-	dex: {},
-	con: {},
-	int: {},
-	wis: {},
-	cha: {}
+	str: { abilityImprovement: 0 },
+	dex: { abilityImprovement: 0 },
+	con: { abilityImprovement: 0 },
+	int: { abilityImprovement: 0 },
+	wis: { abilityImprovement: 0 },
+	cha: { abilityImprovement: 0 }
 };
 
 const abilityScoresSlice = createSlice({
@@ -53,10 +53,28 @@ const abilityScoresSlice = createSlice({
 		updateRaceBonus: (state, action: PayloadAction<AbilityPayload>) => {
 			const { value, abilityIndex } = action.payload;
 			state[abilityIndex].raceBonus = value;
+		},
+		incrementAbilityBonus: (
+			state,
+			{ payload }: PayloadAction<AbilityScores>
+		) => {
+			++state[payload].abilityImprovement;
+		},
+		decrementAbilityBonus: (
+			state,
+			{ payload }: PayloadAction<AbilityScores>
+		) => {
+			--state[payload].abilityImprovement;
 		}
 	}
 });
 
-export const { updateBase, updateOtherBonus, updateOverride, updateRaceBonus } =
-	abilityScoresSlice.actions;
+export const {
+	updateBase,
+	updateOtherBonus,
+	updateOverride,
+	updateRaceBonus,
+	incrementAbilityBonus,
+	decrementAbilityBonus
+} = abilityScoresSlice.actions;
 export default abilityScoresSlice.reducer;

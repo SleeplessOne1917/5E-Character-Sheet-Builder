@@ -1,4 +1,4 @@
-import { SrdFullClassItem, SrdItem } from '../../../../types/srd';
+import { AbilityItem, SrdFullClassItem, SrdItem } from '../../../../types/srd';
 import {
 	addProficiency,
 	removeProficiency
@@ -16,13 +16,15 @@ import ConfirmationModal from '../../../../components/ConfirmationModal/Confirma
 import { Descriptor } from '../../../../types/creation';
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
+import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
+import { decrementAbilityBonus } from '../../../../redux/features/abilityScores';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
-import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 
 type ClassProps = {
 	classes: SrdItem[];
+	abilities: AbilityItem[];
 };
 
 export const mockClasses: SrdItem[] = [
@@ -76,7 +78,7 @@ export const mockClasses: SrdItem[] = [
 	}
 ];
 
-const Class = ({ classes }: ClassProps): JSX.Element => {
+const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [consideredClassIndex, setConsideredClassIndex] = useState<string>();
@@ -199,6 +201,12 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 			dispatch(removeProficiency(index));
 		}
 
+		for (const abilityBonus of classInfo.abilityBonuses.flatMap(val => val)) {
+			if (abilityBonus !== null) {
+				dispatch(decrementAbilityBonus(abilityBonus));
+			}
+		}
+
 		dispatch(deselectClass());
 		setShowDeselectModal(false);
 	}, [dispatch, setShowDeselectModal, classInfo]);
@@ -237,7 +245,10 @@ const Class = ({ classes }: ClassProps): JSX.Element => {
 								Deselect Class
 							</Button>
 						</div>
-						<SelectedClassDisplay klass={classInfo.class} />
+						<SelectedClassDisplay
+							klass={classInfo.class}
+							abilities={abilities}
+						/>
 					</>
 				)}
 			</MainContent>
