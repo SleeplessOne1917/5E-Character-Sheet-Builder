@@ -11,11 +11,11 @@ export const getTotalScore = (ability: AbilityScore) => {
 	) as number;
 
 	if (!ability.override) {
-		if (score > 20) {
-			score = 20;
+		if (score > ability.highest) {
+			score = ability.highest;
 		}
 
-		score += ability.otherBonus || 0;
+		score += ability.otherBonus ?? 0;
 	}
 
 	if (score > 30) {

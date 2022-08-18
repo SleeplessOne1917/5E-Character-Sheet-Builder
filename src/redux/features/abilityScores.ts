@@ -18,6 +18,7 @@ export type AbilityScore = {
 	miscBonus?: number | null;
 	otherBonus?: number | null;
 	override?: number | null;
+	highest: number;
 };
 
 export type AbilityPayload = {
@@ -26,12 +27,12 @@ export type AbilityPayload = {
 };
 
 export const initialState: AbilityScoresState = {
-	str: { abilityImprovement: 0 },
-	dex: { abilityImprovement: 0 },
-	con: { abilityImprovement: 0 },
-	int: { abilityImprovement: 0 },
-	wis: { abilityImprovement: 0 },
-	cha: { abilityImprovement: 0 }
+	str: { abilityImprovement: 0, highest: 20 },
+	dex: { abilityImprovement: 0, highest: 20 },
+	con: { abilityImprovement: 0, highest: 20 },
+	int: { abilityImprovement: 0, highest: 20 },
+	wis: { abilityImprovement: 0, highest: 20 },
+	cha: { abilityImprovement: 0, highest: 20 }
 };
 
 const abilityScoresSlice = createSlice({
@@ -65,6 +66,21 @@ const abilityScoresSlice = createSlice({
 			{ payload }: PayloadAction<AbilityScores>
 		) => {
 			--state[payload].abilityImprovement;
+		},
+		setAbilityHighest: (
+			state,
+			{ payload: { abilityIndex, value } }: PayloadAction<AbilityPayload>
+		) => {
+			state[abilityIndex].highest = value as number;
+		},
+		resetAbilityHighest: (state, { payload }: PayloadAction<AbilityScores>) => {
+			state[payload].highest = 20;
+		},
+		updateMiscBonus: (
+			state,
+			{ payload: { abilityIndex, value } }: PayloadAction<AbilityPayload>
+		) => {
+			state[abilityIndex].miscBonus = value;
 		}
 	}
 });
@@ -75,6 +91,9 @@ export const {
 	updateOverride,
 	updateRaceBonus,
 	incrementAbilityBonus,
-	decrementAbilityBonus
+	decrementAbilityBonus,
+	setAbilityHighest,
+	resetAbilityHighest,
+	updateMiscBonus
 } = abilityScoresSlice.actions;
 export default abilityScoresSlice.reducer;

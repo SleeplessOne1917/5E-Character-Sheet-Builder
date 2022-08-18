@@ -10,7 +10,8 @@ describe('getTotalScore', () => {
 				miscBonus: 1,
 				raceBonus: 1,
 				otherBonus: 4,
-				override: 3
+				override: 3,
+				highest: 20
 			};
 
 			expect(getTotalScore(abilityScore)).toBe(3);
@@ -19,7 +20,9 @@ describe('getTotalScore', () => {
 		it('can be higher than 20', () => {
 			const abilityScore: AbilityScore = {
 				base: 15,
-				override: 21
+				override: 21,
+				abilityImprovement: 0,
+				highest: 20
 			};
 
 			expect(getTotalScore(abilityScore)).toBe(21);
@@ -29,27 +32,32 @@ describe('getTotalScore', () => {
 	it('does not allow scores over 30', () => {
 		const abilityScore: AbilityScore = {
 			base: 10,
-			override: 31
+			override: 31,
+			abilityImprovement: 0,
+			highest: 20
 		};
 
 		expect(getTotalScore(abilityScore)).toBe(30);
 	});
 
-	it('does not allow scores without other bonus or override over 20', () => {
+	it('does not allow scores without other bonus or override over highest', () => {
 		const abilityScore: AbilityScore = {
 			base: 18,
 			raceBonus: 2,
-			abilityImprovement: 4
+			abilityImprovement: 4,
+			highest: 20
 		};
 
 		expect(getTotalScore(abilityScore)).toBe(20);
 	});
 
-	it('allows scores with other bonus over 20', () => {
+	it('allows scores with other bonus over highest', () => {
 		const abilityScore: AbilityScore = {
 			base: 18,
 			raceBonus: 2,
-			otherBonus: 5
+			otherBonus: 5,
+			abilityImprovement: 0,
+			highest: 20
 		};
 
 		expect(getTotalScore(abilityScore)).toBe(25);
@@ -58,7 +66,9 @@ describe('getTotalScore', () => {
 	it('does not allow scores lower than 1', () => {
 		const abilityScore: AbilityScore = {
 			base: 3,
-			otherBonus: -10
+			otherBonus: -10,
+			abilityImprovement: 0,
+			highest: 20
 		};
 
 		expect(getTotalScore(abilityScore)).toBe(1);

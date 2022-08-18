@@ -18,7 +18,11 @@ import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
-import { decrementAbilityBonus } from '../../../../redux/features/abilityScores';
+import {
+	decrementAbilityBonus,
+	resetAbilityHighest,
+	updateMiscBonus
+} from '../../../../redux/features/abilityScores';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
 
@@ -199,6 +203,14 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	const deselectSelectedClass = useCallback(() => {
 		for (const { index } of classInfo.class?.proficiencies ?? []) {
 			dispatch(removeProficiency(index));
+		}
+
+		if (classInfo.level === 20 && classInfo.class?.index === 'barbarian') {
+			dispatch(resetAbilityHighest('con'));
+			dispatch(resetAbilityHighest('str'));
+
+			dispatch(updateMiscBonus({ abilityIndex: 'con', value: null }));
+			dispatch(updateMiscBonus({ abilityIndex: 'str', value: null }));
 		}
 
 		for (const abilityBonus of classInfo.abilityBonuses.flatMap(val => val)) {

@@ -15,7 +15,10 @@ import {
 } from '../../../../redux/features/classInfo';
 import {
 	decrementAbilityBonus,
-	incrementAbilityBonus
+	incrementAbilityBonus,
+	resetAbilityHighest,
+	setAbilityHighest,
+	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect } from 'react';
@@ -78,7 +81,29 @@ const SelectedClassDisplay = ({
 				dispatch(removeAbilityBonus());
 			}
 		}
-	}, [dispatch, classInfo.level, classInfo.abilityBonuses, classLevels]);
+
+		if (classInfo.level === 20 && classInfo.class?.index === 'barbarian') {
+			dispatch(setAbilityHighest({ abilityIndex: 'con', value: 24 }));
+			dispatch(setAbilityHighest({ abilityIndex: 'str', value: 24 }));
+
+			dispatch(updateMiscBonus({ abilityIndex: 'con', value: 4 }));
+			dispatch(updateMiscBonus({ abilityIndex: 'str', value: 4 }));
+		}
+
+		if (classInfo.level < 20 && classInfo.class?.index === 'barbarian') {
+			dispatch(resetAbilityHighest('con'));
+			dispatch(resetAbilityHighest('str'));
+
+			dispatch(updateMiscBonus({ abilityIndex: 'con', value: null }));
+			dispatch(updateMiscBonus({ abilityIndex: 'str', value: null }));
+		}
+	}, [
+		dispatch,
+		classInfo.level,
+		classInfo.abilityBonuses,
+		classLevels,
+		classInfo.class?.index
+	]);
 
 	const subclassFlavor = klass.subclasses[0].subclass_flavor;
 	const subclassLevelNumbers = klass.subclasses[0].subclass_levels
