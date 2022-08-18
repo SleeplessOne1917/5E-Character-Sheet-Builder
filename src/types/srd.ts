@@ -199,6 +199,7 @@ type ClassLevel = {
 		ki_points?: number;
 		unarmored_movement?: number;
 		sneak_attack?: Dice;
+		sorcery_points?: number;
 	};
 };
 

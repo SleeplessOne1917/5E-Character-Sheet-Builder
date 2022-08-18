@@ -127,6 +127,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 						</>
 					)}
 					{klass.index === 'rogue' && <th>Sneak Attack</th>}
+					{klass.index === 'sorcerer' && <th>Sorcery Points</th>}
 					<th>Features</th>
 					{klass.index === 'barbarian' && (
 						<>
@@ -198,6 +199,13 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 									<td>
 										{class_specific?.sneak_attack?.dice_count}d
 										{class_specific?.sneak_attack?.dice_value}
+									</td>
+								)}
+								{klass.index === 'sorcerer' && (
+									<td>
+										{(class_specific?.sorcery_points ?? 0) > 0
+											? class_specific?.sorcery_points
+											: '\u2014'}
 									</td>
 								)}
 								<td>

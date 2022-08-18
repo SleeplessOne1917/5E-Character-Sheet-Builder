@@ -86,6 +86,9 @@ const GET_CLASS = gql`
 							dice_value
 						}
 					}
+					... on SorcererSpecific {
+						sorcery_points
+					}
 				}
 			}
 			proficiency_choices {
