@@ -119,7 +119,7 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 	return (
 		<div className={styles.container}>
 			<h2 className={styles.heading}>Levels</h2>
-			<div>
+			<div className={styles['table-container']}>
 				<div className={styles['level-select-container']}>
 					<label className={styles['level-select-label']} id="select-level">
 						Select Level
