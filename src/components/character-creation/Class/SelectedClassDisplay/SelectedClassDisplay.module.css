@@ -1,7 +1,3 @@
-.head {
-    text-align: start;
-}
-
 .table {
     color: var(--davy);
     background-color: var(--heaven-light);
@@ -9,6 +5,10 @@
     padding: 0.5rem;
     border-radius: 0.3rem;
     width: 100%;
+}
+
+.table th {
+    text-align: start;
 }
 
 .table td, .table th {

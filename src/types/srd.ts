@@ -187,6 +187,10 @@ type ClassLevel = {
 	features: SrdFeatureItem[];
 	spellcasting?: ClassLevelSpellcasting;
 	subclass?: SrdItem;
+	class_specific?: {
+		rage_count?: number;
+		rage_damage_bonus?: number;
+	};
 };
 
 interface SrdEquipmentItem extends SrdItem {

@@ -67,6 +67,12 @@ const GET_CLASS = gql`
 					index
 					name
 				}
+				class_specific {
+					... on BarbarianSpecific {
+						rage_count
+						rage_damage_bonus
+					}
+				}
 			}
 			proficiency_choices {
 				desc

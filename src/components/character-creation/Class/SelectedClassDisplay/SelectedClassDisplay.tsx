@@ -62,12 +62,12 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 		}
 	}
 
+	const classLevels = [...klass.class_levels]
+		.sort((a, b) => a.level - b.level)
+		.filter(level => !level.subclass);
+
 	const warlockSlots: { slotLevel: number; slots: number }[] = [];
 	if (klass.index === 'warlock') {
-		const classLevels = [...klass.class_levels]
-			.filter(level => !level.subclass)
-			.sort((a, b) => a.level - b.level);
-
 		for (let i = 0; i < 20; ++i) {
 			let slotLevel = 0;
 			let slots = 0;
@@ -117,31 +117,36 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 			</div>
 			<table className={styles.table}>
 				<tr>
-					<th className={styles.head}>Level</th>
-					<th className={styles.head}>Proficiency Bonus</th>
-					<th className={styles.head}>Features</th>
+					<th>Level</th>
+					<th>Proficiency Bonus</th>
+					<th>Features</th>
+					{klass.index === 'barbarian' && (
+						<>
+							<th>Rages</th>
+							<th>Rage Damage</th>
+						</>
+					)}
 					{hasSpellcasting && (
 						<>
-							{hasCantrips && <th className={styles.head}>Cantrips Known</th>}
-							{hasSpellsKnown && <th className={styles.head}>Spells Known</th>}
+							{hasCantrips && <th>Cantrips Known</th>}
+							{hasSpellsKnown && <th>Spells Known</th>}
 							{spellCastingLevels.map(level => (
-								<th key={level} className={styles.head}>
-									{getOrdinalString(level)}
-								</th>
+								<th key={level}>{getOrdinalString(level)}</th>
 							))}
 							{klass.index === 'warlock' && (
 								<>
-									<th className={styles.head}>Spell Slots</th>
-									<th className={styles.head}>Slot Level</th>
+									<th>Spell Slots</th>
+									<th>Slot Level</th>
 								</>
 							)}
 						</>
 					)}
 				</tr>
-				{[...klass.class_levels]
-					.sort((a, b) => a.level - b.level)
-					.filter(level => !level.subclass)
-					.map(({ level, prof_bonus, features, spellcasting }, index) => {
+				{classLevels.map(
+					(
+						{ level, prof_bonus, features, spellcasting, class_specific },
+						index
+					) => {
 						const featureNames = features.map(({ name }) =>
 							name.replace(/Spellcasting:.*/i, 'Spellcasting')
 						);
@@ -166,6 +171,14 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 								<td>
 									{featureNames.length > 0 ? featureNames.join(', ') : '\u2014'}
 								</td>
+								{klass.index === 'barbarian' && (
+									<>
+										<td>
+											{level === 20 ? 'Unlimited' : class_specific?.rage_count}
+										</td>
+										<td>{`+${class_specific?.rage_damage_bonus}`}</td>
+									</>
+								)}
 								{hasSpellcasting && (
 									<>
 										{hasCantrips && <td>{spellcasting?.cantrips_known}</td>}
@@ -192,7 +205,8 @@ const SelectedClassDisplay = ({ klass }: SelectedClassDisplayProps) => {
 								)}
 							</tr>
 						);
-					})}
+					}
+				)}
 			</table>
 		</div>
 	);
