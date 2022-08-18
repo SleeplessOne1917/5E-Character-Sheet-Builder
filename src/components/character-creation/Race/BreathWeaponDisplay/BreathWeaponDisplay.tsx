@@ -8,7 +8,7 @@ type BreathWeaponDisplayProps = {
 const BreathWeaponDisplay = ({ breathWeapon }: BreathWeaponDisplayProps) => {
 	return (
 		<div
-			data-testId="breath-weapon"
+			data-testid="breath-weapon"
 			className={classes['breath-weapon-container']}
 		>
 			<div className={classes.title}>Breath Weapon</div>

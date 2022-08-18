@@ -218,6 +218,16 @@ const SelectedClassDisplay = ({
 						{klass.saving_throws.map(st => st.full_name).join(' and ')}
 					</div>
 				</div>
+				{klass.spellcasting && (
+					<div>
+						<div className={styles['summary-item-label']}>
+							Spellcasting Ability
+						</div>
+						<div className={styles['summary-item-data']}>
+							{klass.spellcasting.spellcasting_ability.full_name}
+						</div>
+					</div>
+				)}
 			</div>
 			<svg>
 				<use xlinkHref={`/Icons.svg#${klass.index}`} />

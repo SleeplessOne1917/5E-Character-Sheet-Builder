@@ -86,6 +86,10 @@
     text-align: center;
 }
 
+.summary > div {
+    margin: 0.5rem;
+}
+
 .summary-item-label {
     font-weight: bold;
     font-size: 1.3rem;

@@ -121,7 +121,9 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 							feature => !feature.name.match(/Ability Score Improvement/i)
 						)
 						.map<Descriptor>(feature => ({
-							title: feature.name.replace(/\s+\(.*\)/, ''),
+							title: feature.name
+								.replace(/\s+\(.*\)/, '')
+								.replace(/Spellcasting:.*/, 'Spellcasting'),
 							description: feature.desc
 						}))
 				)
