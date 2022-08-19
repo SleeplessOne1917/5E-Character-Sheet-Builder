@@ -88,19 +88,10 @@ export type BreathWeapon = {
 
 type SpellComponent = 'V' | 'S' | 'M';
 
-export type CastingTime =
-	| 'ACTION'
-	| 'MINUTE'
-	| 'HOUR'
-	| 'BONUS_ACTION'
-	| 'MINUTES_10'
-	| 'DAY'
-	| 'REACTION';
-
 export interface SrdSpellItem extends SrdItem {
 	level: number;
 	components: SpellComponent[];
-	casting_time: CastingTime;
+	casting_time: string;
 	concentration: boolean;
 	desc: string[];
 	school: SrdItem;

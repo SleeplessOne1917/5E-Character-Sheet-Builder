@@ -6,7 +6,6 @@ import {
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 import useMediaQuery from '../../../../../../hooks/useMediaQuery';
 import { handleKeyDownEvent } from '../../../../../../services/handlerService';
-import { prettifyCastingTime } from '../../../../../../services/spellService';
 import { SrdItem, SrdSpellItem } from '../../../../../../types/srd';
 import Button from '../../../../../Button/Button';
 
@@ -80,7 +79,7 @@ const SpellSelector = ({
 					</div>
 					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Casting time</span>:{' '}
-						{prettifyCastingTime(spell.casting_time)}
+						{spell.casting_time}
 					</div>
 					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Range</span>:{' '}
