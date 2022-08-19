@@ -8,7 +8,7 @@ import {
 	selectClass
 } from '../../../../redux/features/classInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from '../../../../components/Button/Button';
 import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
@@ -93,6 +93,7 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	const [showDeselectModal, setShowDeselectModal] = useState(false);
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
 	const dispatch = useAppDispatch();
+	const mainRef = useRef<HTMLDivElement>();
 
 	useEffect(() => {
 		if (consideredClassIndex) {
@@ -157,6 +158,12 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 			setDescriptors(theDescriptors);
 		}
 	}, [consideredClass, setDescriptors]);
+
+	useEffect(() => {
+		if (classInfo.class) {
+			mainRef.current?.scrollTo(0, 0);
+		}
+	}, [classInfo.class]);
 
 	const handleChooseClassOption = useCallback(
 		(index: string) => {
@@ -227,7 +234,7 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 
 	return (
 		<>
-			<MainContent testId="class">
+			<MainContent testId="class" ref={mainRef}>
 				{!classInfo.class && (
 					<>
 						<h1 className={styles.title}>Choose Class</h1>
