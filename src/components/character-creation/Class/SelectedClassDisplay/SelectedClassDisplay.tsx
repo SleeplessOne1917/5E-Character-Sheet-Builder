@@ -205,6 +205,93 @@ const SelectedClassDisplay = ({
 		[dispatch, classInfo.abilityBonuses]
 	);
 
+	const destroyUndeadTable = (
+		<table className={styles.table}>
+			<tr>
+				<th>Cleric Level</th>
+				<th>Destroys Undead of CR ...</th>
+			</tr>
+			<tr>
+				<td>5th</td>
+				<td>1/2 or lower</td>
+			</tr>
+			<tr className={styles.odd}>
+				<td>8th</td>
+				<td>1 or lower</td>
+			</tr>
+			<tr>
+				<td>11th</td>
+				<td>2 or lower</td>
+			</tr>
+			<tr className={styles.odd}>
+				<td>14th</td>
+				<td>3 or lower</td>
+			</tr>
+			<tr>
+				<td>7th</td>
+				<td>4 or lower</td>
+			</tr>
+		</table>
+	);
+
+	const wildShapeTable = (
+		<table className={styles.table}>
+			<tr>
+				<th>Level</th>
+				<th>Max CR</th>
+				<th>Limitations</th>
+				<th>Example</th>
+			</tr>
+			<tr>
+				<td>2nd</td>
+				<td>1/4</td>
+				<td>No flying or swimming speed</td>
+				<td>Wolf</td>
+			</tr>
+			<tr className={styles.odd}>
+				<td>4th</td>
+				<td>1/2</td>
+				<td>No flying speed</td>
+				<td>Crocodile</td>
+			</tr>
+			<tr>
+				<td>8th</td>
+				<td>1</td>
+				<td>&mdash;</td>
+				<td>Giant eagle</td>
+			</tr>
+		</table>
+	);
+
+	const creatingSpellSlotsTable = (
+		<table className={styles.table}>
+			<tr>
+				<th>Spell Slot Level</th>
+				<th>Sorcery Point Cost</th>
+			</tr>
+			<tr>
+				<td>1st</td>
+				<td>2</td>
+			</tr>
+			<tr className={styles.odd}>
+				<td>2nd</td>
+				<td>3</td>
+			</tr>
+			<tr>
+				<td>3rd</td>
+				<td>5</td>
+			</tr>
+			<tr>
+				<td>4th</td>
+				<td>6</td>
+			</tr>
+			<tr>
+				<td>5th</td>
+				<td>7</td>
+			</tr>
+		</table>
+	);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.summary}>
@@ -488,6 +575,15 @@ const SelectedClassDisplay = ({
 						key={feature.index}
 						description={feature.desc}
 						title={feature.name}
+						table={
+							/Destroy Undead/i.test(feature.name)
+								? destroyUndeadTable
+								: /Wild Shape/i.test(feature.name)
+								? wildShapeTable
+								: /Creating Spell Slots/i.test(feature.name)
+								? creatingSpellSlotsTable
+								: null
+						}
 					/>
 				))}
 		</div>

@@ -34,6 +34,7 @@
 
 .subclass table {
     border-collapse: collapse;
+    margin: 0.5rem;
 }
 
 .subclass td {

@@ -4,7 +4,8 @@ import {
 	forwardRef,
 	memo,
 	useCallback,
-	useState
+	useState,
+	ReactNode
 } from 'react';
 
 import classes from './Descriptor.module.css';
@@ -13,15 +14,18 @@ import { handleKeyDownEvent } from '../../../services/handlerService';
 export type DescriptorProps = {
 	title: string;
 	description: string | string[];
+	table?: ReactNode;
 };
 
 const Descriptor = forwardRef<HTMLDivElement, DescriptorProps>(
-	({ title, description }: DescriptorProps, ref) => {
+	({ title, description, table }: DescriptorProps, ref) => {
 		const [isOpen, setIsOpen] = useState(false);
+
 		const toggleOpen = useCallback(
 			() => setIsOpen(prevState => !prevState),
 			[setIsOpen]
 		);
+
 		const toggleOpenKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
 			event => {
 				handleKeyDownEvent<HTMLDivElement>(event, toggleOpen);
@@ -53,6 +57,7 @@ const Descriptor = forwardRef<HTMLDivElement, DescriptorProps>(
 				</div>
 				{isOpen && (
 					<div className={classes.content}>
+						{table && <div className={classes['table-container']}>{table}</div>}
 						{Array.isArray(description) ? (
 							description.map((d, i) => <p key={i}>{d}</p>)
 						) : (

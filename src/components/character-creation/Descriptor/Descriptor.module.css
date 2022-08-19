@@ -1,5 +1,5 @@
 .descriptor {
-    width: 70%;
+    width: 95%;
     margin: 1rem 0;
 }
 
@@ -37,4 +37,14 @@
 
 .content p:first-child {
     margin-block-start: 0;
+}
+
+.table-container {
+    margin: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .descriptor {
+        width: 80%;
+    }
 }
