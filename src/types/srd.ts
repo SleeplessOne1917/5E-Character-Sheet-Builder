@@ -150,7 +150,17 @@ export interface SrdFullSubraceItem extends SrdItem {
 
 export interface SrdFeatureItem extends SrdItem {
 	desc: string[];
+	feature_specific?: {
+		subfeature_options: SrdFeatureChoice;
+	};
 }
+
+export type SrdFeatureChoice = {
+	choose: number;
+	from: {
+		options: { item: SrdFeatureItem }[];
+	};
+};
 
 type ClassSpellcasting = {
 	spellcasting_ability: AbilityItem;

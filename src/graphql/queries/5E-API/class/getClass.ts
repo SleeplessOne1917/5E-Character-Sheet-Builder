@@ -62,6 +62,20 @@ const GET_CLASS = gql`
 					index
 					name
 					desc
+					feature_specific {
+						subfeature_options {
+							choose
+							from {
+								options {
+									item {
+										index
+										name
+										desc
+									}
+								}
+							}
+						}
+					}
 				}
 				level
 				subclass {
@@ -259,6 +273,20 @@ const GET_CLASS = gql`
 						name
 						index
 						desc
+						feature_specific {
+							subfeature_options {
+								choose
+								from {
+									options {
+										item {
+											index
+											name
+											desc
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

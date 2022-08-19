@@ -9,6 +9,7 @@ import {
 	addAbilityBonus,
 	deselectSubclass,
 	removeAbilityBonus,
+	removeFeatureSubfeature,
 	selectSubclass,
 	setAbilityBonus,
 	setLevel
@@ -30,6 +31,7 @@ import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import styles from './SelectedClassDisplay.module.css';
 import { getOrdinal } from '../../../../services/ordinalService';
+import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -292,6 +294,61 @@ const SelectedClassDisplay = ({
 		</table>
 	);
 
+	const features = (
+		classLevels as Partial<ClassLevel>[] &
+			Pick<ClassLevel, 'level' | 'features'>[]
+	)
+		.concat(classInfo.subclass?.subclass_levels ?? [])
+		.sort((a, b) => a.level - b.level)
+		.filter(level => level.level <= classInfo.level)
+		.flatMap(level => level.features)
+		.filter(
+			feature =>
+				!(
+					feature.name
+						.toLocaleLowerCase()
+						.includes('ability score improvement') ||
+					feature.name === subclassFlavor
+				)
+		)
+		.reduce((acc: SrdFeatureItem[], cur) => {
+			const feature = {
+				...cur,
+				name: cur.name
+					.replace(/\s*\(.*\)/, '')
+					.replace(/Spellcasting:.*/i, 'Spellcasting')
+			};
+			if (!acc.some(f => f.name === feature.name)) {
+				return [...acc, feature];
+			} else {
+				return acc;
+			}
+		}, []);
+
+	const fightingStyles = features.filter(({ index }) =>
+		index.includes('fighting-style')
+	);
+
+	useEffect(() => {
+		if (
+			(fightingStyles.length > 0 &&
+				fightingStyles.length <
+					classInfo.featuresSubfeatures[fightingStyles[0].index]?.length) ??
+			0
+		) {
+			const theFeatures =
+				classInfo.featuresSubfeatures[fightingStyles[0].index];
+			for (const i = 0; i < theFeatures.length - fightingStyles.length; ++i) {
+				dispatch(
+					removeFeatureSubfeature({
+						index: fightingStyles[0].index,
+						feature: theFeatures[theFeatures.length - (i + 1)].index
+					})
+				);
+			}
+		}
+	}, [dispatch, fightingStyles, classInfo.featuresSubfeatures]);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.summary}>
@@ -539,53 +596,41 @@ const SelectedClassDisplay = ({
 					</div>
 				</>
 			)}
-			<h2 className={styles.heading}>Features</h2>
-			{(
-				classLevels as Partial<ClassLevel>[] &
-					Pick<ClassLevel, 'level' | 'features'>[]
-			)
-				.concat(classInfo.subclass?.subclass_levels ?? [])
-				.sort((a, b) => a.level - b.level)
-				.filter(level => level.level <= classInfo.level)
-				.flatMap(level => level.features)
-				.filter(
-					feature =>
-						!(
-							feature.name
-								.toLocaleLowerCase()
-								.includes('ability score improvement') ||
-							feature.name === subclassFlavor
-						)
-				)
-				.reduce((acc: SrdFeatureItem[], cur) => {
-					const feature = {
-						...cur,
-						name: cur.name
-							.replace(/\s*\(.*\)/, '')
-							.replace(/Spellcasting:.*/i, 'Spellcasting')
-					};
-					if (!acc.some(f => f.name === feature.name)) {
-						return [...acc, feature];
-					} else {
-						return acc;
+			{fightingStyles.length > 0 && (
+				<FeatureChoiceSelector
+					feature={fightingStyles[0]}
+					choose={fightingStyles.reduce<number>(
+						(acc, cur) =>
+							acc + (cur.feature_specific?.subfeature_options.choose ?? 0),
+						0
+					)}
+					subfeatures={
+						fightingStyles[0].feature_specific?.subfeature_options.from.options.map(
+							({ item }) => ({
+								...item,
+								name: item.name.replace(/Fighting Style:\s*/i, '')
+							})
+						) as SrdFeatureItem[]
 					}
-				}, [])
-				.map(feature => (
-					<Descriptor
-						key={feature.index}
-						description={feature.desc}
-						title={feature.name}
-						table={
-							/Destroy Undead/i.test(feature.name)
-								? destroyUndeadTable
-								: /Wild Shape/i.test(feature.name)
-								? wildShapeTable
-								: /Creating Spell Slots/i.test(feature.name)
-								? creatingSpellSlotsTable
-								: null
-						}
-					/>
-				))}
+				/>
+			)}
+			<h2 className={styles.heading}>Features</h2>
+			{features.map(feature => (
+				<Descriptor
+					key={feature.index}
+					description={feature.desc}
+					title={feature.name}
+					table={
+						/Destroy Undead/i.test(feature.name)
+							? destroyUndeadTable
+							: /Wild Shape/i.test(feature.name)
+							? wildShapeTable
+							: /Creating Spell Slots/i.test(feature.name)
+							? creatingSpellSlotsTable
+							: null
+					}
+				/>
+			))}
 		</div>
 	);
 };

@@ -95,7 +95,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -224,7 +224,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -355,7 +355,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 minute
+                MINUTE
               </div>
               <div
                 class="summary-item"
@@ -484,7 +484,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -613,7 +613,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -748,7 +748,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -897,7 +897,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1043,7 +1043,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1192,7 +1192,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1341,7 +1341,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1472,7 +1472,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1624,7 +1624,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1759,7 +1759,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"
@@ -1908,7 +1908,7 @@ exports[`renders correctly 1`] = `
                 </span>
                 :
                  
-                1 action
+                ACTION
               </div>
               <div
                 class="summary-item"

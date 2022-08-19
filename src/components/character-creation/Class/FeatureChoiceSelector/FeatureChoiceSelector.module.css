@@ -1,0 +1,62 @@
+.heading {
+    align-self: center;
+    margin-block-start: 3rem;
+    margin-block-end: 3rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selected-text {
+    font-size: 2rem;
+}
+
+.subfeatures {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 1.5rem;
+}
+
+.subfeature {
+    text-align: center;
+    margin: 0.5rem;
+    background-color: var(--heaven-light);
+    border-radius: 1rem;
+    border: 3px solid var(--davy);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+    padding: 0.5rem;
+}
+
+.subfeature-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: -0.5rem -0.5rem 0 -0.5rem;
+    background-color: var(--davy);
+    color: var(--heaven-light);
+}
+
+.selected {
+    background-color: var(--highlight-light);
+}
+
+.selected .subfeature-label {
+    background-color: var(--highlight) !important;
+    color: var(--davy) !important;
+}
+
+.subfeature-description {
+    font-size: 1.2rem;
+}
+
+@media screen and (min-width: 1024px) {
+    .subfeature {
+        width: 35%;
+    }
+}

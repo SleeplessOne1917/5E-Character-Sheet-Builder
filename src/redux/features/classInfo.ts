@@ -1,3 +1,4 @@
+import { SrdFeatureItem } from './../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdFullClassItem, SrdSubclassItem } from '../../types/srd';
 
@@ -8,6 +9,7 @@ export type ClassInfoState = {
 	level: number;
 	subclass?: SrdSubclassItem;
 	abilityBonuses: (AbilityScores | null)[][];
+	featuresSubfeatures: { [key: string]: SrdFeatureItem[] };
 };
 
 type SetAbilityBonusPayload = {
@@ -15,7 +17,11 @@ type SetAbilityBonusPayload = {
 	abilityScores: (AbilityScores | null)[];
 };
 
-export const initialState: ClassInfoState = { level: 1, abilityBonuses: [] };
+export const initialState: ClassInfoState = {
+	level: 1,
+	abilityBonuses: [],
+	featuresSubfeatures: {}
+};
 
 const classInfoSlice = createSlice({
 	name: 'classInfo',
@@ -50,6 +56,35 @@ const classInfoSlice = createSlice({
 		},
 		removeAbilityBonus: state => {
 			state.abilityBonuses = state.abilityBonuses.slice(0, -1);
+		},
+		addFeatureSubfeature: (
+			state,
+			{
+				payload: { feature, index }
+			}: PayloadAction<{ index: string; feature: SrdFeatureItem }>
+		) => {
+			if (!state.featuresSubfeatures[index]) {
+				state.featuresSubfeatures[index] = [];
+			}
+
+			state.featuresSubfeatures[index] = [
+				...state.featuresSubfeatures[index],
+				feature
+			];
+		},
+		removeFeatureSubfeature: (
+			state,
+			{
+				payload: { index, feature }
+			}: PayloadAction<{ index: string; feature: string }>
+		) => {
+			if (!state.featuresSubfeatures[index]) {
+				state.featuresSubfeatures[index] = [];
+			}
+
+			state.featuresSubfeatures[index] = state.featuresSubfeatures[
+				index
+			].filter(f => f.index !== feature);
 		}
 	}
 });
@@ -62,7 +97,9 @@ export const {
 	deselectSubclass,
 	addAbilityBonus,
 	setAbilityBonus,
-	removeAbilityBonus
+	removeAbilityBonus,
+	addFeatureSubfeature,
+	removeFeatureSubfeature
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;
