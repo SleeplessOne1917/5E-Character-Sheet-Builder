@@ -1,5 +1,5 @@
 import Button from '../../../Button/Button';
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import Descriptor from '../../Descriptor/Descriptor';
 import { SrdSpellItem, SrdSubclassItem } from '../../../../types/srd';
 import styles from './SubclassSelector.module.css';
@@ -75,11 +75,13 @@ const SubclassSelector = ({
 					<>
 						<h4>{featureName.replace(/.*:\s*/, '')}</h4>
 						<table>
-							<tr>
-								<th>{klassName} Level</th>
-								<th>Spells</th>
-							</tr>
-							{rows}
+							<thead>
+								<tr>
+									<th>{klassName} Level</th>
+									<th>Spells</th>
+								</tr>
+							</thead>
+							<tbody>{rows}</tbody>
 						</table>
 					</>
 				);
@@ -125,11 +127,13 @@ const SubclassSelector = ({
 
 			spellsComponent = (
 				<table>
-					<tr>
-						<th>{klassName} Level</th>
-						<th>Spells</th>
-					</tr>
-					{rows}
+					<thead>
+						<tr>
+							<th>{klassName} Level</th>
+							<th>Spells</th>
+						</tr>
+					</thead>
+					<tbody>{rows}</tbody>
 				</table>
 			);
 		}
