@@ -1,22 +1,24 @@
-import { SrdFullClassItem } from './../types/srd';
 import {
 	AbilityItem,
-	SrdItem,
+	SrdFullRaceItem,
 	SrdFullSubraceItem,
-	SrdSubraceItem,
-	SrdFullRaceItem
+	SrdItem,
+	SrdProficiencyItem,
+	SrdSubraceItem
 } from '../types/srd';
+import { ProficiencyType, SrdFullClassItem } from './../types/srd';
 import { TypedDocumentNode, createClient } from 'urql';
 
 import { DocumentNode } from 'graphql';
 import GET_ABILITIES from './queries/5E-API/abilities/getAbilities';
+import GET_CLASS from './queries/5E-API/class/getClass';
 import GET_CLASSES from './queries/5E-API/class/getClasses';
 import GET_EQUIPMENTS from './queries/5E-API/equipment/getEquipments';
+import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienciesByType';
 import GET_RACE from './queries/5E-API/race/getRace';
 import GET_RACES from './queries/5E-API/race/getRaces';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
-import GET_CLASS from './queries/5E-API/class/getClass';
 
 const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 
@@ -49,3 +51,13 @@ export const getSubraces = async () =>
 
 export const getSubrace = async (index: string) =>
 	await query<{ subrace: SrdFullSubraceItem }>(GET_SUBRACE, { index });
+
+export const getProficienciesByType = async (
+	type: ProficiencyType | ProficiencyType[]
+) =>
+	await query<{ proficiencies: SrdProficiencyItem[] }>(
+		GET_PROFICIENCIES_BY_TYPE,
+		{
+			type
+		}
+	);

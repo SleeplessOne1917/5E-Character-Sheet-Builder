@@ -1,8 +1,12 @@
-import { SrdFeatureItem } from './../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { SrdFullClassItem, SrdSubclassItem } from '../../types/srd';
+import {
+	SrdFullClassItem,
+	SrdProficiencyItem,
+	SrdSubclassItem
+} from '../../types/srd';
 
 import AbilityScores from '../../types/abilityScores';
+import { SrdFeatureItem } from './../../types/srd';
 
 export type ClassInfoState = {
 	class?: SrdFullClassItem;
@@ -10,6 +14,7 @@ export type ClassInfoState = {
 	subclass?: SrdSubclassItem;
 	abilityBonuses: (AbilityScores | null)[][];
 	featuresSubfeatures: { [key: string]: SrdFeatureItem[] };
+	featuresProficiencies: { [key: string]: SrdProficiencyItem[] };
 };
 
 type SetAbilityBonusPayload = {
@@ -20,7 +25,8 @@ type SetAbilityBonusPayload = {
 export const initialState: ClassInfoState = {
 	level: 1,
 	abilityBonuses: [],
-	featuresSubfeatures: {}
+	featuresSubfeatures: {},
+	featuresProficiencies: {}
 };
 
 const classInfoSlice = createSlice({
@@ -85,6 +91,35 @@ const classInfoSlice = createSlice({
 			state.featuresSubfeatures[index] = state.featuresSubfeatures[
 				index
 			].filter(f => f.index !== feature);
+		},
+		addFeatureProficiency: (
+			state,
+			{
+				payload: { index, proficiency }
+			}: PayloadAction<{ index: string; proficiency: SrdProficiencyItem }>
+		) => {
+			if (!state.featuresProficiencies[index]) {
+				state.featuresProficiencies[index] = [];
+			}
+
+			state.featuresProficiencies[index] = [
+				...state.featuresProficiencies[index],
+				proficiency
+			];
+		},
+		removeFeatureProficiency: (
+			state,
+			{
+				payload: { index, proficiency }
+			}: PayloadAction<{ index: string; proficiency: string }>
+		) => {
+			if (!state.featuresProficiencies[index]) {
+				state.featuresProficiencies[index] = [];
+			}
+
+			state.featuresProficiencies[index] = state.featuresProficiencies[
+				index
+			].filter(prof => prof.index !== proficiency);
 		}
 	}
 });
@@ -99,7 +134,9 @@ export const {
 	setAbilityBonus,
 	removeAbilityBonus,
 	addFeatureSubfeature,
-	removeFeatureSubfeature
+	removeFeatureSubfeature,
+	addFeatureProficiency,
+	removeFeatureProficiency
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

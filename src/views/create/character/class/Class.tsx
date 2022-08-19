@@ -4,6 +4,11 @@ import {
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
 import {
+	decrementAbilityBonus,
+	resetAbilityHighest,
+	updateMiscBonus
+} from '../../../../redux/features/abilityScores';
+import {
 	deselectClass,
 	selectClass
 } from '../../../../redux/features/classInfo';
@@ -18,11 +23,6 @@ import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/solid';
-import {
-	decrementAbilityBonus,
-	resetAbilityHighest,
-	updateMiscBonus
-} from '../../../../redux/features/abilityScores';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
 
@@ -210,7 +210,9 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	}, [setShowDeselectModal]);
 
 	const deselectSelectedClass = useCallback(() => {
-		for (const { index } of classInfo.class?.proficiencies ?? []) {
+		for (const { index } of (classInfo.class?.proficiencies ?? []).concat(
+			Object.values(classInfo.featuresProficiencies).flatMap(value => value)
+		)) {
 			dispatch(removeProficiency(index));
 		}
 

@@ -3,17 +3,24 @@ import {
 	ClassLevel,
 	SrdFeatureItem,
 	SrdFullClassItem,
+	SrdProficiencyItem,
 	SrdSubclassItem
 } from '../../../../types/srd';
 import {
 	addAbilityBonus,
+	addFeatureProficiency,
 	deselectSubclass,
 	removeAbilityBonus,
+	removeFeatureProficiency,
 	removeFeatureSubfeature,
 	selectSubclass,
 	setAbilityBonus,
 	setLevel
 } from '../../../../redux/features/classInfo';
+import {
+	addProficiency,
+	removeProficiency
+} from '../../../../redux/features/proficiencies';
 import {
 	decrementAbilityBonus,
 	incrementAbilityBonus,
@@ -22,7 +29,7 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
 import AbilityScores from '../../../../types/abilityScores';
@@ -31,6 +38,7 @@ import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelecto
 import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
+import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
 
 type SelectedClassDisplayProps = {
@@ -49,6 +57,7 @@ const SelectedClassDisplay = ({
 	const hasSpellsKnown = klass.class_levels.some(
 		level => level.spellcasting?.spells_known
 	);
+
 	const classLevels = [...klass.class_levels]
 		.sort((a, b) => a.level - b.level)
 		.filter(level => !level.subclass);
@@ -336,6 +345,63 @@ const SelectedClassDisplay = ({
 				return acc;
 			}
 		}, []);
+
+	const selectedProficiencies = useAppSelector(
+		state => state.editingCharacter.proficiencies
+	);
+
+	const [allSavingThrowProficiencies, setAllSavingThrowProficiencies] =
+		useState<SrdProficiencyItem[]>();
+
+	useEffect(() => {
+		getProficienciesByType('SAVING_THROWS').then(result => {
+			setAllSavingThrowProficiencies(result.data?.proficiencies ?? []);
+		});
+	}, [setAllSavingThrowProficiencies]);
+
+	useEffect(() => {
+		if (klass.index === 'monk') {
+			if (
+				classInfo.level >= 18 &&
+				allSavingThrowProficiencies?.some(
+					st => !selectedProficiencies.some(p => p.index === st.index)
+				)
+			) {
+				for (const prof of allSavingThrowProficiencies.filter(
+					st => !klass.proficiencies.some(p => p.index === st.index)
+				)) {
+					dispatch(
+						addFeatureProficiency({ index: 'diamond-soul', proficiency: prof })
+					);
+					dispatch(addProficiency(prof));
+				}
+			}
+
+			if (
+				classInfo.level < 18 &&
+				(classInfo.featuresProficiencies['diamond-soul']?.length ?? 0) > 0
+			) {
+				for (const prof of classInfo.featuresProficiencies['diamond-soul'] ??
+					[]) {
+					dispatch(removeProficiency(prof.index));
+					dispatch(
+						removeFeatureProficiency({
+							index: 'diamond-soul',
+							proficiency: prof.index
+						})
+					);
+				}
+			}
+		}
+	}, [
+		dispatch,
+		allSavingThrowProficiencies,
+		klass.index,
+		klass.proficiencies,
+		classInfo.level,
+		selectedProficiencies,
+		classInfo.featuresProficiencies
+	]);
 
 	const fightingStyles = features.filter(({ index }) =>
 		index.includes('fighting-style')
