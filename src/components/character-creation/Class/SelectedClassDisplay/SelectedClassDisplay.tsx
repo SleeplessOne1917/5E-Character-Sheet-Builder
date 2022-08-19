@@ -27,11 +27,11 @@ import { useCallback, useEffect } from 'react';
 import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
 import AbilityScores from '../../../../types/abilityScores';
 import Descriptor from '../../Descriptor/Descriptor';
+import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
-import styles from './SelectedClassDisplay.module.css';
 import { getOrdinal } from '../../../../services/ordinalService';
-import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
+import styles from './SelectedClassDisplay.module.css';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -233,7 +233,7 @@ const SelectedClassDisplay = ({
 					<td>3 or lower</td>
 				</tr>
 				<tr>
-					<td>7th</td>
+					<td>17th</td>
 					<td>4 or lower</td>
 				</tr>
 			</tbody>
