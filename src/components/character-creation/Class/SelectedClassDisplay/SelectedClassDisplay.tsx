@@ -361,6 +361,38 @@ const SelectedClassDisplay = ({
 		}
 	}, [dispatch, fightingStyles, classInfo.featuresSubfeatures]);
 
+	const eldritchInvocation = features.find(({ index }) =>
+		index.includes('eldritch-invocations')
+	);
+
+	useEffect(() => {
+		const invocationsKnown =
+			classLevels[classInfo.level - 1].class_specific?.invocations_known ?? 0;
+		if (
+			eldritchInvocation &&
+			classInfo.featuresSubfeatures[eldritchInvocation.index] &&
+			classInfo.featuresSubfeatures[eldritchInvocation.index].length >
+				invocationsKnown
+		) {
+			const invocations =
+				classInfo.featuresSubfeatures[eldritchInvocation.index];
+			for (let i = 0; i < invocations.length - invocationsKnown; ++i) {
+				dispatch(
+					removeFeatureSubfeature({
+						index: eldritchInvocation.index,
+						feature: invocations[invocations.length - (i + 1)].index
+					})
+				);
+			}
+		}
+	}, [
+		dispatch,
+		classInfo.featuresSubfeatures,
+		classInfo.level,
+		classLevels,
+		eldritchInvocation
+	]);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.summary}>
@@ -459,22 +491,27 @@ const SelectedClassDisplay = ({
 								{ level, prof_bonus, features, spellcasting, class_specific },
 								index
 							) => {
-								const featureNames = features.map(({ name }) => {
-									let nameToReturn = name.replace(
-										/Spellcasting:.*/i,
-										'Spellcasting'
-									);
+								const featureNames = features
+									.filter(
+										f =>
+											level === 2 || !f.index.includes('eldritch-invocations')
+									)
+									.map(({ name }) => {
+										let nameToReturn = name.replace(
+											/Spellcasting:.*/i,
+											'Spellcasting'
+										);
 
-									if (name.toLowerCase().includes('wild shape')) {
-										if (level === 2) {
-											nameToReturn = 'Wild Shape';
-										} else {
-											nameToReturn = 'Wild Shape improvement';
+										if (name.toLowerCase().includes('wild shape')) {
+											if (level === 2) {
+												nameToReturn = 'Wild Shape';
+											} else {
+												nameToReturn = 'Wild Shape improvement';
+											}
 										}
-									}
 
-									return nameToReturn;
-								});
+										return nameToReturn;
+									});
 
 								if (!featureNames.includes(subclassFlavor)) {
 									if (subclassLevelNumbers[0] === level) {
@@ -615,6 +652,23 @@ const SelectedClassDisplay = ({
 						))}
 					</div>
 				</>
+			)}
+			{eldritchInvocation && (
+				<FeatureChoiceSelector
+					feature={eldritchInvocation}
+					choose={
+						classLevels[classInfo.level - 1].class_specific
+							?.invocations_known ?? 0
+					}
+					subfeatures={
+						eldritchInvocation.feature_specific?.subfeature_options.from.options.map(
+							({ item }) => ({
+								...item,
+								name: item.name.replace(/Eldritch Invocation:\s+/i, '')
+							})
+						) as SrdFeatureItem[]
+					}
+				/>
 			)}
 			{fightingStyles.length > 0 && (
 				<FeatureChoiceSelector

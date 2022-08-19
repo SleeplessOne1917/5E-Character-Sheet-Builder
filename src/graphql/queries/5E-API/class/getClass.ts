@@ -71,10 +71,32 @@ const GET_CLASS = gql`
 										index
 										name
 										desc
+										prerequisites {
+											feature {
+												name
+												index
+											}
+											spell {
+												index
+												name
+											}
+											level
+										}
 									}
 								}
 							}
 						}
+					}
+					prerequisites {
+						feature {
+							name
+							index
+						}
+						spell {
+							index
+							name
+						}
+						level
 					}
 				}
 				level
@@ -282,10 +304,32 @@ const GET_CLASS = gql`
 											index
 											name
 											desc
+											prerequisites {
+												feature {
+													name
+													index
+												}
+												spell {
+													index
+													name
+												}
+												level
+											}
 										}
 									}
 								}
 							}
+						}
+						prerequisites {
+							feature {
+								name
+								index
+							}
+							spell {
+								index
+								name
+							}
+							level
 						}
 					}
 				}

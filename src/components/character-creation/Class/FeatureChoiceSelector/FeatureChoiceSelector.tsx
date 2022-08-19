@@ -4,6 +4,7 @@ import {
 	addFeatureSubfeature,
 	removeFeatureSubfeature
 } from '../../../../redux/features/classInfo';
+import { getOrdinal } from '../../../../services/ordinalService';
 import { SrdFeatureItem, SrdItem } from '../../../../types/srd';
 import Button from '../../../Button/Button';
 import classes from './FeatureChoiceSelector.module.css';
@@ -25,6 +26,17 @@ const FeatureChoiceSelector = ({
 				state.editingCharacter.classInfo.featuresSubfeatures[feature.index]
 		) ?? [];
 	const dispatch = useAppDispatch();
+
+	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
+
+	const spells = useAppSelector(state => state.editingCharacter.spells);
+
+	const allFeatures = classInfo.class?.class_levels
+		.filter(level => !level.subclass && level.level >= classInfo.level)
+		.flatMap(level => level.features)
+		.concat(
+			Object.values(classInfo.featuresSubfeatures).flatMap(value => value)
+		);
 
 	const handleSelect = useCallback(
 		(subfeature: SrdFeatureItem) => {
@@ -56,6 +68,21 @@ const FeatureChoiceSelector = ({
 						subfeature => subfeature.index === sf.index
 					);
 
+					const meetsPrerequisites = sf.prerequisites.reduce<boolean>(
+						(acc, cur) => {
+							if (cur.feature) {
+								return !!allFeatures?.some(f => f.index === cur.feature?.index);
+							} else if (cur.spell) {
+								return spells.some(spell => spell.index === cur.spell?.index);
+							} else if (cur.level) {
+								return classInfo.level >= cur.level;
+							} else {
+								return acc;
+							}
+						},
+						true
+					);
+
 					return (
 						<div
 							key={sf.index}
@@ -64,6 +91,22 @@ const FeatureChoiceSelector = ({
 							}`}
 						>
 							<div className={classes['subfeature-label']}>{sf.name}</div>
+							{sf.prerequisites.length > 0 && (
+								<div className={classes.prerequisites}>
+									Prerequisites:{' '}
+									{sf.prerequisites
+										.map(prereq => {
+											if (prereq.feature) {
+												return prereq.feature.name;
+											} else if (prereq.spell) {
+												return prereq.spell.name;
+											} else {
+												return `${getOrdinal(prereq.level ?? 1)} level`;
+											}
+										})
+										.join(', ')}
+								</div>
+							)}
 							<div className={classes['subfeature-description']}>
 								{sf.desc.map((d, i) => (
 									<p key={i}>{d}</p>
@@ -80,7 +123,9 @@ const FeatureChoiceSelector = ({
 								<Button
 									positive
 									style={{ alignSelf: 'center' }}
-									disabled={selectedSubfeatures.length >= choose}
+									disabled={
+										selectedSubfeatures.length >= choose || !meetsPrerequisites
+									}
 									onClick={() => handleSelect(sf)}
 								>
 									Select

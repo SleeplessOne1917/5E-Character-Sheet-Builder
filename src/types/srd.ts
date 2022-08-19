@@ -153,6 +153,11 @@ export interface SrdFeatureItem extends SrdItem {
 	feature_specific?: {
 		subfeature_options: SrdFeatureChoice;
 	};
+	prerequisites: {
+		feature?: SrdItem;
+		spell?: SrdItem;
+		level?: number;
+	}[];
 }
 
 export type SrdFeatureChoice = {
