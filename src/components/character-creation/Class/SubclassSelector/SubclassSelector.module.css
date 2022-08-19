@@ -49,6 +49,10 @@
     background-color: var(--heaven-light);
 }
 
+.italic {
+    font-style: italic;
+}
+
 @media screen and (min-width: 1024px) {
     .subclass {
         width: 45%;

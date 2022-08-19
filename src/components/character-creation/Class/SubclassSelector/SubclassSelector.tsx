@@ -67,7 +67,7 @@ const SubclassSelector = ({
 							className={i % 2 !== 0 ? styles['even-row'] : styles['odd-row']}
 						>
 							<td>{getOrdinal(level)}</td>
-							<td>
+							<td className={styles.italic}>
 								{spellsByLevel
 									.get(level)
 									?.map(({ name }) => name)
@@ -119,7 +119,7 @@ const SubclassSelector = ({
 						className={i % 2 !== 0 ? styles['even-row'] : styles['odd-row']}
 					>
 						<td>{getOrdinal(level)}</td>
-						<td>
+						<td className={styles.italic}>
 							{spellsByLevel
 								.get(level)
 								?.map(({ name }) => name)

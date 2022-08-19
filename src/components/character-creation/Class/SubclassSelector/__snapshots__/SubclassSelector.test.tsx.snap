@@ -30,7 +30,9 @@ exports[`renders correctly normally 1`] = `
       <td>
         1st
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -40,7 +42,9 @@ exports[`renders correctly normally 1`] = `
       <td>
         3rd
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -50,7 +54,9 @@ exports[`renders correctly normally 1`] = `
       <td>
         5th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -60,7 +66,9 @@ exports[`renders correctly normally 1`] = `
       <td>
         7th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -70,7 +78,9 @@ exports[`renders correctly normally 1`] = `
       <td>
         9th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -223,7 +233,9 @@ exports[`renders correctly when selected 1`] = `
       <td>
         1st
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -233,7 +245,9 @@ exports[`renders correctly when selected 1`] = `
       <td>
         3rd
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -243,7 +257,9 @@ exports[`renders correctly when selected 1`] = `
       <td>
         5th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -253,7 +269,9 @@ exports[`renders correctly when selected 1`] = `
       <td>
         7th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
@@ -263,7 +281,9 @@ exports[`renders correctly when selected 1`] = `
       <td>
         9th
       </td>
-      <td>
+      <td
+        class="italic"
+      >
         , 
       </td>
     </tr>
