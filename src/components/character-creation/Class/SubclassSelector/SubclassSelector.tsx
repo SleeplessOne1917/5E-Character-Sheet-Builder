@@ -13,12 +13,6 @@ type SubclassSelectorProps = {
 	klassName: string;
 };
 
-const buttonStyle: CSSProperties = {
-	position: 'absolute',
-	top: '0.5rem',
-	right: '0.5rem'
-};
-
 const SubclassSelector = ({
 	subclass,
 	onSelect,
@@ -165,11 +159,9 @@ const SubclassSelector = ({
 					/>
 				))}
 			{selected ? (
-				<Button style={buttonStyle} onClick={onDeselect} size="small">
-					Deselect
-				</Button>
+				<Button onClick={onDeselect}>Deselect</Button>
 			) : (
-				<Button style={buttonStyle} positive onClick={onSelect} size="small">
+				<Button positive onClick={onSelect} S>
 					Select
 				</Button>
 			)}
