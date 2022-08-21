@@ -365,33 +365,37 @@ const SelectedClassDisplay = ({
 		}
 	}, [setAllSavingThrowProficiencies, klass.index]);
 
-	useEffect(() => {
-		if (klass.index === 'monk') {
-			if (
-				classInfo.level >= 18 &&
-				allSavingThrowProficiencies?.some(
-					st => !selectedProficiencies.some(p => p.index === st.index)
-				)
-			) {
-				for (const prof of allSavingThrowProficiencies.filter(
-					st => !klass.proficiencies.some(p => p.index === st.index)
-				)) {
-					dispatch(
-						addFeatureProficiency({ index: 'diamond-soul', proficiency: prof })
-					);
-					dispatch(addProficiency(prof));
+	const addDiamondSoul = useCallback(
+		(newLevel: number) => {
+			if (klass.index === 'monk') {
+				if (
+					newLevel >= 14 &&
+					allSavingThrowProficiencies?.some(
+						st => !selectedProficiencies.some(p => p.index === st.index)
+					)
+				) {
+					for (const prof of allSavingThrowProficiencies.filter(
+						st => !klass.proficiencies.some(p => p.index === st.index)
+					)) {
+						dispatch(
+							addFeatureProficiency({
+								index: 'diamond-soul',
+								proficiency: prof
+							})
+						);
+						dispatch(addProficiency(prof));
+					}
 				}
 			}
-		}
-	}, [
-		dispatch,
-		allSavingThrowProficiencies,
-		klass.index,
-		klass.proficiencies,
-		classInfo.level,
-		selectedProficiencies,
-		classInfo.featuresProficiencies
-	]);
+		},
+		[
+			dispatch,
+			allSavingThrowProficiencies,
+			klass.index,
+			klass.proficiencies,
+			selectedProficiencies
+		]
+	);
 
 	const fightingStyles = features.filter(({ index }) =>
 		index.includes('fighting-style')
@@ -399,28 +403,30 @@ const SelectedClassDisplay = ({
 
 	const removeFightingStyles = useCallback(
 		(newLevel: number, subclassIndex?: string | null) => {
-			const newLevelFightingStyles = getAllFeatures(
-				newLevel,
-				subclassIndex
-			).filter(({ index }) => index.includes('fighting-style'));
+			if (fightingStyles.length > 0) {
+				const newLevelFightingStyles = getAllFeatures(
+					newLevel,
+					subclassIndex
+				).filter(({ index }) => index.includes('fighting-style'));
 
-			if (
-				newLevelFightingStyles.length <
-				(classInfo.featuresSubfeatures[fightingStyles[0].index]?.length ?? 0)
-			) {
-				const theFeatures =
-					classInfo.featuresSubfeatures[fightingStyles[0].index];
-				for (
-					let i = 0;
-					i < theFeatures.length - newLevelFightingStyles.length;
-					++i
+				if (
+					newLevelFightingStyles.length <
+					(classInfo.featuresSubfeatures[fightingStyles[0].index]?.length ?? 0)
 				) {
-					dispatch(
-						removeFeatureSubfeature({
-							index: fightingStyles[0].index,
-							feature: theFeatures[theFeatures.length - (i + 1)].index
-						})
-					);
+					const theFeatures =
+						classInfo.featuresSubfeatures[fightingStyles[0].index];
+					for (
+						let i = 0;
+						i < theFeatures.length - newLevelFightingStyles.length;
+						++i
+					) {
+						dispatch(
+							removeFeatureSubfeature({
+								index: fightingStyles[0].index,
+								feature: theFeatures[theFeatures.length - (i + 1)].index
+							})
+						);
+					}
 				}
 			}
 		},
@@ -555,6 +561,7 @@ const SelectedClassDisplay = ({
 
 			if (newValue > classInfo.level) {
 				addBlankFavoredEnemies(newValue);
+				addDiamondSoul(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -566,7 +573,8 @@ const SelectedClassDisplay = ({
 			removeFavoredEnemies,
 			addBlankFavoredEnemies,
 			removeInvocations,
-			removeFightingStyles
+			removeFightingStyles,
+			addDiamondSoul
 		]
 	);
 
