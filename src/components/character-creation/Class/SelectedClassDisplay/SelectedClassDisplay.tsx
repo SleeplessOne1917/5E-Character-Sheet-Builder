@@ -423,33 +423,30 @@ const SelectedClassDisplay = ({
 		index.includes('eldritch-invocations')
 	);
 
-	useEffect(() => {
-		const invocationsKnown =
-			classLevels[classInfo.level - 1].class_specific?.invocations_known ?? 0;
-		if (
-			eldritchInvocation &&
-			classInfo.featuresSubfeatures[eldritchInvocation.index] &&
-			classInfo.featuresSubfeatures[eldritchInvocation.index].length >
-				invocationsKnown
-		) {
-			const invocations =
-				classInfo.featuresSubfeatures[eldritchInvocation.index];
-			for (let i = 0; i < invocations.length - invocationsKnown; ++i) {
-				dispatch(
-					removeFeatureSubfeature({
-						index: eldritchInvocation.index,
-						feature: invocations[invocations.length - (i + 1)].index
-					})
-				);
+	const removeInvocations = useCallback(
+		(newLevel: number) => {
+			const invocationsKnown =
+				classLevels[newLevel - 1].class_specific?.invocations_known ?? 0;
+			if (
+				eldritchInvocation &&
+				classInfo.featuresSubfeatures[eldritchInvocation.index] &&
+				classInfo.featuresSubfeatures[eldritchInvocation.index].length >
+					invocationsKnown
+			) {
+				const invocations =
+					classInfo.featuresSubfeatures[eldritchInvocation.index];
+				for (let i = 0; i < invocations.length - invocationsKnown; ++i) {
+					dispatch(
+						removeFeatureSubfeature({
+							index: eldritchInvocation.index,
+							feature: invocations[invocations.length - (i + 1)].index
+						})
+					);
+				}
 			}
-		}
-	}, [
-		dispatch,
-		classInfo.featuresSubfeatures,
-		classInfo.level,
-		classLevels,
-		eldritchInvocation
-	]);
+		},
+		[dispatch, classInfo.featuresSubfeatures, classLevels, eldritchInvocation]
+	);
 
 	const removeFeatureProficiencies = useCallback(
 		(newLevel: number) => {
@@ -494,7 +491,7 @@ const SelectedClassDisplay = ({
 		[]
 	);
 
-	const removeFavoveredEnemy = useCallback(
+	const removeFavoredEnemies = useCallback(
 		(newLevel: number) => {
 			const oldFavoredEnemy = getFavoredEnemy(classInfo.level);
 			const newFavoredEnemy = getFavoredEnemy(newLevel);
@@ -543,7 +540,8 @@ const SelectedClassDisplay = ({
 		(newValue: number) => {
 			if (newValue < classInfo.level) {
 				removeFeatureProficiencies(newValue);
-				removeFavoveredEnemy(newValue);
+				removeFavoredEnemies(newValue);
+				removeInvocations(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -556,8 +554,9 @@ const SelectedClassDisplay = ({
 			dispatch,
 			removeFeatureProficiencies,
 			classInfo.level,
-			removeFavoveredEnemy,
-			addBlankFavoredEnemies
+			removeFavoredEnemies,
+			addBlankFavoredEnemies,
+			removeInvocations
 		]
 	);
 
