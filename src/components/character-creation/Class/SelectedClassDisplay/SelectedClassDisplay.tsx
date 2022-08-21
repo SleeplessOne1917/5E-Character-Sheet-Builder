@@ -14,7 +14,7 @@ import {
 	addFeatureProficiency,
 	deselectSubclass,
 	removeAbilityBonus,
-	removeFavoredEnemies,
+	removeFavoredEnemies as removeFavoredEnemiesAction,
 	removeFeatureProficiency,
 	removeFeatureSubfeature,
 	selectSubclass,
@@ -187,17 +187,6 @@ const SelectedClassDisplay = ({
 		levelNumbers.push(i);
 	}
 
-	const handleSubclassSelect = useCallback(
-		(subclass: SrdSubclassItem) => {
-			dispatch(selectSubclass(subclass));
-		},
-		[dispatch]
-	);
-
-	const handleSubclassDeselect = useCallback(() => {
-		dispatch(deselectSubclass());
-	}, [dispatch]);
-
 	const handleAbilityScoreBonusChange = useCallback(
 		(values: (AbilityScores | null)[], index: number) => {
 			for (const abilityScoreIndex of classInfo.abilityBonuses[index]) {
@@ -315,17 +304,26 @@ const SelectedClassDisplay = ({
 			</tbody>
 		</table>
 	);
+
 	const getAllFeatures = useCallback(
-		(classLevel: number) =>
+		(
+			classLevel: number,
+			subclassIndex: string | null | undefined = classInfo?.subclass?.index
+		) =>
 			(
 				classLevels as Partial<ClassLevel>[] &
 					Pick<ClassLevel, 'level' | 'features'>[]
 			)
-				.concat(classInfo.subclass?.subclass_levels ?? [])
+				.concat(
+					subclassIndex
+						? klass.subclasses.find(sc => sc.index === subclassIndex)
+								?.subclass_levels ?? []
+						: []
+				)
 				.sort((a, b) => a.level - b.level)
 				.filter(level => level.level <= classLevel)
 				.flatMap(level => level.features),
-		[classLevels, classInfo.subclass?.subclass_levels]
+		[classLevels, classInfo.subclass?.index, klass.subclasses]
 	);
 
 	const features = getAllFeatures(classInfo.level)
@@ -399,25 +397,35 @@ const SelectedClassDisplay = ({
 		index.includes('fighting-style')
 	);
 
-	useEffect(() => {
-		if (
-			(fightingStyles.length > 0 &&
-				fightingStyles.length <
-					classInfo.featuresSubfeatures[fightingStyles[0].index]?.length) ??
-			0
-		) {
-			const theFeatures =
-				classInfo.featuresSubfeatures[fightingStyles[0].index];
-			for (const i = 0; i < theFeatures.length - fightingStyles.length; ++i) {
-				dispatch(
-					removeFeatureSubfeature({
-						index: fightingStyles[0].index,
-						feature: theFeatures[theFeatures.length - (i + 1)].index
-					})
-				);
+	const removeFightingStyles = useCallback(
+		(newLevel: number, subclassIndex?: string | null) => {
+			const newLevelFightingStyles = getAllFeatures(
+				newLevel,
+				subclassIndex
+			).filter(({ index }) => index.includes('fighting-style'));
+
+			if (
+				newLevelFightingStyles.length <
+				(classInfo.featuresSubfeatures[fightingStyles[0].index]?.length ?? 0)
+			) {
+				const theFeatures =
+					classInfo.featuresSubfeatures[fightingStyles[0].index];
+				for (
+					let i = 0;
+					i < theFeatures.length - newLevelFightingStyles.length;
+					++i
+				) {
+					dispatch(
+						removeFeatureSubfeature({
+							index: fightingStyles[0].index,
+							feature: theFeatures[theFeatures.length - (i + 1)].index
+						})
+					);
+				}
 			}
-		}
-	}, [dispatch, fightingStyles, classInfo.featuresSubfeatures]);
+		},
+		[dispatch, classInfo.featuresSubfeatures, getAllFeatures, fightingStyles]
+	);
 
 	const eldritchInvocation = features.find(({ index }) =>
 		index.includes('eldritch-invocations')
@@ -506,7 +514,7 @@ const SelectedClassDisplay = ({
 					i < oldFavoredEnemiesNumber - newFavoredEnemiesNumber;
 					++i
 				) {
-					dispatch(removeFavoredEnemies());
+					dispatch(removeFavoredEnemiesAction());
 				}
 			}
 		},
@@ -542,6 +550,7 @@ const SelectedClassDisplay = ({
 				removeFeatureProficiencies(newValue);
 				removeFavoredEnemies(newValue);
 				removeInvocations(newValue);
+				removeFightingStyles(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -556,9 +565,23 @@ const SelectedClassDisplay = ({
 			classInfo.level,
 			removeFavoredEnemies,
 			addBlankFavoredEnemies,
-			removeInvocations
+			removeInvocations,
+			removeFightingStyles
 		]
 	);
+
+	const handleSubclassSelect = useCallback(
+		(subclass: SrdSubclassItem) => {
+			dispatch(selectSubclass(subclass));
+			removeFightingStyles(classInfo.level, subclass.index);
+		},
+		[dispatch, removeFightingStyles, classInfo.level]
+	);
+
+	const handleSubclassDeselect = useCallback(() => {
+		dispatch(deselectSubclass());
+		removeFightingStyles(classInfo.level, null);
+	}, [dispatch, removeFightingStyles, classInfo.level]);
 
 	const handleFavoredEnemyChange = useCallback(
 		(index: number, values: (MonsterType | MonsterSubtype | null)[]) => {
