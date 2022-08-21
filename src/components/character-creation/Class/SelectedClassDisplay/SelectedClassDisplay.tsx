@@ -33,10 +33,7 @@ import {
 	setAbilityHighest,
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
-import {
-	getMonsterTypes,
-	getProficienciesByType
-} from '../../../../graphql/srdClientService';
+import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -53,11 +50,13 @@ import styles from './SelectedClassDisplay.module.css';
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
 	abilities: AbilityItem[];
+	monsterTypes: { monsters: MonsterType[]; humanoids: MonsterSubtype[] };
 };
 
 const SelectedClassDisplay = ({
 	klass,
-	abilities
+	abilities,
+	monsterTypes
 }: SelectedClassDisplayProps) => {
 	const dispatch = useAppDispatch();
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
@@ -452,47 +451,6 @@ const SelectedClassDisplay = ({
 		eldritchInvocation
 	]);
 
-	const [monsterTypes, setMonsterTypes] =
-		useState<{ monsters: MonsterType[]; humanoids: MonsterSubtype[] }>();
-
-	useEffect(() => {
-		if (
-			klass.index === 'ranger' &&
-			(!classInfo.favoredEnemies || classInfo.favoredEnemies.length === 0)
-		) {
-			getMonsterTypes().then(result => {
-				setMonsterTypes({
-					humanoids:
-						result.data?.humanoids
-							.map<MonsterSubtype>(({ subtype }) => subtype)
-							.reduce<MonsterSubtype[]>((acc, cur) => {
-								if (!(acc.includes(cur) || cur === 'ANY_RACE')) {
-									return [...acc, cur];
-								} else {
-									return acc;
-								}
-							}, []) ?? [],
-					monsters:
-						result.data?.monsters
-							.map<MonsterType>(({ type }) => type)
-							.reduce<MonsterType[]>((acc, cur) => {
-								if (!(acc.includes(cur) || cur === 'SWARM')) {
-									return [...acc, cur];
-								} else {
-									return acc;
-								}
-							}, []) ?? []
-				});
-
-				dispatch(addFavoredEnemies([null]));
-			});
-		}
-	}, [setMonsterTypes, klass.index, dispatch, classInfo.favoredEnemies]);
-
-	const favoredEnemies = useAppSelector(
-		state => state.editingCharacter.classInfo.favoredEnemies
-	);
-
 	const removeFeatureProficiencies = useCallback(
 		(newLevel: number) => {
 			for (const featureKey of Object.keys(classInfo.featuresProficiencies)) {
@@ -608,6 +566,10 @@ const SelectedClassDisplay = ({
 			dispatch(setFavoredEnemies({ index, enemyTypes: values }));
 		},
 		[dispatch]
+	);
+
+	const favoredEnemies = useAppSelector(
+		state => state.editingCharacter.classInfo.favoredEnemies
 	);
 
 	return (
@@ -894,12 +856,7 @@ const SelectedClassDisplay = ({
 					</h2>
 					{favoredEnemies.map((e, index) => (
 						<FavoredEnemySelector
-							monsters={
-								monsterTypes ?? {
-									monsters: [],
-									humanoids: []
-								}
-							}
+							monsters={monsterTypes}
 							key={index}
 							onChange={values => handleFavoredEnemyChange(index, values)}
 							values={e}

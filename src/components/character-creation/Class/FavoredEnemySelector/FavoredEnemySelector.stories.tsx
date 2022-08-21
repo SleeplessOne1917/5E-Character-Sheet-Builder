@@ -56,8 +56,8 @@ const Template: ComponentStory<typeof FavoredEnemySelector> = args => (
 
 export const Default = Template.bind({});
 
-export const Huamnoid = Template.bind({});
+export const Humanoid = Template.bind({});
 
-Huamnoid.args = {
+Humanoid.args = {
 	values: ['DWARF', 'ELF']
 };

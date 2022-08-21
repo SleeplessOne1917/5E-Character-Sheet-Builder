@@ -32,14 +32,16 @@ const FavoredEnemySelector = ({
 	)?.flatMap(val => val);
 
 	return (
-		<div className={classes.container}>
+		<div className={classes.container} data-testid="favored-enemy-selector">
 			<div className={classes['monster-type-container']}>
 				<label id="monster-type" className={classes.label}>
 					Select Monster Type
 				</label>
 				<Select
 					labelledBy="monster-type"
-					onChange={value => handleChange(value as MonsterType)}
+					onChange={value =>
+						handleChange((value === 'blank' ? null : value) as MonsterType)
+					}
 					options={[{ label: '\u2014', value: 'blank' }].concat(
 						monsters.monsters
 							.filter(m => !selectedTypes?.includes(m) || values.includes(m))
@@ -62,7 +64,12 @@ const FavoredEnemySelector = ({
 						</label>
 						<Select
 							labelledBy="humanoid-1"
-							onChange={value => onChange([value as MonsterSubtype, values[1]])}
+							onChange={value =>
+								onChange([
+									(value === 'blank' ? null : value) as MonsterSubtype,
+									values[1]
+								])
+							}
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								monsters.humanoids
 									.filter(
@@ -82,7 +89,12 @@ const FavoredEnemySelector = ({
 						</label>
 						<Select
 							labelledBy="humanoid-2"
-							onChange={value => onChange([values[0], value as MonsterSubtype])}
+							onChange={value =>
+								onChange([
+									values[0],
+									(value === 'blank' ? null : value) as MonsterSubtype
+								])
+							}
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								monsters.humanoids
 									.filter(

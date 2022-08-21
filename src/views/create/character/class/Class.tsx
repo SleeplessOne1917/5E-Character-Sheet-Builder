@@ -1,4 +1,10 @@
-import { AbilityItem, SrdFullClassItem, SrdItem } from '../../../../types/srd';
+import {
+	AbilityItem,
+	MonsterSubtype,
+	MonsterType,
+	SrdFullClassItem,
+	SrdItem
+} from '../../../../types/srd';
 import {
 	addProficiency,
 	removeProficiency
@@ -9,6 +15,7 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import {
+	addFavoredEnemies,
 	deselectClass,
 	selectClass
 } from '../../../../redux/features/classInfo';
@@ -25,6 +32,7 @@ import SelectedClassDisplay from '../../../../components/character-creation/Clas
 import { XCircleIcon } from '@heroicons/react/solid';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
+import { getMonsterTypes } from '../../../../graphql/srdClientService';
 
 type ClassProps = {
 	classes: SrdItem[];
@@ -94,6 +102,8 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
 	const dispatch = useAppDispatch();
 	const mainRef = useRef<HTMLDivElement>();
+	const [monsterTypes, setMonsterTypes] =
+		useState<{ monsters: MonsterType[]; humanoids: MonsterSubtype[] }>();
 
 	useEffect(() => {
 		if (consideredClassIndex) {
@@ -191,6 +201,10 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	}, [deselectConsideredClass, setShowSelectModal]);
 
 	const handleChooseSelectModal = useCallback(() => {
+		if (consideredClassIndex === 'ranger') {
+			dispatch(addFavoredEnemies([null]));
+		}
+
 		dispatch(selectClass(consideredClass as SrdFullClassItem));
 
 		for (const proficiency of consideredClass?.proficiencies ?? []) {
@@ -199,7 +213,42 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 
 		deselectConsideredClass();
 		setShowSelectModal(false);
-	}, [deselectConsideredClass, setShowSelectModal, dispatch, consideredClass]);
+	}, [
+		deselectConsideredClass,
+		setShowSelectModal,
+		dispatch,
+		consideredClass,
+		consideredClassIndex
+	]);
+
+	useEffect(() => {
+		if (classInfo.class?.index === 'ranger') {
+			getMonsterTypes().then(result => {
+				setMonsterTypes({
+					humanoids:
+						result.data?.humanoids
+							.map<MonsterSubtype>(({ subtype }) => subtype)
+							.reduce<MonsterSubtype[]>((acc, cur) => {
+								if (!(acc.includes(cur) || cur === 'ANY_RACE')) {
+									return [...acc, cur];
+								} else {
+									return acc;
+								}
+							}, []) ?? [],
+					monsters:
+						result.data?.monsters
+							.map<MonsterType>(({ type }) => type)
+							.reduce<MonsterType[]>((acc, cur) => {
+								if (!(acc.includes(cur) || cur === 'SWARM')) {
+									return [...acc, cur];
+								} else {
+									return acc;
+								}
+							}, []) ?? []
+				});
+			});
+		}
+	}, [setMonsterTypes, classInfo.class?.index]);
 
 	const tryDeselectClass = useCallback(() => {
 		setShowDeselectModal(true);
@@ -271,6 +320,12 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 						<SelectedClassDisplay
 							klass={classInfo.class}
 							abilities={abilities}
+							monsterTypes={
+								monsterTypes ?? {
+									monsters: [],
+									humanoids: []
+								}
+							}
 						/>
 					</>
 				)}
