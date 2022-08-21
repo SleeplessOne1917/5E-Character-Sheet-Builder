@@ -1,9 +1,11 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
+	MonsterSubtype,
+	MonsterType,
 	SrdFullClassItem,
 	SrdProficiencyItem,
 	SrdSubclassItem
 } from '../../types/srd';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import AbilityScores from '../../types/abilityScores';
 import { SrdFeatureItem } from './../../types/srd';
@@ -15,6 +17,7 @@ export type ClassInfoState = {
 	abilityBonuses: (AbilityScores | null)[][];
 	featuresSubfeatures: { [key: string]: SrdFeatureItem[] };
 	featuresProficiencies: { [key: string]: SrdProficiencyItem[] };
+	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
 };
 
 type SetAbilityBonusPayload = {
@@ -120,6 +123,42 @@ const classInfoSlice = createSlice({
 			state.featuresProficiencies[index] = state.featuresProficiencies[
 				index
 			].filter(prof => prof.index !== proficiency);
+		},
+		addFavoredEnemies: (
+			state,
+			{ payload }: PayloadAction<(MonsterType | MonsterSubtype | null)[]>
+		) => {
+			if (!state.favoredEnemies) {
+				state.favoredEnemies = [];
+			}
+
+			state.favoredEnemies = [...state.favoredEnemies, payload];
+		},
+		removeFavoredEnemies: state => {
+			if (!state.favoredEnemies) {
+				state.favoredEnemies = [];
+			}
+
+			state.favoredEnemies = state.favoredEnemies.slice(0, -1);
+		},
+		setFavoredEnemies: (
+			state,
+			{
+				payload: { index, enemyTypes }
+			}: PayloadAction<{
+				index: number;
+				enemyTypes: (MonsterType | MonsterSubtype | null)[];
+			}>
+		) => {
+			if (!state.favoredEnemies) {
+				state.favoredEnemies = [];
+
+				for (let i = 0; i < index; ++i) {
+					state.favoredEnemies = [...state.favoredEnemies, [null]];
+				}
+			}
+
+			state.favoredEnemies[index] = enemyTypes;
 		}
 	}
 });
@@ -136,7 +175,10 @@ export const {
 	addFeatureSubfeature,
 	removeFeatureSubfeature,
 	addFeatureProficiency,
-	removeFeatureProficiency
+	removeFeatureProficiency,
+	addFavoredEnemies,
+	removeFavoredEnemies,
+	setFavoredEnemies
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

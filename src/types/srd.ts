@@ -16,6 +16,42 @@ export type ProficiencyType =
 	| 'GAMING_SETS'
 	| 'VEHICLES';
 
+export type MonsterType =
+	| 'BEAST'
+	| 'MONSTROSITY'
+	| 'DRAGON'
+	| 'HUMANOID'
+	| 'UNDEAD'
+	| 'FIEND'
+	| 'CELESTIAL'
+	| 'CONSTRUCT'
+	| 'GIANT'
+	| 'ELEMENTAL'
+	| 'FEY'
+	| 'ABERRATION'
+	| 'OOZE'
+	| 'SWARM'
+	| 'PLANT';
+
+export type MonsterSubtype =
+	| 'ANY_RACE'
+	| 'HUMAN'
+	| 'DWARF'
+	| 'ELF'
+	| 'GOBLINOID'
+	| 'MERFOLK'
+	| 'SHAPECHANGER'
+	| 'DEMON'
+	| 'DEVIL'
+	| 'ORC'
+	| 'SAHUAGIN'
+	| 'TITAN'
+	| 'KOBOLD'
+	| 'GNOLL'
+	| 'GRIMLOCK'
+	| 'LIZARDFOLK'
+	| 'GNOME';
+
 export interface SrdProficiencyItem extends SrdItem {
 	type: ProficiencyType;
 }

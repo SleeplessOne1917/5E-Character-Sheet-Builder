@@ -1,6 +1,8 @@
 import {
 	AbilityItem,
 	ClassLevel,
+	MonsterSubtype,
+	MonsterType,
 	SrdFeatureItem,
 	SrdFullClassItem,
 	SrdProficiencyItem,
@@ -8,13 +10,16 @@ import {
 } from '../../../../types/srd';
 import {
 	addAbilityBonus,
+	addFavoredEnemies,
 	addFeatureProficiency,
 	deselectSubclass,
 	removeAbilityBonus,
+	removeFavoredEnemies,
 	removeFeatureProficiency,
 	removeFeatureSubfeature,
 	selectSubclass,
 	setAbilityBonus,
+	setFavoredEnemies,
 	setLevel
 } from '../../../../redux/features/classInfo';
 import {
@@ -28,17 +33,21 @@ import {
 	setAbilityHighest,
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
+import {
+	getMonsterTypes,
+	getProficienciesByType
+} from '../../../../graphql/srdClientService';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useState } from 'react';
 
 import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
 import AbilityScores from '../../../../types/abilityScores';
 import Descriptor from '../../Descriptor/Descriptor';
+import FavoredEnemySelector from '../FavoredEnemySelector/FavoredEnemySelector';
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
-import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
 
 type SelectedClassDisplayProps = {
@@ -179,13 +188,6 @@ const SelectedClassDisplay = ({
 		levelNumbers.push(i);
 	}
 
-	const handleLevelChange = useCallback(
-		(value: number) => {
-			dispatch(setLevel(value));
-		},
-		[dispatch]
-	);
-
 	const handleSubclassSelect = useCallback(
 		(subclass: SrdSubclassItem) => {
 			dispatch(selectSubclass(subclass));
@@ -314,15 +316,20 @@ const SelectedClassDisplay = ({
 			</tbody>
 		</table>
 	);
+	const getAllFeatures = useCallback(
+		(classLevel: number) =>
+			(
+				classLevels as Partial<ClassLevel>[] &
+					Pick<ClassLevel, 'level' | 'features'>[]
+			)
+				.concat(classInfo.subclass?.subclass_levels ?? [])
+				.sort((a, b) => a.level - b.level)
+				.filter(level => level.level <= classLevel)
+				.flatMap(level => level.features),
+		[classLevels, classInfo.subclass?.subclass_levels]
+	);
 
-	const features = (
-		classLevels as Partial<ClassLevel>[] &
-			Pick<ClassLevel, 'level' | 'features'>[]
-	)
-		.concat(classInfo.subclass?.subclass_levels ?? [])
-		.sort((a, b) => a.level - b.level)
-		.filter(level => level.level <= classInfo.level)
-		.flatMap(level => level.features)
+	const features = getAllFeatures(classInfo.level)
 		.filter(
 			feature =>
 				!(
@@ -354,10 +361,12 @@ const SelectedClassDisplay = ({
 		useState<SrdProficiencyItem[]>();
 
 	useEffect(() => {
-		getProficienciesByType('SAVING_THROWS').then(result => {
-			setAllSavingThrowProficiencies(result.data?.proficiencies ?? []);
-		});
-	}, [setAllSavingThrowProficiencies]);
+		if (klass.index === 'monk') {
+			getProficienciesByType('SAVING_THROWS').then(result => {
+				setAllSavingThrowProficiencies(result.data?.proficiencies ?? []);
+			});
+		}
+	}, [setAllSavingThrowProficiencies, klass.index]);
 
 	useEffect(() => {
 		if (klass.index === 'monk') {
@@ -374,22 +383,6 @@ const SelectedClassDisplay = ({
 						addFeatureProficiency({ index: 'diamond-soul', proficiency: prof })
 					);
 					dispatch(addProficiency(prof));
-				}
-			}
-
-			if (
-				classInfo.level < 18 &&
-				(classInfo.featuresProficiencies['diamond-soul']?.length ?? 0) > 0
-			) {
-				for (const prof of classInfo.featuresProficiencies['diamond-soul'] ??
-					[]) {
-					dispatch(removeProficiency(prof.index));
-					dispatch(
-						removeFeatureProficiency({
-							index: 'diamond-soul',
-							proficiency: prof.index
-						})
-					);
 				}
 			}
 		}
@@ -458,6 +451,164 @@ const SelectedClassDisplay = ({
 		classLevels,
 		eldritchInvocation
 	]);
+
+	const [monsterTypes, setMonsterTypes] =
+		useState<{ monsters: MonsterType[]; humanoids: MonsterSubtype[] }>();
+
+	useEffect(() => {
+		if (
+			klass.index === 'ranger' &&
+			(!classInfo.favoredEnemies || classInfo.favoredEnemies.length === 0)
+		) {
+			getMonsterTypes().then(result => {
+				setMonsterTypes({
+					humanoids:
+						result.data?.humanoids
+							.map<MonsterSubtype>(({ subtype }) => subtype)
+							.reduce<MonsterSubtype[]>((acc, cur) => {
+								if (!(acc.includes(cur) || cur === 'ANY_RACE')) {
+									return [...acc, cur];
+								} else {
+									return acc;
+								}
+							}, []) ?? [],
+					monsters:
+						result.data?.monsters
+							.map<MonsterType>(({ type }) => type)
+							.reduce<MonsterType[]>((acc, cur) => {
+								if (!(acc.includes(cur) || cur === 'SWARM')) {
+									return [...acc, cur];
+								} else {
+									return acc;
+								}
+							}, []) ?? []
+				});
+
+				dispatch(addFavoredEnemies([null]));
+			});
+		}
+	}, [setMonsterTypes, klass.index, dispatch, classInfo.favoredEnemies]);
+
+	const favoredEnemies = useAppSelector(
+		state => state.editingCharacter.classInfo.favoredEnemies
+	);
+
+	const removeFeatureProficiencies = useCallback(
+		(newLevel: number) => {
+			for (const featureKey of Object.keys(classInfo.featuresProficiencies)) {
+				if (!getAllFeatures(newLevel).some(f => f.index === featureKey)) {
+					for (const { index } of classInfo.featuresProficiencies[featureKey]) {
+						dispatch(
+							removeFeatureProficiency({
+								index: featureKey,
+								proficiency: index
+							})
+						);
+
+						dispatch(removeProficiency(index));
+					}
+				}
+			}
+		},
+		[classInfo.featuresProficiencies, dispatch, getAllFeatures]
+	);
+
+	const getFavoredEnemy = useCallback(
+		(level: number) =>
+			getAllFeatures(level).reduce<SrdFeatureItem | null>((acc, cur) => {
+				if (/Favored Enemy/i.test(cur.name)) {
+					return cur;
+				} else {
+					return acc;
+				}
+			}, null),
+		[getAllFeatures]
+	);
+
+	const getFavoredEnemyNumber = useCallback(
+		(favoredEnemy?: SrdFeatureItem | null) =>
+			favoredEnemy
+				? parseInt(
+						(/.*\((\d).*\)/i.exec(favoredEnemy.name) as RegExpExecArray)[1],
+						10
+				  )
+				: 0,
+		[]
+	);
+
+	const removeFavoveredEnemy = useCallback(
+		(newLevel: number) => {
+			const oldFavoredEnemy = getFavoredEnemy(classInfo.level);
+			const newFavoredEnemy = getFavoredEnemy(newLevel);
+
+			const oldFavoredEnemiesNumber = getFavoredEnemyNumber(oldFavoredEnemy);
+
+			const newFavoredEnemiesNumber = getFavoredEnemyNumber(newFavoredEnemy);
+
+			if (newFavoredEnemiesNumber < oldFavoredEnemiesNumber) {
+				for (
+					let i = 0;
+					i < oldFavoredEnemiesNumber - newFavoredEnemiesNumber;
+					++i
+				) {
+					dispatch(removeFavoredEnemies());
+				}
+			}
+		},
+		[dispatch, classInfo.level, getFavoredEnemy, getFavoredEnemyNumber]
+	);
+
+	const addBlankFavoredEnemies = useCallback(
+		(newLevel: number) => {
+			const oldFavoredEnemy = getFavoredEnemy(classInfo.level);
+
+			const newFavoredEnemy = getFavoredEnemy(newLevel);
+
+			const oldFavoredEnemiesNumber = getFavoredEnemyNumber(oldFavoredEnemy);
+
+			const newFavoredEnemiesNumber = getFavoredEnemyNumber(newFavoredEnemy);
+
+			if (newFavoredEnemiesNumber > oldFavoredEnemiesNumber) {
+				for (
+					let i = 0;
+					i < newFavoredEnemiesNumber - oldFavoredEnemiesNumber;
+					++i
+				) {
+					dispatch(addFavoredEnemies([null]));
+				}
+			}
+		},
+		[dispatch, classInfo.level, getFavoredEnemy, getFavoredEnemyNumber]
+	);
+
+	const handleLevelChange = useCallback(
+		(newValue: number) => {
+			if (newValue < classInfo.level) {
+				removeFeatureProficiencies(newValue);
+				removeFavoveredEnemy(newValue);
+			}
+
+			if (newValue > classInfo.level) {
+				addBlankFavoredEnemies(newValue);
+			}
+
+			dispatch(setLevel(newValue));
+		},
+		[
+			dispatch,
+			removeFeatureProficiencies,
+			classInfo.level,
+			removeFavoveredEnemy,
+			addBlankFavoredEnemies
+		]
+	);
+
+	const handleFavoredEnemyChange = useCallback(
+		(index: number, values: (MonsterType | MonsterSubtype | null)[]) => {
+			dispatch(setFavoredEnemies({ index, enemyTypes: values }));
+		},
+		[dispatch]
+	);
 
 	return (
 		<div className={styles.container}>
@@ -735,6 +886,26 @@ const SelectedClassDisplay = ({
 						) as SrdFeatureItem[]
 					}
 				/>
+			)}
+			{favoredEnemies && favoredEnemies.length && (
+				<>
+					<h2 className={styles.heading}>
+						Favored Enem{favoredEnemies.length === 1 ? 'y' : 'ies'}
+					</h2>
+					{favoredEnemies.map((e, index) => (
+						<FavoredEnemySelector
+							monsters={
+								monsterTypes ?? {
+									monsters: [],
+									humanoids: []
+								}
+							}
+							key={index}
+							onChange={values => handleFavoredEnemyChange(index, values)}
+							values={e}
+						/>
+					))}
+				</>
 			)}
 			{fightingStyles.length > 0 && (
 				<FeatureChoiceSelector

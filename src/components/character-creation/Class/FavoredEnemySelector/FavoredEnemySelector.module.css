@@ -1,0 +1,27 @@
+.container {
+	border: 3px solid var(--davy);
+	background-color: var(--heaven-light);
+	border-radius: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0.5rem;
+	width: fit-content;
+	margin: 1rem;
+}
+
+.humanoid-container {
+	display: flex;
+}
+
+.label {
+	font-size: 1.3rem;
+	padding: 0.3rem;
+}
+
+.monster-type-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0.5rem;
+}
