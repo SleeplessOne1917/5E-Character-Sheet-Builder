@@ -45,6 +45,10 @@
     background-color: var(--highlight-light);
 }
 
+.even-row ::selection {
+    background-color: var(--highlight);
+}
+
 .odd-row {
     background-color: var(--heaven-light);
 }

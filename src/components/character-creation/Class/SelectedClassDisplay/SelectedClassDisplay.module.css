@@ -25,6 +25,10 @@
     background-color: var(--highlight-light);
 }
 
+.odd ::selection {
+    background-color: var(--highlight);
+}
+
 .ordinal {
     font-size: 0.75rem;
 }
@@ -45,6 +49,10 @@
 
 .current-level-row {
     background-color: var(--highlight) !important;
+}
+
+.current-level-row ::selection {
+    background-color: var(--highlight-light);
 }
 
 .heading {

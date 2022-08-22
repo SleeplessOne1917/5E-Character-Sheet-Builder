@@ -56,7 +56,11 @@
     font-size: 1.2rem;
 }
 
-.prerequisites{
+.selected .subfeature-description ::selection {
+    background-color: var(--highlight);
+  }
+
+.prerequisites {
     font-size: 1.1rem;
     font-style: italic;
     margin: 0.5rem;
