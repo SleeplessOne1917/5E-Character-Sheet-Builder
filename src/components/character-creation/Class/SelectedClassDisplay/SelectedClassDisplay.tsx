@@ -75,60 +75,6 @@ const SelectedClassDisplay = ({
 		.sort((a, b) => a.level - b.level)
 		.filter(level => !level.subclass);
 
-	useEffect(() => {
-		const numAbilityScoreBonuses =
-			classLevels[classInfo.level - 1].ability_score_bonuses;
-
-		if (numAbilityScoreBonuses > classInfo.abilityBonuses.length) {
-			for (
-				let i = 0;
-				i < numAbilityScoreBonuses - classInfo.abilityBonuses.length;
-				++i
-			) {
-				dispatch(addAbilityBonus([null, null]));
-			}
-		}
-
-		if (numAbilityScoreBonuses < classInfo.abilityBonuses.length) {
-			for (
-				let i = 0;
-				i < classInfo.abilityBonuses.length - numAbilityScoreBonuses;
-				++i
-			) {
-				const lastImprovement =
-					classInfo.abilityBonuses[classInfo.abilityBonuses.length - (i + 1)];
-				lastImprovement.forEach(improvement => {
-					if (improvement !== null) {
-						dispatch(decrementAbilityBonus(improvement));
-					}
-				});
-				dispatch(removeAbilityBonus());
-			}
-		}
-
-		if (classInfo.level === 20 && classInfo.class?.index === 'barbarian') {
-			dispatch(setAbilityHighest({ abilityIndex: 'con', value: 24 }));
-			dispatch(setAbilityHighest({ abilityIndex: 'str', value: 24 }));
-
-			dispatch(updateMiscBonus({ abilityIndex: 'con', value: 4 }));
-			dispatch(updateMiscBonus({ abilityIndex: 'str', value: 4 }));
-		}
-
-		if (classInfo.level < 20 && classInfo.class?.index === 'barbarian') {
-			dispatch(resetAbilityHighest('con'));
-			dispatch(resetAbilityHighest('str'));
-
-			dispatch(updateMiscBonus({ abilityIndex: 'con', value: null }));
-			dispatch(updateMiscBonus({ abilityIndex: 'str', value: null }));
-		}
-	}, [
-		dispatch,
-		classInfo.level,
-		classInfo.abilityBonuses,
-		classLevels,
-		classInfo.class?.index
-	]);
-
 	const subclassFlavor = klass.subclasses[0].subclass_flavor;
 	const subclassLevelNumbers = klass.subclasses[0].subclass_levels
 		.map(sc => sc.level)
@@ -369,6 +315,85 @@ const SelectedClassDisplay = ({
 			});
 		}
 	}, [setAllSavingThrowProficiencies, klass.index]);
+
+	const removeAbilityScoreBonuses = useCallback(
+		(newLevel: number) => {
+			const numAbilityScoreBonuses =
+				classLevels[newLevel - 1].ability_score_bonuses;
+
+			if (numAbilityScoreBonuses < classInfo.abilityBonuses.length) {
+				for (
+					let i = 0;
+					i < classInfo.abilityBonuses.length - numAbilityScoreBonuses;
+					++i
+				) {
+					const lastImprovement =
+						classInfo.abilityBonuses[classInfo.abilityBonuses.length - (i + 1)];
+
+					lastImprovement.forEach(improvement => {
+						if (improvement !== null) {
+							dispatch(decrementAbilityBonus(improvement));
+						}
+					});
+
+					dispatch(removeAbilityBonus());
+				}
+			}
+		},
+		[dispatch, classLevels, classInfo.abilityBonuses]
+	);
+
+	const addBlankAbilityScoreBonuses = useCallback(
+		(newLevel: number) => {
+			const numAbilityScoreBonuses =
+				classLevels[newLevel - 1].ability_score_bonuses;
+
+			if (numAbilityScoreBonuses > classInfo.abilityBonuses.length) {
+				for (
+					let i = 0;
+					i < numAbilityScoreBonuses - classInfo.abilityBonuses.length;
+					++i
+				) {
+					dispatch(addAbilityBonus([null, null]));
+				}
+			}
+		},
+		[dispatch, classInfo.abilityBonuses.length, classLevels]
+	);
+
+	const addPrimalChampion = useCallback(
+		(newLevel: number) => {
+			if (
+				classInfo.level < 20 &&
+				newLevel === 20 &&
+				klass.index === 'barbarian'
+			) {
+				dispatch(setAbilityHighest({ abilityIndex: 'con', value: 24 }));
+				dispatch(setAbilityHighest({ abilityIndex: 'str', value: 24 }));
+
+				dispatch(updateMiscBonus({ abilityIndex: 'con', value: 4 }));
+				dispatch(updateMiscBonus({ abilityIndex: 'str', value: 4 }));
+			}
+		},
+		[dispatch, classInfo.level, klass.index]
+	);
+
+	const removePrimalChampion = useCallback(
+		(newLevel: number) => {
+			if (
+				newLevel < 20 &&
+				classInfo.level === 20 &&
+				klass.index === 'barbarian'
+			) {
+				dispatch(resetAbilityHighest('con'));
+				dispatch(resetAbilityHighest('str'));
+
+				dispatch(updateMiscBonus({ abilityIndex: 'con', value: null }));
+				dispatch(updateMiscBonus({ abilityIndex: 'str', value: null }));
+			}
+		},
+		[dispatch, classInfo.level, klass.index]
+	);
 
 	const addDiamondSoul = useCallback(
 		(newLevel: number) => {
@@ -620,12 +645,16 @@ const SelectedClassDisplay = ({
 				removeInvocations(newValue);
 				removeFightingStyles(newValue);
 				removeFavoredTerrains(newValue);
+				removeAbilityScoreBonuses(newValue);
+				removePrimalChampion(newValue);
 			}
 
 			if (newValue > classInfo.level) {
 				addBlankFavoredEnemies(newValue);
 				addDiamondSoul(newValue);
 				addBlankFavoredTerrains(newValue);
+				addBlankAbilityScoreBonuses(newValue);
+				addPrimalChampion(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -640,7 +669,11 @@ const SelectedClassDisplay = ({
 			removeFightingStyles,
 			addDiamondSoul,
 			removeFavoredTerrains,
-			addBlankFavoredTerrains
+			addBlankFavoredTerrains,
+			addBlankAbilityScoreBonuses,
+			removeAbilityScoreBonuses,
+			addPrimalChampion,
+			removePrimalChampion
 		]
 	);
 
