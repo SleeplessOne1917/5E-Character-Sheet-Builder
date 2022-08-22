@@ -302,3 +302,11 @@ export interface SrdFullClassItem extends SrdItem {
 	starting_equipment_options: SrdStartingEquipmentChoice[];
 	subclasses: SrdSubclassItem[];
 }
+
+export type Terrain =
+	| 'arctic'
+	| 'coast'
+	| 'desert'
+	| 'forest'
+	| 'grassland'
+	| 'swamp';

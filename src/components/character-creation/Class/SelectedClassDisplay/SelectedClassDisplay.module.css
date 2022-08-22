@@ -105,3 +105,17 @@
     width: 7rem;
     height: 7rem;
 }
+
+.favored-enemy-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.favored-terrain-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}

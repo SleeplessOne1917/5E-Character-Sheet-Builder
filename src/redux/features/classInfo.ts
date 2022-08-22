@@ -3,7 +3,8 @@ import {
 	MonsterType,
 	SrdFullClassItem,
 	SrdProficiencyItem,
-	SrdSubclassItem
+	SrdSubclassItem,
+	Terrain
 } from '../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
@@ -18,6 +19,7 @@ export type ClassInfoState = {
 	featuresSubfeatures: { [key: string]: SrdFeatureItem[] };
 	featuresProficiencies: { [key: string]: SrdProficiencyItem[] };
 	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
+	favoredTerrains?: (Terrain | null)[];
 };
 
 type SetAbilityBonusPayload = {
@@ -159,6 +161,36 @@ const classInfoSlice = createSlice({
 			}
 
 			state.favoredEnemies[index] = enemyTypes;
+		},
+		addFavoredTerrain: (state, { payload }: PayloadAction<Terrain | null>) => {
+			if (!state.favoredTerrains) {
+				state.favoredTerrains = [];
+			}
+
+			state.favoredTerrains = [...state.favoredTerrains, payload];
+		},
+		removeFavoredTerrain: state => {
+			if (!state.favoredTerrains) {
+				state.favoredTerrains = [];
+			}
+
+			state.favoredTerrains = state.favoredTerrains.slice(0, -1);
+		},
+		setFavoredTerrain: (
+			state,
+			{
+				payload: { index, terrain }
+			}: PayloadAction<{ index: number; terrain: Terrain | null }>
+		) => {
+			if (!state.favoredTerrains) {
+				state.favoredTerrains = [];
+
+				for (let i = 0; i < index; ++i) {
+					state.favoredTerrains = [...state.favoredTerrains, null];
+				}
+			}
+
+			state.favoredTerrains[index] = terrain;
 		}
 	}
 });
@@ -178,7 +210,10 @@ export const {
 	removeFeatureProficiency,
 	addFavoredEnemies,
 	removeFavoredEnemies,
-	setFavoredEnemies
+	setFavoredEnemies,
+	addFavoredTerrain,
+	removeFavoredTerrain,
+	setFavoredTerrain
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

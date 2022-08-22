@@ -2,7 +2,7 @@
 
 exports[`renders correctly when default 1`] = `
 <div
-  class="container"
+  class="container selected"
   data-testid="favored-enemy-selector"
 >
   <div
@@ -193,7 +193,7 @@ exports[`renders correctly when default 1`] = `
 
 exports[`renders correctly when humanoid 1`] = `
 <div
-  class="container"
+  class="container selected"
   data-testid="favored-enemy-selector"
 >
   <div

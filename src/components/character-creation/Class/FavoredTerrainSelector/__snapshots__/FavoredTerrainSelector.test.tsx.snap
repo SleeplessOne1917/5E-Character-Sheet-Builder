@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="container selected"
+  data-testid="favored-terrain-selector"
+>
+  <label
+    class="label"
+    id="select-terrain"
+  >
+    Select Terrain
+  </label>
+  <div
+    aria-labelledby="select-terrain"
+    class="container"
+    data-testid="select"
+    style="font-size: 1.2rem;"
+  >
+    <button
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      class="button"
+      data-testid="select-button"
+      type="button"
+    >
+      Desert
+      <svg
+        aria-hidden="true"
+        class="icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </button>
+    <ul
+      aria-activedescendant="Desert"
+      class="list"
+      data-testid="select-list"
+      role="listbox"
+      style="display: none;"
+      tabindex="-1"
+    >
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-blank"
+        role="option"
+        tabindex="0"
+      >
+        —
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-arctic"
+        role="option"
+        tabindex="0"
+      >
+        Arctic
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-coast"
+        role="option"
+        tabindex="0"
+      >
+        Coast
+      </li>
+      <li
+        aria-selected="true"
+        class="item selected"
+        data-testid="data-desert"
+        role="option"
+        tabindex="0"
+      >
+        Desert
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-forest"
+        role="option"
+        tabindex="0"
+      >
+        Forest
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-grassland"
+        role="option"
+        tabindex="0"
+      >
+        Grassland
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-swamp"
+        role="option"
+        tabindex="0"
+      >
+        Swamp
+      </li>
+    </ul>
+  </div>
+</div>
+`;

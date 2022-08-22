@@ -32,7 +32,12 @@ const FavoredEnemySelector = ({
 	)?.flatMap(val => val);
 
 	return (
-		<div className={classes.container} data-testid="favored-enemy-selector">
+		<div
+			className={`${classes.container}${
+				!values.includes(null) ? ` ${classes.selected}` : ''
+			}`}
+			data-testid="favored-enemy-selector"
+		>
 			<div className={classes['monster-type-container']}>
 				<label id="monster-type" className={classes.label}>
 					Select Monster Type

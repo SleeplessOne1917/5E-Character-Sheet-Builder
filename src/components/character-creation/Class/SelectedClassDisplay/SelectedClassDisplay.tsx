@@ -6,20 +6,24 @@ import {
 	SrdFeatureItem,
 	SrdFullClassItem,
 	SrdProficiencyItem,
-	SrdSubclassItem
+	SrdSubclassItem,
+	Terrain
 } from '../../../../types/srd';
 import {
 	addAbilityBonus,
 	addFavoredEnemies,
+	addFavoredTerrain,
 	addFeatureProficiency,
 	deselectSubclass,
 	removeAbilityBonus,
 	removeFavoredEnemies as removeFavoredEnemiesAction,
+	removeFavoredTerrain,
 	removeFeatureProficiency,
 	removeFeatureSubfeature,
 	selectSubclass,
 	setAbilityBonus,
 	setFavoredEnemies,
+	setFavoredTerrain,
 	setLevel
 } from '../../../../redux/features/classInfo';
 import {
@@ -46,6 +50,7 @@ import Select from '../../../Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './SelectedClassDisplay.module.css';
+import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -494,15 +499,27 @@ const SelectedClassDisplay = ({
 		[getAllFeatures]
 	);
 
-	const getFavoredEnemyNumber = useCallback(
-		(favoredEnemy?: SrdFeatureItem | null) =>
-			favoredEnemy
+	const getFavoredNumber = useCallback(
+		(favored?: SrdFeatureItem | null) =>
+			favored
 				? parseInt(
-						(/.*\((\d).*\)/i.exec(favoredEnemy.name) as RegExpExecArray)[1],
+						(/.*\((\d).*\)/i.exec(favored.name) as RegExpExecArray)[1],
 						10
 				  )
 				: 0,
 		[]
+	);
+
+	const getNaturalExplorer = useCallback(
+		(level: number) =>
+			getAllFeatures(level).reduce<SrdFeatureItem | null>((acc, cur) => {
+				if (/Natural Explorer/i.test(cur.name)) {
+					return cur;
+				} else {
+					return acc;
+				}
+			}, null),
+		[getAllFeatures]
 	);
 
 	const removeFavoredEnemies = useCallback(
@@ -510,9 +527,9 @@ const SelectedClassDisplay = ({
 			const oldFavoredEnemy = getFavoredEnemy(classInfo.level);
 			const newFavoredEnemy = getFavoredEnemy(newLevel);
 
-			const oldFavoredEnemiesNumber = getFavoredEnemyNumber(oldFavoredEnemy);
+			const oldFavoredEnemiesNumber = getFavoredNumber(oldFavoredEnemy);
 
-			const newFavoredEnemiesNumber = getFavoredEnemyNumber(newFavoredEnemy);
+			const newFavoredEnemiesNumber = getFavoredNumber(newFavoredEnemy);
 
 			if (newFavoredEnemiesNumber < oldFavoredEnemiesNumber) {
 				for (
@@ -524,7 +541,7 @@ const SelectedClassDisplay = ({
 				}
 			}
 		},
-		[dispatch, classInfo.level, getFavoredEnemy, getFavoredEnemyNumber]
+		[dispatch, classInfo.level, getFavoredEnemy, getFavoredNumber]
 	);
 
 	const addBlankFavoredEnemies = useCallback(
@@ -533,9 +550,9 @@ const SelectedClassDisplay = ({
 
 			const newFavoredEnemy = getFavoredEnemy(newLevel);
 
-			const oldFavoredEnemiesNumber = getFavoredEnemyNumber(oldFavoredEnemy);
+			const oldFavoredEnemiesNumber = getFavoredNumber(oldFavoredEnemy);
 
-			const newFavoredEnemiesNumber = getFavoredEnemyNumber(newFavoredEnemy);
+			const newFavoredEnemiesNumber = getFavoredNumber(newFavoredEnemy);
 
 			if (newFavoredEnemiesNumber > oldFavoredEnemiesNumber) {
 				for (
@@ -547,7 +564,52 @@ const SelectedClassDisplay = ({
 				}
 			}
 		},
-		[dispatch, classInfo.level, getFavoredEnemy, getFavoredEnemyNumber]
+		[dispatch, classInfo.level, getFavoredEnemy, getFavoredNumber]
+	);
+
+	const removeFavoredTerrains = useCallback(
+		(newLevel: number) => {
+			const oldFavoredTerrain = getNaturalExplorer(classInfo.level);
+			const newFavoredTerrain = getNaturalExplorer(newLevel);
+
+			const oldFavoredTerrainsNumber = getFavoredNumber(oldFavoredTerrain);
+
+			const newFavoredTerrainsNumber = getFavoredNumber(newFavoredTerrain);
+
+			if (newFavoredTerrainsNumber < oldFavoredTerrainsNumber) {
+				for (
+					let i = 0;
+					i < oldFavoredTerrainsNumber - newFavoredTerrainsNumber;
+					++i
+				) {
+					dispatch(removeFavoredTerrain());
+				}
+			}
+		},
+		[dispatch, classInfo.level, getNaturalExplorer, getFavoredNumber]
+	);
+
+	const addBlankFavoredTerrains = useCallback(
+		(newLevel: number) => {
+			const oldFavoredTerrain = getNaturalExplorer(classInfo.level);
+
+			const newFavoredTerrain = getNaturalExplorer(newLevel);
+
+			const oldFavoredTerrainsNumber = getFavoredNumber(oldFavoredTerrain);
+
+			const newFavoredTerrainsNumber = getFavoredNumber(newFavoredTerrain);
+
+			if (newFavoredTerrainsNumber > oldFavoredTerrainsNumber) {
+				for (
+					let i = 0;
+					i < newFavoredTerrainsNumber - oldFavoredTerrainsNumber;
+					++i
+				) {
+					dispatch(addFavoredTerrain(null));
+				}
+			}
+		},
+		[dispatch, classInfo.level, getNaturalExplorer, getFavoredNumber]
 	);
 
 	const handleLevelChange = useCallback(
@@ -557,11 +619,13 @@ const SelectedClassDisplay = ({
 				removeFavoredEnemies(newValue);
 				removeInvocations(newValue);
 				removeFightingStyles(newValue);
+				removeFavoredTerrains(newValue);
 			}
 
 			if (newValue > classInfo.level) {
 				addBlankFavoredEnemies(newValue);
 				addDiamondSoul(newValue);
+				addBlankFavoredTerrains(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -574,7 +638,9 @@ const SelectedClassDisplay = ({
 			addBlankFavoredEnemies,
 			removeInvocations,
 			removeFightingStyles,
-			addDiamondSoul
+			addDiamondSoul,
+			removeFavoredTerrains,
+			addBlankFavoredTerrains
 		]
 	);
 
@@ -598,8 +664,19 @@ const SelectedClassDisplay = ({
 		[dispatch]
 	);
 
+	const handleFavoredTerrainChange = useCallback(
+		(index: number, value: Terrain | null) => {
+			dispatch(setFavoredTerrain({ index, terrain: value }));
+		},
+		[dispatch]
+	);
+
 	const favoredEnemies = useAppSelector(
 		state => state.editingCharacter.classInfo.favoredEnemies
+	);
+
+	const favoredTerrains = useAppSelector(
+		state => state.editingCharacter.classInfo.favoredTerrains
 	);
 
 	return (
@@ -879,19 +956,35 @@ const SelectedClassDisplay = ({
 					}
 				/>
 			)}
-			{favoredEnemies && favoredEnemies.length && (
+			{favoredEnemies && favoredEnemies.length > 0 && (
 				<>
 					<h2 className={styles.heading}>
 						Favored Enem{favoredEnemies.length === 1 ? 'y' : 'ies'}
 					</h2>
-					{favoredEnemies.map((e, index) => (
-						<FavoredEnemySelector
-							monsters={monsterTypes}
-							key={index}
-							onChange={values => handleFavoredEnemyChange(index, values)}
-							values={e}
-						/>
-					))}
+					<div className={styles['favored-enemy-container']}>
+						{favoredEnemies.map((e, index) => (
+							<FavoredEnemySelector
+								monsters={monsterTypes}
+								key={index}
+								onChange={values => handleFavoredEnemyChange(index, values)}
+								values={e}
+							/>
+						))}
+					</div>
+				</>
+			)}
+			{favoredTerrains && favoredTerrains.length > 0 && (
+				<>
+					<h2 className={styles.heading}>Natural Explorer</h2>
+					<div className={styles['favored-terrain-container']}>
+						{favoredTerrains.map((t, index) => (
+							<FavoredTerrainSelector
+								key={index}
+								value={t}
+								onChange={value => handleFavoredTerrainChange(index, value)}
+							/>
+						))}
+					</div>
 				</>
 			)}
 			{fightingStyles.length > 0 && (

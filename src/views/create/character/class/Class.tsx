@@ -16,6 +16,7 @@ import {
 } from '../../../../redux/features/abilityScores';
 import {
 	addFavoredEnemies,
+	addFavoredTerrain,
 	deselectClass,
 	selectClass
 } from '../../../../redux/features/classInfo';
@@ -203,6 +204,7 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	const handleChooseSelectModal = useCallback(() => {
 		if (consideredClassIndex === 'ranger') {
 			dispatch(addFavoredEnemies([null]));
+			dispatch(addFavoredTerrain(null));
 		}
 
 		dispatch(selectClass(consideredClass as SrdFullClassItem));
