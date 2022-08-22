@@ -77,9 +77,7 @@ const FavoredEnemySelector = ({
 							}
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								monsters.humanoids
-									.filter(
-										h => !selectedTypes?.includes(h) || values.includes(h)
-									)
+									.filter(h => !selectedTypes?.includes(h) || values[0] === h)
 									.map(h => ({
 										value: h,
 										label: h[0] + h.slice(1).toLowerCase()
@@ -102,9 +100,7 @@ const FavoredEnemySelector = ({
 							}
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								monsters.humanoids
-									.filter(
-										h => !selectedTypes?.includes(h) || values.includes(h)
-									)
+									.filter(h => !selectedTypes?.includes(h) || values[1] === h)
 									.map(h => ({
 										value: h,
 										label: h[0] + h.slice(1).toLowerCase()
