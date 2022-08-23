@@ -39,7 +39,6 @@ import {
 	setAbilityHighest,
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
-import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -47,14 +46,15 @@ import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
 import AbilityScores from '../../../../types/abilityScores';
 import Descriptor from '../../Descriptor/Descriptor';
 import FavoredEnemySelector from '../FavoredEnemySelector/FavoredEnemySelector';
+import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
+import LandSelector from '../LandSelector/LandSelector';
 import Select from '../../../Select/Select';
+import SkillsSelector from '../SkillSelector/SkillsSelector';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
+import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
-import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
-import LandSelector from '../LandSelector/LandSelector';
-import SkillsSelector from '../SkillSelector/SkillsSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -313,7 +313,7 @@ const SelectedClassDisplay = ({
 		useState<SrdProficiencyItem[]>();
 
 	useEffect(() => {
-		if (klass.index === 'monk') {
+		if (klass.index === 'monk' || klass.index === 'rogue') {
 			getProficienciesByType('SAVING_THROWS').then(result => {
 				setAllSavingThrowProficiencies(result.data?.proficiencies ?? []);
 			});
@@ -429,6 +429,29 @@ const SelectedClassDisplay = ({
 			klass.proficiencies,
 			selectedProficiencies
 		]
+	);
+
+	const addSlipperyMind = useCallback(
+		(newLevel: number) => {
+			if (
+				klass.index === 'rogue' &&
+				newLevel >= 15 &&
+				!selectedProficiencies.some(prof => prof.index.includes('wis'))
+			) {
+				const savingThrow = allSavingThrowProficiencies?.find(st =>
+					st.index.includes('wis')
+				) as SrdProficiencyItem;
+
+				dispatch(
+					addFeatureProficiency({
+						index: 'slippery-mind',
+						proficiency: savingThrow
+					})
+				);
+				dispatch(addProficiency(savingThrow));
+			}
+		},
+		[dispatch, allSavingThrowProficiencies, klass.index, selectedProficiencies]
 	);
 
 	const fightingStyles = features.filter(({ index }) =>
@@ -747,6 +770,7 @@ const SelectedClassDisplay = ({
 				addBlankAbilityScoreBonuses(newValue);
 				addPrimalChampion(newValue);
 				addBlankSubclassFeatures(newValue);
+				addSlipperyMind(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -767,7 +791,8 @@ const SelectedClassDisplay = ({
 			addPrimalChampion,
 			removePrimalChampion,
 			removeSubclassFeatures,
-			addBlankSubclassFeatures
+			addBlankSubclassFeatures,
+			addSlipperyMind
 		]
 	);
 
