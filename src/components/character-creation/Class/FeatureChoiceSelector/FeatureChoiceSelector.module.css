@@ -41,6 +41,7 @@
     margin: -0.5rem -0.5rem 0 -0.5rem;
     background-color: var(--davy);
     color: var(--heaven-light);
+    padding: 0.5rem 0;
 }
 
 .selected {
