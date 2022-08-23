@@ -11,7 +11,9 @@ export const fetchLoggedInUsername = createAsyncThunk(
 	'viewer/fetchLoggedInUsername',
 	async (arg, { rejectWithValue, dispatch }) => {
 		const result = await client
-			.query(GET_VIEWER, undefined, { requestPolicy: 'cache-and-network' })
+			.query<{ viewer: string }>(GET_VIEWER, undefined, {
+				requestPolicy: 'cache-and-network'
+			})
 			.toPromise();
 
 		if (result.error) {
@@ -24,7 +26,7 @@ export const fetchLoggedInUsername = createAsyncThunk(
 			return rejectWithValue(`${result.error.message}`);
 		}
 
-		return result.data.viewer as string;
+		return result.data?.viewer ?? null;
 	}
 );
 
