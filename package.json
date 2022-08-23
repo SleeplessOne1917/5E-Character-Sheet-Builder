@@ -15,7 +15,7 @@
   "dependencies": {
     "@graphql-tools/schema": "^9.0.1",
     "@heroicons/react": "^1.0.6",
-    "@reduxjs/toolkit": "^1.8.4",
+    "@reduxjs/toolkit": "^1.8.5",
     "@urql/exchange-auth": "^0.1.7",
     "apollo-server-micro": "^3.10.1",
     "argon2": "^0.28.7",
@@ -36,7 +36,7 @@
     "react-html-email": "^3.0.0",
     "react-redux": "^8.0.1",
     "reduce-reducers": "^1.0.4",
-    "urql": "^2.2.3",
+    "urql": "^3.0.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -68,7 +68,7 @@
     "@types/react-dom": "18.0.6",
     "@types/react-html-email": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1",
+    "@typescript-eslint/parser": "^5.34.0",
     "@typescript-eslint/typescript-estree": "^5.32.0",
     "@urql/storybook-addon": "^1.0.9",
     "babel-jest": "^28.1.3",
