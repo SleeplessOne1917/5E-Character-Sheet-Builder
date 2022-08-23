@@ -54,6 +54,7 @@ import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './SelectedClassDisplay.module.css';
 import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 import LandSelector from '../LandSelector/LandSelector';
+import SkillsSelector from '../SkillSelector/SkillsSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -1040,6 +1041,11 @@ const SelectedClassDisplay = ({
 					</tbody>
 				</table>
 			</div>
+			<SkillsSelector
+				skills={klass.proficiency_choices[0].from.options.map(
+					({ item }) => item as SrdProficiencyItem
+				)}
+			/>
 			{classInfo.abilityBonuses.length > 0 && (
 				<>
 					<h2 className={styles.heading}>

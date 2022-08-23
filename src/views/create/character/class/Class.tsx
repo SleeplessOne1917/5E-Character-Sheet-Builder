@@ -3,7 +3,8 @@ import {
 	MonsterSubtype,
 	MonsterType,
 	SrdFullClassItem,
-	SrdItem
+	SrdItem,
+	SrdProficiencyItem
 } from '../../../../types/srd';
 import {
 	addProficiency,
@@ -18,7 +19,8 @@ import {
 	addFavoredEnemies,
 	addFavoredTerrain,
 	deselectClass,
-	selectClass
+	selectClass,
+	setSelectedSkills
 } from '../../../../redux/features/classInfo';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -207,6 +209,16 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 			dispatch(addFavoredTerrain(null));
 		}
 
+		const blankSkills = [];
+		for (
+			let i = 0;
+			i < (consideredClass?.proficiency_choices[0].choose ?? 0);
+			++i
+		) {
+			blankSkills.push(null);
+		}
+		dispatch(setSelectedSkills(blankSkills));
+
 		dispatch(selectClass(consideredClass as SrdFullClassItem));
 
 		for (const proficiency of consideredClass?.proficiencies ?? []) {
@@ -261,9 +273,13 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 	}, [setShowDeselectModal]);
 
 	const deselectSelectedClass = useCallback(() => {
-		for (const { index } of (classInfo.class?.proficiencies ?? []).concat(
-			Object.values(classInfo.featuresProficiencies).flatMap(value => value)
-		)) {
+		for (const { index } of (classInfo.class?.proficiencies ?? [])
+			.concat(
+				Object.values(classInfo.featuresProficiencies).flatMap(value => value)
+			)
+			.concat(
+				classInfo.selectedSkills.filter(skill => skill) as SrdProficiencyItem[]
+			)) {
 			dispatch(removeProficiency(index));
 		}
 

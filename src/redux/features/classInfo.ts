@@ -4,12 +4,12 @@ import {
 	SrdFullClassItem,
 	SrdProficiencyItem,
 	SrdSubclassItem,
-	Terrain
+	Terrain,
+	SrdFeatureItem
 } from '../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import AbilityScores from '../../types/abilityScores';
-import { SrdFeatureItem } from './../../types/srd';
 
 export type ClassInfoState = {
 	class?: SrdFullClassItem;
@@ -21,6 +21,7 @@ export type ClassInfoState = {
 	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
 	favoredTerrains?: (Terrain | null)[];
 	subclassSubType?: string;
+	selectedSkills: (SrdProficiencyItem | null)[];
 };
 
 type SetAbilityBonusPayload = {
@@ -32,7 +33,8 @@ export const initialState: ClassInfoState = {
 	level: 1,
 	abilityBonuses: [],
 	featuresSubfeatures: {},
-	featuresProficiencies: {}
+	featuresProficiencies: {},
+	selectedSkills: []
 };
 
 const classInfoSlice = createSlice({
@@ -198,6 +200,12 @@ const classInfoSlice = createSlice({
 		},
 		deselectSubclassSubtype: state => {
 			delete state.subclassSubType;
+		},
+		setSelectedSkills: (
+			state,
+			{ payload }: PayloadAction<(SrdProficiencyItem | null)[]>
+		) => {
+			state.selectedSkills = payload;
 		}
 	}
 });
@@ -222,7 +230,8 @@ export const {
 	removeFavoredTerrain,
 	setFavoredTerrain,
 	selectSubclassSubtype,
-	deselectSubclassSubtype
+	deselectSubclassSubtype,
+	setSelectedSkills
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;
