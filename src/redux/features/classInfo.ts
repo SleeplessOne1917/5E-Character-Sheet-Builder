@@ -20,6 +20,7 @@ export type ClassInfoState = {
 	featuresProficiencies: { [key: string]: SrdProficiencyItem[] };
 	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
 	favoredTerrains?: (Terrain | null)[];
+	subclassSubType?: string;
 };
 
 type SetAbilityBonusPayload = {
@@ -191,6 +192,12 @@ const classInfoSlice = createSlice({
 			}
 
 			state.favoredTerrains[index] = terrain;
+		},
+		selectSubclassSubtype: (state, { payload }: PayloadAction<string>) => {
+			state.subclassSubType = payload;
+		},
+		deselectSubclassSubtype: state => {
+			delete state.subclassSubType;
 		}
 	}
 });
@@ -213,7 +220,9 @@ export const {
 	setFavoredEnemies,
 	addFavoredTerrain,
 	removeFavoredTerrain,
-	setFavoredTerrain
+	setFavoredTerrain,
+	selectSubclassSubtype,
+	deselectSubclassSubtype
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

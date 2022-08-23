@@ -15,12 +15,14 @@ import {
 	addFavoredTerrain,
 	addFeatureProficiency,
 	deselectSubclass,
+	deselectSubclassSubtype,
 	removeAbilityBonus,
 	removeFavoredEnemies as removeFavoredEnemiesAction,
 	removeFavoredTerrain,
 	removeFeatureProficiency,
 	removeFeatureSubfeature,
 	selectSubclass,
+	selectSubclassSubtype,
 	setAbilityBonus,
 	setFavoredEnemies,
 	setFavoredTerrain,
@@ -51,6 +53,7 @@ import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './SelectedClassDisplay.module.css';
 import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
+import LandSelector from '../LandSelector/LandSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -686,9 +689,21 @@ const SelectedClassDisplay = ({
 	);
 
 	const handleSubclassDeselect = useCallback(() => {
+		dispatch(deselectSubclassSubtype());
 		dispatch(deselectSubclass());
 		removeFightingStyles(classInfo.level, null);
 	}, [dispatch, removeFightingStyles, classInfo.level]);
+
+	const handleSelectSubclassSubtype = useCallback(
+		(value: string | null) => {
+			if (value) {
+				dispatch(selectSubclassSubtype(value));
+			} else {
+				dispatch(deselectSubclassSubtype());
+			}
+		},
+		[dispatch]
+	);
 
 	const handleFavoredEnemyChange = useCallback(
 		(index: number, values: (MonsterType | MonsterSubtype | null)[]) => {
@@ -1018,6 +1033,15 @@ const SelectedClassDisplay = ({
 							/>
 						))}
 					</div>
+				</>
+			)}
+			{classInfo.subclass?.index === 'land' && (
+				<>
+					<h2 className={styles.heading}>{classInfo.subclass.name}</h2>
+					<LandSelector
+						value={(classInfo.subclassSubType as Land) ?? null}
+						onChange={handleSelectSubclassSubtype}
+					/>
 				</>
 			)}
 			{fightingStyles.length > 0 && (
