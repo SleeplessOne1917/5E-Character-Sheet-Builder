@@ -640,6 +640,92 @@ const SelectedClassDisplay = ({
 		[dispatch, classInfo.level, getNaturalExplorer, getFavoredNumber]
 	);
 
+	const [subclassFeaturesWithSubfeatures, setSubclassFeaturesWithSubfeatures] =
+		useState<SrdFeatureItem[]>([]);
+
+	const addBlankSubclassFeatures = useCallback(
+		(
+			newLevel: number,
+			subclass: SrdSubclassItem | null | undefined = classInfo.subclass
+		) => {
+			for (const feature of [...(subclass?.subclass_levels ?? [])]
+				.sort((a, b) => a.level - b.level)
+				.filter(({ level }) => level <= newLevel)
+				.flatMap(({ features }) => features)) {
+				if (
+					feature.feature_specific?.subfeature_options &&
+					!subclassFeaturesWithSubfeatures.some(f => f.index === feature.index)
+				) {
+					setSubclassFeaturesWithSubfeatures(prev => [...prev, feature]);
+				}
+			}
+		},
+		[
+			setSubclassFeaturesWithSubfeatures,
+			classInfo.subclass,
+			subclassFeaturesWithSubfeatures
+		]
+	);
+
+	const removeSubclassFeatures = useCallback(
+		(
+			newLevel: number,
+			subclass: SrdSubclassItem | null | undefined = classInfo.subclass
+		) => {
+			const newNumberOfSubclassFeaturesWithSubfeatures =
+				[...(subclass?.subclass_levels ?? [])]
+					.sort((a, b) => a.level - b.level)
+					.filter(({ level }) => level <= newLevel)
+					.flatMap(({ features }) => features)
+					.filter(feature => feature.feature_specific?.subfeature_options)
+					.length ?? 0;
+			const currentNumberofSubclassFeaturesWithSubfeatures =
+				subclassFeaturesWithSubfeatures.length;
+
+			if (
+				newNumberOfSubclassFeaturesWithSubfeatures <
+				currentNumberofSubclassFeaturesWithSubfeatures
+			) {
+				for (
+					let i = 0;
+					i <
+					currentNumberofSubclassFeaturesWithSubfeatures -
+						newNumberOfSubclassFeaturesWithSubfeatures;
+					++i
+				) {
+					const featureIdex =
+						subclassFeaturesWithSubfeatures[
+							subclassFeaturesWithSubfeatures.length - (i + 1)
+						].index;
+					const featureSubfeatures = classInfo.featuresSubfeatures[featureIdex];
+
+					if (featureSubfeatures) {
+						for (let j = 0; j < featureSubfeatures.length; ++j) {
+							dispatch(
+								removeFeatureSubfeature({
+									index: featureIdex,
+									feature:
+										featureSubfeatures[featureSubfeatures.length - (j + 1)]
+											.index
+								})
+							);
+						}
+					}
+
+					setSubclassFeaturesWithSubfeatures(prev =>
+						prev.filter((_, index) => index < prev.length - 1)
+					);
+				}
+			}
+		},
+		[
+			dispatch,
+			classInfo.featuresSubfeatures,
+			classInfo.subclass,
+			subclassFeaturesWithSubfeatures
+		]
+	);
+
 	const handleLevelChange = useCallback(
 		(newValue: number) => {
 			if (newValue < classInfo.level) {
@@ -650,6 +736,7 @@ const SelectedClassDisplay = ({
 				removeFavoredTerrains(newValue);
 				removeAbilityScoreBonuses(newValue);
 				removePrimalChampion(newValue);
+				removeSubclassFeatures(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -658,6 +745,7 @@ const SelectedClassDisplay = ({
 				addBlankFavoredTerrains(newValue);
 				addBlankAbilityScoreBonuses(newValue);
 				addPrimalChampion(newValue);
+				addBlankSubclassFeatures(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -676,23 +764,27 @@ const SelectedClassDisplay = ({
 			addBlankAbilityScoreBonuses,
 			removeAbilityScoreBonuses,
 			addPrimalChampion,
-			removePrimalChampion
+			removePrimalChampion,
+			removeSubclassFeatures,
+			addBlankSubclassFeatures
 		]
 	);
 
 	const handleSubclassSelect = useCallback(
 		(subclass: SrdSubclassItem) => {
 			dispatch(selectSubclass(subclass));
+			addBlankSubclassFeatures(classInfo.level, subclass);
 			removeFightingStyles(classInfo.level, subclass.index);
 		},
-		[dispatch, removeFightingStyles, classInfo.level]
+		[dispatch, removeFightingStyles, classInfo.level, addBlankSubclassFeatures]
 	);
 
 	const handleSubclassDeselect = useCallback(() => {
 		dispatch(deselectSubclassSubtype());
+		removeSubclassFeatures(classInfo.level, null);
 		dispatch(deselectSubclass());
 		removeFightingStyles(classInfo.level, null);
-	}, [dispatch, removeFightingStyles, classInfo.level]);
+	}, [dispatch, removeFightingStyles, classInfo.level, removeSubclassFeatures]);
 
 	const handleSelectSubclassSubtype = useCallback(
 		(value: string | null) => {
@@ -1035,6 +1127,22 @@ const SelectedClassDisplay = ({
 					</div>
 				</>
 			)}
+			{subclassFeaturesWithSubfeatures.length > 0 &&
+				subclassFeaturesWithSubfeatures.map(feature => (
+					<FeatureChoiceSelector
+						key={feature.index}
+						feature={feature}
+						choose={feature.feature_specific?.subfeature_options?.choose ?? 0}
+						subfeatures={
+							feature.feature_specific?.subfeature_options?.from.options.map(
+								({ item }) => ({
+									...item,
+									name: item.name.replace(/.*:\s*/, '')
+								})
+							) as SrdFeatureItem[]
+						}
+					/>
+				))}
 			{classInfo.subclass?.index === 'land' && (
 				<>
 					<h2 className={styles.heading}>{classInfo.subclass.name}</h2>
