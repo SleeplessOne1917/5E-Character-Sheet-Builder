@@ -3590,10 +3590,10 @@
     "@urql/core" ">=2.3.6"
     wonka "^4.0.14"
 
-"@urql/storybook-addon@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@urql/storybook-addon/-/storybook-addon-1.0.9.tgz#b27f98baabe07c8d70306f2acd154be053bd314a"
-  integrity sha512-fJuQejFftJl6NvygOrDGVzgLFBTWycUCXPZxjExaLYG7+nTt4z9h/WiZoYsBwk9PazfOhOgjJiOg++sVhyd46w==
+"@urql/storybook-addon@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@urql/storybook-addon/-/storybook-addon-2.0.0.tgz#3c488799507dac04617d263592b6e48d7e95f805"
+  integrity sha512-lv1RmwKQEHOzXvy/zIumneiLptNsdbszj2KPUXT8PRuMWCPaIGDnVfrwGwYwEvemKYHp0wu3TCZe30LSNnCz2g==
   optionalDependencies:
     "@storybook/addons" ">=6.0.28"
     "@urql/devtools" ">=2.0.0"
