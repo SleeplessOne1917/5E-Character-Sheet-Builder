@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MenuIcon } from '@heroicons/react/solid';
+import { Bars3Icon } from '@heroicons/react/24/solid';
 import { MouseEventHandler } from 'react';
 import classes from './Header.module.css';
 import { useAppSelector } from '../../hooks/reduxHooks';
@@ -70,7 +70,7 @@ const Header = ({
 					)}
 				</ul>
 			</nav>
-			<MenuIcon
+			<Bars3Icon
 				className={classes['menu-icon']}
 				onClick={onMenuIconClick}
 				data-testid="menu"
