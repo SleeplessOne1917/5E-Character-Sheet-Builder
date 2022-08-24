@@ -4179,10 +4179,10 @@ arg@4.1.0:
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.0.tgz#583c518199419e0037abb74062c37f8519e575f0"
   integrity sha512-ZWc51jO3qegGkVh8Hwpv636EkbesNV5ZNQPCtRa+0qytRYPEs9IYT9qITY9buezqUH5uqyzlWLcufrzU2rffdg==
 
-argon2@^0.29.0:
-  version "0.29.0"
-  resolved "https://registry.yarnpkg.com/argon2/-/argon2-0.29.0.tgz#94b6ef96cbdbe9f3562523c7130552af4c8d25bb"
-  integrity sha512-J8XxGYjq90qohrN5ySXTIXJ2HyDjMOw3uXMOsWrHzKe9daT6TtFCCtrADz1wPFuDH2bOxumPwbgBhKa5AknIhw==
+argon2@^0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/argon2/-/argon2-0.29.1.tgz#e6b621ba5dcaf02ea8246669532c2934799973e3"
+  integrity sha512-bWXzAsQA0B6EFWZh5li+YBk+muoknAb8KacAi1h/bC6Gigy9p5ANbrPvpnjTIb7i9I11/8Df6FeSxpJDK3vy4g==
   dependencies:
     "@mapbox/node-pre-gyp" "^1.0.9"
     "@phc/format" "^1.0.0"
