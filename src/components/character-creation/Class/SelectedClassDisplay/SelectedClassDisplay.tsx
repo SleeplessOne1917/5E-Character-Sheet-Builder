@@ -756,6 +756,7 @@ const SelectedClassDisplay = ({
 	const addMoreExpertise = useCallback(
 		(newLevel: number) => {
 			if (
+				klass.index === 'rogue' &&
 				newLevel >= 6 &&
 				(classInfo.expertiseProficiencies?.length ?? 0) < 4
 			) {
@@ -764,18 +765,49 @@ const SelectedClassDisplay = ({
 				}
 			}
 		},
-		[dispatch, classInfo.expertiseProficiencies]
+		[dispatch, classInfo.expertiseProficiencies, klass.index]
 	);
 
 	const removeExpertise = useCallback(
 		(newLevel: number) => {
-			if (newLevel < 6 && (classInfo.expertiseProficiencies?.length ?? 0) > 2) {
+			if (
+				klass.index === 'rogue' &&
+				newLevel < 6 &&
+				(classInfo.expertiseProficiencies?.length ?? 0) > 2
+			) {
 				for (let i = 0; i < 2; ++i) {
 					dispatch(removeExpertiseProficiency());
 				}
 			}
 		},
-		[dispatch, classInfo.expertiseProficiencies]
+		[dispatch, classInfo.expertiseProficiencies, klass.index]
+	);
+
+	const removeMetamagic = useCallback(
+		(newLevel: number) => {
+			const newNumberOfMetamagics =
+				classLevels[newLevel - 1].class_specific?.metamagic_known ?? 0;
+			const metamagicIndex = features.find(f =>
+				f.index.includes('metamagic')
+			)?.index;
+			const metamagics = metamagicIndex
+				? classInfo.featuresSubfeatures[metamagicIndex] ?? []
+				: [];
+
+			if (newNumberOfMetamagics < metamagics.length) {
+				for (let i = 0; i < metamagics.length - newNumberOfMetamagics; ++i) {
+					const metamagicToRemove = metamagics[metamagics.length - (i + 1)];
+
+					dispatch(
+						removeFeatureSubfeature({
+							index: metamagicIndex as string,
+							feature: metamagicToRemove.index
+						})
+					);
+				}
+			}
+		},
+		[dispatch, classLevels, classInfo.featuresSubfeatures, features]
 	);
 
 	const handleLevelChange = useCallback(
@@ -790,6 +822,7 @@ const SelectedClassDisplay = ({
 				removePrimalChampion(newValue);
 				removeSubclassFeatures(newValue);
 				removeExpertise(newValue);
+				removeMetamagic(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -824,7 +857,8 @@ const SelectedClassDisplay = ({
 			addBlankSubclassFeatures,
 			addSlipperyMind,
 			removeExpertise,
-			addMoreExpertise
+			addMoreExpertise,
+			removeMetamagic
 		]
 	);
 
@@ -876,6 +910,8 @@ const SelectedClassDisplay = ({
 	const favoredTerrains = useAppSelector(
 		state => state.editingCharacter.classInfo.favoredTerrains
 	);
+
+	const metamagicFeature = features.find(f => f.index.includes('metamagic'));
 
 	return (
 		<div className={styles.container}>
@@ -1192,6 +1228,24 @@ const SelectedClassDisplay = ({
 						))}
 					</div>
 				</>
+			)}
+			{(classLevels[classInfo.level - 1].class_specific?.metamagic_known ?? 0) >
+				0 && (
+				<FeatureChoiceSelector
+					choose={
+						classLevels[classInfo.level - 1].class_specific
+							?.metamagic_known as number
+					}
+					feature={metamagicFeature as SrdFeatureItem}
+					subfeatures={
+						metamagicFeature?.feature_specific?.subfeature_options.from.options.map(
+							({ item }) => ({
+								...item,
+								name: item.name.replace(/.*:\s*/, '')
+							})
+						) as SrdFeatureItem[]
+					}
+				/>
 			)}
 			{subclassFeaturesWithSubfeatures.length > 0 &&
 				subclassFeaturesWithSubfeatures.map(feature => (

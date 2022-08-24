@@ -125,6 +125,7 @@ const GET_CLASS = gql`
 					}
 					... on SorcererSpecific {
 						sorcery_points
+						metamagic_known
 					}
 					... on WarlockSpecific {
 						invocations_known
