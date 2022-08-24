@@ -1,4 +1,4 @@
-import { CheckIcon, XIcon } from '@heroicons/react/solid';
+import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import {
 	hasLowerCase,
 	hasNumber,
@@ -26,7 +26,7 @@ const PasswordValidator = ({
 				{password && password.length >= 8 ? (
 					<CheckIcon className={`${classes.icon} ${classes.check}`} />
 				) : (
-					<XIcon className={`${classes.icon} ${classes.x}`} />
+					<XMarkIcon className={`${classes.icon} ${classes.x}`} />
 				)}{' '}
 				At least 8 characters long
 			</div>
@@ -38,7 +38,7 @@ const PasswordValidator = ({
 				{password && hasLowerCase(password) ? (
 					<CheckIcon className={`${classes.icon} ${classes.check}`} />
 				) : (
-					<XIcon className={`${classes.icon} ${classes.x}`} />
+					<XMarkIcon className={`${classes.icon} ${classes.x}`} />
 				)}{' '}
 				At least 1 lowercase letter
 			</div>
@@ -50,7 +50,7 @@ const PasswordValidator = ({
 				{password && hasUpperCase(password) ? (
 					<CheckIcon className={`${classes.icon} ${classes.check}`} />
 				) : (
-					<XIcon className={`${classes.icon} ${classes.x}`} />
+					<XMarkIcon className={`${classes.icon} ${classes.x}`} />
 				)}{' '}
 				At least 1 uppercase letter
 			</div>
@@ -62,7 +62,7 @@ const PasswordValidator = ({
 				{password && hasNumber(password) ? (
 					<CheckIcon className={`${classes.icon} ${classes.check}`} />
 				) : (
-					<XIcon className={`${classes.icon} ${classes.x}`} />
+					<XMarkIcon className={`${classes.icon} ${classes.x}`} />
 				)}{' '}
 				At least 1 number
 			</div>
@@ -76,7 +76,7 @@ const PasswordValidator = ({
 				{password && hasSpecialCharacter(password) ? (
 					<CheckIcon className={`${classes.icon} ${classes.check}`} />
 				) : (
-					<XIcon className={`${classes.icon} ${classes.x}`} />
+					<XMarkIcon className={`${classes.icon} ${classes.x}`} />
 				)}{' '}
 				At least 1 special character
 			</div>

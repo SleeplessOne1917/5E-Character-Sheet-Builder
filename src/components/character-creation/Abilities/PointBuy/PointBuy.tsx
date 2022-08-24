@@ -3,7 +3,7 @@ import {
 	updateBase
 } from '../../../../redux/features/abilityScores';
 import { KeyboardEvent, useCallback, useState } from 'react';
-import { MinusIcon, PlusIcon } from '@heroicons/react/solid';
+import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import { AbilityItem } from '../../../../types/srd';
