@@ -1,13 +1,14 @@
-import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import { SrdFeatureItem, SrdItem } from '../../../../types/srd';
 import {
 	addFeatureSubfeature,
 	removeFeatureSubfeature
 } from '../../../../redux/features/classInfo';
-import { getOrdinal } from '../../../../services/ordinalService';
-import { SrdFeatureItem, SrdItem } from '../../../../types/srd';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+
 import Button from '../../../Button/Button';
 import classes from './FeatureChoiceSelector.module.css';
+import { getOrdinal } from '../../../../services/ordinalService';
+import { useCallback } from 'react';
 
 type FeatureChoiceSelectorProps = {
 	feature: SrdItem;
@@ -29,7 +30,9 @@ const FeatureChoiceSelector = ({
 
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
 
-	const spells = useAppSelector(state => state.editingCharacter.spells);
+	const spells = useAppSelector(
+		state => state.editingCharacter.spellcasting.spells
+	);
 
 	const allFeatures = classInfo.class?.class_levels
 		.filter(level => !level.subclass && level.level >= classInfo.level)

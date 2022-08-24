@@ -3,20 +3,23 @@ import {
 	SrdSpellItem,
 	SrdSpellItemChoice
 } from '../../../../../types/srd';
+import {
+	addSpell,
+	removeSpell
+} from '../../../../../redux/features/spellcasting';
+import {
+	addTraitSpell,
+	removeTraitSpell
+} from '../../../../../redux/features/raceInfo';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
 import SpellSelector from './SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
-import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../../../hooks/reduxHooks';
-import { addSpell, removeSpell } from '../../../../../redux/features/spells';
-import {
-	addTraitSpell,
-	removeTraitSpell
-} from '../../../../../redux/features/raceInfo';
 
 type SpellChoiceSelectorProps = {
 	trait: SrdItem;
@@ -43,7 +46,9 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 		return returnValues;
 	}, [choice, selectedSpells]);
 
-	const spells = useAppSelector(state => state.editingCharacter.spells);
+	const spells = useAppSelector(
+		state => state.editingCharacter.spellcasting.spells
+	);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
 		getInitialSelectValues()

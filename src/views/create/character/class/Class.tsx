@@ -7,6 +7,15 @@ import {
 	SrdProficiencyItem
 } from '../../../../types/srd';
 import {
+	addExpertiseProficiency,
+	addFavoredEnemies,
+	addFavoredTerrain,
+	deselectClass,
+	removeClassSpell,
+	selectClass,
+	setSelectedSkills
+} from '../../../../redux/features/classInfo';
+import {
 	addProficiency,
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
@@ -16,13 +25,11 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import {
-	addExpertiseProficiency,
-	addFavoredEnemies,
-	addFavoredTerrain,
-	deselectClass,
-	selectClass,
-	setSelectedSkills
-} from '../../../../redux/features/classInfo';
+	removeSpell,
+	setCantripsKnown,
+	setHighestSlotLevel,
+	setSpellsKnown
+} from '../../../../redux/features/spellcasting';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -35,8 +42,8 @@ import Option from '../../../../components/character-creation/Option/Option';
 import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import { getClass } from '../../../../services/classService';
-import styles from './Class.module.css';
 import { getMonsterTypes } from '../../../../graphql/srdClientService';
+import styles from './Class.module.css';
 
 type ClassProps = {
 	classes: SrdItem[];
@@ -288,6 +295,14 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 				classInfo.selectedSkills.filter(skill => skill) as SrdProficiencyItem[]
 			)) {
 			dispatch(removeProficiency(index));
+		}
+
+		dispatch(setSpellsKnown(0));
+		dispatch(setCantripsKnown(0));
+		dispatch(setHighestSlotLevel(0));
+		for (const { index } of classInfo.spells ?? []) {
+			dispatch(removeClassSpell(index));
+			dispatch(removeSpell(index));
 		}
 
 		if (classInfo.level === 20 && classInfo.class?.index === 'barbarian') {

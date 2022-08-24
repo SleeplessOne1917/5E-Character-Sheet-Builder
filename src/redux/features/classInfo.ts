@@ -1,11 +1,12 @@
 import {
 	MonsterSubtype,
 	MonsterType,
+	SrdFeatureItem,
 	SrdFullClassItem,
 	SrdProficiencyItem,
+	SrdSpellItem,
 	SrdSubclassItem,
-	Terrain,
-	SrdFeatureItem
+	Terrain
 } from '../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
@@ -23,6 +24,7 @@ export type ClassInfoState = {
 	subclassSubType?: string;
 	selectedSkills: (SrdProficiencyItem | null)[];
 	expertiseProficiencies?: (SrdProficiencyItem | null)[];
+	spells?: SrdSpellItem[];
 };
 
 type SetAbilityBonusPayload = {
@@ -252,6 +254,20 @@ const classInfoSlice = createSlice({
 			}
 
 			state.expertiseProficiencies[index] = proficiency;
+		},
+		addClassSpell: (state, { payload }: PayloadAction<SrdSpellItem>) => {
+			if (!state.spells) {
+				state.spells = [];
+			}
+
+			state.spells = [...state.spells, payload];
+		},
+		removeClassSpell: (state, { payload }: PayloadAction<string>) => {
+			if (!state.spells) {
+				state.spells = [];
+			}
+
+			state.spells = state.spells.filter(spell => spell.index !== payload);
 		}
 	}
 });
@@ -280,7 +296,9 @@ export const {
 	setSelectedSkills,
 	addExpertiseProficiency,
 	removeExpertiseProficiency,
-	setExpertiseProficiency
+	setExpertiseProficiency,
+	addClassSpell,
+	removeClassSpell
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

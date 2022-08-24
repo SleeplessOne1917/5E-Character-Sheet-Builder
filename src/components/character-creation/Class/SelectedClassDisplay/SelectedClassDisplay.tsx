@@ -41,12 +41,18 @@ import {
 	setAbilityHighest,
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
+import {
+	setCantripsKnown,
+	setHighestSlotLevel,
+	setSpellsKnown
+} from '../../../../redux/features/spellcasting';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback, useEffect, useState } from 'react';
 
 import AbilityBonusSelector from '../AbilityBonusSelector/AbilityBonusSelector';
 import AbilityScores from '../../../../types/abilityScores';
 import Descriptor from '../../Descriptor/Descriptor';
+import ExpertiseSelector from '../ExpertiseSelector/ExpertiseSelector';
 import FavoredEnemySelector from '../FavoredEnemySelector/FavoredEnemySelector';
 import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
@@ -57,7 +63,6 @@ import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
-import ExpertiseSelector from '../ExpertiseSelector/ExpertiseSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -810,6 +815,74 @@ const SelectedClassDisplay = ({
 		[dispatch, classLevels, classInfo.featuresSubfeatures, features]
 	);
 
+	const characterSpellcasting = useAppSelector(
+		state => state.editingCharacter.spellcasting
+	);
+
+	const handleSpellcastingChange = useCallback(
+		(newLevel: number) => {
+			const levelSpellcasting = classLevels[newLevel - 1].spellcasting;
+			const highestSlotLevel = Object.keys(levelSpellcasting ?? {}).reduce(
+				(acc, cur) => {
+					if (cur.includes('spell_slots_level')) {
+						if (
+							levelSpellcasting &&
+							(levelSpellcasting as { [key: string]: number })[cur] &&
+							((levelSpellcasting as { [key: string]: number })[
+								cur
+							] as number) > 0
+						) {
+							const slotLevel = parseInt(
+								(/spell_slots_level_(\d)/.exec(cur) as RegExpExecArray)[1],
+								10
+							);
+
+							return slotLevel > acc ? slotLevel : acc;
+						}
+					}
+
+					return acc;
+				},
+				0
+			);
+
+			if (highestSlotLevel !== characterSpellcasting.highestSlotLevel) {
+				dispatch(setHighestSlotLevel(highestSlotLevel));
+			}
+
+			if (
+				typeof levelSpellcasting?.spells_known === 'number' &&
+				levelSpellcasting.spells_known !== characterSpellcasting.spellsKnown
+			) {
+				dispatch(setSpellsKnown(levelSpellcasting.spells_known));
+			}
+
+			if (
+				typeof levelSpellcasting?.cantrips_known === 'number' &&
+				levelSpellcasting.cantrips_known !== characterSpellcasting.cantripsKnown
+			) {
+				dispatch(setCantripsKnown(levelSpellcasting.cantrips_known));
+			}
+		},
+		[dispatch, classLevels, characterSpellcasting]
+	);
+
+	useEffect(() => {
+		if (
+			klass.spellcasting &&
+			classInfo.level === 1 &&
+			!(characterSpellcasting.highestSlotLevel > 0)
+		) {
+			handleSpellcastingChange(1);
+		}
+	}, [
+		klass.index,
+		handleSpellcastingChange,
+		klass.spellcasting,
+		characterSpellcasting.highestSlotLevel,
+		classInfo.level
+	]);
+
 	const handleLevelChange = useCallback(
 		(newValue: number) => {
 			if (newValue < classInfo.level) {
@@ -836,6 +909,8 @@ const SelectedClassDisplay = ({
 				addMoreExpertise(newValue);
 			}
 
+			handleSpellcastingChange(newValue);
+
 			dispatch(setLevel(newValue));
 		},
 		[
@@ -858,7 +933,8 @@ const SelectedClassDisplay = ({
 			addSlipperyMind,
 			removeExpertise,
 			addMoreExpertise,
-			removeMetamagic
+			removeMetamagic,
+			handleSpellcastingChange
 		]
 	);
 

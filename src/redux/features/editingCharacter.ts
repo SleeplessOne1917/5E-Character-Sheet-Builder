@@ -1,4 +1,4 @@
-import { SrdItem, SrdProficiencyItem, SrdSpellItem } from '../../types/srd';
+import { SrdItem, SrdProficiencyItem } from '../../types/srd';
 import abilityScores, {
 	AbilityScoresState,
 	initialState as abilityScoresInitialState
@@ -16,7 +16,10 @@ import raceInfo, {
 	RaceInfoState,
 	initialState as raceInitialState
 } from './raceInfo';
-import spells, { initialState as spellsInitialState } from './spells';
+import spellcasting, {
+	SpellcastingState,
+	initialState as spellcastingInitialState
+} from './spellcasting';
 
 import reduceReducers from 'reduce-reducers';
 
@@ -25,7 +28,7 @@ export type EditingCharacterState = {
 	raceInfo: RaceInfoState;
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
-	spells: SrdSpellItem[];
+	spellcasting: SpellcastingState;
 	classInfo: ClassInfoState;
 };
 
@@ -34,7 +37,7 @@ const initialState: EditingCharacterState = {
 	raceInfo: raceInitialState,
 	languages: languagesInitialState,
 	proficiencies: proficienciesInitialState,
-	spells: spellsInitialState,
+	spellcasting: spellcastingInitialState,
 	classInfo: classInitialState
 };
 
@@ -49,7 +52,7 @@ const wholeReducer = combineReducers({
 	raceInfo,
 	languages,
 	proficiencies,
-	spells,
+	spellcasting,
 	classInfo
 });
 

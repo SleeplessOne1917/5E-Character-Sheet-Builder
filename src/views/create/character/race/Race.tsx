@@ -36,7 +36,7 @@ import SelectedRaceDisplay from '../../../../components/character-creation/Race/
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
-import { removeSpell } from '../../../../redux/features/spells';
+import { removeSpell } from '../../../../redux/features/spellcasting';
 import { updateRaceBonus } from '../../../../redux/features/abilityScores';
 
 type RaceProps = {
