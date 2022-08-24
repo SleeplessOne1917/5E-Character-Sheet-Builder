@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`renders correctly normally 1`] = `
 <nav
   class="section-bar"
 >
@@ -32,6 +32,76 @@ exports[`renders correctly 1`] = `
         href="/create/character/abilities"
       >
         Abilities
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/description"
+      >
+        Description
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/equipment"
+      >
+        Equipment
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/finish"
+      >
+        Finish
+      </a>
+    </li>
+  </ul>
+</nav>
+`;
+
+exports[`renders correctly with spells 1`] = `
+<nav
+  class="section-bar"
+>
+  <ul
+    class="section-list"
+    data-testid="section-list"
+    style=""
+  >
+    <li>
+      <a
+        class="link link-selected"
+        href="/create/character/race"
+        style="transform: translateY(0);"
+      >
+        Race
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/class"
+      >
+        Class
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/abilities"
+      >
+        Abilities
+      </a>
+    </li>
+    <li>
+      <a
+        class="link"
+        href="/create/character/spells"
+      >
+        Spells
       </a>
     </li>
     <li>

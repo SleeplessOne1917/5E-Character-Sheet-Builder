@@ -33,7 +33,7 @@ import { Descriptor } from '../../../../types/creation';
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { removeSpell } from '../../../../redux/features/spells';

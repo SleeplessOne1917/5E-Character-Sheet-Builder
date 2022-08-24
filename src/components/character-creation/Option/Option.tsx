@@ -2,7 +2,7 @@ import {
 	ChevronDownIcon,
 	ChevronRightIcon,
 	ChevronUpIcon
-} from '@heroicons/react/solid';
+} from '@heroicons/react/24/solid';
 import {
 	KeyboardEventHandler,
 	useState,

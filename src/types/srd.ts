@@ -244,6 +244,7 @@ export type ClassLevel = {
 		sneak_attack?: Dice;
 		sorcery_points?: number;
 		invocations_known?: number;
+		metamagic_known?: number;
 	};
 };
 

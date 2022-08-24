@@ -2,7 +2,7 @@ import {
 	CheckIcon,
 	ChevronDownIcon,
 	ChevronUpIcon
-} from '@heroicons/react/solid';
+} from '@heroicons/react/20/solid';
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 import useMediaQuery from '../../../../../../hooks/useMediaQuery';
 import { handleKeyDownEvent } from '../../../../../../services/handlerService';

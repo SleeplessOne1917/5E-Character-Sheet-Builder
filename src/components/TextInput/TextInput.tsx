@@ -6,7 +6,7 @@ import {
 	useCallback,
 	useState
 } from 'react';
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
 
 import PasswordValidator from '../PasswordValidator/PasswordValidator';
 import classes from './TextInput.module.css';
@@ -68,7 +68,7 @@ const TextInput = ({
 					{type === 'text' ? (
 						''
 					) : showPassword ? (
-						<EyeOffIcon
+						<EyeSlashIcon
 							className={classes.eye}
 							onClick={toggleShowPassword}
 							onKeyDown={toggleShowPasswordKeyDown}
