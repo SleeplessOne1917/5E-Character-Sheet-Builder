@@ -4,16 +4,16 @@ import {
 	ChevronUpIcon
 } from '@heroicons/react/20/solid';
 import { KeyboardEventHandler, useCallback, useState } from 'react';
-import useMediaQuery from '../../../../../../hooks/useMediaQuery';
-import { handleKeyDownEvent } from '../../../../../../services/handlerService';
-import { SrdItem, SrdSpellItem } from '../../../../../../types/srd';
-import Button from '../../../../../Button/Button';
+import { SrdItem, SrdSpellItem } from '../../../../types/srd';
 
+import Button from '../../../Button/Button';
 import classes from './SpellSelector.module.css';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
+import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type SpellSelectorProps = {
 	spell: SrdSpellItem;
-	trait: SrdItem;
+	item?: SrdItem;
 	onAdd: () => void;
 	onRemove: () => void;
 	selectValues: string[];
@@ -21,7 +21,7 @@ type SpellSelectorProps = {
 
 const SpellSelector = ({
 	spell,
-	trait,
+	item,
 	onAdd,
 	onRemove,
 	selectValues
@@ -48,7 +48,7 @@ const SpellSelector = ({
 				className={classes['selector-label']}
 				role="button"
 				tabIndex={0}
-				aria-label={`${trait.name} ${spell.name}`}
+				aria-label={`${item ? `${item?.name} ` : ''}${spell.name}`}
 				onClick={toggleOpen}
 				onKeyDown={toggleOpenKeyDown}
 			>
@@ -93,7 +93,9 @@ const SpellSelector = ({
 				</div>
 				<div className={classes.description}>
 					{spell.desc.map((desc, index) => (
-						<p key={`${trait.index}-${spell.name}-${index}`}>{desc}</p>
+						<p key={`${item ? `${item.index}` : ''}${spell.name}-${index}`}>
+							{desc}
+						</p>
 					))}
 				</div>
 				<div className={classes.other}>
@@ -103,7 +105,7 @@ const SpellSelector = ({
 					{spell.ritual && (
 						<p className={classes['other-info']}>Can be cast as a ritual.</p>
 					)}
-					{spell.damage && (
+					{spell.damage && spell.damage.damage_type && (
 						<div className={classes['damage-display']}>
 							<div>
 								<span className={classes['summary-item-label']}>

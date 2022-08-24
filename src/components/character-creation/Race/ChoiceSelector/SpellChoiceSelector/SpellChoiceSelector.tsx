@@ -18,7 +18,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
-import SpellSelector from './SpellSelector/SpellSelector';
+import SpellSelector from '../../../Spells/SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
 
 type SpellChoiceSelectorProps = {
@@ -103,7 +103,7 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 					.map(option => (
 						<SpellSelector
 							key={`${trait.index}-${option.item.index}`}
-							trait={trait}
+							item={trait}
 							spell={option.item}
 							onAdd={() => handleAdd(option.item.index)}
 							onRemove={() => handleRemove(option.item.index)}

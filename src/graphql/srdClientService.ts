@@ -6,6 +6,7 @@ import {
 	SrdFullSubraceItem,
 	SrdItem,
 	SrdProficiencyItem,
+	SrdSpellItem,
 	SrdSubraceItem
 } from '../types/srd';
 import { ProficiencyType, SrdFullClassItem } from './../types/srd';
@@ -20,6 +21,7 @@ import GET_MONSTER_TYPES from './queries/5E-API/monsters/getMonsterTypes';
 import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienciesByType';
 import GET_RACE from './queries/5E-API/race/getRace';
 import GET_RACES from './queries/5E-API/race/getRaces';
+import GET_SPELLS_BY_CLASS from './queries/5E-API/spells/getSpellsByClass';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
 
@@ -79,3 +81,9 @@ export const getMonsterTypes = async () =>
 		},
 		{ type: MonsterType | MonsterType[] }
 	>(GET_MONSTER_TYPES, { type: 'HUMANOID' });
+
+export const getSpellsByClass = async (klass: string | string[]) =>
+	await query<{ spells: SrdSpellItem[] }, { class: string | string[] }>(
+		GET_SPELLS_BY_CLASS,
+		{ class: klass }
+	);

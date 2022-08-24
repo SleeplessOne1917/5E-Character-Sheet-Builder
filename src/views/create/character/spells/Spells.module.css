@@ -4,3 +4,26 @@
 	justify-content: center;
 	height: 100%;
 }
+
+.title {
+    align-self: center;
+    font-family: var(--font-fantasy);
+    color: var(--davy);
+}
+
+.spells-selector-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 2rem 0;
+}
+
+.spell-select-title {
+	margin: 1rem 0;
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        align-self: flex-start;
+    }
+}

@@ -1,11 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import SpellSelector from './SpellSelector';
 
 export default {
-	title: 'Components/ChoiceSelector/SpellChoiceSelector/SpellSelector',
+	title: 'Components/Spells/SpellSelector',
 	component: SpellSelector,
 	args: {
-		trait: {
+		item: {
 			name: 'High Elf Cantrip',
 			index: 'high-elf-cantrip'
 		},
