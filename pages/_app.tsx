@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 
 import { useAppDispatch, useAppSelector } from '../src/hooks/reduxHooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { AppProps } from 'next/app';
 import Footer from '../src/components/Footer/Footer';
@@ -24,8 +24,16 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const dispatch = useAppDispatch();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
-	const hasSpellcasting = !!useAppSelector(
+	const currentLevel = useAppSelector(
+		state => state.editingCharacter.classInfo.level
+	);
+	const spellcasting = useAppSelector(
 		state => state.editingCharacter.classInfo.class?.spellcasting
+	);
+
+	const hasSpellcasting = useMemo(
+		() => !!spellcasting && currentLevel >= spellcasting.level,
+		[spellcasting, currentLevel]
 	);
 
 	useEffect(() => {
