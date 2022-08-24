@@ -22,6 +22,7 @@ export type ClassInfoState = {
 	favoredTerrains?: (Terrain | null)[];
 	subclassSubType?: string;
 	selectedSkills: (SrdProficiencyItem | null)[];
+	expertiseProficiencies?: (SrdProficiencyItem | null)[];
 };
 
 type SetAbilityBonusPayload = {
@@ -157,8 +158,10 @@ const classInfoSlice = createSlice({
 		) => {
 			if (!state.favoredEnemies) {
 				state.favoredEnemies = [];
+			}
 
-				for (let i = 0; i < index; ++i) {
+			if (state.favoredEnemies.length < index + 1) {
+				for (let i = 0; i <= index; ++i) {
 					state.favoredEnemies = [...state.favoredEnemies, [null]];
 				}
 			}
@@ -187,8 +190,10 @@ const classInfoSlice = createSlice({
 		) => {
 			if (!state.favoredTerrains) {
 				state.favoredTerrains = [];
+			}
 
-				for (let i = 0; i < index; ++i) {
+			if (state.favoredTerrains.length < index + 1) {
+				for (let i = 0; i <= index; ++i) {
 					state.favoredTerrains = [...state.favoredTerrains, null];
 				}
 			}
@@ -206,6 +211,47 @@ const classInfoSlice = createSlice({
 			{ payload }: PayloadAction<(SrdProficiencyItem | null)[]>
 		) => {
 			state.selectedSkills = payload;
+		},
+		addExpertiseProficiency: (
+			state,
+			{ payload }: PayloadAction<SrdProficiencyItem | null>
+		) => {
+			if (!state.expertiseProficiencies) {
+				state.expertiseProficiencies = [];
+			}
+
+			state.expertiseProficiencies = [...state.expertiseProficiencies, payload];
+		},
+		removeExpertiseProficiency: state => {
+			if (!state.expertiseProficiencies) {
+				state.expertiseProficiencies = [];
+			}
+
+			state.expertiseProficiencies = state.expertiseProficiencies?.slice(0, -1);
+		},
+		setExpertiseProficiency: (
+			state,
+			{
+				payload: { index, proficiency }
+			}: PayloadAction<{
+				index: number;
+				proficiency: SrdProficiencyItem | null;
+			}>
+		) => {
+			if (!state.expertiseProficiencies) {
+				state.expertiseProficiencies = [];
+			}
+
+			if (state.expertiseProficiencies.length < index + 1) {
+				for (let i = 0; i <= index; ++i) {
+					state.expertiseProficiencies = [
+						...state.expertiseProficiencies,
+						null
+					];
+				}
+			}
+
+			state.expertiseProficiencies[index] = proficiency;
 		}
 	}
 });
@@ -231,7 +277,10 @@ export const {
 	setFavoredTerrain,
 	selectSubclassSubtype,
 	deselectSubclassSubtype,
-	setSelectedSkills
+	setSelectedSkills,
+	addExpertiseProficiency,
+	removeExpertiseProficiency,
+	setExpertiseProficiency
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

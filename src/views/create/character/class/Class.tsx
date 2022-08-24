@@ -16,6 +16,7 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import {
+	addExpertiseProficiency,
 	addFavoredEnemies,
 	addFavoredTerrain,
 	deselectClass,
@@ -207,6 +208,12 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 		if (consideredClassIndex === 'ranger') {
 			dispatch(addFavoredEnemies([null]));
 			dispatch(addFavoredTerrain(null));
+		}
+
+		if (consideredClassIndex === 'rogue') {
+			for (let i = 0; i < 2; ++i) {
+				dispatch(addExpertiseProficiency(null));
+			}
 		}
 
 		const blankSkills = [];

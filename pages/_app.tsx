@@ -14,7 +14,7 @@ import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
 import { fetchLoggedInUsername } from '../src/redux/features/viewer';
-import { useAppDispatch } from '../src/hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
 import { useStore } from '../src/redux/store';
@@ -24,6 +24,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	const dispatch = useAppDispatch();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+	const hasSpellcasting = !!useAppSelector(
+		state => state.editingCharacter.classInfo.class?.spellcasting
+	);
 
 	useEffect(() => {
 		dispatch(fetchLoggedInUsername());
@@ -104,7 +107,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				onMenuIconClick={toggleMobileNav}
 				onLogoIconClick={closeMobileNav}
 			/>
-			{pathname.includes('create') && <SectionBar />}
+			{pathname.includes('create') && (
+				<SectionBar hasSpellcasting={hasSpellcasting} />
+			)}
 			<div className="app">
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
 				<Component {...pageProps} />
