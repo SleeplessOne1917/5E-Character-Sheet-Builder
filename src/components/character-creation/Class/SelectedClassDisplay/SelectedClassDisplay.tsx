@@ -11,12 +11,14 @@ import {
 } from '../../../../types/srd';
 import {
 	addAbilityBonus,
+	addExpertiseProficiency,
 	addFavoredEnemies,
 	addFavoredTerrain,
 	addFeatureProficiency,
 	deselectSubclass,
 	deselectSubclassSubtype,
 	removeAbilityBonus,
+	removeExpertiseProficiency,
 	removeFavoredEnemies as removeFavoredEnemiesAction,
 	removeFavoredTerrain,
 	removeFeatureProficiency,
@@ -50,11 +52,12 @@ import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSele
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 import LandSelector from '../LandSelector/LandSelector';
 import Select from '../../../Select/Select';
-import SkillsSelector from '../SkillSelector/SkillsSelector';
+import SkillsSelector from '../SkillsSelector/SkillsSelector';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
+import ExpertiseSelector from '../ExpertiseSelector/ExpertiseSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -750,6 +753,31 @@ const SelectedClassDisplay = ({
 		]
 	);
 
+	const addMoreExpertise = useCallback(
+		(newLevel: number) => {
+			if (
+				newLevel >= 6 &&
+				(classInfo.expertiseProficiencies?.length ?? 0) < 4
+			) {
+				for (let i = 0; i < 2; ++i) {
+					dispatch(addExpertiseProficiency(null));
+				}
+			}
+		},
+		[dispatch, classInfo.expertiseProficiencies]
+	);
+
+	const removeExpertise = useCallback(
+		(newLevel: number) => {
+			if (newLevel < 6 && (classInfo.expertiseProficiencies?.length ?? 0) > 2) {
+				for (let i = 0; i < 2; ++i) {
+					dispatch(removeExpertiseProficiency());
+				}
+			}
+		},
+		[dispatch, classInfo.expertiseProficiencies]
+	);
+
 	const handleLevelChange = useCallback(
 		(newValue: number) => {
 			if (newValue < classInfo.level) {
@@ -761,6 +789,7 @@ const SelectedClassDisplay = ({
 				removeAbilityScoreBonuses(newValue);
 				removePrimalChampion(newValue);
 				removeSubclassFeatures(newValue);
+				removeExpertise(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -771,6 +800,7 @@ const SelectedClassDisplay = ({
 				addPrimalChampion(newValue);
 				addBlankSubclassFeatures(newValue);
 				addSlipperyMind(newValue);
+				addMoreExpertise(newValue);
 			}
 
 			dispatch(setLevel(newValue));
@@ -792,7 +822,9 @@ const SelectedClassDisplay = ({
 			removePrimalChampion,
 			removeSubclassFeatures,
 			addBlankSubclassFeatures,
-			addSlipperyMind
+			addSlipperyMind,
+			removeExpertise,
+			addMoreExpertise
 		]
 	);
 
@@ -1071,6 +1103,9 @@ const SelectedClassDisplay = ({
 					({ item }) => item as SrdProficiencyItem
 				)}
 			/>
+			{(classInfo.expertiseProficiencies?.length ?? 0) > 0 && (
+				<ExpertiseSelector />
+			)}
 			{classInfo.abilityBonuses.length > 0 && (
 				<>
 					<h2 className={styles.heading}>

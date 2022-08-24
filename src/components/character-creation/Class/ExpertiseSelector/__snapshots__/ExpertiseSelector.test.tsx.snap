@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="container"
+  data-testid="expertise-selector"
+>
+  <h2
+    class="heading"
+  >
+    Expertise
+  </h2>
+  <div
+    class="selected-text"
+  >
+    0
+    /
+    0
+     Proficiencies Selected
+  </div>
+  <div
+    class="proficiencies-container"
+  />
+</div>
+`;

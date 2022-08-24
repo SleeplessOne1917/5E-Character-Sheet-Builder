@@ -77,15 +77,15 @@ const SkillsSelector = ({ skills }: SkillSelectorProps) => {
 										label: skill.name.replace(/.*:\s*/, '')
 									}))
 							)}
-							value={skill ? skill.index : undefined}
+							value={skill ? skill.index : 'blank'}
 							onChange={value =>
 								handleChange(
 									index,
-									value !== null
+									value !== 'blank'
 										? (skills.find(
 												skill => skill.index === (value as string)
 										  ) as SrdProficiencyItem)
-										: value
+										: null
 								)
 							}
 						/>
