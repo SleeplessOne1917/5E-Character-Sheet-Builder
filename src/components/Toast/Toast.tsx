@@ -1,8 +1,8 @@
 import {
 	CheckCircleIcon,
-	ExclamationCircleIcon,
-	XIcon
-} from '@heroicons/react/solid';
+	ExclaimationCircleIcon,
+	XMarkIcon
+} from '@heroicons/react/24/solid';
 import { KeyboardEventHandler, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
@@ -51,7 +51,7 @@ const Toast = (): JSX.Element => {
 		<div className={getClassName()} aria-label="toast" role="alert">
 			<div className={classes['icon-container']}>
 				{type === ToastType.error ? (
-					<ExclamationCircleIcon
+					<ExclaimationCircleIcon
 						className={`${classes.icon} ${classes['error-icon']}`}
 						role="img"
 						aria-hidden="false"
@@ -75,7 +75,7 @@ const Toast = (): JSX.Element => {
 				<p className={classes.message}>{cleanMessage(message)}</p>
 			</div>
 			<div className={classes['x-container']}>
-				<XIcon
+				<XMarkIcon
 					className={classes['x-icon']}
 					onKeyDown={hideToastKeyDown}
 					onClick={hideToast}

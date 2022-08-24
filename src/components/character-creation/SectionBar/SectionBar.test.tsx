@@ -38,13 +38,24 @@ const mockMatchMedia = (matches: boolean) => {
 	}));
 };
 
-it('renders correctly', () => {
-	mockMatchMedia(true);
-	mockRouter('/create/character/race/');
+describe('renders correctly', () => {
+	it('normally', () => {
+		mockMatchMedia(true);
+		mockRouter('/create/character/race/');
 
-	render(<SectionBar />);
+		render(<SectionBar />);
 
-	expect(screen.getByRole('navigation')).toMatchSnapshot();
+		expect(screen.getByRole('navigation')).toMatchSnapshot();
+	});
+
+	it('with spells', () => {
+		mockMatchMedia(true);
+		mockRouter('/create/character/race/');
+
+		render(<SectionBar hasSpellcasting />);
+
+		expect(screen.getByRole('navigation')).toMatchSnapshot();
+	});
 });
 
 describe('snaps to snapPercents', () => {

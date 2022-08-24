@@ -4,13 +4,22 @@ import SectionBar from './SectionBar';
 
 export default {
 	title: 'Components/SectionBar',
-	component: SectionBar
+	component: SectionBar,
+	parameters: {
+		nextRouter: {
+			pathname: '/create/character/race',
+			asPath: '/create/character/race'
+		}
+	}
 } as ComponentMeta<typeof SectionBar>;
 
-export const Default: ComponentStory<typeof SectionBar> = () => <SectionBar />;
-Default.parameters = {
-	nextRouter: {
-		pathname: '/create/character/race',
-		asPath: '/create/character/race'
-	}
+const Template: ComponentStory<typeof SectionBar> = args => (
+	<SectionBar {...args} />
+);
+
+export const Default = Template.bind({});
+
+export const WithSpells = Template.bind({});
+WithSpells.args = {
+	hasSpellcasting: true
 };

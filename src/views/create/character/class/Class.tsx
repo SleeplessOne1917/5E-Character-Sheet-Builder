@@ -16,6 +16,7 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import {
+	addExpertiseProficiency,
 	addFavoredEnemies,
 	addFavoredTerrain,
 	deselectClass,
@@ -32,7 +33,7 @@ import { Descriptor } from '../../../../types/creation';
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { getClass } from '../../../../services/classService';
 import styles from './Class.module.css';
 import { getMonsterTypes } from '../../../../graphql/srdClientService';
@@ -207,6 +208,12 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 		if (consideredClassIndex === 'ranger') {
 			dispatch(addFavoredEnemies([null]));
 			dispatch(addFavoredTerrain(null));
+		}
+
+		if (consideredClassIndex === 'rogue') {
+			for (let i = 0; i < 2; ++i) {
+				dispatch(addExpertiseProficiency(null));
+			}
 		}
 
 		const blankSkills = [];
