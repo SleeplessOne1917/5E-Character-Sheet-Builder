@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { setSelectedSkills } from '../../../../redux/features/classInfo';
+import {
+	addProficiency,
+	removeProficiency
+} from '../../../../redux/features/proficiencies';
 import { SrdProficiencyItem } from '../../../../types/srd';
 import Select from '../../../Select/Select';
 import classes from './SkillsSelector.module.css';
@@ -22,6 +26,12 @@ const SkillsSelector = ({ skills }: SkillSelectorProps) => {
 
 	const handleChange = useCallback(
 		(index: number, value: SrdProficiencyItem | null) => {
+			if (value) {
+				dispatch(addProficiency(value));
+			} else if (selectedSkills[index]) {
+				dispatch(removeProficiency(selectedSkills[index]?.index as string));
+			}
+
 			dispatch(
 				setSelectedSkills([
 					...selectedSkills.slice(0, index),
