@@ -1,6 +1,6 @@
 import {
 	CheckCircleIcon,
-	ExclaimationCircleIcon,
+	ExclamationCircleIcon,
 	XMarkIcon
 } from '@heroicons/react/24/solid';
 import { KeyboardEventHandler, useCallback, useEffect } from 'react';
@@ -51,7 +51,7 @@ const Toast = (): JSX.Element => {
 		<div className={getClassName()} aria-label="toast" role="alert">
 			<div className={classes['icon-container']}>
 				{type === ToastType.error ? (
-					<ExclaimationCircleIcon
+					<ExclamationCircleIcon
 						className={`${classes.icon} ${classes['error-icon']}`}
 						role="img"
 						aria-hidden="false"
