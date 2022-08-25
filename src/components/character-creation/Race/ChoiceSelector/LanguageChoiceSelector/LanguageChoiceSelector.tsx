@@ -50,7 +50,9 @@ const LanguageChoiceSelector = ({
 	}, [choice]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		selectedLanguages?.map(({ index }) => index) ?? getInitialSelectValues()
+		traitSelectedLanguages?.map(({ index }) => index) ??
+			selectedLanguages?.map(({ index }) => index) ??
+			getInitialSelectValues()
 	);
 
 	useEffect(() => {
