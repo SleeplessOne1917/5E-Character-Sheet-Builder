@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useRef } from 'react';
 
 import Button from '../Button/Button';
-import { ExclaimationTriangleIcon } from '@heroicons/react/24/outline';
+import ExclamationTriangleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
 import classes from './ConfirmationModal.module.css';
 
 type ConfirmationModalProps = {
@@ -44,7 +44,7 @@ const ConfirmationModal = ({
 		>
 			<div className={classes.modal}>
 				<div className={classes.content}>
-					<ExclaimationTriangleIcon className={classes.icon} /> {message}
+					<ExclamationTriangleIcon className={classes.icon} /> {message}
 				</div>
 				<div className={classes.buttons}>
 					<Button positive style={buttonStyle} onClick={onYes} ref={yesRef}>
