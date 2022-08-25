@@ -1,13 +1,10 @@
 import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
-import {
-	addRaceAbilityBonus,
-	removeRaceAbilityBonus
-} from '../../../../../redux/features/raceInfo';
+import { setRaceAbilityBonus } from '../../../../../redux/features/raceInfo';
 import {
 	useAppDispatch,
 	useAppSelector
 } from '../../../../../hooks/reduxHooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import AbilityScores from '../../../../../types/abilityScores';
 import ChoiceSelector from '../ChoiceSelector';
@@ -37,23 +34,16 @@ const AbilityBonusChoiceSelector = ({
 	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		getInitialSelectValues()
+		selectedAbilityScoreBonuses?.map(
+			bonus => bonus?.ability_score.index ?? 'blank'
+		) ?? getInitialSelectValues()
 	);
-
-	useEffect(() => {
-		if (
-			!selectedAbilityScoreBonuses ||
-			selectedAbilityScoreBonuses.length == 0
-		) {
-			setSelectValues(getInitialSelectValues());
-		}
-	}, [setSelectValues, getInitialSelectValues, selectedAbilityScoreBonuses]);
 
 	const dispatch = useAppDispatch();
 
 	const handleChangeSelect = useCallback(
 		(index: number, selectValue: string) => {
-			dispatch(removeRaceAbilityBonus(selectValues[index]));
+			dispatch(setRaceAbilityBonus({ index, abilityBonus: null }));
 
 			if (selectValues[index] !== 'blank') {
 				dispatch(
@@ -68,7 +58,7 @@ const AbilityBonusChoiceSelector = ({
 				const bonus = choice.from.options.find(
 					option => option.ability_score.index === selectValue
 				) as AbilityBonus;
-				dispatch(addRaceAbilityBonus(bonus));
+				dispatch(setRaceAbilityBonus({ index, abilityBonus: bonus }));
 				dispatch(
 					updateRaceBonus({
 						value: bonus.bonus,
@@ -89,7 +79,12 @@ const AbilityBonusChoiceSelector = ({
 			.filter(option => selectValues.includes(option.ability_score.index))
 			.map(bonus => bonus.ability_score.index)) {
 			dispatch(updateRaceBonus({ value: null, abilityIndex: index }));
-			dispatch(removeRaceAbilityBonus(index));
+			dispatch(
+				setRaceAbilityBonus({
+					index: selectValues.indexOf(index),
+					abilityBonus: null
+				})
+			);
 		}
 		setSelectValues(getInitialSelectValues());
 	}, [setSelectValues, getInitialSelectValues, choice, selectValues, dispatch]);

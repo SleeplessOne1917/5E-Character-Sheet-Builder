@@ -47,7 +47,7 @@ const ProficiencyChoiceSelector = ({
 	}, [choice]);
 
 	const [selectValues, setSelectValues] = useState<string[]>(
-		getInitialSelectValues()
+		selectedProficiencies?.map(({ index }) => index) ?? getInitialSelectValues()
 	);
 
 	const proficiencies = useAppSelector(

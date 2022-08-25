@@ -11,7 +11,7 @@ import { SrdFullRaceItem, SrdFullSubraceItem } from '../../types/srd';
 export type RaceInfoState = {
 	race?: SrdFullRaceItem;
 	subrace?: SrdFullSubraceItem;
-	selectedAbilityScoreBonuses?: AbilityBonus[];
+	selectedAbilityScoreBonuses?: (AbilityBonus | null)[];
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
 	selectedTraitLanguages: { [key: string]: SrdItem[] };
@@ -58,24 +58,28 @@ const raceInfoSlice = createSlice({
 			}
 		},
 		deselectRace: () => initialState,
-		addRaceAbilityBonus: (state, action: PayloadAction<AbilityBonus>) => {
+		setRaceAbilityBonus: (
+			state,
+			{
+				payload: { index, abilityBonus }
+			}: PayloadAction<{ index: number; abilityBonus: AbilityBonus | null }>
+		) => {
 			if (!state.selectedAbilityScoreBonuses) {
 				state.selectedAbilityScoreBonuses = [];
 			}
-			state.selectedAbilityScoreBonuses = [
-				...state.selectedAbilityScoreBonuses,
-				action.payload
-			];
-		},
-		removeRaceAbilityBonus: (state, { payload }: PayloadAction<string>) => {
-			if (!state.selectedAbilityScoreBonuses) {
-				state.selectedAbilityScoreBonuses = [];
-			} else {
-				state.selectedAbilityScoreBonuses =
-					state.selectedAbilityScoreBonuses.filter(
-						bonus => bonus.ability_score.index !== payload
-					);
+
+			if (state.selectedAbilityScoreBonuses.length < index + 1) {
+				for (let i = 0; i < index + 1; ++i) {
+					state.selectedAbilityScoreBonuses = [
+						...(state.selectedAbilityScoreBonuses as AbilityBonus[]),
+						null
+					];
+				}
 			}
+
+			state.selectedAbilityScoreBonuses = (
+				state.selectedAbilityScoreBonuses as AbilityBonus[]
+			).map((bonus, i) => (i === index ? abilityBonus : bonus));
 		},
 		addRaceLanguage: (state, { payload }: PayloadAction<SrdItem>) => {
 			if (!state.selectedLanguages) {
@@ -287,8 +291,7 @@ const raceInfoSlice = createSlice({
 export const {
 	selectRace,
 	deselectRace,
-	addRaceAbilityBonus,
-	removeRaceAbilityBonus,
+	setRaceAbilityBonus,
 	addRaceLanguage,
 	removeRaceLanguage,
 	addTraitProficiency,
