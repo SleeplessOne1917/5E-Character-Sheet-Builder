@@ -18,6 +18,7 @@ import {
 	deselectSubclass,
 	deselectSubclassSubtype,
 	removeAbilityBonus,
+	removeClassSpell,
 	removeExpertiseProficiency,
 	removeFavoredEnemies as removeFavoredEnemiesAction,
 	removeFavoredTerrain,
@@ -35,6 +36,7 @@ import {
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
 import {
+	AbilityScore,
 	decrementAbilityBonus,
 	incrementAbilityBonus,
 	resetAbilityHighest,
@@ -42,6 +44,7 @@ import {
 	updateMiscBonus
 } from '../../../../redux/features/abilityScores';
 import {
+	removeSpell,
 	setCantripsKnown,
 	setHighestSlotLevel,
 	setSpellsKnown
@@ -63,6 +66,7 @@ import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -81,6 +85,22 @@ const SelectedClassDisplay = ({
 	const hasCantrips = !!klass.class_levels[0].spellcasting?.cantrips_known;
 	const hasSpellsKnown = klass.class_levels.some(
 		level => level.spellcasting?.spells_known
+	);
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+	const classCantrips = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level === 0);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
 	);
 
 	const classLevels = [...klass.class_levels]
@@ -150,9 +170,99 @@ const SelectedClassDisplay = ({
 		levelNumbers.push(i);
 	}
 
+	const removePrepareSpellsAbilityBonusChange = useCallback(
+		(abilityScoreIndex: AbilityScores, decrementValue = 1) => {
+			if (
+				spellcastingAbility &&
+				abilityScoreIndex === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const abilityScore = (
+					abilityScores as {
+						[key: string]: AbilityScore;
+					}
+				)[abilityScoreIndex];
+
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...abilityScore,
+						abilityImprovement: abilityScore.abilityImprovement - decrementValue
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
+		},
+		[
+			abilityScores,
+			dispatch,
+			classSpells,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
+	);
+
+	const abilityBonusesAreSame = useCallback(
+		(abilityBonuses: (AbilityScores | null)[]) =>
+			abilityBonuses.reduce<{
+				bonuses: (AbilityScores | null)[];
+				areSame: boolean;
+			}>(
+				(acc, cur) => ({
+					bonuses: [...acc.bonuses, cur],
+					areSame: acc.bonuses.length === 0 || acc.bonuses.includes(cur)
+				}),
+				{
+					bonuses: [],
+					areSame: true
+				}
+			).areSame,
+		[]
+	);
+
 	const handleAbilityScoreBonusChange = useCallback(
 		(values: (AbilityScores | null)[], index: number) => {
-			for (const abilityScoreIndex of classInfo.abilityBonuses[index]) {
+			const oldBonuses = classInfo.abilityBonuses[index];
+			const oldBonusesAreSame = abilityBonusesAreSame(oldBonuses);
+			const newBonusesAreSame = abilityBonusesAreSame(values);
+
+			if (
+				!newBonusesAreSame &&
+				values.some(b => oldBonuses.includes(b)) &&
+				oldBonusesAreSame &&
+				oldBonuses[0]
+			) {
+				removePrepareSpellsAbilityBonusChange(oldBonuses[0]);
+			} else if (
+				newBonusesAreSame &&
+				oldBonusesAreSame &&
+				oldBonuses[0] &&
+				oldBonuses[0] !== values[0]
+			) {
+				removePrepareSpellsAbilityBonusChange(oldBonuses[0], 2);
+			} else {
+				for (const bonus of oldBonuses.filter(
+					b => !values.some(v => b === v)
+				)) {
+					if (bonus) {
+						removePrepareSpellsAbilityBonusChange(bonus);
+					}
+				}
+			}
+
+			for (const abilityScoreIndex of oldBonuses) {
 				if (abilityScoreIndex !== null) {
 					dispatch(decrementAbilityBonus(abilityScoreIndex));
 				}
@@ -166,7 +276,12 @@ const SelectedClassDisplay = ({
 				}
 			}
 		},
-		[dispatch, classInfo.abilityBonuses]
+		[
+			dispatch,
+			classInfo.abilityBonuses,
+			removePrepareSpellsAbilityBonusChange,
+			abilityBonusesAreSame
+		]
 	);
 
 	const destroyUndeadTable = (
@@ -848,6 +963,15 @@ const SelectedClassDisplay = ({
 
 			if (highestSlotLevel !== characterSpellcasting.highestSlotLevel) {
 				dispatch(setHighestSlotLevel(highestSlotLevel));
+
+				if (highestSlotLevel < characterSpellcasting.highestSlotLevel) {
+					for (const spell of (classSpells ?? []).filter(
+						s => s.level > highestSlotLevel
+					)) {
+						dispatch(removeSpell(spell.index));
+						dispatch(removeClassSpell(spell.index));
+					}
+				}
 			}
 
 			if (
@@ -855,6 +979,21 @@ const SelectedClassDisplay = ({
 				levelSpellcasting.spells_known !== characterSpellcasting.spellsKnown
 			) {
 				dispatch(setSpellsKnown(levelSpellcasting.spells_known));
+
+				if (
+					classSpells &&
+					levelSpellcasting.spells_known < classSpells.length
+				) {
+					for (
+						let i = 0;
+						i < classSpells.length - levelSpellcasting.spells_known;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
 			}
 
 			if (
@@ -862,9 +1001,96 @@ const SelectedClassDisplay = ({
 				levelSpellcasting.cantrips_known !== characterSpellcasting.cantripsKnown
 			) {
 				dispatch(setCantripsKnown(levelSpellcasting.cantrips_known));
+
+				if (
+					classCantrips &&
+					levelSpellcasting.cantrips_known < classCantrips.length
+				) {
+					for (
+						let i = 0;
+						i < classCantrips.length - levelSpellcasting.cantrips_known;
+						++i
+					) {
+						const spellToRemove = classCantrips[classCantrips.length - (i + 1)];
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
 			}
 		},
-		[dispatch, classLevels, characterSpellcasting]
+		[dispatch, classLevels, characterSpellcasting, classSpells, classCantrips]
+	);
+
+	const removePreparedSpellsLevelChange = useCallback(
+		(newLevel: number) => {
+			if (shouldPrepareSpells) {
+				const numAbilityScoreBonuses =
+					classLevels[newLevel - 1].ability_score_bonuses;
+				const abilityBonusesToRemove = classInfo.abilityBonuses.slice(
+					numAbilityScoreBonuses
+				);
+
+				const abilityBonusValues = abilityBonusesToRemove.flatMap(
+					values => values
+				);
+
+				const spellcastingAbilityBonusToSubtract = abilityBonusValues.filter(
+					bonus => bonus === spellcastingAbility
+				).length;
+
+				let abilityScore: AbilityScore | undefined;
+
+				if (spellcastingAbilityBonusToSubtract > 0) {
+					abilityScore = (abilityScores as { [key: string]: AbilityScore })[
+						spellcastingAbility as AbilityScores
+					];
+					abilityScore = {
+						...abilityScore,
+						abilityImprovement:
+							abilityScore.abilityImprovement -
+							spellcastingAbilityBonusToSubtract
+					};
+				}
+
+				const getPreparedSpellsArgs: {
+					level: number;
+					abilityScore?: AbilityScore;
+				} = {
+					level: newLevel
+				};
+
+				if (abilityScore) {
+					getPreparedSpellsArgs.abilityScore = abilityScore;
+				}
+
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare(
+					getPreparedSpellsArgs as { level: number; abilityScore: AbilityScore }
+				);
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
+		},
+		[
+			dispatch,
+			shouldPrepareSpells,
+			getNumberOfSpellsToPrepare,
+			classSpells,
+			abilityScores,
+			classInfo.abilityBonuses,
+			classLevels,
+			spellcastingAbility
+		]
 	);
 
 	useEffect(() => {
@@ -896,6 +1122,7 @@ const SelectedClassDisplay = ({
 				removeSubclassFeatures(newValue);
 				removeExpertise(newValue);
 				removeMetamagic(newValue);
+				removePreparedSpellsLevelChange(newValue);
 			}
 
 			if (newValue > classInfo.level) {
@@ -934,7 +1161,8 @@ const SelectedClassDisplay = ({
 			removeExpertise,
 			addMoreExpertise,
 			removeMetamagic,
-			handleSpellcastingChange
+			handleSpellcastingChange,
+			removePreparedSpellsLevelChange
 		]
 	);
 

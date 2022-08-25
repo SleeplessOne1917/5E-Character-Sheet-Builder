@@ -43,13 +43,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#evocation"
                 />
               </svg>
-               
               Light
             </div>
             <svg
@@ -172,13 +170,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#conjuration"
                 />
               </svg>
-               
               Mage Hand
             </div>
             <svg
@@ -303,13 +299,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#transmutation"
                 />
               </svg>
-               
               Mending
             </div>
             <svg
@@ -432,13 +426,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#transmutation"
                 />
               </svg>
-               
               Message
             </div>
             <svg
@@ -561,13 +553,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#illusion"
                 />
               </svg>
-               
               Minor Illusion
             </div>
             <svg
@@ -696,13 +686,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#conjuration"
                 />
               </svg>
-               
               Acid Splash
             </div>
             <svg
@@ -845,13 +833,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#transmutation"
                 />
               </svg>
-               
               Prestidigitation
             </div>
             <svg
@@ -991,13 +977,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#evocation"
                 />
               </svg>
-               
               Ray of Frost
             </div>
             <svg
@@ -1140,13 +1124,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#evocation"
                 />
               </svg>
-               
               Shocking Grasp
             </div>
             <svg
@@ -1289,13 +1271,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#divination"
                 />
               </svg>
-               
               True Strike
             </div>
             <svg
@@ -1420,13 +1400,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#necromancy"
                 />
               </svg>
-               
               Chill Touch
             </div>
             <svg
@@ -1572,13 +1550,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#evocation"
                 />
               </svg>
-               
               Dancing Lights
             </div>
             <svg
@@ -1707,13 +1683,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#evocation"
                 />
               </svg>
-               
               Fire Bolt
             </div>
             <svg
@@ -1856,13 +1830,11 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 class="label-icon"
-                style="margin-right: 0.25rem;"
               >
                 <use
                   xlink:href="/Icons.svg#conjuration"
                 />
               </svg>
-               
               Poison Spray
             </div>
             <svg

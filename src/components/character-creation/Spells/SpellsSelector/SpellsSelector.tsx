@@ -1,9 +1,14 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 
 import SpellSelector from '../SpellSelector/SpellSelector';
 import { SrdSpellItem } from '../../../../types/srd';
 import styles from './SpellsSelector.module.css';
-import { useAppSelector } from '../../../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+import {
+	addClassSpell,
+	removeClassSpell
+} from '../../../../redux/features/classInfo';
+import { addSpell, removeSpell } from '../../../../redux/features/spellcasting';
 
 type SpellsSelectorProps = {
 	spells: SrdSpellItem[];
@@ -14,6 +19,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 	const classSpells = useAppSelector(
 		state => state.editingCharacter.classInfo.spells
 	);
+
+	const dispatch = useAppDispatch();
 
 	const traitSpellsByTrait = useAppSelector(
 		state => state.editingCharacter.raceInfo.selectedTraitSpells
@@ -38,11 +45,29 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 		return selected;
 	}, [spells, classSpells, choose]);
 
-	/* eslint-disable unused-imports/no-unused-vars */
 	const [selectedSpells, setSelectedSpells] = useState(
 		getInitialSelectedSpells()
 	);
-	/* eslint-enable unused-imports/no-unused-vars */
+
+	useEffect(() => {
+		setSelectedSpells(getInitialSelectedSpells());
+	}, [setSelectedSpells, getInitialSelectedSpells]);
+
+	const handleAdd = useCallback(
+		(spell: SrdSpellItem) => {
+			dispatch(addClassSpell(spell));
+			dispatch(addSpell(spell));
+		},
+		[dispatch]
+	);
+
+	const handleRemove = useCallback(
+		(spell: SrdSpellItem) => {
+			dispatch(removeClassSpell(spell.index));
+			dispatch(removeSpell(spell.index));
+		},
+		[dispatch]
+	);
 
 	return (
 		<div data-testid="spells-selector" className={styles.container}>
@@ -58,8 +83,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							key={spell.index}
 							spell={spell}
 							selectValues={selectedSpells}
-							onAdd={() => {}}
-							onRemove={() => {}}
+							onAdd={() => handleAdd(spell)}
+							onRemove={() => handleRemove(spell)}
 						/>
 					))}
 			</div>

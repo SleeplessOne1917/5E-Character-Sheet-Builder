@@ -33,13 +33,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#divination"
             />
           </svg>
-           
           True Strike
         </div>
         <svg
@@ -164,13 +162,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#evocation"
             />
           </svg>
-           
           Light
         </div>
         <svg
@@ -293,13 +289,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#transmutation"
             />
           </svg>
-           
           Mending
         </div>
         <svg
@@ -422,13 +416,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#transmutation"
             />
           </svg>
-           
           Message
         </div>
         <svg
@@ -551,13 +543,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#enchantment"
             />
           </svg>
-           
           Vicious Mockery
         </div>
         <svg
@@ -700,13 +690,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#illusion"
             />
           </svg>
-           
           Minor Illusion
         </div>
         <svg
@@ -835,13 +823,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#evocation"
             />
           </svg>
-           
           Dancing Lights
         </div>
         <svg
@@ -970,13 +956,11 @@ exports[`renders correctly default 1`] = `
         >
           <svg
             class="label-icon"
-            style="margin-right: 0.25rem;"
           >
             <use
               xlink:href="/Icons.svg#transmutation"
             />
           </svg>
-           
           Prestidigitation
         </div>
         <svg

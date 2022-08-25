@@ -18,7 +18,7 @@ import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
 
-const reducer = {
+const getReducer = () => ({
 	toast,
 	viewer,
 	editingCharacter: editingCharacter as Reducer<
@@ -27,7 +27,7 @@ const reducer = {
 	>,
 	rollGroups,
 	generationMethod
-};
+});
 
 const indexedDbCacheListener = createListenerMiddleware();
 
@@ -51,7 +51,7 @@ const getStore = async () => {
 	});
 
 	const options: ConfigureStoreOptions = {
-		reducer,
+		reducer: getReducer(),
 		middleware: getDefaultMiddleware =>
 			getDefaultMiddleware().prepend(indexedDbCacheListener.middleware)
 	};
@@ -88,7 +88,13 @@ export const useStore = () => {
 	return theStore;
 };
 
-export const getTestStore = () => configureStore({ reducer, devTools: false });
+export const getTestStore = (
+	reducerOverrides?: Partial<ReturnType<typeof getReducer>>
+) =>
+	configureStore({
+		reducer: { ...getReducer(), ...reducerOverrides },
+		devTools: false
+	});
 
 const store = getTestStore();
 

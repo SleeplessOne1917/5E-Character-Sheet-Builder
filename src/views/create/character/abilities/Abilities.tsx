@@ -24,7 +24,13 @@ import Select from '../../../../components/Select/Select';
 import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
-import { updateBase } from '../../../../redux/features/abilityScores';
+import {
+	AbilityScore,
+	updateBase
+} from '../../../../redux/features/abilityScores';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import { removeClassSpell } from '../../../../redux/features/classInfo';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
@@ -35,24 +41,81 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 	const rollGroups = useAppSelector(state => state.rollGroups);
 	const generationMethod = useAppSelector(state => state.generationMethod);
 	const dispatch = useAppDispatch();
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
+
+	const removePreparedSpells = useCallback(
+		(value: number | null, abilityScoreIndex: AbilityScores) => {
+			if (
+				spellcastingAbility &&
+				abilityScoreIndex === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...(
+							abilityScores as {
+								[key: string]: AbilityScore;
+							}
+						)[abilityScoreIndex],
+						base: value
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
+		},
+		[
+			abilityScores,
+			classSpells,
+			dispatch,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
+	);
 
 	const handleGenerationMethodChange = useCallback(
 		(value: string) => {
 			{
 				if (value === 'point-buy') {
 					for (const { index } of abilities) {
-						dispatch(
-							updateBase({ value: 8, abilityIndex: index as AbilityScores })
-						);
+						dispatch(updateBase({ value: 8, abilityIndex: index }));
+
+						removePreparedSpells(8, index);
 					}
 				} else {
 					for (const { index } of abilities) {
 						dispatch(
 							updateBase({
 								value: null,
-								abilityIndex: index as AbilityScores
+								abilityIndex: index
 							})
 						);
+
+						removePreparedSpells(null, index);
 					}
 				}
 
@@ -63,7 +126,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 				);
 			}
 		},
-		[dispatch, abilities]
+		[dispatch, abilities, removePreparedSpells]
 	);
 
 	const toggleShowRollGroups = useCallback(() => {

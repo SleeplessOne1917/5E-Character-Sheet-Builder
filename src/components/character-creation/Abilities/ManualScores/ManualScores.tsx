@@ -1,4 +1,5 @@
 import {
+	AbilityScore,
 	AbilityScoresState,
 	updateBase
 } from '../../../../redux/features/abilityScores';
@@ -10,6 +11,9 @@ import AbilityScores from '../../../../types/abilityScores';
 import classes from './ManualScores.module.css';
 import { getTotalScore } from '../../../../services/abilityScoreService';
 import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import { removeClassSpell } from '../../../../redux/features/classInfo';
 
 export type ManualScoresProps = {
 	abilities: AbilityItem[];
@@ -41,6 +45,16 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 	const getAbilityScore = useGetAbilityScore();
 	const [abilityScoreStrings, setAbilityScoreStrings] =
 		useState<AbilityScoreStrings>(getInitialAbilityScoreStrings(abilityScores));
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>, abilityIndex: AbilityScores) => {
@@ -54,7 +68,7 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 
 	const handleBlur = useCallback(
 		(event: FocusEvent<HTMLInputElement>, abilityIndex: AbilityScores) => {
-			let value: number | null = parseInt(event.target.value);
+			let value: number | null = parseInt(event.target.value, 10);
 			if (isNaN(value)) {
 				value = null;
 			} else {
@@ -67,13 +81,51 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 				}
 			}
 
+			if (
+				spellcastingAbility &&
+				abilityIndex === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...(
+							abilityScores as {
+								[key: string]: AbilityScore;
+							}
+						)[abilityIndex],
+						base: value
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
+
 			setAbilityScoreStrings(prevState => ({
 				...prevState,
 				[abilityIndex]: value
 			}));
 			dispatch(updateBase({ value, abilityIndex }));
 		},
-		[dispatch, setAbilityScoreStrings]
+		[
+			dispatch,
+			setAbilityScoreStrings,
+			abilityScores,
+			classSpells,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
 	);
 
 	return (

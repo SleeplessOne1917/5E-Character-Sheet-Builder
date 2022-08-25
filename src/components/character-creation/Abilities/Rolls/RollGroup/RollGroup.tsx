@@ -10,7 +10,13 @@ import AbilityScores from '../../../../../types/abilityScores';
 import Button from '../../../../Button/Button';
 import RollDisplay from '../RollDisplay/RollDisplay';
 import classes from './RollGroup.module.css';
-import { updateBase } from '../../../../../redux/features/abilityScores';
+import {
+	AbilityScore,
+	updateBase
+} from '../../../../../redux/features/abilityScores';
+import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
+import { removeSpell } from '../../../../../redux/features/spellcasting';
+import { removeClassSpell } from '../../../../../redux/features/classInfo';
 
 export type RollGroupProps = {
 	onDeleteGroup?: MouseEventHandler<HTMLButtonElement> | null;
@@ -30,8 +36,21 @@ const RollGroup = ({
 	abilities,
 	group
 }: RollGroupProps): JSX.Element => {
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
 	const rollInfos = useAppSelector(state => state.rollGroups[group]);
 	const dispatch = useAppDispatch();
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
 
 	const resetGroups: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
 		for (let i = 0; i < rollInfos.length; ++i) {
@@ -80,9 +99,47 @@ const RollGroup = ({
 						abilityIndex: info.ability as AbilityScores
 					})
 				);
+
+				if (
+					spellcastingAbility &&
+					info.ability === spellcastingAbility &&
+					shouldPrepareSpells
+				) {
+					const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+						abilityScore: {
+							...(
+								abilityScores as {
+									[key: string]: AbilityScore;
+								}
+							)[info.ability],
+							base: sumRolls(info.rolls)
+						}
+					});
+
+					if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+						for (
+							let i = 0;
+							i < classSpells.length - newPreparedSpellsNumber;
+							++i
+						) {
+							const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+							dispatch(removeSpell(spellToRemove.index));
+							dispatch(removeClassSpell(spellToRemove.index));
+						}
+					}
+				}
 			}
 		}
-	}, [dispatch, rollInfos]);
+	}, [
+		dispatch,
+		rollInfos,
+		abilityScores,
+		classSpells,
+		getNumberOfSpellsToPrepare,
+		shouldPrepareSpells,
+		spellcastingAbility
+	]);
 
 	return (
 		<div className={classes['roll-group']} data-testid="roll-group">

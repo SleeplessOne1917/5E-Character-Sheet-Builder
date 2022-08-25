@@ -32,7 +32,7 @@ export type EditingCharacterState = {
 	classInfo: ClassInfoState;
 };
 
-const initialState: EditingCharacterState = {
+export const initialState: EditingCharacterState = {
 	abilityScores: abilityScoresInitialState,
 	raceInfo: raceInitialState,
 	languages: languagesInitialState,

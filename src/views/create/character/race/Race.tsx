@@ -37,7 +37,12 @@ import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
 import { removeSpell } from '../../../../redux/features/spellcasting';
-import { updateRaceBonus } from '../../../../redux/features/abilityScores';
+import {
+	AbilityScore,
+	updateRaceBonus
+} from '../../../../redux/features/abilityScores';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import { removeClassSpell } from '../../../../redux/features/classInfo';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -84,6 +89,19 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 	const mainRef = useRef<HTMLDivElement>();
 	const dispatch = useAppDispatch();
 	const raceInfo = useAppSelector(state => state.editingCharacter.raceInfo);
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
 
 	useEffect(() => {
 		if (consideredRace) {
@@ -251,7 +269,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		for (const { index } of (raceInfo.race?.languages ?? [])
 			.concat(raceInfo.selectedLanguages ?? [])
 			.concat(
-				Object.keys(raceInfo.selectedTraitLanguages).reduce<SrdItem[]>(
+				Object.keys(raceInfo.selectedTraitLanguages).reduce<SrdItem[]>( //TODO: chagne to use flatmap
 					(acc, cur) => acc.concat(raceInfo.selectedTraitLanguages[cur]),
 					[]
 				)
@@ -283,8 +301,48 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 
 		for (const { index } of abilities) {
 			dispatch(updateRaceBonus({ abilityIndex: index, value: null }));
+
+			if (
+				spellcastingAbility &&
+				index === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...(
+							abilityScores as {
+								[key: string]: AbilityScore;
+							}
+						)[index],
+						raceBonus: null
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
 		}
-	}, [setShowDeselectModal, dispatch, abilities, raceInfo]);
+	}, [
+		setShowDeselectModal,
+		dispatch,
+		abilities,
+		raceInfo,
+		abilityScores,
+		classSpells,
+		getNumberOfSpellsToPrepare,
+		shouldPrepareSpells,
+		spellcastingAbility
+	]);
 
 	const tryDeselectRace = useCallback(() => {
 		setShowDeselectModal(true);

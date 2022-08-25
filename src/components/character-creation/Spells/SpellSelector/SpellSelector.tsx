@@ -3,7 +3,13 @@ import {
 	ChevronDownIcon,
 	ChevronUpIcon
 } from '@heroicons/react/20/solid';
-import { KeyboardEventHandler, useCallback, useState } from 'react';
+import {
+	KeyboardEventHandler,
+	useCallback,
+	useMemo,
+	useState,
+	memo
+} from 'react';
 import { SrdItem, SrdSpellItem } from '../../../../types/srd';
 
 import Button from '../../../Button/Button';
@@ -28,7 +34,10 @@ const SpellSelector = ({
 }: SpellSelectorProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
-	const isSelected = selectValues.includes(spell.index);
+	const isSelected = useMemo(
+		() => selectValues.includes(spell.index),
+		[selectValues, spell.index]
+	);
 
 	const toggleOpen = useCallback(
 		() => setIsOpen(prevState => !prevState),
@@ -43,7 +52,12 @@ const SpellSelector = ({
 	);
 
 	return (
-		<div className={classes.selector} data-testid="spell-selector">
+		<div
+			className={`${classes.selector}${
+				isSelected ? ` ${classes.selected}` : ''
+			}`}
+			data-testid="spell-selector"
+		>
 			<div
 				className={classes['selector-label']}
 				role="button"
@@ -53,12 +67,9 @@ const SpellSelector = ({
 				onKeyDown={toggleOpenKeyDown}
 			>
 				<div className={classes['label-name-container']}>
-					<svg
-						className={classes['label-icon']}
-						style={{ marginRight: '0.25rem' }}
-					>
+					<svg className={classes['label-icon']}>
 						<use xlinkHref={`/Icons.svg#${spell.school.index}`} />
-					</svg>{' '}
+					</svg>
 					{spell.name}
 					{isSelected && <CheckIcon className={classes.check} />}
 				</div>
@@ -143,4 +154,4 @@ const SpellSelector = ({
 	);
 };
 
-export default SpellSelector;
+export default memo(SpellSelector);

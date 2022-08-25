@@ -1,5 +1,5 @@
 .selector {
-    background-color: var(--heaven);
+    background-color: var(--heaven-light);
     color: var(--davy);
     align-self: stretch;
     padding: 0.5rem;
@@ -19,7 +19,7 @@
 }
 
 .selected {
-    background-color: var(--highlight) !important;
+    background-color: var(--highlight-light) !important;
 }
 
 .check {
@@ -36,6 +36,7 @@
     min-width: 2rem;
     height: 2rem;
     width: 2rem;
+    margin-right: 0.5rem;
 }
 
 .label-name-container {

@@ -5,9 +5,15 @@ import AbilityScores from '../../../../types/abilityScores';
 import Select from '../../../Select/Select';
 import classes from './StandardArray.module.css';
 import { getTotalScore } from '../../../../services/abilityScoreService';
-import { updateBase } from '../../../../redux/features/abilityScores';
+import {
+	AbilityScore,
+	updateBase
+} from '../../../../redux/features/abilityScores';
 import { useCallback } from 'react';
 import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import { removeClassSpell } from '../../../../redux/features/classInfo';
 
 const arrayValues = [8, 10, 12, 13, 14, 15];
 
@@ -21,17 +27,63 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 	const abilityScores = useAppSelector(
 		state => state.editingCharacter.abilityScores
 	);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+
 	const handleValueSelect = useCallback(
 		(value: string | number, abilityIndex: AbilityScores) => {
 			if (value === 'blank') {
 				dispatch(updateBase({ value: null, abilityIndex }));
 			} else {
-				dispatch(
-					updateBase({ value: parseInt(value as string, 10), abilityIndex })
-				);
+				dispatch(updateBase({ value: value as number, abilityIndex }));
+			}
+
+			if (
+				spellcastingAbility &&
+				abilityIndex === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...(
+							abilityScores as {
+								[key: string]: AbilityScore;
+							}
+						)[abilityIndex],
+						base: value === 'blank' ? null : (value as number)
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
 			}
 		},
-		[dispatch]
+		[
+			dispatch,
+			abilityScores,
+			classSpells,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
 	);
 
 	return (

@@ -1,4 +1,5 @@
 import {
+	AbilityScore,
 	AbilityScoresState,
 	updateBase
 } from '../../../../redux/features/abilityScores';
@@ -12,6 +13,9 @@ import classes from './PointBuy.module.css';
 import { getTotalScore } from '../../../../services/abilityScoreService';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
 import useGetAbilityScore from '../../../../hooks/useGetAbilityScore';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import { removeClassSpell } from '../../../../redux/features/classInfo';
 
 export type PointBuyProps = {
 	abilities: AbilityItem[];
@@ -43,6 +47,58 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 	const getAbilityScore = useGetAbilityScore();
 	const dispatch = useAppDispatch();
 	const [points, setPoints] = useState(getInitialPoints(abilityScores));
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+
+	const handleScoreChange = useCallback(
+		(value: number, abilityIndex: AbilityScores) => {
+			if (
+				spellcastingAbility &&
+				abilityIndex === spellcastingAbility &&
+				shouldPrepareSpells
+			) {
+				const newPreparedSpellsNumber = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...(
+							abilityScores as {
+								[key: string]: AbilityScore;
+							}
+						)[abilityIndex],
+						base: value
+					}
+				});
+
+				if (classSpells && newPreparedSpellsNumber < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newPreparedSpellsNumber;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+
+						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.index));
+					}
+				}
+			}
+		},
+		[
+			abilityScores,
+			dispatch,
+			classSpells,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
+	);
 
 	const subtractScore = useCallback(
 		(abilityIndex: AbilityScores) => {
@@ -53,9 +109,11 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 				setPoints(prevState => prevState + 1);
 			}
 
+			handleScoreChange(oldScore - 1, abilityIndex);
+
 			dispatch(updateBase({ value: oldScore - 1, abilityIndex }));
 		},
-		[setPoints, dispatch, getAbilityScore]
+		[setPoints, dispatch, getAbilityScore, handleScoreChange]
 	);
 
 	const handleSubtractScoreKeyDown = useCallback(
@@ -76,9 +134,11 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 				setPoints(prevState => prevState - 1);
 			}
 
+			handleScoreChange(oldScore + 1, abilityIndex);
+
 			dispatch(updateBase({ value: oldScore + 1, abilityIndex }));
 		},
-		[setPoints, dispatch, getAbilityScore]
+		[setPoints, dispatch, getAbilityScore, handleScoreChange]
 	);
 
 	const handleAddScoreKeyDown = useCallback(

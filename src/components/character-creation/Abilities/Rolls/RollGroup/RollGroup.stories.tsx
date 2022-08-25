@@ -1,11 +1,29 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import RollGroup, { RollGroupProps } from './RollGroup';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';
 import { RollGroupsState } from '../../../../../redux/features/rollGroups';
 import { mockAbilities } from '../../MockAbilitiesStore';
+import { getTestStore } from '../../../../../redux/store';
+import AbilityScores from '../../../../../types/abilityScores';
+
+type AddRollsPayload = {
+	rolls: number[] | null;
+	group: number;
+	index: number;
+};
+
+type AddAbilityPayload = {
+	ability: AbilityScores | null;
+	group: number;
+	index: number;
+};
+
+type GroupPayload = {
+	group: number;
+};
 
 const mockState = {
 	0: [{}, {}, {}, {}, {}, {}],
@@ -45,14 +63,31 @@ const mockState = {
 
 const MockStore = ({ children }: { children: ReactNode }) => (
 	<Provider
-		store={configureStore({
-			reducer: {
-				rollGroups: createSlice({
-					name: 'rollGroups',
-					initialState: mockState,
-					reducers: {}
-				}).reducer
-			}
+		store={getTestStore({
+			rollGroups: createSlice({
+				name: 'rollGroups',
+				initialState: mockState,
+				reducers: {
+					addGroup: state => {
+						const newGroup =
+							parseInt(Object.keys(state)[Object.keys(state).length - 1]) + 1;
+						state[newGroup] = [{}, {}, {}, {}, {}, {}];
+					},
+					removeGroup: (state, action: PayloadAction<GroupPayload>) => {
+						delete state[action.payload.group];
+					},
+					addRolls: (state, action: PayloadAction<AddRollsPayload>) => {
+						const { rolls, group, index } = action.payload;
+
+						state[group][index].rolls = rolls;
+					},
+					addAbility: (state, action: PayloadAction<AddAbilityPayload>) => {
+						const { ability, group, index } = action.payload;
+
+						state[group][index].ability = ability;
+					}
+				}
+			}).reducer
 		})}
 	>
 		{children}
