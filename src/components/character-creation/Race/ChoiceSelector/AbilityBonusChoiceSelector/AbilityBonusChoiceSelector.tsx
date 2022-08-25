@@ -1,5 +1,4 @@
 import { AbilityBonus, AbilityBonusChoice } from '../../../../../types/srd';
-import { setRaceAbilityBonus } from '../../../../../redux/features/raceInfo';
 import {
 	useAppDispatch,
 	useAppSelector
@@ -10,7 +9,11 @@ import AbilityScores from '../../../../../types/abilityScores';
 import ChoiceSelector from '../ChoiceSelector';
 import Select from '../../../../Select/Select';
 import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
+import { removeClassSpell } from '../../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../../redux/features/spellcasting';
+import { setRaceAbilityBonus } from '../../../../../redux/features/raceInfo';
 import { updateRaceBonus } from '../../../../../redux/features/abilityScores';
+import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
 
 type OptionSelectorProps = {
 	choice: AbilityBonusChoice;
@@ -39,10 +42,50 @@ const AbilityBonusChoiceSelector = ({
 		) ?? getInitialSelectValues()
 	);
 
+	const { getNumberOfSpellsToPrepare, shouldPrepareSpells } =
+		usePreparedSpells();
+	const classSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.spells
+	)?.filter(({ level }) => level > 0);
+	const spellcastingAbility = useAppSelector(
+		state =>
+			state.editingCharacter.classInfo.class?.spellcasting?.spellcasting_ability
+				.index
+	);
+	const abilityScores = useAppSelector(
+		state => state.editingCharacter.abilityScores
+	);
+
 	const dispatch = useAppDispatch();
 
 	const handleChangeSelect = useCallback(
 		(index: number, selectValue: string) => {
+			if (
+				shouldPrepareSpells &&
+				selectValue !== selectValues[index] &&
+				selectValues[index] === spellcastingAbility
+			) {
+				const abilityScore = abilityScores[spellcastingAbility];
+				const newNumberOfSpellsToPrepare = getNumberOfSpellsToPrepare({
+					abilityScore: {
+						...abilityScore,
+						raceBonus: null
+					}
+				});
+
+				if (classSpells && newNumberOfSpellsToPrepare < classSpells.length) {
+					for (
+						let i = 0;
+						i < classSpells.length - newNumberOfSpellsToPrepare;
+						++i
+					) {
+						const spellToRemove = classSpells[classSpells.length - (i + 1)];
+						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.index));
+					}
+				}
+			}
+
 			dispatch(setRaceAbilityBonus({ index, abilityBonus: null }));
 
 			if (selectValues[index] !== 'blank') {
@@ -71,7 +114,17 @@ const AbilityBonusChoiceSelector = ({
 				prevState.map((value, i) => (i === index ? selectValue : value))
 			);
 		},
-		[setSelectValues, dispatch, choice, selectValues]
+		[
+			setSelectValues,
+			dispatch,
+			choice,
+			selectValues,
+			abilityScores,
+			classSpells,
+			getNumberOfSpellsToPrepare,
+			shouldPrepareSpells,
+			spellcastingAbility
+		]
 	);
 
 	const handleReset = useCallback(() => {
