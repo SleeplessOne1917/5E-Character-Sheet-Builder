@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@graphql-tools/schema": "^9.0.1",
-    "@heroicons/react": "^2.0.1",
+    "@heroicons/react": "^2.0.4",
     "@reduxjs/toolkit": "^1.8.5",
     "@urql/exchange-auth": "^1.0.0",
     "apollo-server-micro": "^3.10.1",
