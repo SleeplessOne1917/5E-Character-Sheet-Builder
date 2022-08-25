@@ -88,7 +88,12 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 	}, [choice, selectValues, dispatch, trait.index]);
 
 	const selects = [
-		<div key={`${trait.index}-spell-selector`} className={classes.container}>
+		<div
+			key={`${trait.index}-spell-selector`}
+			className={`${classes.container}${
+				!selectValues.includes('blank') ? ` ${classes.selected}` : ''
+			}`}
+		>
 			<div className={classes.label}>
 				{selectValues.filter(value => value !== 'blank').length}/{choice.choose}{' '}
 				spells selected

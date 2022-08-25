@@ -22,6 +22,10 @@
     margin-bottom: 1rem;
 }
 
+.selected {
+    color: var(--davy);
+}
+
 @media screen and (min-width: 768px) {
     .label {
         font-size: 1.6rem;
