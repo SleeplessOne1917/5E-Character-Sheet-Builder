@@ -16,6 +16,140 @@ exports[`renders correctly default 1`] = `
     s selected
   </div>
   <div
+    class="filter-bar"
+  >
+    <div
+      class="search-container"
+    >
+      <input
+        aria-label="Search cantrips"
+        class="search"
+        placeholder="Search cantrips"
+        value=""
+      />
+      <svg
+        aria-hidden="true"
+        class="search-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+    <div
+      class="selects"
+    >
+      <div
+        class="select-container"
+      >
+        <label
+          class="select-label"
+          id="school-select"
+        >
+          School
+        </label>
+         
+        <div
+          aria-labelledby="school-select"
+          class="container"
+          data-testid="select"
+          style="font-size: 1.2rem;"
+        >
+          <button
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="button"
+            data-testid="select-button"
+            type="button"
+          >
+            —
+            <svg
+              aria-hidden="true"
+              class="icon"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <ul
+            aria-activedescendant="—"
+            class="list"
+            data-testid="select-list"
+            role="listbox"
+            style="display: none;"
+            tabindex="-1"
+          >
+            <li
+              aria-selected="true"
+              class="item selected"
+              data-testid="data-blank"
+              role="option"
+              tabindex="0"
+            >
+              —
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="data-divination"
+              role="option"
+              tabindex="0"
+            >
+              Divination
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="data-evocation"
+              role="option"
+              tabindex="0"
+            >
+              Evocation
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="data-transmutation"
+              role="option"
+              tabindex="0"
+            >
+              Transmutation
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="data-enchantment"
+              role="option"
+              tabindex="0"
+            >
+              Enchantment
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="data-illusion"
+              role="option"
+              tabindex="0"
+            >
+              Illusion
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
     class="spells-container"
   >
     <div

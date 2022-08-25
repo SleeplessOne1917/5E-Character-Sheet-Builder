@@ -21,3 +21,64 @@
 	max-height: 40rem;
 	overflow-y: auto;
 }
+
+.filter-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 1rem 2rem;
+}
+
+.search {
+	padding: 0.3rem 0 0.3rem 2rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    background-color: var(--heaven-light);
+    border: 1px solid var(--davy);
+    border-radius: 0.75rem;
+    color: var(--davy);
+    margin-top: 0.25rem;
+	width: 100%;
+}
+
+.search:focus-visible,
+.search:active {
+    outline: var(--focus-outline);
+}
+
+.search::placeholder {
+	color: var(--davy-light);
+}
+
+.search-container {
+	position: relative;
+	flex-grow: 1;
+}
+
+.search-icon {
+	position: absolute;
+	top: 0.5rem;
+	bottom: 0;
+	left: 0.5rem;
+	pointer-events: none;
+	height: 1.5rem;
+	color: var(--davy);
+}
+
+.selects {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.select-container {
+	text-align: center;
+}
+
+.select-label {
+	margin-bottom: 0.5rem;
+	display: inline-block;
+	font-size: 1.3rem;
+}
