@@ -1407,10 +1407,10 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
   integrity sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==
 
-"@heroicons/react@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.4.tgz#d82bf1ab146e52bb6f73ec088ec8a3e19d418a62"
-  integrity sha512-6C3CPY0vfWSHIMH0lr2L0KUJpPnKAnxgnzsiW0hXp8k9xu95ZFX5Qx4JQqZbQ1LsaGRyFqtyAnW5VerDY2XUdA==
+"@heroicons/react@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.7.tgz#d5a95c7c8ae19f651721b0f9ae3f6fa8b2f6922e"
+  integrity sha512-eo6EwIwVYDz6SMHXgTe2wK56jrAS2c8eVUFKxt2eJYGxQwbi4eFZSP5gLvkDbEBsClMxPDWgudnGRi5X2ZrETw==
 
 "@humanwhocodes/config-array@^0.10.4":
   version "0.10.4"
