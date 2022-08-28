@@ -134,7 +134,8 @@ function MyApp({
 						style={{
 							display: 'flex',
 							alignItems: 'center',
-							justifyContent: 'center'
+							justifyContent: 'center',
+							flexGrow: 1
 						}}
 					>
 						<LoadingSpinner />

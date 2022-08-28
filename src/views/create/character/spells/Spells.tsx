@@ -9,6 +9,7 @@ import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
 import { useRouter } from 'next/router';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import SpellsKnownDisplay from '../../../../components/character-creation/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
 
 const Spells = () => {
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
@@ -59,6 +60,14 @@ const Spells = () => {
 			) : (
 				<>
 					<h1 className={styles.title}>Spells</h1>
+					{spellcasting.spells.length > 0 && (
+						<div className={styles['spells-selector-container']}>
+							<h2 className={styles['spell-select-title']}>
+								Spells {shouldPrepareSpells ? 'Prepared' : 'Known'}
+							</h2>
+							<SpellsKnownDisplay />
+						</div>
+					)}
 					{spellcasting.cantripsKnown > 0 && (
 						<div className={styles['spells-selector-container']}>
 							<h2 className={styles['spell-select-title']}>
