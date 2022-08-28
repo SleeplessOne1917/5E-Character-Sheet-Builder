@@ -88,3 +88,11 @@
 	display: inline-block;
 	font-size: 1.3rem;
 }
+
+.no-spells {
+	background-color: var(--heaven-light);
+	color: var(--davy);
+	padding: 4rem;
+	text-align: center;
+	font-size: 1.5rem;
+}

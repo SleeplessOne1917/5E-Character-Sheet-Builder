@@ -141,6 +141,28 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 		[setSelectedLevel]
 	);
 
+	const filteredSpells = useMemo(
+		() =>
+			spells.filter(
+				spell =>
+					!traitSpells.some(ts => ts.index === spell.index) &&
+					spell.name.toLowerCase().includes(search.toLowerCase()) &&
+					(selectedSchool === 'blank' ||
+						selectedSchool === spell.school.index) &&
+					(selectedLevel === 'blank' || selectedLevel === spell.level) &&
+					(!filterOnlySelected || selectedSpells.includes(spell.index))
+			),
+		[
+			spells,
+			traitSpells,
+			selectedSchool,
+			selectedLevel,
+			filterOnlySelected,
+			search,
+			selectedSpells
+		]
+	);
+
 	return (
 		<div data-testid="spells-selector" className={styles.container}>
 			<div className={styles.text}>
@@ -216,17 +238,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 				</div>
 			</div>
 			<div className={styles['spells-container']}>
-				{spells
-					.filter(
-						spell =>
-							!traitSpells.some(ts => ts.index === spell.index) &&
-							spell.name.toLowerCase().includes(search.toLowerCase()) &&
-							(selectedSchool === 'blank' ||
-								selectedSchool === spell.school.index) &&
-							(selectedLevel === 'blank' || selectedLevel === spell.level) &&
-							(!filterOnlySelected || selectedSpells.includes(spell.index))
-					)
-					.map(spell => (
+				{filteredSpells.length > 0 ? (
+					filteredSpells.map(spell => (
 						<SpellSelector
 							key={spell.index}
 							spell={spell}
@@ -234,7 +247,10 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							onAdd={() => handleAdd(spell)}
 							onRemove={() => handleRemove(spell)}
 						/>
-					))}
+					))
+				) : (
+					<div className={styles['no-spells']}>No spells found.</div>
+				)}
 			</div>
 		</div>
 	);
