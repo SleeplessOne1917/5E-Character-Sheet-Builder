@@ -2,12 +2,13 @@
     width: 1.5rem;
     height: 1.5rem;
     border: 2px solid var(--davy);
-    background-color: var(--heaven);
+    background-color: var(--heaven-light);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border-radius: 0.5rem;
 }
 
 .checked {

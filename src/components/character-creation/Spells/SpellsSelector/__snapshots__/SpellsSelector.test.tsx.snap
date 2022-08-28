@@ -147,6 +147,23 @@ exports[`renders correctly default 1`] = `
           </ul>
         </div>
       </div>
+      <div
+        class="select-container"
+      >
+        <label
+          class="select-label"
+        >
+          Only Show Selected
+        </label>
+         
+        <div
+          aria-checked="false"
+          aria-label="Only Show Selected"
+          class="checkbox"
+          role="checkbox"
+          tabindex="0"
+        />
+      </div>
     </div>
   </div>
   <div

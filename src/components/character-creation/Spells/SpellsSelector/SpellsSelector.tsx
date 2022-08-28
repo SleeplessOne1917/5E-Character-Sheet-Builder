@@ -17,6 +17,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import Select from '../../../Select/Select';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import styles from './SpellsSelector.module.css';
+import Checkbox from '../../../Checkbox/Checkbox';
 
 type SpellsSelectorProps = {
 	spells: SrdSpellItem[];
@@ -75,6 +76,7 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 	const [search, setSearch] = useState('');
 	const [selectedSchool, setSelectedSchool] = useState('blank');
 	const [selectedLevel, setSelectedLevel] = useState<string | number>('blank');
+	const [filterOnlySelected, setFilterOnlySelected] = useState(false);
 
 	const getInitialSelectedSpells = useCallback(() => {
 		const selected = spells
@@ -203,6 +205,14 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							/>
 						</div>
 					)}
+					<div className={styles['select-container']}>
+						<label className={styles['select-label']}>Only Show Selected</label>{' '}
+						<Checkbox
+							label="Only Show Selected"
+							checked={filterOnlySelected}
+							onChange={checked => setFilterOnlySelected(checked)}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className={styles['spells-container']}>
@@ -213,7 +223,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							spell.name.toLowerCase().includes(search.toLowerCase()) &&
 							(selectedSchool === 'blank' ||
 								selectedSchool === spell.school.index) &&
-							(selectedLevel === 'blank' || selectedLevel === spell.level)
+							(selectedLevel === 'blank' || selectedLevel === spell.level) &&
+							(!filterOnlySelected || selectedSpells.includes(spell.index))
 					)
 					.map(spell => (
 						<SpellSelector
