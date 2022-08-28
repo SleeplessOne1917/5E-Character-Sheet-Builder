@@ -71,10 +71,12 @@ const getStore = async () => {
 
 export const useStore = () => {
 	const [theStore, setTheStore] = useState(getTestStore());
+	const [loadingStore, setLoadingStore] = useState(true);
 
 	useEffect(() => {
 		getStore().then(s => {
 			setTheStore(s);
+			setLoadingStore(false);
 		});
 
 		return () => {
@@ -85,7 +87,7 @@ export const useStore = () => {
 		};
 	}, [setTheStore]);
 
-	return theStore;
+	return { store: theStore, loading: loadingStore };
 };
 
 export const getTestStore = (

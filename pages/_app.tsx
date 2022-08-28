@@ -18,8 +18,17 @@ import { fetchLoggedInUsername } from '../src/redux/features/viewer';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useRouter } from 'next/router';
 import { useStore } from '../src/redux/store';
+import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+type MyAppProps = {
+	loadingStore: boolean;
+};
+
+function MyApp({
+	Component,
+	pageProps,
+	loadingStore
+}: AppProps & MyAppProps): JSX.Element {
 	const { pathname } = useRouter();
 	const dispatch = useAppDispatch();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -120,7 +129,19 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 					<SectionBar hasSpellcasting={hasSpellcasting} />
 				)}
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
-				<Component {...pageProps} />
+				{loadingStore ? (
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}
+					>
+						<LoadingSpinner />
+					</div>
+				) : (
+					<Component {...pageProps} />
+				)}
 				<ToastContainer />
 			</div>
 			<Footer />
@@ -129,11 +150,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 }
 
 const WrappedApp = (props: AppProps) => {
-	const store = useStore();
+	const { store, loading } = useStore();
 
 	return (
 		<ReduxProvider store={store}>
-			<MyApp {...props} />
+			<MyApp {...props} loadingStore={loading} />
 		</ReduxProvider>
 	);
 };
