@@ -2,7 +2,7 @@ import { gql } from 'urql';
 
 const GET_SPELLS_BY_CLASS = gql`
 	query SpellsByClass($class: StringFilter) {
-		spells(class: $class) {
+		spells(class: $class, limit: 500) {
 			index
 			name
 			level
