@@ -1,0 +1,32 @@
+.checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--davy);
+    background-color: var(--heaven);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.checked {
+    background-color: var(--highlight) !important;
+}
+
+.check {
+    width: 1.2rem;
+    height: 1.2rem;
+    color: var(--davy);
+    pointer-events: none;
+}
+
+.checkbox:focus-visible {
+    outline: var(--focus-outline);
+}
+
+@media screen and (hover: hover) {
+    .checkbox:hover {
+        background-color: var(--highlight-light);
+    }
+}
