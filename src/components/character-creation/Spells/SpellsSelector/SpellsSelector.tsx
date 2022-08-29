@@ -13,11 +13,11 @@ import {
 import { addSpell, removeSpell } from '../../../../redux/features/spellcasting';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
+import Checkbox from '../../../Checkbox/Checkbox';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import Select from '../../../Select/Select';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import styles from './SpellsSelector.module.css';
-import Checkbox from '../../../Checkbox/Checkbox';
 
 type SpellsSelectorProps = {
 	spells: SrdSpellItem[];
@@ -172,10 +172,19 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 		]
 	);
 
+	const numberOfSelectedSpells = selectedSpells.filter(
+		spell => spell !== 'blank'
+	).length;
+
 	return (
-		<div data-testid="spells-selector" className={styles.container}>
+		<div
+			data-testid="spells-selector"
+			className={`${styles.container}${
+				numberOfSelectedSpells === choose ? ` ${styles.selected}` : ''
+			}`}
+		>
 			<div className={styles.text}>
-				{selectedSpells.filter(spell => spell !== 'blank').length}/{choose}{' '}
+				{numberOfSelectedSpells}/{choose}{' '}
 				{spells.some(({ level }) => level > 0) ? 'spell' : 'cantrip'}s selected
 			</div>
 			<div className={styles['filter-bar']}>
@@ -242,6 +251,7 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							label="Only Show Selected"
 							checked={filterOnlySelected}
 							onChange={checked => setFilterOnlySelected(checked)}
+							useAlternateStyle={numberOfSelectedSpells === choose}
 						/>
 					</div>
 				</div>

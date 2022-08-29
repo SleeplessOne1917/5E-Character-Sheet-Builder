@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
 import * as stories from './Checkbox.stories';
+
+import { render, screen } from '@testing-library/react';
+
 import { composeStories } from '@storybook/testing-react';
 
-const { Checked, Default } = composeStories(stories);
+const { Checked, Default, Alternate } = composeStories(stories);
 
 describe('renders correctly', () => {
 	it('by default', () => {
@@ -13,6 +15,12 @@ describe('renders correctly', () => {
 
 	it('when checked', () => {
 		render(<Checked />);
+
+		expect(screen.getByRole('checkbox')).toMatchSnapshot();
+	});
+
+	it('when alternate', () => {
+		render(<Alternate />);
 
 		expect(screen.getByRole('checkbox')).toMatchSnapshot();
 	});

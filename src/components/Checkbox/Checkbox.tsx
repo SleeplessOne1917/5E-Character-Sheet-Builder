@@ -1,15 +1,22 @@
-import classes from './Checkbox.module.css';
-import { useState, KeyboardEvent, useCallback } from 'react';
-import { handleKeyDownEvent } from '../../services/handlerService';
+import { KeyboardEvent, useCallback, useState } from 'react';
+
 import { CheckIcon } from '@heroicons/react/20/solid';
+import classes from './Checkbox.module.css';
+import { handleKeyDownEvent } from '../../services/handlerService';
 
 type CheckboxProps = {
 	checked?: boolean;
 	label?: string;
 	onChange: (value: boolean) => void;
+	useAlternateStyle?: boolean;
 };
 
-const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
+const Checkbox = ({
+	checked,
+	onChange,
+	label,
+	useAlternateStyle = false
+}: CheckboxProps) => {
 	const [isChecked, setIsChecked] = useState(checked ?? false);
 
 	const handleChange = useCallback(() => {
@@ -31,7 +38,7 @@ const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
 		<div
 			className={`${classes.checkbox}${
 				checked || isChecked ? ` ${classes.checked}` : ''
-			}`}
+			}${useAlternateStyle ? ` ${classes.alternate}` : ''}`}
 			tabIndex={0}
 			role="checkbox"
 			aria-checked={isChecked}

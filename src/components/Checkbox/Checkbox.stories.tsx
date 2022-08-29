@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import Checkbox from './Checkbox';
 
 export default {
@@ -15,4 +16,10 @@ export const Default = Template.bind({});
 export const Checked = Template.bind({});
 Checked.args = {
 	checked: true
+};
+
+export const Alternate = Template.bind({});
+Alternate.args = {
+	checked: true,
+	useAlternateStyle: true
 };

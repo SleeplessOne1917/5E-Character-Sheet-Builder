@@ -15,6 +15,14 @@
     background-color: var(--highlight) !important;
 }
 
+.alternate.checked {
+    background-color: var(--davy) !important;
+}
+
+.alternate .check {
+    color: var(--heaven-light);
+}
+
 .check {
     width: 1.2rem;
     height: 1.2rem;
