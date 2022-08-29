@@ -25,6 +25,7 @@ export type ClassInfoState = {
 	selectedSkills: (SrdProficiencyItem | null)[];
 	expertiseProficiencies?: (SrdProficiencyItem | null)[];
 	spells?: SrdSpellItem[];
+	subclassSpells?: SrdSpellItem[];
 };
 
 type SetAbilityBonusPayload = {
@@ -268,6 +269,22 @@ const classInfoSlice = createSlice({
 			}
 
 			state.spells = state.spells.filter(spell => spell.index !== payload);
+		},
+		addSubclassSpell: (state, { payload }: PayloadAction<SrdSpellItem>) => {
+			if (!state.subclassSpells) {
+				state.subclassSpells = [];
+			}
+
+			state.subclassSpells = [...state.subclassSpells, payload];
+		},
+		removeSubclassSpell: (state, { payload }: PayloadAction<string>) => {
+			if (!state.subclassSpells) {
+				state.subclassSpells = [];
+			}
+
+			state.subclassSpells = state.subclassSpells.filter(
+				spell => spell.index !== payload
+			);
 		}
 	}
 });
@@ -298,7 +315,9 @@ export const {
 	removeExpertiseProficiency,
 	setExpertiseProficiency,
 	addClassSpell,
-	removeClassSpell
+	removeClassSpell,
+	addSubclassSpell,
+	removeSubclassSpell
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;
