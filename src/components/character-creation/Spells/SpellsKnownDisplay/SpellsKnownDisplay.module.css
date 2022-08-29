@@ -27,8 +27,8 @@
     }
 }
 
-@media screen and (min-width: 2560px) {
+@media screen and (min-width: 1536px) {
     .container {
-        max-height: 30rem;
+        max-height: 60rem;
     }
 }
