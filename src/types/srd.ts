@@ -137,6 +137,8 @@ export interface SrdSpellItem extends SrdItem {
 	material?: string;
 	range: string;
 	ritual: boolean;
+	duration: string;
+	higher_level?: string[];
 }
 
 export type SrdSpellItemChoice = {

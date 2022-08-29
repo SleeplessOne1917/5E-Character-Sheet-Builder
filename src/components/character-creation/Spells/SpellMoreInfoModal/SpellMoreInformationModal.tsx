@@ -63,8 +63,16 @@ const SpellMoreInformationModal = ({
 							: {spell?.casting_time}
 						</div>
 						<div className={classes['summary-item']}>
+							<span className={classes['summary-item-label']}>Duration</span>:{' '}
+							{spell?.duration}
+						</div>
+						<div className={classes['summary-item']}>
 							<span className={classes['summary-item-label']}>Range</span>:{' '}
 							{spell?.range}
+						</div>
+						<div className={classes['summary-item']}>
+							<span className={classes['summary-item-label']}>School</span>:{' '}
+							{spell?.school.name}
 						</div>
 						<div className={classes['summary-item']}>
 							<span className={classes['summary-item-label']}>Components</span>:{' '}
@@ -76,6 +84,17 @@ const SpellMoreInformationModal = ({
 						{spell?.desc.map((desc, index) => (
 							<p key={`${spell.name}-${index}`}>{desc}</p>
 						))}
+						{spell?.higher_level &&
+							spell.higher_level.map((hl, index) => (
+								<p key={`${spell.index}-higher-level-${index}`}>
+									{index === 0 && (
+										<span className={classes['summary-item-label']}>
+											At Higher Levels:{' '}
+										</span>
+									)}
+									{hl}
+								</p>
+							))}
 					</div>
 					<div className={classes.other}>
 						{spell?.concentration && (

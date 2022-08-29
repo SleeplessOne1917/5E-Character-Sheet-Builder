@@ -5,10 +5,10 @@ import {
 } from '@heroicons/react/20/solid';
 import {
 	KeyboardEventHandler,
+	memo,
 	useCallback,
 	useMemo,
-	useState,
-	memo
+	useState
 } from 'react';
 import { SrdItem, SrdSpellItem } from '../../../../types/srd';
 
@@ -93,8 +93,16 @@ const SpellSelector = ({
 						{spell.casting_time}
 					</div>
 					<div className={classes['summary-item']}>
+						<span className={classes['summary-item-label']}>Duration</span>:{' '}
+						{spell.duration}
+					</div>
+					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Range</span>:{' '}
 						{spell.range}
+					</div>
+					<div className={classes['summary-item']}>
+						<span className={classes['summary-item-label']}>School</span>:{' '}
+						{spell.school.name}
 					</div>
 					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Components</span>:{' '}
@@ -104,10 +112,25 @@ const SpellSelector = ({
 				</div>
 				<div className={classes.description}>
 					{spell.desc.map((desc, index) => (
-						<p key={`${item ? `${item.index}` : ''}${spell.name}-${index}`}>
+						<p key={`${item ? `${item.index}` : ''}${spell.index}-${index}`}>
 							{desc}
 						</p>
 					))}
+					{spell.higher_level &&
+						spell.higher_level.map((hl, index) => (
+							<p
+								key={`${item ? `${item.index}` : ''}${
+									spell.index
+								}-higher-level-${index}`}
+							>
+								{index === 0 && (
+									<span className={classes['summary-item-label']}>
+										At Higher Levels:{' '}
+									</span>
+								)}
+								{hl}
+							</p>
+						))}
 				</div>
 				<div className={classes.other}>
 					{spell.concentration && (

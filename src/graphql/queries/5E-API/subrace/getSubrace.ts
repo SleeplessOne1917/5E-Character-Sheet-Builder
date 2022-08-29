@@ -60,6 +60,8 @@ const GET_SUBRACE = gql`
 									casting_time
 									concentration
 									desc
+									duration
+									higher_level
 									school {
 										name
 										index

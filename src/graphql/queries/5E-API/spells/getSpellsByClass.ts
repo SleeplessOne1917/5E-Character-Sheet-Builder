@@ -9,6 +9,8 @@ const GET_SPELLS_BY_CLASS = gql`
 			components
 			casting_time
 			concentration
+			duration
+			higher_level
 			desc
 			school {
 				name

@@ -86,6 +86,10 @@
 
 .description {
     grid-area: description;
+    background-color: var(--heaven-light);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 3px solid var(--davy);
 }
 
 .other {

@@ -82,11 +82,34 @@ exports[`renders correctly 1`] = `
           <span
             class="summary-item-label"
           >
+            Duration
+          </span>
+          :
+           
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
             Range
           </span>
           :
            
           Self
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            School
+          </span>
+          :
+           
+          Illusion
         </div>
         <div
           class="summary-item"

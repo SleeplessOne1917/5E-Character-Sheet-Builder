@@ -74,11 +74,34 @@ exports[`renders correctly 1`] = `
         <span
           class="summary-item-label"
         >
+          Duration
+        </span>
+        :
+         
+      </div>
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
           Range
         </span>
         :
          
         60 feet
+      </div>
+      <div
+        class="summary-item"
+      >
+        <span
+          class="summary-item-label"
+        >
+          School
+        </span>
+        :
+         
+        Evocation
       </div>
       <div
         class="summary-item"

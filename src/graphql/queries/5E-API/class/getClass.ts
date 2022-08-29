@@ -276,6 +276,8 @@ const GET_CLASS = gql`
 						casting_time
 						concentration
 						desc
+						duration
+						higher_level
 						school {
 							index
 							name
