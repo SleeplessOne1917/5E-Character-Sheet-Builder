@@ -8382,7 +8382,7 @@ jest-each@^29.0.1:
     jest-util "^29.0.1"
     pretty-format "^29.0.1"
 
-jest-environment-jsdom@^29.0.0:
+jest-environment-jsdom@^29.0.1:
   version "29.0.1"
   resolved "https://registry.yarnpkg.com/jest-environment-jsdom/-/jest-environment-jsdom-29.0.1.tgz#45bb0ef6506cafcff0809c961e841d2d4c9820cf"
   integrity sha512-rMF501kfui+bw4AmwowLA2bNaYb633A3ejFMN5pVU0AeOqLv2NbMAY5XzzlMr/+lM1itEf+3ZdCr9dGGrUfoxg==
