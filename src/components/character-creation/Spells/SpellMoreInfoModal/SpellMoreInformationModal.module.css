@@ -14,13 +14,14 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 1fr 5fr;
+    grid-template-columns: auto 15%;
+    grid-template-rows: 20% auto;
     grid-template-areas: "title close"
                          "content content";
     background-color: var(--heaven);
     font-family: var(--font-display);
     overflow-y: auto;
+    border-radius: 0.5rem;
 }
 
 .title-container {
@@ -58,6 +59,7 @@
 }
 
 .content-container {
+    display: grid;
     grid-area: content;
     grid-template-columns: 100%;
     grid-template-rows: repeat(3, min-content);
@@ -95,6 +97,7 @@
 .other {
     grid-area: other;
     font-size: 0.8rem;
+    padding: 0.5rem;
 }
 
 .other-info {
@@ -130,6 +133,7 @@
         grid-template-rows: min-content auto;
         grid-template-areas: "summary summary"
                             "description other";
+        height: fit-content;
     }
 
     .summary-item {
