@@ -305,6 +305,12 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 			dispatch(removeSpell(index));
 		}
 
+		if (classInfo.subclassSpells && classInfo.subclassSpells.length > 0) {
+			for (const spell of classInfo.subclassSpells) {
+				dispatch(removeSpell(spell.index));
+			}
+		}
+
 		if (classInfo.level === 20 && classInfo.class?.index === 'barbarian') {
 			dispatch(resetAbilityHighest('con'));
 			dispatch(resetAbilityHighest('str'));

@@ -73,6 +73,10 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 		[traitSpellsByTrait]
 	);
 
+	const subclassSpells = useAppSelector(
+		state => state.editingCharacter.classInfo.subclass?.spells
+	);
+
 	const [search, setSearch] = useState('');
 	const [selectedSchool, setSelectedSchool] = useState('blank');
 	const [selectedLevel, setSelectedLevel] = useState<string | number>('blank');
@@ -146,6 +150,10 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 			spells.filter(
 				spell =>
 					!traitSpells.some(ts => ts.index === spell.index) &&
+					!(
+						subclassSpells &&
+						subclassSpells.some(s => s.spell.index === spell.index)
+					) &&
 					spell.name.toLowerCase().includes(search.toLowerCase()) &&
 					(selectedSchool === 'blank' ||
 						selectedSchool === spell.school.index) &&
@@ -159,7 +167,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 			selectedLevel,
 			filterOnlySelected,
 			search,
-			selectedSpells
+			selectedSpells,
+			subclassSpells
 		]
 	);
 
