@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="modal-container"
+  data-testid="spell-more-information-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="title-container"
+    >
+      <svg
+        class="title-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#illusion"
+        />
+      </svg>
+      <h3>
+        Fear
+      </h3>
+    </div>
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="content-container"
+    >
+      <div
+        class="summary"
+      >
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Level
+          </span>
+          :
+           
+          3
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Casting time
+          </span>
+          : 
+          1 action
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Range
+          </span>
+          :
+           
+          Self
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Components
+          </span>
+          :
+           
+          V, S, M
+           (A white feather or the heart of a hen.)
+        </div>
+      </div>
+      <div
+        class="description"
+      >
+        <p>
+          You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a wisdom saving throw or drop whatever it is holding and become frightened for the duration.
+        </p>
+        <p>
+          While frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a wisdom saving throw. On a successful save, the spell ends for that creature.
+        </p>
+      </div>
+      <div
+        class="other"
+      >
+        <p
+          class="other-info"
+        >
+          Requires concentration.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

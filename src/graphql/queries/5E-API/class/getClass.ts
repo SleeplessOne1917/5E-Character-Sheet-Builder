@@ -269,6 +269,7 @@ const GET_CLASS = gql`
 						}
 					}
 					spell {
+						index
 						name
 						level
 						components
