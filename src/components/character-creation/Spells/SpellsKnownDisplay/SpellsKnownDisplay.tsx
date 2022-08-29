@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useAppSelector } from '../../../../hooks/reduxHooks';
-import { SrdSpellItem } from '../../../../types/srd';
+
 import Button from '../../../Button/Button';
 import SpellMoreInformationModal from '../SpellMoreInfoModal/SpellMoreInformationModal';
+import { SrdSpellItem } from '../../../../types/srd';
 import classes from './SpellsKnownDisplay.module.css';
+import { useAppSelector } from '../../../../hooks/reduxHooks';
 
 const SpellsKnownDisplay = () => {
 	const spells = useAppSelector(
@@ -46,18 +47,25 @@ const SpellsKnownDisplay = () => {
 								{level === 0 ? 'Cantrips' : `Level ${level}`}
 							</div>
 						].concat(
-							(spellsByLevel.get(level) as SrdSpellItem[]).map(spell => (
-								<div key={spell.index} className={classes.spell}>
-									{spell.name}
-									<Button
-										size="small"
-										positive
-										onClick={() => handleShowMoreInfo(spell)}
+							(spellsByLevel.get(level) as SrdSpellItem[]).map(
+								(spell, index) => (
+									<div
+										key={spell.index}
+										className={`${classes.spell} ${
+											index % 2 === 0 ? classes.even : classes.odd
+										}`}
 									>
-										More Info
-									</Button>
-								</div>
-							))
+										{spell.name}
+										<Button
+											size="small"
+											positive
+											onClick={() => handleShowMoreInfo(spell)}
+										>
+											More Info
+										</Button>
+									</div>
+								)
+							)
 						)
 					)}
 			</div>
