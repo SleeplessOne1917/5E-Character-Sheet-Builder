@@ -1,0 +1,156 @@
+.modal-container {
+    background-color: rgba(03, 03, 03, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 1fr 5fr;
+    grid-template-areas: "title close"
+                         "content content";
+    background-color: var(--heaven);
+    font-family: var(--font-display);
+    overflow-y: auto;
+}
+
+.title-container {
+    grid-area: title;
+    font-family: var(--font-fantasy);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+}
+
+.title-container h3 {
+    text-align: center;
+}
+
+.close-container {
+    grid-area: close;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.close-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--wine-red);
+    fill: var(--heaven-light);
+    margin-right: 0.5rem;
+}
+
+.content-container {
+    grid-area: content;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, min-content);
+    grid-template-areas: "summary"
+                         "other"
+                         "description";
+    padding: 1rem;
+}
+
+.summary {
+    grid-area: summary;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.summary-item {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.summary-item-label {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.description {
+    grid-area: description;
+}
+
+.other {
+    grid-area: other;
+    font-size: 0.8rem;
+}
+
+.other-info {
+    font-weight: bold;
+}
+
+.damage-display {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.damage-icon {
+    min-height: 2rem;
+    min-width: 2rem;
+    height: 2rem;
+    width: 2rem;
+    margin: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .modal {
+        height: 80%;
+        width: 80%;
+    }
+
+    .title-container {
+        flex-direction: row;
+    }
+
+    .content-container {
+        grid-template-columns: 65% auto;
+        grid-template-rows: min-content auto;
+        grid-template-areas: "summary summary"
+                            "description other";
+    }
+
+    .summary-item {
+        font-size: 1.3rem;
+    }
+    
+    .summary-item-label {
+        font-size: 1.4rem;
+    }
+
+    .other {
+        font-size: 1.2rem;
+    }
+
+    .damage-icon {
+        min-height: 3rem;
+        min-width: 3rem;
+        height: 3rem;
+        width: 3rem;
+    }
+}
+
+@media screen and (min-width:1024px) {
+    .modal {
+        height: 60%;
+        width: 60%;
+    }
+}
