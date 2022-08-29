@@ -1,6 +1,8 @@
-import { XCircleIcon } from '@heroicons/react/24/solid';
-import { SrdSpellItem } from '../../../../types/srd';
+import { useEffect, useRef } from 'react';
+
 import Button from '../../../Button/Button';
+import { SrdSpellItem } from '../../../../types/srd';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
 
 type SpellMoreInformationModalProps = {
@@ -14,6 +16,14 @@ const SpellMoreInformationModal = ({
 	spell,
 	onClose
 }: SpellMoreInformationModalProps) => {
+	const closeButtonRef = useRef<HTMLButtonElement>();
+
+	useEffect(() => {
+		if (show) {
+			closeButtonRef.current?.focus();
+		}
+	}, [show]);
+
 	return (
 		<div
 			className={classes['modal-container']}
@@ -34,6 +44,7 @@ const SpellMoreInformationModal = ({
 							display: 'flex',
 							alignItems: 'center'
 						}}
+						ref={closeButtonRef}
 					>
 						<XCircleIcon className={classes['close-icon']} />
 						Close
