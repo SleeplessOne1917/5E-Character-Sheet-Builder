@@ -285,7 +285,7 @@ type SrdStartingEquipmentChoice = {
 export interface SrdSubclassItem extends SrdItem {
 	subclass_flavor: string;
 	desc: string[];
-	spells: {
+	spells?: {
 		prerequisites: { level?: number; index?: string; name?: string }[];
 		spell: SrdSpellItem;
 	}[];
