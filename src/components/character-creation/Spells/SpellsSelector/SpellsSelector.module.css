@@ -22,7 +22,7 @@
 
 .spells-container {
 	align-self: stretch;
-	padding: 1.5rem;
+	margin: 1.5rem;
 	max-height: 40rem;
 	overflow-y: auto;
 }
