@@ -1407,7 +1407,7 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
   integrity sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==
 
-"@heroicons/react@^2.0.7":
+"@heroicons/react@^2.0.8":
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.8.tgz#b87618a14d3fb237aa465d1a158517f92eccf7b2"
   integrity sha512-nJNOMjXQH0Ngk6Y7QllYBH5VLB3+HMJyGBVQPZYUXGalYmN9kgEcVIxMjOiVjwuzee0GvZzmMRB0VQRJPHe8eg==
