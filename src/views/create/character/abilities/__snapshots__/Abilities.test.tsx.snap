@@ -45,6 +45,7 @@ exports[`renders correctly 1`] = `
       <div
         aria-label="Set Hit Points"
         class="hp-container"
+        data-testid="hit-points-button"
         role="button"
         tabindex="0"
       >

@@ -8,6 +8,7 @@ const HitPointsButton = () => {
 			tabIndex={0}
 			role="button"
 			aria-label="Set Hit Points"
+			data-testid="hit-points-button"
 		>
 			<HeartIcon className={classes['hp-icon']} />
 			<div className={classes.hp}>&mdash; HP</div>

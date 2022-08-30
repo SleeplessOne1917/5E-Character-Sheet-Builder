@@ -4,6 +4,7 @@
 	padding: 0.5rem;
 	display: flex;
 	cursor: pointer;
+	width: fit-content;
 }
 
 .hp-icon {
