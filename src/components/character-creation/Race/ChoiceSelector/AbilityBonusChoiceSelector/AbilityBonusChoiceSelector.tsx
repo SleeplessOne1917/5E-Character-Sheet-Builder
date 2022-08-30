@@ -33,7 +33,7 @@ const AbilityBonusChoiceSelector = ({
 		}
 
 		return returnValues;
-	}, [choice]);
+	}, [choice.choose]);
 	const allSameBonus = getIsAllBonusesSame(choice.from.options);
 
 	const [selectValues, setSelectValues] = useState<string[]>(

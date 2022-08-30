@@ -69,7 +69,11 @@ const raceInfoSlice = createSlice({
 			}
 
 			if (state.selectedAbilityScoreBonuses.length < index + 1) {
-				for (let i = 0; i < index + 1; ++i) {
+				for (
+					let i = 0;
+					i < index + 1 - state.selectedAbilityScoreBonuses.length;
+					++i
+				) {
 					state.selectedAbilityScoreBonuses = [
 						...(state.selectedAbilityScoreBonuses as AbilityBonus[]),
 						null
