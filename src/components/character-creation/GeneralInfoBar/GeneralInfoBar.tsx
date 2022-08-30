@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
+import HitPointsButton from '../HitPointsButton/HitPointsButton';
 import TextInput from '../../TextInput/TextInput';
 import classes from './GeneralInfoBar.module.css';
 import { setName } from '../../../redux/features/name';
@@ -43,6 +44,7 @@ const GeneralInfoBar = () => {
 					darkBackground
 				/>
 			</div>
+			<HitPointsButton />
 		</section>
 	);
 };

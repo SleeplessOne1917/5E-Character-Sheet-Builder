@@ -1,0 +1,49 @@
+.hp-container {
+	background-color: var(--heaven-light);
+	border-radius: 1rem;
+	padding: 1rem;
+	display: flex;
+	cursor: pointer;
+}
+
+.hp-icon {
+	width: 2rem;
+	height: 2rem;
+	margin-right: 0.5rem;
+	color: transparent;
+	stroke: var(--wine-red);
+	transition: color 0.75s;
+}
+
+.hp-container:active .hp-icon, .hp-container:focus-visible .hp-icon {
+	color: var(--wine-red);
+}
+
+.hp-container:focus-visible {
+	outline: var(--focus-outline);
+}
+
+.hp {
+	font-size: 1rem;
+}
+
+@media (hover: hover) {
+	.hp-container:hover .hp-icon {
+		color: var(--wine-red);
+	}
+}
+
+@media screen and (min-width: 1024px) {
+	.hp-container {
+		padding: 1.5rem;
+	}
+
+	.hp-icon {
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.hp {
+		font-size: 1.5rem;
+	}
+}
