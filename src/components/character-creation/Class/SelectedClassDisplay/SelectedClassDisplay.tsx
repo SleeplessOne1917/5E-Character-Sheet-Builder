@@ -64,12 +64,12 @@ import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSele
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 import LandSelector from '../LandSelector/LandSelector';
 import Select from '../../../Select/Select';
-import SkillsSelector from '../SkillsSelector/SkillsSelector';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
+import ProficienciesSelector from '../ProficienciesSelector/ProficienciesSelector';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -1594,11 +1594,14 @@ const SelectedClassDisplay = ({
 					</tbody>
 				</table>
 			</div>
-			<SkillsSelector
-				skills={klass.proficiency_choices[0].from.options.map(
-					({ item }) => item as SrdProficiencyItem
-				)}
-			/>
+			<h2 className={styles.heading}>Proficiencies</h2>
+			{klass.proficiency_choices.map((choice, index) => (
+				<ProficienciesSelector
+					choice={choice}
+					key={index}
+					proficienciesIndex={index}
+				/>
+			))}
 			{(classInfo.expertiseProficiencies?.length ?? 0) > 0 && (
 				<ExpertiseSelector />
 			)}

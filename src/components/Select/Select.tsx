@@ -12,8 +12,10 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import classes from './Select.module.css';
 import { handleKeyDownEvent } from '../../services/handlerService';
 
+export type Option = { value: string | number; label: string };
+
 type SelectProps = {
-	options: { value: string | number; label: string }[];
+	options: Option[];
 	value?: string | number;
 	onChange: (value: string | number) => void;
 	testId?: string;
