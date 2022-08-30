@@ -1,14 +1,14 @@
 .hp-container {
 	background-color: var(--heaven-light);
 	border-radius: 1rem;
-	padding: 1rem;
+	padding: 0.5rem;
 	display: flex;
 	cursor: pointer;
 }
 
 .hp-icon {
-	width: 2rem;
-	height: 2rem;
+	width: 1.5rem;
+	height: 1.5rem;
 	margin-right: 0.5rem;
 	color: transparent;
 	stroke: var(--wine-red);
@@ -30,6 +30,17 @@
 @media (hover: hover) {
 	.hp-container:hover .hp-icon {
 		color: var(--wine-red);
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.hp-container {
+		padding: 1rem;
+	}
+
+	.hp-icon {
+		width: 2rem;
+		height: 2rem;
 	}
 }
 
