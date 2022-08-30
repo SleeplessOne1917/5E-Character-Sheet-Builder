@@ -21,6 +21,7 @@ type TextInputProps = {
 	onChange: ChangeEventHandler<HTMLInputElement>;
 	onBlur: FocusEventHandler<HTMLInputElement>;
 	type?: 'text' | 'password' | 'validate-password';
+	darkBackground?: boolean;
 };
 
 const TextInput = ({
@@ -31,7 +32,8 @@ const TextInput = ({
 	label,
 	onChange,
 	onBlur,
-	type = 'text'
+	type = 'text',
+	darkBackground = false
 }: TextInputProps) => {
 	const [showPassword, setShowPassword] = useState(false);
 
@@ -91,7 +93,7 @@ const TextInput = ({
 					htmlFor={id}
 					className={`${classes.label}${
 						value.length > 0 ? ` ${classes['label-selected']}` : ''
-					}`}
+					}${darkBackground ? ` ${classes['light-label']}` : ''}`}
 				>
 					{label}
 				</label>

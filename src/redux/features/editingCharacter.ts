@@ -9,6 +9,7 @@ import classInfo, {
 } from './classInfo';
 import { combineReducers, createSlice } from '@reduxjs/toolkit';
 import languages, { initialState as languagesInitialState } from './languages';
+import name, { initialState as nameInitialState } from './name';
 import proficiencies, {
 	initialState as proficienciesInitialState
 } from './proficiencies';
@@ -30,6 +31,7 @@ export type EditingCharacterState = {
 	proficiencies: SrdProficiencyItem[];
 	spellcasting: SpellcastingState;
 	classInfo: ClassInfoState;
+	name: string;
 };
 
 export const initialState: EditingCharacterState = {
@@ -38,7 +40,8 @@ export const initialState: EditingCharacterState = {
 	languages: languagesInitialState,
 	proficiencies: proficienciesInitialState,
 	spellcasting: spellcastingInitialState,
-	classInfo: classInitialState
+	classInfo: classInitialState,
+	name: nameInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -53,7 +56,8 @@ const wholeReducer = combineReducers({
 	languages,
 	proficiencies,
 	spellcasting,
-	classInfo
+	classInfo,
+	name
 });
 
 export default reduceReducers<EditingCharacterState>(

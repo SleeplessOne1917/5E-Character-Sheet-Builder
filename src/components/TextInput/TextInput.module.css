@@ -42,7 +42,7 @@
     position: absolute;
     bottom: 0.25rem;
     left: 0.5rem;
-    color: #777;
+    color: var(--davy-light);
     cursor: text;
     pointer-events: none;
 }
@@ -54,6 +54,10 @@
     top: 0;
     font-size: 0.9rem !important;
     pointer-events: all !important;
+}
+
+.light-label.label-selected {
+    color: var(--heaven-light) !important;
 }
 
 .error {

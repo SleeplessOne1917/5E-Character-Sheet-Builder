@@ -8,6 +8,10 @@ import {
 	SrdSubraceItem
 } from '../../../../types/srd';
 import {
+	AbilityScore,
+	updateRaceBonus
+} from '../../../../redux/features/abilityScores';
+import {
 	MutableRefObject,
 	useCallback,
 	useEffect,
@@ -30,19 +34,16 @@ import Button from '../../../../components/Button/Button';
 import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
+import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
-import { removeSpell } from '../../../../redux/features/spellcasting';
-import {
-	AbilityScore,
-	updateRaceBonus
-} from '../../../../redux/features/abilityScores';
-import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 import { removeClassSpell } from '../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 
 type RaceProps = {
 	races: SrdItem[];
@@ -358,6 +359,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 				testId="race"
 				ref={mainRef as MutableRefObject<HTMLDivElement>}
 			>
+				<GeneralInfoBar />
 				{raceInfo.race && (
 					<>
 						<div className={classes['deselect-button-div']}>

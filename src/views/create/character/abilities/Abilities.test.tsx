@@ -43,6 +43,7 @@ describe('hides and shows roll groups', () => {
 
 		await userEvent.tab();
 		await userEvent.tab();
+		await userEvent.tab();
 		await userEvent.keyboard('{Enter}');
 
 		expect(screen.getByTestId('roll-groups')).not.toHaveClass('open');
@@ -57,6 +58,7 @@ describe('hides and shows roll groups', () => {
 
 		expect(screen.getByTestId('roll-groups')).toHaveClass('open');
 
+		await userEvent.tab();
 		await userEvent.tab();
 		await userEvent.tab();
 		await userEvent.keyboard(' ');

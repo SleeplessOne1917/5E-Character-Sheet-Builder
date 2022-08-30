@@ -7,6 +7,13 @@ import {
 	SrdProficiencyItem
 } from '../../../../types/srd';
 import {
+	MutableRefObject,
+	useCallback,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
+import {
 	addExpertiseProficiency,
 	addFavoredEnemies,
 	addFavoredTerrain,
@@ -30,12 +37,12 @@ import {
 	setSpellsKnown
 } from '../../../../redux/features/spellcasting';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from '../../../../components/Button/Button';
 import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
+import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/character-creation/Option/Option';
 import SelectedClassDisplay from '../../../../components/character-creation/Class/SelectedClassDisplay/SelectedClassDisplay';
@@ -322,7 +329,11 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 
 	return (
 		<>
-			<MainContent testId="class" ref={mainRef}>
+			<MainContent
+				testId="class"
+				ref={mainRef as MutableRefObject<HTMLDivElement>}
+			>
+				<GeneralInfoBar />
 				{!classInfo.class && (
 					<>
 						<h1 className={styles.title}>Choose Class</h1>

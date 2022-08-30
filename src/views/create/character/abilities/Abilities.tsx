@@ -1,3 +1,7 @@
+import {
+	AbilityScore,
+	updateBase
+} from '../../../../redux/features/abilityScores';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import {
 	GenerationMethodState,
@@ -16,6 +20,7 @@ import AbilityCalculation from '../../../../components/character-creation/Abilit
 import { AbilityItem } from '../../../../types/srd';
 import AbilityScores from '../../../../types/abilityScores';
 import Button from '../../../../components/Button/Button';
+import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
 import ManualScores from '../../../../components/character-creation/Abilities/ManualScores/ManualScores';
 import PointBuy from '../../../../components/character-creation/Abilities/PointBuy/PointBuy';
@@ -24,13 +29,9 @@ import Select from '../../../../components/Select/Select';
 import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
-import {
-	AbilityScore,
-	updateBase
-} from '../../../../redux/features/abilityScores';
-import usePreparedSpells from '../../../../hooks/usePreparedSpells';
-import { removeSpell } from '../../../../redux/features/spellcasting';
 import { removeClassSpell } from '../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../redux/features/spellcasting';
+import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 
 type AbilitiesProps = {
 	abilities: AbilityItem[];
@@ -154,6 +155,7 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 
 	return (
 		<MainContent testId="abilities">
+			<GeneralInfoBar />
 			<h1 className={classes.title}>Ability Scores</h1>
 			<div className={classes['generation-control']}>
 				<label id="generation-methods-label">Generation Method</label>

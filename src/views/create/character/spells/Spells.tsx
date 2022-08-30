@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 
+import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
+import SpellsKnownDisplay from '../../../../components/character-creation/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
 import SpellsSelector from '../../../../components/character-creation/Spells/SpellsSelector/SpellsSelector';
 import { SrdSpellItem } from '../../../../types/srd';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
-import { useRouter } from 'next/router';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
-import SpellsKnownDisplay from '../../../../components/character-creation/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
+import { useRouter } from 'next/router';
 
 const Spells = () => {
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
@@ -53,6 +54,7 @@ const Spells = () => {
 
 	return (
 		<MainContent>
+			<GeneralInfoBar />
 			{isLoading ? (
 				<div className={styles['loading-container']}>
 					<LoadingSpinner />

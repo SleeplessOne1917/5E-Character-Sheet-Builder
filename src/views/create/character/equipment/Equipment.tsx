@@ -1,3 +1,4 @@
+import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { SrdItem } from '../../../../types/srd';
 
@@ -8,6 +9,7 @@ type EquipmentProps = {
 const Equipment = ({ equipments }: EquipmentProps): JSX.Element => {
 	return (
 		<MainContent>
+			<GeneralInfoBar />
 			<ul>
 				{equipments.map(equipment => (
 					<li key={equipment.index}>{equipment.name}</li>
