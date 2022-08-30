@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="modal-container"
+  data-testid="modal-background"
+  style="display: flex;"
+>
+  <div
+    style="width: 80%; height: 80%; background-color: red;"
+  />
+</div>
+`;

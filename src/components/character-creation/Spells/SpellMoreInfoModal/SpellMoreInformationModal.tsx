@@ -4,6 +4,7 @@ import Button from '../../../Button/Button';
 import { SrdSpellItem } from '../../../../types/srd';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
+import ModalBackground from '../../../ModalBackground/ModalBackground';
 
 type SpellMoreInformationModalProps = {
 	show: boolean;
@@ -25,11 +26,7 @@ const SpellMoreInformationModal = ({
 	}, [show]);
 
 	return (
-		<div
-			className={classes['modal-container']}
-			data-testid="spell-more-information-modal"
-			style={{ display: show ? 'flex' : 'none' }}
-		>
+		<ModalBackground testId="spell-more-information-modal" show={show}>
 			<div className={classes.modal}>
 				<div className={classes['title-container']}>
 					<svg className={classes['title-icon']}>
@@ -121,7 +118,7 @@ const SpellMoreInformationModal = ({
 					</div>
 				</div>
 			</div>
-		</div>
+		</ModalBackground>
 	);
 };
 

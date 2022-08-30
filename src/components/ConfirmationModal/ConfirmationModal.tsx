@@ -3,6 +3,7 @@ import { CSSProperties, useEffect, useRef } from 'react';
 import Button from '../Button/Button';
 import ExclamationTriangleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
 import classes from './ConfirmationModal.module.css';
+import ModalBackground from '../ModalBackground/ModalBackground';
 
 type ConfirmationModalProps = {
 	show: boolean;
@@ -37,11 +38,7 @@ const ConfirmationModal = ({
 	}, [show]);
 
 	return (
-		<div
-			className={classes['modal-container']}
-			data-testid="confirmation-modal"
-			style={{ display: show ? 'flex' : 'none' }}
-		>
+		<ModalBackground testId="confirmation-modal" show={show}>
 			<div className={classes.modal}>
 				<div className={classes.content}>
 					<ExclamationTriangleIcon className={classes.icon} /> {message}
@@ -55,7 +52,7 @@ const ConfirmationModal = ({
 					</Button>
 				</div>
 			</div>
-		</div>
+		</ModalBackground>
 	);
 };
 

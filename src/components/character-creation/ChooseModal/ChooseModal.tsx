@@ -5,6 +5,7 @@ import { Descriptor } from '../../../types/creation';
 import DescriptorComponent from '../Descriptor/Descriptor';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import classes from './ChooseModal.module.css';
+import ModalBackground from '../../ModalBackground/ModalBackground';
 
 export type ChooseModalProps = {
 	show: boolean;
@@ -52,11 +53,7 @@ const ChooseModal = ({
 		: {};
 
 	return (
-		<div
-			style={{ display: show ? 'flex' : 'none' }}
-			className={classes['modal-container']}
-			data-testid="choose-modal"
-		>
+		<ModalBackground show={show} testId="choose-modal">
 			<div className={classes.modal}>
 				<div className={classes['icon-container']}>
 					<svg className={classes.icon}>
@@ -118,7 +115,7 @@ const ChooseModal = ({
 					</Button>
 				</div>
 			</div>
-		</div>
+		</ModalBackground>
 	);
 };
 
