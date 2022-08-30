@@ -32,7 +32,7 @@ const GeneralInfoBar = () => {
 	);
 
 	return (
-		<section className={classes.container}>
+		<section className={classes.container} data-testid="general-info-bar">
 			<div className={classes['name-container']}>
 				<TextInput
 					id="characterName"

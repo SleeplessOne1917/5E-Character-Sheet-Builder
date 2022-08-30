@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<section
+  class="container"
+  data-testid="general-info-bar"
+>
+  <div
+    class="name-container"
+  >
+    <div
+      class="input-and-error-container"
+      data-testid="text-input"
+    >
+      <div
+        class="input-and-label-container"
+      >
+        <div
+          class="input-container"
+        >
+          <input
+            class="input"
+            id="characterName"
+            name="characterName"
+            type="text"
+            value=""
+          />
+        </div>
+        <label
+          class="label light-label"
+          for="characterName"
+        >
+          Character Name
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+`;
