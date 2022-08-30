@@ -133,6 +133,8 @@ exports[`renders correctly 1`] = `
     <div
       aria-label="Hide Roll Groups"
       class="roll-groups-toggle"
+      role="button"
+      style="margin-bottom: 0px;"
       tabindex="0"
     >
       Dice Roll Groups

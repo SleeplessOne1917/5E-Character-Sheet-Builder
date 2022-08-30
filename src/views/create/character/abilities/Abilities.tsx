@@ -181,6 +181,8 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 						onKeyDown={toggleShowRollGroupsKeyDown}
 						tabIndex={0}
 						aria-label={`${showRollGroups ? 'Hide' : 'Show'} Roll Groups`}
+						style={{ marginBottom: showRollGroups ? 0 : '1rem' }}
+						role="button"
 					>
 						Dice Roll Groups{' '}
 						{showRollGroups ? (
