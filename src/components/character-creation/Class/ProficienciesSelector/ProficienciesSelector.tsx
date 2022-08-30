@@ -32,11 +32,42 @@ const ProficienciesSelector = ({
 
 	const dispatch = useAppDispatch();
 
-	const [selectedType, setSelectedType] = useState('blank');
+	const hasSelectedProficiencies = useMemo(
+		() =>
+			classProficienciesList.length > proficienciesIndex &&
+			classProficienciesList[proficienciesIndex].length > 0,
+		[classProficienciesList, proficienciesIndex]
+	);
+
+	const hasNestedChoices = useMemo(
+		() => choice.from.options.some(option => option.choice),
+		[choice.from.options]
+	);
+
+	const defaultType = useMemo(() => {
+		let type = 'blank';
+
+		if (
+			hasNestedChoices &&
+			hasSelectedProficiencies &&
+			classProficienciesList[proficienciesIndex].some(prof => prof)
+		) {
+			type = classProficienciesList[proficienciesIndex].filter(prof => prof)[0]
+				?.type as string;
+		}
+
+		return type;
+	}, [
+		hasSelectedProficiencies,
+		proficienciesIndex,
+		classProficienciesList,
+		hasNestedChoices
+	]);
+
+	const [selectedType, setSelectedType] = useState(defaultType);
 
 	const types = useMemo(() => {
 		const types: Option[] = [];
-		const hasNestedChoices = choice.from.options.some(option => option.choice);
 
 		if (hasNestedChoices) {
 			for (const option of choice.from.options) {
@@ -48,13 +79,10 @@ const ProficienciesSelector = ({
 		}
 
 		return types;
-	}, [choice.from.options]);
+	}, [choice.from.options, hasNestedChoices]);
 
 	const values = useMemo(() => {
-		if (
-			classProficienciesList.length > proficienciesIndex &&
-			classProficienciesList[proficienciesIndex].length > 0
-		) {
+		if (hasSelectedProficiencies) {
 			return classProficienciesList[proficienciesIndex].map(
 				prof => prof?.index ?? null
 			);
@@ -81,7 +109,8 @@ const ProficienciesSelector = ({
 		classProficienciesList,
 		choice.from.options,
 		proficienciesIndex,
-		selectedType
+		selectedType,
+		hasSelectedProficiencies
 	]);
 
 	useEffect(() => {
