@@ -21,7 +21,7 @@ export type ClassInfoState = {
 	featuresProficiencies: { [key: string]: SrdProficiencyItem[] };
 	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
 	favoredTerrains?: (Terrain | null)[];
-	subclassSubType?: string;
+	subclassSubType?: string | null;
 	selectedSkills: (SrdProficiencyItem | null)[];
 	expertiseProficiencies?: (SrdProficiencyItem | null)[];
 	spells?: SrdSpellItem[];
@@ -203,7 +203,10 @@ const classInfoSlice = createSlice({
 
 			state.favoredTerrains[index] = terrain;
 		},
-		selectSubclassSubtype: (state, { payload }: PayloadAction<string>) => {
+		selectSubclassSubtype: (
+			state,
+			{ payload }: PayloadAction<string | null>
+		) => {
 			state.subclassSubType = payload;
 		},
 		deselectSubclassSubtype: state => {

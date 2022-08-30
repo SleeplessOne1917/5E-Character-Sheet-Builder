@@ -1115,10 +1115,8 @@ const SelectedClassDisplay = ({
 	const removeSubclassSpells = useCallback(
 		(newLevel: number) => {
 			if (classInfo.subclass?.spells) {
-				for (const { spell } of classInfo.subclass.spells.filter(
-					s =>
-						s.prerequisites.length === 1 &&
-						(s.prerequisites[0].level ?? 0) > newLevel
+				for (const { spell } of classInfo.subclass.spells.filter(s =>
+					s.prerequisites.some(p => p.level && p.level > newLevel)
 				)) {
 					dispatch(removeSubclassSpell(spell.index));
 					dispatch(removeSpell(spell.index));
@@ -1133,8 +1131,14 @@ const SelectedClassDisplay = ({
 			if (classInfo.subclass?.spells) {
 				for (const { spell } of classInfo.subclass.spells.filter(
 					s =>
-						s.prerequisites.length === 1 &&
-						(s.prerequisites[0].level ?? 0) <= newLevel
+						s.prerequisites.some(p => p.level && p.level <= newLevel) &&
+						(classInfo.subclassSubType === undefined ||
+							(classInfo.subclassSubType !== null &&
+								s.prerequisites.some(
+									p =>
+										p.index &&
+										p.index.includes(classInfo.subclassSubType as string)
+								)))
 				)) {
 					if (classSpells?.some(cs => cs.index === spell.index)) {
 						dispatch(removeClassSpell(spell.index));
@@ -1162,7 +1166,8 @@ const SelectedClassDisplay = ({
 			classSpells,
 			dispatch,
 			classInfo.subclassSpells,
-			characterSpellcasting.spells
+			characterSpellcasting.spells,
+			classInfo.subclassSubType
 		]
 	);
 
@@ -1233,11 +1238,15 @@ const SelectedClassDisplay = ({
 			addBlankSubclassFeatures(classInfo.level, subclass);
 			removeFightingStyles(classInfo.level, subclass.index);
 
+			if (subclass.index === 'land') {
+				dispatch(selectSubclassSubtype(null));
+			}
+
 			if (subclass.spells) {
 				for (const { spell } of subclass.spells.filter(
 					s =>
-						s.prerequisites.length === 1 &&
-						(s.prerequisites[0].level ?? 0) <= classInfo.level
+						s.prerequisites.some(p => p.level && p.level <= classInfo.level) &&
+						!s.prerequisites.some(p => p.name)
 				)) {
 					if (classSpells?.some(cs => cs.index === spell.index)) {
 						dispatch(removeClassSpell(spell.index));
@@ -1273,10 +1282,8 @@ const SelectedClassDisplay = ({
 
 	const handleSubclassDeselect = useCallback(() => {
 		if (classInfo.subclass?.spells) {
-			for (const { spell } of classInfo.subclass.spells.filter(
-				s =>
-					s.prerequisites.length === 1 &&
-					(s.prerequisites[0].level ?? 0) <= classInfo.level
+			for (const { spell } of classInfo.subclass.spells.filter(s =>
+				s.prerequisites.some(p => p.level && p.level <= classInfo.level)
 			)) {
 				dispatch(removeSpell(spell.index));
 				dispatch(removeSubclassSpell(spell.index));
@@ -1297,13 +1304,49 @@ const SelectedClassDisplay = ({
 
 	const handleSelectSubclassSubtype = useCallback(
 		(value: string | null) => {
-			if (value) {
-				dispatch(selectSubclassSubtype(value));
-			} else {
-				dispatch(deselectSubclassSubtype());
+			dispatch(selectSubclassSubtype(value));
+
+			if (value !== classInfo.subclassSubType) {
+				if (classInfo.subclassSubType) {
+					for (const { spell } of (classInfo.subclass?.spells ?? []).filter(
+						s =>
+							s.prerequisites.some(
+								p => p.level && p.level <= classInfo.level
+							) &&
+							s.prerequisites.some(p =>
+								p.index?.includes(classInfo.subclassSubType as string)
+							)
+					)) {
+						dispatch(removeSpell(spell.index));
+						dispatch(removeSubclassSpell(spell.index));
+					}
+				}
+
+				if (value) {
+					for (const { spell } of (classInfo.subclass?.spells ?? []).filter(
+						s =>
+							s.prerequisites.some(
+								p => p.level && p.level <= classInfo.level
+							) && s.prerequisites.some(p => p.index?.includes(value as string))
+					)) {
+						dispatch(addSubclassSpell(spell));
+
+						if (classSpells && classSpells.some(s => s.index === spell.index)) {
+							dispatch(removeClassSpell(spell.index));
+						} else {
+							dispatch(addSpell(spell));
+						}
+					}
+				}
 			}
 		},
-		[dispatch]
+		[
+			dispatch,
+			classInfo.subclassSubType,
+			classInfo.level,
+			classInfo.subclass?.spells,
+			classSpells
+		]
 	);
 
 	const handleFavoredEnemyChange = useCallback(
