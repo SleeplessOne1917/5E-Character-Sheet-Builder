@@ -22,6 +22,7 @@
                         "other other"
                         "buttons buttons";
     font-family: var(--font-display);
+    overflow: hidden;
 }
 
 .content-container {
@@ -29,7 +30,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: auto;
     padding-bottom: 0.5rem;
 }
 
@@ -81,6 +81,7 @@
     justify-content: space-evenly;
     align-items: flex-start;
     padding-bottom: 1rem;
+    overflow-y: auto;
 }
 
 .other {
@@ -104,7 +105,7 @@
     }
 }
 
-@media screen and (min-width:1024px) {
+@media screen and (min-width: 1024px) {
     .modal {
         height: 60%;
         width: 60%;
@@ -112,11 +113,6 @@
                              "content other"
                              "buttons buttons";
         grid-template-rows: 3fr 3fr 1fr;
-    }
-
-    .icon {
-        height: 20rem;
-        width: 20rem;
     }
 
     .title {
