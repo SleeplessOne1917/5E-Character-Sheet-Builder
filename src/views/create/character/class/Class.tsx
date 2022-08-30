@@ -12,8 +12,7 @@ import {
 	addFavoredTerrain,
 	deselectClass,
 	removeClassSpell,
-	selectClass,
-	setSelectedSkills
+	selectClass
 } from '../../../../redux/features/classInfo';
 import {
 	addProficiency,
@@ -223,16 +222,6 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 			}
 		}
 
-		const blankSkills = [];
-		for (
-			let i = 0;
-			i < (consideredClass?.proficiency_choices[0].choose ?? 0);
-			++i
-		) {
-			blankSkills.push(null);
-		}
-		dispatch(setSelectedSkills(blankSkills));
-
 		dispatch(selectClass(consideredClass as SrdFullClassItem));
 
 		for (const proficiency of consideredClass?.proficiencies ?? []) {
@@ -292,7 +281,9 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 				Object.values(classInfo.featuresProficiencies).flatMap(value => value)
 			)
 			.concat(
-				classInfo.selectedSkills.filter(skill => skill) as SrdProficiencyItem[]
+				classInfo.proficiencies
+					.flatMap(values => values)
+					.filter(prof => prof) as SrdProficiencyItem[]
 			)) {
 			dispatch(removeProficiency(index));
 		}
