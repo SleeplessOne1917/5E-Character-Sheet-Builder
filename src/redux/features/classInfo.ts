@@ -22,10 +22,10 @@ export type ClassInfoState = {
 	favoredEnemies?: (MonsterType | MonsterSubtype | null)[][];
 	favoredTerrains?: (Terrain | null)[];
 	subclassSubType?: string | null;
-	selectedSkills: (SrdProficiencyItem | null)[];
 	expertiseProficiencies?: (SrdProficiencyItem | null)[];
 	spells?: SrdSpellItem[];
 	subclassSpells?: SrdSpellItem[];
+	proficiencies: (SrdProficiencyItem | null)[][];
 };
 
 type SetAbilityBonusPayload = {
@@ -38,7 +38,7 @@ export const initialState: ClassInfoState = {
 	abilityBonuses: [],
 	featuresSubfeatures: {},
 	featuresProficiencies: {},
-	selectedSkills: []
+	proficiencies: []
 };
 
 const classInfoSlice = createSlice({
@@ -212,12 +212,6 @@ const classInfoSlice = createSlice({
 		deselectSubclassSubtype: state => {
 			delete state.subclassSubType;
 		},
-		setSelectedSkills: (
-			state,
-			{ payload }: PayloadAction<(SrdProficiencyItem | null)[]>
-		) => {
-			state.selectedSkills = payload;
-		},
 		addExpertiseProficiency: (
 			state,
 			{ payload }: PayloadAction<SrdProficiencyItem | null>
@@ -288,6 +282,21 @@ const classInfoSlice = createSlice({
 			state.subclassSpells = state.subclassSpells.filter(
 				spell => spell.index !== payload
 			);
+		},
+		setClassProficiencies: (
+			state,
+			{
+				payload: { proficiencies, index }
+			}: PayloadAction<{
+				proficiencies: (SrdProficiencyItem | null)[];
+				index: number;
+			}>
+		) => {
+			if (state.proficiencies.length < index + 1) {
+				state.proficiencies = [...state.proficiencies, []];
+			}
+
+			state.proficiencies[index] = proficiencies;
 		}
 	}
 });
@@ -313,14 +322,14 @@ export const {
 	setFavoredTerrain,
 	selectSubclassSubtype,
 	deselectSubclassSubtype,
-	setSelectedSkills,
 	addExpertiseProficiency,
 	removeExpertiseProficiency,
 	setExpertiseProficiency,
 	addClassSpell,
 	removeClassSpell,
 	addSubclassSpell,
-	removeSubclassSpell
+	removeSubclassSpell,
+	setClassProficiencies
 } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;
