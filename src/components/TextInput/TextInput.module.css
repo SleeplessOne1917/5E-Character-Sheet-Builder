@@ -45,6 +45,7 @@
     color: var(--davy-light);
     cursor: text;
     pointer-events: none;
+    height: min-content;
 }
 
 .label-selected {
@@ -53,7 +54,7 @@
     left: 0 !important;
     top: 0;
     font-size: 0.9rem !important;
-    pointer-events: all !important;
+    pointer-events: auto !important;
 }
 
 .light-label.label-selected {
