@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when checked 1`] = `
+<div
+  aria-checked="true"
+  class="radio-button selected"
+  role="radio"
+  tabindex="0"
+>
+  <div
+    class="inner-circle"
+  />
+</div>
+`;
+
+exports[`renders correctly when unchecked 1`] = `
+<div
+  aria-checked="false"
+  class="radio-button"
+  role="radio"
+  tabindex="0"
+>
+  <div
+    class="inner-circle"
+  />
+</div>
+`;

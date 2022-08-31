@@ -1,0 +1,34 @@
+.radio-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: var(--heaven-light);
+    border: 3px solid var(--davy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-circle {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background-color: var(--davy);
+    transform: scale(0);
+    transition: transform 0.2s ease-in;
+}
+
+.selected.radio-button {
+    background-color: var(--highlight) !important;
+}
+
+.selected .inner-circle {
+    transform: scale(1);
+}
+
+@media (hover: hover) {
+    .radio-button:hover {
+        background-color: var(--highlight-light);
+    }
+}
