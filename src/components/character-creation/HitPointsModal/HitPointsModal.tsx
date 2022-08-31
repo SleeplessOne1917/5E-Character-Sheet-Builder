@@ -2,14 +2,15 @@ import {
 	calculateModifier,
 	getTotalScore
 } from '../../../services/abilityScoreService';
-
+import { setAutoLevel as createSetAutoLevelAction } from '../../../redux/features/hp';
 import Button from '../../Button/Button';
 import ModalBackground from '../../ModalBackground/ModalBackground';
 import RadioButton from '../../RadioButton/RadioButton';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './HitPointsModal.module.css';
-import { useAppSelector } from '../../../hooks/reduxHooks';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { useCallback } from 'react';
+import { AutoLevelType } from '../../../redux/features/hp';
 
 type HitPointsModalProps = {
 	show: boolean;
@@ -23,8 +24,15 @@ const HitPointsModal = ({ show, onClose }: HitPointsModalProps) => {
 	const hitDie = useAppSelector(
 		state => state.editingCharacter.classInfo.class?.hit_die
 	);
+	const dispatch = useAppDispatch();
+	const { autoLevel } = useAppSelector(state => state.editingCharacter.hp);
 
-	const [autoLevel, setAutoLevel] = useState<'off' | 'roll' | 'average'>('off');
+	const setAutoLevel = useCallback(
+		(value: AutoLevelType) => {
+			dispatch(createSetAutoLevelAction(value));
+		},
+		[dispatch]
+	);
 
 	const conModifier = constitution.base
 		? calculateModifier(getTotalScore(constitution))
@@ -71,20 +79,19 @@ const HitPointsModal = ({ show, onClose }: HitPointsModalProps) => {
 						<RadioButton
 							selected={autoLevel}
 							value="off"
-							onChange={value => setAutoLevel(value as 'off')}
+							onChange={value => setAutoLevel(value as AutoLevelType)}
 							labelText="Off"
 						/>
 						<RadioButton
 							selected={autoLevel}
 							value="roll"
-							onChange={value => setAutoLevel(value as 'roll')}
+							onChange={value => setAutoLevel(value as AutoLevelType)}
 							labelText="Roll Hit Die"
 						/>
-
 						<RadioButton
 							selected={autoLevel}
 							value="average"
-							onChange={value => setAutoLevel(value as 'average')}
+							onChange={value => setAutoLevel(value as AutoLevelType)}
 							labelText="Average Hit Die Roll"
 						/>
 					</div>

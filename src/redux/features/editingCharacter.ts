@@ -21,6 +21,7 @@ import spellcasting, {
 	SpellcastingState,
 	initialState as spellcastingInitialState
 } from './spellcasting';
+import hp, { HPState, initialState as hpInitialState } from './hp';
 
 import reduceReducers from 'reduce-reducers';
 
@@ -32,6 +33,7 @@ export type EditingCharacterState = {
 	spellcasting: SpellcastingState;
 	classInfo: ClassInfoState;
 	name: string;
+	hp: HPState;
 };
 
 export const initialState: EditingCharacterState = {
@@ -41,7 +43,8 @@ export const initialState: EditingCharacterState = {
 	proficiencies: proficienciesInitialState,
 	spellcasting: spellcastingInitialState,
 	classInfo: classInitialState,
-	name: nameInitialState
+	name: nameInitialState,
+	hp: hpInitialState
 };
 
 const editingCharacterSlice = createSlice({
@@ -57,7 +60,8 @@ const wholeReducer = combineReducers({
 	proficiencies,
 	spellcasting,
 	classInfo,
-	name
+	name,
+	hp
 });
 
 export default reduceReducers<EditingCharacterState>(
