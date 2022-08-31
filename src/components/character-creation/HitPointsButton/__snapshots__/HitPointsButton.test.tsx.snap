@@ -2,27 +2,139 @@
 
 exports[`renders correctly 1`] = `
 <div
-  aria-label="Set Hit Points"
-  class="hp-container"
+  class="wrapper"
   data-testid="hit-points-button"
-  role="button"
-  tabindex="0"
 >
-  <svg
-    aria-hidden="true"
-    class="hp-icon"
-    fill="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"
-    />
-  </svg>
   <div
-    class="hp"
+    aria-label="Set Hit Points"
+    class="hp-container"
+    role="button"
+    tabindex="0"
   >
-    — HP
+    <svg
+      aria-hidden="true"
+      class="hp-icon"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"
+      />
+    </svg>
+    <div
+      class="hp"
+    >
+      — HP
+    </div>
+  </div>
+  <div
+    class="modal-container"
+    data-testid="hit-points-modal"
+    style="display: none;"
+  >
+    <div
+      class="modal"
+    >
+      <div
+        class="close-container"
+      >
+        <button
+          class="button negative"
+          style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="close-icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          Close
+        </button>
+      </div>
+      <div
+        class="bonuses-container"
+      />
+      <div
+        class="auto-level-container"
+      >
+        <div
+          class="section-header"
+        >
+          Automatically add HP on level up
+        </div>
+        <div
+          class="auto-level-radios"
+          role="radiogroup"
+        >
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="true"
+              class="radio-button selected"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Off
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Roll Hit Die
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Average Hit Die Roll
+          </label>
+        </div>
+      </div>
+      <div
+        class="hp-container"
+      >
+        <div
+          class="no-class-message"
+        >
+          Must select class to calculate HP.
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;

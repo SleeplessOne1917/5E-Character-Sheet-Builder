@@ -46,16 +46,16 @@ const HitPointsModal = ({ show, onClose }: HitPointsModalProps) => {
 					</Button>
 				</div>
 				<div className={classes['bonuses-container']}>
-					{conModifier && (
+					{conModifier !== null && conModifier !== 0 && (
 						<>
 							<div className={classes['section-header']}>Bonuses per level</div>
 							<div className={classes.bonuses}>
-								{conModifier && (
+								{conModifier !== null && conModifier !== 0 && (
 									<div className={classes.bonus}>
 										<span className={classes['bonus-label']}>
 											Constitution Bonus:
 										</span>{' '}
-										{conModifier > 0 ? '+' : '-'}
+										{conModifier >= 0 ? '+' : '-'}
 										{Math.abs(conModifier)}
 									</div>
 								)}
