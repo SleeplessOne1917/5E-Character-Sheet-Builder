@@ -1,0 +1,96 @@
+.modal {
+	display: grid;
+	background-color: var(--heaven);
+	width: 100%;
+	height: 100%;
+	grid-template-areas: ". close"
+						 "bonuses bonuses"
+	                     "autoLevel autoLevel"
+						 "hp hp";
+	grid-template-columns: auto min-content;
+	grid-template-rows:  fit-content(5rem) fit-content(10rem) fit-content(10rem) auto;
+}
+
+.close-container {
+	grid-area: close;
+	width: min-content;
+	height: min-content;
+}
+
+.close-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--wine-red);
+    fill: var(--heaven-light);
+    margin-right: 0.5rem;
+}
+
+.bonuses-container {
+	grid-area: bonuses;
+	padding: 0.5rem;
+	height: min-content;
+}
+
+.section-header {
+	font-size: 1.3rem;
+	font-weight: bold;
+	margin-bottom: 0.3rem;
+}
+
+.bonuses {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+
+.bonus {
+	font-size: 1.2rem;
+}
+
+.bonus-label {
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.auto-level-container {
+	grid-area: autoLevel;
+	padding: 0.5rem;
+}
+
+.auto-level-radios {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-evenly;
+	margin-left: 1rem;
+}
+
+.hp-container {
+	grid-area: hp;
+	padding: 0.5rem;
+}
+
+.no-class-message {
+	font-size: 1.5rem;
+	font-style: italic;
+	padding: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+	.modal {
+		width: 80%;
+		height: 80%;
+	}
+}
+
+@media screen and (min-width: 1024px) {
+	.modal {
+		width: 60%;
+		height: 60%;
+		grid-template-areas: "hp . close"
+		                     "hp bonuses bonuses"
+							 "hp autoLevel autoLevel";
+		grid-template-columns: 3.5fr 2fr fit-content(5rem);
+		grid-template-rows: fit-content(5rem) repeat(2, auto);
+	}
+}

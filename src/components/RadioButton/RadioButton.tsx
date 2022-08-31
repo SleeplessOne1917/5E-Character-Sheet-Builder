@@ -1,14 +1,21 @@
 import { KeyboardEventHandler, useCallback } from 'react';
-import { handleKeyDownEvent } from '../../services/handlerService';
+
 import classes from './RadioButton.module.css';
+import { handleKeyDownEvent } from '../../services/handlerService';
 
 type RadioButtonProps = {
 	value: string;
 	selected: string;
+	labelText: string;
 	onChange: (value: string) => void;
 };
 
-const RadioButton = ({ value, selected, onChange }: RadioButtonProps) => {
+const RadioButton = ({
+	value,
+	selected,
+	onChange,
+	labelText
+}: RadioButtonProps) => {
 	const handleClick = useCallback(() => {
 		onChange(value);
 	}, [onChange, value]);
@@ -21,18 +28,25 @@ const RadioButton = ({ value, selected, onChange }: RadioButtonProps) => {
 	);
 
 	return (
-		<div
-			className={`${classes['radio-button']}${
-				value === selected ? ` ${classes.selected}` : ''
-			}`}
-			tabIndex={0}
-			role="radio"
-			aria-checked={value === selected}
+		<label
+			className={classes['radio-label']}
 			onClick={handleClick}
-			onKeyDown={handleKeyDown}
+			data-testid="radio-button"
 		>
-			<div className={classes['inner-circle']} />
-		</div>
+			<div
+				className={`${classes['radio-button']}${
+					value === selected ? ` ${classes.selected}` : ''
+				}`}
+				tabIndex={0}
+				role="radio"
+				aria-checked={value === selected}
+				onClick={handleClick}
+				onKeyDown={handleKeyDown}
+			>
+				<div className={classes['inner-circle']} />
+			</div>
+			{labelText}
+		</label>
 	);
 };
 

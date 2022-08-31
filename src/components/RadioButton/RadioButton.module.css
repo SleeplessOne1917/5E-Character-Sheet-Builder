@@ -27,8 +27,18 @@
     transform: scale(1);
 }
 
+.radio-label {
+	display: grid;
+	font-size: 1.3rem;
+	grid-template-columns: auto auto;
+	gap: 0.5rem;
+	cursor: pointer;
+	user-select: none;
+    margin: 0.5rem;
+}
+
 @media (hover: hover) {
-    .radio-button:hover {
+    .radio-button:hover , .radio-label:hover .radio-button {
         background-color: var(--highlight-light);
     }
 }

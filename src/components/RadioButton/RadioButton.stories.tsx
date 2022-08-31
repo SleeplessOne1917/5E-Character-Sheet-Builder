@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import RadioButton from './RadioButton';
 
 export default {
@@ -6,7 +7,8 @@ export default {
 	component: RadioButton,
 	args: {
 		selected: 'bar',
-		value: 'foo'
+		value: 'foo',
+		labelText: 'Foo'
 	}
 } as ComponentMeta<typeof RadioButton>;
 

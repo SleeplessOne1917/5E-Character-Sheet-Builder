@@ -5,6 +5,7 @@
 	display: flex;
 	cursor: pointer;
 	width: fit-content;
+	user-select: none;
 }
 
 .hp-icon {
