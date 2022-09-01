@@ -16,6 +16,7 @@ import Button from '../../../Button/Button';
 import classes from './SpellSelector.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
+import MarkdownParser from '../../../MarkdownParser/MarkdownParser';
 
 type SpellSelectorProps = {
 	spell: SrdSpellItem;
@@ -111,11 +112,7 @@ const SpellSelector = ({
 					</div>
 				</div>
 				<div className={classes.description}>
-					{spell.desc.map((desc, index) => (
-						<p key={`${item ? `${item.index}` : ''}${spell.index}-${index}`}>
-							{desc}
-						</p>
-					))}
+					<MarkdownParser input={spell.desc} />
 					{spell.higher_level &&
 						spell.higher_level.map((hl, index) => (
 							<p

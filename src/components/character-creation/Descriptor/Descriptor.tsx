@@ -10,6 +10,7 @@ import {
 
 import classes from './Descriptor.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
+import MarkdownParser from '../../MarkdownParser/MarkdownParser';
 
 export type DescriptorProps = {
 	title: string;
@@ -58,11 +59,7 @@ const Descriptor = forwardRef<HTMLDivElement, DescriptorProps>(
 				{isOpen && (
 					<div className={classes.content}>
 						{table && <div className={classes['table-container']}>{table}</div>}
-						{Array.isArray(description) ? (
-							description.map((d, i) => <p key={i}>{d}</p>)
-						) : (
-							<p>{description}</p>
-						)}
+						<MarkdownParser input={description} />
 					</div>
 				)}
 			</div>

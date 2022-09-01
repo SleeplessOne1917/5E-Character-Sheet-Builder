@@ -24,7 +24,10 @@ const customJestConfig = {
 		'^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`,
 
 		// Handle module aliases
-		'^@/components/(.*)$': '<rootDir>/components/$1'
+		'^@/components/(.*)$': '<rootDir>/components/$1',
+		'remark-.*': '<rootDir>/src/mock/remark.ts',
+		'react-markdown':
+			'<rootDir>/node_modules/react-markdown/react-markdown.min.js'
 	},
 	// Add more setup options before each test is run
 	// setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

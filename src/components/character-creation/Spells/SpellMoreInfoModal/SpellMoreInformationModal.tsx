@@ -5,6 +5,7 @@ import { SrdSpellItem } from '../../../../types/srd';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
 import ModalBackground from '../../../ModalBackground/ModalBackground';
+import MarkdownParser from '../../../MarkdownParser/MarkdownParser';
 
 type SpellMoreInformationModalProps = {
 	show: boolean;
@@ -78,9 +79,7 @@ const SpellMoreInformationModal = ({
 						</div>
 					</div>
 					<div className={classes.description}>
-						{spell?.desc.map((desc, index) => (
-							<p key={`${spell.name}-${index}`}>{desc}</p>
-						))}
+						<MarkdownParser input={spell?.desc ?? ''} />
 						{spell?.higher_level &&
 							spell.higher_level.map((hl, index) => (
 								<p key={`${spell.index}-higher-level-${index}`}>
