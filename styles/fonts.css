@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "Alegreya";
+    src: url("/fonts/Alegreya-VariableFont_wght.ttf") format("truetype");
+    font-weight: 1 999;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Alegreya";
+    src: url("/fonts/Alegreya-Italic-VariableFont_wght.ttf") format("truetype");
+    font-weight: 1 999;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "MedievalSharp";
+    src: url("/fonts/MedievalSharp-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}

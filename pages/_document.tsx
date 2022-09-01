@@ -4,8 +4,25 @@ const MyDocument = (): JSX.Element => (
 	<Html lang="en-US">
 		<Head>
 			<link
-				href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400;1,700&family=MedievalSharp&display=swap"
-				rel="stylesheet"
+				rel="preload"
+				href="/fonts/Alegreya-VariableFont_wght.ttf"
+				as="font"
+				type="font/ttf"
+				crossOrigin="anonymous"
+			/>
+			<link
+				rel="preload"
+				href="/fonts/Alegreya-Italic-VariableFont_wght.ttf"
+				as="font"
+				type="font/ttf"
+				crossOrigin="anonymous"
+			/>
+			<link
+				rel="preload"
+				href="/fonts/MedievalSharp-Regular.ttf"
+				as="font"
+				type="font/ttf"
+				crossOrigin="anonymous"
 			/>
 		</Head>
 		<body>

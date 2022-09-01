@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import '../styles/fonts.css';
 
 import { useAppDispatch, useAppSelector } from '../src/hooks/reduxHooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
