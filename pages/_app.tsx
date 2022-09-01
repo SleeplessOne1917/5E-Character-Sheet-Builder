@@ -126,7 +126,7 @@ function MyApp({
 				onLogoIconClick={closeMobileNav}
 			/>
 			<div className="app">
-				{pathname.includes('create') && (
+				{pathname.includes('create/character') && (
 					<SectionBar hasSpellcasting={hasSpellcasting} />
 				)}
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />

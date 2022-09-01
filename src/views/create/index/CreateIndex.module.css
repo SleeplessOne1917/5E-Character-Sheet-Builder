@@ -1,0 +1,59 @@
+.create-link-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.continue-link {
+    font-size: 2rem;
+    text-decoration: none;
+    background-color: var(--davy);
+    color: var(--heaven-light);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: 1rem;
+}
+
+.link-arrow {
+    width: 3rem;
+    height: 3rem;
+}
+
+.create-account-blurb {
+    text-align: center;
+    margin-top: 5rem;
+    font-size: 1.5rem;
+}
+
+.create-account-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--wine-red);
+    font-size: 1.7rem;
+}
+
+.create-account-link:focus-visible, .continue-link:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.continue-link:focus-visible {
+    background-color: var(--davy-light);
+}
+
+.create-account-link:focus-visible {
+    color: var(--wine-red-hover);
+    text-decoration: underline;
+}
+
+@media (hover: hover) {
+    .continue-link:hover {
+        background-color: var(--davy-light);
+    }
+
+    .create-account-link:hover {
+        color: var(--wine-red-hover);
+        text-decoration: underline;
+    }
+}
