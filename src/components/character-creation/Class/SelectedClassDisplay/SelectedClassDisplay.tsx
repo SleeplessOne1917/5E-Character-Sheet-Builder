@@ -70,6 +70,11 @@ import { getProficienciesByType } from '../../../../graphql/srdClientService';
 import styles from './SelectedClassDisplay.module.css';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 import ProficienciesSelector from '../ProficienciesSelector/ProficienciesSelector';
+import {
+	addLevelHPBonus,
+	removeLevelHPBonus
+} from '../../../../redux/features/hp';
+import { rollDie } from '../../../../services/diceService';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -1171,6 +1176,36 @@ const SelectedClassDisplay = ({
 		]
 	);
 
+	const autoLevel = useAppSelector(
+		state => state.editingCharacter.hp.autoLevel
+	);
+
+	const handleLevelHPBonuses = useCallback(
+		(newLevel: number) => {
+			if (newLevel < classInfo.level) {
+				for (let i = 0; i < classInfo.level - newLevel; ++i) {
+					dispatch(removeLevelHPBonus());
+				}
+			}
+
+			if (newLevel > classInfo.level) {
+				for (let i = 0; i < newLevel - classInfo.level; ++i) {
+					switch (autoLevel) {
+						case 'off':
+							dispatch(addLevelHPBonus(null));
+							break;
+						case 'average':
+							dispatch(addLevelHPBonus(klass.hit_die / 2 + 1));
+							break;
+						case 'roll':
+							dispatch(addLevelHPBonus(rollDie(klass.hit_die)));
+					}
+				}
+			}
+		},
+		[dispatch, autoLevel, classInfo.level, klass.hit_die]
+	);
+
 	const handleLevelChange = useCallback(
 		(newValue: number) => {
 			if (newValue < classInfo.level) {
@@ -1201,6 +1236,7 @@ const SelectedClassDisplay = ({
 			}
 
 			handleSpellcastingChange(newValue);
+			handleLevelHPBonuses(newValue);
 
 			dispatch(setLevel(newValue));
 		},
@@ -1228,7 +1264,8 @@ const SelectedClassDisplay = ({
 			handleSpellcastingChange,
 			removePreparedSpellsLevelChange,
 			addSubclassSpells,
-			removeSubclassSpells
+			removeSubclassSpells,
+			handleLevelHPBonuses
 		]
 	);
 

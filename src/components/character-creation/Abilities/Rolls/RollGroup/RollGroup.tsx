@@ -17,6 +17,7 @@ import {
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
 import { removeSpell } from '../../../../../redux/features/spellcasting';
 import { removeClassSpell } from '../../../../../redux/features/classInfo';
+import { rollDie } from '../../../../../services/diceService';
 
 export type RollGroupProps = {
 	onDeleteGroup?: MouseEventHandler<HTMLButtonElement> | null;
@@ -24,7 +25,7 @@ export type RollGroupProps = {
 	abilities: AbilityItem[];
 };
 
-const rollD6 = () => Math.floor(Math.random() * (6 - 1 + 1) + 1);
+const rollD6 = () => rollDie(6);
 
 const getRolls = () => [rollD6(), rollD6(), rollD6(), rollD6()];
 

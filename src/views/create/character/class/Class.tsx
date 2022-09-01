@@ -50,6 +50,7 @@ import { XCircleIcon } from '@heroicons/react/24/solid';
 import { getClass } from '../../../../services/classService';
 import { getMonsterTypes } from '../../../../graphql/srdClientService';
 import styles from './Class.module.css';
+import { removeLevelHPBonus } from '../../../../redux/features/hp';
 
 type ClassProps = {
 	classes: SrdItem[];
@@ -293,6 +294,10 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 					.filter(prof => prof) as SrdProficiencyItem[]
 			)) {
 			dispatch(removeProficiency(index));
+		}
+
+		for (let i = 0; i < classInfo.level - 1; ++i) {
+			dispatch(removeLevelHPBonus());
 		}
 
 		dispatch(setSpellsKnown(0));

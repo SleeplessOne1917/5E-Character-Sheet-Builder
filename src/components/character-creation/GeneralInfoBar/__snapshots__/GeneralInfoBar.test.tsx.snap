@@ -59,7 +59,8 @@ exports[`renders correctly 1`] = `
       <div
         class="hp"
       >
-        — HP
+        —
+         HP
       </div>
     </div>
     <div
@@ -101,63 +102,74 @@ exports[`renders correctly 1`] = `
           class="auto-level-container"
         >
           <div
-            class="section-header"
+            style="align-self: flex-start;"
           >
-            Automatically add HP on level up
+            <div
+              class="section-header"
+            >
+              Automatically add HP on level up
+            </div>
+            <div
+              class="auto-level-radios"
+              role="radiogroup"
+            >
+              <label
+                class="radio-label"
+                data-testid="radio-button"
+              >
+                <div
+                  aria-checked="true"
+                  class="radio-button selected"
+                  role="radio"
+                  tabindex="0"
+                >
+                  <div
+                    class="inner-circle"
+                  />
+                </div>
+                Off
+              </label>
+              <label
+                class="radio-label"
+                data-testid="radio-button"
+              >
+                <div
+                  aria-checked="false"
+                  class="radio-button"
+                  role="radio"
+                  tabindex="0"
+                >
+                  <div
+                    class="inner-circle"
+                  />
+                </div>
+                Roll Hit Die
+              </label>
+              <label
+                class="radio-label"
+                data-testid="radio-button"
+              >
+                <div
+                  aria-checked="false"
+                  class="radio-button"
+                  role="radio"
+                  tabindex="0"
+                >
+                  <div
+                    class="inner-circle"
+                  />
+                </div>
+                Average Hit Die Roll
+              </label>
+            </div>
           </div>
-          <div
-            class="auto-level-radios"
-            role="radiogroup"
+          <button
+            class="button negative"
+            style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+            type="button"
           >
-            <label
-              class="radio-label"
-              data-testid="radio-button"
-            >
-              <div
-                aria-checked="true"
-                class="radio-button selected"
-                role="radio"
-                tabindex="0"
-              >
-                <div
-                  class="inner-circle"
-                />
-              </div>
-              Off
-            </label>
-            <label
-              class="radio-label"
-              data-testid="radio-button"
-            >
-              <div
-                aria-checked="false"
-                class="radio-button"
-                role="radio"
-                tabindex="0"
-              >
-                <div
-                  class="inner-circle"
-                />
-              </div>
-              Roll Hit Die
-            </label>
-            <label
-              class="radio-label"
-              data-testid="radio-button"
-            >
-              <div
-                aria-checked="false"
-                class="radio-button"
-                role="radio"
-                tabindex="0"
-              >
-                <div
-                  class="inner-circle"
-                />
-              </div>
-              Average Hit Die Roll
-            </label>
-          </div>
+            Reset All Level Bonuses
+          </button>
         </div>
         <div
           class="hp-container"

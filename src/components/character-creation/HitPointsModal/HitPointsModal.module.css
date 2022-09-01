@@ -7,8 +7,9 @@
 						 "bonuses bonuses"
 	                     "autoLevel autoLevel"
 						 "hp hp";
-	grid-template-columns: auto min-content;
-	grid-template-rows:  fit-content(5rem) fit-content(10rem) fit-content(10rem) auto;
+	grid-template-columns: auto fit-content(5rem);
+	grid-template-rows:  fit-content(5rem) fit-content(10rem) fit-content(20rem) auto;
+	overflow-y: hidden;
 }
 
 .close-container {
@@ -41,6 +42,7 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
+	overflow-y: auto;
 }
 
 .bonus {
@@ -55,6 +57,10 @@
 .auto-level-container {
 	grid-area: autoLevel;
 	padding: 0.5rem;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .auto-level-radios {
@@ -63,11 +69,13 @@
 	align-items: flex-start;
 	justify-content: space-evenly;
 	margin-left: 1rem;
+	overflow-y: auto;
 }
 
 .hp-container {
 	grid-area: hp;
 	padding: 0.5rem;
+	overflow-y: auto;
 }
 
 .no-class-message {
@@ -78,6 +86,71 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+}
+
+.hp-levels {
+	display: grid;
+	grid-template-columns: 100%;
+	grid-auto-rows: 1fr;
+	border: 3px solid var(--davy);
+	height: 100%;
+	border-radius: 1rem;
+	overflow-y: auto;
+}
+
+.hp-level {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+}
+
+.hp-level:nth-child(odd) {
+	background-color: var(--heaven-light);
+}
+
+.hp-level:nth-child(even) {
+	background-color: var(--highlight-light);
+}
+
+.hp-level-start {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.hp-level-label {
+	font-size: 1.4rem;
+	font-weight: bold;
+}
+
+.hp-level-hp {
+	font-size: 1.5rem;
+	margin-left: 1rem;
+}
+
+.hp {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	padding: 0.75rem;
+	height: 100%;
+	overflow: hidden;
+}
+
+.hp-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	width: 30%;
+}
+
+.hp-section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.5rem;
+	font-size: 1.5rem;
 }
 
 @media screen and (min-width: 768px) {
@@ -96,5 +169,17 @@
 							 "hp autoLevel autoLevel";
 		grid-template-columns: 3.5fr 2fr fit-content(5rem);
 		grid-template-rows: fit-content(5rem) repeat(2, auto);
+	}
+
+	.auto-level-container {
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-around;
+	}
+}
+
+@media (hover: hover) {
+	.hp-level:hover {
+		background-color: var(--highlight) !important;
 	}
 }

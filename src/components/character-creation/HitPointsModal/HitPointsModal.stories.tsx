@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-
 import HitPointsModal from './HitPointsModal';
 import { Provider } from 'react-redux';
 import { getTestStore } from '../../../redux/store';

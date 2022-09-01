@@ -8,6 +8,10 @@
 	user-select: none;
 }
 
+.hp-container.selected {
+	background-color: var(--highlight);
+}
+
 .wrapper {
 	width: fit-content;
 	height: fit-content;
