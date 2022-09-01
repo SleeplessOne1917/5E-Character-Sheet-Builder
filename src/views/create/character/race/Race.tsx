@@ -270,7 +270,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 		for (const { index } of (raceInfo.race?.languages ?? [])
 			.concat(raceInfo.selectedLanguages ?? [])
 			.concat(
-				Object.keys(raceInfo.selectedTraitLanguages).reduce<SrdItem[]>( //TODO: chagne to use flatmap
+				Object.keys(raceInfo.selectedTraitLanguages).reduce<SrdItem[]>(
 					(acc, cur) => acc.concat(raceInfo.selectedTraitLanguages[cur]),
 					[]
 				)
