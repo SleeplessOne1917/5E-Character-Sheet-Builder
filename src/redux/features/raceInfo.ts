@@ -1,3 +1,4 @@
+import { AppReducers } from './../../types/redux';
 import {
 	AbilityBonus,
 	SrdItem,
@@ -5,7 +6,7 @@ import {
 	SrdSpellItem,
 	SrdSubtraitItem
 } from './../../types/srd';
-import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../../types/srd';
 
 export type RaceInfoState = {
@@ -45,251 +46,149 @@ export const initialState: RaceInfoState = {
 	selectedTraitSpells: {}
 };
 
+export const reducers: AppReducers<RaceInfoState> = {
+	selectRace: (state, action: PayloadAction<SelectRacePayload>) => {
+		const { race, subrace } = action.payload;
+		state.race = race;
+
+		if (subrace) {
+			state.subrace = subrace;
+		}
+	},
+	deselectRace: () => initialState,
+	setRaceAbilityBonus: (
+		state,
+		{
+			payload: { index, abilityBonus }
+		}: PayloadAction<{ index: number; abilityBonus: AbilityBonus | null }>
+	) => {
+		if (!state.selectedAbilityScoreBonuses) {
+			state.selectedAbilityScoreBonuses = [];
+		}
+
+		if (state.selectedAbilityScoreBonuses.length < index + 1) {
+			for (
+				let i = 0;
+				i < index + 1 - state.selectedAbilityScoreBonuses.length;
+				++i
+			) {
+				state.selectedAbilityScoreBonuses = [
+					...(state.selectedAbilityScoreBonuses as AbilityBonus[]),
+					null
+				];
+			}
+		}
+
+		state.selectedAbilityScoreBonuses = (
+			state.selectedAbilityScoreBonuses as AbilityBonus[]
+		).map((bonus, i) => (i === index ? abilityBonus : bonus));
+	},
+	addRaceLanguage: (state, { payload }: PayloadAction<SrdItem>) => {
+		if (!state.selectedLanguages) {
+			state.selectedLanguages = [];
+		}
+		state.selectedLanguages = [...state.selectedLanguages, payload];
+	},
+	removeRaceLanguage: (state, { payload }: PayloadAction<string>) => {
+		if (!state.selectedLanguages) {
+			state.selectedLanguages = [];
+		}
+		state.selectedLanguages = state.selectedLanguages.filter(
+			language => language.index !== payload
+		);
+	},
+	addTraitProficiency: (
+		state,
+		action: PayloadAction<AddTraitProficiencyPayload>
+	) => {
+		const { index, proficiency } = action.payload;
+		if (!state.selectedTraitProficiencies[index]) {
+			state.selectedTraitProficiencies[index] = [];
+		}
+
+		state.selectedTraitProficiencies[index] = [
+			...state.selectedTraitProficiencies[index],
+			proficiency
+		];
+	},
+	removeTraitProficiency: (
+		state,
+		{
+			payload: { index, proficiency }
+		}: PayloadAction<{ index: string; proficiency: string }>
+	) => {
+		if (!state.selectedTraitProficiencies[index]) {
+			state.selectedTraitProficiencies[index] = [];
+		}
+		state.selectedTraitProficiencies[index] = state.selectedTraitProficiencies[
+			index
+		].filter(({ index }) => index !== proficiency);
+	},
+	addTraitLanguage: (state, action: PayloadAction<AddTraitLanguagePayload>) => {
+		const { index, language } = action.payload;
+		if (!state.selectedTraitLanguages[index]) {
+			state.selectedTraitLanguages[index] = [];
+		}
+
+		state.selectedTraitLanguages[index] = [
+			...state.selectedTraitLanguages[index],
+			language
+		];
+	},
+	removeTraitLanguage: (
+		state,
+		{
+			payload: { index, language }
+		}: PayloadAction<{ index: string; language: string }>
+	) => {
+		if (!state.selectedTraitLanguages[index]) {
+			state.selectedTraitLanguages[index] = [];
+		}
+
+		state.selectedTraitLanguages[index] = state.selectedTraitLanguages[
+			index
+		].filter(({ index }) => index !== language);
+	},
+	selectDraconicAncestry: (
+		state,
+		{ payload }: PayloadAction<SrdSubtraitItem>
+	) => {
+		state.draconicAncestry = payload;
+	},
+	deselectDraconicAncestry: state => {
+		delete state.draconicAncestry;
+	},
+	addTraitSpell: (state, action: PayloadAction<AddTraitSpellPayload>) => {
+		const { index, spell } = action.payload;
+		if (!state.selectedTraitSpells[index]) {
+			state.selectedTraitSpells[index] = [];
+		}
+
+		state.selectedTraitSpells[index] = [
+			...state.selectedTraitSpells[index],
+			spell
+		];
+	},
+	removeTraitSpell: (
+		state,
+		{
+			payload: { index, spell }
+		}: PayloadAction<{ index: string; spell: string }>
+	) => {
+		if (!state.selectedTraitSpells[index]) {
+			state.selectedTraitSpells[index] = [];
+		}
+
+		state.selectedTraitSpells[index] = state.selectedTraitSpells[index].filter(
+			({ index }) => index !== spell
+		);
+	}
+};
+
 const raceInfoSlice = createSlice({
 	name: 'raceInfo',
 	initialState,
-	reducers: {
-		selectRace: (state, action: PayloadAction<SelectRacePayload>) => {
-			const { race, subrace } = action.payload;
-			state.race = race;
-
-			if (subrace) {
-				state.subrace = subrace;
-			}
-		},
-		deselectRace: () => initialState,
-		setRaceAbilityBonus: (
-			state,
-			{
-				payload: { index, abilityBonus }
-			}: PayloadAction<{ index: number; abilityBonus: AbilityBonus | null }>
-		) => {
-			if (!state.selectedAbilityScoreBonuses) {
-				state.selectedAbilityScoreBonuses = [];
-			}
-
-			if (state.selectedAbilityScoreBonuses.length < index + 1) {
-				for (
-					let i = 0;
-					i < index + 1 - state.selectedAbilityScoreBonuses.length;
-					++i
-				) {
-					state.selectedAbilityScoreBonuses = [
-						...(state.selectedAbilityScoreBonuses as AbilityBonus[]),
-						null
-					];
-				}
-			}
-
-			state.selectedAbilityScoreBonuses = (
-				state.selectedAbilityScoreBonuses as AbilityBonus[]
-			).map((bonus, i) => (i === index ? abilityBonus : bonus));
-		},
-		addRaceLanguage: (state, { payload }: PayloadAction<SrdItem>) => {
-			if (!state.selectedLanguages) {
-				state.selectedLanguages = [];
-			}
-			state.selectedLanguages = [...state.selectedLanguages, payload];
-		},
-		removeRaceLanguage: (state, { payload }: PayloadAction<string>) => {
-			if (!state.selectedLanguages) {
-				state.selectedLanguages = [];
-			}
-			state.selectedLanguages = state.selectedLanguages.filter(
-				language => language.index !== payload
-			);
-		},
-		addTraitProficiency: (
-			state,
-			action: PayloadAction<AddTraitProficiencyPayload>
-		) => {
-			const { index, proficiency } = action.payload;
-			if (
-				!(
-					state.selectedTraitProficiencies as Draft<{
-						[key: string]: SrdProficiencyItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitProficiencies as Draft<{
-						[key: string]: SrdProficiencyItem[];
-					}>
-				)[index] = [];
-			}
-			(
-				state.selectedTraitProficiencies as Draft<{
-					[key: string]: SrdProficiencyItem[];
-				}>
-			)[index] = [
-				...(
-					state.selectedTraitProficiencies as Draft<{
-						[key: string]: SrdProficiencyItem[];
-					}>
-				)[index],
-				proficiency
-			];
-		},
-		removeTraitProficiency: (
-			state,
-			{
-				payload: { index, proficiency }
-			}: PayloadAction<{ index: string; proficiency: string }>
-		) => {
-			if (
-				!(
-					state.selectedTraitProficiencies as Draft<{
-						[key: string]: SrdProficiencyItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitProficiencies as Draft<{
-						[key: string]: SrdProficiencyItem[];
-					}>
-				)[index] = [];
-			}
-			(
-				state.selectedTraitProficiencies as Draft<{
-					[key: string]: SrdProficiencyItem[];
-				}>
-			)[index] = (
-				state.selectedTraitProficiencies as Draft<{
-					[key: string]: SrdProficiencyItem[];
-				}>
-			)[index].filter(({ index }) => index !== proficiency);
-		},
-		addTraitLanguage: (
-			state,
-			action: PayloadAction<AddTraitLanguagePayload>
-		) => {
-			const { index, language } = action.payload;
-			if (
-				!(
-					state.selectedTraitLanguages as Draft<{
-						[key: string]: SrdItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitLanguages as Draft<{
-						[key: string]: SrdItem[];
-					}>
-				)[index] = [];
-			}
-
-			(
-				state.selectedTraitLanguages as Draft<{
-					[key: string]: SrdItem[];
-				}>
-			)[index] = [
-				...(
-					state.selectedTraitLanguages as Draft<{
-						[key: string]: SrdItem[];
-					}>
-				)[index],
-				language
-			];
-		},
-		removeTraitLanguage: (
-			state,
-			{
-				payload: { index, language }
-			}: PayloadAction<{ index: string; language: string }>
-		) => {
-			if (
-				!(
-					state.selectedTraitLanguages as Draft<{
-						[key: string]: SrdItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitLanguages as Draft<{
-						[key: string]: SrdItem[];
-					}>
-				)[index] = [];
-			}
-
-			(
-				state.selectedTraitLanguages as Draft<{
-					[key: string]: SrdItem[];
-				}>
-			)[index] = (
-				state.selectedTraitLanguages as Draft<{
-					[key: string]: SrdItem[];
-				}>
-			)[index].filter(({ index }) => index !== language);
-		},
-		selectDraconicAncestry: (
-			state,
-			{ payload }: PayloadAction<SrdSubtraitItem>
-		) => {
-			state.draconicAncestry = payload;
-		},
-		deselectDraconicAncestry: state => {
-			delete state.draconicAncestry;
-		},
-		addTraitSpell: (state, action: PayloadAction<AddTraitSpellPayload>) => {
-			const { index, spell } = action.payload;
-			if (
-				!(
-					state.selectedTraitSpells as Draft<{
-						[key: string]: SrdSpellItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitSpells as Draft<{
-						[key: string]: SrdSpellItem[];
-					}>
-				)[index] = [];
-			}
-
-			(
-				state.selectedTraitSpells as Draft<{
-					[key: string]: SrdSpellItem[];
-				}>
-			)[index] = [
-				...(
-					state.selectedTraitSpells as Draft<{
-						[key: string]: SrdSpellItem[];
-					}>
-				)[index],
-				spell
-			];
-		},
-		removeTraitSpell: (
-			state,
-			{
-				payload: { index, spell }
-			}: PayloadAction<{ index: string; spell: string }>
-		) => {
-			if (
-				!(
-					state.selectedTraitSpells as Draft<{
-						[key: string]: SrdSpellItem[];
-					}>
-				)[index]
-			) {
-				(
-					state.selectedTraitSpells as Draft<{
-						[key: string]: SrdSpellItem[];
-					}>
-				)[index] = [];
-			}
-
-			(
-				state.selectedTraitSpells as Draft<{
-					[key: string]: SrdSpellItem[];
-				}>
-			)[index] = (
-				state.selectedTraitSpells as Draft<{
-					[key: string]: SrdSpellItem[];
-				}>
-			)[index].filter(({ index }) => index !== spell);
-		}
-	}
+	reducers
 });
 
 export const {

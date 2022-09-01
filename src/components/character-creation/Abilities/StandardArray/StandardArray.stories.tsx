@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { AbilityScoresState } from '../../../../redux/features/abilityScores';
 import MockStore, { mockAbilities } from '../MockAbilitiesStore';
 import StandardArray, { StandardArrayProps } from './StandardArray';
 
@@ -14,13 +15,13 @@ const Template: ComponentStory<typeof StandardArray> = (
 	args: StandardArrayProps
 ) => <StandardArray {...args} />;
 
-const defaultOverride = {
-	str: {},
-	dex: {},
-	con: {},
-	int: {},
-	cha: {},
-	wis: {}
+const defaultOverride: AbilityScoresState = {
+	str: { highest: 20, abilityImprovement: 0 },
+	dex: { highest: 20, abilityImprovement: 0 },
+	con: { highest: 20, abilityImprovement: 0 },
+	int: { highest: 20, abilityImprovement: 0 },
+	cha: { highest: 20, abilityImprovement: 0 },
+	wis: { highest: 20, abilityImprovement: 0 }
 };
 
 export const NoneSelected = Template.bind({});
@@ -34,9 +35,9 @@ HalfSelected.decorators = [
 		<MockStore
 			overrideValues={{
 				...defaultOverride,
-				str: { base: 8 },
-				int: { base: 15 },
-				con: { base: 14 }
+				str: { base: 8, highest: 20, abilityImprovement: 0 },
+				int: { base: 15, highest: 20, abilityImprovement: 0 },
+				con: { base: 14, highest: 20, abilityImprovement: 0 }
 			}}
 		>
 			{story()}
@@ -49,12 +50,12 @@ AllSelected.decorators = [
 	story => (
 		<MockStore
 			overrideValues={{
-				str: { base: 8 },
-				dex: { base: 10 },
-				con: { base: 12 },
-				int: { base: 13 },
-				cha: { base: 14 },
-				wis: { base: 15 }
+				str: { base: 8, highest: 20, abilityImprovement: 0 },
+				dex: { base: 10, highest: 20, abilityImprovement: 0 },
+				con: { base: 12, highest: 20, abilityImprovement: 0 },
+				int: { base: 13, highest: 20, abilityImprovement: 0 },
+				cha: { base: 14, highest: 20, abilityImprovement: 0 },
+				wis: { base: 15, highest: 20, abilityImprovement: 0 }
 			}}
 		>
 			{story()}

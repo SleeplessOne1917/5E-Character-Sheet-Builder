@@ -48,7 +48,11 @@ MiscBonusWithBase.args = {
 };
 MiscBonusWithBase.decorators = [
 	story => (
-		<MockStore overrideValues={{ wis: { base: 13, miscBonus: 1 } }}>
+		<MockStore
+			overrideValues={{
+				wis: { base: 13, miscBonus: 1, highest: 20, abilityImprovement: 0 }
+			}}
+		>
 			{story()}
 		</MockStore>
 	)
@@ -83,7 +87,8 @@ AllBonusesAndOverrideButNoBase.decorators = [
 					raceBonus: 2,
 					otherBonus: 1,
 					override: 28,
-					miscBonus: 1
+					miscBonus: 1,
+					highest: 20
 				}
 			}}
 		>
@@ -107,7 +112,8 @@ Everything.decorators = [
 					miscBonus: 3,
 					raceBonus: 1,
 					otherBonus: 1,
-					override: 5
+					override: 5,
+					highest: 20
 				}
 			}}
 		>

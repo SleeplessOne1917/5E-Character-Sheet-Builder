@@ -5,12 +5,12 @@ import PointBuy, { PointBuyProps } from './PointBuy';
 import { AbilityScoresState } from '../../../../redux/features/abilityScores';
 
 const defaultState: AbilityScoresState = {
-	cha: { base: 8 },
-	con: { base: 8 },
-	dex: { base: 8 },
-	int: { base: 8 },
-	str: { base: 8 },
-	wis: { base: 8 }
+	cha: { base: 8, highest: 20, abilityImprovement: 0 },
+	con: { base: 8, highest: 20, abilityImprovement: 0 },
+	dex: { base: 8, highest: 20, abilityImprovement: 0 },
+	int: { base: 8, highest: 20, abilityImprovement: 0 },
+	str: { base: 8, highest: 20, abilityImprovement: 0 },
+	wis: { base: 8, highest: 20, abilityImprovement: 0 }
 };
 
 export default {
@@ -35,12 +35,12 @@ NoMorePoints.decorators = [
 	story => (
 		<MockStore
 			overrideValues={{
-				con: { base: 12 },
-				cha: { base: 13 },
-				dex: { base: 14 },
-				int: { base: 12 },
-				str: { base: 12 },
-				wis: { base: 11 }
+				con: { base: 12, highest: 20, abilityImprovement: 0 },
+				cha: { base: 13, highest: 20, abilityImprovement: 0 },
+				dex: { base: 14, highest: 20, abilityImprovement: 0 },
+				int: { base: 12, highest: 20, abilityImprovement: 0 },
+				str: { base: 12, highest: 20, abilityImprovement: 0 },
+				wis: { base: 11, highest: 20, abilityImprovement: 0 }
 			}}
 		>
 			{story()}
@@ -52,7 +52,11 @@ export const SomePointsSpent = Template.bind({});
 SomePointsSpent.decorators = [
 	story => (
 		<MockStore
-			overrideValues={{ ...defaultState, str: { base: 12 }, wis: { base: 14 } }}
+			overrideValues={{
+				...defaultState,
+				str: { base: 12, highest: 20, abilityImprovement: 0 },
+				wis: { base: 14, highest: 20, abilityImprovement: 0 }
+			}}
 		>
 			{story()}
 		</MockStore>

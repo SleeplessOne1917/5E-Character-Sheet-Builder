@@ -1,0 +1,454 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when class is selected 1`] = `
+<div
+  class="modal-container"
+  data-testid="hit-points-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="bonuses-container"
+    >
+      <div
+        class="section-header"
+      >
+        Bonuses per level
+      </div>
+      <div
+        class="bonuses"
+      >
+        <div
+          class="bonus"
+        >
+          <span
+            class="bonus-label"
+          >
+            Constitution Bonus:
+          </span>
+           
+          +
+          3
+        </div>
+      </div>
+    </div>
+    <div
+      class="auto-level-container"
+    >
+      <div
+        style="align-self: flex-start;"
+      >
+        <div
+          class="section-header"
+        >
+          Automatically add HP on level up
+        </div>
+        <div
+          class="auto-level-radios"
+          role="radiogroup"
+        >
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="true"
+              class="radio-button selected"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Off
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Roll Hit Die
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Average Hit Die Roll
+          </label>
+        </div>
+      </div>
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+        type="button"
+      >
+        Reset All Level Bonuses
+      </button>
+    </div>
+    <div
+      class="hp-container"
+    >
+      <div
+        class="hp"
+      >
+        <div
+          class="hp-section-header"
+        >
+          <div>
+            HP by level
+          </div>
+          <div>
+            Hit Die: d
+            8
+          </div>
+          <div>
+            HP: 
+            49
+          </div>
+        </div>
+        <div
+          class="hp-levels"
+        >
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                1st
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                8
+                 +3
+              </div>
+            </div>
+          </div>
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                2nd
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                1
+                 +3
+              </div>
+            </div>
+            <div
+              class="hp-buttons"
+            >
+              <button
+                class="button negative"
+                style="font-size: 0.7rem; padding: 0.5rem; margin: 0.25rem;"
+                type="button"
+              >
+                Clear Level
+              </button>
+            </div>
+          </div>
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                3rd
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                8
+                 +3
+              </div>
+            </div>
+            <div
+              class="hp-buttons"
+            >
+              <button
+                class="button negative"
+                style="font-size: 0.7rem; padding: 0.5rem; margin: 0.25rem;"
+                type="button"
+              >
+                Clear Level
+              </button>
+            </div>
+          </div>
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                4th
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                6
+                 +3
+              </div>
+            </div>
+            <div
+              class="hp-buttons"
+            >
+              <button
+                class="button negative"
+                style="font-size: 0.7rem; padding: 0.5rem; margin: 0.25rem;"
+                type="button"
+              >
+                Clear Level
+              </button>
+            </div>
+          </div>
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                5th
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                3
+                 +3
+              </div>
+            </div>
+            <div
+              class="hp-buttons"
+            >
+              <button
+                class="button negative"
+                style="font-size: 0.7rem; padding: 0.5rem; margin: 0.25rem;"
+                type="button"
+              >
+                Clear Level
+              </button>
+            </div>
+          </div>
+          <div
+            class="hp-level"
+          >
+            <div
+              class="hp-level-start"
+            >
+              <div
+                class="hp-level-label"
+              >
+                6th
+              </div>
+              <div
+                class="hp-level-hp"
+              >
+                5
+                 +3
+              </div>
+            </div>
+            <div
+              class="hp-buttons"
+            >
+              <button
+                class="button negative"
+                style="font-size: 0.7rem; padding: 0.5rem; margin: 0.25rem;"
+                type="button"
+              >
+                Clear Level
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly when no class is selected 1`] = `
+<div
+  class="modal-container"
+  data-testid="hit-points-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="bonuses-container"
+    />
+    <div
+      class="auto-level-container"
+    >
+      <div
+        style="align-self: flex-start;"
+      >
+        <div
+          class="section-header"
+        >
+          Automatically add HP on level up
+        </div>
+        <div
+          class="auto-level-radios"
+          role="radiogroup"
+        >
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="true"
+              class="radio-button selected"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Off
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Roll Hit Die
+          </label>
+          <label
+            class="radio-label"
+            data-testid="radio-button"
+          >
+            <div
+              aria-checked="false"
+              class="radio-button"
+              role="radio"
+              tabindex="0"
+            >
+              <div
+                class="inner-circle"
+              />
+            </div>
+            Average Hit Die Roll
+          </label>
+        </div>
+      </div>
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+        type="button"
+      >
+        Reset All Level Bonuses
+      </button>
+    </div>
+    <div
+      class="hp-container"
+    >
+      <div
+        class="no-class-message"
+      >
+        Must select class to calculate HP.
+      </div>
+    </div>
+  </div>
+</div>
+`;
