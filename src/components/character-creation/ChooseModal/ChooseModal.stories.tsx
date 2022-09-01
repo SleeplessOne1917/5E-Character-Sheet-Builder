@@ -2,7 +2,7 @@ import ChooseModal from './ChooseModal';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 export default {
-	title: 'Components/ChooseModal',
+	title: 'Components/CharacterCreation/ChooseModal',
 	component: ChooseModal,
 	args: {
 		show: true,

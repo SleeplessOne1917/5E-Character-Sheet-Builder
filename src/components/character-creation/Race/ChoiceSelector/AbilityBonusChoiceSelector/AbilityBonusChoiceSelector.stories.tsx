@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/ChoiceSelector/AbilityBonusChoiceSelector',
+	title:
+		'Components/CharacterCreation/Race/ChoiceSelector/AbilityBonusChoiceSelector',
 	component: AbilityBonusChoiceSelector,
 	decorators: [
 		Story => (

@@ -246,6 +246,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -398,6 +399,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -548,6 +550,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -698,6 +701,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -848,6 +852,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -1018,6 +1023,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -1174,6 +1180,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"
@@ -1330,6 +1337,7 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
+            1 hour
           </div>
           <div
             class="summary-item"

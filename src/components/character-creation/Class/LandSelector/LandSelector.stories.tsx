@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import LandSelector from './LandSelector';
 
 export default {
-	title: 'Components/LandSelector',
+	title: 'Components/CharacterCreation/Class/LandSelector',
 	component: LandSelector,
 	args: {
 		value: 'coast'

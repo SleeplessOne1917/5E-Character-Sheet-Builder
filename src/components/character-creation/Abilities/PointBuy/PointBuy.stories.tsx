@@ -14,7 +14,7 @@ const defaultState: AbilityScoresState = {
 };
 
 export default {
-	title: 'Components/PointBuy',
+	title: 'Components/CharacterCreation/Abilities/PointBuy',
 	component: PointBuy,
 	args: {
 		abilities: mockAbilities

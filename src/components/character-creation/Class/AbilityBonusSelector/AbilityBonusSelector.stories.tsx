@@ -4,7 +4,7 @@ import AbilityBonusSelector from './AbilityBonusSelector';
 import { mockAbilities } from '../../Abilities/MockAbilitiesStore';
 
 export default {
-	title: 'Components/AbilityBonusSelector',
+	title: 'Components/CharacterCreation/Class/AbilityBonusSelector',
 	component: AbilityBonusSelector,
 	args: {
 		abilities: mockAbilities,

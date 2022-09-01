@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/ChoiceSelector/ProficiencyChoiceSelector',
+	title:
+		'Components/CharacterCreation/Race/ChoiceSelector/ProficiencyChoiceSelector',
 	component: ProficiencyChoiceSelector,
 	args: {
 		choice: {

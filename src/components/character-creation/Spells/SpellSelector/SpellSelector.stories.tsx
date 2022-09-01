@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import SpellSelector from './SpellSelector';
 
 export default {
-	title: 'Components/Spells/SpellSelector',
+	title: 'Components/CharacterCreation/Spells/SpellSelector',
 	component: SpellSelector,
 	args: {
 		item: {
@@ -32,7 +32,8 @@ export default {
 				}
 			},
 			range: '60 feet',
-			ritual: false
+			ritual: false,
+			duration: '1 hour'
 		},
 		selectValues: ['blank']
 	}

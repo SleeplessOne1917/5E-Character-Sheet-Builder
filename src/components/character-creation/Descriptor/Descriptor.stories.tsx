@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Descriptor, { DescriptorProps } from './Descriptor';
 
 export default {
-	title: 'Components/Descriptor',
+	title: 'Components/CharacterCreation/Descriptor',
 	component: Descriptor,
 	argTypes: { toggleOpen: { type: 'function' } }
 } as ComponentMeta<typeof Descriptor>;

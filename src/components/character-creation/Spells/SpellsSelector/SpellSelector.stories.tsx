@@ -5,7 +5,7 @@ import SpellsSelector from './SpellsSelector';
 import { getTestStore } from '../../../../redux/store';
 
 export default {
-	title: 'Components/Spells/SpellsSelector',
+	title: 'Components/CharacterCreation/Spells/SpellsSelector',
 	component: SpellsSelector,
 	args: {
 		choose: 5,
@@ -25,7 +25,8 @@ export default {
 					index: 'divination'
 				},
 				range: '30 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'light',
@@ -44,7 +45,8 @@ export default {
 				},
 				material: 'A firefly or phosphorescent moss.',
 				range: 'Touch',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'mending',
@@ -63,7 +65,8 @@ export default {
 				},
 				material: 'Two lodestones.',
 				range: 'Touch',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'message',
@@ -82,7 +85,8 @@ export default {
 				},
 				material: 'A short piece of copper wire.',
 				range: '120 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'vicious-mockery',
@@ -106,7 +110,8 @@ export default {
 					}
 				},
 				range: '60 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'minor-illusion',
@@ -127,7 +132,8 @@ export default {
 				},
 				material: 'A bit of fleece.',
 				range: '30 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'dancing-lights',
@@ -146,7 +152,8 @@ export default {
 				},
 				material: 'A bit of phosphorus or wychwood, or a glowworm.',
 				range: '120 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			},
 			{
 				index: 'prestidigitation',
@@ -170,7 +177,8 @@ export default {
 					index: 'transmutation'
 				},
 				range: '10 feet',
-				ritual: false
+				ritual: false,
+				duration: '1 hour'
 			}
 		]
 	},

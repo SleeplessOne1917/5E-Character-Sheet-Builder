@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/ChoiceSelector/DraconicAncestryChoiceSelector',
+	title:
+		'Components/CharacterCreation/Race/ChoiceSelector/DraconicAncestryChoiceSelector',
 	component: DraconicAncestryChoiceSelector,
 	args: {
 		choice: {

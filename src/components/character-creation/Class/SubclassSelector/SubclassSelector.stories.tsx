@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import SubclassSelector from './SubclassSelector';
 
 export default {
-	title: 'Components/SubclassSelector',
+	title: 'Components/CharacterCreation/Class/SubclassSelector',
 	component: SubclassSelector,
 	args: {
 		subclass: {

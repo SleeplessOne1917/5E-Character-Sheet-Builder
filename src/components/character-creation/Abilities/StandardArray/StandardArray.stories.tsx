@@ -4,7 +4,7 @@ import MockStore, { mockAbilities } from '../MockAbilitiesStore';
 import StandardArray, { StandardArrayProps } from './StandardArray';
 
 export default {
-	title: 'Components/StandardArray',
+	title: 'Components/CharacterCreation/Abilities/StandardArray',
 	component: StandardArray,
 	args: {
 		abilities: mockAbilities

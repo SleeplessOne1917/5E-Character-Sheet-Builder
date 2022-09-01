@@ -4,7 +4,7 @@ import { getTestStore } from '../../../../redux/store';
 import ProficienciesSelector from './ProficienciesSelector';
 
 export default {
-	title: 'Components/ProficienciesSelector',
+	title: 'Components/CharacterCreation/Class/ProficienciesSelector',
 	component: ProficienciesSelector,
 	args: {
 		proficienciesIndex: 0

@@ -6,7 +6,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import MockStore from '../MockAbilitiesStore';
 
 export default {
-	title: 'Components/AbilityCalculation',
+	title: 'Components/CharacterCreation/Abilities/AbilityCalculation',
 	component: AbilityCalculation
 } as ComponentMeta<typeof AbilityCalculation>;
 

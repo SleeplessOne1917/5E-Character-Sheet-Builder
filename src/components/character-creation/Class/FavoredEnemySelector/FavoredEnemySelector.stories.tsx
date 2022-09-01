@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../redux/store';
 
 export default {
-	title: 'Components/FavoredEnemySelector',
+	title: 'Components/CharacterCreation/Class/FavoredEnemySelector',
 	component: FavoredEnemySelector,
 	args: {
 		values: ['ABERRATION'],

@@ -5,7 +5,7 @@ import SpellChoiceSelector from './SpellChoiceSelector';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/ChoiceSelector/SpellChoiceSelector',
+	title: 'Components/CharacterCreation/Race/ChoiceSelector/SpellChoiceSelector',
 	component: SpellChoiceSelector,
 	decorators: [
 		Story => (
@@ -41,7 +41,8 @@ export default {
 							},
 							material: 'A firefly or phosphorescent moss.',
 							range: 'Touch',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -62,7 +63,8 @@ export default {
 								index: 'conjuration'
 							},
 							range: '30 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -83,7 +85,8 @@ export default {
 							},
 							material: 'Two lodestones.',
 							range: 'Touch',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -104,7 +107,8 @@ export default {
 							},
 							material: 'A short piece of copper wire.',
 							range: '120 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -127,7 +131,8 @@ export default {
 							},
 							material: 'A bit of fleece.',
 							range: '30 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -153,7 +158,8 @@ export default {
 								}
 							},
 							range: '60 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -179,7 +185,8 @@ export default {
 								index: 'transmutation'
 							},
 							range: '10 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -205,7 +212,8 @@ export default {
 								}
 							},
 							range: '60 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -231,7 +239,8 @@ export default {
 								}
 							},
 							range: 'Touch',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -250,7 +259,8 @@ export default {
 								index: 'divination'
 							},
 							range: '30 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -277,7 +287,8 @@ export default {
 								}
 							},
 							range: '120 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -298,7 +309,8 @@ export default {
 							},
 							material: 'A bit of phosphorus or wychwood, or a glowworm.',
 							range: '120 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -324,7 +336,8 @@ export default {
 								}
 							},
 							range: '120 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					},
 					{
@@ -350,7 +363,8 @@ export default {
 								}
 							},
 							range: '10 feet',
-							ritual: false
+							ritual: false,
+							duration: '1 hour'
 						}
 					}
 				]

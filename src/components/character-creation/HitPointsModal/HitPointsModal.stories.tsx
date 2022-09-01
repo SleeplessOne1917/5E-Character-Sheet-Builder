@@ -5,7 +5,7 @@ import { getTestStore } from '../../../redux/store';
 import getMockEditingCharacter from '../../../mock/editingCharacterMock';
 
 export default {
-	title: 'Components/HitPointsModal',
+	title: 'Components/CharacterCreation/HitPointsModal',
 	component: HitPointsModal,
 	args: {
 		show: true

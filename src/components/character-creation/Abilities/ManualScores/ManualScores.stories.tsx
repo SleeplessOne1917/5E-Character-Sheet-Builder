@@ -3,7 +3,7 @@ import ManualScores, { ManualScoresProps } from './ManualScores';
 import MockStore, { mockAbilities } from '../MockAbilitiesStore';
 
 export default {
-	title: 'Components/ManualScores',
+	title: 'Components/CharacterCreation/Abilities/ManualScores',
 	component: ManualScores,
 	args: {
 		abilities: mockAbilities

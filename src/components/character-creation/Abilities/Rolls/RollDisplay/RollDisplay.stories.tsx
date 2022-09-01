@@ -4,7 +4,7 @@ import RollDisplay, { RollDisplayProps } from './RollDisplay';
 import { mockAbilities } from '../../MockAbilitiesStore';
 
 export default {
-	title: 'Components/RollDisplay',
+	title: 'Components/CharacterCreation/Abilities/Rolls/RollDisplay',
 	component: RollDisplay,
 	args: {
 		abilities: mockAbilities

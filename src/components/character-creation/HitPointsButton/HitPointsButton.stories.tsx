@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../redux/store';
 
 export default {
-	title: 'Components/HitPointsButton',
+	title: 'Components/CharacterCreation/HitPointsButton',
 	component: HitPointsButton,
 	decorators: [
 		Story => (
