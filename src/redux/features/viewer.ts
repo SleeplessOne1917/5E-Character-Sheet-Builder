@@ -19,7 +19,9 @@ export const fetchLoggedInUsername = createAsyncThunk(
 		if (result.error) {
 			const toast = {
 				closeTimeoutSeconds: 10,
-				message: result.error.message,
+				message: result.error.message.toLowerCase().includes('mongoose')
+					? 'Could not connect to DB.'
+					: result.error.message,
 				type: ToastType.error
 			};
 			dispatch(show(toast));
