@@ -200,11 +200,9 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 				</div>
 				<div className={styles.selects}>
 					<div className={styles['select-container']}>
-						<label id="school-select" className={styles['select-label']}>
-							School
-						</label>{' '}
 						<Select
-							labelledBy="school-select"
+							label="School"
+							id="school-select"
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								spells
 									.reduce<SrdItem[]>((acc, cur) => {
@@ -224,11 +222,9 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 					</div>
 					{levels.length > 0 && (
 						<div className={styles['select-container']}>
-							<label id="level-select" className={styles['select-label']}>
-								Level
-							</label>{' '}
 							<Select
-								labelledBy="level-select"
+								label="Level"
+								id="level-select"
 								options={[
 									{ value: 'blank', label: '\u2014' } as {
 										value: string | number;

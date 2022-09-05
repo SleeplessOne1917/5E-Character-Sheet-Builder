@@ -4,3 +4,22 @@
     align-items: center;
     flex-direction: column;
 }
+
+.name-and-level {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.level-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .name-and-level {
+        justify-content: space-around;
+    }
+}

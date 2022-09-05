@@ -9,93 +9,98 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="str-select-label"
-    >
-      Strength
-    </label>
     <div
-      aria-labelledby="str-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="str"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="str-button"
-        type="button"
+      <label
+        id="str-select-label"
+        style="font-size: 1.5rem;"
       >
-        8
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="8"
-        class="list"
-        data-testid="str-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Strength
+      </label>
+      <div
+        aria-labelledby="str-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="str-data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="str-data-8"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="str-button"
+          type="button"
         >
           8
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="str-data-10"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="8"
+          class="list"
+          data-testid="str-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="str-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="str-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-      </ul>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="str-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="str-data-8"
+            role="option"
+            tabindex="0"
+          >
+            8
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="str-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="str-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="str-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:
@@ -106,84 +111,89 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="dex-select-label"
-    >
-      Dexterity
-    </label>
     <div
-      aria-labelledby="dex-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="dex"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="dex-button"
-        type="button"
+      <label
+        id="dex-select-label"
+        style="font-size: 1.5rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="dex-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Dexterity
+      </label>
+      <div
+        aria-labelledby="dex-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="dex-data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="dex-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="dex-data-10"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="dex-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="dex-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="dex-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="dex-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="dex-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="dex-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="dex-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:
@@ -194,93 +204,98 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="con-select-label"
-    >
-      Constitution
-    </label>
     <div
-      aria-labelledby="con-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="con"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="con-button"
-        type="button"
+      <label
+        id="con-select-label"
+        style="font-size: 1.5rem;"
       >
-        14
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="14"
-        class="list"
-        data-testid="con-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Constitution
+      </label>
+      <div
+        aria-labelledby="con-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="con-data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="con-data-10"
-          role="option"
-          tabindex="0"
-        >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="con-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="con-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="con-data-14"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="con-button"
+          type="button"
         >
           14
-        </li>
-      </ul>
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="14"
+          class="list"
+          data-testid="con-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
+        >
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="con-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="con-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="con-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="con-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="con-data-14"
+            role="option"
+            tabindex="0"
+          >
+            14
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:
@@ -291,93 +306,98 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="int-select-label"
-    >
-      Intelligence
-    </label>
     <div
-      aria-labelledby="int-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="int"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="int-button"
-        type="button"
+      <label
+        id="int-select-label"
+        style="font-size: 1.5rem;"
       >
-        15
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="15"
-        class="list"
-        data-testid="int-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Intelligence
+      </label>
+      <div
+        aria-labelledby="int-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="int-data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="int-data-10"
-          role="option"
-          tabindex="0"
-        >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="int-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="int-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="int-data-15"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="int-button"
+          type="button"
         >
           15
-        </li>
-      </ul>
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="15"
+          class="list"
+          data-testid="int-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
+        >
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="int-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="int-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="int-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="int-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="int-data-15"
+            role="option"
+            tabindex="0"
+          >
+            15
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:
@@ -388,84 +408,89 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="wis-select-label"
-    >
-      Wisdom
-    </label>
     <div
-      aria-labelledby="wis-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="wis"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="wis-button"
-        type="button"
+      <label
+        id="wis-select-label"
+        style="font-size: 1.5rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="wis-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Wisdom
+      </label>
+      <div
+        aria-labelledby="wis-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="wis-data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="wis-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="wis-data-10"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="wis-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="wis-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="wis-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="wis-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="wis-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="wis-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="wis-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:
@@ -476,84 +501,89 @@ exports[`renders correctly 1`] = `
   <div
     class="ability"
   >
-    <label
-      id="cha-select-label"
-    >
-      Charisma
-    </label>
     <div
-      aria-labelledby="cha-select-label"
-      class="container"
+      class="list-box-and-error-container"
       data-testid="cha"
-      style="font-size: 1.5rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="cha-button"
-        type="button"
+      <label
+        id="cha-select-label"
+        style="font-size: 1.5rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="cha-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
+        Charisma
+      </label>
+      <div
+        aria-labelledby="cha-select-label"
+        class="list-box-container"
+        style="font-size: 1.5rem;"
       >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="cha-data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="cha-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="cha-data-10"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="cha-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          10
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="cha-data-12"
-          role="option"
-          tabindex="0"
-        >
-          12
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="cha-data-13"
-          role="option"
-          tabindex="0"
-        >
-          13
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="cha-data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="cha-data-10"
+            role="option"
+            tabindex="0"
+          >
+            10
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="cha-data-12"
+            role="option"
+            tabindex="0"
+          >
+            12
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="cha-data-13"
+            role="option"
+            tabindex="0"
+          >
+            13
+          </li>
+        </ul>
+      </div>
     </div>
     <div>
       Total:

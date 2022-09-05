@@ -4,7 +4,7 @@ import { SpellComponent } from '../../types/srd';
 
 export type EditingSpellState = {
 	name: string;
-	level?: number | null;
+	level?: number;
 	castingTime: string;
 	duration: string;
 	range: string;
@@ -34,7 +34,7 @@ const editingSpellSlice = createSlice({
 		setName: (state, { payload }: PayloadAction<string>) => {
 			state.name = payload;
 		},
-		setLevel: (state, { payload }: PayloadAction<number | null>) => {
+		setLevel: (state, { payload }: PayloadAction<number | undefined>) => {
 			state.level = payload;
 		},
 		setCastingTime: (state, { payload }: PayloadAction<string>) => {
