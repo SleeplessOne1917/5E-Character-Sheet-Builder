@@ -6,9 +6,14 @@ import { useRouter } from 'next/router';
 const ResetPasswordPage: NextPage = () => {
 	const router = useRouter();
 	const { otlId } = router.query;
-	useRedirectLoggedInUser();
+	const { loading } = useRedirectLoggedInUser();
 
-	return <ResetPasswordView otlId={(otlId || '') as string} />;
+	return (
+		<ResetPasswordView
+			otlId={(otlId || '') as string}
+			loggedInLoading={loading}
+		/>
+	);
 };
 
 export default ResetPasswordPage;

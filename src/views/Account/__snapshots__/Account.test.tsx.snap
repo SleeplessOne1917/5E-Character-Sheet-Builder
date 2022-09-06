@@ -14,7 +14,7 @@ exports[`renders correctly 1`] = `
     <div
       class="username-blurb"
     >
-      Your username is 
+      Your username is 
       <span
         class="username"
       />

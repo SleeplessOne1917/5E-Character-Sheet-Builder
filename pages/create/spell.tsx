@@ -11,9 +11,9 @@ type SpellPageProps = {
 const SpellPage: NextPage<SpellPageProps> = ({
 	magicSchools
 }: SpellPageProps) => {
-	useRedirectLoggedOffUser();
+	const { loading } = useRedirectLoggedOffUser();
 
-	return <SpellView magicSchools={magicSchools} />;
+	return <SpellView magicSchools={magicSchools} loading={loading} />;
 };
 
 export default SpellPage;

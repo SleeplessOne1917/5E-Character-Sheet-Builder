@@ -4,7 +4,10 @@ import ForgotIndex from './ForgotIndex';
 
 export default {
 	title: 'Views/ForgotIndex',
-	component: ForgotIndex
+	component: ForgotIndex,
+	args: {
+		loading: false
+	}
 } as ComponentMeta<typeof ForgotIndex>;
 
 const Template: ComponentStory<typeof ForgotIndex> = (args: any) => (

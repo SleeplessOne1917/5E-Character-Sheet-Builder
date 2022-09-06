@@ -3,9 +3,9 @@ import { NextPage } from 'next';
 import useRedirectLoggedInUser from '../src/hooks/useRedirectLoggedInUser';
 
 const LogInPage: NextPage = () => {
-	useRedirectLoggedInUser();
+	const { loading } = useRedirectLoggedInUser();
 
-	return <LogInView />;
+	return <LogInView loading={loading} />;
 };
 
 export default LogInPage;

@@ -10,6 +10,7 @@ export default {
 export const Content: ComponentStory<typeof MainContent> = () => (
 	<MainContent>Content</MainContent>
 );
+
 Content.decorators = [
 	story => (
 		<div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>

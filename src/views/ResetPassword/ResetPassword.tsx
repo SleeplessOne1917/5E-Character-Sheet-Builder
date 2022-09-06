@@ -2,7 +2,6 @@ import Button, { ButtonType } from '../../components/Button/Button';
 import { useEffect, useState } from 'react';
 
 import { Formik } from 'formik';
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../components/MainContent/MainContent';
 import RESET_PASSWORD from '../../graphql/mutations/user/resetPassword';
 import TextInput from '../../components/TextInput/TextInput';
@@ -16,12 +15,14 @@ import { useAppDispatch } from '../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
 import { useRouter } from 'next/router';
+import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 
 type ResetPasswordProps = {
 	otlId: string;
+	loggedInLoading: boolean;
 };
 
-const ResetPassword = ({ otlId }: ResetPasswordProps) => {
+const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
@@ -36,11 +37,9 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 	});
 
 	useEffect(() => {
-		if (otlId) {
-			validateResetPassword({ otlId }).then(() => {
-				setLoading(false);
-			});
-		}
+		validateResetPassword({ otlId }).then(() => {
+			setLoading(false);
+		});
 	}, [validateResetPassword, setLoading, otlId]);
 
 	useEffect(() => {
@@ -50,112 +49,111 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 	}, [validateError, startCountdown, resetError, otlId]);
 
 	let headerText = 'Loading...';
-	let content = (
-		<div className={classes['spinner-container']}>
-			<LoadingSpinner />
-		</div>
-	);
+	let content;
 
-	if (!loading) {
-		if (validateError || resetError) {
-			headerText = 'Error';
-			content = (
-				<>
-					<div className={classes['error-message']}>
-						{cleanMessage(validateError?.message ?? resetError?.message ?? '')}
-					</div>
-					<p className={classes['countdown-message']}>
-						You will be redirected back to the home page in{' '}
-						<span className={classes.countdown}>
-							{secondsLeft} second{secondsLeft === 1 ? '' : 's'}
-						</span>
-						.
-					</p>
-				</>
-			);
-		} else {
-			headerText = 'Reset Password';
-			content = (
-				<Formik
-					initialValues={{ password: '', confirmPassword: '' }}
-					validationSchema={resetPasswordSchema}
-					onSubmit={async (values, { resetForm }) => {
-						const result = await resetPassword({ ...values, otlId });
+	if (validateError || resetError) {
+		headerText = 'Error';
+		content = (
+			<>
+				<div className={classes['error-message']}>
+					{cleanMessage(validateError?.message ?? resetError?.message ?? '')}
+				</div>
+				<p className={classes['countdown-message']}>
+					You will be redirected back to the home page in{' '}
+					<span className={classes.countdown}>
+						{secondsLeft} second{secondsLeft === 1 ? '' : 's'}
+					</span>
+					.
+				</p>
+			</>
+		);
+	} else {
+		headerText = 'Reset Password';
+		content = (
+			<Formik
+				initialValues={{ password: '', confirmPassword: '' }}
+				validationSchema={resetPasswordSchema}
+				onSubmit={async (values, { resetForm }) => {
+					const result = await resetPassword({ ...values, otlId });
 
-						if (result.data) {
-							dispatch(
-								show({
-									closeTimeoutSeconds: 10,
-									message: result.data.resetPassword,
-									type: ToastType.success
-								})
-							);
+					if (result.data) {
+						dispatch(
+							show({
+								closeTimeoutSeconds: 10,
+								message: result.data.resetPassword,
+								type: ToastType.success
+							})
+						);
 
-							resetForm();
-							router.replace('/log-in');
-						}
-					}}
-				>
-					{({
-						errors,
-						touched,
-						values,
-						handleBlur,
-						handleChange,
-						handleSubmit,
-						isSubmitting,
-						setTouched
-					}) => (
-						<form onSubmit={handleSubmit} className={classes.form}>
-							<TextInput
-								id="password"
-								label="New Password"
-								onBlur={handleBlur}
-								onChange={event => {
-									setTouched({ ...touched, password: false });
-									handleChange(event);
-								}}
-								value={values.password}
-								error={errors.password}
-								touched={touched.password}
-								type="validate-password"
-							/>
-							<TextInput
-								id="confirmPassword"
-								label="Confirm Password"
-								onBlur={handleBlur}
-								onChange={event => {
-									setTouched({ ...touched, confirmPassword: false });
-									handleChange(event);
-								}}
-								value={values.confirmPassword}
-								error={errors.confirmPassword}
-								touched={touched.confirmPassword}
-								type="password"
-							/>
-							<Button
-								disabled={isSubmitting}
-								type={ButtonType.submit}
-								positive
-								size="medium"
-								spacing={4}
-							>
-								Reset password
-							</Button>
-						</form>
-					)}
-				</Formik>
-			);
-		}
+						resetForm();
+						router.replace('/log-in');
+					}
+				}}
+			>
+				{({
+					errors,
+					touched,
+					values,
+					handleBlur,
+					handleChange,
+					handleSubmit,
+					isSubmitting,
+					setTouched
+				}) => (
+					<form onSubmit={handleSubmit} className={classes.form}>
+						<TextInput
+							id="password"
+							label="New Password"
+							onBlur={handleBlur}
+							onChange={event => {
+								setTouched({ ...touched, password: false });
+								handleChange(event);
+							}}
+							value={values.password}
+							error={errors.password}
+							touched={touched.password}
+							type="validate-password"
+						/>
+						<TextInput
+							id="confirmPassword"
+							label="Confirm Password"
+							onBlur={handleBlur}
+							onChange={event => {
+								setTouched({ ...touched, confirmPassword: false });
+								handleChange(event);
+							}}
+							value={values.confirmPassword}
+							error={errors.confirmPassword}
+							touched={touched.confirmPassword}
+							type="password"
+						/>
+						<Button
+							disabled={isSubmitting}
+							type={ButtonType.submit}
+							positive
+							size="medium"
+							spacing={4}
+						>
+							Reset password
+						</Button>
+					</form>
+				)}
+			</Formik>
+		);
 	}
 
 	return (
-		<MainContent>
-			<div className={classes.content}>
-				<h1>{headerText}</h1>
-				{content}
-			</div>
-		</MainContent>
+		<>
+			{(loading || loggedInLoading) && <LoadingPageContent />}
+			{!(loading || loggedInLoading) && (
+				<MainContent>
+					<div className={classes.content}>
+						<h1>{headerText}</h1>
+						{content}
+					</div>
+				</MainContent>
+			)}
+		</>
 	);
 };
 

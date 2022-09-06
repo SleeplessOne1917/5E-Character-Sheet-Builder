@@ -6,9 +6,14 @@ import { useRouter } from 'next/router';
 const UsernameReminderPage: NextPage = () => {
 	const router = useRouter();
 	const { otlId } = router.query;
-	useRedirectLoggedInUser();
+	const { loading } = useRedirectLoggedInUser();
 
-	return <UsernameReminderView otlId={(otlId || '') as string} />;
+	return (
+		<UsernameReminderView
+			otlId={(otlId || '') as string}
+			loggedInLoading={loading}
+		/>
+	);
 };
 
 export default UsernameReminderPage;

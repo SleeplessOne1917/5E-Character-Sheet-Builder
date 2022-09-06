@@ -3,9 +3,9 @@ import { NextPage } from 'next';
 import useRedirectLoggedOffUser from '../src/hooks/useRedirectLoggedOffUser';
 
 const AccountPage: NextPage = () => {
-	useRedirectLoggedOffUser();
+	const { loading } = useRedirectLoggedOffUser();
 
-	return <AccountView />;
+	return <AccountView loading={loading} />;
 };
 
 export default AccountPage;

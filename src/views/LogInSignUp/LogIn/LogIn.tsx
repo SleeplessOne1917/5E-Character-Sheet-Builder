@@ -8,36 +8,46 @@ import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 
-const LogIn = (): JSX.Element => {
+type LogInProps = {
+	loading: boolean;
+};
+
+const LogIn = ({ loading }: LogInProps): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [_, logIn] = useMutation(LOG_IN);
 	const router = useRouter();
 
 	return (
-		<MainContent>
-			<h1>Log In</h1>
-			<LogInSignUpForm
-				schema={logInSchema}
-				type="logIn"
-				onSubmit={async (values, { resetForm }) => {
-					const { username, password } = values;
-					const result = await logIn({ user: { username, password } });
-					if (result.error) {
-						const toast = {
-							closeTimeoutSeconds: 10,
-							message: result.error.message,
-							type: ToastType.error
-						};
-						dispatch(show(toast));
-					} else {
-						await dispatch(fetchLoggedInUsername());
-						router.replace('/');
-					}
-					resetForm();
-				}}
-			/>
-		</MainContent>
+		<>
+			{loading && <LoadingPageContent />}
+			{!loading && (
+				<MainContent>
+					<h1>Log In</h1>
+					<LogInSignUpForm
+						schema={logInSchema}
+						type="logIn"
+						onSubmit={async (values, { resetForm }) => {
+							const { username, password } = values;
+							const result = await logIn({ user: { username, password } });
+							if (result.error) {
+								const toast = {
+									closeTimeoutSeconds: 10,
+									message: result.error.message,
+									type: ToastType.error
+								};
+								dispatch(show(toast));
+							} else {
+								await dispatch(fetchLoggedInUsername());
+								router.replace('/');
+							}
+							resetForm();
+						}}
+					/>
+				</MainContent>
+			)}
+		</>
 	);
 };
 

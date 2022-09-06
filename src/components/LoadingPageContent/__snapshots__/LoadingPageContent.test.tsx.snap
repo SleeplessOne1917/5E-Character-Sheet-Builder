@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<main
+  class="main"
+  data-testid="loading-page-content"
+>
+  <div
+    class="content"
+  >
+    <h1>
+      Loading...
+    </h1>
+    <div
+      style="display: flex; align-items: center; justify-content: center; height: 100%;"
+    >
+      <div
+        class="container"
+      >
+        <svg
+          class="icon"
+        >
+          <use
+            xlink:href="/Icons.svg#spinner"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</main>
+`;

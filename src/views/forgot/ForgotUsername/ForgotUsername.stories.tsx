@@ -7,7 +7,10 @@ import { getTestStore } from '../../../redux/store';
 export default {
 	title: 'Views/ForgotUsername',
 	component: ForgotUsername,
-	decorators: [story => <Provider store={getTestStore()}>{story()}</Provider>]
+	decorators: [story => <Provider store={getTestStore()}>{story()}</Provider>],
+	args: {
+		loading: false
+	}
 } as ComponentMeta<typeof ForgotUsername>;
 
 const Template: ComponentStory<typeof ForgotUsername> = (args: any) => (

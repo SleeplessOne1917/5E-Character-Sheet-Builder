@@ -1,21 +1,7 @@
-import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
-import MainContent from '../../../../components/MainContent/MainContent';
+import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 
 const CharacterIndex = () => {
-	return (
-		<MainContent>
-			<div
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					height: '100%'
-				}}
-			>
-				<LoadingSpinner />
-			</div>
-		</MainContent>
-	);
+	return <LoadingPageContent />;
 };
 
 export default CharacterIndex;

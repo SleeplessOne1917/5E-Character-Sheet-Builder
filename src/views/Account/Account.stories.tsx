@@ -11,6 +11,7 @@ const MockStore = ({ children }: { children: ReactNode }) => (
 export default {
 	title: 'Views/Account',
 	component: Account,
+	args: { loading: false },
 	decorators: [
 		Story => (
 			<MockStore>

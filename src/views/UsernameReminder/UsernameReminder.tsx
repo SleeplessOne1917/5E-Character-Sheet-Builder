@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../components/MainContent/MainContent';
 import REMIND_USERNAME from '../../graphql/mutations/user/remindUsername';
 import classes from './UsernameReminder.module.css';
 import { cleanMessage } from '../../services/messageCleanerService';
 import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
+import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 
 type UsernameReminderProps = {
 	otlId: string;
+	loggedInLoading: boolean;
 };
 
-const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
+const UsernameReminder = ({
+	otlId,
+	loggedInLoading
+}: UsernameReminderProps) => {
 	const [loading, setLoading] = useState(true);
 	const [{ error, data }, remindUsername] = useMutation(REMIND_USERNAME);
 	const { secondsLeft, startCountdown } = useRedirectCountdown({
@@ -22,11 +26,9 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 	});
 
 	useEffect(() => {
-		if (otlId) {
-			remindUsername({ otlId }).then(() => {
-				setLoading(false);
-			});
-		}
+		remindUsername({ otlId }).then(() => {
+			setLoading(false);
+		});
 	}, [otlId, setLoading, remindUsername]);
 
 	useEffect(() => {
@@ -36,56 +38,55 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 	}, [startCountdown, error]);
 
 	let headerText = 'Loading...';
-	let content = (
-		<div className={classes['spinner-container']}>
-			<LoadingSpinner />
-		</div>
-	);
+	let content;
 
-	if (loading === false) {
-		if (error) {
-			headerText = 'Error';
-			content = (
-				<>
-					<div className={classes['error-message']}>
-						{cleanMessage(error.message)}
-					</div>
-					<p className={classes['countdown-message']}>
-						You will be redirected back to the home page in{' '}
-						<span className={classes.countdown}>
-							{secondsLeft} second{secondsLeft === 1 ? '' : 's'}
-						</span>
-						.
-					</p>
-				</>
-			);
-		} else {
-			headerText = 'Username Reminder';
-			content = (
-				<>
-					<div className={classes['username-message']}>
-						Your username is:{' '}
-						<span className={classes.username}>{data?.remindUsername}</span>
-					</div>
-					<p className={classes['username-warning']}>
-						Be sure to write down your username{' '}
-						<strong className={classes.emphasis}>
-							before refreshing the page
-						</strong>{' '}
-						or you&apos;ll have to request another link
-					</p>
-				</>
-			);
-		}
+	if (error) {
+		headerText = 'Error';
+		content = (
+			<>
+				<div className={classes['error-message']}>
+					{cleanMessage(error.message)}
+				</div>
+				<p className={classes['countdown-message']}>
+					You will be redirected back to the home page in{' '}
+					<span className={classes.countdown}>
+						{secondsLeft} second{secondsLeft === 1 ? '' : 's'}
+					</span>
+					.
+				</p>
+			</>
+		);
+	} else {
+		headerText = 'Username Reminder';
+		content = (
+			<>
+				<div className={classes['username-message']}>
+					Your username is:{' '}
+					<span className={classes.username}>{data?.remindUsername}</span>
+				</div>
+				<p className={classes['username-warning']}>
+					Be sure to write down your username{' '}
+					<strong className={classes.emphasis}>
+						before refreshing the page
+					</strong>{' '}
+					or you&apos;ll have to request another link
+				</p>
+			</>
+		);
 	}
 
 	return (
-		<MainContent>
-			<div className={classes.content}>
-				<h1>{headerText}</h1>
-				{content}
-			</div>
-		</MainContent>
+		<>
+			{(loading || loggedInLoading) && <LoadingPageContent />}
+			{!(loading || loggedInLoading) && (
+				<MainContent>
+					<div className={classes.content}>
+						<h1>{headerText}</h1>
+						{content}
+					</div>
+				</MainContent>
+			)}
+		</>
 	);
 };
 
