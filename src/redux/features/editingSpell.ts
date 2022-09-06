@@ -17,7 +17,7 @@ export type EditingSpellState = {
 	atHigherLevels?: string;
 };
 
-const initialState: EditingSpellState = {
+export const initialState: EditingSpellState = {
 	name: '',
 	castingTime: '',
 	duration: '',

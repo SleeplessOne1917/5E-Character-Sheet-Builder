@@ -3,6 +3,7 @@ import Link from 'next/link';
 import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
 import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
+import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
 import { isEqual } from 'lodash';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import { useMemo } from 'react';
@@ -11,11 +12,17 @@ import { useRouter } from 'next/router';
 const CreateIndex = () => {
 	const router = useRouter();
 	const editingCharacter = useAppSelector(state => state.editingCharacter);
+	const editingSpell = useAppSelector(state => state.editingSpell);
 	const viewer = useAppSelector(state => state.viewer);
 
 	const editingCharacterChanged = useMemo(
 		() => !isEqual(editingCharacterInitialState, editingCharacter),
 		[editingCharacter]
+	);
+
+	const editingSpellChanged = useMemo(
+		() => !isEqual(editingSpellInitialState, editingSpell),
+		[editingSpell]
 	);
 
 	return (
@@ -41,7 +48,7 @@ const CreateIndex = () => {
 						<div className={classes['create-link-container']}>
 							<Link href={`${router.asPath}/spell`}>
 								<a className={classes['continue-link']}>
-									Create Spell
+									{editingSpellChanged ? 'Continue Editing' : 'Create'} Spell
 									<ArrowSmallRightIcon className={classes['link-arrow']} />
 								</a>
 							</Link>
