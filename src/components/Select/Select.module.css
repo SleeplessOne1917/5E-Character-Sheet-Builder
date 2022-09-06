@@ -1,6 +1,30 @@
-.container {
+.list-box-and-error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-box-and-error-container label {
+    padding: 0.5rem;
+}
+
+.list-box-container {
     position: relative;
     width: fit-content;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    color: var(--wine-red);
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+.list-box-container.error {
+    border: 3px solid var(--error-red);
+    border-radius: 1rem;
+    padding: 0.1rem;
 }
 
 .list {

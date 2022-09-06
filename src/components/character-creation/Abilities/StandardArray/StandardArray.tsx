@@ -97,13 +97,11 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 
 				return (
 					<div key={ability.index} className={classes.ability}>
-						<label id={`${ability.index}-select-label`}>
-							{ability.full_name}
-						</label>
 						<Select
 							fontSize="1.5rem"
 							testId={ability.index}
-							labelledBy={`${ability.index}-select-label`}
+							label={ability.full_name}
+							id={`${ability.index}-select`}
 							onChange={value =>
 								handleValueSelect(value, ability.index as AbilityScores)
 							}

@@ -17,204 +17,214 @@ exports[`renders correctly none selected 1`] = `
     class="selects"
   >
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
-        >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
-        >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -241,204 +251,214 @@ exports[`renders correctly one selected 1`] = `
     class="selects"
   >
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
-        >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        Dexterity
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="Dexterity"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
-        >
-          Strength
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="Dexterity"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -463,204 +483,214 @@ exports[`renders correctly same selected 1`] = `
     class="selects"
   >
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        Strength
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="Strength"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="Strength"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        Strength
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="Strength"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="Strength"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -690,204 +720,214 @@ exports[`renders correctly two selected 1`] = `
     class="selects"
   >
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        Charisma
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="Charisma"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
-        >
-          Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
-        >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
-        >
-          Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
-        >
-          Wisdom
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           Charisma
-        </li>
-      </ul>
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="Charisma"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
+        >
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        Intelligence
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="Intelligence"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
-        >
-          —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-str"
-          role="option"
-          tabindex="0"
-        >
-          Strength
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-dex"
-          role="option"
-          tabindex="0"
-        >
-          Dexterity
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-con"
-          role="option"
-          tabindex="0"
-        >
-          Constitution
-        </li>
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-int"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           Intelligence
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-wis"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="Intelligence"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Wisdom
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-cha"
-          role="option"
-          tabindex="0"
-        >
-          Charisma
-        </li>
-      </ul>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-str"
+            role="option"
+            tabindex="0"
+          >
+            Strength
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-dex"
+            role="option"
+            tabindex="0"
+          >
+            Dexterity
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-con"
+            role="option"
+            tabindex="0"
+          >
+            Constitution
+          </li>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-int"
+            role="option"
+            tabindex="0"
+          >
+            Intelligence
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-wis"
+            role="option"
+            tabindex="0"
+          >
+            Wisdom
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-cha"
+            role="option"
+            tabindex="0"
+          >
+            Charisma
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

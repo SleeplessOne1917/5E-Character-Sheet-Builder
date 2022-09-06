@@ -47,6 +47,13 @@
     text-decoration: underline;
 }
 
+.links {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-rows: auto;
+    gap: 3rem;
+}
+
 @media (hover: hover) {
     .continue-link:hover {
         background-color: var(--davy-light);

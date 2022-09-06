@@ -2,76 +2,81 @@
 
 exports[`renders correctly 1`] = `
 <div
-  class="container"
+  class="list-box-and-error-container"
   data-testid="select"
-  style="font-size: 1.2rem;"
 >
-  <button
-    aria-expanded="false"
-    aria-haspopup="listbox"
-    class="button"
-    data-testid="select-button"
-    type="button"
+  <div
+    aria-labelledby="test-label"
+    class="list-box-container"
+    style="font-size: 1.2rem;"
   >
-    Foo
-    <svg
-      aria-hidden="true"
-      class="icon"
-      fill="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        clip-rule="evenodd"
-        d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-        fill-rule="evenodd"
-      />
-    </svg>
-  </button>
-  <ul
-    aria-activedescendant="Foo"
-    class="list"
-    data-testid="select-list"
-    role="listbox"
-    style="display: none;"
-    tabindex="-1"
-  >
-    <li
-      aria-selected="true"
-      class="item selected"
-      data-testid="data-foo"
-      role="option"
-      tabindex="0"
+    <button
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      class="button"
+      data-testid="select-button"
+      type="button"
     >
       Foo
-    </li>
-    <li
-      aria-selected="false"
-      class="item"
-      data-testid="data-bar"
-      role="option"
-      tabindex="0"
+      <svg
+        aria-hidden="true"
+        class="icon"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </button>
+    <ul
+      aria-activedescendant="Foo"
+      class="list"
+      data-testid="select-list"
+      role="listbox"
+      style="display: none;"
+      tabindex="-1"
     >
-      Bar
-    </li>
-    <li
-      aria-selected="false"
-      class="item"
-      data-testid="data-baz"
-      role="option"
-      tabindex="0"
-    >
-      Baz
-    </li>
-    <li
-      aria-selected="false"
-      class="item"
-      data-testid="data-qux"
-      role="option"
-      tabindex="0"
-    >
-      Qux
-    </li>
-  </ul>
+      <li
+        aria-selected="true"
+        class="item selected"
+        data-testid="data-foo"
+        role="option"
+        tabindex="0"
+      >
+        Foo
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-bar"
+        role="option"
+        tabindex="0"
+      >
+        Bar
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-baz"
+        role="option"
+        tabindex="0"
+      >
+        Baz
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-qux"
+        role="option"
+        tabindex="0"
+      >
+        Qux
+      </li>
+    </ul>
+  </div>
 </div>
 `;

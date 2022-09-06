@@ -39,11 +39,10 @@ const FavoredEnemySelector = ({
 			data-testid="favored-enemy-selector"
 		>
 			<div className={classes['monster-type-container']}>
-				<label id="monster-type" className={classes.label}>
-					Select Monster Type
-				</label>
 				<Select
-					labelledBy="monster-type"
+					id="monster-type"
+					label="Select Monster Type"
+					labelFontSize="1.3rem"
 					onChange={value =>
 						handleChange((value === 'blank' ? null : value) as MonsterType)
 					}
@@ -64,11 +63,10 @@ const FavoredEnemySelector = ({
 			{values.length > 1 && (
 				<div className={classes['humanoid-container']}>
 					<div className={classes['monster-type-container']}>
-						<label className={classes.label} id="humanoid-1">
-							Select Humanoid Type 1
-						</label>
 						<Select
-							labelledBy="humanoid-1"
+							id="humanoid-1"
+							fontSize="1.3rem"
+							label="Select Humanoid Type 1"
 							onChange={value =>
 								onChange([
 									(value === 'blank' ? null : value) as MonsterSubtype,
@@ -87,11 +85,10 @@ const FavoredEnemySelector = ({
 						/>
 					</div>
 					<div className={classes['monster-type-container']}>
-						<label className={classes.label} id="humanoid-2">
-							Select Humanoid Type 2
-						</label>
 						<Select
-							labelledBy="humanoid-2"
+							id="humanoid-2"
+							label="Select Humanoid Type 2"
+							labelFontSize="1.3rem"
 							onChange={value =>
 								onChange([
 									values[0],

@@ -1440,11 +1440,9 @@ const SelectedClassDisplay = ({
 			<h2 className={styles.heading}>Levels</h2>
 			<div className={styles['table-container']}>
 				<div className={styles['level-select-container']}>
-					<label className={styles['level-select-label']} id="select-level">
-						Select Level
-					</label>
 					<Select
-						labelledBy="select-level"
+						id="select-level"
+						label="Select Level"
 						onChange={value => handleLevelChange(value as number)}
 						options={levelNumbers.map(num => ({ value: num, label: `${num}` }))}
 						value={classInfo.level}

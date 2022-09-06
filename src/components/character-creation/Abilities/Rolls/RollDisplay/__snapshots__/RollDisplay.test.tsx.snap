@@ -60,104 +60,109 @@ exports[`renders correctly when roll is showing 1`] = `
     </div>
   </div>
   <div
-    class="container"
+    class="list-box-and-error-container"
     data-testid="select"
-    style="font-size: 1.5rem;"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      class="button"
-      data-testid="select-button"
-      type="button"
+    <div
+      aria-labelledby="undefined-label"
+      class="list-box-container"
+      style="font-size: 1.5rem;"
     >
-      —
-      <svg
-        aria-hidden="true"
-        class="icon"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          clip-rule="evenodd"
-          d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-          fill-rule="evenodd"
-        />
-      </svg>
-    </button>
-    <ul
-      aria-activedescendant="—"
-      class="list"
-      data-testid="select-list"
-      role="listbox"
-      style="display: none;"
-      tabindex="-1"
-    >
-      <li
-        aria-selected="true"
-        class="item selected"
-        data-testid="data-blank"
-        role="option"
-        tabindex="0"
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="button"
+        data-testid="select-button"
+        type="button"
       >
         —
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-str"
-        role="option"
-        tabindex="0"
+        <svg
+          aria-hidden="true"
+          class="icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <ul
+        aria-activedescendant="—"
+        class="list"
+        data-testid="select-list"
+        role="listbox"
+        style="display: none;"
+        tabindex="-1"
       >
-        STR
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-dex"
-        role="option"
-        tabindex="0"
-      >
-        DEX
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-con"
-        role="option"
-        tabindex="0"
-      >
-        CON
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-int"
-        role="option"
-        tabindex="0"
-      >
-        INT
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-wis"
-        role="option"
-        tabindex="0"
-      >
-        WIS
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-cha"
-        role="option"
-        tabindex="0"
-      >
-        CHA
-      </li>
-    </ul>
+        <li
+          aria-selected="true"
+          class="item selected"
+          data-testid="data-blank"
+          role="option"
+          tabindex="0"
+        >
+          —
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-str"
+          role="option"
+          tabindex="0"
+        >
+          STR
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-dex"
+          role="option"
+          tabindex="0"
+        >
+          DEX
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-con"
+          role="option"
+          tabindex="0"
+        >
+          CON
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-int"
+          role="option"
+          tabindex="0"
+        >
+          INT
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-wis"
+          role="option"
+          tabindex="0"
+        >
+          WIS
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-cha"
+          role="option"
+          tabindex="0"
+        >
+          CHA
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 `;
@@ -202,104 +207,109 @@ exports[`renders correctly when roll is showing and ability is selected 1`] = `
     </div>
   </div>
   <div
-    class="container"
+    class="list-box-and-error-container"
     data-testid="select"
-    style="font-size: 1.5rem;"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      class="button"
-      data-testid="select-button"
-      type="button"
+    <div
+      aria-labelledby="undefined-label"
+      class="list-box-container"
+      style="font-size: 1.5rem;"
     >
-      CON
-      <svg
-        aria-hidden="true"
-        class="icon"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          clip-rule="evenodd"
-          d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-          fill-rule="evenodd"
-        />
-      </svg>
-    </button>
-    <ul
-      aria-activedescendant="CON"
-      class="list"
-      data-testid="select-list"
-      role="listbox"
-      style="display: none;"
-      tabindex="-1"
-    >
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-blank"
-        role="option"
-        tabindex="0"
-      >
-        —
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-str"
-        role="option"
-        tabindex="0"
-      >
-        STR
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-dex"
-        role="option"
-        tabindex="0"
-      >
-        DEX
-      </li>
-      <li
-        aria-selected="true"
-        class="item selected"
-        data-testid="data-con"
-        role="option"
-        tabindex="0"
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="button"
+        data-testid="select-button"
+        type="button"
       >
         CON
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-int"
-        role="option"
-        tabindex="0"
+        <svg
+          aria-hidden="true"
+          class="icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <ul
+        aria-activedescendant="CON"
+        class="list"
+        data-testid="select-list"
+        role="listbox"
+        style="display: none;"
+        tabindex="-1"
       >
-        INT
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-wis"
-        role="option"
-        tabindex="0"
-      >
-        WIS
-      </li>
-      <li
-        aria-selected="false"
-        class="item"
-        data-testid="data-cha"
-        role="option"
-        tabindex="0"
-      >
-        CHA
-      </li>
-    </ul>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-blank"
+          role="option"
+          tabindex="0"
+        >
+          —
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-str"
+          role="option"
+          tabindex="0"
+        >
+          STR
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-dex"
+          role="option"
+          tabindex="0"
+        >
+          DEX
+        </li>
+        <li
+          aria-selected="true"
+          class="item selected"
+          data-testid="data-con"
+          role="option"
+          tabindex="0"
+        >
+          CON
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-int"
+          role="option"
+          tabindex="0"
+        >
+          INT
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-wis"
+          role="option"
+          tabindex="0"
+        >
+          WIS
+        </li>
+        <li
+          aria-selected="false"
+          class="item"
+          data-testid="data-cha"
+          role="option"
+          tabindex="0"
+        >
+          CHA
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 `;
