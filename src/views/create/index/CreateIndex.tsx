@@ -1,12 +1,12 @@
 import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 import MainContent from '../../../components/MainContent/MainContent';
-import { useAppSelector } from '../../../hooks/reduxHooks';
 import classes from './CreateIndex.module.css';
-import { isEqual } from 'lodash';
 import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
+import { isEqual } from 'lodash';
+import { useAppSelector } from '../../../hooks/reduxHooks';
+import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 const CreateIndex = () => {
 	const router = useRouter();
@@ -51,7 +51,7 @@ const CreateIndex = () => {
 			</div>
 			{!viewer && (
 				<div className={classes['create-account-blurb']}>
-					Create classes, spells and more by{' '}
+					Create classes, spells, and more by{' '}
 					<Link href="/sign-up">
 						<a className={classes['create-account-link']}>
 							creating an account
