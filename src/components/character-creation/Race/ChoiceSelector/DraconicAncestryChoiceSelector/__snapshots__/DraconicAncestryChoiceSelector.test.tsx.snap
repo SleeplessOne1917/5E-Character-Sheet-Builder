@@ -14,68 +14,73 @@ exports[`renders correctly 1`] = `
     class="select-div"
   >
     <div
-      class="container"
+      class="list-box-and-error-container"
       data-testid="select"
-      style="font-size: 1.2rem;"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="button"
-        data-testid="select-button"
-        type="button"
+      <div
+        aria-labelledby="undefined-label"
+        class="list-box-container"
+        style="font-size: 1.2rem;"
       >
-        —
-        <svg
-          aria-hidden="true"
-          class="icon"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <ul
-        aria-activedescendant="—"
-        class="list"
-        data-testid="select-list"
-        role="listbox"
-        style="display: none;"
-        tabindex="-1"
-      >
-        <li
-          aria-selected="true"
-          class="item selected"
-          data-testid="data-blank"
-          role="option"
-          tabindex="0"
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="button"
+          data-testid="select-button"
+          type="button"
         >
           —
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-foo"
-          role="option"
-          tabindex="0"
+          <svg
+            aria-hidden="true"
+            class="icon"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <ul
+          aria-activedescendant="—"
+          class="list"
+          data-testid="select-list"
+          role="listbox"
+          style="display: none;"
+          tabindex="-1"
         >
-          Foo
-        </li>
-        <li
-          aria-selected="false"
-          class="item"
-          data-testid="data-bar"
-          role="option"
-          tabindex="0"
-        >
-          Bar
-        </li>
-      </ul>
+          <li
+            aria-selected="true"
+            class="item selected"
+            data-testid="data-blank"
+            role="option"
+            tabindex="0"
+          >
+            —
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-foo"
+            role="option"
+            tabindex="0"
+          >
+            Foo
+          </li>
+          <li
+            aria-selected="false"
+            class="item"
+            data-testid="data-bar"
+            role="option"
+            tabindex="0"
+          >
+            Bar
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <div

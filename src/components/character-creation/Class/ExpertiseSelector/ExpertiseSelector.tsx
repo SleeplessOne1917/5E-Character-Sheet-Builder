@@ -39,11 +39,10 @@ const ExpertiseSelector = () => {
 							prof ? ` ${classes.selected}` : ''
 						}`}
 					>
-						<label id="select-proficiency" className={classes.label}>
-							Select Proficiency
-						</label>
 						<Select
-							labelledBy="select-proficiency"
+							fontSize="1.3rem"
+							id="select-proficiency"
+							label="Select Proficiency"
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								proficiencies
 									.filter(

@@ -158,10 +158,10 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 			<GeneralInfoBar />
 			<h1 className={classes.title}>Ability Scores</h1>
 			<div className={classes['generation-control']}>
-				<label id="generation-methods-label">Generation Method</label>
 				<Select
 					testId="generation-method"
-					labelledBy="generation-methods"
+					label="Generation Method"
+					id="generation-methods"
 					value={generationMethod}
 					onChange={value => handleGenerationMethodChange(value as string)}
 					options={[

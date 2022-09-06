@@ -19,8 +19,12 @@ type SelectProps = {
 	value?: string | number;
 	onChange: (value: string | number) => void;
 	testId?: string;
-	labelledBy?: string;
 	fontSize?: string;
+	touched?: boolean;
+	error?: string;
+	id?: string;
+	label?: string;
+	labelFontSize?: string;
 };
 
 const Select = ({
@@ -28,8 +32,12 @@ const Select = ({
 	value,
 	onChange,
 	testId,
-	labelledBy,
-	fontSize
+	fontSize,
+	touched,
+	error,
+	id,
+	label,
+	labelFontSize = '1.5rem'
 }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -37,7 +45,7 @@ const Select = ({
 		display: 'none'
 	});
 	const listItemRefs = useRef<HTMLLIElement[]>([]);
-	const containerRef = useRef<HTMLDivElement>();
+	const listBoxContainerRef = useRef<HTMLDivElement>();
 	const buttonRef = useRef<HTMLButtonElement>();
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
@@ -65,7 +73,7 @@ const Select = ({
 
 	useEffect(() => {
 		const handleClickOutside = (event: Event) => {
-			if (!containerRef.current?.contains(event.target as Node)) {
+			if (!listBoxContainerRef.current?.contains(event.target as Node)) {
 				closeSelect();
 			}
 		};
@@ -153,60 +161,76 @@ const Select = ({
 
 	return (
 		<div
-			className={classes.container}
-			ref={containerRef as MutableRefObject<HTMLDivElement>}
 			data-testid={testId ?? 'select'}
-			aria-labelledby={labelledBy}
-			style={{ fontSize: fontSize ? fontSize : '1.2rem' }}
+			className={classes['list-box-and-error-container']}
 		>
-			<button
-				type="button"
-				aria-haspopup="listbox"
-				aria-expanded={isOpen}
-				onClick={handleOpen}
-				className={classes.button}
-				onKeyDown={handleListKeyDown}
-				ref={buttonRef as MutableRefObject<HTMLButtonElement>}
-				data-testid={testId ? `${testId}-button` : 'select-button'}
+			{label && (
+				<label id={`${id}-label`} style={{ fontSize: labelFontSize }}>
+					{label}
+				</label>
+			)}
+			<div
+				className={`${classes['list-box-container']}${
+					touched && error ? ` ${classes.error}` : ''
+				}`}
+				ref={listBoxContainerRef as MutableRefObject<HTMLDivElement>}
+				aria-labelledby={`${id}-label`}
+				style={{ fontSize: fontSize ? fontSize : '1.2rem' }}
 			>
-				{options[defaultIndex].label}
-				{isOpen ? (
-					<ChevronUpIcon className={classes.icon} />
-				) : (
-					<ChevronDownIcon className={classes.icon} />
-				)}
-			</button>
-			<ul
-				tabIndex={-1}
-				style={listStyle}
-				role="listbox"
-				aria-activedescendant={options[defaultIndex].label}
-				className={classes.list}
-				onKeyDown={handleListKeyDown}
-				data-testid={testId ? `${testId}-list` : 'select-list'}
-			>
-				{options.map((option, index) => (
-					<li
-						key={option.value}
-						tabIndex={0}
-						role="option"
-						aria-selected={defaultIndex === index}
-						className={`${classes.item}${
-							defaultIndex === index ? ` ${classes.selected}` : ''
-						}`}
-						onClick={() => handleChange(option.value)}
-						onKeyDown={event => handleItemKeyDown(event, option.value)}
-						ref={element => {
-							listItemRefs.current[index] = element as HTMLLIElement;
-						}}
-						data-testid={
-							testId ? `${testId}-data-${option.value}` : `data-${option.value}`
-						}
-					>
-						{option.label}
-					</li>
-				))}
-			</ul>
+				<button
+					type="button"
+					aria-haspopup="listbox"
+					aria-expanded={isOpen}
+					onClick={handleOpen}
+					className={classes.button}
+					onKeyDown={handleListKeyDown}
+					ref={buttonRef as MutableRefObject<HTMLButtonElement>}
+					data-testid={testId ? `${testId}-button` : 'select-button'}
+				>
+					{options[defaultIndex].label}
+					{isOpen ? (
+						<ChevronUpIcon className={classes.icon} />
+					) : (
+						<ChevronDownIcon className={classes.icon} />
+					)}
+				</button>
+				<ul
+					tabIndex={-1}
+					style={listStyle}
+					role="listbox"
+					aria-activedescendant={options[defaultIndex].label}
+					className={classes.list}
+					onKeyDown={handleListKeyDown}
+					data-testid={testId ? `${testId}-list` : 'select-list'}
+				>
+					{options.map((option, index) => (
+						<li
+							key={option.value}
+							tabIndex={0}
+							role="option"
+							aria-selected={defaultIndex === index}
+							className={`${classes.item}${
+								defaultIndex === index ? ` ${classes.selected}` : ''
+							}`}
+							onClick={() => handleChange(option.value)}
+							onKeyDown={event => handleItemKeyDown(event, option.value)}
+							ref={element => {
+								listItemRefs.current[index] = element as HTMLLIElement;
+							}}
+							data-testid={
+								testId
+									? `${testId}-data-${option.value}`
+									: `data-${option.value}`
+							}
+						>
+							{option.label}
+						</li>
+					))}
+				</ul>
+			</div>
+			{touched && error && (
+				<div className={classes['error-message']}>{error}</div>
+			)}
 		</div>
 	);
 };

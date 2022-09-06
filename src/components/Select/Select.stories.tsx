@@ -22,7 +22,8 @@ export default {
 				value: 'qux',
 				label: 'Qux'
 			}
-		]
+		],
+		id: 'test'
 	}
 } as ComponentMeta<typeof Select>;
 

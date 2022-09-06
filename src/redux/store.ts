@@ -17,6 +17,7 @@ import generationMethod from './features/generationMethod';
 import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
+import editingSpell from './features/editingSpell';
 
 const getReducer = () => ({
 	toast,
@@ -26,7 +27,8 @@ const getReducer = () => ({
 		AnyAction
 	>,
 	rollGroups,
-	generationMethod
+	generationMethod,
+	editingSpell
 });
 
 const indexedDbCacheListener = createListenerMiddleware();
