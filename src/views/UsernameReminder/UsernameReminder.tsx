@@ -37,8 +37,8 @@ const UsernameReminder = ({
 		}
 	}, [startCountdown, error]);
 
-	let headerText = 'Loading...';
-	let content;
+	let headerText: string;
+	let content: JSX.Element;
 
 	if (error) {
 		headerText = 'Error';

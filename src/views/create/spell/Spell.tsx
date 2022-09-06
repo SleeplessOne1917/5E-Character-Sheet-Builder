@@ -131,26 +131,26 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 		<>
 			{loading && <LoadingPageContent />}
 			{!loading && (
-				<Formik
-					initialValues={initialValues}
-					onSubmit={handleFormikSubmit}
-					validationSchema={spellSchema}
-					enableReinitialize
-				>
-					{({
-						values,
-						handleChange,
-						handleBlur,
-						handleSubmit,
-						touched,
-						errors,
-						isSubmitting,
-						setFieldValue,
-						setFieldTouched,
-						setFieldError
-					}) => (
-						<MainContent>
-							<h1>Create Spell</h1>
+				<MainContent testId="create-spell">
+					<h1>Create Spell</h1>
+					<Formik
+						initialValues={initialValues}
+						onSubmit={handleFormikSubmit}
+						validationSchema={spellSchema}
+						enableReinitialize
+					>
+						{({
+							values,
+							handleChange,
+							handleBlur,
+							handleSubmit,
+							touched,
+							errors,
+							isSubmitting,
+							setFieldValue,
+							setFieldTouched,
+							setFieldError
+						}) => (
 							<form onSubmit={handleSubmit} className={classes.form}>
 								<div className={classes['name-and-level']}>
 									<TextInput
@@ -437,9 +437,9 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 									Create Spell
 								</Button>
 							</form>
-						</MainContent>
-					)}
-				</Formik>
+						)}
+					</Formik>
+				</MainContent>
 			)}
 		</>
 	);

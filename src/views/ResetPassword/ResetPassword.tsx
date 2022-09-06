@@ -48,8 +48,8 @@ const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
 		}
 	}, [validateError, startCountdown, resetError, otlId]);
 
-	let headerText = 'Loading...';
-	let content;
+	let headerText: string;
+	let content: JSX.Element;
 
 	if (validateError || resetError) {
 		headerText = 'Error';
