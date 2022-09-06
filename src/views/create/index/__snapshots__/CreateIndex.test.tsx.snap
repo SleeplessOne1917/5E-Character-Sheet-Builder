@@ -41,7 +41,7 @@ exports[`renders correctly 1`] = `
     <div
       class="create-account-blurb"
     >
-      Create classes, spells and more by
+      Create classes, spells, and more by
        
       <a
         class="create-account-link"

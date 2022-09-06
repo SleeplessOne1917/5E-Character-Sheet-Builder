@@ -53,7 +53,8 @@
   padding-inline-start: 0;
 }
 
-.navigation-list a:focus-visible {
+.navigation-link:focus-visible {
+  transform: translateY(-0.25rem);
   outline: var(--focus-outline);
 }
 
@@ -69,6 +70,7 @@
   bottom: -1rem;
   white-space: nowrap;
   text-decoration: none;
+  transition: transform 0.2s, color 0.2s;
 }
 
 .navigation-link:active {
