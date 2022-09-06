@@ -1,56 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly by default 1`] = `
-<div
-  aria-checked="false"
-  class="checkbox"
-  role="checkbox"
-  tabindex="0"
-/>
+<label
+  class="label"
+  data-testid="checkbox"
+>
+  <div
+    aria-checked="false"
+    class="checkbox"
+    role="checkbox"
+    tabindex="0"
+  />
+</label>
 `;
 
 exports[`renders correctly when alternate 1`] = `
-<div
-  aria-checked="true"
-  class="checkbox checked alternate"
-  role="checkbox"
-  tabindex="0"
+<label
+  class="label"
+  data-testid="checkbox"
 >
-  <svg
-    aria-hidden="true"
-    class="check"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
+  <div
+    aria-checked="true"
+    class="checkbox checked alternate"
+    role="checkbox"
+    tabindex="0"
   >
-    <path
-      clip-rule="evenodd"
-      d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-      fill-rule="evenodd"
-    />
-  </svg>
-</div>
+    <svg
+      aria-hidden="true"
+      class="check"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+</label>
 `;
 
 exports[`renders correctly when checked 1`] = `
-<div
-  aria-checked="true"
-  class="checkbox checked"
-  role="checkbox"
-  tabindex="0"
+<label
+  class="label"
+  data-testid="checkbox"
 >
-  <svg
-    aria-hidden="true"
-    class="check"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
+  <div
+    aria-checked="true"
+    class="checkbox checked"
+    role="checkbox"
+    tabindex="0"
   >
-    <path
-      clip-rule="evenodd"
-      d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-      fill-rule="evenodd"
-    />
-  </svg>
-</div>
+    <svg
+      aria-hidden="true"
+      class="check"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+        fill-rule="evenodd"
+      />
+    </svg>
+  </div>
+</label>
 `;

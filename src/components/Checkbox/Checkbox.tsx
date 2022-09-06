@@ -6,7 +6,7 @@ import { handleKeyDownEvent } from '../../services/handlerService';
 
 type CheckboxProps = {
 	checked?: boolean;
-	label?: string;
+	label: string;
 	onChange: (value: boolean) => void;
 	useAlternateStyle?: boolean;
 };
@@ -35,19 +35,24 @@ const Checkbox = ({
 	);
 
 	return (
-		<div
-			className={`${classes.checkbox}${
-				checked || isChecked ? ` ${classes.checked}` : ''
-			}${useAlternateStyle ? ` ${classes.alternate}` : ''}`}
-			tabIndex={0}
-			role="checkbox"
-			aria-checked={isChecked}
+		<label
 			onClick={handleChange}
-			onKeyDown={handleKeyDown}
-			aria-label={label}
+			className={classes.label}
+			data-testid="checkbox"
 		>
-			{(checked || isChecked) && <CheckIcon className={classes.check} />}
-		</div>
+			<div
+				className={`${classes.checkbox}${
+					checked || isChecked ? ` ${classes.checked}` : ''
+				}${useAlternateStyle ? ` ${classes.alternate}` : ''}`}
+				tabIndex={0}
+				role="checkbox"
+				aria-checked={isChecked}
+				onKeyDown={handleKeyDown}
+			>
+				{(checked || isChecked) && <CheckIcon className={classes.check} />}
+			</div>
+			{label}
+		</label>
 	);
 };
 

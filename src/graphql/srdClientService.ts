@@ -24,6 +24,7 @@ import GET_RACES from './queries/5E-API/race/getRaces';
 import GET_SPELLS_BY_CLASS from './queries/5E-API/spells/getSpellsByClass';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
+import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
 
 const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 
@@ -62,6 +63,10 @@ export const getSubrace = async (index: string) =>
 	await query<{ subrace: SrdFullSubraceItem }, { index: string }>(GET_SUBRACE, {
 		index
 	});
+
+export const getMagicSchools = async (): Promise<SrdItem[] | undefined> =>
+	(await query<{ magicSchools: SrdItem[] }>(GET_MAGIC_SCHOOLS)).data
+		?.magicSchools;
 
 export const getProficienciesByType = async (
 	type: ProficiencyType | ProficiencyType[]
