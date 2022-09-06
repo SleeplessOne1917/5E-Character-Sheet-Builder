@@ -199,84 +199,89 @@ exports[`renders correctly 1`] = `
     <div
       class="generation-control"
     >
-      <label
-        id="generation-methods-label"
-      >
-        Generation Method
-      </label>
       <div
-        aria-labelledby="generation-methods"
-        class="container"
+        class="list-box-and-error-container"
         data-testid="generation-method"
-        style="font-size: 1.2rem;"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="listbox"
-          class="button"
-          data-testid="generation-method-button"
-          type="button"
+        <label
+          id="generation-methods-label"
+          style="font-size: 1.5rem;"
         >
-          Roll
-          <svg
-            aria-hidden="true"
-            class="icon"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <ul
-          aria-activedescendant="Roll"
-          class="list"
-          data-testid="generation-method-list"
-          role="listbox"
-          style="display: none;"
-          tabindex="-1"
+          Generation Method
+        </label>
+        <div
+          aria-labelledby="generation-methods-label"
+          class="list-box-container"
+          style="font-size: 1.2rem;"
         >
-          <li
-            aria-selected="false"
-            class="item"
-            data-testid="generation-method-data-manual"
-            role="option"
-            tabindex="0"
-          >
-            Manual
-          </li>
-          <li
-            aria-selected="true"
-            class="item selected"
-            data-testid="generation-method-data-roll"
-            role="option"
-            tabindex="0"
+          <button
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="button"
+            data-testid="generation-method-button"
+            type="button"
           >
             Roll
-          </li>
-          <li
-            aria-selected="false"
-            class="item"
-            data-testid="generation-method-data-point-buy"
-            role="option"
-            tabindex="0"
+            <svg
+              aria-hidden="true"
+              class="icon"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <ul
+            aria-activedescendant="Roll"
+            class="list"
+            data-testid="generation-method-list"
+            role="listbox"
+            style="display: none;"
+            tabindex="-1"
           >
-            Point Buy
-          </li>
-          <li
-            aria-selected="false"
-            class="item"
-            data-testid="generation-method-data-array"
-            role="option"
-            tabindex="0"
-          >
-            Standard Array
-          </li>
-        </ul>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="generation-method-data-manual"
+              role="option"
+              tabindex="0"
+            >
+              Manual
+            </li>
+            <li
+              aria-selected="true"
+              class="item selected"
+              data-testid="generation-method-data-roll"
+              role="option"
+              tabindex="0"
+            >
+              Roll
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="generation-method-data-point-buy"
+              role="option"
+              tabindex="0"
+            >
+              Point Buy
+            </li>
+            <li
+              aria-selected="false"
+              class="item"
+              data-testid="generation-method-data-array"
+              role="option"
+              tabindex="0"
+            >
+              Standard Array
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div

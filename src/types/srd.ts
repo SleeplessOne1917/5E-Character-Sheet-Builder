@@ -122,7 +122,7 @@ export type BreathWeapon = {
 	area_of_effect: AreaOfEffect;
 };
 
-type SpellComponent = 'V' | 'S' | 'M';
+export type SpellComponent = 'V' | 'S' | 'M';
 
 export interface SrdSpellItem extends SrdItem {
 	level: number;

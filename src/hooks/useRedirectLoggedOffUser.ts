@@ -11,10 +11,10 @@ const useRedirectLoggedOffUser = () => {
 		dispatch(fetchLoggedInUsername()).then(result => {
 			if (result.meta.requestStatus === 'fulfilled') {
 				if (!result.payload) {
-					router.replace('/');
+					router.back();
 				}
 			} else {
-				router.replace('/');
+				router.back();
 			}
 		});
 	}, [router, dispatch]);

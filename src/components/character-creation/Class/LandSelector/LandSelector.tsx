@@ -20,11 +20,10 @@ const LandSelector = ({ value, onChange }: LandSelectorProps) => (
 		data-testid="land-selector"
 		className={`${classes.container}${value ? ` ${classes.selected}` : ''}`}
 	>
-		<label id="select-land" className={classes.label}>
-			Select Land
-		</label>
 		<Select
-			labelledBy="select-land"
+			id="select-land"
+			labelFontSize="1.3rem"
+			label="Select Land"
 			options={[
 				{ value: 'blank', label: '\u2014' },
 				{ value: 'arctic', label: 'Arctic' },

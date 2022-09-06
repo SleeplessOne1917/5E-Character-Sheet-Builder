@@ -21,11 +21,10 @@ const FavoredTerrainSelector = ({
 			className={`${classes.container}${value ? ` ${classes.selected}` : ''}`}
 			data-testid="favored-terrain-selector"
 		>
-			<label id="select-terrain" className={classes.label}>
-				Select Terrain
-			</label>
 			<Select
-				labelledBy="select-terrain"
+				id="select-terrain"
+				labelFontSize="1.3rem"
+				label="Select Terrain"
 				options={[
 					{ value: 'blank', label: '\u2014' },
 					{ value: 'arctic', label: 'Arctic' },

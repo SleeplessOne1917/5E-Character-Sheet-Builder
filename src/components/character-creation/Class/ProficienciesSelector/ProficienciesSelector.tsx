@@ -185,12 +185,12 @@ const ProficienciesSelector = ({
 					}`}
 					key={index}
 				>
-					<label id="select-proficiency" className={classes.label}>
-						Select{' '}
-						{typeString.endsWith('s') ? typeString.slice(0, -1) : typeString}
-					</label>
 					<Select
-						labelledBy="select-proficiency"
+						id="select-proficiency"
+						labelFontSize="1.3rem"
+						label={`Select ${
+							typeString.endsWith('s') ? typeString.slice(0, -1) : typeString
+						}`}
 						value={value ? value : 'blank'}
 						options={[{ value: 'blank', label: '\u2014' } as Option].concat(
 							proficiencies

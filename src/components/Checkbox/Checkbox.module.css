@@ -9,6 +9,7 @@
     justify-content: center;
     cursor: pointer;
     border-radius: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .checked {
@@ -17,6 +18,15 @@
 
 .alternate.checked {
     background-color: var(--davy) !important;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    width: fit-content;
 }
 
 .alternate .check {
