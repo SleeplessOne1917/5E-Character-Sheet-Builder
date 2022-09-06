@@ -150,23 +150,18 @@ exports[`renders correctly default 1`] = `
           </div>
         </div>
       </div>
-      <div
-        class="select-container"
+      <label
+        class="label"
+        data-testid="checkbox"
       >
-        <label
-          class="select-label"
-        >
-          Only Show Selected
-        </label>
-         
         <div
           aria-checked="false"
-          aria-label="Only Show Selected"
           class="checkbox"
           role="checkbox"
           tabindex="0"
         />
-      </div>
+        Only Show Selected
+      </label>
     </div>
   </div>
   <div

@@ -7,6 +7,10 @@ const spellSchema = object({
 		.max(30, 'Name must be 30 characters or less')
 		.required('Name is required'),
 	level: number()
+		.nullable()
+		.test('is-not-null', 'Level is required', function (value) {
+			return value !== null;
+		})
 		.integer('Level must be integer')
 		.required('Level is required')
 		.min(0, 'Level cannot be less than 0')
@@ -52,19 +56,28 @@ const spellSchema = object({
 					);
 				}
 			)
-	}).required('School is required'),
+	})
+		.required('School is required')
+		.nullable()
+		.test('is-not-null', 'School is required', function (value) {
+			return value !== null;
+		}),
 	components: array()
+		.nullable()
+		.test('is-not-null', 'Components are required', function (value) {
+			return value !== null;
+		})
+		.min(1, 'Must have at least 1 component')
 		.of(
 			string().test(
 				'is-component',
 				'Components can only be "V", "S", or "M"',
 				function (value) {
-					return !!value && /^(V|S|M)$/.test(value);
+					return !!value && ['V', 'S', 'M'].includes(value);
 				}
 			)
 		)
 		.required('Components are required')
-		.min(1, 'Must have at least 1 component')
 		.test('no-repeats', 'Cannot repeat component values', function (value) {
 			return (
 				!!value &&

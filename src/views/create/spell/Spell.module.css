@@ -12,14 +12,80 @@
     width: 100%;
 }
 
-.level-container {
+.casting-time-duration-range {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.components-school-ritual-concentration {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, auto);
+    grid-template-areas: "components"
+                         "school";
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.components-container {
+    grid-area: components;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.components {
+    border: 3px solid var(--davy);
+}
+
+.components.error {
+    border: 3px solid var(--error-red);
+}
+
+.components.error legend {
+    color: var(--wine-red);
+}
+
+.error-message {
+    font-size: 1.5rem;
+    color: var(--wine-red);
+}
+
+.components legend {
+    font-size: 1.5rem;
+}
+
+.school-ritual-concentration {
+    grid-area: school;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.concentration-ritual {
+    display: flex;
+    width: fit-content;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.margin-vertical {
+    margin: 1rem 0;
+}
+
 @media (min-width: 1024px) {
     .name-and-level {
         justify-content: space-around;
+    }
+}
+
+@media (min-width: 768px) {
+    .components-school-ritual-concentration {
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 100%;
+        grid-template-areas: "components school";
     }
 }

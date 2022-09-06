@@ -10,18 +10,18 @@ describe('renders correctly', () => {
 	it('by default', () => {
 		render(<Default />);
 
-		expect(screen.getByRole('checkbox')).toMatchSnapshot();
+		expect(screen.getByTestId('checkbox')).toMatchSnapshot();
 	});
 
 	it('when checked', () => {
 		render(<Checked />);
 
-		expect(screen.getByRole('checkbox')).toMatchSnapshot();
+		expect(screen.getByTestId('checkbox')).toMatchSnapshot();
 	});
 
 	it('when alternate', () => {
 		render(<Alternate />);
 
-		expect(screen.getByRole('checkbox')).toMatchSnapshot();
+		expect(screen.getByTestId('checkbox')).toMatchSnapshot();
 	});
 });

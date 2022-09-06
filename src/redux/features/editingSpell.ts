@@ -4,17 +4,17 @@ import { SpellComponent } from '../../types/srd';
 
 export type EditingSpellState = {
 	name: string;
-	level?: number;
+	level: number | null;
 	castingTime: string;
 	duration: string;
 	range: string;
-	school?: SrdItem | null;
-	components?: SpellComponent[];
-	material?: string | null;
+	school: SrdItem | null;
+	components: SpellComponent[] | null;
+	material?: string;
 	concentration: boolean;
 	ritual: boolean;
 	description: string;
-	atHigherLevels?: string | null;
+	atHigherLevels?: string;
 };
 
 const initialState: EditingSpellState = {
@@ -24,7 +24,10 @@ const initialState: EditingSpellState = {
 	range: '',
 	concentration: false,
 	ritual: false,
-	description: ''
+	description: '',
+	level: null,
+	school: null,
+	components: null
 };
 
 const editingSpellSlice = createSlice({
@@ -34,7 +37,7 @@ const editingSpellSlice = createSlice({
 		setName: (state, { payload }: PayloadAction<string>) => {
 			state.name = payload;
 		},
-		setLevel: (state, { payload }: PayloadAction<number | undefined>) => {
+		setLevel: (state, { payload }: PayloadAction<number | null>) => {
 			state.level = payload;
 		},
 		setCastingTime: (state, { payload }: PayloadAction<string>) => {
@@ -57,7 +60,7 @@ const editingSpellSlice = createSlice({
 				component => component !== payload
 			);
 		},
-		setMaterial: (state, { payload }: PayloadAction<string | null>) => {
+		setMaterial: (state, { payload }: PayloadAction<string | undefined>) => {
 			state.material = payload;
 		},
 		setConcentration: (state, { payload }: PayloadAction<boolean>) => {
@@ -69,7 +72,10 @@ const editingSpellSlice = createSlice({
 		setDescription: (state, { payload }: PayloadAction<string>) => {
 			state.description = payload;
 		},
-		setAtHigherLevels: (state, { payload }: PayloadAction<string | null>) => {
+		setAtHigherLevels: (
+			state,
+			{ payload }: PayloadAction<string | undefined>
+		) => {
 			state.atHigherLevels = payload;
 		},
 		resetSpell: () => initialState

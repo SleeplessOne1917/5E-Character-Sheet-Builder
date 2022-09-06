@@ -241,15 +241,12 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							/>
 						</div>
 					)}
-					<div className={styles['select-container']}>
-						<label className={styles['select-label']}>Only Show Selected</label>{' '}
-						<Checkbox
-							label="Only Show Selected"
-							checked={filterOnlySelected}
-							onChange={checked => setFilterOnlySelected(checked)}
-							useAlternateStyle={numberOfSelectedSpells === choose}
-						/>
-					</div>
+					<Checkbox
+						label="Only Show Selected"
+						checked={filterOnlySelected}
+						onChange={checked => setFilterOnlySelected(checked)}
+						useAlternateStyle={numberOfSelectedSpells === choose}
+					/>
 				</div>
 			</div>
 			<div className={styles['spells-container']}>
