@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import { AbilityItem } from '../../../../types/srd';
 import AbilityScores from '../../../../types/abilityScores';
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import classes from './StandardArray.module.css';
 import { getTotalScore } from '../../../../services/abilityScoreService';
 import {

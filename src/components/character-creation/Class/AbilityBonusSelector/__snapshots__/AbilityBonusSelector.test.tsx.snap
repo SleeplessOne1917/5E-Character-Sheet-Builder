@@ -21,7 +21,7 @@ exports[`renders correctly none selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -126,7 +126,7 @@ exports[`renders correctly none selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -255,7 +255,7 @@ exports[`renders correctly one selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -360,7 +360,7 @@ exports[`renders correctly one selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -487,7 +487,7 @@ exports[`renders correctly same selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -592,7 +592,7 @@ exports[`renders correctly same selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -724,7 +724,7 @@ exports[`renders correctly two selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >
@@ -829,7 +829,7 @@ exports[`renders correctly two selected 1`] = `
       data-testid="select"
     >
       <div
-        aria-labelledby="undefined-label"
+        aria-labelledby="select-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
       >

@@ -2,9 +2,11 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Select from './Select';
 
 export default {
-	title: 'Components/Select',
+	title: 'Components/Select/Select',
 	component: Select,
 	args: {
+		label: 'Stuff',
+		id: 'stuff',
 		options: [
 			{
 				value: 'foo',
@@ -22,11 +24,17 @@ export default {
 				value: 'qux',
 				label: 'Qux'
 			}
-		],
-		id: 'test'
+		]
 	}
 } as ComponentMeta<typeof Select>;
 
 const Template: ComponentStory<typeof Select> = args => <Select {...args} />;
 
 export const Default = Template.bind({});
+
+export const Error = Template.bind({});
+
+Error.args = {
+	touched: true,
+	error: 'Your value sucks'
+};

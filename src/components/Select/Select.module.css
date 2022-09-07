@@ -99,8 +99,16 @@
     background-color: var(--highlight)  !important;
 }
 
+.selected:focus-visible {
+    background-color: var(--highlight-hover) !important;
+}
+
 @media (hover: hover) {
     .item:hover {
         background-color: var(--highlight-light);
+    }
+
+    .selected:hover {
+        background-color: var(--highlight-hover) !important;
     }
 }

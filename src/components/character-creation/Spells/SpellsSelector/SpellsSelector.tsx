@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import Checkbox from '../../../Checkbox/Checkbox';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import styles from './SpellsSelector.module.css';
 

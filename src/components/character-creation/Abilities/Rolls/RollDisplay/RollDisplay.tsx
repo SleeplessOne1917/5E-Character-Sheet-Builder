@@ -2,7 +2,7 @@ import { MouseEventHandler, memo } from 'react';
 
 import { AbilityItem } from '../../../../../types/srd';
 import Button from '../../../../Button/Button';
-import Select from '../../../../Select/Select';
+import Select from '../../../../Select/Select/Select';
 import classes from './RollDisplay.module.css';
 
 export type RollDisplayProps = {

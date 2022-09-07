@@ -1,6 +1,6 @@
 import { MonsterSubtype, MonsterType } from '../../../../types/srd';
 
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import classes from './FavoredEnemySelector.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
 import { useCallback } from 'react';

@@ -25,7 +25,7 @@ import MainContent from '../../../../components/MainContent/MainContent';
 import ManualScores from '../../../../components/character-creation/Abilities/ManualScores/ManualScores';
 import PointBuy from '../../../../components/character-creation/Abilities/PointBuy/PointBuy';
 import RollGroup from '../../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
-import Select from '../../../../components/Select/Select';
+import Select from '../../../../components/Select/Select/Select';
 import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';

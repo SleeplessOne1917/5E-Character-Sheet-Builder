@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { setExpertiseProficiency } from '../../../../redux/features/classInfo';
 import { SrdProficiencyItem } from '../../../../types/srd';
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import classes from './ExpertiseSelector.module.css';
 
 const ExpertiseSelector = () => {

@@ -16,7 +16,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
-import Select from '../../../../Select/Select';
+import Select from '../../../../Select/Select//Select';
 
 type OptionSelectorProps = {
 	choice: SrdItemChoice;

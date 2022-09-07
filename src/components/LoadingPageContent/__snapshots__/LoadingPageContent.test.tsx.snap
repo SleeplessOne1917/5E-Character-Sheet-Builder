@@ -9,7 +9,7 @@ exports[`renders correctly 1`] = `
     class="content"
   >
     <h1>
-      Loading...
+      Loading
     </h1>
     <div
       style="display: flex; align-items: center; justify-content: center; height: 100%;"

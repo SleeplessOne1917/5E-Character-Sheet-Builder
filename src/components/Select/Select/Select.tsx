@@ -8,11 +8,10 @@ import {
 	useState
 } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
+import Option from '../Option';
 
-import classes from './Select.module.css';
-import { handleKeyDownEvent } from '../../services/handlerService';
-
-export type Option = { value: string | number; label: string };
+import classes from '../Select.module.css';
+import { handleKeyDownEvent } from '../../../services/handlerService';
 
 type SelectProps = {
 	options: Option[];
@@ -35,7 +34,7 @@ const Select = ({
 	fontSize,
 	touched,
 	error,
-	id,
+	id = 'select',
 	label,
 	labelFontSize = '1.5rem'
 }: SelectProps) => {

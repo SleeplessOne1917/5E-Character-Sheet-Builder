@@ -1,4 +1,4 @@
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import classes from './LandSelector.module.css';
 
 type Land =

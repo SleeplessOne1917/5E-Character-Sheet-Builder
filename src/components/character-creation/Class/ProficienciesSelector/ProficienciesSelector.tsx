@@ -11,7 +11,8 @@ import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice
 } from '../../../../types/srd';
-import Select, { Option } from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
+import Option from '../../../Select/Option';
 import classes from './ProficienciesSelector.module.css';
 
 type ProficienciesSelectorProps = {

@@ -7,7 +7,7 @@ import { useCallback, useState } from 'react';
 
 import AbilityScores from '../../../../../types/abilityScores';
 import ChoiceSelector from '../ChoiceSelector';
-import Select from '../../../../Select/Select';
+import Select from '../../../../Select/Select/Select';
 import { getIsAllBonusesSame } from '../../../../../services/abilityBonusService';
 import { removeClassSpell } from '../../../../../redux/features/classInfo';
 import { removeSpell } from '../../../../../redux/features/spellcasting';

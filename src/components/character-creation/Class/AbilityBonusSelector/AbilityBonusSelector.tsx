@@ -1,7 +1,7 @@
 import { AbilityItem } from '../../../../types/srd';
 import AbilityScores from '../../../../types/abilityScores';
 import { ReactNode } from 'react';
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import classes from './AbilityBonusSelector.module.css';
 
 type AbilityBonusSelectorProps = {

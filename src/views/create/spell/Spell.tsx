@@ -4,7 +4,8 @@ import Button, { ButtonType } from '../../../components/Button/Button';
 import Checkbox from '../../../components/Checkbox/Checkbox';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
-import Select, { Option } from '../../../components/Select/Select';
+import Select from '../../../components/Select/Select/Select';
+import Option from '../../../components/Select/Option';
 import TextInput from '../../../components/TextInput/TextInput';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import {

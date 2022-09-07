@@ -12,7 +12,7 @@ import {
 } from '../../../../../hooks/reduxHooks';
 
 import ChoiceSelector from '../ChoiceSelector';
-import Select from '../../../../Select/Select';
+import Select from '../../../../Select/Select/Select';
 import { useCallback } from 'react';
 
 type OptionSelectorProps = {

@@ -183,7 +183,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-0"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -282,7 +282,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-1"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -381,7 +381,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-2"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -480,7 +480,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-3"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -579,7 +579,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-4"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -678,7 +678,7 @@ exports[`renders correctly when all score with abilities assigned 1`] = `
         data-testid="roll-5"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -805,7 +805,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-0"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -949,7 +949,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-1"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -1093,7 +1093,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-2"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -1237,7 +1237,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-3"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -1381,7 +1381,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-4"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >
@@ -1525,7 +1525,7 @@ exports[`renders correctly when all scores 1`] = `
         data-testid="roll-5"
       >
         <div
-          aria-labelledby="undefined-label"
+          aria-labelledby="select-label"
           class="list-box-container"
           style="font-size: 1.5rem;"
         >

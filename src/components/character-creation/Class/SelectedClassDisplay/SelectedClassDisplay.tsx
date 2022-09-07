@@ -63,7 +63,7 @@ import FavoredEnemySelector from '../FavoredEnemySelector/FavoredEnemySelector';
 import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
 import LandSelector from '../LandSelector/LandSelector';
-import Select from '../../../Select/Select';
+import Select from '../../../Select/Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';

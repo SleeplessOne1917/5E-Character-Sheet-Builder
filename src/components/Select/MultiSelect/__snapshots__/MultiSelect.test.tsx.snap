@@ -1,0 +1,225 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly by default 1`] = `
+<div
+  class="list-box-and-error-container"
+  data-testid="multi-select"
+>
+  <label
+    id="stuff-label"
+    style="font-size: 1.5rem;"
+  >
+    Stuff
+  </label>
+  <div
+    class="list-box-container"
+    style="font-size: 1.2rem;"
+  >
+    <ul
+      aria-labelledby="stuff-label"
+      aria-multiselectable="true"
+      class="list"
+      data-testid="multi-select-list"
+      role="listbox"
+      tabindex="-1"
+    >
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-foo"
+        role="option"
+        tabindex="0"
+      >
+        Foo
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-bar"
+        role="option"
+        tabindex="0"
+      >
+        Bar
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-baz"
+        role="option"
+        tabindex="0"
+      >
+        Baz
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`renders correctly with a lot of options 1`] = `
+<div
+  class="list-box-and-error-container"
+  data-testid="multi-select"
+>
+  <label
+    id="stuff-label"
+    style="font-size: 1.5rem;"
+  >
+    Stuff
+  </label>
+  <div
+    class="list-box-container"
+    style="font-size: 1.2rem;"
+  >
+    <ul
+      aria-labelledby="stuff-label"
+      aria-multiselectable="true"
+      class="list"
+      data-testid="multi-select-list"
+      role="listbox"
+      tabindex="-1"
+    >
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-foo"
+        role="option"
+        tabindex="0"
+      >
+        Foo
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-bar"
+        role="option"
+        tabindex="0"
+      >
+        Bar
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-baz"
+        role="option"
+        tabindex="0"
+      >
+        Baz
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-spam"
+        role="option"
+        tabindex="0"
+      >
+        Eggs
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-barbarian"
+        role="option"
+        tabindex="0"
+      >
+        Barbarian
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-druid"
+        role="option"
+        tabindex="0"
+      >
+        Druid
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-bard"
+        role="option"
+        tabindex="0"
+      >
+        Bard
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-fighter"
+        role="option"
+        tabindex="0"
+      >
+        Fighter
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-wizard"
+        role="option"
+        tabindex="0"
+      >
+        Wizard
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`renders correctly with error 1`] = `
+<div
+  class="list-box-and-error-container"
+  data-testid="multi-select"
+>
+  <label
+    id="stuff-label"
+    style="font-size: 1.5rem;"
+  >
+    Stuff
+  </label>
+  <div
+    class="list-box-container error"
+    style="font-size: 1.2rem;"
+  >
+    <ul
+      aria-labelledby="stuff-label"
+      aria-multiselectable="true"
+      class="list"
+      data-testid="multi-select-list"
+      role="listbox"
+      tabindex="-1"
+    >
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-foo"
+        role="option"
+        tabindex="0"
+      >
+        Foo
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-bar"
+        role="option"
+        tabindex="0"
+      >
+        Bar
+      </li>
+      <li
+        aria-selected="false"
+        class="item"
+        data-testid="data-baz"
+        role="option"
+        tabindex="0"
+      >
+        Baz
+      </li>
+    </ul>
+  </div>
+  <div
+    class="error-message"
+  >
+    Your values suck
+  </div>
+</div>
+`;
