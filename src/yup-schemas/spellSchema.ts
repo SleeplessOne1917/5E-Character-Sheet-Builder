@@ -123,6 +123,7 @@ const spellSchema = object({
 					.min(1, 'Class ID is required')
 			})
 		)
+		.min(1, 'Must select at least 1 class')
 		.required('Classes are required')
 		.test('no-repeats', 'Cannot repeat class values', function (value) {
 			return (

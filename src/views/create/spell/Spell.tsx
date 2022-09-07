@@ -1,4 +1,4 @@
-import { Formik, FormikHelpers } from 'formik';
+import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import { FocusEventHandler, useCallback, useState } from 'react';
 import Button, { ButtonType } from '../../../components/Button/Button';
 import Checkbox from '../../../components/Checkbox/Checkbox';
@@ -14,7 +14,9 @@ import {
 	removeComponent,
 	resetSpell,
 	setCastingTime,
+	setClasses,
 	setConcentration,
+	setDamageType,
 	setDuration,
 	setLevel,
 	setMaterial,
@@ -27,13 +29,21 @@ import { Item } from '../../../types/db/item';
 import { SpellComponent, SrdItem } from '../../../types/srd';
 import spellSchema from '../../../yup-schemas/spellSchema';
 import classes from './Spell.module.css';
+import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
+	srdClasses: SrdItem[];
+	damageTypes: SrdItem[];
 	loading: boolean;
 };
 
-const Spell = ({ magicSchools, loading }: SpellProps) => {
+const Spell = ({
+	magicSchools,
+	loading,
+	damageTypes,
+	srdClasses
+}: SpellProps) => {
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const dispatch = useAppDispatch();
 	/* eslint-disable unused-imports/no-unused-vars */
@@ -114,6 +124,20 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 	const handleRitualChange = useCallback(
 		(value: boolean) => {
 			dispatch(setRitual(value));
+		},
+		[dispatch]
+	);
+
+	const handleSelectClasses = useCallback(
+		(klasses: Item[]) => {
+			dispatch(setClasses(klasses));
+		},
+		[dispatch]
+	);
+
+	const handleDamageTypeChange = useCallback(
+		(damageType: Item | undefined) => {
+			dispatch(setDamageType(damageType));
 		},
 		[dispatch]
 	);
@@ -435,6 +459,89 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 												/>
 											</div>
 										</div>
+									</div>
+								</div>
+								<div className={classes['classes-damage-type']}>
+									<div className={classes['classes-container']}>
+										<MultiSelect
+											id="spellcasting-classes"
+											label="Spellcasting Classes"
+											touched={touched.classes as boolean | undefined}
+											error={
+												typeof errors.classes === 'string' ||
+												typeof errors.classes === 'undefined'
+													? errors.classes
+													: typeof errors.classes[0] === 'string'
+													? errors.classes[0]
+													: (errors.classes as FormikErrors<Item>[])[0].name
+											}
+											values={values.classes.map(({ id }) => id)}
+											options={[...srdClasses]
+												.sort((a, b) => a.name.localeCompare(b.name))
+												.map(klass => ({
+													value: klass.index,
+													label: klass.name
+												}))}
+											onSelect={values => {
+												const newClasses: Item[] = srdClasses
+													.filter(klass => values.includes(klass.index))
+													.map<Item>(klass => ({
+														id: klass.index,
+														name: klass.name
+													}));
+
+												handleSelectClasses(newClasses);
+												setFieldValue('classes', newClasses, false);
+												setFieldTouched('classes', true, false);
+												setFieldError(
+													'classes',
+													newClasses.length === 0
+														? 'Must select at least 1 class'
+														: undefined
+												);
+											}}
+										/>
+									</div>
+									<div className={classes['damage-type-container']}>
+										<Select
+											id="damage-type"
+											label="Damage Type"
+											touched={touched.damageType}
+											error={errors.damageType}
+											value={values.damageType?.id ?? 'blank'}
+											options={[
+												{ value: 'blank', label: '\u2014' } as Option
+											].concat(
+												damageTypes.map(dt => ({
+													value: dt.index,
+													label: dt.name
+												}))
+											)}
+											onChange={value => {
+												let newDamageType: Item | undefined = undefined;
+
+												if (value !== 'blank') {
+													const damageTypeSrd = damageTypes.find(
+														dt => dt.index === (value as string)
+													) as SrdItem;
+
+													newDamageType = {
+														id: damageTypeSrd?.index,
+														name: damageTypeSrd.name
+													};
+												}
+
+												handleDamageTypeChange(newDamageType);
+
+												setFieldValue('damageType', newDamageType, false);
+												setFieldTouched('damageType', true, false);
+											}}
+										/>
+										{!!values.damageType && (
+											<svg className={classes['damage-type-icon']}>
+												<use xlinkHref={`/Icons.svg#${values.damageType.id}`} />
+											</svg>
+										)}
 									</div>
 								</div>
 								<Button

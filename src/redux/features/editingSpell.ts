@@ -16,6 +16,7 @@ export type EditingSpellState = {
 	description: string;
 	atHigherLevels?: string;
 	damageType?: Item;
+	classes: Item[];
 };
 
 export const initialState: EditingSpellState = {
@@ -28,7 +29,8 @@ export const initialState: EditingSpellState = {
 	description: '',
 	level: null,
 	school: null,
-	components: null
+	components: null,
+	classes: []
 };
 
 const editingSpellSlice = createSlice({
@@ -82,6 +84,9 @@ const editingSpellSlice = createSlice({
 		setDamageType: (state, { payload }: PayloadAction<Item | undefined>) => {
 			state.damageType = payload;
 		},
+		setClasses: (state, { payload }: PayloadAction<Item[]>) => {
+			state.classes = payload;
+		},
 		resetSpell: () => initialState
 	}
 });
@@ -101,7 +106,8 @@ export const {
 	setRitual,
 	setDescription,
 	setAtHigherLevels,
-	setDamageType
+	setDamageType,
+	setClasses
 } = editingSpellSlice.actions;
 
 export default editingSpellSlice.reducer;
