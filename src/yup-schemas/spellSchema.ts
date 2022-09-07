@@ -42,7 +42,7 @@ const spellSchema = object({
 					);
 				}
 			),
-		index: string()
+		id: string()
 			.required('School index is required')
 			.test(
 				'is-spell-school',
@@ -158,7 +158,37 @@ const spellSchema = object({
 		.max(5000, 'Description cannot be longer than 5000 characters'),
 	atHigherLevels: string()
 		.optional()
-		.max(2000, 'At higher levels cannot be longer than 2000 characters.')
+		.max(2000, 'At higher levels cannot be longer than 2000 characters.'),
+	damageType: object({
+		name: string()
+			.required('Damage type must have name')
+			.test(
+				'valid-damage-type-name',
+				'Damage type name must be one of Acid, Cold, Fire, Bludgeoning, Lightning, Necrotic, Force, Poison, Psychic, Piercing, Radiant, Slashing, Thunder',
+				function (value) {
+					return (
+						!!value &&
+						/^(Acid|Cold|Fire|Bludgeoning|Lightning|Necrotic|Force|Poison|Psychic|Piercing|Radiant|Slashing|Thunder)$/.test(
+							value
+						)
+					);
+				}
+			),
+		id: string()
+			.required('Damage type must have id')
+			.test(
+				'valid-damage-type-id',
+				'Damage type name must be one of acid, cold, fire, bludgeoning, lightning, necrotic, force, poison, psychic, piercing, radiant, slashing, thunder',
+				function (value) {
+					return (
+						!!value &&
+						/^(acid|cold|fire|bludgeoning|lightning|necrotic|force|poison|psychic|piercing|radiant|slashing|thunder)$/.test(
+							value
+						)
+					);
+				}
+			)
+	}).optional()
 });
 
 export default spellSchema;

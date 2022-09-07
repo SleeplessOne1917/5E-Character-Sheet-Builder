@@ -1,6 +1,6 @@
-import { SrdItem } from './../../types/srd';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SpellComponent } from '../../types/srd';
+import { Item } from '../../types/db/item';
 
 export type EditingSpellState = {
 	name: string;
@@ -8,13 +8,14 @@ export type EditingSpellState = {
 	castingTime: string;
 	duration: string;
 	range: string;
-	school: SrdItem | null;
+	school: Item | null;
 	components: SpellComponent[] | null;
 	material?: string;
 	concentration: boolean;
 	ritual: boolean;
 	description: string;
 	atHigherLevels?: string;
+	damageType?: Item;
 };
 
 export const initialState: EditingSpellState = {
@@ -49,7 +50,7 @@ const editingSpellSlice = createSlice({
 		setRange: (state, { payload }: PayloadAction<string>) => {
 			state.range = payload;
 		},
-		setSchool: (state, { payload }: PayloadAction<SrdItem | null>) => {
+		setSchool: (state, { payload }: PayloadAction<Item | null>) => {
 			state.school = payload;
 		},
 		addComponent: (state, { payload }: PayloadAction<SpellComponent>) => {
@@ -78,6 +79,9 @@ const editingSpellSlice = createSlice({
 		) => {
 			state.atHigherLevels = payload;
 		},
+		setDamageType: (state, { payload }: PayloadAction<Item | undefined>) => {
+			state.damageType = payload;
+		},
 		resetSpell: () => initialState
 	}
 });
@@ -96,7 +100,8 @@ export const {
 	setConcentration,
 	setRitual,
 	setDescription,
-	setAtHigherLevels
+	setAtHigherLevels,
+	setDamageType
 } = editingSpellSlice.actions;
 
 export default editingSpellSlice.reducer;

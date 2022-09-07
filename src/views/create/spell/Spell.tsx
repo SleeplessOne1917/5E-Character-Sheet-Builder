@@ -22,6 +22,7 @@ import {
 	setRitual,
 	setSchool
 } from '../../../redux/features/editingSpell';
+import { Item } from '../../../types/db/item';
 import { SpellComponent, SrdItem } from '../../../types/srd';
 import spellSchema from '../../../yup-schemas/spellSchema';
 import classes from './Spell.module.css';
@@ -96,7 +97,7 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 	);
 
 	const handleSchoolChange = useCallback(
-		(school: SrdItem | null) => {
+		(school: Item | null) => {
 			dispatch(setSchool(school));
 		},
 		[dispatch]
@@ -377,7 +378,7 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 											<Select
 												id="school"
 												label="Magic School"
-												value={values.school?.index ?? 'blank'}
+												value={values.school?.id ?? 'blank'}
 												options={[{ value: 'blank', label: '\u2014' }].concat(
 													magicSchools.map(school => ({
 														value: school.index,
@@ -392,12 +393,19 @@ const Spell = ({ magicSchools, loading }: SpellProps) => {
 															school => school.index === value
 														) ?? null;
 
-													handleSchoolChange(newSchool);
-													setFieldValue('school', newSchool, false);
+													const newSchoolItem = newSchool
+														? {
+																name: newSchool?.name,
+																id: newSchool?.index
+														  }
+														: newSchool;
+
+													handleSchoolChange(newSchoolItem);
+													setFieldValue('school', newSchoolItem, false);
 													setFieldTouched('school', true, false);
 													setFieldError(
 														'school',
-														newSchool ? undefined : 'School is required'
+														newSchoolItem ? undefined : 'School is required'
 													);
 												}}
 											/>
