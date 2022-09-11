@@ -1,4 +1,4 @@
-import { Document, ObjectId, Schema, model, models } from 'mongoose';
+import { Document, ObjectId, Schema, model, models, Model } from 'mongoose';
 
 export interface IUsernameOTL {
 	userId: ObjectId;
@@ -7,12 +7,16 @@ export interface IUsernameOTL {
 
 export interface IUsernameOTLDocument extends IUsernameOTL, Document {}
 
-const usernameOTLSchema = new Schema({
+const usernameOTLSchema = new Schema<IUsernameOTL>({
 	userId: Schema.Types.ObjectId,
 	createdAt: Date
 });
 
 usernameOTLSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 });
 
-export default models.UsernameOTL ||
-	model<IUsernameOTLDocument>('UsernameOTL', usernameOTLSchema, 'usernameOTLs');
+export default (models.UsernameOTL ||
+	model<IUsernameOTLDocument>(
+		'UsernameOTL',
+		usernameOTLSchema,
+		'usernameOTLs'
+	)) as Model<IUsernameOTLDocument>;

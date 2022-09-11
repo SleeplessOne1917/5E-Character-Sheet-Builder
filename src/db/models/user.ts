@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from 'mongoose';
+import { Document, Schema, model, models, Model } from 'mongoose';
 
 export interface IUser {
 	emailHash?: string;
@@ -8,7 +8,7 @@ export interface IUser {
 
 export interface IUserDocument extends IUser, Document {}
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
 	emailHash: {
 		type: String,
 		unique: true
@@ -25,4 +25,5 @@ const userSchema = new Schema({
 	}
 });
 
-export default models.User || model<IUserDocument>('User', userSchema, 'users');
+export default (models.User ||
+	model<IUserDocument>('User', userSchema, 'users')) as Model<IUserDocument>;
