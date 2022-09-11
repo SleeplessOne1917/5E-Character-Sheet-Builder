@@ -58,7 +58,8 @@ const MarkdownTextArea = ({
 	useEffect(() => {
 		const setColsAndRows = () => {
 			const newColumnsNumber = Math.floor(
-				(textAreaRef.current?.offsetWidth ?? 100) / convertRemToPixels(1.2)
+				(textAreaRef.current?.offsetWidth ?? 100) /
+					(convertRemToPixels(1.2) / 2)
 			);
 			setNumberOfCols(newColumnsNumber);
 			setNumberOfRows(calculateNumberOfRows(content, newColumnsNumber));
