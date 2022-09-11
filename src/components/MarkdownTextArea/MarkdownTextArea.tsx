@@ -25,16 +25,31 @@ type MarkdownTextAreaProps = {
 
 const calculateNumberOfRows = (content: string, cols: number) => {
 	return Math.max(
-		content.split(/(\n)/g).reduce<number>((acc, cur) => {
-			if (cur === '\n') {
-				return acc + 1;
-			} else {
-				return (
-					acc +
-					(cur.length > 0 ? Math.max(Math.floor(cur.length / cols), 1) : 0)
-				);
-			}
-		}, 0),
+		content.split(/(\n)/g).reduce<{ value: number; hasNewline: boolean }>(
+			(acc, cur) => {
+				if (cur === '\n') {
+					if (acc.hasNewline) {
+						return {
+							...acc,
+							value: acc.value + 1
+						};
+					} else {
+						return {
+							hasNewline: true,
+							value: acc.value + 2
+						};
+					}
+				} else {
+					return {
+						...acc,
+						value:
+							acc.value +
+							(cur.length > 0 ? Math.max(Math.floor(cur.length / cols), 1) : 0)
+					};
+				}
+			},
+			{ value: 0, hasNewline: false }
+		).value,
 		5
 	);
 };
