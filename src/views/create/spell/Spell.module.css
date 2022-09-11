@@ -63,6 +63,15 @@
     align-items: center;
 }
 
+.description-higher-levels {
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.description-higher-levels > * {
+    margin: 1rem 0;
+}
+
 .components {
     border: 3px solid var(--davy);
 }

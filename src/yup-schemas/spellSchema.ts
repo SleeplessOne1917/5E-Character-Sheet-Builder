@@ -189,7 +189,9 @@ const spellSchema = object({
 					);
 				}
 			)
-	}).optional()
+	})
+		.optional()
+		.default(undefined)
 });
 
 export default spellSchema;

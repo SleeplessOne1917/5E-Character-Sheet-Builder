@@ -23,13 +23,17 @@ import {
 	setName,
 	setRange,
 	setRitual,
-	setSchool
+	setSchool,
+	initialState as spellInitialState,
+	setDescription,
+	setAtHigherLevels
 } from '../../../redux/features/editingSpell';
 import { Item } from '../../../types/db/item';
 import { SpellComponent, SrdItem } from '../../../types/srd';
 import spellSchema from '../../../yup-schemas/spellSchema';
 import classes from './Spell.module.css';
 import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
+import MarkdownTextArea from '../../../components/MarkdownTextArea/MarkdownTextArea';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -46,9 +50,7 @@ const Spell = ({
 }: SpellProps) => {
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const dispatch = useAppDispatch();
-	/* eslint-disable unused-imports/no-unused-vars */
 	const [initialValues, setInitialValues] = useState(editingSpell);
-	/* eslint-enable unused-imports/no-unused-vars */
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		e => {
@@ -142,11 +144,26 @@ const Spell = ({
 		[dispatch]
 	);
 
+	const handleDescriptionChange = useCallback(
+		(description: string) => {
+			dispatch(setDescription(description));
+		},
+		[dispatch]
+	);
+
+	const handleHigherLevelsChange = useCallback(
+		(description: string) => {
+			dispatch(setAtHigherLevels(description));
+		},
+		[dispatch]
+	);
+
 	const handleFormikSubmit = useCallback(
 		async (
 			values: EditingSpellState,
 			{ resetForm }: FormikHelpers<EditingSpellState>
 		) => {
+			setInitialValues(spellInitialState);
 			resetForm();
 			dispatch(resetSpell());
 		},
@@ -543,6 +560,32 @@ const Spell = ({
 											</svg>
 										)}
 									</div>
+								</div>
+								<div className={classes['description-higher-levels']}>
+									<MarkdownTextArea
+										id="description"
+										value={values.description}
+										label="Description"
+										onBlur={handleBlur}
+										onChange={event => {
+											handleChange(event);
+											handleDescriptionChange(event.target.value);
+										}}
+										touched={touched.description}
+										error={errors.description}
+									/>
+									<MarkdownTextArea
+										id="higher-levels"
+										value={values.atHigherLevels}
+										label="At Higher Levels"
+										onBlur={handleBlur}
+										onChange={event => {
+											handleChange(event);
+											handleHigherLevelsChange(event.target.value);
+										}}
+										touched={touched.atHigherLevels}
+										error={errors.atHigherLevels}
+									/>
 								</div>
 								<Button
 									positive

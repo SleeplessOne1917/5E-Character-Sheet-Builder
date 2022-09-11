@@ -118,9 +118,8 @@ const MarkdownTextArea = ({
 					cols={numberOfCols}
 					onBlur={onBlur}
 					id={id}
-				>
-					{content}
-				</textarea>
+					value={content}
+				></textarea>
 			)}
 			{error && touched && (
 				<div className={classes['error-message']}>{error}</div>
