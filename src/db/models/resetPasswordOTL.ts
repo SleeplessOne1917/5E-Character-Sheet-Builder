@@ -1,7 +1,7 @@
-import { Document, ObjectId, Schema, model, models, Model } from 'mongoose';
-
+import { Types, Schema, model, models, Model } from 'mongoose';
+import Document from '../../types/db/document';
 export interface IResetPasswordOTL {
-	userId: ObjectId;
+	userId: Types.ObjectId;
 	createdAt: Date;
 }
 

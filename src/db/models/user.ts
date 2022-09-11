@@ -1,5 +1,5 @@
-import { Document, Schema, model, models, Model } from 'mongoose';
-
+import { Schema, model, models, Model } from 'mongoose';
+import Document from '../../types/db/document';
 export interface IUser {
 	emailHash?: string;
 	passwordHash: string;

@@ -85,7 +85,7 @@ const Mutation = {
 		if (user.email) {
 			const users = await User.find<IUserDocument>().lean();
 			for (const u of users) {
-				if (await verifyValue(u.emailHash, user.email)) {
+				if (u.emailHash && (await verifyValue(u.emailHash, user.email))) {
 					throw new ApolloError('User already exists');
 				}
 			}
@@ -179,7 +179,7 @@ const Mutation = {
 				user.emailHash &&
 				(await verifyValue(user.emailHash, request.email))
 			) {
-				const otl = await UsernameOTL.create<IUsernameOTLDocument>({
+				const otl = await UsernameOTL.create({
 					userId: user._id,
 					createdAt: Date.now()
 				});
