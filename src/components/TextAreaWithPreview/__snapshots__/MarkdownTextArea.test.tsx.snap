@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly by default 1`] = `
+<div
+  class="container"
+  data-testid="markdown-text-area"
+>
+  <div
+    class="header"
+  >
+    <label
+      class="label"
+      for="description"
+    >
+      Description
+    </label>
+    <button
+      class="button positive"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; justify-self: flex-end;"
+      type="button"
+    >
+      Preview
+    </button>
+  </div>
+  <textarea
+    class="text-input"
+    id="description"
+    rows="5"
+  />
+</div>
+`;
+
+exports[`renders correctly with error showing 1`] = `
+<div
+  class="container"
+  data-testid="markdown-text-area"
+>
+  <div
+    class="header"
+  >
+    <label
+      class="label"
+      for="description"
+    >
+      Description
+    </label>
+    <button
+      class="button positive"
+      style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; justify-self: flex-end;"
+      type="button"
+    >
+      Preview
+    </button>
+  </div>
+  <textarea
+    class="text-input error"
+    id="description"
+    rows="5"
+  />
+  <div
+    class="error-message"
+  >
+    This is an error
+  </div>
+</div>
+`;

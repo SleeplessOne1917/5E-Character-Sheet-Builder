@@ -1,0 +1,53 @@
+.container {
+    background-color: var(--davy);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 0.75rem;
+}
+
+.text-input {
+    resize: none;
+    align-self: stretch;
+    background-color: var(--heaven-light);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    width: 100%;
+    color: var(--davy);
+}
+
+.text-input:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.text-input.error {
+    border: 7px solid var(--error-red);
+}
+
+.header {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.label {
+    font-size: 1.5rem;
+    color: var(--heaven-light);
+    font-family: var(--font-display);
+    margin: 0 auto;
+}
+
+.error-message {
+    background-color: var(--heaven-light);
+    color: var(--wine-red);
+    font-size: 1.3rem;
+    align-self: center;
+    padding: 0.25rem;
+    border-radius: 0.75rem;
+    margin-top: 0.75rem;
+    border: 3px solid var(--error-red);
+}
+
+.markdown-container {
+    background-color: var(--heaven-light);
+}
