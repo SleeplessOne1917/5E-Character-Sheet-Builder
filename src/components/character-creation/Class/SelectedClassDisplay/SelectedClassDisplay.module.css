@@ -34,8 +34,8 @@
 }
 
 .level-select-container {
-    display: column;
-    align-items: flex-start;
+    align-self: flex-start;
+    width: fit-content;
     padding: 1rem;
 }
 
