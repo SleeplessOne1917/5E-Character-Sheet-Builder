@@ -2,3 +2,8 @@
     font-family: var(--font-display);
     font-size: 1.2rem;
 }
+
+.paragraph {
+    text-indent: 0.7rem;
+    word-break: break-all;
+}
