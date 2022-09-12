@@ -336,7 +336,10 @@ const Mutation = {
 		}
 
 		const newPasswordHash = await hashValue(args.newPassword);
-		await User.updateOne({ username }, { passwordHash: newPasswordHash });
+		await User.updateOne(
+			{ username },
+			{ $set: { passwordHash: newPasswordHash } }
+		);
 
 		return 'Password successfully changed';
 	}
