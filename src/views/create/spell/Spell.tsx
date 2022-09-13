@@ -1,22 +1,15 @@
-import { Formik, FormikErrors, FormikHelpers } from 'formik';
-import { FocusEventHandler, useCallback, useState } from 'react';
 import Button, { ButtonType } from '../../../components/Button/Button';
-import Checkbox from '../../../components/Checkbox/Checkbox';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
-import MainContent from '../../../components/MainContent/MainContent';
-import Select from '../../../components/Select/Select/Select';
-import Option from '../../../components/Select/Option';
-import TextInput from '../../../components/TextInput/TextInput';
-import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import {
-	addComponent,
 	EditingSpellState,
+	addComponent,
 	removeComponent,
 	resetSpell,
+	setAtHigherLevels,
 	setCastingTime,
 	setClasses,
 	setConcentration,
 	setDamageType,
+	setDescription,
 	setDuration,
 	setLevel,
 	setMaterial,
@@ -24,16 +17,24 @@ import {
 	setRange,
 	setRitual,
 	setSchool,
-	initialState as spellInitialState,
-	setDescription,
-	setAtHigherLevels
+	initialState as spellInitialState
 } from '../../../redux/features/editingSpell';
-import { Item } from '../../../types/db/item';
+import { FocusEventHandler, useCallback, useState } from 'react';
+import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import { SpellComponent, SrdItem } from '../../../types/srd';
-import spellSchema from '../../../yup-schemas/spellSchema';
-import classes from './Spell.module.css';
-import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+
+import Checkbox from '../../../components/Checkbox/Checkbox';
+import { Item } from '../../../types/db/item';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
+import MainContent from '../../../components/MainContent/MainContent';
 import MarkdownTextArea from '../../../components/MarkdownTextArea/MarkdownTextArea';
+import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
+import Option from '../../../components/Select/Option';
+import Select from '../../../components/Select/Select/Select';
+import TextInput from '../../../components/TextInput/TextInput';
+import classes from './Spell.module.css';
+import spellSchema from '../../../yup-schemas/spellSchema';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -279,7 +280,9 @@ const Spell = ({
 									<div className={classes['components-container']}>
 										<fieldset
 											className={`${classes.components}${
-												errors.components ? ` ${classes.error}` : ''
+												touched.components && errors.components
+													? ` ${classes.error}`
+													: ''
 											}`}
 										>
 											<legend>Components</legend>
@@ -308,7 +311,7 @@ const Spell = ({
 															'components',
 															!(
 																(values.components ?? []).filter(
-																	component => component !== 'S'
+																	component => component !== 'V'
 																).length > 0
 															)
 																? 'Must have at least 1 component'
@@ -408,7 +411,7 @@ const Spell = ({
 													}}
 												/>
 											)}
-											{errors.components && (
+											{touched.components && errors.components && (
 												<div className={classes['error-message']}>
 													{errors.components}
 												</div>
