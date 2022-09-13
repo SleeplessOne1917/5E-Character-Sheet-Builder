@@ -594,6 +594,7 @@ const Spell = ({
 									positive
 									type={ButtonType.submit}
 									disabled={isSubmitting}
+									size="large"
 									style={{ marginTop: '3rem' }}
 								>
 									Create Spell
