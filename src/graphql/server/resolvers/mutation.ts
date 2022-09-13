@@ -1,10 +1,5 @@
-import ResetPasswordOTL, {
-	IResetPasswordOTLDocument
-} from '../../../db/models/resetPasswordOTL';
-import User, { IUser, IUserDocument } from '../../../db/models/user';
-import UsernameOTL, {
-	IUsernameOTLDocument
-} from '../../../db/models/usernameOTL';
+import User, { IUser } from '../../../db/models/user';
+import UsernameOTL from '../../../db/models/usernameOTL';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
@@ -83,8 +78,7 @@ const Mutation = {
 		}
 
 		if (user.email) {
-			const users = await User.find<IUserDocument>().lean();
-			for (const u of users) {
+			for await (const u of User.find().lean()) {
 				if (u.emailHash && (await verifyValue(u.emailHash, user.email))) {
 					throw new ApolloError('User already exists');
 				}
@@ -130,7 +124,7 @@ const Mutation = {
 		const user = args.user;
 		await logInSchema.validate(user);
 
-		const existingUser = await User.findOne<IUser>({
+		const existingUser = await User.findOne({
 			username: user.username
 		}).lean();
 		if (
@@ -173,8 +167,7 @@ const Mutation = {
 	forgotUsername: async (parent, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request);
 
-		const users = await User.find<IUserDocument>().lean();
-		for (const user of users) {
+		for await (const user of User.find().lean()) {
 			if (
 				user.emailHash &&
 				(await verifyValue(user.emailHash, request.email))
@@ -196,7 +189,7 @@ const Mutation = {
 	forgotPassword: async (parent, { request }: ForgotPasswordArgs) => {
 		await forgotPasswordSchema.validate(request);
 
-		const user = await User.findOne<IUserDocument>({
+		const user = await User.findOne({
 			username: request.username
 		}).lean();
 		if (user) {
@@ -237,7 +230,7 @@ const Mutation = {
 			throw new ApolloError(errorMessage);
 		}
 
-		const otl = await UsernameOTL.findById<IUsernameOTLDocument>(otlIdObjId);
+		const otl = await UsernameOTL.findById(otlIdObjId);
 
 		if (!otl) {
 			throw new ApolloError(errorMessage);
@@ -246,7 +239,7 @@ const Mutation = {
 		await UsernameOTL.deleteOne({ _id: otlIdObjId });
 
 		// eslint-disable-next-line testing-library/await-async-query
-		const user = await User.findById<IUser>(otl.userId).lean();
+		const user = await User.findById(otl.userId).lean();
 
 		if (!user) {
 			throw new ApolloError('User does not exist');
@@ -261,21 +254,16 @@ const Mutation = {
 		try {
 			otlIdObjId = new Types.ObjectId(otlId);
 		} catch (e) {
-			console.error('invalid otl');
 			throw new ApolloError(errorMessage);
 		}
 
 		if (otlIdObjId.toString() !== otlId) {
-			console.error('invalid otl');
 			throw new ApolloError(errorMessage);
 		}
 
-		const otl = await ResetPasswordOTL.findById<IResetPasswordOTLDocument>(
-			otlIdObjId
-		);
+		const otl = await ResetPasswordOTL.findById(otlIdObjId);
 
 		if (!otl) {
-			console.error('could not find otl');
 			throw new ApolloError(errorMessage);
 		}
 
@@ -297,9 +285,7 @@ const Mutation = {
 
 		await resetPasswordSchema.validate(args);
 
-		const otl = await ResetPasswordOTL.findById<IResetPasswordOTLDocument>(
-			otlIdObjId
-		);
+		const otl = await ResetPasswordOTL.findById(otlIdObjId);
 
 		if (!otl) {
 			throw new ApolloError(errorMessage);
@@ -308,7 +294,7 @@ const Mutation = {
 		const passwordHash = await hashValue(args.password);
 		const updateResponse = await User.updateOne(
 			{ _id: otl.userId },
-			{ passwordHash }
+			{ $set: { passwordHash } }
 		);
 		await ResetPasswordOTL.deleteOne({ _id: otlIdObjId });
 
@@ -325,7 +311,7 @@ const Mutation = {
 	) => {
 		await newPasswordSchema.validate(args);
 
-		const user = await User.findOne<IUser>({ username });
+		const user = await User.findOne({ username });
 
 		if (!user) {
 			throw new ApolloError('Must be logged on');
