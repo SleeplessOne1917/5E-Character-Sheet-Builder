@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import classes from './MarkdownParser.module.css';
+import remarkGfm from 'remark-gfm';
 
 type MarkdownParserProps = {
 	input: string | string[];
@@ -10,7 +10,7 @@ const MarkdownParser = ({ input }: MarkdownParserProps) => (
 	<ReactMarkdown
 		remarkPlugins={[remarkGfm]}
 		components={{
-			p: ({ children }) => <p style={{ textIndent: '0.7rem' }}>{children}</p>
+			p: ({ children }) => <p className={classes.paragraph}>{children}</p>
 		}}
 		className={classes.markdown}
 	>

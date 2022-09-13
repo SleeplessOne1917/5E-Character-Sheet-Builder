@@ -8,10 +8,11 @@ import {
 	useRef,
 	useState
 } from 'react';
-import { convertRemToPixels } from '../../services/remToPixelsService';
+
 import Button from '../Button/Button';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
 import classes from './MarkdownTextArea.module.css';
+import { convertRemToPixels } from '../../services/remToPixelsService';
 
 type MarkdownTextAreaProps = {
 	value?: string;
@@ -74,7 +75,7 @@ const MarkdownTextArea = ({
 		const setColsAndRows = () => {
 			const newColumnsNumber = Math.floor(
 				(textAreaRef.current?.offsetWidth ?? 100) /
-					(convertRemToPixels(1.2) / 2)
+					(convertRemToPixels(1.2) / 1.85)
 			);
 			setNumberOfCols(newColumnsNumber);
 			setNumberOfRows(calculateNumberOfRows(content, newColumnsNumber));

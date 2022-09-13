@@ -50,4 +50,5 @@
 
 .markdown-container {
     background-color: var(--heaven-light);
+    padding: 0.5rem;
 }
