@@ -1,4 +1,5 @@
-import { object, string, number, array, boolean } from 'yup';
+import { array, boolean, number, object, string } from 'yup';
+
 import { Item } from '../types/db/item';
 
 const spellSchema = object({
@@ -155,6 +156,9 @@ const spellSchema = object({
 	ritual: boolean().required('Ritual is required'),
 	description: string()
 		.required('Description is required')
+		.test('not-whitespace', 'Description is required', function (value) {
+			return !!value && !/^\s*$/.test(value);
+		})
 		.min(1, 'Description is required')
 		.max(5000, 'Description cannot be longer than 5000 characters'),
 	atHigherLevels: string()
