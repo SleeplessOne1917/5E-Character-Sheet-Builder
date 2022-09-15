@@ -110,11 +110,6 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.19.1.tgz#72d647b4ff6a4f82878d184613353af1dd0290f9"
   integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
 
-"@babel/compat-data@^7.19.1":
-  version "7.19.1"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.19.1.tgz#72d647b4ff6a4f82878d184613353af1dd0290f9"
-  integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
-
 "@babel/core@7.12.9":
   version "7.12.9"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.12.9.tgz#fd450c4ec10cdbb980e2928b7aa7a28484593fc8"
@@ -10168,10 +10163,10 @@ mongodb@4.9.1:
   optionalDependencies:
     saslprep "^1.0.3"
 
-mongoose@^6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.6.0.tgz#40cfef85e34fb6903fa5fc246d534bbd80da226e"
-  integrity sha512-5sS0D7qbmfT4G/nODkJhx5l2qvhqLMplhMlp08Wea8eoi6O/B6b+o1ukUEKjjm1MV8dAS3w8kx47R/klYKLPpQ==
+mongoose@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.6.1.tgz#8aec30924b1a524924d9de4eb4746951f6aadd26"
+  integrity sha512-hPDamnn6quL9TjIrOudqUS5sMilENmP/gfxoCIb+rDmlzawtM7+MVCAWrM9930fzD20N7qAema/zE9QIDuifhQ==
   dependencies:
     bson "^4.6.5"
     kareem "2.4.1"
