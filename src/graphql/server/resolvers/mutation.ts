@@ -1,5 +1,6 @@
 import User, { IUser } from '../../../db/models/user';
 import UsernameOTL from '../../../db/models/usernameOTL';
+import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
@@ -68,9 +69,9 @@ type CreateNewPasswordArgs = {
 };
 
 const Mutation = {
-	signUp: async (parent, args: SignUpArgs, { res }: ApolloContext) => {
+	signUp: async (parent: never, args: SignUpArgs, { res }: ApolloContext) => {
 		const { user } = args;
-		await signUpSchema.validate(user);
+		await signUpSchema.validate(user, { strict: true });
 
 		const existingUser = await User.findOne({ username: user.username }).lean();
 		if (existingUser) {
@@ -120,9 +121,9 @@ const Mutation = {
 
 		return { token };
 	},
-	logIn: async (parent, args: LoginArgs, { res }: ApolloContext) => {
+	logIn: async (parent: never, args: LoginArgs, { res }: ApolloContext) => {
 		const user = args.user;
-		await logInSchema.validate(user);
+		await logInSchema.validate(user, { strict: true });
 
 		const existingUser = await User.findOne({
 			username: user.username
@@ -154,7 +155,11 @@ const Mutation = {
 
 		return { token };
 	},
-	logOut: async (parent, args, { res, username }: ApolloContext) => {
+	logOut: async (
+		parent: never,
+		args: never,
+		{ res, username }: ApolloContext
+	) => {
 		if (username) {
 			nookies.destroy({ res }, 'token', {
 				path: '/'
@@ -164,8 +169,8 @@ const Mutation = {
 			return null;
 		}
 	},
-	forgotUsername: async (parent, { request }: ForgotUsernameArgs) => {
-		await forgotUsernameSchema.validate(request);
+	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
+		await forgotUsernameSchema.validate(request, { strict: true });
 
 		for await (const user of User.find().lean()) {
 			if (
@@ -186,8 +191,8 @@ const Mutation = {
 			message: 'Email was sent if it exists.'
 		};
 	},
-	forgotPassword: async (parent, { request }: ForgotPasswordArgs) => {
-		await forgotPasswordSchema.validate(request);
+	forgotPassword: async (parent: never, { request }: ForgotPasswordArgs) => {
+		await forgotPasswordSchema.validate(request, { strict: true });
 
 		const user = await User.findOne({
 			username: request.username
@@ -216,7 +221,7 @@ const Mutation = {
 				'Email was sent if the provided email matches the email in the system.'
 		};
 	},
-	remindUsername: async (parent, { otlId }: OTLArgs) => {
+	remindUsername: async (parent: never, { otlId }: OTLArgs) => {
 		const errorMessage = 'Link either expired or was incorrect';
 		let otlIdObjId: Types.ObjectId;
 
@@ -247,7 +252,7 @@ const Mutation = {
 
 		return user.username;
 	},
-	validateResetPassword: async (parent, { otlId }: OTLArgs) => {
+	validateResetPassword: async (parent: never, { otlId }: OTLArgs) => {
 		const errorMessage = 'Link either expired or was incorrect';
 		let otlIdObjId: Types.ObjectId;
 
@@ -269,7 +274,10 @@ const Mutation = {
 
 		return 'One time link is valid';
 	},
-	resetPassword: async (parent, { otlId, ...args }: ResetPasswordArgs) => {
+	resetPassword: async (
+		parent: never,
+		{ otlId, ...args }: ResetPasswordArgs
+	) => {
 		const errorMessage = 'Link either expired or was incorrect';
 		let otlIdObjId: Types.ObjectId;
 
@@ -283,7 +291,7 @@ const Mutation = {
 			throw new ApolloError(errorMessage);
 		}
 
-		await resetPasswordSchema.validate(args);
+		await resetPasswordSchema.validate(args, { strict: true });
 
 		const otl = await ResetPasswordOTL.findById(otlIdObjId);
 
@@ -305,11 +313,11 @@ const Mutation = {
 		return 'Password was reset';
 	},
 	createNewPassword: async (
-		parent,
+		parent: never,
 		args: CreateNewPasswordArgs,
 		{ username }: ApolloContext
 	) => {
-		await newPasswordSchema.validate(args);
+		await newPasswordSchema.validate(args, { strict: true });
 
 		const user = await User.findOne({ username });
 
