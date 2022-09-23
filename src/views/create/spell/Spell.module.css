@@ -74,6 +74,7 @@
 
 .components {
     border: 3px solid var(--davy);
+    border-radius: 1rem;
 }
 
 .components.error {
@@ -117,6 +118,32 @@
     height: 5rem;
 }
 
+.summons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.summon {
+    margin: 1rem 0;
+    border: 3px solid var(--davy);
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    position: relative;
+}
+
+.button-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.close-button-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
 @media (min-width: 1024px) {
     .name-and-level {
         justify-content: space-around;
@@ -134,5 +161,9 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 100%;
         grid-template-areas: "classes damageType";
+    }
+
+    .summon {
+        width: 80%;
     }
 }
