@@ -10,6 +10,7 @@ import Link from 'next/link';
 import classes from './SectionBar.module.css';
 import useMediaQuery from '../../../hooks/useMediaQuery';
 import { useRouter } from 'next/router';
+import { capitalize } from '../../../services/capitalizeService';
 
 export enum Section {
 	'race',
@@ -45,11 +46,6 @@ const getSections = (
 	hasSpellcasting ? spellcastingSections : sections;
 
 const MAX_PERCENT = 60;
-
-const capitalize = (str: string) => {
-	const [first, ...rest] = str;
-	return first.toUpperCase() + rest.join('').toLowerCase();
-};
 
 type SectionBarProps = {
 	hasSpellcasting?: boolean;
