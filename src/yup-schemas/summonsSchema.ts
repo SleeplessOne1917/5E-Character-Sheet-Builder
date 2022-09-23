@@ -146,6 +146,14 @@ const summonsSchema = array()
 				.max(100, 'Summon damage immunities cannot be more than 100 characters')
 				.optional()
 				.default(undefined),
+			savingThrows: string()
+				.max(100, 'Summon saving throws cannot be more than 100 characters')
+				.optional()
+				.default(undefined),
+			skills: string()
+				.max(100, 'Summon skills cannot be more than 100 characters')
+				.optional()
+				.default(undefined),
 			senses: string()
 				.max(100, 'Summon senses cannot be more than 100 characters')
 				.required('Summon senses are required'),
@@ -172,6 +180,7 @@ const summonsSchema = array()
 	)
 	.optional()
 	.default(undefined)
+	.min(1, 'There must be at least one summon in the summons array')
 	.max(5, 'No more than 5 summons allowed');
 
 export default summonsSchema;

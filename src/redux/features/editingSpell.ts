@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SpellComponent } from '../../types/srd';
 import { Item } from '../../types/db/item';
+import { DeepPartial } from '../../types/helpers';
+import { Summon } from '../../types/summon';
 
 export type EditingSpellState = {
 	name: string;
@@ -17,6 +19,7 @@ export type EditingSpellState = {
 	atHigherLevels?: string;
 	damageType?: Item;
 	classes: Item[];
+	summons?: DeepPartial<Summon>[];
 };
 
 export const initialState: EditingSpellState = {
@@ -87,6 +90,51 @@ const editingSpellSlice = createSlice({
 		setClasses: (state, { payload }: PayloadAction<Item[]>) => {
 			state.classes = payload;
 		},
+		addSummon: state => {
+			if (!state.summons) {
+				state.summons = [];
+			}
+
+			state.summons = [...state.summons, {}];
+		},
+		setSummonProperties: (
+			state,
+			{
+				payload: { index, overrideProps }
+			}: PayloadAction<{ index: number; overrideProps: DeepPartial<Summon> }>
+		) => {
+			if (!state.summons) {
+				state.summons = [];
+			}
+
+			if (state.summons.length < index + 1) {
+				for (let i = 0; i <= index; ++i) {
+					state.summons = [...state.summons, {}];
+				}
+			}
+
+			state.summons[index] = {
+				...state.summons[index],
+				...overrideProps
+			};
+		},
+		deleteSummon: (state, { payload }: PayloadAction<number>) => {
+			let index = payload;
+
+			if (index < 0 && state.summons && state.summons.length > 0) {
+				while (index < 0) {
+					index += state.summons.length;
+				}
+			}
+
+			if (state.summons && index < state.summons.length) {
+				state.summons = state.summons.filter((summon, i) => i !== index);
+			}
+
+			if (state.summons?.length === 0) {
+				delete state.summons;
+			}
+		},
 		resetSpell: () => initialState
 	}
 });
@@ -107,7 +155,10 @@ export const {
 	setDescription,
 	setAtHigherLevels,
 	setDamageType,
-	setClasses
+	setClasses,
+	addSummon,
+	setSummonProperties,
+	deleteSummon
 } = editingSpellSlice.actions;
 
 export default editingSpellSlice.reducer;

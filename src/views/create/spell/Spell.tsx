@@ -17,10 +17,13 @@ import {
 	setRange,
 	setRitual,
 	setSchool,
-	initialState as spellInitialState
+	initialState as spellInitialState,
+	addSummon,
+	setSummonProperties,
+	deleteSummon
 } from '../../../redux/features/editingSpell';
 import { FocusEventHandler, useCallback, useState } from 'react';
-import { Formik, FormikErrors, FormikHelpers } from 'formik';
+import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
 import { SpellComponent, SrdItem } from '../../../types/srd';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
@@ -35,6 +38,14 @@ import Select from '../../../components/Select/Select/Select';
 import TextInput from '../../../components/TextInput/TextInput';
 import classes from './Spell.module.css';
 import spellSchema from '../../../yup-schemas/spellSchema';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { DeepError, DeepPartial, DeepTouched } from '../../../types/helpers';
+import { Summon } from '../../../types/summon';
+import { SIZES } from '../../../constants/sizeContants';
+import { capitalize } from '../../../services/capitalizeService';
+import Size from '../../../types/size';
+import { MONSTER_TYPES } from '../../../constants/monsterTypeConstants';
+import MonsterType from '../../../types/monsterType';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -42,6 +53,22 @@ type SpellProps = {
 	damageTypes: SrdItem[];
 	loading: boolean;
 };
+
+const getSummonTouchedAtIndex = (
+	touched: FormikTouched<EditingSpellState>,
+	index: number
+) =>
+	touched.summons
+		? (touched.summons as never as DeepTouched<Summon>[])[index]
+		: undefined;
+
+const getSummonErrorAtIndex = (
+	errors: FormikErrors<EditingSpellState>,
+	index: number
+) =>
+	errors.summons
+		? (errors.summons as never as DeepError<Summon>[])[index]
+		: undefined;
 
 const Spell = ({
 	magicSchools,
@@ -167,6 +194,24 @@ const Spell = ({
 			setInitialValues(spellInitialState);
 			resetForm();
 			dispatch(resetSpell());
+		},
+		[dispatch]
+	);
+
+	const handleAddSummon = useCallback(() => {
+		dispatch(addSummon());
+	}, [dispatch]);
+
+	const handleSetSummonProperties = useCallback(
+		(index: number, overrideProps: DeepPartial<Summon>) => {
+			dispatch(setSummonProperties({ index, overrideProps }));
+		},
+		[dispatch]
+	);
+
+	const handleRemoveSummon = useCallback(
+		(index: number) => {
+			dispatch(deleteSummon(index));
 		},
 		[dispatch]
 	);
@@ -563,6 +608,216 @@ const Spell = ({
 											</svg>
 										)}
 									</div>
+								</div>
+								<div className={classes['summons']}>
+									{values.summons && values.summons.length > 0 ? (
+										<>
+											<h2>Summons</h2>
+											{values.summons.map((summon, index) => (
+												<div className={classes.summon} key={index}>
+													<Button
+														size="small"
+														style={{
+															position: 'absolute',
+															top: 0,
+															right: 0,
+															display: 'flex',
+															alignItems: 'center'
+														}}
+														onClick={() => {
+															handleRemoveSummon(index);
+															setFieldValue(
+																'summons',
+																(values.summons ?? []).length <= 1
+																	? undefined
+																	: values.summons?.filter(
+																			(s, i) => i !== index
+																	  ),
+																false
+															);
+														}}
+													>
+														<XMarkIcon
+															className={classes['close-button-icon']}
+														/>{' '}
+														Remove Summon
+													</Button>
+													<div
+														style={{
+															display: 'flex',
+															justifyContent: 'center'
+														}}
+													>
+														<TextInput
+															id={`summon-${index}-name`}
+															label="Name"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.name`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index].name ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	name: event.target.value
+																});
+																setFieldTouched(`summons.${index}.name`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)?.name ??
+																false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.name ??
+																undefined
+															}
+														/>
+													</div>
+													<div
+														style={{
+															display: 'flex',
+															justifyContent: 'space-evenly'
+														}}
+													>
+														<Select
+															id={`summon-${index}-size`}
+															label="Size"
+															options={[
+																{ label: '\u2014', value: 'blank' }
+															].concat(
+																SIZES.map(size => ({
+																	label: capitalize(size),
+																	value: size
+																}))
+															)}
+															value={
+																values.summons
+																	? values.summons[index].size ?? 'blank'
+																	: 'blank'
+															}
+															onChange={value => {
+																const newVal =
+																	value !== 'blank'
+																		? (value as Size)
+																		: undefined;
+																handleSetSummonProperties(index, {
+																	size: newVal
+																});
+																setFieldValue(
+																	`summons.${index}.size`,
+																	newVal,
+																	false
+																);
+																setFieldTouched(
+																	`summons.${index}.size`,
+																	true,
+																	false
+																);
+																setFieldError(
+																	`summons.${index}.size`,
+																	newVal ? undefined : 'Summon size is required'
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)?.size ??
+																false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.size ??
+																undefined
+															}
+														/>
+														<Select
+															id={`summon-${index}-type`}
+															label="Type1"
+															options={[
+																{ label: '\u2014', value: 'blank' }
+															].concat(
+																MONSTER_TYPES.map(size => ({
+																	label: capitalize(size),
+																	value: size
+																}))
+															)}
+															value={
+																values.summons
+																	? values.summons[index].type ?? 'blank'
+																	: 'blank'
+															}
+															onChange={value => {
+																const newVal =
+																	value !== 'blank'
+																		? (value as MonsterType)
+																		: undefined;
+																handleSetSummonProperties(index, {
+																	type: newVal
+																});
+																setFieldValue(
+																	`summons.${index}.type`,
+																	newVal,
+																	false
+																);
+																setFieldTouched(
+																	`summons.${index}.type`,
+																	true,
+																	false
+																);
+																setFieldError(
+																	`summons.${index}.type`,
+																	newVal ? undefined : 'Summon type is required'
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)?.type ??
+																false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.type ??
+																undefined
+															}
+														/>
+													</div>
+												</div>
+											))}
+											{values.summons.length < 5 && (
+												<Button
+													positive
+													style={{ display: 'flex', alignItems: 'center' }}
+													onClick={() => {
+														handleAddSummon();
+														setFieldValue(
+															'summons',
+															[...(values.summons ?? []), {}],
+															false
+														);
+													}}
+												>
+													<PlusIcon className={classes['button-icon']} /> Add
+													Summon
+												</Button>
+											)}
+										</>
+									) : (
+										<Button
+											positive
+											style={{ display: 'flex', alignItems: 'center' }}
+											onClick={() => {
+												handleAddSummon();
+												setFieldValue(
+													'summons',
+													[...(values.summons ?? []), {}],
+													false
+												);
+											}}
+										>
+											<PlusIcon className={classes['button-icon']} /> Add Summon
+										</Button>
+									)}
 								</div>
 								<div className={classes['description-higher-levels']}>
 									<MarkdownTextArea
