@@ -1,14 +1,6 @@
+import { Land } from '../../../../types/land';
 import Select from '../../../Select/Select/Select';
 import classes from './LandSelector.module.css';
-
-type Land =
-	| 'arctic'
-	| 'coast'
-	| 'desert'
-	| 'forest'
-	| 'grassland'
-	| 'mountain'
-	| 'swamp';
 
 type LandSelectorProps = {
 	value: null | Land;

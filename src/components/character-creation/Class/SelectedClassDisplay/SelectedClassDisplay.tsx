@@ -10,6 +10,14 @@ import {
 	Terrain
 } from '../../../../types/srd';
 import {
+	AbilityScore,
+	decrementAbilityBonus,
+	incrementAbilityBonus,
+	resetAbilityHighest,
+	setAbilityHighest,
+	updateMiscBonus
+} from '../../../../redux/features/abilityScores';
+import {
 	addAbilityBonus,
 	addExpertiseProficiency,
 	addFavoredEnemies,
@@ -34,17 +42,13 @@ import {
 	setLevel
 } from '../../../../redux/features/classInfo';
 import {
+	addLevelHPBonus,
+	removeLevelHPBonus
+} from '../../../../redux/features/hp';
+import {
 	addProficiency,
 	removeProficiency
 } from '../../../../redux/features/proficiencies';
-import {
-	AbilityScore,
-	decrementAbilityBonus,
-	incrementAbilityBonus,
-	resetAbilityHighest,
-	setAbilityHighest,
-	updateMiscBonus
-} from '../../../../redux/features/abilityScores';
 import {
 	addSpell,
 	removeSpell,
@@ -62,19 +66,16 @@ import ExpertiseSelector from '../ExpertiseSelector/ExpertiseSelector';
 import FavoredEnemySelector from '../FavoredEnemySelector/FavoredEnemySelector';
 import FavoredTerrainSelector from '../FavoredTerrainSelector/FavoredTerrainSelector';
 import FeatureChoiceSelector from '../FeatureChoiceSelector/FeatureChoiceSelector';
+import { Land } from '../../../../types/land';
 import LandSelector from '../LandSelector/LandSelector';
+import ProficienciesSelector from '../ProficienciesSelector/ProficienciesSelector';
 import Select from '../../../Select/Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../graphql/srdClientService';
+import { rollDie } from '../../../../services/diceService';
 import styles from './SelectedClassDisplay.module.css';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
-import ProficienciesSelector from '../ProficienciesSelector/ProficienciesSelector';
-import {
-	addLevelHPBonus,
-	removeLevelHPBonus
-} from '../../../../redux/features/hp';
-import { rollDie } from '../../../../services/diceService';
 
 type SelectedClassDisplayProps = {
 	klass: SrdFullClassItem;
@@ -471,7 +472,7 @@ const SelectedClassDisplay = ({
 						}
 					});
 
-					dispatch(removeAbilityBonus());
+					dispatch(removeAbilityBonus(undefined));
 				}
 			}
 		},
@@ -720,7 +721,7 @@ const SelectedClassDisplay = ({
 					i < oldFavoredEnemiesNumber - newFavoredEnemiesNumber;
 					++i
 				) {
-					dispatch(removeFavoredEnemiesAction());
+					dispatch(removeFavoredEnemiesAction(undefined));
 				}
 			}
 		},
@@ -765,7 +766,7 @@ const SelectedClassDisplay = ({
 					i < oldFavoredTerrainsNumber - newFavoredTerrainsNumber;
 					++i
 				) {
-					dispatch(removeFavoredTerrain());
+					dispatch(removeFavoredTerrain(undefined));
 				}
 			}
 		},
@@ -904,7 +905,7 @@ const SelectedClassDisplay = ({
 				(classInfo.expertiseProficiencies?.length ?? 0) > 2
 			) {
 				for (let i = 0; i < 2; ++i) {
-					dispatch(removeExpertiseProficiency());
+					dispatch(removeExpertiseProficiency(undefined));
 				}
 			}
 		},
@@ -1184,7 +1185,7 @@ const SelectedClassDisplay = ({
 		(newLevel: number) => {
 			if (newLevel < classInfo.level) {
 				for (let i = 0; i < classInfo.level - newLevel; ++i) {
-					dispatch(removeLevelHPBonus());
+					dispatch(removeLevelHPBonus(undefined));
 				}
 			}
 
@@ -1327,9 +1328,9 @@ const SelectedClassDisplay = ({
 			}
 		}
 
-		dispatch(deselectSubclassSubtype());
+		dispatch(deselectSubclassSubtype(undefined));
 		removeSubclassFeatures(classInfo.level, null);
-		dispatch(deselectSubclass());
+		dispatch(deselectSubclass(undefined));
 		removeFightingStyles(classInfo.level, null);
 	}, [
 		dispatch,
