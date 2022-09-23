@@ -1,6 +1,7 @@
 import { array, boolean, number, object, string } from 'yup';
 
 import { Item } from '../types/db/item';
+import summonsSchema from './summonsSchema';
 
 const spellSchema = object({
 	name: string()
@@ -9,9 +10,7 @@ const spellSchema = object({
 		.required('Name is required'),
 	level: number()
 		.nullable()
-		.test('is-not-null', 'Level is required', function (value) {
-			return value !== null;
-		})
+		.test('is-not-null', 'Level is required', value => value !== null)
 		.integer('Level must be integer')
 		.required('Level is required')
 		.min(0, 'Level cannot be less than 0')
@@ -34,53 +33,43 @@ const spellSchema = object({
 			.test(
 				'is-spell-school',
 				'School name must be one of Abjuration, Conjuration, Divination, Enchantment, Evocation, Necromancy, Illusion, or Transmutation',
-				function (value) {
-					return (
-						!!value &&
-						/^(Abjuration|Conjuration|Divination|Enchantment|Evocation|Necromancy|Illusion|Transmutation)$/.test(
-							value
-						)
-					);
-				}
+				value =>
+					!!value &&
+					/^(Abjuration|Conjuration|Divination|Enchantment|Evocation|Necromancy|Illusion|Transmutation)$/.test(
+						value
+					)
 			),
 		id: string()
 			.required('School index is required')
 			.test(
 				'is-spell-school',
-				'School index must be one of Abjuration, Conjuration, Divination, Enchantment, Evocation, Necromancy, Illusion, or Transmutation',
-				function (value) {
-					return (
-						!!value &&
-						/^(abjuration|conjuration|divination|enchantment|evocation|necromancy|illusion|transmutation)$/.test(
-							value
-						)
-					);
-				}
+				'School index must be one of abjuration, conjuration, divination, enchantment, evocation, necromancy, illusion, or transmutation',
+				value =>
+					!!value &&
+					/^(abjuration|conjuration|divination|enchantment|evocation|necromancy|illusion|transmutation)$/.test(
+						value
+					)
 			)
 	})
 		.required('School is required')
 		.nullable()
-		.test('is-not-null', 'School is required', function (value) {
-			return value !== null;
-		}),
+		.test('is-not-null', 'School is required', value => value !== null),
 	components: array()
 		.nullable()
-		.test('is-not-null', 'Components are required', function (value) {
-			return value !== null;
-		})
+		.test('is-not-null', 'Components are required', value => value !== null)
 		.min(1, 'Must have at least 1 component')
 		.of(
 			string().test(
 				'is-component',
-				'Components can only be "V", "S", or "M"',
-				function (value) {
-					return !!value && ['V', 'S', 'M'].includes(value);
-				}
+				'Components can only be V, S, or M',
+				value => !!value && ['V', 'S', 'M'].includes(value)
 			)
 		)
 		.required('Components are required')
-		.test('no-repeats', 'Cannot repeat component values', function (value) {
-			return (
+		.test(
+			'no-repeats',
+			'Cannot repeat component values',
+			value =>
 				!!value &&
 				value.reduce<{ isValid: boolean; values: string[] }>(
 					(acc, cur) => {
@@ -103,8 +92,7 @@ const spellSchema = object({
 						values: []
 					}
 				).isValid
-			);
-		}),
+		),
 	material: string().when('components', {
 		is: (components: string[] | undefined) =>
 			components && components.includes('M'),
@@ -126,8 +114,10 @@ const spellSchema = object({
 		)
 		.min(1, 'Must select at least 1 class')
 		.required('Classes are required')
-		.test('no-repeats', 'Cannot repeat class values', function (value) {
-			return (
+		.test(
+			'no-repeats',
+			'Cannot repeat class values',
+			value =>
 				!!value &&
 				[...value].reduce<{ isValid: boolean; values: Item[] }>(
 					(acc, cur) => {
@@ -150,15 +140,16 @@ const spellSchema = object({
 						values: []
 					}
 				).isValid
-			);
-		}),
+		),
 	concentration: boolean().required('Concentration is required'),
 	ritual: boolean().required('Ritual is required'),
 	description: string()
 		.required('Description is required')
-		.test('not-whitespace', 'Description is required', function (value) {
-			return !!value && !/^\s*$/.test(value);
-		})
+		.test(
+			'not-whitespace',
+			'Description is required',
+			value => !!value && !/^\s*$/.test(value)
+		)
 		.min(1, 'Description is required')
 		.max(5000, 'Description cannot be longer than 5000 characters'),
 	atHigherLevels: string()
@@ -169,33 +160,28 @@ const spellSchema = object({
 			.required('Damage type must have name')
 			.test(
 				'valid-damage-type-name',
-				'Damage type name must be one of Acid, Cold, Fire, Bludgeoning, Lightning, Necrotic, Force, Poison, Psychic, Piercing, Radiant, Slashing, Thunder',
-				function (value) {
-					return (
-						!!value &&
-						/^(Acid|Cold|Fire|Bludgeoning|Lightning|Necrotic|Force|Poison|Psychic|Piercing|Radiant|Slashing|Thunder)$/.test(
-							value
-						)
-					);
-				}
+				'Damage type name must be one of Acid, Cold, Fire, Bludgeoning, Lightning, Necrotic, Force, Poison, Psychic, Piercing, Radiant, Slashing, or Thunder',
+				value =>
+					!!value &&
+					/^(Acid|Cold|Fire|Bludgeoning|Lightning|Necrotic|Force|Poison|Psychic|Piercing|Radiant|Slashing|Thunder)$/.test(
+						value
+					)
 			),
 		id: string()
 			.required('Damage type must have id')
 			.test(
 				'valid-damage-type-id',
-				'Damage type name must be one of acid, cold, fire, bludgeoning, lightning, necrotic, force, poison, psychic, piercing, radiant, slashing, thunder',
-				function (value) {
-					return (
-						!!value &&
-						/^(acid|cold|fire|bludgeoning|lightning|necrotic|force|poison|psychic|piercing|radiant|slashing|thunder)$/.test(
-							value
-						)
-					);
-				}
+				'Damage type name must be one of acid, cold, fire, bludgeoning, lightning, necrotic, force, poison, psychic, piercing, radiant, slashing, or thunder',
+				value =>
+					!!value &&
+					/^(acid|cold|fire|bludgeoning|lightning|necrotic|force|poison|psychic|piercing|radiant|slashing|thunder)$/.test(
+						value
+					)
 			)
 	})
 		.optional()
-		.default(undefined)
+		.default(undefined),
+	summons: summonsSchema
 });
 
 export default spellSchema;

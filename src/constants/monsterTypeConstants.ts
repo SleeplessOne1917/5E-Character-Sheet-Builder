@@ -1,0 +1,16 @@
+export const MONSTER_TYPES = [
+	'BEAST',
+	'MONSTROSITY',
+	'DRAGON',
+	'HUMANOID',
+	'UNDEAD',
+	'FIEND',
+	'CELESTIAL',
+	'CONSTRUCT',
+	'GIANT',
+	'ELEMENTAL',
+	'FEY',
+	'ABERRATION',
+	'OOZE',
+	'PLANT'
+];

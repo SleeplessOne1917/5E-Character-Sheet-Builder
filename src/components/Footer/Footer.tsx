@@ -1,4 +1,4 @@
-import { GITHUB_URL } from '../../routeConstants';
+import { GITHUB_URL } from '../../constants/routeConstants';
 import classes from './Footer.module.css';
 import { memo } from 'react';
 

@@ -1,4 +1,4 @@
-import { GITHUB_URL } from '../../routeConstants';
+import { GITHUB_URL } from '../../constants/routeConstants';
 import LinkButton from '../LinkButton/LinkButton';
 import { MouseEventHandler } from 'react';
 import classes from './MobileNav.module.css';
