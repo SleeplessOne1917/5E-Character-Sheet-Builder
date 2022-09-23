@@ -12,7 +12,7 @@ const useMediaQuery = (query: string): boolean => {
 		return () => {
 			mediaQuery.removeEventListener('change', mediaListener);
 		};
-	}, []); //eslint-disable-line
+	}, [query]);
 
 	return matches;
 };
