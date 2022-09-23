@@ -1,7 +1,10 @@
 import Button, { ButtonType } from '../../../components/Button/Button';
+import { DeepError, DeepPartial, DeepTouched } from '../../../types/helpers';
 import {
 	EditingSpellState,
 	addComponent,
+	addSummon,
+	deleteSummon,
 	removeComponent,
 	resetSpell,
 	setAtHigherLevels,
@@ -17,35 +20,32 @@ import {
 	setRange,
 	setRitual,
 	setSchool,
-	initialState as spellInitialState,
-	addSummon,
 	setSummonProperties,
-	deleteSummon
+	initialState as spellInitialState
 } from '../../../redux/features/editingSpell';
 import { FocusEventHandler, useCallback, useState } from 'react';
 import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { SpellComponent, SrdItem } from '../../../types/srd';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import Checkbox from '../../../components/Checkbox/Checkbox';
 import { Item } from '../../../types/db/item';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
+import { MONSTER_TYPES } from '../../../constants/monsterTypeConstants';
 import MainContent from '../../../components/MainContent/MainContent';
 import MarkdownTextArea from '../../../components/MarkdownTextArea/MarkdownTextArea';
+import MonsterType from '../../../types/monsterType';
 import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
 import Option from '../../../components/Select/Option';
+import { SIZES } from '../../../constants/sizeContants';
 import Select from '../../../components/Select/Select/Select';
+import Size from '../../../types/size';
+import { Summon } from '../../../types/summon';
 import TextInput from '../../../components/TextInput/TextInput';
+import { capitalize } from '../../../services/capitalizeService';
 import classes from './Spell.module.css';
 import spellSchema from '../../../yup-schemas/spellSchema';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { DeepError, DeepPartial, DeepTouched } from '../../../types/helpers';
-import { Summon } from '../../../types/summon';
-import { SIZES } from '../../../constants/sizeContants';
-import { capitalize } from '../../../services/capitalizeService';
-import Size from '../../../types/size';
-import { MONSTER_TYPES } from '../../../constants/monsterTypeConstants';
-import MonsterType from '../../../types/monsterType';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -622,10 +622,30 @@ const Spell = ({
 															top: 0,
 															right: 0,
 															display: 'flex',
-															alignItems: 'center'
+															alignItems: 'center',
+															marginRight: '-0.1rem',
+															marginTop: '-0.1rem',
+															borderTopRightRadius: '1rem'
 														}}
 														onClick={() => {
 															handleRemoveSummon(index);
+															if (touched.summons) {
+																const newTouched = Object.keys(
+																	getSummonTouchedAtIndex(
+																		touched,
+																		index
+																	) as DeepTouched<Summon>
+																).reduce<Partial<DeepTouched<Summon>>>(
+																	(acc, key) => ({ ...acc, [key]: false }),
+																	{}
+																);
+
+																setFieldTouched(
+																	`summons.${index}`,
+																	newTouched as unknown as boolean
+																);
+															}
+
 															setFieldValue(
 																'summons',
 																(values.summons ?? []).length <= 1
@@ -633,7 +653,7 @@ const Spell = ({
 																	: values.summons?.filter(
 																			(s, i) => i !== index
 																	  ),
-																false
+																(values.summons ?? []).length <= 1
 															);
 														}}
 													>
@@ -735,7 +755,7 @@ const Spell = ({
 														/>
 														<Select
 															id={`summon-${index}-type`}
-															label="Type1"
+															label="Type"
 															options={[
 																{ label: '\u2014', value: 'blank' }
 															].concat(
@@ -779,6 +799,359 @@ const Spell = ({
 															error={
 																getSummonErrorAtIndex(errors, index)?.type ??
 																undefined
+															}
+														/>
+													</div>
+													<div
+														style={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'space-evenly',
+															flexWrap: 'wrap'
+														}}
+													>
+														<TextInput
+															id={`summon-${index}-armor-class`}
+															label="Armor Class"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.armorClass`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.armorClass ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	armorClass: event.target.value
+																});
+																setFieldTouched(`summons.${index}.armorClass`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.armorClass ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.armorClass ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-hit-points`}
+															label="Hit Points"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.hitPoints`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.hitPoints ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	hitPoints: event.target.value
+																});
+																setFieldTouched(`summons.${index}.hitPoints`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.hitPoints ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.hitPoints ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-speed`}
+															label="Speed"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.speed`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.speed ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	speed: event.target.value
+																});
+																setFieldTouched(`summons.${index}.speed`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.speed ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.speed ??
+																undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-condition-immunities`}
+															label="Condition Immunities"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.conditionImmunities`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]
+																			?.conditionImmunities ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	conditionImmunities: event.target.value
+																});
+																setFieldTouched(
+																	`summons.${index}.conditionImmunities`
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.conditionImmunities ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.conditionImmunities ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-damage-resistances`}
+															label="Damage Resistances"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.damageResistances`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.damageResistances ??
+																	  ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	damageResistances: event.target.value
+																});
+																setFieldTouched(
+																	`summons.${index}.damageResistances`
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.damageResistances ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.damageResistances ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-damage-immunities`}
+															label="Damage Immunities"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.damageImmunities`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.damageImmunities ??
+																	  ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	damageImmunities: event.target.value
+																});
+																setFieldTouched(
+																	`summons.${index}.damageImmunities`
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.damageImmunities ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.damageImmunities ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-saving-throws`}
+															label="Saving Throws"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.savingThrows`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.savingThrows ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	savingThrows: event.target.value
+																});
+																setFieldTouched(
+																	`summons.${index}.savingThrows`
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.savingThrows ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.savingThrows ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-skills`}
+															label="Skills"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.skills`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.skills ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	skills: event.target.value
+																});
+																setFieldTouched(`summons.${index}.skills`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.skills ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.skills ??
+																undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-senses`}
+															label="Senses"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.senses`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.senses ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	senses: event.target.value
+																});
+																setFieldTouched(`summons.${index}.senses`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.senses ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)?.senses ??
+																undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-languages`}
+															label="Languages"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.languages`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.languages ?? ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	languages: event.target.value
+																});
+																setFieldTouched(`summons.${index}.languages`);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.languages ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.languages ?? undefined
+															}
+														/>
+														<TextInput
+															id={`summon-${index}-proficiency-bonus`}
+															label="Proficiency Bonus"
+															onChange={event => {
+																setFieldValue(
+																	`summons.${index}.proficiencyBonus`,
+																	event.target.value,
+																	false
+																);
+															}}
+															value={
+																values.summons
+																	? values.summons[index]?.proficiencyBonus ??
+																	  ''
+																	: ''
+															}
+															onBlur={event => {
+																handleSetSummonProperties(index, {
+																	proficiencyBonus: event.target.value
+																});
+																setFieldTouched(
+																	`summons.${index}.proficiencyBonus`
+																);
+															}}
+															touched={
+																getSummonTouchedAtIndex(touched, index)
+																	?.proficiencyBonus ?? false
+															}
+															error={
+																getSummonErrorAtIndex(errors, index)
+																	?.proficiencyBonus ?? undefined
 															}
 														/>
 													</div>
