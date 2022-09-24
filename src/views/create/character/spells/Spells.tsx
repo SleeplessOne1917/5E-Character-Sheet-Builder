@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
+import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
-import SpellsKnownDisplay from '../../../../components/character-creation/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
-import SpellsSelector from '../../../../components/character-creation/Spells/SpellsSelector/SpellsSelector';
+import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
+import SpellsSelector from '../../../../components/Create/Character/Spells/SpellsSelector/SpellsSelector';
 import { SrdSpellItem } from '../../../../types/srd';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';

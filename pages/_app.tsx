@@ -11,7 +11,7 @@ import Header from '../src/components/Header/Header';
 import Image from 'next/image';
 import MobileNav from '../src/components/MobileNav/MobileNav';
 import { Provider as ReduxProvider } from 'react-redux';
-import SectionBar from '../src/components/character-creation/SectionBar/SectionBar';
+import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';

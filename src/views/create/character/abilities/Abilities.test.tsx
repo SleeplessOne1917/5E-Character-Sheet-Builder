@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { composeStories } from '@storybook/testing-react';
 import { getAbilityScoresTest } from '../../../../hooks/useGetAbilityScore';
 import { getTestStore } from '../../../../redux/store';
-import { mockAbilities } from '../../../../components/character-creation/Abilities/MockAbilitiesStore';
+import { mockAbilities } from '../../../../components/Create/Character/Abilities/MockAbilitiesStore';
 import userEvent from '@testing-library/user-event';
 
 const { Default } = composeStories(stories);

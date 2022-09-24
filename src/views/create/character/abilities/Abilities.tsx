@@ -16,17 +16,17 @@ import {
 import { addGroup, removeGroup } from '../../../../redux/features/rollGroups';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
-import AbilityCalculation from '../../../../components/character-creation/Abilities/AbilityCalculation/AbilityCalculation';
+import AbilityCalculation from '../../../../components/Create/Character/Abilities/AbilityCalculation/AbilityCalculation';
 import { AbilityItem } from '../../../../types/srd';
 import AbilityScores from '../../../../types/abilityScores';
 import Button from '../../../../components/Button/Button';
-import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
+import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
-import ManualScores from '../../../../components/character-creation/Abilities/ManualScores/ManualScores';
-import PointBuy from '../../../../components/character-creation/Abilities/PointBuy/PointBuy';
-import RollGroup from '../../../../components/character-creation/Abilities/Rolls/RollGroup/RollGroup';
+import ManualScores from '../../../../components/Create/Character/Abilities/ManualScores/ManualScores';
+import PointBuy from '../../../../components/Create/Character/Abilities/PointBuy/PointBuy';
+import RollGroup from '../../../../components/Create/Character/Abilities/Rolls/RollGroup/RollGroup';
 import Select from '../../../../components/Select/Select/Select';
-import StandardArray from '../../../../components/character-creation/Abilities/StandardArray/StandardArray';
+import StandardArray from '../../../../components/Create/Character/Abilities/StandardArray/StandardArray';
 import classes from './Abilities.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
 import { removeClassSpell } from '../../../../redux/features/classInfo';

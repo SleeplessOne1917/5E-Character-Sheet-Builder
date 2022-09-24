@@ -31,13 +31,13 @@ import { getRace, getSubrace } from '../../../../services/raceService';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import Button from '../../../../components/Button/Button';
-import ChooseModal from '../../../../components/character-creation/ChooseModal/ChooseModal';
+import ChooseModal from '../../../../components/Create/Character/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
-import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
+import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
-import Option from '../../../../components/character-creation/Option/Option';
-import SelectedRaceDisplay from '../../../../components/character-creation/Race/SelectedRaceDisplay/SelectedRaceDisplay';
+import Option from '../../../../components/Create/Character/Option/Option';
+import SelectedRaceDisplay from '../../../../components/Create/Character/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';

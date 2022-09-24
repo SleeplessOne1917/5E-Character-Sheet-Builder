@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../redux/store';
-import { mockAbilities } from '../../../../components/character-creation/Abilities/MockAbilitiesStore';
+import { mockAbilities } from '../../../../components/Create/Character/Abilities/MockAbilitiesStore';
 
 export default {
 	title: 'Views/Class',

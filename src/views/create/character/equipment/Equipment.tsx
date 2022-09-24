@@ -1,4 +1,4 @@
-import GeneralInfoBar from '../../../../components/character-creation/GeneralInfoBar/GeneralInfoBar';
+import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { SrdItem } from '../../../../types/srd';
 

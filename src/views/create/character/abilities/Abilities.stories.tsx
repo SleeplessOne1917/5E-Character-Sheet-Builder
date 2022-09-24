@@ -4,7 +4,7 @@ import Abilities from './Abilities';
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';
 import { getTestStore } from '../../../../redux/store';
-import { mockAbilities } from '../../../../components/character-creation/Abilities/MockAbilitiesStore';
+import { mockAbilities } from '../../../../components/Create/Character/Abilities/MockAbilitiesStore';
 
 const MockStore = ({ children }: { children: ReactNode }) => (
 	<Provider store={getTestStore()}>{children}</Provider>
