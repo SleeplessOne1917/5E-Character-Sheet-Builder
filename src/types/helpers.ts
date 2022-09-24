@@ -6,18 +6,18 @@ export type DeepPartial<T> = T extends object
 	? DeepPartial<U>[]
 	: T;
 
-export type DeepTouched<T> = {
-	[K in keyof T]: T[K] extends (infer U)[]
-		? { [I in keyof U]: boolean }[]
-		: T[K] extends object
-		? { [I in keyof T[K]]: boolean }
-		: boolean;
-};
+export type DeepTouched<T> = T extends object
+	? {
+			[K in keyof T]?: DeepTouched<Required<T>[K]>;
+	  }
+	: T extends (infer U)[]
+	? DeepTouched<U>[]
+	: boolean;
 
-export type DeepError<T> = {
-	[K in keyof T]: T[K] extends (infer U)[]
-		? { [I in keyof U]: string }[]
-		: T[K] extends object
-		? { [I in keyof T[K]]: string }
-		: string;
-};
+export type DeepError<T> = T extends object
+	? {
+			[K in keyof T]?: DeepError<Required<T>[K]>;
+	  }
+	: T extends (infer U)[]
+	? DeepError<U>[]
+	: string;

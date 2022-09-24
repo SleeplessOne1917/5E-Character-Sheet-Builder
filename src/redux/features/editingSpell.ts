@@ -95,7 +95,10 @@ const editingSpellSlice = createSlice({
 				state.summons = [];
 			}
 
-			state.summons = [...state.summons, {}];
+			state.summons = [
+				...state.summons,
+				{ actions: [{ name: '', description: '' }] }
+			];
 		},
 		setSummonProperties: (
 			state,

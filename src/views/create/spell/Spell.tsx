@@ -70,6 +70,8 @@ const getSummonErrorAtIndex = (
 		? (errors.summons as never as DeepError<Summon>[])[index]
 		: undefined;
 
+const MAX_SUMMONS_OR_ACTIONS = 5;
+
 const Spell = ({
 	magicSchools,
 	loading,
@@ -1155,9 +1157,459 @@ const Spell = ({
 															}
 														/>
 													</div>
+													<div>
+														<div className={classes.actions}>
+															<h3>Actions</h3>
+															{values.summons &&
+																values.summons[index].actions?.map(
+																	(action, i) => (
+																		<div key={i} className={classes.action}>
+																			<TextInput
+																				id={`summon-${index}-actions-${i}-name`}
+																				label="Name"
+																				onChange={event => {
+																					setFieldValue(
+																						`summons.${index}.actions.${i}.name`,
+																						event.target.value,
+																						false
+																					);
+																				}}
+																				value={action?.name ?? ''}
+																				onBlur={event => {
+																					handleSetSummonProperties(index, {
+																						actions: (
+																							values.summons as DeepPartial<Summon>[]
+																						)[index].actions?.map((val, j) =>
+																							j === i
+																								? {
+																										...val,
+																										name: event.target.value
+																								  }
+																								: val
+																						)
+																					});
+																					setFieldTouched(
+																						`summons.${index}.actions.${i}.name`
+																					);
+																				}}
+																				touched={
+																					(getSummonTouchedAtIndex(
+																						touched,
+																						index
+																					)?.actions ?? [{}])[i]?.name
+																				}
+																				error={
+																					(getSummonErrorAtIndex(errors, index)
+																						?.actions ?? [{}])[i]?.name
+																				}
+																			/>
+																			{values.summons &&
+																				(values.summons[index].actions
+																					?.length ?? 0) > 1 && (
+																					<Button
+																						size="small"
+																						onClick={() => {
+																							const actions = (
+																								values.summons as DeepPartial<Summon>[]
+																							)[index].actions?.filter(
+																								(_, j) => j !== i
+																							);
+																							handleSetSummonProperties(index, {
+																								actions
+																							});
+																							setFieldValue(
+																								`summons.${index}.actions`,
+																								actions,
+																								false
+																							);
+																						}}
+																						style={{
+																							display: 'flex',
+																							alignItems: 'center',
+																							position: 'absolute',
+																							top: 0,
+																							right: 0,
+																							borderTopRightRadius: '1rem',
+																							marginTop: '-0.1rem',
+																							marginRight: '-0.1rem'
+																						}}
+																					>
+																						<XMarkIcon
+																							className={
+																								classes['close-button-icon']
+																							}
+																						/>
+																						Remove Action
+																					</Button>
+																				)}
+																			<label
+																				htmlFor={`summons-${index}-actions-${i}-description`}
+																				className={
+																					classes['action-description-label']
+																				}
+																			>
+																				Description
+																			</label>
+																			<div
+																				style={{
+																					display: 'flex',
+																					flexDirection: 'column',
+																					alignItems: 'center'
+																				}}
+																			>
+																				<textarea
+																					id={`summons-${index}-actions-${i}-description`}
+																					className={`${classes['text-input']}${
+																						(getSummonTouchedAtIndex(
+																							touched,
+																							index
+																						)?.actions ?? [{}])[i]
+																							?.description &&
+																						(getSummonErrorAtIndex(
+																							errors,
+																							index
+																						)?.actions ?? [{}])[i]?.description
+																							? ` ${classes.error}`
+																							: ''
+																					}`}
+																					rows={7}
+																					value={action?.description}
+																					onChange={event => {
+																						setFieldValue(
+																							`summons.${index}.actions.${i}.description`,
+																							event.target.value,
+																							false
+																						);
+																					}}
+																					onBlur={event => {
+																						handleSetSummonProperties(index, {
+																							actions: (
+																								values.summons as DeepPartial<Summon>[]
+																							)[index].actions?.map((val, j) =>
+																								j === i
+																									? {
+																											...val,
+																											description:
+																												event.target.value
+																									  }
+																									: val
+																							)
+																						});
+																						setFieldTouched(
+																							`summons.${index}.actions.${i}.description`
+																						);
+																					}}
+																				></textarea>
+																				{(getSummonTouchedAtIndex(
+																					touched,
+																					index
+																				)?.actions ?? [{}])[i]?.description &&
+																					(getSummonErrorAtIndex(errors, index)
+																						?.actions ?? [{}])[i]
+																						?.description && (
+																						<div
+																							className={
+																								classes['error-message']
+																							}
+																						>
+																							{
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.actions ?? [{}])[i]
+																									?.description
+																							}
+																						</div>
+																					)}
+																			</div>
+																		</div>
+																	)
+																)}
+															{values.summons &&
+																(values.summons[index].actions?.length ?? 0) <
+																	MAX_SUMMONS_OR_ACTIONS && (
+																	<Button
+																		positive
+																		style={{
+																			display: 'flex',
+																			alignItems: 'center'
+																		}}
+																		onClick={() => {
+																			const actions = [
+																				...((
+																					values.summons as DeepPartial<Summon>[]
+																				)[index].actions ?? []),
+																				{ name: '', description: '' }
+																			];
+
+																			handleSetSummonProperties(index, {
+																				actions
+																			});
+
+																			setFieldValue(
+																				`summons.${index}.actions`,
+																				actions,
+																				false
+																			);
+																		}}
+																	>
+																		<PlusIcon
+																			className={classes['button-icon']}
+																		/>
+																		Add Action
+																	</Button>
+																)}
+														</div>
+														<div className={classes.actions}>
+															{values.summons &&
+																values.summons[index].specialAbilities &&
+																(values.summons[index].specialAbilities
+																	?.length ?? 0) > 0 && (
+																	<>
+																		<h3>Special Abilities</h3>
+																		{values.summons &&
+																			values.summons[
+																				index
+																			].specialAbilities?.map(
+																				(specialAbility, i) => (
+																					<div
+																						key={i}
+																						className={classes.action}
+																					>
+																						<TextInput
+																							id={`summon-${index}-special-abilities-${i}-name`}
+																							label="Name"
+																							onChange={event => {
+																								setFieldValue(
+																									`summons.${index}.specialAbilities.${i}.name`,
+																									event.target.value,
+																									false
+																								);
+																							}}
+																							value={specialAbility?.name ?? ''}
+																							onBlur={event => {
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										specialAbilities: (
+																											values.summons as DeepPartial<Summon>[]
+																										)[
+																											index
+																										].specialAbilities?.map(
+																											(val, j) =>
+																												j === i
+																													? {
+																															...val,
+																															name: event.target
+																																.value
+																													  }
+																													: val
+																										)
+																									}
+																								);
+																								setFieldTouched(
+																									`summons.${index}.specialAbilities.${i}.name`
+																								);
+																							}}
+																							touched={
+																								(getSummonTouchedAtIndex(
+																									touched,
+																									index
+																								)?.specialAbilities ?? [{}])[i]
+																									?.name
+																							}
+																							error={
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.specialAbilities ?? [{}])[i]
+																									?.name
+																							}
+																						/>
+																						<Button
+																							size="small"
+																							onClick={() => {
+																								const specialAbilities = (
+																									values.summons as DeepPartial<Summon>[]
+																								)[
+																									index
+																								].specialAbilities?.filter(
+																									(_, j) => j !== i
+																								);
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										specialAbilities
+																									}
+																								);
+																								setFieldValue(
+																									`summons.${index}.specialAbilities`,
+																									specialAbilities,
+																									false
+																								);
+																							}}
+																							style={{
+																								display: 'flex',
+																								alignItems: 'center',
+																								position: 'absolute',
+																								top: 0,
+																								right: 0,
+																								marginTop: '-0.1rem',
+																								marginRight: '-0.1rem',
+																								borderTopRightRadius: '1rem'
+																							}}
+																						>
+																							<XMarkIcon
+																								className={
+																									classes['close-button-icon']
+																								}
+																							/>
+																							Remove Action
+																						</Button>
+																						<label
+																							htmlFor={`summons-${index}-special-abilities-${i}-description`}
+																							className={
+																								classes[
+																									'action-description-label'
+																								]
+																							}
+																						>
+																							Description
+																						</label>
+																						<div
+																							style={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								alignItems: 'center'
+																							}}
+																						>
+																							<textarea
+																								id={`summons-${index}-special-abilities-${i}-description`}
+																								className={`${
+																									classes['text-input']
+																								}${
+																									(getSummonTouchedAtIndex(
+																										touched,
+																										index
+																									)?.specialAbilities ?? [{}])[
+																										i
+																									]?.description &&
+																									(getSummonErrorAtIndex(
+																										errors,
+																										index
+																									)?.specialAbilities ?? [{}])[
+																										i
+																									]?.description
+																										? ` ${classes.error}`
+																										: ''
+																								}`}
+																								rows={7}
+																								value={
+																									specialAbility?.description
+																								}
+																								onChange={event => {
+																									setFieldValue(
+																										`summons.${index}.specialAbilities.${i}.description`,
+																										event.target.value,
+																										false
+																									);
+																								}}
+																								onBlur={event => {
+																									handleSetSummonProperties(
+																										index,
+																										{
+																											specialAbilities: (
+																												values.summons as DeepPartial<Summon>[]
+																											)[
+																												index
+																											].specialAbilities?.map(
+																												(val, j) =>
+																													j === i
+																														? {
+																																...val,
+																																description:
+																																	event.target
+																																		.value
+																														  }
+																														: val
+																											)
+																										}
+																									);
+																									setFieldTouched(
+																										`summons.${index}.specialAbilities.${i}.description`
+																									);
+																								}}
+																							></textarea>
+																							{(getSummonTouchedAtIndex(
+																								touched,
+																								index
+																							)?.specialAbilities ?? [{}])[i]
+																								?.description &&
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.specialAbilities ?? [{}])[i]
+																									?.description && (
+																									<div
+																										className={
+																											classes['error-message']
+																										}
+																									>
+																										{
+																											(getSummonErrorAtIndex(
+																												errors,
+																												index
+																											)?.specialAbilities ?? [
+																												{}
+																											])[i]?.description
+																										}
+																									</div>
+																								)}
+																						</div>
+																					</div>
+																				)
+																			)}
+																	</>
+																)}
+															{values.summons &&
+																(values.summons[index].specialAbilities
+																	?.length ?? 0) < MAX_SUMMONS_OR_ACTIONS && (
+																	<Button
+																		positive
+																		style={{
+																			display: 'flex',
+																			alignItems: 'center'
+																		}}
+																		onClick={() => {
+																			const specialAbilities = [
+																				...((
+																					values.summons as DeepPartial<Summon>[]
+																				)[index].specialAbilities ?? []),
+																				{ name: '', description: '' }
+																			];
+
+																			handleSetSummonProperties(index, {
+																				specialAbilities
+																			});
+
+																			setFieldValue(
+																				`summons.${index}.specialAbilities`,
+																				specialAbilities,
+																				false
+																			);
+																		}}
+																	>
+																		<PlusIcon
+																			className={classes['button-icon']}
+																		/>
+																		Add Special Ability
+																	</Button>
+																)}
+														</div>
+													</div>
 												</div>
 											))}
-											{values.summons.length < 5 && (
+											{values.summons.length < MAX_SUMMONS_OR_ACTIONS && (
 												<Button
 													positive
 													style={{ display: 'flex', alignItems: 'center' }}
@@ -1165,7 +1617,12 @@ const Spell = ({
 														handleAddSummon();
 														setFieldValue(
 															'summons',
-															[...(values.summons ?? []), {}],
+															[
+																...(values.summons ?? []),
+																{
+																	actions: [{ name: '', description: '' }]
+																} as DeepPartial<Summon>
+															],
 															false
 														);
 													}}
@@ -1183,7 +1640,12 @@ const Spell = ({
 												handleAddSummon();
 												setFieldValue(
 													'summons',
-													[...(values.summons ?? []), {}],
+													[
+														...(values.summons ?? []),
+														{
+															actions: [{ name: '', description: '' }]
+														} as DeepPartial<Summon>
+													],
 													false
 												);
 											}}

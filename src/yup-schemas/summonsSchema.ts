@@ -5,17 +5,18 @@ import { SIZES } from '../constants/sizeContants';
 const isGTE3 = (num: number | undefined) => !!num && num >= 3;
 const isLTE30 = (num: number | undefined) => !!num && num <= 30;
 
-const nameDescriptionSchema = object({
-	name: string()
-		.required('Summon special ability name is required')
-		.max(30, 'Summon special ability name cannot be more than 30 characters'),
-	description: string()
-		.required('Summon special ability description is required')
-		.max(
-			500,
-			'Summon special ability description cannot be more than 500 characters'
-		)
-});
+const getNameDescriptionSchema = (fieldName: string) =>
+	object({
+		name: string()
+			.required(`Summon ${fieldName} name is required`)
+			.max(30, `Summon ${fieldName} name cannot be more than 30 characters`),
+		description: string()
+			.required(`Summon ${fieldName} description is required`)
+			.max(
+				500,
+				`Summon ${fieldName} description cannot be more than 500 characters`
+			)
+	});
 
 const summonsSchema = array()
 	.of(
@@ -164,18 +165,25 @@ const summonsSchema = array()
 				.max(50, 'Summon proficiency bonus cannot be more than 50 characters')
 				.required('Summon proficiency bonus is required'),
 			specialAbilities: array()
-				.of(nameDescriptionSchema)
+				.of(getNameDescriptionSchema('special ability'))
 				.optional()
-				.default(undefined),
+				.default(undefined)
+				.max(5, 'Cannot have more than 5 summon special abilities'),
 			actions: array()
-				.of(nameDescriptionSchema)
+				.of(getNameDescriptionSchema('action'))
 				.required('Summon actions are required')
-				.min(1, 'Summon actions must have at least 1 action'),
+				.min(1, 'Summon actions must have at least 1 action')
+				.max(5, 'Cannot have more than 5 summon actions'),
 			bonusActions: array()
-				.of(nameDescriptionSchema)
+				.of(getNameDescriptionSchema('bonus action'))
 				.optional()
-				.default(undefined),
-			reactions: array().of(nameDescriptionSchema).optional().default(undefined)
+				.default(undefined)
+				.max(5, 'Cannot have more than 5 summon bonus actions'),
+			reactions: array()
+				.of(getNameDescriptionSchema('reaction'))
+				.optional()
+				.default(undefined)
+				.max(5, 'Cannot have more than 5 summon reactions')
 		})
 	)
 	.optional()
