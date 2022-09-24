@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Option from './Option';
 
 export default {
-	title: 'Components/CharacterCreation/Option',
+	title: 'Components/Create/Character/Option',
 	component: Option,
 	argTypes: {
 		onChoose: { type: 'function' }

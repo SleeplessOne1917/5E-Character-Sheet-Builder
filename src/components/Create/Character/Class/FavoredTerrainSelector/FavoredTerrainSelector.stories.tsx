@@ -4,7 +4,7 @@ import { getTestStore } from '../../../../../redux/store';
 import FavoredTerrainSelector from './FavoredTerrainSelector';
 
 export default {
-	title: 'Components/CharacterCreation/Class/FavoredTerrainSelector',
+	title: 'Components/Create/Character/Class/FavoredTerrainSelector',
 	component: FavoredTerrainSelector,
 	args: {
 		value: 'desert'

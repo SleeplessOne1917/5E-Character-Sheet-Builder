@@ -95,7 +95,7 @@ const MockStore = ({ children }: { children: ReactNode }) => (
 );
 
 export default {
-	title: 'Components/CharacterCreation/Abilities/Rolls/RollGroup',
+	title: 'Components/Create/Character/Abilities/Rolls/RollGroup',
 	component: RollGroup,
 	args: {
 		abilities: mockAbilities

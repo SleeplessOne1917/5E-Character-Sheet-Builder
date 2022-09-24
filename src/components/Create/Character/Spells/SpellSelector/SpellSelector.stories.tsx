@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import SpellSelector from './SpellSelector';
 
 export default {
-	title: 'Components/CharacterCreation/Spells/SpellSelector',
+	title: 'Components/Create/Character/Spells/SpellSelector',
 	component: SpellSelector,
 	args: {
 		item: {

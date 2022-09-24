@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import SectionBar from './SectionBar';
 
 export default {
-	title: 'Components/CharacterCreation/SectionBar',
+	title: 'Components/Create/Character/SectionBar',
 	component: SectionBar,
 	parameters: {
 		nextRouter: {

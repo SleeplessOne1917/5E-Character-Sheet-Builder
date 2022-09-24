@@ -6,7 +6,7 @@ import { getTestStore } from '../../../../../../redux/store';
 
 export default {
 	title:
-		'Components/CharacterCreation/Race/ChoiceSelector/DraconicAncestryChoiceSelector',
+		'Components/Create/Character/Race/ChoiceSelector/DraconicAncestryChoiceSelector',
 	component: DraconicAncestryChoiceSelector,
 	args: {
 		choice: {

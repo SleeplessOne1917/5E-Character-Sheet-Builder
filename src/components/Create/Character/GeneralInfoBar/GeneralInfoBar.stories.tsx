@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../../redux/store';
 
 export default {
-	title: 'Components/CharacterCreation/GeneralInfoBar',
+	title: 'Components/Create/Character/GeneralInfoBar',
 	component: GeneralInfoBar,
 	decorators: [
 		Story => (

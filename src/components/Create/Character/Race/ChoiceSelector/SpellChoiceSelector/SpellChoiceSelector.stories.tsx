@@ -5,7 +5,7 @@ import SpellChoiceSelector from './SpellChoiceSelector';
 import { getTestStore } from '../../../../../../redux/store';
 
 export default {
-	title: 'Components/CharacterCreation/Race/ChoiceSelector/SpellChoiceSelector',
+	title: 'Components/Create/Character/Race/ChoiceSelector/SpellChoiceSelector',
 	component: SpellChoiceSelector,
 	decorators: [
 		Story => (

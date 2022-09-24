@@ -4,7 +4,7 @@ import { getTestStore } from '../../../../../redux/store';
 import ExpertiseSelector from './ExpertiseSelector';
 
 export default {
-	title: 'Components/CharacterCreation/Class/ExpertiseSelector',
+	title: 'Components/Create/Character/Class/ExpertiseSelector',
 	component: ExpertiseSelector,
 	decorators: [
 		Story => (

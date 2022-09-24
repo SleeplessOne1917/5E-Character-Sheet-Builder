@@ -6,7 +6,7 @@ import { getTestStore } from '../../../../../../redux/store';
 
 export default {
 	title:
-		'Components/CharacterCreation/Race/ChoiceSelector/LanguageChoiceSelector',
+		'Components/Create/Character/Race/ChoiceSelector/LanguageChoiceSelector',
 	component: LanguageChoiceSelector,
 	args: {
 		choice: {

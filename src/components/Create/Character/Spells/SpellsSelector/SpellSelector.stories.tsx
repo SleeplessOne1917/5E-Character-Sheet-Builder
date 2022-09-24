@@ -5,7 +5,7 @@ import SpellsSelector from './SpellsSelector';
 import { getTestStore } from '../../../../../redux/store';
 
 export default {
-	title: 'Components/CharacterCreation/Spells/SpellsSelector',
+	title: 'Components/Create/Character/Spells/SpellsSelector',
 	component: SpellsSelector,
 	args: {
 		choose: 5,

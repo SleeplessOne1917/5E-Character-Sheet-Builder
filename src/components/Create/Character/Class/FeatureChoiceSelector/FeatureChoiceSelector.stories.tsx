@@ -5,7 +5,7 @@ import { getTestStore } from '../../../../../redux/store';
 import FeatureChoiceSelector from './FeatureChoiceSelector';
 
 export default {
-	title: 'Components/CharacterCreation/Class/FeatureChoiceSelector',
+	title: 'Components/Create/Character/Class/FeatureChoiceSelector',
 	component: FeatureChoiceSelector,
 	args: {
 		choose: 1,

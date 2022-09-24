@@ -6,7 +6,7 @@ import { getTestStore } from '../../../../../../redux/store';
 
 export default {
 	title:
-		'Components/CharacterCreation/Race/ChoiceSelector/ProficiencyChoiceSelector',
+		'Components/Create/Character/Race/ChoiceSelector/ProficiencyChoiceSelector',
 	component: ProficiencyChoiceSelector,
 	args: {
 		choice: {

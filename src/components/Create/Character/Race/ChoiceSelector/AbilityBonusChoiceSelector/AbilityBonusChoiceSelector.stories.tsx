@@ -6,7 +6,7 @@ import { getTestStore } from '../../../../../../redux/store';
 
 export default {
 	title:
-		'Components/CharacterCreation/Race/ChoiceSelector/AbilityBonusChoiceSelector',
+		'Components/Create/Character/Race/ChoiceSelector/AbilityBonusChoiceSelector',
 	component: AbilityBonusChoiceSelector,
 	decorators: [
 		Story => (

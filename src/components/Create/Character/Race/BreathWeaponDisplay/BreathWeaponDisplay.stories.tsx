@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import BreathWeaponDisplay from './BreathWeaponDisplay';
 
 export default {
-	title: 'Components/CharacterCreation/Race/BreathWeaponDisplay',
+	title: 'Components/Create/Character/Race/BreathWeaponDisplay',
 	component: BreathWeaponDisplay,
 	args: {
 		breathWeapon: {

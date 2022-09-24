@@ -1,0 +1,166 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly for actions 1`] = `
+<div
+  class="actions"
+  data-testid="summon-actions"
+>
+  <h3>
+    Actions
+  </h3>
+  <div
+    class="action"
+    data-testid="summon-action"
+  >
+    <div
+      class="input-and-error-container"
+      data-testid="text-input"
+    >
+      <div
+        class="input-and-label-container"
+      >
+        <div
+          class="input-container"
+        >
+          <input
+            class="input"
+            id="summon-0-actions-0-name"
+            name="summon-0-actions-0-name"
+            type="text"
+            value=""
+          />
+        </div>
+        <label
+          class="label"
+          for="summon-0-actions-0-name"
+        >
+          Name
+        </label>
+      </div>
+    </div>
+    <label
+      class="action-description-label"
+      for="summons-0-actions-0-description"
+    >
+      Description
+    </label>
+    <div
+      style="display: flex; flex-direction: column; align-items: center;"
+    >
+      <textarea
+        class="text-input"
+        id="summons-0-actions-0-description"
+        rows="7"
+      />
+    </div>
+  </div>
+  <button
+    class="button positive"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="button-icon"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+        fill-rule="evenodd"
+      />
+    </svg>
+    Add 
+    Action
+  </button>
+</div>
+`;
+
+exports[`renders correctly for bonus actions 1`] = `
+<div
+  class="actions"
+  data-testid="summon-actions"
+>
+  <button
+    class="button positive"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="button-icon"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+        fill-rule="evenodd"
+      />
+    </svg>
+    Add 
+    Bonus Action
+  </button>
+</div>
+`;
+
+exports[`renders correctly for reactions 1`] = `
+<div
+  class="actions"
+  data-testid="summon-actions"
+>
+  <button
+    class="button positive"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="button-icon"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+        fill-rule="evenodd"
+      />
+    </svg>
+    Add 
+    Reactions
+  </button>
+</div>
+`;
+
+exports[`renders correctly for special abilities 1`] = `
+<div
+  class="actions"
+  data-testid="summon-actions"
+>
+  <button
+    class="button positive"
+    style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="button-icon"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+        fill-rule="evenodd"
+      />
+    </svg>
+    Add 
+    Special Ability
+  </button>
+</div>
+`;
