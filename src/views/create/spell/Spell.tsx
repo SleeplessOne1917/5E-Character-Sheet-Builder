@@ -1464,7 +1464,7 @@ const Spell = ({
 																									classes['close-button-icon']
 																								}
 																							/>
-																							Remove Action
+																							Remove Special Ability
 																						</Button>
 																						<label
 																							htmlFor={`summons-${index}-special-abilities-${i}-description`}
@@ -1603,6 +1603,473 @@ const Spell = ({
 																			className={classes['button-icon']}
 																		/>
 																		Add Special Ability
+																	</Button>
+																)}
+														</div>
+														<div className={classes.actions}>
+															{values.summons &&
+																values.summons[index].bonusActions &&
+																(values.summons[index].bonusActions?.length ??
+																	0) > 0 && (
+																	<>
+																		<h3>Bonus Actions</h3>
+																		{values.summons &&
+																			values.summons[index].bonusActions?.map(
+																				(bonusAction, i) => (
+																					<div
+																						key={i}
+																						className={classes.action}
+																					>
+																						<TextInput
+																							id={`summon-${index}-bonus-actions-${i}-name`}
+																							label="Name"
+																							onChange={event => {
+																								setFieldValue(
+																									`summons.${index}.bonusActions.${i}.name`,
+																									event.target.value,
+																									false
+																								);
+																							}}
+																							value={bonusAction?.name ?? ''}
+																							onBlur={event => {
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										bonusActions: (
+																											values.summons as DeepPartial<Summon>[]
+																										)[index].bonusActions?.map(
+																											(val, j) =>
+																												j === i
+																													? {
+																															...val,
+																															name: event.target
+																																.value
+																													  }
+																													: val
+																										)
+																									}
+																								);
+																								setFieldTouched(
+																									`summons.${index}.bonusActions.${i}.name`
+																								);
+																							}}
+																							touched={
+																								(getSummonTouchedAtIndex(
+																									touched,
+																									index
+																								)?.bonusActions ?? [{}])[i]
+																									?.name
+																							}
+																							error={
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.bonusActions ?? [{}])[i]
+																									?.name
+																							}
+																						/>
+																						<Button
+																							size="small"
+																							onClick={() => {
+																								const bonusActions = (
+																									values.summons as DeepPartial<Summon>[]
+																								)[index].bonusActions?.filter(
+																									(_, j) => j !== i
+																								);
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										bonusActions
+																									}
+																								);
+																								setFieldValue(
+																									`summons.${index}.bonusActions`,
+																									bonusActions,
+																									false
+																								);
+																							}}
+																							style={{
+																								display: 'flex',
+																								alignItems: 'center',
+																								position: 'absolute',
+																								top: 0,
+																								right: 0,
+																								marginTop: '-0.1rem',
+																								marginRight: '-0.1rem',
+																								borderTopRightRadius: '1rem'
+																							}}
+																						>
+																							<XMarkIcon
+																								className={
+																									classes['close-button-icon']
+																								}
+																							/>
+																							Remove Bonus Action
+																						</Button>
+																						<label
+																							htmlFor={`summons-${index}-bonus-actions-${i}-description`}
+																							className={
+																								classes[
+																									'action-description-label'
+																								]
+																							}
+																						>
+																							Description
+																						</label>
+																						<div
+																							style={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								alignItems: 'center'
+																							}}
+																						>
+																							<textarea
+																								id={`summons-${index}-bonus-actions-${i}-description`}
+																								className={`${
+																									classes['text-input']
+																								}${
+																									(getSummonTouchedAtIndex(
+																										touched,
+																										index
+																									)?.bonusActions ?? [{}])[i]
+																										?.description &&
+																									(getSummonErrorAtIndex(
+																										errors,
+																										index
+																									)?.bonusActions ?? [{}])[i]
+																										?.description
+																										? ` ${classes.error}`
+																										: ''
+																								}`}
+																								rows={7}
+																								value={bonusAction?.description}
+																								onChange={event => {
+																									setFieldValue(
+																										`summons.${index}.bonusActions.${i}.description`,
+																										event.target.value,
+																										false
+																									);
+																								}}
+																								onBlur={event => {
+																									handleSetSummonProperties(
+																										index,
+																										{
+																											bonusActions: (
+																												values.summons as DeepPartial<Summon>[]
+																											)[
+																												index
+																											].bonusActions?.map(
+																												(val, j) =>
+																													j === i
+																														? {
+																																...val,
+																																description:
+																																	event.target
+																																		.value
+																														  }
+																														: val
+																											)
+																										}
+																									);
+																									setFieldTouched(
+																										`summons.${index}.bonusActions.${i}.description`
+																									);
+																								}}
+																							></textarea>
+																							{(getSummonTouchedAtIndex(
+																								touched,
+																								index
+																							)?.bonusActions ?? [{}])[i]
+																								?.description &&
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.bonusActions ?? [{}])[i]
+																									?.description && (
+																									<div
+																										className={
+																											classes['error-message']
+																										}
+																									>
+																										{
+																											(getSummonErrorAtIndex(
+																												errors,
+																												index
+																											)?.bonusActions ?? [{}])[
+																												i
+																											]?.description
+																										}
+																									</div>
+																								)}
+																						</div>
+																					</div>
+																				)
+																			)}
+																	</>
+																)}
+															{values.summons &&
+																(values.summons[index].bonusActions?.length ??
+																	0) < MAX_SUMMONS_OR_ACTIONS && (
+																	<Button
+																		positive
+																		style={{
+																			display: 'flex',
+																			alignItems: 'center'
+																		}}
+																		onClick={() => {
+																			const bonusActions = [
+																				...((
+																					values.summons as DeepPartial<Summon>[]
+																				)[index].bonusActions ?? []),
+																				{ name: '', description: '' }
+																			];
+
+																			handleSetSummonProperties(index, {
+																				bonusActions
+																			});
+
+																			setFieldValue(
+																				`summons.${index}.bonusActions`,
+																				bonusActions,
+																				false
+																			);
+																		}}
+																	>
+																		<PlusIcon
+																			className={classes['button-icon']}
+																		/>
+																		Add Bonus Action
+																	</Button>
+																)}
+														</div>
+														<div className={classes.actions}>
+															{values.summons &&
+																values.summons[index].reactions &&
+																(values.summons[index].reactions?.length ?? 0) >
+																	0 && (
+																	<>
+																		<h3>Reactions</h3>
+																		{values.summons &&
+																			values.summons[index].reactions?.map(
+																				(reaction, i) => (
+																					<div
+																						key={i}
+																						className={classes.action}
+																					>
+																						<TextInput
+																							id={`summon-${index}-reactions-${i}-name`}
+																							label="Name"
+																							onChange={event => {
+																								setFieldValue(
+																									`summons.${index}.reactions.${i}.name`,
+																									event.target.value,
+																									false
+																								);
+																							}}
+																							value={reaction?.name ?? ''}
+																							onBlur={event => {
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										bonusActions: (
+																											values.summons as DeepPartial<Summon>[]
+																										)[index].reactions?.map(
+																											(val, j) =>
+																												j === i
+																													? {
+																															...val,
+																															name: event.target
+																																.value
+																													  }
+																													: val
+																										)
+																									}
+																								);
+																								setFieldTouched(
+																									`summons.${index}.reactions.${i}.name`
+																								);
+																							}}
+																							touched={
+																								(getSummonTouchedAtIndex(
+																									touched,
+																									index
+																								)?.reactions ?? [{}])[i]?.name
+																							}
+																							error={
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.reactions ?? [{}])[i]?.name
+																							}
+																						/>
+																						<Button
+																							size="small"
+																							onClick={() => {
+																								const reactions = (
+																									values.summons as DeepPartial<Summon>[]
+																								)[index].reactions?.filter(
+																									(_, j) => j !== i
+																								);
+																								handleSetSummonProperties(
+																									index,
+																									{
+																										reactions
+																									}
+																								);
+																								setFieldValue(
+																									`summons.${index}.reactions`,
+																									reactions,
+																									false
+																								);
+																							}}
+																							style={{
+																								display: 'flex',
+																								alignItems: 'center',
+																								position: 'absolute',
+																								top: 0,
+																								right: 0,
+																								marginTop: '-0.1rem',
+																								marginRight: '-0.1rem',
+																								borderTopRightRadius: '1rem'
+																							}}
+																						>
+																							<XMarkIcon
+																								className={
+																									classes['close-button-icon']
+																								}
+																							/>
+																							Remove Reaction
+																						</Button>
+																						<label
+																							htmlFor={`summons-${index}-reactions-${i}-description`}
+																							className={
+																								classes[
+																									'action-description-label'
+																								]
+																							}
+																						>
+																							Description
+																						</label>
+																						<div
+																							style={{
+																								display: 'flex',
+																								flexDirection: 'column',
+																								alignItems: 'center'
+																							}}
+																						>
+																							<textarea
+																								id={`summons-${index}-reactions-${i}-description`}
+																								className={`${
+																									classes['text-input']
+																								}${
+																									(getSummonTouchedAtIndex(
+																										touched,
+																										index
+																									)?.reactions ?? [{}])[i]
+																										?.description &&
+																									(getSummonErrorAtIndex(
+																										errors,
+																										index
+																									)?.reactions ?? [{}])[i]
+																										?.description
+																										? ` ${classes.error}`
+																										: ''
+																								}`}
+																								rows={7}
+																								value={reaction?.description}
+																								onChange={event => {
+																									setFieldValue(
+																										`summons.${index}.reactions.${i}.description`,
+																										event.target.value,
+																										false
+																									);
+																								}}
+																								onBlur={event => {
+																									handleSetSummonProperties(
+																										index,
+																										{
+																											reactions: (
+																												values.summons as DeepPartial<Summon>[]
+																											)[index].reactions?.map(
+																												(val, j) =>
+																													j === i
+																														? {
+																																...val,
+																																description:
+																																	event.target
+																																		.value
+																														  }
+																														: val
+																											)
+																										}
+																									);
+																									setFieldTouched(
+																										`summons.${index}.reactions.${i}.description`
+																									);
+																								}}
+																							></textarea>
+																							{(getSummonTouchedAtIndex(
+																								touched,
+																								index
+																							)?.reactions ?? [{}])[i]
+																								?.description &&
+																								(getSummonErrorAtIndex(
+																									errors,
+																									index
+																								)?.reactions ?? [{}])[i]
+																									?.description && (
+																									<div
+																										className={
+																											classes['error-message']
+																										}
+																									>
+																										{
+																											(getSummonErrorAtIndex(
+																												errors,
+																												index
+																											)?.reactions ?? [{}])[i]
+																												?.description
+																										}
+																									</div>
+																								)}
+																						</div>
+																					</div>
+																				)
+																			)}
+																	</>
+																)}
+															{values.summons &&
+																(values.summons[index].reactions?.length ?? 0) <
+																	MAX_SUMMONS_OR_ACTIONS && (
+																	<Button
+																		positive
+																		style={{
+																			display: 'flex',
+																			alignItems: 'center'
+																		}}
+																		onClick={() => {
+																			const reactions = [
+																				...((
+																					values.summons as DeepPartial<Summon>[]
+																				)[index].reactions ?? []),
+																				{ name: '', description: '' }
+																			];
+
+																			handleSetSummonProperties(index, {
+																				reactions
+																			});
+
+																			setFieldValue(
+																				`summons.${index}.reactions`,
+																				reactions,
+																				false
+																			);
+																		}}
+																	>
+																		<PlusIcon
+																			className={classes['button-icon']}
+																		/>
+																		Add Reaction
 																	</Button>
 																)}
 														</div>
