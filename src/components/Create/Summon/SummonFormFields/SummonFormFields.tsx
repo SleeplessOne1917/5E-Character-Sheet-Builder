@@ -1,19 +1,21 @@
-import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { AbilityItem, MonsterType } from '../../../../types/srd';
 import { DeepError, DeepPartial, DeepTouched } from '../../../../types/helpers';
-import { Summon } from '../../../../types/summon';
-import Button from '../../../Button/Button';
-import { useCallback } from 'react';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import TextInput from '../../../TextInput/TextInput';
-import { SIZES } from '../../../../constants/sizeContants';
-import { capitalize } from '../../../../services/capitalizeService';
+
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import Button from '../../../Button/Button';
 import { MONSTER_TYPES } from '../../../../constants/monsterTypeConstants';
+import { SIZES } from '../../../../constants/sizeContants';
 import Select from '../../../Select/Select/Select';
 import Size from '../../../../types/size';
-import { MonsterType } from '../../../../types/srd';
-import classes from './SummonFormFields.module.css';
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { StringSchema } from 'yup';
+import { Summon } from '../../../../types/summon';
 import SummonActions from '../SummonActions/SummonActions';
+import TextInput from '../../../TextInput/TextInput';
+import { capitalize } from '../../../../services/capitalizeService';
+import classes from './SummonFormFields.module.css';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { useCallback } from 'react';
 
 type SummonFormFieldsProps = {
 	summons?: DeepPartial<Summon>[];
@@ -31,6 +33,7 @@ type SummonFormFieldsProps = {
 		set: ActionCreatorWithPayload<any, string>;
 		delete: ActionCreatorWithPayload<any, string>;
 	};
+	abilities: AbilityItem[];
 };
 
 const MAX_SUMMONS = 5;
@@ -42,7 +45,8 @@ const SummonFormFields = ({
 	setFieldValue,
 	setFieldTouched,
 	setFieldError,
-	actions
+	actions,
+	abilities
 }: SummonFormFieldsProps) => {
 	const dispatch = useAppDispatch();
 
@@ -63,6 +67,18 @@ const SummonFormFields = ({
 		},
 		[dispatch, actions]
 	);
+
+	const handleChangeAbility = (
+		abilityName: string,
+		summonIndex: number,
+		value: string
+	) => {
+		setFieldValue(
+			`summons.${summonIndex}.${abilityName.toLowerCase()}`,
+			parseInt(value),
+			false
+		);
+	};
 
 	return (
 		<div className={classes.summons} data-testid="summon-form-fields">
@@ -85,7 +101,7 @@ const SummonFormFields = ({
 								}}
 								onClick={() => {
 									handleRemoveSummon(index);
-									if (touched) {
+									if (touched && touched[index]) {
 										const newTouched = Object.keys(touched[index]).reduce<
 											Partial<DeepTouched<Summon>>
 										>((acc, key) => ({ ...acc, [key]: false }), {});
@@ -193,6 +209,96 @@ const SummonFormFields = ({
 									touched={(touched ? touched[index] : {})?.type}
 									error={(errors ? errors[index] : {})?.type}
 								/>
+							</div>
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									flexWrap: 'wrap',
+									justifyContent: 'space-evenly'
+								}}
+							>
+								{abilities.map(ability => (
+									<div className={classes['ability']} key={ability.index}>
+										<label
+											className={classes['ability-label']}
+											htmlFor={`summon-${index}-${ability.full_name.toLowerCase()}`}
+										>
+											{ability.full_name}
+										</label>
+										<input
+											id={`summon-${index}-${ability.full_name.toLowerCase()}`}
+											type="number"
+											className={`${classes['ability-input']}${
+												touched &&
+												touched[index] &&
+												(touched as Record<string, boolean>[])[index][
+													ability.full_name.toLowerCase()
+												] &&
+												errors &&
+												errors[index] &&
+												(errors as Record<string, string>[])[index][
+													ability.full_name.toLowerCase()
+												]
+													? ` ${classes.error}`
+													: ''
+											}`}
+											onChange={event =>
+												handleChangeAbility(
+													ability.full_name,
+													index,
+													event.target.value
+												)
+											}
+											value={
+												summon
+													? (summon as Record<string, number>)[
+															ability.full_name.toLowerCase()
+													  ]
+													: undefined
+											}
+											onBlur={event => {
+												let value = parseInt(event.target.value);
+												if (value < 3) {
+													value = 3;
+												}
+												if (value > 30) {
+													value = 30;
+												}
+
+												setFieldValue(
+													`summons.${index}.${ability.full_name.toLowerCase()}`,
+													value,
+													false
+												);
+												handleSetSummonProperties(index, {
+													[ability.full_name.toLowerCase()]: value
+												});
+												setFieldTouched(
+													`summons.${index}.${ability.full_name.toLowerCase()}`
+												);
+											}}
+										/>
+										{touched &&
+											touched[index] &&
+											(touched as Record<string, boolean>[])[index][
+												ability.full_name.toLowerCase()
+											] &&
+											errors &&
+											errors[index] &&
+											(errors as Record<string, string>[])[index][
+												ability.full_name.toLowerCase()
+											] && (
+												<div className={classes['error-message']}>
+													{
+														(errors as Record<string, string>[])[index][
+															ability.full_name.toLowerCase()
+														]
+													}
+												</div>
+											)}
+									</div>
+								))}
 							</div>
 							<div
 								style={{
@@ -484,7 +590,13 @@ const SummonFormFields = ({
 								setFieldValue('summons', [
 									...(summons ?? []),
 									{
-										actions: [{ name: '', description: '' }]
+										actions: [{ name: '', description: '' }],
+										strength: NaN,
+										dexterity: NaN,
+										constitution: NaN,
+										wisdom: NaN,
+										intelligence: NaN,
+										charisma: NaN
 									} as DeepPartial<Summon>
 								]);
 							}}
@@ -502,7 +614,13 @@ const SummonFormFields = ({
 						setFieldValue('summons', [
 							...(summons ?? []),
 							{
-								actions: [{ name: '', description: '' }]
+								actions: [{ name: '', description: '' }],
+								strength: NaN,
+								dexterity: NaN,
+								constitution: NaN,
+								wisdom: NaN,
+								intelligence: NaN,
+								charisma: NaN
 							} as DeepPartial<Summon>
 						]);
 					}}

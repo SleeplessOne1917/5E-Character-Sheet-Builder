@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SpellComponent } from '../../types/srd';
-import { Item } from '../../types/db/item';
-import { DeepPartial } from '../../types/helpers';
-import { Summon } from '../../types/summon';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { AppReducers } from '../../types/redux';
+import { DeepPartial } from '../../types/helpers';
+import { Item } from '../../types/db/item';
+import { SpellComponent } from '../../types/srd';
+import { Summon } from '../../types/summon';
 
 export type EditingSpellState = {
 	name: string;
@@ -95,7 +96,15 @@ export const reducers: AppReducers<EditingSpellState> = {
 
 		state.summons = [
 			...state.summons,
-			{ actions: [{ name: '', description: '' }] }
+			{
+				actions: [{ name: '', description: '' }],
+				strength: NaN,
+				dexterity: NaN,
+				constitution: NaN,
+				wisdom: NaN,
+				intelligence: NaN,
+				charisma: NaN
+			}
 		];
 	},
 	setSummonProperties: (

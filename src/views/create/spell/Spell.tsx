@@ -1,3 +1,4 @@
+import { AbilityItem, SpellComponent, SrdItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../../components/Button/Button';
 import { DeepError, DeepTouched } from '../../../types/helpers';
 import {
@@ -25,7 +26,6 @@ import {
 } from '../../../redux/features/editingSpell';
 import { FocusEventHandler, useCallback, useState } from 'react';
 import { Formik, FormikErrors, FormikHelpers } from 'formik';
-import { SpellComponent, SrdItem } from '../../../types/srd';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import Checkbox from '../../../components/Checkbox/Checkbox';
@@ -37,23 +37,25 @@ import MultiSelect from '../../../components/Select/MultiSelect/MultiSelect';
 import Option from '../../../components/Select/Option';
 import Select from '../../../components/Select/Select/Select';
 import { Summon } from '../../../types/summon';
+import SummonFormFields from '../../../components/Create/Summon/SummonFormFields/SummonFormFields';
 import TextInput from '../../../components/TextInput/TextInput';
 import classes from './Spell.module.css';
 import spellSchema from '../../../yup-schemas/spellSchema';
-import SummonFormFields from '../../../components/Create/Summon/SummonFormFields/SummonFormFields';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
 	srdClasses: SrdItem[];
 	damageTypes: SrdItem[];
 	loading: boolean;
+	abilities: AbilityItem[];
 };
 
 const Spell = ({
 	magicSchools,
 	loading,
 	damageTypes,
-	srdClasses
+	srdClasses,
+	abilities
 }: SpellProps) => {
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const dispatch = useAppDispatch();
@@ -582,6 +584,7 @@ const Spell = ({
 									setFieldError={setFieldError}
 									setFieldTouched={setFieldTouched}
 									setFieldValue={setFieldValue}
+									abilities={abilities}
 								/>
 								<div className={classes['description-higher-levels']}>
 									<MarkdownTextArea

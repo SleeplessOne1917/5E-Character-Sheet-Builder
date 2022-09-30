@@ -1,4 +1,5 @@
 import { array, number, object, string } from 'yup';
+
 import { MONSTER_TYPES } from '../constants/monsterTypeConstants';
 import { SIZES } from '../constants/sizeContants';
 
@@ -52,6 +53,7 @@ const summonsSchema = array()
 				.min(1, 'Summon speed is required')
 				.max(50, 'Summon speed cannot be more than 50 characters.'),
 			strength: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon strength is required')
 				.integer('Summon strength must be integer')
 				.test(
@@ -65,6 +67,7 @@ const summonsSchema = array()
 					isLTE30
 				),
 			dexterity: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon dexterity is required')
 				.integer('Summon dexterity must be integer')
 				.test(
@@ -78,6 +81,7 @@ const summonsSchema = array()
 					isLTE30
 				),
 			constitution: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon constitution is required')
 				.integer('Summon constitution must be integer')
 				.test(
@@ -91,6 +95,7 @@ const summonsSchema = array()
 					isLTE30
 				),
 			intelligence: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon intelligence is required')
 				.integer('Summon intelligence must be integer')
 				.test(
@@ -104,6 +109,7 @@ const summonsSchema = array()
 					isLTE30
 				),
 			wisdom: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon wisdom is required')
 				.integer('Summon wisdom must be integer')
 				.test(
@@ -117,6 +123,7 @@ const summonsSchema = array()
 					isLTE30
 				),
 			charisma: number()
+				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon charisma is required')
 				.integer('Summon charisma must be integer')
 				.test(

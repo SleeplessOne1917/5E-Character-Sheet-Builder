@@ -1,23 +1,27 @@
+import { AbilityItem, SrdItem } from '../../src/types/srd';
 import { GetStaticPropsResult, NextPage } from 'next';
 import {
+	getAbilities,
 	getDamageTypes,
 	getMagicSchools,
 	getSpellcastingClasses
 } from '../../src/graphql/srdClientService';
-import useRedirectLoggedOffUser from '../../src/hooks/useRedirectLoggedOffUser';
-import { SrdItem } from '../../src/types/srd';
+
 import SpellView from '../../src/views/create/spell/Spell';
+import useRedirectLoggedOffUser from '../../src/hooks/useRedirectLoggedOffUser';
 
 type SpellPageProps = {
 	magicSchools: SrdItem[];
 	classes: SrdItem[];
 	damageTypes: SrdItem[];
+	abilities: AbilityItem[];
 };
 
 const SpellPage: NextPage<SpellPageProps> = ({
 	magicSchools,
 	classes,
-	damageTypes
+	damageTypes,
+	abilities
 }: SpellPageProps) => {
 	const { loading } = useRedirectLoggedOffUser();
 
@@ -27,6 +31,7 @@ const SpellPage: NextPage<SpellPageProps> = ({
 			loading={loading}
 			srdClasses={classes}
 			damageTypes={damageTypes}
+			abilities={abilities}
 		/>
 	);
 };
@@ -39,6 +44,7 @@ export const getStaticProps = async (): Promise<
 	const magicSchools = (await getMagicSchools()) ?? [];
 	const classes = (await getSpellcastingClasses()) ?? [];
 	const damageTypes = (await getDamageTypes()) ?? [];
+	const abilities = (await getAbilities()) ?? [];
 
 	return {
 		props: {
@@ -46,7 +52,8 @@ export const getStaticProps = async (): Promise<
 				a.name.localeCompare(b.name)
 			),
 			classes,
-			damageTypes
+			damageTypes,
+			abilities
 		}
 	};
 };

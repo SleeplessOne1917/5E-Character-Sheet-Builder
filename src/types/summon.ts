@@ -1,5 +1,5 @@
-import Size from './size';
 import { MonsterType } from './srd';
+import Size from './size';
 
 type NameDescription = {
 	name: string;

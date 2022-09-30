@@ -14,7 +14,6 @@
     position: relative;
 }
 
-
 .button-icon {
     width: 2.5rem;
     height: 2.5rem;
@@ -23,6 +22,36 @@
 .close-button-icon {
     width: 1rem;
     height: 1rem;
+}
+
+.ability {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ability-label {
+    font-size: 1.3rem;
+}
+
+.ability-input {
+    font-size: 1.3rem;
+    width: 30%;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+}
+
+.ability-input:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.ability-input.error {
+    border: 3px solid var(--error-red);
+}
+
+.error-message {
+    color: var(--wine-red);
+    font-size: 1.2rem;
 }
 
 @media (min-width: 768px) {
