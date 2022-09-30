@@ -147,8 +147,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.name`);
 									}}
-									touched={(touched ? touched[index] : {})?.name}
-									error={(errors ? errors[index] : {})?.name}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].name
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].name
+												: undefined
+											: undefined
+									}
 								/>
 							</div>
 							<div
@@ -180,8 +192,20 @@ const SummonFormFields = ({
 											newVal ? undefined : 'Summon size is required'
 										);
 									}}
-									touched={(touched ? touched[index] : {})?.size}
-									error={(errors ? errors[index] : {})?.size}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].size
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].size
+												: undefined
+											: undefined
+									}
 								/>
 								<Select
 									id={`summon-${index}-type`}
@@ -206,8 +230,20 @@ const SummonFormFields = ({
 											newVal ? undefined : 'Summon type is required'
 										);
 									}}
-									touched={(touched ? touched[index] : {})?.type}
-									error={(errors ? errors[index] : {})?.type}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].type
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].type
+												: undefined
+											: undefined
+									}
 								/>
 							</div>
 							<div
@@ -325,8 +361,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.armorClass`);
 									}}
-									touched={(touched ? touched[index] : {})?.armorClass}
-									error={(errors ? errors[index] : {})?.armorClass}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].armorClass
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].armorClass
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-hit-points`}
@@ -345,8 +393,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.hitPoints`);
 									}}
-									touched={(touched ? touched[index] : {})?.hitPoints}
-									error={(errors ? errors[index] : {})?.hitPoints}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].hitPoints
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].hitPoints
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-speed`}
@@ -365,8 +425,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.speed`);
 									}}
-									touched={(touched ? touched[index] : {})?.speed}
-									error={(errors ? errors[index] : {})?.speed}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].speed
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].speed
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-condition-immunities`}
@@ -385,8 +457,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.conditionImmunities`);
 									}}
-									touched={(touched ? touched[index] : {})?.conditionImmunities}
-									error={(errors ? errors[index] : {})?.conditionImmunities}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].conditionImmunities
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].conditionImmunities
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-damage-resistances`}
@@ -405,8 +489,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.damageResistances`);
 									}}
-									touched={(touched ? touched[index] : {})?.damageResistances}
-									error={(errors ? errors[index] : {})?.damageResistances}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].damageResistances
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].damageResistances
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-damage-immunities`}
@@ -425,8 +521,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.damageImmunities`);
 									}}
-									touched={(touched ? touched[index] : {})?.damageImmunities}
-									error={(errors ? errors[index] : {})?.damageImmunities}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].damageImmunities
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].damageImmunities
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-saving-throws`}
@@ -445,8 +553,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.savingThrows`);
 									}}
-									touched={(touched ? touched[index] : {})?.savingThrows}
-									error={(errors ? errors[index] : {})?.savingThrows}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].savingThrows
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].savingThrows
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-skills`}
@@ -465,8 +585,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.skills`);
 									}}
-									touched={(touched ? touched[index] : {})?.skills}
-									error={(errors ? errors[index] : {})?.skills}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].skills
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].skills
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-senses`}
@@ -485,8 +617,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.senses`);
 									}}
-									touched={(touched ? touched[index] : {})?.senses}
-									error={(errors ? errors[index] : {})?.senses}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].senses
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].senses
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-languages`}
@@ -505,8 +649,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.languages`);
 									}}
-									touched={(touched ? touched[index] : {})?.languages}
-									error={(errors ? errors[index] : {})?.languages}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].languages
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].languages
+												: undefined
+											: undefined
+									}
 								/>
 								<TextInput
 									id={`summon-${index}-proficiency-bonus`}
@@ -525,8 +681,20 @@ const SummonFormFields = ({
 										});
 										setFieldTouched(`summons.${index}.proficiencyBonus`);
 									}}
-									touched={(touched ? touched[index] : {})?.proficiencyBonus}
-									error={(errors ? errors[index] : {})?.proficiencyBonus}
+									touched={
+										touched
+											? touched[index]
+												? touched[index].proficiencyBonus
+												: undefined
+											: undefined
+									}
+									error={
+										errors
+											? errors[index]
+												? errors[index].proficiencyBonus
+												: undefined
+											: undefined
+									}
 								/>
 							</div>
 							<div>
