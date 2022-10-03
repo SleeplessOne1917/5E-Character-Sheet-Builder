@@ -9,9 +9,19 @@ import {
 } from '../../../../redux/features/editingSpell';
 import { getTestStore } from '../../../../redux/store';
 import { DeepError, DeepTouched } from '../../../../types/helpers';
+import { AbilityItem } from '../../../../types/srd';
 import { Summon } from '../../../../types/summon';
 import spellSchema from '../../../../yup-schemas/spellSchema';
 import SummonFormFields from './SummonFormFields';
+
+const abilities: AbilityItem[] = [
+	{ index: 'str', full_name: 'Strength' },
+	{ index: 'dex', full_name: 'Dexterity' },
+	{ index: 'con', full_name: 'Constitution' },
+	{ index: 'cha', full_name: 'Charisma' },
+	{ index: 'int', full_name: 'Intelligence' },
+	{ index: 'wis', full_name: 'Wisdom' }
+];
 
 export default {
 	title: 'Components/Create/Summon/SummonFormFields',
@@ -21,7 +31,8 @@ export default {
 			add: addSummon,
 			set: setSummonProperties,
 			delete: deleteSummon
-		}
+		},
+		abilities
 	},
 	decorators: [
 		Story => (
