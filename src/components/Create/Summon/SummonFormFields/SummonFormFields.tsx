@@ -8,7 +8,6 @@ import { MONSTER_TYPES } from '../../../../constants/monsterTypeConstants';
 import { SIZES } from '../../../../constants/sizeContants';
 import Select from '../../../Select/Select/Select';
 import Size from '../../../../types/size';
-import { StringSchema } from 'yup';
 import { Summon } from '../../../../types/summon';
 import SummonActions from '../SummonActions/SummonActions';
 import TextInput from '../../../TextInput/TextInput';
