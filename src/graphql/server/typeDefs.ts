@@ -16,10 +16,6 @@ const typeDefs = gql`
 		token: String!
 	}
 
-	type Query {
-		viewer: String
-	}
-
 	type ForgotResponse {
 		message: String!
 	}
@@ -31,6 +27,97 @@ const typeDefs = gql`
 	input ForgotPasswordRequest {
 		email: String!
 		username: String!
+	}
+
+	enum Size {
+		TINY
+		SMALL
+		MEDIUM
+		LARGE
+		HUGE
+		GARGANTUAN
+	}
+
+	enum MonsterType {
+		BEAST
+		MONSTROSITY
+		DRAGON
+		HUMANOID
+		UNDEAD
+		FIEND
+		CELESTIAL
+		CONSTRUCT
+		GIANT
+		ELEMENTAL
+		FEY
+		ABERRATION
+		OOZE
+		PLANT
+	}
+
+	enum SpellComponent {
+		V
+		S
+		M
+	}
+
+	input NameDescriptionInput {
+		name: String!
+		description: String!
+	}
+
+	input SummonInput {
+		name: String!
+		size: Size!
+		type: MonsterType!
+		armorClass: String!
+		hitPoints: String!
+		speed: String!
+		strength: Int!
+		dexterity: Int!
+		constitution: Int!
+		wisdom: Int!
+		charisma: Int!
+		intelligence: Int!
+		conditionImmunities: String
+		damageResistances: String
+		damageImmunities: String
+		skills: String
+		savingThrows: String
+		senses: String!
+		languages: String!
+		proficiencyBonus: String!
+		specialAbilities: [NameDescriptionInput!]
+		actions: [NameDescriptionInput!]!
+		bonusActions: [NameDescriptionInput!]
+		reactions: [NameDescriptionInput!]
+	}
+
+	input ItemInput {
+		id: String!
+		name: String!
+	}
+
+	input SpellInput {
+		name: String!
+		level: Int!
+		castingTime: String!
+		duration: String!
+		range: String!
+		school: ItemInput!
+		components: [SpellComponent!]!
+		material: String
+		concentration: Boolean
+		ritual: Boolean
+		description: String!
+		atHigherLevels: String
+		damageType: ItemInput
+		classes: [ItemInput!]!
+		summons: [SummonInput!]
+	}
+
+	type Query {
+		viewer: String
 	}
 
 	type Mutation {
@@ -51,6 +138,7 @@ const typeDefs = gql`
 			newPassword: String!
 			confirmPassword: String!
 		): String!
+		createSpell(spell: SpellInput!): String!
 	}
 `;
 

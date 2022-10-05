@@ -31,6 +31,7 @@ export const summonSchema = new Schema<Summon>({
 	damageResistances: { type: String, trim: true },
 	damageImmunities: { type: String, trim: true },
 	skills: { type: String, trim: true },
+	savingThrows: { type: String, trim: true },
 	senses: { type: String, required: true, trim: true },
 	languages: { type: String, required: true, trim: true },
 	proficiencyBonus: { type: String, required: true, trim: true },
