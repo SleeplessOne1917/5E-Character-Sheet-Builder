@@ -97,13 +97,7 @@ export const reducers: AppReducers<EditingSpellState> = {
 		state.summons = [
 			...state.summons,
 			{
-				actions: [{ name: '', description: '' }],
-				strength: NaN,
-				dexterity: NaN,
-				constitution: NaN,
-				wisdom: NaN,
-				intelligence: NaN,
-				charisma: NaN
+				actions: [{ name: '', description: '' }]
 			}
 		];
 	},

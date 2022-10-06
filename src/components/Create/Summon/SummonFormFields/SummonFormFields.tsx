@@ -72,9 +72,10 @@ const SummonFormFields = ({
 		summonIndex: number,
 		value: string
 	) => {
+		const parsedValue = parseInt(value);
 		setFieldValue(
 			`summons.${summonIndex}.${abilityName.toLowerCase()}`,
-			parseInt(value),
+			!isNaN(parsedValue) ? parsedValue : undefined,
 			false
 		);
 	};
@@ -263,7 +264,8 @@ const SummonFormFields = ({
 										</label>
 										<input
 											id={`summon-${index}-${ability.full_name.toLowerCase()}`}
-											type="number"
+											type="text"
+											placeholder={'\u2014'}
 											className={`${classes['ability-input']}${
 												touched &&
 												touched[index] &&
@@ -293,12 +295,17 @@ const SummonFormFields = ({
 													: undefined
 											}
 											onBlur={event => {
-												let value = parseInt(event.target.value);
+												let value: number | undefined = parseInt(
+													event.target.value
+												);
 												if (value < 3) {
 													value = 3;
 												}
 												if (value > 30) {
 													value = 30;
+												}
+												if (isNaN(value)) {
+													value = undefined;
 												}
 
 												setFieldValue(
@@ -757,13 +764,7 @@ const SummonFormFields = ({
 								setFieldValue('summons', [
 									...(summons ?? []),
 									{
-										actions: [{ name: '', description: '' }],
-										strength: NaN,
-										dexterity: NaN,
-										constitution: NaN,
-										wisdom: NaN,
-										intelligence: NaN,
-										charisma: NaN
+										actions: [{ name: '', description: '' }]
 									} as DeepPartial<Summon>
 								]);
 							}}
@@ -781,13 +782,7 @@ const SummonFormFields = ({
 						setFieldValue('summons', [
 							...(summons ?? []),
 							{
-								actions: [{ name: '', description: '' }],
-								strength: NaN,
-								dexterity: NaN,
-								constitution: NaN,
-								wisdom: NaN,
-								intelligence: NaN,
-								charisma: NaN
+								actions: [{ name: '', description: '' }]
 							} as DeepPartial<Summon>
 						]);
 					}}
