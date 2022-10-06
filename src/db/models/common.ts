@@ -3,18 +3,27 @@ import { MONSTER_TYPES } from '../../constants/monsterTypeConstants';
 import { SIZES } from '../../constants/sizeContants';
 import { Item } from '../../types/db/item';
 import { Summon } from '../../types/summon';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 export const itemSchema = new Schema<Item>({
+	// @ts-ignore
+	_id: false,
 	id: { type: String, required: true },
 	name: { type: String, required: true, trim: true }
 });
 
-const nameDescriptionSchema = new Schema({
-	name: { type: String, required: true, trim: true },
-	description: { type: String, required: true, trim: true }
-});
+const nameDescriptionSchema = new Schema<{ name: string; description: string }>(
+	{
+		// @ts-ignore
+		_id: false,
+		name: { type: String, required: true, trim: true },
+		description: { type: String, required: true, trim: true }
+	}
+);
 
 export const summonSchema = new Schema<Summon>({
+	// @ts-ignore
+	_id: false,
 	name: { type: String, required: true, trim: true },
 	size: { type: String, required: true, trim: true, enum: SIZES },
 	type: { type: String, required: true, trim: true, enum: MONSTER_TYPES },

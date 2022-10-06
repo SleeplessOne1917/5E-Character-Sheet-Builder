@@ -11,7 +11,7 @@ const MockStore = ({ children }: { children: ReactNode }) => (
 );
 
 export default {
-	title: 'Views/Abilities',
+	title: 'Views/Create/Character/Abilities',
 	component: Abilities,
 	args: {
 		abilities: mockAbilities

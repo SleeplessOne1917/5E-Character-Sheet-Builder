@@ -10,7 +10,7 @@ const getNameDescriptionSchema = (fieldName: string) =>
 	object({
 		name: string()
 			.required(`Summon ${fieldName} name is required`)
-			.max(30, `Summon ${fieldName} name cannot be more than 30 characters`),
+			.max(50, `Summon ${fieldName} name cannot be more than 50 characters`),
 		description: string()
 			.required(`Summon ${fieldName} description is required`)
 			.max(

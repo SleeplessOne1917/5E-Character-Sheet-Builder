@@ -6,7 +6,7 @@ import { getTestStore } from '../../../../redux/store';
 import { mockAbilities } from '../../../../components/Create/Character/Abilities/MockAbilitiesStore';
 
 export default {
-	title: 'Views/Class',
+	title: 'Views/Create/Character/Class',
 	component: Class,
 	args: {
 		classes: mockClasses,

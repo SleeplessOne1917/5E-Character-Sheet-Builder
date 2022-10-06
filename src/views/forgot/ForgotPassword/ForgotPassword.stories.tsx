@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { getTestStore } from '../../../redux/store';
 
 export default {
-	title: 'Views/ForgotPassword',
+	title: 'Views/Forgot/Password',
 	component: ForgotPassword,
 	decorators: [story => <Provider store={getTestStore()}>{story()}</Provider>],
 	args: {

@@ -1,10 +1,11 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import CreateIndex from './CreateIndex';
 import { Provider } from 'react-redux';
 import { getTestStore } from '../../../redux/store';
-import CreateIndex from './CreateIndex';
 
 export default {
-	title: 'Views/CreateIndex',
+	title: 'Views/Create/Index',
 	component: CreateIndex,
 	decorators: [
 		Story => (
