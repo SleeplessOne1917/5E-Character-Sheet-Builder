@@ -1,10 +1,11 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Provider } from 'react-redux';
-import { getTestStore } from '../../../../redux/store';
 import Race, { mockRaces, mockSubraces } from './Race';
 
+import { Provider } from 'react-redux';
+import { getTestStore } from '../../../../redux/store';
+
 export default {
-	title: 'Views/Race',
+	title: 'Views/Create/Character/Race',
 	component: Race,
 	args: {
 		races: mockRaces,
