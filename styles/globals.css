@@ -63,7 +63,7 @@ option {
   color: 	#705555;
 }
 
-.app {
+#app {
   height: 100%; 
   flex-grow: 1;
   z-index: 10;

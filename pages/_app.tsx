@@ -9,6 +9,7 @@ import Footer from '../src/components/Footer/Footer';
 import Head from 'next/head';
 import Header from '../src/components/Header/Header';
 import Image from 'next/image';
+import LoadingPageContent from '../src/components/LoadingPageContent/LoadingPageContent';
 import MobileNav from '../src/components/MobileNav/MobileNav';
 import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
@@ -17,23 +18,22 @@ import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
 import { fetchLoggedInUsername } from '../src/redux/features/viewer';
 import useMediaQuery from '../src/hooks/useMediaQuery';
-import { useRouter } from 'next/router';
 import { useStore } from '../src/redux/store';
-import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
 
 type MyAppProps = {
 	loadingStore: boolean;
 };
 
-function MyApp({
+const MyApp = ({
 	Component,
 	pageProps,
+	router,
 	loadingStore
-}: AppProps & MyAppProps): JSX.Element {
-	const { pathname } = useRouter();
+}: AppProps & MyAppProps): JSX.Element => {
+	const { pathname } = router;
 	const dispatch = useAppDispatch();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+	const isLargeOrLarger = useMediaQuery('(min-width: 1024px)');
 	const currentLevel = useAppSelector(
 		state => state.editingCharacter.classInfo.level
 	);
@@ -61,10 +61,10 @@ function MyApp({
 	);
 
 	useEffect(() => {
-		if (isMediumOrLarger) {
+		if (isLargeOrLarger) {
 			closeMobileNav();
 		}
-	}, [isMediumOrLarger, closeMobileNav]);
+	}, [isLargeOrLarger, closeMobileNav]);
 
 	useEffect(() => {
 		let resizeTimer: NodeJS.Timeout;
@@ -110,9 +110,9 @@ function MyApp({
 					href="/favicon-16x16.png"
 				/>
 				<link rel="manifest" href="/site.webmanifest" />
-				<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+				<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#930c10" />
 				<meta name="msapplication-TileColor" content="#f7ce65" />
-				<meta name="theme-color" content="#ffffff" />
+				<meta name="theme-color" content="#fffebd" />
 			</Head>
 			<Image
 				src="/images/character-sheet-with-dice.jpg"
@@ -125,31 +125,18 @@ function MyApp({
 				onMenuIconClick={toggleMobileNav}
 				onLogoIconClick={closeMobileNav}
 			/>
-			<div className="app">
+			<div id="app">
 				{pathname.includes('create/character') && (
 					<SectionBar hasSpellcasting={hasSpellcasting} />
 				)}
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
-				{loadingStore ? (
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							flexGrow: 1
-						}}
-					>
-						<LoadingSpinner />
-					</div>
-				) : (
-					<Component {...pageProps} />
-				)}
+				{loadingStore ? <LoadingPageContent /> : <Component {...pageProps} />}
 				<ToastContainer />
 			</div>
 			<Footer />
 		</UrqlProvider>
 	);
-}
+};
 
 const WrappedApp = (props: AppProps) => {
 	const { store, loading } = useStore();
