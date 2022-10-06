@@ -7,7 +7,8 @@ import {
 
 const client = createClient({
 	url: `/api/graphql`,
-	exchanges: [dedupExchange, cacheExchange, fetchExchange]
+	exchanges: [dedupExchange, cacheExchange, fetchExchange],
+	requestPolicy: 'cache-and-network'
 });
 
 export default client;
