@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode, memo } from 'react';
+import { MouseEventHandler, PropsWithChildren, memo } from 'react';
 
 import Link from 'next/link';
 import classes from './LinkButton.module.css';
@@ -6,7 +6,6 @@ import classes from './LinkButton.module.css';
 export type LinkButtonProps = {
 	href: string;
 	onClick?: MouseEventHandler<HTMLAnchorElement>;
-	children: ReactNode;
 	tabIndex?: number;
 };
 
@@ -15,7 +14,7 @@ const LinkButton = ({
 	onClick,
 	children,
 	tabIndex
-}: LinkButtonProps): JSX.Element => (
+}: PropsWithChildren<LinkButtonProps>): JSX.Element => (
 	<Link href={href}>
 		<a
 			className={classes['link-button']}

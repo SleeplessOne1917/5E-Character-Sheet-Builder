@@ -1,24 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import Header, { HeaderProps } from './Header';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+import Header from './Header';
 import { Provider } from 'react-redux';
-
-const MockStore = ({ mockState, children }) => (
-	<Provider
-		store={configureStore({
-			reducer: {
-				viewer: createSlice({
-					name: 'viewer',
-					initialState: mockState,
-					reducers: {}
-				}).reducer
-			}
-		})}
-	>
-		{children}
-	</Provider>
-);
+import { getTestStore } from '../../redux/store';
+import loggedInViewerMock from '../../mock/loggedInViewerMock';
 
 export default {
 	title: 'Components/Header',
@@ -29,16 +14,22 @@ export default {
 	}
 } as ComponentMeta<typeof Header>;
 
-const Template: ComponentStory<typeof Header> = (args: HeaderProps) => (
-	<Header {...args} />
-);
+const Template: ComponentStory<typeof Header> = args => <Header {...args} />;
 
 export const LoggedOut = Template.bind({});
 LoggedOut.decorators = [
-	story => <MockStore mockState={null}>{story()}</MockStore>
+	Story => (
+		<Provider store={getTestStore()}>
+			<Story />
+		</Provider>
+	)
 ];
 
 export const LoggedIn = Template.bind({});
 LoggedIn.decorators = [
-	story => <MockStore mockState="foo@bar.com">{story()}</MockStore>
+	Story => (
+		<Provider store={getTestStore({ viewer: loggedInViewerMock })}>
+			<Story />
+		</Provider>
+	)
 ];

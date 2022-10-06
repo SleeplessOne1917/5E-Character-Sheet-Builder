@@ -1,6 +1,99 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`renders correctly when logged in 1`] = `
+<header
+  aria-label="Header"
+  class="header"
+  role="banner"
+>
+  <div
+    class="brand-container"
+  >
+    <a
+      aria-label="Home"
+      data-testid="home"
+      href="/"
+    >
+      <svg
+        class="logo"
+      >
+        <use
+          xlink:href="/Icons.svg#logo"
+        />
+      </svg>
+    </a>
+    <div
+      class="brand-text"
+    >
+      D&D 5E Character Sheet Builder
+    </div>
+  </div>
+  <nav
+    class="navigation"
+  >
+    <ul
+      class="navigation-list"
+    >
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/create"
+        >
+          Create
+        </a>
+      </li>
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/my-stuff"
+        >
+          My Stuff
+        </a>
+      </li>
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/account"
+        >
+          Account
+        </a>
+      </li>
+      <li
+        class="navigation-list-item"
+      >
+        <a
+          class="navigation-link"
+          href="/#"
+        >
+          Log Out
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <svg
+    aria-hidden="true"
+    class="menu-icon"
+    data-testid="menu"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clip-rule="evenodd"
+      d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
+      fill-rule="evenodd"
+    />
+  </svg>
+</header>
+`;
+
+exports[`renders correctly when logged out 1`] = `
 <header
   aria-label="Header"
   class="header"

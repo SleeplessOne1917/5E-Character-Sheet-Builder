@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom';
 
+import * as Router from 'next/router';
 import * as stories from './Header.stories';
 
 import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 import userEvent from '@testing-library/user-event';
-import * as Router from 'next/router';
 
 const { LoggedIn, LoggedOut } = composeStories(stories);
 
@@ -33,10 +33,18 @@ beforeAll(() => {
 	useRouter.mockReturnValue(router);
 });
 
-it('renders correctly', () => {
-	render(<LoggedOut />);
+describe('renders correctly', () => {
+	it('when logged out', () => {
+		render(<LoggedOut />);
 
-	expect(screen.getByRole('banner')).toMatchSnapshot();
+		expect(screen.getByRole('banner')).toMatchSnapshot();
+	});
+
+	it('when logged in', () => {
+		render(<LoggedIn />);
+
+		expect(screen.getByRole('banner')).toMatchSnapshot();
+	});
 });
 
 describe('has expected links', () => {

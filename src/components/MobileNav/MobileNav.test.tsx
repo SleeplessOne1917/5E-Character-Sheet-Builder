@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 
+import * as Router from 'next/router';
 import * as stories from './MobileNav.stories';
 
 import { render, screen } from '@testing-library/react';
@@ -7,7 +8,6 @@ import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 
 const { Closed, LoggedIn, LoggedOut } = composeStories(stories);
-import * as Router from 'next/router';
 
 beforeAll(() => {
 	const useRouter = jest.spyOn(Router, 'useRouter');
@@ -32,20 +32,28 @@ beforeAll(() => {
 	useRouter.mockReturnValue(router);
 });
 
-it('renders correctly', () => {
-	render(<LoggedOut />).container;
+describe('renders correctly', () => {
+	it('when logged out', () => {
+		render(<LoggedOut />);
 
-	expect(screen.getByRole('navigation')).toMatchSnapshot();
+		expect(screen.getByRole('navigation')).toMatchSnapshot();
+	});
+
+	it('when logged in', () => {
+		render(<LoggedIn />);
+
+		expect(screen.getByRole('navigation')).toMatchSnapshot();
+	});
 });
 
 it('is closed when closed', () => {
-	render(<Closed />).container;
+	render(<Closed />);
 
 	expect(screen.getByRole('navigation')).not.toHaveClass('open');
 });
 
 it('is open when open', () => {
-	render(<LoggedIn />).container;
+	render(<LoggedIn />);
 
 	expect(screen.getByRole('navigation')).toHaveClass('open');
 });

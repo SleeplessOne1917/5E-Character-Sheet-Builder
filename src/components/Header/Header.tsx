@@ -1,11 +1,11 @@
-import Link from 'next/link';
 import { Bars3Icon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 import { MouseEventHandler } from 'react';
 import classes from './Header.module.css';
 import { useAppSelector } from '../../hooks/reduxHooks';
 import useLogout from '../../hooks/useLogout';
 
-export type HeaderProps = {
+type HeaderProps = {
 	onMenuIconClick: MouseEventHandler<SVGSVGElement>;
 	onLogoIconClick: MouseEventHandler<HTMLAnchorElement>;
 };
@@ -54,6 +54,11 @@ const Header = ({
 					)}
 					{viewer && (
 						<>
+							<li className={classes['navigation-list-item']}>
+								<Link href="/my-stuff">
+									<a className={classes['navigation-link']}>My Stuff</a>
+								</Link>
+							</li>
 							<li className={classes['navigation-list-item']}>
 								<Link href="/account">
 									<a className={classes['navigation-link']}>Account</a>

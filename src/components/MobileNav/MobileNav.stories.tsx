@@ -1,24 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 import MobileNav from './MobileNav';
 import { Provider } from 'react-redux';
-
-const MockStore = ({ mockState, children }) => (
-	<Provider
-		store={configureStore({
-			reducer: {
-				viewer: createSlice({
-					name: 'viewer',
-					initialState: mockState,
-					reducers: {}
-				}).reducer
-			}
-		})}
-	>
-		{children}
-	</Provider>
-);
+import { getTestStore } from '../../redux/store';
+import loggedInViewerMock from '../../mock/loggedInViewerMock';
 
 export default {
 	title: 'Components/MobileNav',
@@ -35,7 +20,11 @@ const Template: ComponentStory<typeof MobileNav> = args => (
 
 export const Closed = Template.bind({});
 Closed.decorators = [
-	story => <MockStore mockState={null}>{story()}</MockStore>
+	Story => (
+		<Provider store={getTestStore()}>
+			<Story />
+		</Provider>
+	)
 ];
 Closed.args = {
 	isOpen: false
@@ -43,7 +32,11 @@ Closed.args = {
 
 export const LoggedOut = Template.bind({});
 LoggedOut.decorators = [
-	story => <MockStore mockState={null}>{story()}</MockStore>
+	Story => (
+		<Provider store={getTestStore()}>
+			<Story />
+		</Provider>
+	)
 ];
 LoggedOut.args = {
 	isOpen: true
@@ -51,7 +44,11 @@ LoggedOut.args = {
 
 export const LoggedIn = Template.bind({});
 LoggedIn.decorators = [
-	story => <MockStore mockState={'email@email.com'}>{story()}</MockStore>
+	Story => (
+		<Provider store={getTestStore({ viewer: loggedInViewerMock })}>
+			<Story />
+		</Provider>
+	)
 ];
 LoggedIn.args = {
 	isOpen: true
