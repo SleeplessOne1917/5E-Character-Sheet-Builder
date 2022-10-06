@@ -1,3 +1,4 @@
+import Spell, { ISpell } from './../../../db/models/spell';
 import User, { IUser } from '../../../db/models/user';
 import UsernameOTL from '../../../db/models/usernameOTL';
 import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
@@ -19,6 +20,7 @@ import nookies from 'nookies';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
+import spellSchema from '../../../yup-schemas/spellSchema';
 
 interface LoginUserRequest {
 	username: string;
@@ -66,6 +68,10 @@ type CreateNewPasswordArgs = {
 	currentPassword: string;
 	newPassword: string;
 	confirmPassword: string;
+};
+
+type CreateSpellArgs = {
+	spell: Omit<ISpell, 'userId'>;
 };
 
 const Mutation = {
@@ -336,6 +342,27 @@ const Mutation = {
 		);
 
 		return 'Password successfully changed';
+	},
+	createSpell: async (
+		parent: never,
+		{ spell }: CreateSpellArgs,
+		{ username }: ApolloContext
+	) => {
+		await spellSchema.validate(spell, { strict: true });
+
+		const user = await User.findOne({ username });
+
+		if (!user) {
+			throw new ApolloError('Must be logged on');
+		}
+
+		try {
+			Spell.create({ ...spell, userId: user._id });
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not create spell');
+		}
+
+		return 'Spell successfully created';
 	}
 };
 

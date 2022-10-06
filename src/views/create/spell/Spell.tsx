@@ -41,6 +41,11 @@ import SummonFormFields from '../../../components/Create/Summon/SummonFormFields
 import TextInput from '../../../components/TextInput/TextInput';
 import classes from './Spell.module.css';
 import spellSchema from '../../../yup-schemas/spellSchema';
+import { useMutation } from 'urql';
+import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
+import { ToastType } from '../../../types/toast';
+import { show } from '../../../redux/features/toast';
+import { useRouter } from 'next/router';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -60,6 +65,8 @@ const Spell = ({
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const dispatch = useAppDispatch();
 	const [initialValues, setInitialValues] = useState(editingSpell);
+	const [_, createSpell] = useMutation(CREATE_SPELL);
+	const router = useRouter();
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		e => {
@@ -172,11 +179,22 @@ const Spell = ({
 			values: EditingSpellState,
 			{ resetForm }: FormikHelpers<EditingSpellState>
 		) => {
-			setInitialValues(spellInitialState);
-			resetForm();
-			dispatch(resetSpell(undefined));
+			const result = await createSpell({ spell: values });
+			if (result.error) {
+				const toast = {
+					closeTimeoutSeconds: 10,
+					message: result.error.message,
+					type: ToastType.error
+				};
+				dispatch(show(toast));
+			} else {
+				setInitialValues(spellInitialState);
+				resetForm();
+				dispatch(resetSpell(undefined));
+				router.replace('/create');
+			}
 		},
-		[dispatch]
+		[dispatch, createSpell, router]
 	);
 
 	return (
