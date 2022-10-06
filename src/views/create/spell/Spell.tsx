@@ -618,7 +618,7 @@ const Spell = ({
 										error={errors.description}
 									/>
 									<MarkdownTextArea
-										id="higher-levels"
+										id="atHigherLevels"
 										value={values.atHigherLevels}
 										label="At Higher Levels"
 										onBlur={handleBlur}

@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import ForgotIndex from './ForgotIndex';
 
 export default {
-	title: 'Views/ForgotIndex',
+	title: 'Views/Forgot/Index',
 	component: ForgotIndex,
 	args: {
 		loading: false

@@ -99,7 +99,7 @@ const spellSchema = object({
 		then: string()
 			.required('Material is required')
 			.min(1, 'Material is required')
-			.max(60, 'Material must be 60 characters or less')
+			.max(100, 'Material must be 100 characters or less')
 	}),
 	classes: array()
 		.of(
