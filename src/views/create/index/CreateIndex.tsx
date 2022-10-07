@@ -1,4 +1,4 @@
-import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
+import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import Link from 'next/link';
 import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
@@ -30,28 +30,28 @@ const CreateIndex = () => {
 			<h1>Create</h1>
 			<div className={classes.links}>
 				<div className={classes['create-link-container']}>
-					<Link href={`${router.asPath}/character/race`}>
-						<a className={classes['continue-link']}>
-							{editingCharacterChanged
+					<ArrowLink
+						href={`${router.asPath}/character/race`}
+						text={
+							editingCharacterChanged
 								? `Continue Editing ${
 										editingCharacter.name.length > 0
 											? editingCharacter.name
 											: 'Character'
 								  }`
-								: 'Create Character'}
-							<ArrowSmallRightIcon className={classes['link-arrow']} />
-						</a>
-					</Link>
+								: 'Create Character'
+						}
+					/>
 				</div>
 				{viewer && (
 					<>
 						<div className={classes['create-link-container']}>
-							<Link href={`${router.asPath}/spell`}>
-								<a className={classes['continue-link']}>
-									{editingSpellChanged ? 'Continue Editing' : 'Create'} Spell
-									<ArrowSmallRightIcon className={classes['link-arrow']} />
-								</a>
-							</Link>
+							<ArrowLink
+								href={`${router.asPath}/spell`}
+								text={`${
+									editingSpellChanged ? 'Continue Editing' : 'Create'
+								} Spell`}
+							/>
 						</div>
 					</>
 				)}

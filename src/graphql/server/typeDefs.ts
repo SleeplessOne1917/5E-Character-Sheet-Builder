@@ -61,9 +61,41 @@ const typeDefs = gql`
 		M
 	}
 
+	type NameDescription {
+		name: String!
+		description: String!
+	}
+
 	input NameDescriptionInput {
 		name: String!
 		description: String!
+	}
+
+	type Summon {
+		name: String!
+		size: Size!
+		type: MonsterType!
+		armorClass: String!
+		hitPoints: String!
+		speed: String!
+		strength: Int!
+		dexterity: Int!
+		constitution: Int!
+		wisdom: Int!
+		charisma: Int!
+		intelligence: Int!
+		conditionImmunities: String
+		damageResistances: String
+		damageImmunities: String
+		skills: String
+		savingThrows: String
+		senses: String!
+		languages: String!
+		proficiencyBonus: String!
+		specialAbilities: [NameDescription!]
+		actions: [NameDescription!]!
+		bonusActions: [NameDescription!]
+		reactions: [NameDescription!]
 	}
 
 	input SummonInput {
@@ -98,6 +130,11 @@ const typeDefs = gql`
 		name: String!
 	}
 
+	type Item {
+		id: String!
+		name: String!
+	}
+
 	input SpellInput {
 		name: String!
 		level: Int!
@@ -116,8 +153,28 @@ const typeDefs = gql`
 		summons: [SummonInput!]
 	}
 
+	type Spell {
+		id: ID!
+		name: String!
+		level: Int!
+		castingTime: String!
+		duration: String!
+		range: String!
+		school: Item!
+		components: [SpellComponent!]!
+		material: String
+		concentration: Boolean
+		ritual: Boolean
+		description: String!
+		atHigherLevels: String
+		damageType: Item
+		classes: [Item!]!
+		summons: [Summon!]
+	}
+
 	type Query {
 		viewer: String
+		spells(limit: Int! = 50): [Spell!]!
 	}
 
 	type Mutation {
