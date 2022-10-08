@@ -4,7 +4,6 @@ import {
 	SrdFullSubraceItem,
 	SrdItem,
 	SrdProficiencyItem,
-	SrdSpellItem,
 	SrdSubraceItem
 } from '../../../../types/srd';
 import {
@@ -38,6 +37,7 @@ import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoB
 import MainContent from '../../../../components/MainContent/MainContent';
 import Option from '../../../../components/Create/Character/Option/Option';
 import SelectedRaceDisplay from '../../../../components/Create/Character/Race/SelectedRaceDisplay/SelectedRaceDisplay';
+import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './Race.module.css';
 import { getAbilityScoreDescription } from '../../../../services/abilityBonusService';
@@ -278,10 +278,10 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 			dispatch(removeLanguage(index));
 		}
 
-		for (const { index } of Object.keys(raceInfo.selectedTraitSpells).reduce<
-			SrdSpellItem[]
+		for (const { id } of Object.keys(raceInfo.selectedTraitSpells).reduce<
+			Spell[]
 		>((acc, cur) => acc.concat(raceInfo.selectedTraitSpells[cur]), [])) {
-			dispatch(removeSpell(index));
+			dispatch(removeSpell(id));
 		}
 
 		for (const { index } of (raceInfo.race?.traits ?? [])
@@ -297,7 +297,7 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 			dispatch(removeProficiency(index));
 		}
 
-		dispatch(deselectRace());
+		dispatch(deselectRace(undefined));
 		setShowDeselectModal(false);
 
 		for (const { index } of abilities) {
@@ -327,8 +327,8 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}

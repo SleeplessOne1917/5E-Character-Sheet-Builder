@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 import Button from '../../../../Button/Button';
-import { SrdSpellItem } from '../../../../../types/srd';
+import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
+import ModalBackground from '../../../../ModalBackground/ModalBackground';
+import { Spell } from '../../../../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
-import ModalBackground from '../../../../ModalBackground/ModalBackground';
-import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
 
 type SpellMoreInformationModalProps = {
 	show: boolean;
-	spell?: SrdSpellItem;
+	spell?: Spell;
 	onClose: () => void;
 };
 
@@ -31,7 +31,7 @@ const SpellMoreInformationModal = ({
 			<div className={classes.modal}>
 				<div className={classes['title-container']}>
 					<svg className={classes['title-icon']}>
-						<use xlinkHref={`/Icons.svg#${spell?.school.index}`} />
+						<use xlinkHref={`/Icons.svg#${spell?.school.id}`} />
 					</svg>
 					<h3>{spell?.name}</h3>
 				</div>
@@ -58,7 +58,7 @@ const SpellMoreInformationModal = ({
 							<span className={classes['summary-item-label']}>
 								Casting time
 							</span>
-							: {spell?.casting_time}
+							: {spell?.castingTime}
 						</div>
 						<div className={classes['summary-item']}>
 							<span className={classes['summary-item-label']}>Duration</span>:{' '}
@@ -79,18 +79,12 @@ const SpellMoreInformationModal = ({
 						</div>
 					</div>
 					<div className={classes.description}>
-						<MarkdownParser input={spell?.desc ?? ''} />
-						{spell?.higher_level &&
-							spell.higher_level.map((hl, index) => (
-								<p key={`${spell.index}-higher-level-${index}`}>
-									{index === 0 && (
-										<span className={classes['summary-item-label']}>
-											At Higher Levels:{' '}
-										</span>
-									)}
-									{hl}
-								</p>
-							))}
+						<MarkdownParser input={spell?.description ?? ''} />
+						{spell?.atHigherLevels && (
+							<MarkdownParser
+								input={'**At Higher Levels**: ' + spell.atHigherLevels}
+							/>
+						)}
 					</div>
 					<div className={classes.other}>
 						{spell?.concentration && (
@@ -99,18 +93,16 @@ const SpellMoreInformationModal = ({
 						{spell?.ritual && (
 							<p className={classes['other-info']}>Can be cast as a ritual.</p>
 						)}
-						{spell?.damage && spell.damage.damage_type && (
+						{spell?.damageType && (
 							<div className={classes['damage-display']}>
 								<div>
 									<span className={classes['summary-item-label']}>
 										Damage type
 									</span>
-									: {spell.damage.damage_type.name}
+									: {spell.damageType?.name}
 								</div>
 								<svg className={classes['damage-icon']}>
-									<use
-										xlinkHref={`/Icons.svg#${spell.damage.damage_type.index}`}
-									/>
+									<use xlinkHref={`/Icons.svg#${spell.damageType?.id}`} />
 								</svg>
 							</div>
 						)}

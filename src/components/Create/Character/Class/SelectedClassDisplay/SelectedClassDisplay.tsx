@@ -76,6 +76,7 @@ import Select from '../../../../Select/Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../../graphql/srdClientService';
+import { mapSpell } from '../../../../../services/spellsService';
 import { rollDie } from '../../../../../services/diceService';
 import styles from './SelectedClassDisplay.module.css';
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
@@ -210,8 +211,8 @@ const SelectedClassDisplay = ({
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}
@@ -980,8 +981,8 @@ const SelectedClassDisplay = ({
 					for (const spell of (classSpells ?? []).filter(
 						s => s.level > highestSlotLevel
 					)) {
-						dispatch(removeSpell(spell.index));
-						dispatch(removeClassSpell(spell.index));
+						dispatch(removeSpell(spell.id));
+						dispatch(removeClassSpell(spell.id));
 					}
 				}
 			}
@@ -1002,8 +1003,8 @@ const SelectedClassDisplay = ({
 						++i
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}
@@ -1024,8 +1025,8 @@ const SelectedClassDisplay = ({
 						++i
 					) {
 						const spellToRemove = classCantrips[classCantrips.length - (i + 1)];
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}
@@ -1087,8 +1088,8 @@ const SelectedClassDisplay = ({
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}
@@ -1149,20 +1150,18 @@ const SelectedClassDisplay = ({
 										p.index.includes(classInfo.subclassSubType as string)
 								)))
 				)) {
-					if (classSpells?.some(cs => cs.index === spell.index)) {
+					if (classSpells?.some(cs => cs.id === spell.index)) {
 						dispatch(removeClassSpell(spell.index));
 					}
 
-					if (
-						!characterSpellcasting.spells.some(s => s.index === spell.index)
-					) {
-						dispatch(addSpell(spell));
+					if (!characterSpellcasting.spells.some(s => s.id === spell.index)) {
+						dispatch(addSpell(mapSpell(spell)));
 					}
 
 					if (
 						!(
 							classInfo.subclassSpells &&
-							classInfo.subclassSpells.some(s => s.index === spell.index)
+							classInfo.subclassSpells.some(s => s.id === spell.index)
 						)
 					) {
 						dispatch(addSubclassSpell(spell));
@@ -1289,20 +1288,18 @@ const SelectedClassDisplay = ({
 						s.prerequisites.some(p => p.level && p.level <= classInfo.level) &&
 						!s.prerequisites.some(p => p.name)
 				)) {
-					if (classSpells?.some(cs => cs.index === spell.index)) {
+					if (classSpells?.some(cs => cs.id === spell.index)) {
 						dispatch(removeClassSpell(spell.index));
 					}
 
-					if (
-						!characterSpellcasting.spells.some(s => s.index === spell.index)
-					) {
-						dispatch(addSpell(spell));
+					if (!characterSpellcasting.spells.some(s => s.id === spell.index)) {
+						dispatch(addSpell(mapSpell(spell)));
 					}
 
 					if (
 						!(
 							classInfo.subclassSpells &&
-							classInfo.subclassSpells.some(s => s.index === spell.index)
+							classInfo.subclassSpells.some(s => s.id === spell.index)
 						)
 					) {
 						dispatch(addSubclassSpell(spell));
@@ -1372,10 +1369,10 @@ const SelectedClassDisplay = ({
 					)) {
 						dispatch(addSubclassSpell(spell));
 
-						if (classSpells && classSpells.some(s => s.index === spell.index)) {
+						if (classSpells && classSpells.some(s => s.id === spell.index)) {
 							dispatch(removeClassSpell(spell.index));
 						} else {
-							dispatch(addSpell(spell));
+							dispatch(addSpell(mapSpell(spell)));
 						}
 					}
 				}

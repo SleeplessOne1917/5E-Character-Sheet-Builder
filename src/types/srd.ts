@@ -132,13 +132,14 @@ export interface SrdSpellItem extends SrdItem {
 	desc: string[];
 	school: SrdItem;
 	damage?: {
-		damage_type: SrdItem;
+		damage_type?: SrdItem;
 	};
 	material?: string;
 	range: string;
 	ritual: boolean;
 	duration: string;
 	higher_level?: string[];
+	classes: SrdItem[];
 }
 
 export type SrdSpellItemChoice = {

@@ -282,6 +282,10 @@ const GET_CLASS = gql`
 							index
 							name
 						}
+						classes {
+							index
+							name
+						}
 						damage {
 							damage_type {
 								index

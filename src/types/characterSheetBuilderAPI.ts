@@ -1,3 +1,5 @@
 import { ISpell } from './../db/models/spell';
 
-export type Spell = ISpell & { id: string };
+type WithId = { id: string };
+
+export type Spell = Omit<ISpell & WithId, 'userId'>;

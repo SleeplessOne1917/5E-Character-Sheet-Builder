@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
+import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
 import SpellsSelector from '../../../../components/Create/Character/Spells/SpellsSelector/SpellsSelector';
-import { SrdSpellItem } from '../../../../types/srd';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
@@ -21,15 +21,15 @@ const Spells = () => {
 	const [isFetchingSpells, setIsFetchingSpells] = useState(true);
 	const { numberOfSpellsToPrepare, shouldPrepareSpells } = usePreparedSpells();
 
-	const [allClassSpells, setAllClassSpells] = useState<SrdSpellItem[]>([]);
+	const [allClassSpells, setAllClassSpells] = useState<Spell[]>([]);
 
 	useEffect(() => {
 		setIsFetchingSpells(true);
 
 		if (classInfo.class) {
 			getSpellsByClass(classInfo.class.index).then(result => {
-				if (result.data) {
-					setAllClassSpells(result.data.spells);
+				if (result) {
+					setAllClassSpells(result);
 				}
 				setIsFetchingSpells(false);
 			});

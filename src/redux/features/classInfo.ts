@@ -4,7 +4,6 @@ import {
 	SrdFeatureItem,
 	SrdFullClassItem,
 	SrdProficiencyItem,
-	SrdSpellItem,
 	SrdSubclassItem,
 	Terrain
 } from '../../types/srd';
@@ -12,6 +11,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import AbilityScores from '../../types/abilityScores';
 import { AppReducers } from '../../types/redux';
+import { Spell } from '../../types/characterSheetBuilderAPI';
 
 export type ClassInfoState = {
 	class?: SrdFullClassItem;
@@ -24,8 +24,8 @@ export type ClassInfoState = {
 	favoredTerrains?: (Terrain | null)[];
 	subclassSubType?: string | null;
 	expertiseProficiencies?: (SrdProficiencyItem | null)[];
-	spells?: SrdSpellItem[];
-	subclassSpells?: SrdSpellItem[];
+	spells?: Spell[];
+	subclassSpells?: Spell[];
 	proficiencies: (SrdProficiencyItem | null)[][];
 };
 
@@ -243,7 +243,7 @@ export const reducers: AppReducers<ClassInfoState> = {
 
 		state.expertiseProficiencies[index] = proficiency;
 	},
-	addClassSpell: (state, { payload }: PayloadAction<SrdSpellItem>) => {
+	addClassSpell: (state, { payload }: PayloadAction<Spell>) => {
 		if (!state.spells) {
 			state.spells = [];
 		}
@@ -255,9 +255,9 @@ export const reducers: AppReducers<ClassInfoState> = {
 			state.spells = [];
 		}
 
-		state.spells = state.spells.filter(spell => spell.index !== payload);
+		state.spells = state.spells.filter(spell => spell.id !== payload);
 	},
-	addSubclassSpell: (state, { payload }: PayloadAction<SrdSpellItem>) => {
+	addSubclassSpell: (state, { payload }: PayloadAction<Spell>) => {
 		if (!state.subclassSpells) {
 			state.subclassSpells = [];
 		}
@@ -270,7 +270,7 @@ export const reducers: AppReducers<ClassInfoState> = {
 		}
 
 		state.subclassSpells = state.subclassSpells.filter(
-			spell => spell.index !== payload
+			spell => spell.id !== payload
 		);
 	},
 	setClassProficiencies: (

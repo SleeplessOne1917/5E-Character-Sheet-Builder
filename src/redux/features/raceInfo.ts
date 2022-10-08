@@ -1,13 +1,14 @@
-import { AppReducers } from './../../types/redux';
 import {
 	AbilityBonus,
 	SrdItem,
 	SrdProficiencyItem,
-	SrdSpellItem,
 	SrdSubtraitItem
 } from './../../types/srd';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../../types/srd';
+
+import { AppReducers } from './../../types/redux';
+import { Spell } from '../../types/characterSheetBuilderAPI';
 
 export type RaceInfoState = {
 	race?: SrdFullRaceItem;
@@ -16,7 +17,7 @@ export type RaceInfoState = {
 	selectedLanguages?: SrdItem[];
 	selectedTraitProficiencies: { [key: string]: SrdProficiencyItem[] };
 	selectedTraitLanguages: { [key: string]: SrdItem[] };
-	selectedTraitSpells: { [key: string]: SrdSpellItem[] };
+	selectedTraitSpells: { [key: string]: Spell[] };
 	draconicAncestry?: SrdSubtraitItem;
 };
 
@@ -37,7 +38,7 @@ type AddTraitLanguagePayload = {
 
 type AddTraitSpellPayload = {
 	index: string;
-	spell: SrdSpellItem;
+	spell: Spell;
 };
 
 export const initialState: RaceInfoState = {
@@ -180,7 +181,7 @@ export const reducers: AppReducers<RaceInfoState> = {
 		}
 
 		state.selectedTraitSpells[index] = state.selectedTraitSpells[index].filter(
-			({ index }) => index !== spell
+			({ id }) => id !== spell
 		);
 	}
 };

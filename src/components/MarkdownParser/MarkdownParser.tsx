@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import classes from './MarkdownParser.module.css';
+import { getMarkdownFromStringArray } from '../../services/markdownStringArrayToStringService';
 import remarkGfm from 'remark-gfm';
 
 type MarkdownParserProps = {
@@ -14,15 +15,7 @@ const MarkdownParser = ({ input }: MarkdownParserProps) => (
 		}}
 		className={classes.markdown}
 	>
-		{Array.isArray(input)
-			? input.reduce<string>((acc, cur) => {
-					if (cur.includes('|')) {
-						return acc + cur + '\n';
-					} else {
-						return acc + cur + '\n\n';
-					}
-			  }, '')
-			: input}
+		{getMarkdownFromStringArray(input)}
 	</ReactMarkdown>
 );
 

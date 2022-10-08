@@ -1,9 +1,11 @@
 import Button from '../../../../Button/Button';
-import { ReactNode } from 'react';
 import Descriptor from '../../Descriptor/Descriptor';
-import { SrdSpellItem, SrdSubclassItem } from '../../../../../types/srd';
-import styles from './SubclassSelector.module.css';
+import { ReactNode } from 'react';
+import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import { SrdSubclassItem } from '../../../../../types/srd';
 import { getOrdinal } from '../../../../../services/ordinalService';
+import { mapSpell } from '../../../../../services/spellsService';
+import styles from './SubclassSelector.module.css';
 
 type SubclassSelectorProps = {
 	subclass: SrdSubclassItem;
@@ -29,23 +31,23 @@ const SubclassSelector = ({
 			)
 		) {
 			const spellsByFeature = subclass.spells.reduce<
-				Map<string, Map<number, SrdSpellItem[]>>
+				Map<string, Map<number, Spell[]>>
 			>((acc, cur) => {
 				const featureName = cur.prerequisites.find(p => p.name)?.name as string;
 				const level = cur.prerequisites.find(p => p.level)?.level as number;
 
 				if (!acc.get(featureName)) {
-					acc.set(featureName, new Map<number, SrdSpellItem[]>());
+					acc.set(featureName, new Map<number, Spell[]>());
 				}
 
 				if (!acc.get(featureName)?.get(level)) {
 					acc.get(featureName)?.set(level, []);
 				}
 
-				acc.get(featureName)?.get(level)?.push(cur.spell);
+				acc.get(featureName)?.get(level)?.push(mapSpell(cur.spell));
 
 				return acc;
-			}, new Map<string, Map<number, SrdSpellItem[]>>());
+			}, new Map<string, Map<number, Spell[]>>());
 
 			const tables: ReactNode[] = [];
 
@@ -89,7 +91,7 @@ const SubclassSelector = ({
 
 			spellsComponent = <>{tables}</>;
 		} else {
-			const spellsByLevel = subclass.spells.reduce<Map<number, SrdSpellItem[]>>(
+			const spellsByLevel = subclass.spells.reduce<Map<number, Spell[]>>(
 				(acc, cur) => {
 					const level = cur.prerequisites.find(p => p.level)?.level as number;
 
@@ -97,11 +99,11 @@ const SubclassSelector = ({
 						acc.set(level, []);
 					}
 
-					acc.get(level)?.push(cur.spell);
+					acc.get(level)?.push(mapSpell(cur.spell));
 
 					return acc;
 				},
-				new Map<number, SrdSpellItem[]>()
+				new Map<number, Spell[]>()
 			);
 
 			const rows: ReactNode[] = [];
@@ -165,7 +167,7 @@ const SubclassSelector = ({
 			{selected ? (
 				<Button onClick={onDeselect}>Deselect</Button>
 			) : (
-				<Button positive onClick={onSelect} S>
+				<Button positive onClick={onSelect}>
 					Select
 				</Button>
 			)}

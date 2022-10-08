@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import Button from '../../../../Button/Button';
+import { Spell } from '../../../../../types/characterSheetBuilderAPI';
 import SpellMoreInformationModal from '../SpellMoreInfoModal/SpellMoreInformationModal';
-import { SrdSpellItem } from '../../../../../types/srd';
 import classes from './SpellsKnownDisplay.module.css';
 import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
@@ -13,7 +13,7 @@ const SpellsKnownDisplay = () => {
 
 	const spellsByLevel = useMemo(
 		() =>
-			spells.reduce<Map<number, SrdSpellItem[]>>((acc, cur) => {
+			spells.reduce<Map<number, Spell[]>>((acc, cur) => {
 				if (!acc.get(cur.level)) {
 					acc.set(cur.level, [cur]);
 				} else {
@@ -21,7 +21,7 @@ const SpellsKnownDisplay = () => {
 				}
 
 				return acc;
-			}, new Map<number, SrdSpellItem[]>()),
+			}, new Map<number, Spell[]>()),
 		[spells]
 	);
 
@@ -29,7 +29,7 @@ const SpellsKnownDisplay = () => {
 	const [showMore, setShowMore] = useState(false);
 
 	const handleShowMoreInfo = useCallback(
-		(spell: SrdSpellItem) => {
+		(spell: Spell) => {
 			setSelectedSpell(spell);
 			setShowMore(true);
 		},
@@ -47,25 +47,23 @@ const SpellsKnownDisplay = () => {
 								{level === 0 ? 'Cantrips' : `Level ${level}`}
 							</div>
 						].concat(
-							(spellsByLevel.get(level) as SrdSpellItem[]).map(
-								(spell, index) => (
-									<div
-										key={spell.index}
-										className={`${classes.spell} ${
-											index % 2 === 0 ? classes.even : classes.odd
-										}`}
+							(spellsByLevel.get(level) as Spell[]).map((spell, index) => (
+								<div
+									key={spell.id}
+									className={`${classes.spell} ${
+										index % 2 === 0 ? classes.even : classes.odd
+									}`}
+								>
+									{spell.name}
+									<Button
+										size="small"
+										positive
+										onClick={() => handleShowMoreInfo(spell)}
 									>
-										{spell.name}
-										<Button
-											size="small"
-											positive
-											onClick={() => handleShowMoreInfo(spell)}
-										>
-											More Info
-										</Button>
-									</div>
-								)
-							)
+										More Info
+									</Button>
+								</div>
+							))
 						)
 					)}
 			</div>

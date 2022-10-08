@@ -20,6 +20,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ChoiceSelector from '../ChoiceSelector';
 import SpellSelector from '../../../Spells/SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
+import { mapSpell } from '../../../../../../services/spellsService';
 
 type SpellChoiceSelectorProps = {
 	trait: SrdItem;
@@ -32,12 +33,12 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 	);
 	const dispatch = useAppDispatch();
 
-	const getInitialSelectValues = useCallback(() => {
+	const getInitialSelectValues = useCallback((): string[] => {
 		const returnValues: string[] = [];
 
 		for (let i = 0; i < choice.choose; ++i) {
 			if (selectedSpells && i < selectedSpells.length) {
-				returnValues.push(selectedSpells[i].index);
+				returnValues.push(selectedSpells[i].id);
 			} else {
 				returnValues.push('blank');
 			}
@@ -60,9 +61,11 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 
 	const handleAdd = useCallback(
 		(value: string) => {
-			const spell = choice.from.options
-				.map(option => option.item)
-				.find(option => option.index === value) as SrdSpellItem;
+			const spell = mapSpell(
+				choice.from.options
+					.map(option => option.item)
+					.find(option => option.index === value) as SrdSpellItem
+			);
 
 			dispatch(addSpell(spell));
 			dispatch(addTraitSpell({ index: trait.index, spell }));
@@ -102,14 +105,14 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 				{choice.from.options
 					.filter(
 						({ item: { index } }) =>
-							!spells.map(({ index }) => index).includes(index) ||
+							!spells.map(({ id }) => id).includes(index) ||
 							selectValues.includes(index)
 					)
 					.map(option => (
 						<SpellSelector
 							key={`${trait.index}-${option.item.index}`}
 							item={trait}
-							spell={option.item}
+							spell={mapSpell(option.item)}
 							onAdd={() => handleAdd(option.item.index)}
 							onRemove={() => handleRemove(option.item.index)}
 							selectValues={selectValues}

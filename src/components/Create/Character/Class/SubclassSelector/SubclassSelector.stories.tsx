@@ -94,7 +94,8 @@ export default {
 						},
 						material: null,
 						range: 'Self',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -124,7 +125,8 @@ export default {
 						damage: null,
 						material: null,
 						range: '60 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -148,7 +150,8 @@ export default {
 						damage: null,
 						material: null,
 						range: '30 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -178,7 +181,8 @@ export default {
 						},
 						material: null,
 						range: '120 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -208,7 +212,8 @@ export default {
 						},
 						material: 'A tiny ball of bat guano and sulfur.',
 						range: '150 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -234,7 +239,8 @@ export default {
 						damage: null,
 						material: 'A rotten egg or several skunk cabbage leaves.',
 						range: '90 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -265,7 +271,8 @@ export default {
 						},
 						material: 'A little phosphorus or a firefly.',
 						range: 'Self',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -297,7 +304,8 @@ export default {
 						},
 						material: 'A small piece of phosphorus.',
 						range: '120 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -326,7 +334,8 @@ export default {
 						},
 						material: 'Pinch of sulfur.',
 						range: '60 feet',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				},
 				{
@@ -363,7 +372,8 @@ export default {
 						material:
 							'Herbs, oils, and incense worth at least 1,000 gp, which the spell consumes.',
 						range: 'Touch',
-						ritual: false
+						ritual: false,
+						classes: [{ index: 'warlock', name: 'Warlock' }]
 					}
 				}
 			]

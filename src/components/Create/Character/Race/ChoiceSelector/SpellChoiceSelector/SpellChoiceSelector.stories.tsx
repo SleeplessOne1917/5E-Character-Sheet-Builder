@@ -42,7 +42,8 @@ export default {
 							material: 'A firefly or phosphorescent moss.',
 							range: 'Touch',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -64,7 +65,8 @@ export default {
 							},
 							range: '30 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -86,7 +88,8 @@ export default {
 							material: 'Two lodestones.',
 							range: 'Touch',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -108,7 +111,8 @@ export default {
 							material: 'A short piece of copper wire.',
 							range: '120 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -132,7 +136,8 @@ export default {
 							material: 'A bit of fleece.',
 							range: '30 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -159,7 +164,8 @@ export default {
 							},
 							range: '60 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -186,7 +192,8 @@ export default {
 							},
 							range: '10 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -213,7 +220,8 @@ export default {
 							},
 							range: '60 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -240,7 +248,8 @@ export default {
 							},
 							range: 'Touch',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -260,7 +269,8 @@ export default {
 							},
 							range: '30 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -288,7 +298,8 @@ export default {
 							},
 							range: '120 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -310,7 +321,8 @@ export default {
 							material: 'A bit of phosphorus or wychwood, or a glowworm.',
 							range: '120 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -337,7 +349,8 @@ export default {
 							},
 							range: '120 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					},
 					{
@@ -364,7 +377,8 @@ export default {
 							},
 							range: '10 feet',
 							ritual: false,
-							duration: '1 hour'
+							duration: '1 hour',
+							classes: [{ index: 'sorcerer', name: 'Sorcerer' }]
 						}
 					}
 				]

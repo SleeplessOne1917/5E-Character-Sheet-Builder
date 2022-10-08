@@ -12,6 +12,10 @@ const GET_SPELLS_BY_CLASS = gql`
 			duration
 			higher_level
 			desc
+			classes {
+				index
+				name
+			}
 			school {
 				name
 				index

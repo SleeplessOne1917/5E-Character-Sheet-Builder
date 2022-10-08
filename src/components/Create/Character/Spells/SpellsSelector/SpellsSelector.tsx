@@ -5,7 +5,6 @@ import {
 	useMemo,
 	useState
 } from 'react';
-import { SrdItem, SrdSpellItem } from '../../../../../types/srd';
 import {
 	addClassSpell,
 	removeClassSpell
@@ -20,13 +19,15 @@ import {
 } from '../../../../../hooks/reduxHooks';
 
 import Checkbox from '../../../../Checkbox/Checkbox';
+import { Item } from '../../../../../types/db/item';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import Select from '../../../../Select/Select/Select';
+import { Spell } from '../../../../../types/characterSheetBuilderAPI';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import styles from './SpellsSelector.module.css';
 
 type SpellsSelectorProps = {
-	spells: SrdSpellItem[];
+	spells: Spell[];
 	choose: number;
 };
 
@@ -90,8 +91,8 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 
 	const getInitialSelectedSpells = useCallback(() => {
 		const selected = spells
-			.filter(spell => classSpells?.some(cs => cs.index === spell.index))
-			.map(({ index }) => index);
+			.filter(spell => classSpells?.some(cs => cs.id === spell.id))
+			.map(({ id }) => id);
 
 		if (selected.length < choose) {
 			for (let i = 0; i < choose; ++i) {
@@ -111,7 +112,7 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 	}, [setSelectedSpells, getInitialSelectedSpells]);
 
 	const handleAdd = useCallback(
-		(spell: SrdSpellItem) => {
+		(spell: Spell) => {
 			dispatch(addClassSpell(spell));
 			dispatch(addSpell(spell));
 		},
@@ -119,9 +120,9 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 	);
 
 	const handleRemove = useCallback(
-		(spell: SrdSpellItem) => {
-			dispatch(removeClassSpell(spell.index));
-			dispatch(removeSpell(spell.index));
+		(spell: Spell) => {
+			dispatch(removeClassSpell(spell.id));
+			dispatch(removeSpell(spell.id));
 		},
 		[dispatch]
 	);
@@ -155,16 +156,15 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 		() =>
 			spells.filter(
 				spell =>
-					!traitSpells.some(ts => ts.index === spell.index) &&
+					!traitSpells.some(ts => ts.id === spell.id) &&
 					!(
 						subclassSpells &&
-						subclassSpells.some(s => s.spell.index === spell.index)
+						subclassSpells.some(s => s.spell.index === spell.id)
 					) &&
 					spell.name.toLowerCase().includes(search.toLowerCase()) &&
-					(selectedSchool === 'blank' ||
-						selectedSchool === spell.school.index) &&
+					(selectedSchool === 'blank' || selectedSchool === spell.school.id) &&
 					(selectedLevel === 'blank' || selectedLevel === spell.level) &&
-					(!filterOnlySelected || selectedSpells.includes(spell.index))
+					(!filterOnlySelected || selectedSpells.includes(spell.id))
 			),
 		[
 			spells,
@@ -211,16 +211,14 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 							id="school-select"
 							options={[{ value: 'blank', label: '\u2014' }].concat(
 								spells
-									.reduce<SrdItem[]>((acc, cur) => {
-										if (
-											!acc.some(school => school.index === cur.school.index)
-										) {
+									.reduce<Item[]>((acc, cur) => {
+										if (!acc.some(school => school.id === cur.school.id)) {
 											return [...acc, cur.school];
 										} else {
 											return acc;
 										}
 									}, [])
-									.map(school => ({ value: school.index, label: school.name }))
+									.map(school => ({ value: school.id, label: school.name }))
 							)}
 							value={selectedSchool}
 							onChange={handleSelectedSchoolChange}
@@ -259,7 +257,7 @@ const SpellsSelector = ({ spells, choose }: SpellsSelectorProps) => {
 				{filteredSpells.length > 0 ? (
 					filteredSpells.map(spell => (
 						<SpellSelector
-							key={spell.index}
+							key={spell.id}
 							spell={spell}
 							selectValues={selectedSpells}
 							onAdd={() => handleAdd(spell)}

@@ -10,16 +10,17 @@ import {
 	useMemo,
 	useState
 } from 'react';
-import { SrdItem, SrdSpellItem } from '../../../../../types/srd';
 
 import Button from '../../../../Button/Button';
+import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
+import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import { SrdItem } from '../../../../../types/srd';
 import classes from './SpellSelector.module.css';
 import { handleKeyDownEvent } from '../../../../../services/handlerService';
 import useMediaQuery from '../../../../../hooks/useMediaQuery';
-import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
 
 type SpellSelectorProps = {
-	spell: SrdSpellItem;
+	spell: Spell;
 	item?: SrdItem;
 	onAdd: () => void;
 	onRemove: () => void;
@@ -36,8 +37,8 @@ const SpellSelector = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 	const isSelected = useMemo(
-		() => selectValues.includes(spell.index),
-		[selectValues, spell.index]
+		() => selectValues.includes(spell.id),
+		[selectValues, spell.id]
 	);
 
 	const toggleOpen = useCallback(
@@ -69,7 +70,7 @@ const SpellSelector = ({
 			>
 				<div className={classes['label-name-container']}>
 					<svg className={classes['label-icon']}>
-						<use xlinkHref={`/Icons.svg#${spell.school.index}`} />
+						<use xlinkHref={`/Icons.svg#${spell.school.id}`} />
 					</svg>
 					{spell.name}
 					{isSelected && <CheckIcon className={classes.check} />}
@@ -91,7 +92,7 @@ const SpellSelector = ({
 					</div>
 					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Casting time</span>:{' '}
-						{spell.casting_time}
+						{spell.castingTime}
 					</div>
 					<div className={classes['summary-item']}>
 						<span className={classes['summary-item-label']}>Duration</span>:{' '}
@@ -112,22 +113,12 @@ const SpellSelector = ({
 					</div>
 				</div>
 				<div className={classes.description}>
-					<MarkdownParser input={spell.desc} />
-					{spell.higher_level &&
-						spell.higher_level.map((hl, index) => (
-							<p
-								key={`${item ? `${item.index}` : ''}${
-									spell.index
-								}-higher-level-${index}`}
-							>
-								{index === 0 && (
-									<span className={classes['summary-item-label']}>
-										At Higher Levels:{' '}
-									</span>
-								)}
-								{hl}
-							</p>
-						))}
+					<MarkdownParser input={spell.description} />
+					{spell.atHigherLevels && (
+						<MarkdownParser
+							input={'**At Higher Levels**: ' + spell.atHigherLevels}
+						/>
+					)}
 				</div>
 				<div className={classes.other}>
 					{spell.concentration && (
@@ -136,18 +127,16 @@ const SpellSelector = ({
 					{spell.ritual && (
 						<p className={classes['other-info']}>Can be cast as a ritual.</p>
 					)}
-					{spell.damage && spell.damage.damage_type && (
+					{spell.damageType && (
 						<div className={classes['damage-display']}>
 							<div>
 								<span className={classes['summary-item-label']}>
 									Damage type
 								</span>
-								: {spell.damage.damage_type.name}
+								: {spell.damageType.name}
 							</div>
 							<svg className={classes['damage-icon']}>
-								<use
-									xlinkHref={`/Icons.svg#${spell.damage.damage_type.index}`}
-								/>
+								<use xlinkHref={`/Icons.svg#${spell.damageType.id}`} />
 							</svg>
 						</div>
 					)}
