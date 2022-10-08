@@ -180,7 +180,7 @@ const typeDefs = gql`
 
 	type Query {
 		viewer: String
-		spells(limit: Int! = 50): SpellsResponse!
+		spells(limit: Int! = 50, skip: Int): SpellsResponse!
 	}
 
 	type Mutation {

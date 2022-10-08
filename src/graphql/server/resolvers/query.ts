@@ -10,6 +10,7 @@ import User from './../../../db/models/user';
 
 type SkipLimit = {
 	limit: number;
+	skip?: number;
 };
 
 const Query = {
@@ -17,7 +18,7 @@ const Query = {
 		username,
 	spells: async (
 		parent: never,
-		{ limit }: SkipLimit,
+		{ limit, skip }: SkipLimit,
 		{ username }: ApolloContext
 	) => {
 		if (!username) {
@@ -31,7 +32,12 @@ const Query = {
 		}
 
 		return {
-			spells: (await Spell.find({ userId }).lean().limit(limit)).map(spell => ({
+			spells: (
+				await Spell.find({ userId })
+					.skip(skip ?? 0)
+					.lean()
+					.limit(limit)
+			).map(spell => ({
 				...spell,
 				id: spell._id.toString()
 			})),

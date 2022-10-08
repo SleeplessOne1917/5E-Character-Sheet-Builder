@@ -1,8 +1,8 @@
 import { gql } from 'urql';
 
 const GET_SPELLS = gql`
-	query GetSpells($limit: Int) {
-		spells(limit: $limit) {
+	query GetSpells($limit: Int, $skip: Int) {
+		spells(limit: $limit, skip: $skip) {
 			count
 			spells {
 				id
