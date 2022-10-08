@@ -33,6 +33,7 @@
   width: fit-content;
   padding: 0.25rem;
   z-index: 20;
+  transition: transform 0.2s, color 0.2s
 }
 
 .link:focus-visible {
