@@ -1,4 +1,4 @@
-name: Lint and Test
+name: 5E Character Sheet Builder CI/CD
 
 on:
   push:
@@ -49,3 +49,21 @@ jobs:
 
       - name: Run linter
         run: yarn lint
+    github-release:
+      name: Github Release
+      runs-on: ubuntu-latest
+      needs: [test, lint]
+      if: ${{ github.event_name == 'push' && github.repository == 'abias1122/5E-Character-Sheet-Builder' }}
+      outputs:
+        new_release_published: ${{ steps.semantic.outputs.new_release_published}}
+        version: ${{ steps.semantic.outputs.new_release_version }}
+      steps:
+        - name: Checkout latest code
+          uses: actions/checkout@v2
+          with:
+           fetch-depth: 0
+        - name: Semantic Release
+          id: semantic
+          uses: cycjimmy/semantic-release-action@v3
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
