@@ -1,6 +1,7 @@
 import {
 	accessTokenKey,
-	refreshTokenKey
+	refreshTokenKey,
+	tokenExpired
 } from '../../../constants/generalConstants';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
@@ -22,7 +23,9 @@ type MyStuffIndexProps = {
 };
 
 const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
-	const [spellsResult, refetechSpells] = useQuery<{ spells: Spell[] }>({
+	const [spellsResult, refetechSpells] = useQuery<{
+		spells: { spells: Spell[]; count: number };
+	}>({
 		query: GET_SPELLS,
 		variables: { limit: 5 }
 	});
@@ -32,18 +35,20 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 	useEffect(() => {
 		if (spellsResult.error) {
 			const refreshToken = localStorage.getItem(refreshTokenKey);
-			getToken({ refreshToken }).then(result => {
-				if (result.error || !result.data) {
-					logout();
-					return;
-				}
+			if (refreshToken && spellsResult.error.message == tokenExpired) {
+				getToken({ refreshToken }).then(result => {
+					if (result.error || !result.data) {
+						logout();
+						return;
+					}
 
-				localStorage.setItem(accessTokenKey, result.data.token);
+					localStorage.setItem(accessTokenKey, result.data.token);
 
-				if (spellsResult.error) {
-					refetechSpells();
-				}
-			});
+					if (spellsResult.error) {
+						refetechSpells();
+					}
+				});
+			}
 		}
 	}, [getToken, logout, refetechSpells, spellsResult.error]);
 
@@ -66,7 +71,8 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 				<>
 					<MainContent testId="my-stuff-index">
 						<h1>My Stuff</h1>
-						{(!spellsResult.data || spellsResult.data.spells.length === 0) && (
+						{(!spellsResult.data ||
+							spellsResult.data.spells.spells.length === 0) && (
 							<div className={classes['no-items-container']}>
 								<p>
 									You haven&apos;t created anything yet. Whenever you create
@@ -76,21 +82,22 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 							</div>
 						)}
 						<div className={classes.previews}>
-							{spellsResult.data && spellsResult.data.spells.length > 0 && (
-								<Preview
-									path="spells"
-									title="Spells"
-									items={
-										spellsResult.data?.spells.map(spell => (
-											<SpellItem
-												spell={spell}
-												key={spell.id}
-												onMoreInfoClick={handleSpellMoreInfoClick}
-											/>
-										)) ?? []
-									}
-								/>
-							)}
+							{spellsResult.data &&
+								spellsResult.data.spells.spells.length > 0 && (
+									<Preview
+										path="spells"
+										title="Spells"
+										items={
+											spellsResult.data?.spells.spells.map(spell => (
+												<SpellItem
+													spell={spell}
+													key={spell.id}
+													onMoreInfoClick={handleSpellMoreInfoClick}
+												/>
+											)) ?? []
+										}
+									/>
+								)}
 						</div>
 					</MainContent>
 					<SpellMoreInformationModal

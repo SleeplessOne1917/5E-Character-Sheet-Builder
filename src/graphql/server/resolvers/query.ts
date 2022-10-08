@@ -30,10 +30,13 @@ const Query = {
 			throw new ApolloError(userDoesNotExist);
 		}
 
-		return (await Spell.find({ userId }).lean().limit(limit)).map(spell => ({
-			...spell,
-			id: spell._id.toString()
-		}));
+		return {
+			spells: (await Spell.find({ userId }).lean().limit(limit)).map(spell => ({
+				...spell,
+				id: spell._id.toString()
+			})),
+			count: await Spell.countDocuments({ userId })
+		};
 	}
 };
 

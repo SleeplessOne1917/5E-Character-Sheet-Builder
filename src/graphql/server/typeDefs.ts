@@ -173,9 +173,14 @@ const typeDefs = gql`
 		summons: [Summon!]
 	}
 
+	type SpellsResponse {
+		count: Int!
+		spells: [Spell!]!
+	}
+
 	type Query {
 		viewer: String
-		spells(limit: Int! = 50): [Spell!]!
+		spells(limit: Int! = 50): SpellsResponse!
 	}
 
 	type Mutation {

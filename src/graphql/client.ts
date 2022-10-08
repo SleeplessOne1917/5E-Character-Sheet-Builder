@@ -1,7 +1,4 @@
 import {
-	accessTokenKey
-} from './../constants/generalConstants';
-import {
 	cacheExchange,
 	createClient,
 	dedupExchange,
@@ -10,6 +7,7 @@ import {
 } from 'urql';
 import { useEffect, useState } from 'react';
 
+import { accessTokenKey } from './../constants/generalConstants';
 import { authExchange } from '@urql/exchange-auth';
 import jwt from 'jsonwebtoken';
 
@@ -27,7 +25,6 @@ export const createAuthClient = () =>
 			cacheExchange,
 			authExchange({
 				getAuth: async ({ authState }) => {
-					console.log('getting auth');
 					if (!authState) {
 						const accessToken = localStorage.getItem(accessTokenKey);
 						if (accessToken) {
@@ -63,7 +60,6 @@ export const createAuthClient = () =>
 					});
 				},
 				willAuthError: ({ authState }) => {
-					console.log('will auth error');
 					try {
 						jwt.verify(
 							/* @ts-ignore */
