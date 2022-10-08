@@ -27,6 +27,13 @@ exports[`renders correctly 1`] = `
         </svg>
         Mending
       </div>
+      <button
+        class="button positive"
+        style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+        type="button"
+      >
+        More Info
+      </button>
     </div>
     <div
       class="item"
@@ -44,6 +51,13 @@ exports[`renders correctly 1`] = `
         </svg>
         Message
       </div>
+      <button
+        class="button positive"
+        style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+        type="button"
+      >
+        More Info
+      </button>
     </div>
     <div
       class="item"
@@ -61,6 +75,13 @@ exports[`renders correctly 1`] = `
         </svg>
         Vicious Mockery
       </div>
+      <button
+        class="button positive"
+        style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+        type="button"
+      >
+        More Info
+      </button>
     </div>
     <div
       class="item"
@@ -78,6 +99,13 @@ exports[`renders correctly 1`] = `
         </svg>
         Minor Illusion
       </div>
+      <button
+        class="button positive"
+        style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+        type="button"
+      >
+        More Info
+      </button>
     </div>
     <div
       class="item"
@@ -95,6 +123,13 @@ exports[`renders correctly 1`] = `
         </svg>
         Dancing Lights
       </div>
+      <button
+        class="button positive"
+        style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+        type="button"
+      >
+        More Info
+      </button>
     </div>
   </div>
   <a

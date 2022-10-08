@@ -17,5 +17,12 @@ exports[`renders correctly 1`] = `
     </svg>
     Ray of Frost
   </div>
+  <button
+    class="button positive"
+    style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+    type="button"
+  >
+    More Info
+  </button>
 </div>
 `;
