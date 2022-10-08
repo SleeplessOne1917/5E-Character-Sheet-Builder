@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="item"
+  data-testid="spell-item"
+>
+  <div
+    class="spell-info"
+  >
+    <svg
+      class="school-icon"
+    >
+      <use
+        xlink:href="/Icons.svg#evocation"
+      />
+    </svg>
+    Ray of Frost
+  </div>
+</div>
+`;

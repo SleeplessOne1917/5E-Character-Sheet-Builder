@@ -1,4 +1,4 @@
-import * as stories from './SpellSelector.stories';
+import * as stories from './SpellsSelector.stories';
 
 import { render, screen } from '@testing-library/react';
 

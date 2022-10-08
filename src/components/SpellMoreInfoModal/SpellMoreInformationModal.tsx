@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-import Button from '../../../../Button/Button';
-import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
-import ModalBackground from '../../../../ModalBackground/ModalBackground';
-import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import Button from '../Button/Button';
+import MarkdownParser from '../MarkdownParser/MarkdownParser';
+import ModalBackground from '../ModalBackground/ModalBackground';
+import { Spell } from '../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
 

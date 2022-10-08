@@ -8,7 +8,7 @@ type PreviewProps = {
 };
 
 const Preview = ({ items, title, path }: PreviewProps) => (
-	<section className={classes.preview}>
+	<section className={classes.preview} data-testid="preview">
 		<h2>{title}</h2>
 		<div className={classes.items}>{items}</div>
 		<ArrowLink href={`/my-stuff/${path}`} text={`See All ${title}`} />

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import Button from '../../../../Button/Button';
 import { Spell } from '../../../../../types/characterSheetBuilderAPI';
-import SpellMoreInformationModal from '../SpellMoreInfoModal/SpellMoreInformationModal';
+import SpellMoreInformationModal from '../../../../SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './SpellsKnownDisplay.module.css';
 import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
