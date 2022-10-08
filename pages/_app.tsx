@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import '../styles/fonts.css';
 
-import { useAppDispatch, useAppSelector } from '../src/hooks/reduxHooks';
+import { useAppSelector } from '../src/hooks/reduxHooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { AppProps } from 'next/app';
@@ -15,23 +15,24 @@ import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
-import client from '../src/graphql/client';
-import { fetchLoggedInUsername } from '../src/redux/features/viewer';
+import useLogInAlreadyLoggedIn from '../src/hooks/useLogInAlreadyLoggedIn';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { useStore } from '../src/redux/store';
+import { useUrqlClient } from '../src/graphql/client';
 
 type MyAppProps = {
 	loadingStore: boolean;
+	loadingClient: boolean;
 };
 
 const MyApp = ({
 	Component,
 	pageProps,
 	router,
-	loadingStore
+	loadingStore,
+	loadingClient
 }: AppProps & MyAppProps): JSX.Element => {
 	const { pathname } = router;
-	const dispatch = useAppDispatch();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 	const isLargeOrLarger = useMediaQuery('(min-width: 1024px)');
 	const currentLevel = useAppSelector(
@@ -46,9 +47,7 @@ const MyApp = ({
 		[spellcasting, currentLevel]
 	);
 
-	useEffect(() => {
-		dispatch(fetchLoggedInUsername());
-	}, [dispatch]);
+	useLogInAlreadyLoggedIn(loadingClient);
 
 	const closeMobileNav = useCallback(
 		() => setIsMobileNavOpen(false),
@@ -88,7 +87,7 @@ const MyApp = ({
 	}, []);
 
 	return (
-		<UrqlProvider value={client}>
+		<>
 			<Head>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta httpEquiv="ScreenOrientation" content="autoRotate:disabled" />
@@ -130,20 +129,27 @@ const MyApp = ({
 					<SectionBar hasSpellcasting={hasSpellcasting} />
 				)}
 				<MobileNav isOpen={isMobileNavOpen} onClickLink={closeMobileNav} />
-				{loadingStore ? <LoadingPageContent /> : <Component {...pageProps} />}
+				{loadingStore || loadingClient ? (
+					<LoadingPageContent />
+				) : (
+					<Component {...pageProps} />
+				)}
 				<ToastContainer />
 			</div>
 			<Footer />
-		</UrqlProvider>
+		</>
 	);
 };
 
 const WrappedApp = (props: AppProps) => {
 	const { store, loading } = useStore();
+	const { client, loading: urqlLoading } = useUrqlClient();
 
 	return (
 		<ReduxProvider store={store}>
-			<MyApp {...props} loadingStore={loading} />
+			<UrqlProvider value={client}>
+				<MyApp {...props} loadingStore={loading} loadingClient={urqlLoading} />
+			</UrqlProvider>
 		</ReduxProvider>
 	);
 };

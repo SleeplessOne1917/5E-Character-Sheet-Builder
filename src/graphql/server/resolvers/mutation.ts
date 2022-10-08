@@ -1,26 +1,29 @@
 import Spell, { ISpell } from './../../../db/models/spell';
 import User, { IUser } from '../../../db/models/user';
-import UsernameOTL from '../../../db/models/usernameOTL';
-import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
 	sendUsernameReminder
 } from './../../../services/sendEmailService';
+import {
+	tokenExpired,
+	userDoesNotExist
+} from './../../../constants/generalConstants';
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
+import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
 import { Types } from 'mongoose';
+import UsernameOTL from '../../../db/models/usernameOTL';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
-import nookies from 'nookies';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
-import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 import spellSchema from '../../../yup-schemas/spellSchema';
+import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
 interface LoginUserRequest {
 	username: string;
@@ -75,7 +78,7 @@ type CreateSpellArgs = {
 };
 
 const Mutation = {
-	signUp: async (parent: never, args: SignUpArgs, { res }: ApolloContext) => {
+	signUp: async (parent: never, args: SignUpArgs) => {
 		const { user } = args;
 		await signUpSchema.validate(user, { strict: true });
 
@@ -109,25 +112,25 @@ const Mutation = {
 			);
 		}
 
-		const token = jwt.sign(
+		const accessToken = jwt.sign(
 			{ username: user.username },
-			process.env.JWT_SECRET as string,
+			process.env.NEXT_PUBLIC_JWT_SECRET as string,
 			{
 				expiresIn: '1h'
 			}
 		);
 
-		nookies.set({ res }, 'token', token, {
-			httpOnly: true,
-			maxAge: 60 * 60,
-			secure: process.env.NODE_ENV !== 'development',
-			sameSite: 'Strict',
-			path: '/'
-		});
+		const refreshToken = jwt.sign(
+			{ username: user.username },
+			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			{
+				expiresIn: '180d'
+			}
+		);
 
-		return { token };
+		return { accessToken, refreshToken };
 	},
-	logIn: async (parent: never, args: LoginArgs, { res }: ApolloContext) => {
+	logIn: async (parent: never, args: LoginArgs) => {
 		const user = args.user;
 		await logInSchema.validate(user, { strict: true });
 
@@ -143,37 +146,46 @@ const Mutation = {
 			throw new ApolloError('Username or password was incorrect');
 		}
 
-		const token = jwt.sign(
+		const accessToken = jwt.sign(
 			{ username: user.username },
-			process.env.JWT_SECRET as string,
+			process.env.NEXT_PUBLIC_JWT_SECRET as string,
 			{
 				expiresIn: '1h'
 			}
 		);
 
-		nookies.set({ res }, 'token', token, {
-			httpOnly: true,
-			maxAge: 60 * 60,
-			secure: process.env.NODE_ENV !== 'development',
-			sameSite: 'Strict',
-			path: '/'
-		});
+		const refreshToken = jwt.sign(
+			{ username: user.username },
+			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			{
+				expiresIn: '180d'
+			}
+		);
 
-		return { token };
+		return { accessToken, refreshToken };
 	},
-	logOut: async (
-		parent: never,
-		args: never,
-		{ res, username }: ApolloContext
-	) => {
-		if (username) {
-			nookies.destroy({ res }, 'token', {
-				path: '/'
-			});
-			return username;
-		} else {
-			return null;
+	token: async (parent: never, { refreshToken }: { refreshToken: string }) => {
+		let username: string;
+		try {
+			username = (
+				jwt.verify(
+					refreshToken,
+					process.env.NEXT_PUBLIC_JWT_SECRET as string
+				) as {
+					username: string;
+				}
+			).username;
+		} catch (e) {
+			throw new ApolloError('Refresh token expired');
 		}
+
+		return jwt.sign(
+			{ username },
+			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			{
+				expiresIn: '1h'
+			}
+		);
 	},
 	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request, { strict: true });
@@ -323,12 +335,16 @@ const Mutation = {
 		args: CreateNewPasswordArgs,
 		{ username }: ApolloContext
 	) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
 		await newPasswordSchema.validate(args, { strict: true });
 
 		const user = await User.findOne({ username });
 
 		if (!user) {
-			throw new ApolloError('Must be logged on');
+			throw new ApolloError(userDoesNotExist);
 		}
 
 		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
@@ -348,12 +364,16 @@ const Mutation = {
 		{ spell }: CreateSpellArgs,
 		{ username }: ApolloContext
 	) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
 		await spellSchema.validate(spell, { strict: true });
 
 		const user = await User.findOne({ username });
 
 		if (!user) {
-			throw new ApolloError('Must be logged on');
+			throw new ApolloError(userDoesNotExist);
 		}
 
 		try {

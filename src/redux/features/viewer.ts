@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import GET_VIEWER from '../../graphql/queries/getViewer';
 import { ToastType } from '../../types/toast';
-import client from '../../graphql/client';
+import { createAuthClient } from './../../graphql/client';
 import { show } from './toast';
 
 const initialState = null as string | null;
@@ -10,10 +10,8 @@ const initialState = null as string | null;
 export const fetchLoggedInUsername = createAsyncThunk(
 	'viewer/fetchLoggedInUsername',
 	async (arg, { rejectWithValue, dispatch }) => {
-		const result = await client
-			.query<{ viewer: string }>(GET_VIEWER, undefined, {
-				requestPolicy: 'cache-and-network'
-			})
+		const result = await createAuthClient()
+			.query<{ viewer: string }>(GET_VIEWER, undefined)
 			.toPromise();
 
 		if (result.error) {

@@ -5,7 +5,6 @@ import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
 import dbConnect from '../../src/db/dbConnect';
 import jwt from 'jsonwebtoken';
-import nookies from 'nookies';
 import schema from '../../src/graphql/server/schema';
 
 const cors = Cors();
@@ -13,18 +12,17 @@ const cors = Cors();
 const apolloServer = new ApolloServer({
 	schema,
 	context: ({
-		req,
-		res
+		req
 	}: {
 		req: NextApiRequest;
 		res: NextApiResponse;
 	}): ApolloContext => {
-		const token = nookies.get({ req }).token;
+		const token = req.headers.authorization?.replace('Bearer ', '') ?? '';
 
 		let username: string | null;
 		try {
 			username = (
-				jwt.verify(token, process.env.JWT_SECRET as string) as {
+				jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET as string) as {
 					username: string;
 				}
 			).username;
@@ -32,7 +30,7 @@ const apolloServer = new ApolloServer({
 			username = null;
 		}
 
-		return { username, req, res };
+		return { username };
 	}
 });
 

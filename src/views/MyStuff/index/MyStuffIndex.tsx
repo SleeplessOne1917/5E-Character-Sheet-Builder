@@ -1,7 +1,13 @@
-import { useCallback, useState } from 'react';
+import {
+	accessTokenKey,
+	refreshTokenKey
+} from '../../../constants/generalConstants';
+import { useCallback, useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'urql';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
+import GET_TOKEN from '../../../graphql/mutations/user/token';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import Preview from '../../../components/MyStuff/Preview/Preview';
@@ -9,17 +15,37 @@ import { Spell } from '../../../types/characterSheetBuilderAPI';
 import SpellItem from '../../../components/MyStuff/SpellItem/SpellItem';
 import SpellMoreInformationModal from '../../../components/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
-import { useQuery } from 'urql';
+import useLogout from '../../../hooks/useLogout';
 
 type MyStuffIndexProps = {
 	loading: boolean;
 };
 
 const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
-	const [spellsResult, _] = useQuery<{ spells: Spell[] }>({
+	const [spellsResult, refetechSpells] = useQuery<{ spells: Spell[] }>({
 		query: GET_SPELLS,
 		variables: { limit: 5 }
 	});
+	const [_, getToken] = useMutation<{ token: string }>(GET_TOKEN);
+	const logout = useLogout();
+
+	useEffect(() => {
+		if (spellsResult.error) {
+			const refreshToken = localStorage.getItem(refreshTokenKey);
+			getToken({ refreshToken }).then(result => {
+				if (result.error || !result.data) {
+					logout();
+					return;
+				}
+
+				localStorage.setItem(accessTokenKey, result.data.token);
+
+				if (spellsResult.error) {
+					refetechSpells();
+				}
+			});
+		}
+	}, [getToken, logout, refetechSpells, spellsResult.error]);
 
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 

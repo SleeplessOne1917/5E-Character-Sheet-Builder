@@ -1,3 +1,8 @@
+import {
+	tokenExpired,
+	userDoesNotExist
+} from './../../../constants/generalConstants';
+
 import { ApolloContext } from './../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import Spell from './../../../db/models/spell';
@@ -15,10 +20,14 @@ const Query = {
 		{ limit }: SkipLimit,
 		{ username }: ApolloContext
 	) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
 		const userId = (await User.findOne({ username }).lean())?._id;
 
 		if (!userId) {
-			throw new ApolloError('Must be logged in to fetch spells');
+			throw new ApolloError(userDoesNotExist);
 		}
 
 		return (await Spell.find({ userId }).lean().limit(limit)).map(spell => ({

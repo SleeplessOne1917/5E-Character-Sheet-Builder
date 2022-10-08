@@ -1,16 +1,23 @@
 import Button, { ButtonType } from '../../components/Button/Button';
+import {
+	accessTokenKey,
+	refreshTokenKey,
+	tokenExpired
+} from '../../constants/generalConstants';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 import CREATE_NEW_PASSWORD from '../../graphql/mutations/user/createNewPassword';
 import { Formik } from 'formik';
+import GET_TOKEN from '../../graphql/mutations/user/token';
+import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import TextInput from '../../components/TextInput/TextInput';
 import { ToastType } from '../../types/toast';
 import classes from './Account.module.css';
 import newPasswordSchema from '../../yup-schemas/newPasswordSchema';
 import { show } from '../../redux/features/toast';
+import useLogout from '../../hooks/useLogout';
 import { useMutation } from 'urql';
-import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 
 type AccountProps = {
 	loading: boolean;
@@ -18,7 +25,10 @@ type AccountProps = {
 
 const Account = ({ loading }: AccountProps) => {
 	const username = useAppSelector(state => state.viewer);
-	const [_, createNewPassword] = useMutation(CREATE_NEW_PASSWORD);
+	const [_, createNewPassword] =
+		useMutation<{ createNewPassword: string }>(CREATE_NEW_PASSWORD);
+	const [__, getToken] = useMutation<{ token: string }>(GET_TOKEN);
+	const logout = useLogout();
 	const dispatch = useAppDispatch();
 
 	return (
@@ -43,18 +53,51 @@ const Account = ({ loading }: AccountProps) => {
 							const result = await createNewPassword(values);
 
 							if (result.error) {
-								dispatch(
-									show({
-										closeTimeoutSeconds: 10,
-										message: result.error.message,
-										type: ToastType.error
-									})
-								);
+								if (result.error.message === tokenExpired) {
+									const refreshToken = localStorage.getItem(refreshTokenKey);
+									const tokenResult = await getToken({ refreshToken });
+									if (tokenResult.error || !tokenResult.data) {
+										logout();
+										return;
+									}
+									localStorage.setItem(
+										accessTokenKey,
+										tokenResult.data?.token ?? ''
+									);
+
+									const result2 = await createNewPassword(values);
+
+									if (result2.error) {
+										dispatch(
+											show({
+												closeTimeoutSeconds: 10,
+												message: result2.error.message,
+												type: ToastType.error
+											})
+										);
+									} else {
+										dispatch(
+											show({
+												closeTimeoutSeconds: 10,
+												message: result2.data?.createNewPassword ?? '',
+												type: ToastType.success
+											})
+										);
+									}
+								} else {
+									dispatch(
+										show({
+											closeTimeoutSeconds: 10,
+											message: result.error.message,
+											type: ToastType.error
+										})
+									);
+								}
 							} else {
 								dispatch(
 									show({
 										closeTimeoutSeconds: 10,
-										message: result.data.createNewPassword,
+										message: result.data?.createNewPassword ?? '',
 										type: ToastType.success
 									})
 								);

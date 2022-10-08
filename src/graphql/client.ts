@@ -1,14 +1,97 @@
 import {
+	accessTokenKey
+} from './../constants/generalConstants';
+import {
 	cacheExchange,
 	createClient,
 	dedupExchange,
-	fetchExchange
+	fetchExchange,
+	makeOperation
 } from 'urql';
+import { useEffect, useState } from 'react';
 
-const client = createClient({
+import { authExchange } from '@urql/exchange-auth';
+import jwt from 'jsonwebtoken';
+
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+const defaultClient = createClient({
 	url: `/api/graphql`,
-	exchanges: [dedupExchange, cacheExchange, fetchExchange],
-	requestPolicy: 'cache-and-network'
+	exchanges: [dedupExchange, cacheExchange, fetchExchange]
 });
 
-export default client;
+export const createAuthClient = () =>
+	createClient({
+		url: `/api/graphql`,
+		exchanges: [
+			dedupExchange,
+			cacheExchange,
+			authExchange({
+				getAuth: async ({ authState }) => {
+					console.log('getting auth');
+					if (!authState) {
+						const accessToken = localStorage.getItem(accessTokenKey);
+						if (accessToken) {
+							return { accessToken };
+						}
+						return null;
+					}
+
+					return authState;
+				},
+				addAuthToOperation: ({ authState, operation }) => {
+					/* @ts-ignore */
+					if (!authState || !authState.accessToken) {
+						return operation;
+					}
+
+					const fetchOptions =
+						typeof operation.context.fetchOptions === 'function'
+							? operation.context.fetchOptions()
+							: operation.context.fetchOptions || {};
+
+					return makeOperation(operation.kind, operation, {
+						...operation.context,
+						fetchOptions: {
+							...fetchOptions,
+							headers: {
+								...fetchOptions.headers,
+								/* @ts-ignore */
+								Authorization: `Bearer ${authState.accessToken}`
+							},
+							credentials: 'include'
+						}
+					});
+				},
+				willAuthError: ({ authState }) => {
+					console.log('will auth error');
+					try {
+						jwt.verify(
+							/* @ts-ignore */
+							authState.accessToken,
+							process.env.NEXT_PUBLIC_JWT_SECRET as string
+						);
+					} catch (e) {
+						return true;
+					}
+
+					return false;
+				}
+			}),
+			fetchExchange
+		],
+		requestPolicy: 'cache-and-network'
+	});
+
+export const useUrqlClient = () => {
+	const [client, setClient] = useState(defaultClient);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		setClient(createAuthClient());
+		setLoading(false);
+	}, []);
+
+	return { loading, client };
+};
+
+export default defaultClient;

@@ -1,4 +1,11 @@
+import {
+	accessTokenKey,
+	refreshTokenKey
+} from '../../../constants/generalConstants';
+
+import { AuthResponse } from '../../../types/auth';
 import LOG_IN from '../../../graphql/mutations/user/logIn';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import LogInSignUpForm from '../../../components/LogInSignUp/LogInSignUpForm';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
@@ -8,7 +15,6 @@ import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 
 type LogInProps = {
 	loading: boolean;
@@ -16,7 +22,7 @@ type LogInProps = {
 
 const LogIn = ({ loading }: LogInProps): JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [_, logIn] = useMutation(LOG_IN);
+	const [_, logIn] = useMutation<{ logIn: AuthResponse }>(LOG_IN);
 	const router = useRouter();
 
 	return (
@@ -39,6 +45,12 @@ const LogIn = ({ loading }: LogInProps): JSX.Element => {
 								};
 								dispatch(show(toast));
 							} else {
+								const { accessToken, refreshToken } = result.data
+									?.logIn as AuthResponse;
+
+								localStorage.setItem(accessTokenKey, accessToken);
+								localStorage.setItem(refreshTokenKey, refreshToken);
+
 								await dispatch(fetchLoggedInUsername());
 								router.replace('/');
 							}

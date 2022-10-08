@@ -26,9 +26,16 @@ import {
 } from '../../../redux/features/editingSpell';
 import { FocusEventHandler, useCallback, useState } from 'react';
 import { Formik, FormikErrors, FormikHelpers } from 'formik';
+import {
+	accessTokenKey,
+	refreshTokenKey,
+	tokenExpired
+} from '../../../constants/generalConstants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
+import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
 import Checkbox from '../../../components/Checkbox/Checkbox';
+import GET_TOKEN from '../../../graphql/mutations/user/token';
 import { Item } from '../../../types/db/item';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
@@ -39,12 +46,12 @@ import Select from '../../../components/Select/Select/Select';
 import { Summon } from '../../../types/summon';
 import SummonFormFields from '../../../components/Create/Summon/SummonFormFields/SummonFormFields';
 import TextInput from '../../../components/TextInput/TextInput';
-import classes from './Spell.module.css';
-import spellSchema from '../../../yup-schemas/spellSchema';
-import { useMutation } from 'urql';
-import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
 import { ToastType } from '../../../types/toast';
+import classes from './Spell.module.css';
 import { show } from '../../../redux/features/toast';
+import spellSchema from '../../../yup-schemas/spellSchema';
+import useLogout from '../../../hooks/useLogout';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 
 type SpellProps = {
@@ -66,6 +73,8 @@ const Spell = ({
 	const dispatch = useAppDispatch();
 	const [initialValues, setInitialValues] = useState(editingSpell);
 	const [_, createSpell] = useMutation(CREATE_SPELL);
+	const [__, getToken] = useMutation<{ token: string }>(GET_TOKEN);
+	const logout = useLogout();
 	const router = useRouter();
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
@@ -181,20 +190,48 @@ const Spell = ({
 		) => {
 			const result = await createSpell({ spell: values });
 			if (result.error) {
-				const toast = {
-					closeTimeoutSeconds: 10,
-					message: result.error.message,
-					type: ToastType.error
-				};
-				dispatch(show(toast));
+				if (result.error.message === tokenExpired) {
+					const refreshToken = localStorage.getItem(refreshTokenKey);
+					const tokenResult = await getToken({ refreshToken });
+
+					if (tokenResult.error || !tokenResult.data) {
+						logout();
+						return;
+					}
+
+					localStorage.setItem(accessTokenKey, tokenResult.data.token);
+
+					const result2 = await createSpell({ spell: values });
+
+					if (result2.error) {
+						const toast = {
+							closeTimeoutSeconds: 10,
+							message: result2.error.message,
+							type: ToastType.error
+						};
+						dispatch(show(toast));
+					} else {
+						setInitialValues(spellInitialState);
+						resetForm();
+						dispatch(resetSpell(undefined));
+						router.replace('/my-stuff');
+					}
+				} else {
+					const toast = {
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					};
+					dispatch(show(toast));
+				}
 			} else {
 				setInitialValues(spellInitialState);
 				resetForm();
 				dispatch(resetSpell(undefined));
-				router.replace('/create');
+				router.replace('/my-stuff');
 			}
 		},
-		[dispatch, createSpell, router]
+		[dispatch, createSpell, router, getToken, logout]
 	);
 
 	return (

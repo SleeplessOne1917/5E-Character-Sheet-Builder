@@ -13,7 +13,8 @@ const typeDefs = gql`
 	}
 
 	type AuthResponse {
-		token: String!
+		accessToken: String!
+		refreshToken: String!
 	}
 
 	type ForgotResponse {
@@ -180,7 +181,7 @@ const typeDefs = gql`
 	type Mutation {
 		signUp(user: SignUpRequest!): AuthResponse!
 		logIn(user: LoginRequest!): AuthResponse!
-		logOut: String
+		token(refreshToken: String!): String!
 		forgotUsername(request: ForgotUsernameRequest!): ForgotResponse!
 		forgotPassword(request: ForgotPasswordRequest!): ForgotResponse!
 		remindUsername(otlId: String!): String!
