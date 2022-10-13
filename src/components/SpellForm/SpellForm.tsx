@@ -23,7 +23,6 @@ import {
 	setSummonProperties
 } from '../../redux/features/editingSpell';
 
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import Checkbox from '../Checkbox/Checkbox';
 import { Item } from '../../types/db/item';
 import MarkdownTextArea from '../MarkdownTextArea/MarkdownTextArea';
