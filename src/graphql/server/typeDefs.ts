@@ -181,6 +181,7 @@ const typeDefs = gql`
 	type Query {
 		viewer: String
 		spells(limit: Int! = 50, skip: Int): SpellsResponse!
+		spell(id: ID!): Spell!
 	}
 
 	type Mutation {
@@ -202,6 +203,7 @@ const typeDefs = gql`
 			confirmPassword: String!
 		): String!
 		createSpell(spell: SpellInput!): String!
+		updateSpell(id: ID!, spell: SpellInput!): String!
 	}
 `;
 

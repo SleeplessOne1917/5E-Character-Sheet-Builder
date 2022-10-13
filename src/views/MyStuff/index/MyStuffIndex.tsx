@@ -104,6 +104,7 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 						show={!!selectedSpell}
 						spell={selectedSpell}
 						onClose={handleSpellMoreInfoClose}
+						shouldShowEdit
 					/>
 				</>
 			)}

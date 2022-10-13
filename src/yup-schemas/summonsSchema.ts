@@ -25,7 +25,7 @@ const summonsSchema = array()
 			name: string()
 				.required('Summon name is required')
 				.min(1, 'Summon name is required')
-				.max(30, 'Summon name cannot be longer than 30 characters.'),
+				.max(50, 'Summon name cannot be longer than 30 characters.'),
 			size: string()
 				.required('Summon size is required')
 				.test(
@@ -43,15 +43,15 @@ const summonsSchema = array()
 			armorClass: string()
 				.required('Summon armor class is required')
 				.min(1, 'Summon armor class is required')
-				.max(50, 'Summon armor class cannot be more than 50 characters.'),
+				.max(100, 'Summon armor class cannot be more than 50 characters.'),
 			hitPoints: string()
 				.required('Summon hit points are required')
 				.min(1, 'Summon hit points are required')
-				.max(50, 'Summon hit points cannot be more than 50 characters.'),
+				.max(100, 'Summon hit points cannot be more than 50 characters.'),
 			speed: string()
 				.required('Summon speed is required')
 				.min(1, 'Summon speed is required')
-				.max(50, 'Summon speed cannot be more than 50 characters.'),
+				.max(100, 'Summon speed cannot be more than 50 characters.'),
 			strength: number()
 				.transform(value => (isNaN(value) ? undefined : value))
 				.required('Summon strength is required')
@@ -142,6 +142,7 @@ const summonsSchema = array()
 					'Summon condition immunities cannot be more than 100 characters'
 				)
 				.optional()
+				.nullable()
 				.default(undefined),
 			damageResistances: string()
 				.max(
@@ -149,18 +150,22 @@ const summonsSchema = array()
 					'Summon damage resistances cannot be more than 100 characters'
 				)
 				.optional()
+				.nullable()
 				.default(undefined),
 			damageImmunities: string()
 				.max(100, 'Summon damage immunities cannot be more than 100 characters')
 				.optional()
+				.nullable()
 				.default(undefined),
 			savingThrows: string()
 				.max(100, 'Summon saving throws cannot be more than 100 characters')
 				.optional()
+				.nullable()
 				.default(undefined),
 			skills: string()
 				.max(100, 'Summon skills cannot be more than 100 characters')
 				.optional()
+				.nullable()
 				.default(undefined),
 			senses: string()
 				.max(100, 'Summon senses cannot be more than 100 characters')
@@ -169,11 +174,12 @@ const summonsSchema = array()
 				.max(100, 'Summon languages cannot be more than 100 characters')
 				.required('Summon languages are required'),
 			proficiencyBonus: string()
-				.max(50, 'Summon proficiency bonus cannot be more than 50 characters')
+				.max(100, 'Summon proficiency bonus cannot be more than 50 characters')
 				.required('Summon proficiency bonus is required'),
 			specialAbilities: array()
 				.of(getNameDescriptionSchema('special ability'))
 				.optional()
+				.nullable()
 				.default(undefined)
 				.max(5, 'Cannot have more than 5 summon special abilities'),
 			actions: array()
@@ -184,18 +190,19 @@ const summonsSchema = array()
 			bonusActions: array()
 				.of(getNameDescriptionSchema('bonus action'))
 				.optional()
+				.nullable()
 				.default(undefined)
 				.max(5, 'Cannot have more than 5 summon bonus actions'),
 			reactions: array()
 				.of(getNameDescriptionSchema('reaction'))
 				.optional()
+				.nullable()
 				.default(undefined)
 				.max(5, 'Cannot have more than 5 summon reactions')
 		})
 	)
 	.optional()
 	.default(undefined)
-	.min(1, 'There must be at least one summon in the summons array')
 	.max(5, 'No more than 5 summons allowed');
 
 export default summonsSchema;

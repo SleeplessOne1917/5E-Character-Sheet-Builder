@@ -50,7 +50,7 @@ const SummonFormFields = ({
 	const dispatch = useAppDispatch();
 
 	const handleAddSummon = useCallback(() => {
-		dispatch(actions.add());
+		dispatch(actions.add(undefined));
 	}, [dispatch, actions]);
 
 	const handleSetSummonProperties = useCallback(

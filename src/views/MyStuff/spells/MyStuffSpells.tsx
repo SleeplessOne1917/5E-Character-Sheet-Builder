@@ -104,6 +104,7 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 				spell={selectedSpell}
 				show={!!selectedSpell}
 				onClose={handleCloseShowMoreInfoModal}
+				shouldShowEdit
 			/>
 		</>
 	);

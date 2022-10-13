@@ -20,6 +20,7 @@ const defaultClient = createClient({
 export const createAuthClient = () =>
 	createClient({
 		url: `/api/graphql`,
+		maskTypename: true,
 		exchanges: [
 			dedupExchange,
 			cacheExchange,
