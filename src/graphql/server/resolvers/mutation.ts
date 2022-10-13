@@ -77,6 +77,11 @@ type CreateSpellArgs = {
 	spell: Omit<ISpell, 'userId'>;
 };
 
+type UpdateSpellArgs = {
+	id: string;
+	spell: Omit<ISpell, 'userId'>;
+};
+
 const Mutation = {
 	signUp: async (parent: never, args: SignUpArgs) => {
 		const { user } = args;
@@ -383,6 +388,34 @@ const Mutation = {
 		}
 
 		return 'Spell successfully created';
+	},
+	updateSpell: async (
+		parent: never,
+		{ spell, id }: UpdateSpellArgs,
+		{ username }: ApolloContext
+	) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
+		await spellSchema.validate(spell, { strict: true });
+
+		const user = await User.findOne({ username });
+
+		if (!user) {
+			throw new ApolloError(userDoesNotExist);
+		}
+
+		try {
+			await Spell.updateOne(
+				{ _id: new Types.ObjectId(id), username },
+				{ $set: spell }
+			);
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not edit spell');
+		}
+
+		return 'Spell edited successfully';
 	}
 };
 

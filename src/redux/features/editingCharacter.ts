@@ -8,6 +8,7 @@ import classInfo, {
 	initialState as classInitialState
 } from './classInfo';
 import { combineReducers, createSlice } from '@reduxjs/toolkit';
+import hp, { HPState, initialState as hpInitialState } from './hp';
 import languages, { initialState as languagesInitialState } from './languages';
 import name, { initialState as nameInitialState } from './name';
 import proficiencies, {
@@ -21,7 +22,6 @@ import spellcasting, {
 	SpellcastingState,
 	initialState as spellcastingInitialState
 } from './spellcasting';
-import hp, { HPState, initialState as hpInitialState } from './hp';
 
 import reduceReducers from 'reduce-reducers';
 
@@ -50,7 +50,9 @@ export const initialState: EditingCharacterState = {
 const editingCharacterSlice = createSlice({
 	name: 'editingCharacter',
 	initialState,
-	reducers: {}
+	reducers: {
+		doNothing: state => state
+	}
 });
 
 const wholeReducer = combineReducers({
@@ -63,6 +65,8 @@ const wholeReducer = combineReducers({
 	name,
 	hp
 });
+
+export const { doNothing } = editingCharacterSlice.actions;
 
 export default reduceReducers<EditingCharacterState>(
 	editingCharacterSlice.reducer,
