@@ -9,7 +9,7 @@ import classes from './SpellMoreInformationModal.module.css';
 import { useRouter } from 'next/router';
 
 type SpellMoreInformationModalProps = {
-	shouldShowEdit?: boolean;
+	shouldShowEditAndClasses?: boolean;
 	show: boolean;
 	spell?: Spell;
 	onClose: () => void;
@@ -19,7 +19,7 @@ const SpellMoreInformationModal = ({
 	show,
 	spell,
 	onClose,
-	shouldShowEdit = false
+	shouldShowEditAndClasses = false
 }: SpellMoreInformationModalProps) => {
 	const closeButtonRef = useRef<HTMLButtonElement>();
 	const router = useRouter();
@@ -85,6 +85,12 @@ const SpellMoreInformationModal = ({
 							{spell?.components.join(', ')}
 							{spell?.material ? ` (${spell.material})` : ''}
 						</div>
+						{shouldShowEditAndClasses && (
+							<div className={classes['summary-item']}>
+								<span className={classes['summary-item-label']}>Classes</span>:{' '}
+								{spell?.classes.map(({ name }) => name).join(', ')}
+							</div>
+						)}
 					</div>
 					<div className={classes.description}>
 						<MarkdownParser input={spell?.description ?? ''} />
@@ -114,7 +120,7 @@ const SpellMoreInformationModal = ({
 								</svg>
 							</div>
 						)}
-						{shouldShowEdit && (
+						{shouldShowEditAndClasses && (
 							<Button
 								positive
 								onClick={handleEditClick}
