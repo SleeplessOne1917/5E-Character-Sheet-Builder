@@ -173,7 +173,7 @@ exports[`renders correctly when error 1`] = `
         <p
           class="error-message"
         >
-          Could not load race details
+          Could not load details
         </p>
       </div>
     </div>
