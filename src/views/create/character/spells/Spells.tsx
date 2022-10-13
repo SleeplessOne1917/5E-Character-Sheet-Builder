@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
+import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
@@ -52,76 +53,70 @@ const Spells = () => {
 		}
 	}, [router, classInfo.class?.spellcasting, classInfo.level, setIsLoading]);
 
-	return (
+	return isLoading ? (
+		<LoadingPageContent />
+	) : (
 		<MainContent>
 			<GeneralInfoBar />
-			{isLoading ? (
-				<div className={styles['loading-container']}>
-					<LoadingSpinner />
+			<h1 className={styles.title}>Spells</h1>
+			{spellcasting.spells.length > 0 && (
+				<div className={styles['spells-selector-container']}>
+					<h2 className={styles['spell-select-title']}>
+						Spells {shouldPrepareSpells ? 'Prepared' : 'Known'}
+					</h2>
+					<SpellsKnownDisplay />
 				</div>
-			) : (
-				<>
-					<h1 className={styles.title}>Spells</h1>
-					{spellcasting.spells.length > 0 && (
-						<div className={styles['spells-selector-container']}>
-							<h2 className={styles['spell-select-title']}>
-								Spells {shouldPrepareSpells ? 'Prepared' : 'Known'}
-							</h2>
-							<SpellsKnownDisplay />
-						</div>
-					)}
-					{spellcasting.cantripsKnown > 0 && (
-						<div className={styles['spells-selector-container']}>
-							<h2 className={styles['spell-select-title']}>
-								Select {spellcasting.cantripsKnown} Cantrip
-								{spellcasting.cantripsKnown > 1 ? 's' : ''}
-							</h2>
-							{isFetchingSpells ? (
-								<div className={styles['loading-container']}>
-									<LoadingSpinner />
-								</div>
-							) : (
-								<SpellsSelector
-									spells={allClassSpells.filter(({ level }) => level === 0)}
-									choose={spellcasting.cantripsKnown}
-								/>
-							)}
-						</div>
-					)}
-					<div className={styles['spells-selector-container']}>
-						{shouldPrepareSpells ? (
-							<h2 className={styles['spell-select-title']}>
-								Prepare {numberOfSpellsToPrepare} Spell
-								{numberOfSpellsToPrepare > 1 ? 's' : ''}
-							</h2>
-						) : (
-							<h2 className={styles['spell-select-title']}>
-								Select {spellcasting.spellsKnown} Spell
-								{spellcasting.spellsKnown > 1 ? 's' : ''}
-							</h2>
-						)}
-						{isFetchingSpells ? (
-							<div className={styles['loading-container']}>
-								<LoadingSpinner />
-							</div>
-						) : (
-							<SpellsSelector
-								spells={[
-									...allClassSpells.filter(
-										({ level }) =>
-											level >= 1 && level <= spellcasting.highestSlotLevel
-									)
-								].sort((a, b) => a.level - b.level)}
-								choose={
-									shouldPrepareSpells
-										? numberOfSpellsToPrepare
-										: spellcasting.spellsKnown
-								}
-							/>
-						)}
-					</div>
-				</>
 			)}
+			{spellcasting.cantripsKnown > 0 && (
+				<div className={styles['spells-selector-container']}>
+					<h2 className={styles['spell-select-title']}>
+						Select {spellcasting.cantripsKnown} Cantrip
+						{spellcasting.cantripsKnown > 1 ? 's' : ''}
+					</h2>
+					{isFetchingSpells ? (
+						<div className={styles['loading-container']}>
+							<LoadingSpinner />
+						</div>
+					) : (
+						<SpellsSelector
+							spells={allClassSpells.filter(({ level }) => level === 0)}
+							choose={spellcasting.cantripsKnown}
+						/>
+					)}
+				</div>
+			)}
+			<div className={styles['spells-selector-container']}>
+				{shouldPrepareSpells ? (
+					<h2 className={styles['spell-select-title']}>
+						Prepare {numberOfSpellsToPrepare} Spell
+						{numberOfSpellsToPrepare > 1 ? 's' : ''}
+					</h2>
+				) : (
+					<h2 className={styles['spell-select-title']}>
+						Select {spellcasting.spellsKnown} Spell
+						{spellcasting.spellsKnown > 1 ? 's' : ''}
+					</h2>
+				)}
+				{isFetchingSpells ? (
+					<div className={styles['loading-container']}>
+						<LoadingSpinner />
+					</div>
+				) : (
+					<SpellsSelector
+						spells={[
+							...allClassSpells.filter(
+								({ level }) =>
+									level >= 1 && level <= spellcasting.highestSlotLevel
+							)
+						].sort((a, b) => a.level - b.level)}
+						choose={
+							shouldPrepareSpells
+								? numberOfSpellsToPrepare
+								: spellcasting.spellsKnown
+						}
+					/>
+				)}
+			</div>
 		</MainContent>
 	);
 };
