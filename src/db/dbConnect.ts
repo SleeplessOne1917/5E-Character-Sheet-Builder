@@ -22,7 +22,7 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = (global as Global).mongoose;
+let cached = (global as Global).mongoose as Cached;
 
 if (!cached) {
 	cached = (global as Global).mongoose = { conn: null, promise: null };

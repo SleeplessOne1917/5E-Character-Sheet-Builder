@@ -49,8 +49,8 @@ import SelectedClassDisplay from '../../../../components/Create/Character/Class/
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import { getClass } from '../../../../services/classService';
 import { getMonsterTypes } from '../../../../graphql/srdClientService';
-import styles from './Class.module.css';
 import { removeLevelHPBonus } from '../../../../redux/features/hp';
+import styles from './Class.module.css';
 
 type ClassProps = {
 	classes: SrdItem[];
@@ -297,20 +297,20 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 		}
 
 		for (let i = 0; i < classInfo.level - 1; ++i) {
-			dispatch(removeLevelHPBonus());
+			dispatch(removeLevelHPBonus(undefined));
 		}
 
 		dispatch(setSpellsKnown(0));
 		dispatch(setCantripsKnown(0));
 		dispatch(setHighestSlotLevel(0));
-		for (const { index } of classInfo.spells ?? []) {
-			dispatch(removeClassSpell(index));
-			dispatch(removeSpell(index));
+		for (const { id } of classInfo.spells ?? []) {
+			dispatch(removeClassSpell(id));
+			dispatch(removeSpell(id));
 		}
 
 		if (classInfo.subclassSpells && classInfo.subclassSpells.length > 0) {
 			for (const spell of classInfo.subclassSpells) {
-				dispatch(removeSpell(spell.index));
+				dispatch(removeSpell(spell.id));
 			}
 		}
 
@@ -328,7 +328,7 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 			}
 		}
 
-		dispatch(deselectClass());
+		dispatch(deselectClass(undefined));
 		setShowDeselectModal(false);
 	}, [dispatch, setShowDeselectModal, classInfo]);
 

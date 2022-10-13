@@ -82,8 +82,8 @@ const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}
