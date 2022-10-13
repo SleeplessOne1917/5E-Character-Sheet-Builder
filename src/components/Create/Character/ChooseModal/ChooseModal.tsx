@@ -4,8 +4,8 @@ import Button from '../../../Button/Button';
 import { Descriptor } from '../../../../types/creation';
 import DescriptorComponent from '../Descriptor/Descriptor';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
-import classes from './ChooseModal.module.css';
 import ModalBackground from '../../../ModalBackground/ModalBackground';
+import classes from './ChooseModal.module.css';
 
 export type ChooseModalProps = {
 	show: boolean;
@@ -71,9 +71,7 @@ const ChooseModal = ({
 						{loading ? (
 							<LoadingSpinner />
 						) : error ? (
-							<p className={classes['error-message']}>
-								Could not load race details
-							</p>
+							<p className={classes['error-message']}>Could not load details</p>
 						) : (
 							descriptors &&
 							descriptors.map((descriptor, index) => (
