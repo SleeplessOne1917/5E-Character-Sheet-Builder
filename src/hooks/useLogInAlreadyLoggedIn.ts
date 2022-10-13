@@ -41,7 +41,6 @@ const useLogInAlreadyLoggedIn = (loading: boolean) => {
 		let logInInterval: NodeJS.Timer;
 
 		if (run && !loading) {
-			console.log('logging in');
 			logIn();
 			logInInterval = setInterval(logIn, 1000 * 60 * 15);
 			setRun(false);

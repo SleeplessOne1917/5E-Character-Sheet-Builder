@@ -93,14 +93,16 @@ const spellSchema = object({
 					}
 				).isValid
 		),
-	material: string().when('components', {
-		is: (components: string[] | undefined) =>
-			components && components.includes('M'),
-		then: string()
-			.required('Material is required')
-			.min(1, 'Material is required')
-			.max(100, 'Material must be 100 characters or less')
-	}),
+	material: string()
+		.nullable()
+		.when('components', {
+			is: (components: string[] | undefined) =>
+				components && components.includes('M'),
+			then: string()
+				.required('Material is required')
+				.min(1, 'Material is required')
+				.max(100, 'Material must be 100 characters or less')
+		}),
 	classes: array()
 		.of(
 			object({
@@ -154,6 +156,7 @@ const spellSchema = object({
 		.max(5000, 'Description cannot be longer than 5000 characters'),
 	atHigherLevels: string()
 		.optional()
+		.nullable()
 		.max(2000, 'At higher levels cannot be longer than 2000 characters.'),
 	damageType: object({
 		name: string()
@@ -180,6 +183,7 @@ const spellSchema = object({
 			)
 	})
 		.optional()
+		.nullable()
 		.default(undefined),
 	summons: summonsSchema
 });

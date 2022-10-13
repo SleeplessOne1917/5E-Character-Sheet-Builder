@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import Button from '../Button/Button';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
@@ -6,8 +6,10 @@ import ModalBackground from '../ModalBackground/ModalBackground';
 import { Spell } from '../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
+import { useRouter } from 'next/router';
 
 type SpellMoreInformationModalProps = {
+	shouldShowEdit?: boolean;
 	show: boolean;
 	spell?: Spell;
 	onClose: () => void;
@@ -16,9 +18,15 @@ type SpellMoreInformationModalProps = {
 const SpellMoreInformationModal = ({
 	show,
 	spell,
-	onClose
+	onClose,
+	shouldShowEdit = false
 }: SpellMoreInformationModalProps) => {
 	const closeButtonRef = useRef<HTMLButtonElement>();
+	const router = useRouter();
+
+	const handleEditClick = useCallback(() => {
+		router.push(`/my-stuff/edit/spells/${spell?.id}`);
+	}, [router, spell?.id]);
 
 	useEffect(() => {
 		if (show) {
@@ -105,6 +113,15 @@ const SpellMoreInformationModal = ({
 									<use xlinkHref={`/Icons.svg#${spell.damageType?.id}`} />
 								</svg>
 							</div>
+						)}
+						{shouldShowEdit && (
+							<Button
+								positive
+								onClick={handleEditClick}
+								style={{ width: '80%' }}
+							>
+								Edit
+							</Button>
 						)}
 					</div>
 				</div>
