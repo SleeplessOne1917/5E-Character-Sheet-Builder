@@ -21,3 +21,5 @@ export type DeepError<T> = T extends object
 	: T extends (infer U)[]
 	? DeepError<U>[]
 	: string;
+
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

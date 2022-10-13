@@ -6,10 +6,16 @@ import {
 import { ApolloContext } from './../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import Spell from './../../../db/models/spell';
+import { Types } from 'mongoose';
 import User from './../../../db/models/user';
 
 type SkipLimit = {
 	limit: number;
+	skip?: number;
+};
+
+type WithId = {
+	id: string;
 };
 
 const Query = {
@@ -17,7 +23,7 @@ const Query = {
 		username,
 	spells: async (
 		parent: never,
-		{ limit }: SkipLimit,
+		{ limit, skip }: SkipLimit,
 		{ username }: ApolloContext
 	) => {
 		if (!username) {
@@ -30,10 +36,34 @@ const Query = {
 			throw new ApolloError(userDoesNotExist);
 		}
 
-		return (await Spell.find({ userId }).lean().limit(limit)).map(spell => ({
-			...spell,
-			id: spell._id.toString()
-		}));
+		return {
+			spells: (
+				await Spell.find({ userId })
+					.skip(skip ?? 0)
+					.lean()
+					.limit(limit)
+			).map(spell => ({
+				...spell,
+				id: spell._id.toString()
+			})),
+			count: await Spell.countDocuments({ userId })
+		};
+	},
+	spell: async (parent: never, { id }: WithId, { username }: ApolloContext) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
+		const spell = await Spell.findOne({
+			_id: new Types.ObjectId(id),
+			username
+		}).lean();
+
+		if (!spell) {
+			throw new ApolloError('Spell not found');
+		}
+
+		return { ...spell, id: spell?._id.toString() };
 	}
 };
 
