@@ -1,5 +1,4 @@
 import {
-	cacheExchange,
 	createClient,
 	dedupExchange,
 	fetchExchange,
@@ -9,12 +8,13 @@ import { useEffect, useState } from 'react';
 
 import { accessTokenKey } from './../constants/generalConstants';
 import { authExchange } from '@urql/exchange-auth';
+import { cacheExchange } from '@urql/exchange-graphcache';
 import jwt from 'jsonwebtoken';
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 const defaultClient = createClient({
 	url: `/api/graphql`,
-	exchanges: [dedupExchange, cacheExchange, fetchExchange]
+	exchanges: [dedupExchange, cacheExchange({}), fetchExchange]
 });
 
 export const createAuthClient = () =>
@@ -23,7 +23,7 @@ export const createAuthClient = () =>
 		maskTypename: true,
 		exchanges: [
 			dedupExchange,
-			cacheExchange,
+			cacheExchange({}),
 			authExchange({
 				getAuth: async ({ authState }) => {
 					if (!authState) {

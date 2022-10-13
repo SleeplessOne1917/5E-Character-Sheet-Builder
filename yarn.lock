@@ -3665,6 +3665,14 @@
     "@urql/core" ">=3.0.0"
     wonka "^6.0.0"
 
+"@urql/exchange-graphcache@^5.0.1":
+  version "5.0.1"
+  resolved "https://proget.ema.emoneyadvisor.com/npm/npm/@urql/exchange-graphcache/-/exchange-graphcache-5.0.1.tgz#3c051d971ba79cccf4aadc2cf87b413c6682cbd3"
+  integrity sha512-sbornx6SaAADycfEex0+npdJwhImSKa+76DAnOjF48wls5bYlG+ewDe0ipWdmV+gQ+t9SDFPLAHBzFURTlQacQ==
+  dependencies:
+    "@urql/core" ">=3.0.0"
+    wonka "^6.0.0"
+
 "@urql/storybook-addon@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@urql/storybook-addon/-/storybook-addon-2.0.1.tgz#684988a12b68edd8964d1ab17e86aefeddfdbc71"
