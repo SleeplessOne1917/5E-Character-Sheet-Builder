@@ -15,10 +15,10 @@ import AbilityScores from '../../../../../types/abilityScores';
 import classes from './PointBuy.module.css';
 import { getTotalScore } from '../../../../../services/abilityScoreService';
 import { handleKeyDownEvent } from '../../../../../services/handlerService';
+import { removeClassSpell } from '../../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../../redux/features/spellcasting';
 import useGetAbilityScore from '../../../../../hooks/useGetAbilityScore';
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
-import { removeSpell } from '../../../../../redux/features/spellcasting';
-import { removeClassSpell } from '../../../../../redux/features/classInfo';
 
 export type PointBuyProps = {
 	abilities: AbilityItem[];
@@ -87,8 +87,8 @@ const PointBuy = ({ abilities }: PointBuyProps): JSX.Element => {
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}

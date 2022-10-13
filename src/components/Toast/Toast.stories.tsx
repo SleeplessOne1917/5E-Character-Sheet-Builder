@@ -1,11 +1,16 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import Toast from './Toast';
+import { ToastState } from '../../redux/features/toast';
 import { ToastType } from '../../types/toast';
 
-const MockStore = ({ mockState, children }) => (
+const MockStore = ({
+	mockState,
+	children
+}: PropsWithChildren<{ mockState: Partial<ToastState> }>) => (
 	<Provider
 		store={configureStore({
 			reducer: {

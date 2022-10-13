@@ -1,4 +1,8 @@
 import {
+	AbilityScore,
+	updateBase
+} from '../../../../../redux/features/abilityScores';
+import {
 	useAppDispatch,
 	useAppSelector
 } from '../../../../../hooks/reduxHooks';
@@ -8,15 +12,11 @@ import AbilityScores from '../../../../../types/abilityScores';
 import Select from '../../../../Select/Select/Select';
 import classes from './StandardArray.module.css';
 import { getTotalScore } from '../../../../../services/abilityScoreService';
-import {
-	AbilityScore,
-	updateBase
-} from '../../../../../redux/features/abilityScores';
+import { removeClassSpell } from '../../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../../redux/features/spellcasting';
 import { useCallback } from 'react';
 import useGetAbilityScore from '../../../../../hooks/useGetAbilityScore';
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
-import { removeSpell } from '../../../../../redux/features/spellcasting';
-import { removeClassSpell } from '../../../../../redux/features/classInfo';
 
 const arrayValues = [8, 10, 12, 13, 14, 15];
 
@@ -73,8 +73,8 @@ const StandardArray = ({ abilities }: StandardArrayProps): JSX.Element => {
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}

@@ -80,8 +80,8 @@ const AbilityBonusChoiceSelector = ({
 						++i
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
-						dispatch(removeClassSpell(spellToRemove.index));
-						dispatch(removeSpell(spellToRemove.index));
+						dispatch(removeClassSpell(spellToRemove.id));
+						dispatch(removeSpell(spellToRemove.id));
 					}
 				}
 			}

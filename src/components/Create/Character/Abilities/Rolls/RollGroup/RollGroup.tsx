@@ -1,3 +1,7 @@
+import {
+	AbilityScore,
+	updateBase
+} from '../../../../../../redux/features/abilityScores';
 import { MouseEventHandler, useCallback } from 'react';
 import {
 	addAbility,
@@ -13,14 +17,10 @@ import AbilityScores from '../../../../../../types/abilityScores';
 import Button from '../../../../../Button/Button';
 import RollDisplay from '../RollDisplay/RollDisplay';
 import classes from './RollGroup.module.css';
-import {
-	AbilityScore,
-	updateBase
-} from '../../../../../../redux/features/abilityScores';
-import usePreparedSpells from '../../../../../../hooks/usePreparedSpells';
-import { removeSpell } from '../../../../../../redux/features/spellcasting';
 import { removeClassSpell } from '../../../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../../../redux/features/spellcasting';
 import { rollDie } from '../../../../../../services/diceService';
+import usePreparedSpells from '../../../../../../hooks/usePreparedSpells';
 
 export type RollGroupProps = {
 	onDeleteGroup?: MouseEventHandler<HTMLButtonElement> | null;
@@ -128,8 +128,8 @@ const RollGroup = ({
 						) {
 							const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-							dispatch(removeSpell(spellToRemove.index));
-							dispatch(removeClassSpell(spellToRemove.index));
+							dispatch(removeSpell(spellToRemove.id));
+							dispatch(removeClassSpell(spellToRemove.id));
 						}
 					}
 				}

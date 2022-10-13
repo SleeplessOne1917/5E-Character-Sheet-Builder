@@ -1,4 +1,10 @@
-import { CSSProperties, MouseEventHandler, ReactNode, forwardRef } from 'react';
+import {
+	CSSProperties,
+	ForwardedRef,
+	MouseEventHandler,
+	ReactNode,
+	forwardRef
+} from 'react';
 
 import classes from './Button.module.css';
 
@@ -53,7 +59,7 @@ const Button = forwardRef(
 			spacing,
 			style = {}
 		}: ButtonProps,
-		ref
+		ref: ForwardedRef<HTMLButtonElement>
 	): JSX.Element => (
 		<button
 			disabled={disabled}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { MutableRefObject, useCallback, useEffect, useRef } from 'react';
 
 import Button from '../Button/Button';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
@@ -50,7 +50,7 @@ const SpellMoreInformationModal = ({
 							display: 'flex',
 							alignItems: 'center'
 						}}
-						ref={closeButtonRef}
+						ref={closeButtonRef as MutableRefObject<HTMLButtonElement>}
 					>
 						<XCircleIcon className={classes['close-icon']} />
 						Close

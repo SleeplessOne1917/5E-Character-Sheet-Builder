@@ -1,10 +1,19 @@
 import mongoose from 'mongoose';
 
+type Cached = {
+	conn: any | null;
+	promise: Promise<typeof mongoose> | null;
+};
+
+type Global = {
+	mongoose?: Cached;
+};
+
 const MONGODB_URI = process.env.DB_CONNECTION_STRING;
 
 if (!MONGODB_URI) {
 	throw new Error(
-		'Please define the DB_CONNECTION_STRING environment variable inside .env.local'
+		'Please define the DB_CONNECTION_STRING environment variable inside .env'
 	);
 }
 
@@ -13,18 +22,18 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose;
+let cached = (global as Global).mongoose;
 
 if (!cached) {
-	cached = global.mongoose = { conn: null, promise: null };
+	cached = (global as Global).mongoose = { conn: null, promise: null };
 }
 
 async function dbConnect() {
-	if (cached.conn) {
+	if (cached?.conn) {
 		return cached.conn;
 	}
 
-	if (!cached.promise) {
+	if (!cached?.promise) {
 		const opts = {
 			bufferCommands: false
 		};

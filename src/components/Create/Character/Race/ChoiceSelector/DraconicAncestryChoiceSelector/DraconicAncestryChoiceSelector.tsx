@@ -31,7 +31,7 @@ const DraconicAncestryChoiceSelector = ({
 	const handleChangeSelect = useCallback(
 		(value: string) => {
 			if (value === 'blank') {
-				dispatch(deselectDraconicAncestry());
+				dispatch(deselectDraconicAncestry(undefined));
 			} else {
 				dispatch(
 					selectDraconicAncestry(
@@ -46,7 +46,7 @@ const DraconicAncestryChoiceSelector = ({
 	);
 
 	const handleReset = useCallback(() => {
-		dispatch(deselectDraconicAncestry());
+		dispatch(deselectDraconicAncestry(undefined));
 	}, [dispatch]);
 
 	const selects = [

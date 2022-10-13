@@ -1,9 +1,9 @@
-import { CSSProperties, useEffect, useRef } from 'react';
+import { CSSProperties, MutableRefObject, useEffect, useRef } from 'react';
 
 import Button from '../Button/Button';
 import ExclamationTriangleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
-import classes from './ConfirmationModal.module.css';
 import ModalBackground from '../ModalBackground/ModalBackground';
+import classes from './ConfirmationModal.module.css';
 
 type ConfirmationModalProps = {
 	show: boolean;
@@ -44,7 +44,12 @@ const ConfirmationModal = ({
 					<ExclamationTriangleIcon className={classes.icon} /> {message}
 				</div>
 				<div className={classes.buttons}>
-					<Button positive style={buttonStyle} onClick={onYes} ref={yesRef}>
+					<Button
+						positive
+						style={buttonStyle}
+						onClick={onYes}
+						ref={yesRef as MutableRefObject<HTMLButtonElement>}
+					>
 						Yes
 					</Button>
 					<Button style={buttonStyle} onClick={onNo}>

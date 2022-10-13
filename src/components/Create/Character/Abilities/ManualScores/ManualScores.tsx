@@ -13,10 +13,10 @@ import { AbilityItem } from '../../../../../types/srd';
 import AbilityScores from '../../../../../types/abilityScores';
 import classes from './ManualScores.module.css';
 import { getTotalScore } from '../../../../../services/abilityScoreService';
+import { removeClassSpell } from '../../../../../redux/features/classInfo';
+import { removeSpell } from '../../../../../redux/features/spellcasting';
 import useGetAbilityScore from '../../../../../hooks/useGetAbilityScore';
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
-import { removeSpell } from '../../../../../redux/features/spellcasting';
-import { removeClassSpell } from '../../../../../redux/features/classInfo';
 
 export type ManualScoresProps = {
 	abilities: AbilityItem[];
@@ -108,8 +108,8 @@ const ManualScores = ({ abilities }: ManualScoresProps): JSX.Element => {
 					) {
 						const spellToRemove = classSpells[classSpells.length - (i + 1)];
 
-						dispatch(removeSpell(spellToRemove.index));
-						dispatch(removeClassSpell(spellToRemove.index));
+						dispatch(removeSpell(spellToRemove.id));
+						dispatch(removeClassSpell(spellToRemove.id));
 					}
 				}
 			}

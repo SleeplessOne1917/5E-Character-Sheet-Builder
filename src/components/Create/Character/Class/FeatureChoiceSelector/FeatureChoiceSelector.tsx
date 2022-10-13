@@ -79,7 +79,7 @@ const FeatureChoiceSelector = ({
 							if (cur.feature) {
 								return !!allFeatures?.some(f => f.index === cur.feature?.index);
 							} else if (cur.spell) {
-								return spells.some(spell => spell.index === cur.spell?.index);
+								return spells.some(spell => spell.id === cur.spell?.index);
 							} else if (cur.level) {
 								return classInfo.level >= cur.level;
 							} else {

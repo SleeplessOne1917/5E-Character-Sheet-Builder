@@ -17,7 +17,7 @@ export default EquipmentPage;
 export const getStaticProps = async (): Promise<
 	GetStaticPropsResult<EquipmentPageProps>
 > => {
-	const equipments = await getEquipments();
+	const equipments = (await getEquipments()) ?? [];
 
 	return { props: { equipments } };
 };

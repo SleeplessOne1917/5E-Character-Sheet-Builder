@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { ToastType } from '../../types/toast';
 
-type ToastState = {
+export type ToastState = {
 	message: string;
 	type: ToastType;
 	isOpen: boolean;
