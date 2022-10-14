@@ -6,9 +6,7 @@ import {
 } from '../../constants/generalConstants';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
-import CREATE_NEW_PASSWORD from '../../graphql/mutations/user/createNewPassword';
 import { Formik } from 'formik';
-import GET_TOKEN from '../../graphql/mutations/user/token';
 import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import TextInput from '../../components/TextInput/TextInput';
@@ -16,8 +14,9 @@ import { ToastType } from '../../types/toast';
 import classes from './Account.module.css';
 import newPasswordSchema from '../../yup-schemas/newPasswordSchema';
 import { show } from '../../redux/features/toast';
+import useCreateNewPasswordMutation from '../../hooks/urql/mutations/useCreateNewPasswordMutation';
+import useGetTokenMutation from '../../hooks/urql/mutations/useGetTokenMutation';
 import useLogout from '../../hooks/useLogout';
-import { useMutation } from 'urql';
 
 type AccountProps = {
 	loading: boolean;
@@ -25,9 +24,8 @@ type AccountProps = {
 
 const Account = ({ loading }: AccountProps) => {
 	const username = useAppSelector(state => state.viewer);
-	const [_, createNewPassword] =
-		useMutation<{ createNewPassword: string }>(CREATE_NEW_PASSWORD);
-	const [__, getToken] = useMutation<{ token: string }>(GET_TOKEN);
+	const [_, createNewPassword] = useCreateNewPasswordMutation();
+	const [__, getToken] = useGetTokenMutation();
 	const logout = useLogout();
 	const dispatch = useAppDispatch();
 

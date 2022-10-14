@@ -297,6 +297,8 @@ const Mutation = {
 
 		return 'One time link is valid';
 	},
+	// This is the one that is used on the page that is linked for users who forgot their password.
+	// It uses a one time id on a link sent to the user's email address (if it exists) to handle authorization
 	resetPassword: async (
 		parent: never,
 		{ otlId, ...args }: ResetPasswordArgs
@@ -335,6 +337,7 @@ const Mutation = {
 
 		return 'Password was reset';
 	},
+	// This is the one for users to create a new password on their account page that requires your current password to update
 	createNewPassword: async (
 		parent: never,
 		args: CreateNewPasswordArgs,
@@ -355,7 +358,7 @@ const Mutation = {
 		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
 			throw new ApolloError('Incorrect password provided');
 		}
-
+		// TODO: Add check that new password matches confirmation password
 		const newPasswordHash = await hashValue(args.newPassword);
 		await User.updateOne(
 			{ username },
