@@ -54,6 +54,7 @@
 }
 
 .text-effect-buttons {
+    display: flex;
     margin-bottom: 0.5rem;
 }
 
@@ -69,6 +70,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 0.3rem;
+}
+
+.text-effect-button:first-of-type {
+    margin-left: 0;
 }
 
 .text-effect-button:focus-visible {

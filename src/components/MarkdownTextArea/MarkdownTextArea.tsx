@@ -67,7 +67,7 @@ const MarkdownTextArea = ({
 	const [numberOfRows, setNumberOfRows] = useState(5);
 	const [numberOfCols, setNumberOfCols] = useState(20);
 	const [isPreview, setIsPreview] = useState(false);
-	const [changed, setChanged] = useState<'bold' | null>();
+	const [changed, setChanged] = useState<'bold' | 'italic' | null>();
 	const [shouldFocus, setShouldFocus] = useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
@@ -110,7 +110,10 @@ const MarkdownTextArea = ({
 	const handleTextAreaBlur = useCallback(
 		(event: FocusEvent<HTMLTextAreaElement>) => {
 			onBlur(event);
-			if (event.relatedTarget?.innerHTML !== 'B') {
+			if (
+				event.relatedTarget?.innerHTML !== 'B' &&
+				event.relatedTarget?.innerHTML !== 'I'
+			) {
 				textAreaRef.current?.setSelectionRange(-1, -1);
 			}
 		},
@@ -159,6 +162,48 @@ const MarkdownTextArea = ({
 		setChanged('bold');
 	}, [content]);
 
+	const handleItalicClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+			setContent(
+				prevContent =>
+					prevContent.substring(0, selectionStart) +
+					'*' +
+					prevContent.substring(selectionStart, selectionEnd) +
+					'*' +
+					prevContent.substring(selectionEnd, prevContent.length)
+			);
+		} else if (
+			selectionStart &&
+			selectionEnd &&
+			selectionStart === selectionEnd &&
+			selectionStart < content.length
+		) {
+			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
+			let end = content.indexOf(' ', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			setContent(
+				prevContent =>
+					prevContent.substring(0, start) +
+					'*' +
+					prevContent.substring(start, end) +
+					'*' +
+					prevContent.substring(end, prevContent.length)
+			);
+		} else {
+			setContent(prevContent => prevContent + '**');
+			setShouldFocus(true);
+		}
+
+		setChanged('italic');
+	}, [content]);
+
 	if (changed && textAreaRef.current?.value === content) {
 		if (shouldFocus) {
 			if (changed === 'bold') {
@@ -166,6 +211,13 @@ const MarkdownTextArea = ({
 				textAreaRef.current.setSelectionRange(
 					content.length - 2,
 					content.length - 2
+				);
+			}
+			if (changed === 'italic') {
+				textAreaRef.current.focus();
+				textAreaRef.current.setSelectionRange(
+					content.length - 1,
+					content.length - 1
 				);
 			}
 
@@ -204,6 +256,14 @@ const MarkdownTextArea = ({
 							style={{ fontWeight: 'bold' }}
 						>
 							B
+						</button>
+						<button
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleItalicClick}
+							style={{ fontStyle: 'italic' }}
+						>
+							I
 						</button>
 					</div>
 					<textarea
