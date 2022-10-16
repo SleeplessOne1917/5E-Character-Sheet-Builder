@@ -21,7 +21,7 @@
 }
 
 .negative:active {
-    background-color: var(--wine-red-active);
+    background-color: var(--wine-red-active) !important;
 }
 
 .negative:disabled {
@@ -33,7 +33,7 @@
 }
 
 .positive:active {
-    background-color: var(--positive-green-active);
+    background-color: var(--positive-green-active) !important;
 }
 
 .positive:disabled {
