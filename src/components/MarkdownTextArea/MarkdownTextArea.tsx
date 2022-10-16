@@ -67,7 +67,8 @@ const MarkdownTextArea = ({
 	const [numberOfRows, setNumberOfRows] = useState(5);
 	const [numberOfCols, setNumberOfCols] = useState(20);
 	const [isPreview, setIsPreview] = useState(false);
-	const [changed, setChanged] = useState<'bold' | 'italic' | 'header' | null>();
+	const [changed, setChanged] =
+		useState<'bold' | 'italic' | 'header' | 'quote' | null>();
 	const [shouldFocus, setShouldFocus] = useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
@@ -113,7 +114,8 @@ const MarkdownTextArea = ({
 			if (
 				event.relatedTarget?.innerHTML !== 'B' &&
 				event.relatedTarget?.innerHTML !== 'I' &&
-				event.relatedTarget?.innerHTML !== 'H'
+				event.relatedTarget?.innerHTML !== 'H' &&
+				event.relatedTarget?.innerHTML !== 'Q'
 			) {
 				textAreaRef.current?.setSelectionRange(-1, -1);
 			}
@@ -241,6 +243,59 @@ const MarkdownTextArea = ({
 		setChanged('header');
 	}, [content]);
 
+	const handleQuoteClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+			setContent(
+				prevContent =>
+					prevContent.substring(0, selectionStart) +
+					(selectionStart === 0 ? '> ' : '\n\n> ') +
+					prevContent.substring(selectionStart, selectionEnd) +
+					'\n\n' +
+					prevContent.substring(selectionEnd, prevContent.length)
+			);
+		} else if (
+			selectionStart &&
+			selectionEnd &&
+			selectionStart === selectionEnd &&
+			selectionStart < content.length
+		) {
+			const start = content.substring(0, selectionStart).lastIndexOf('\n') + 1;
+			const isOneLine = !content.includes('\n');
+			let end = content.indexOf('\n', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			if (isOneLine) {
+				setContent(prevContent => '> ' + prevContent);
+			} else {
+				const linesAbove = /.+\n/.test(content.substring(0, selectionStart));
+				const linesBelow = /\n.+/.test(
+					content.substring(selectionEnd, content.length)
+				);
+				setContent(
+					prevContent =>
+						prevContent.substring(0, start) +
+						`${linesAbove ? '\n' : ''}> ` +
+						prevContent.substring(start, end) +
+						(linesBelow ? '\n' : '') +
+						prevContent.substring(end, prevContent.length)
+				);
+			}
+		} else {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
+			);
+			setShouldFocus(true);
+		}
+
+		setChanged('quote');
+	}, [content]);
+
 	if (changed && textAreaRef.current?.value === content) {
 		if (shouldFocus) {
 			textAreaRef.current.focus();
@@ -257,7 +312,7 @@ const MarkdownTextArea = ({
 					content.length - 1
 				);
 			}
-			if (changed === 'header') {
+			if (changed === 'header' || changed === 'quote') {
 				textAreaRef.current.setSelectionRange(content.length, content.length);
 			}
 
@@ -290,6 +345,7 @@ const MarkdownTextArea = ({
 				<>
 					<div className={classes['text-effect-buttons']}>
 						<button
+							aria-label="Insert header"
 							className={classes['text-effect-button']}
 							type="button"
 							onClick={handleHeaderClick}
@@ -298,6 +354,7 @@ const MarkdownTextArea = ({
 							H
 						</button>
 						<button
+							aria-label="Insert bold text"
 							className={classes['text-effect-button']}
 							onClick={handleBoldClick}
 							type="button"
@@ -306,12 +363,21 @@ const MarkdownTextArea = ({
 							B
 						</button>
 						<button
+							aria-label="Insert italic text"
 							className={classes['text-effect-button']}
 							type="button"
 							onClick={handleItalicClick}
 							style={{ fontStyle: 'italic' }}
 						>
 							I
+						</button>
+						<button
+							aria-label="Insert block quote"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleQuoteClick}
+						>
+							Q
 						</button>
 					</div>
 					<textarea

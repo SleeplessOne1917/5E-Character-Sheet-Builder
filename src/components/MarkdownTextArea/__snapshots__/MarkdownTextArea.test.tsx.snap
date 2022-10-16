@@ -26,6 +26,15 @@ exports[`renders correctly by default 1`] = `
     class="text-effect-buttons"
   >
     <button
+      aria-label="Insert header"
+      class="text-effect-button"
+      style="font-family: var(--font-fantasy);"
+      type="button"
+    >
+      H
+    </button>
+    <button
+      aria-label="Insert bold text"
       class="text-effect-button"
       style="font-weight: bold;"
       type="button"
@@ -33,11 +42,19 @@ exports[`renders correctly by default 1`] = `
       B
     </button>
     <button
+      aria-label="Insert italic text"
       class="text-effect-button"
       style="font-style: italic;"
       type="button"
     >
       I
+    </button>
+    <button
+      aria-label="Insert block quote"
+      class="text-effect-button"
+      type="button"
+    >
+      Q
     </button>
   </div>
   <textarea
@@ -74,6 +91,15 @@ exports[`renders correctly with error showing 1`] = `
     class="text-effect-buttons"
   >
     <button
+      aria-label="Insert header"
+      class="text-effect-button"
+      style="font-family: var(--font-fantasy);"
+      type="button"
+    >
+      H
+    </button>
+    <button
+      aria-label="Insert bold text"
       class="text-effect-button"
       style="font-weight: bold;"
       type="button"
@@ -81,11 +107,19 @@ exports[`renders correctly with error showing 1`] = `
       B
     </button>
     <button
+      aria-label="Insert italic text"
       class="text-effect-button"
       style="font-style: italic;"
       type="button"
     >
       I
+    </button>
+    <button
+      aria-label="Insert block quote"
+      class="text-effect-button"
+      type="button"
+    >
+      Q
     </button>
   </div>
   <textarea
