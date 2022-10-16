@@ -324,6 +324,10 @@ const Mutation = {
 			throw new ApolloError(errorMessage);
 		}
 
+		if (args.password !== args.confirmPassword) {
+			throw new ApolloError('Passwords do not match');
+		}
+
 		const passwordHash = await hashValue(args.password);
 		const updateResponse = await User.updateOne(
 			{ _id: otl.userId },
@@ -358,7 +362,11 @@ const Mutation = {
 		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
 			throw new ApolloError('Incorrect password provided');
 		}
-		// TODO: Add check that new password matches confirmation password
+
+		if (args.newPassword !== args.confirmPassword) {
+			throw new ApolloError('Passwords do not match');
+		}
+
 		const newPasswordHash = await hashValue(args.newPassword);
 		await User.updateOne(
 			{ username },
