@@ -6,7 +6,7 @@ import summonsSchema from './summonsSchema';
 const spellSchema = object({
 	name: string()
 		.min(1, 'Name is required')
-		.max(30, 'Name must be 30 characters or less')
+		.max(50, 'Name must be 50 characters or less')
 		.required('Name is required'),
 	level: number()
 		.nullable()
