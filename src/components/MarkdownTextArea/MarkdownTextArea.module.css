@@ -52,3 +52,36 @@
     background-color: var(--heaven-light);
     padding: 0.5rem;
 }
+
+.text-effect-buttons {
+    margin-bottom: 0.5rem;
+}
+
+.text-effect-button {
+    font-size: 1.1rem;
+    cursor: pointer;
+    background-color: var(--heaven-light);
+    border: 0px;
+    border-radius: 0.35rem;
+    font-family: var(--font-display);
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-effect-button:focus-visible {
+    background-color: var(--highlight-light);
+    outline: var(--focus-outline);
+}
+
+.text-effect-button:active {
+    background-color: var(--highlight) !important;
+}
+
+@media (hover: hover) {
+    .text-effect-button:hover {
+        background-color: var(--highlight-light);
+    }
+}

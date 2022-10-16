@@ -1,5 +1,4 @@
 import {
-	ChangeEvent,
 	ChangeEventHandler,
 	FocusEvent,
 	MutableRefObject,
@@ -16,7 +15,7 @@ import { convertRemToPixels } from '../../services/remToPixelsService';
 
 type MarkdownTextAreaProps = {
 	value?: string;
-	onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+	onChange?: (value: string) => void;
 	onBlur?: (event: FocusEvent<HTMLTextAreaElement>) => void;
 	touched?: boolean;
 	error?: string;
@@ -68,6 +67,8 @@ const MarkdownTextArea = ({
 	const [numberOfRows, setNumberOfRows] = useState(5);
 	const [numberOfCols, setNumberOfCols] = useState(20);
 	const [isPreview, setIsPreview] = useState(false);
+	const [changed, setChanged] = useState<'bold' | null>();
+	const [shouldFocus, setShouldFocus] = useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
 
@@ -93,7 +94,7 @@ const MarkdownTextArea = ({
 	const handleTextAreaChange: ChangeEventHandler<HTMLTextAreaElement> =
 		useCallback(
 			event => {
-				onChange(event);
+				onChange(event.target.value);
 				setContent(event.target.value);
 
 				setNumberOfRows(
@@ -105,6 +106,75 @@ const MarkdownTextArea = ({
 			},
 			[onChange]
 		);
+
+	const handleTextAreaBlur = useCallback(
+		(event: FocusEvent<HTMLTextAreaElement>) => {
+			onBlur(event);
+			if (event.relatedTarget?.innerHTML !== 'B') {
+				textAreaRef.current?.setSelectionRange(-1, -1);
+			}
+		},
+		[onBlur]
+	);
+
+	const handleBoldClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+			setContent(
+				prevContent =>
+					prevContent.substring(0, selectionStart) +
+					'**' +
+					prevContent.substring(selectionStart, selectionEnd) +
+					'**' +
+					prevContent.substring(selectionEnd, prevContent.length)
+			);
+		} else if (
+			selectionStart &&
+			selectionEnd &&
+			selectionStart === selectionEnd &&
+			selectionStart < content.length
+		) {
+			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
+			let end = content.indexOf(' ', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			setContent(
+				prevContent =>
+					prevContent.substring(0, start) +
+					'**' +
+					prevContent.substring(start, end) +
+					'**' +
+					prevContent.substring(end, prevContent.length)
+			);
+		} else {
+			setContent(prevContent => prevContent + '****');
+			setShouldFocus(true);
+		}
+
+		setChanged('bold');
+	}, [content]);
+
+	if (changed && textAreaRef.current?.value === content) {
+		if (shouldFocus) {
+			if (changed === 'bold') {
+				textAreaRef.current.focus();
+				textAreaRef.current.setSelectionRange(
+					content.length - 2,
+					content.length - 2
+				);
+			}
+
+			setShouldFocus(false);
+		}
+
+		onChange(content);
+		setChanged(null);
+	}
 
 	return (
 		<div className={classes.container} data-testid="markdown-text-area">
@@ -125,18 +195,30 @@ const MarkdownTextArea = ({
 					<MarkdownParser input={content} />
 				</div>
 			) : (
-				<textarea
-					onChange={handleTextAreaChange}
-					className={`${classes['text-input']}${
-						error && touched ? ` ${classes.error}` : ''
-					}`}
-					ref={textAreaRef as MutableRefObject<HTMLTextAreaElement>}
-					rows={numberOfRows}
-					cols={numberOfCols}
-					onBlur={onBlur}
-					id={id}
-					value={content}
-				></textarea>
+				<>
+					<div className={classes['text-effect-buttons']}>
+						<button
+							className={classes['text-effect-button']}
+							onClick={handleBoldClick}
+							type="button"
+							style={{ fontWeight: 'bold' }}
+						>
+							B
+						</button>
+					</div>
+					<textarea
+						onChange={handleTextAreaChange}
+						className={`${classes['text-input']}${
+							error && touched ? ` ${classes.error}` : ''
+						}`}
+						ref={textAreaRef as MutableRefObject<HTMLTextAreaElement>}
+						rows={numberOfRows}
+						cols={numberOfCols}
+						onBlur={handleTextAreaBlur}
+						id={id}
+						value={content}
+					></textarea>
+				</>
 			)}
 			{error && touched && (
 				<div className={classes['error-message']}>{error}</div>
