@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import Button from '../Button/Button';
+import { LinkIcon } from '@heroicons/react/20/solid';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
 import classes from './MarkdownTextArea.module.css';
 import { convertRemToPixels } from '../../services/remToPixelsService';
@@ -68,7 +69,7 @@ const MarkdownTextArea = ({
 	const [numberOfCols, setNumberOfCols] = useState(20);
 	const [isPreview, setIsPreview] = useState(false);
 	const [changed, setChanged] =
-		useState<'bold' | 'italic' | 'header' | 'quote' | null>();
+		useState<'bold' | 'italic' | 'header' | 'quote' | 'link' | null>();
 	const [shouldFocus, setShouldFocus] = useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
@@ -112,10 +113,12 @@ const MarkdownTextArea = ({
 		(event: FocusEvent<HTMLTextAreaElement>) => {
 			onBlur(event);
 			if (
+				event.relatedTarget?.tagName.toLowerCase() === 'button' &&
 				event.relatedTarget?.innerHTML !== 'B' &&
 				event.relatedTarget?.innerHTML !== 'I' &&
 				event.relatedTarget?.innerHTML !== 'H' &&
-				event.relatedTarget?.innerHTML !== 'Q'
+				event.relatedTarget?.innerHTML !== 'Q' &&
+				!event.relatedTarget?.innerHTML.startsWith('<svg')
 			) {
 				textAreaRef.current?.setSelectionRange(-1, -1);
 			}
@@ -296,6 +299,48 @@ const MarkdownTextArea = ({
 		setChanged('quote');
 	}, [content]);
 
+	const handleLinkClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+			setContent(
+				prevContent =>
+					prevContent.substring(0, selectionStart) +
+					'[' +
+					prevContent.substring(selectionStart, selectionEnd) +
+					'](url)' +
+					prevContent.substring(selectionEnd, prevContent.length)
+			);
+		} else if (
+			selectionStart &&
+			selectionEnd &&
+			selectionStart === selectionEnd &&
+			selectionStart < content.length
+		) {
+			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
+			let end = content.indexOf(' ', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			setContent(
+				prevContent =>
+					prevContent.substring(0, start) +
+					'[' +
+					prevContent.substring(start, end) +
+					'](url)' +
+					prevContent.substring(end, prevContent.length)
+			);
+		} else {
+			setContent(prevContent => prevContent + '[](url)');
+			setShouldFocus(true);
+		}
+
+		setChanged('link');
+	}, [content]);
+
 	if (changed && textAreaRef.current?.value === content) {
 		if (shouldFocus) {
 			textAreaRef.current.focus();
@@ -314,6 +359,12 @@ const MarkdownTextArea = ({
 			}
 			if (changed === 'header' || changed === 'quote') {
 				textAreaRef.current.setSelectionRange(content.length, content.length);
+			}
+			if (changed === 'link') {
+				textAreaRef.current.setSelectionRange(
+					content.length - 6,
+					content.length - 6
+				);
 			}
 
 			setShouldFocus(false);
@@ -378,6 +429,14 @@ const MarkdownTextArea = ({
 							onClick={handleQuoteClick}
 						>
 							Q
+						</button>
+						<button
+							aria-label="Insert link"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleLinkClick}
+						>
+							<LinkIcon className={classes['text-effect-button-icon']} />
 						</button>
 					</div>
 					<textarea

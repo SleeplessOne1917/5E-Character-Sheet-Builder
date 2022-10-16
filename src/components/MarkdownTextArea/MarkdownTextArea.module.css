@@ -71,6 +71,7 @@
     justify-content: center;
     align-items: center;
     margin: 0 0.3rem;
+    color: var(--davy);
 }
 
 .text-effect-button:first-of-type {
@@ -84,6 +85,11 @@
 
 .text-effect-button:active {
     background-color: var(--highlight) !important;
+}
+
+.text-effect-button-icon {
+    width: 1rem;
+    height: 1rem;
 }
 
 @media (hover: hover) {
