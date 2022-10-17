@@ -56,6 +56,9 @@ const calculateNumberOfRows = (content: string, cols: number) => {
 	);
 };
 
+const linesAboveRegex = /\S+((?!\n)\s*)?\n$/;
+const linesBelowRegex = /^\n(?!\n)\s*\S+/;
+
 const MarkdownTextArea = ({
 	value,
 	onBlur = () => {},
@@ -114,7 +117,7 @@ const MarkdownTextArea = ({
 		(event: FocusEvent<HTMLTextAreaElement>) => {
 			onBlur(event);
 			if (
-				event.relatedTarget?.tagName.toLowerCase() === 'button' &&
+				event.relatedTarget?.tagName.toLowerCase() !== 'button' &&
 				event.relatedTarget?.innerHTML !== 'B' &&
 				event.relatedTarget?.innerHTML !== 'I' &&
 				event.relatedTarget?.innerHTML !== 'H' &&
@@ -186,7 +189,7 @@ const MarkdownTextArea = ({
 			selectionStart &&
 			selectionEnd &&
 			selectionStart === selectionEnd &&
-			selectionStart < content.length
+			selectionStart <= content.length
 		) {
 			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
 			let end = content.indexOf(' ', selectionEnd);
@@ -266,30 +269,31 @@ const MarkdownTextArea = ({
 			selectionStart === selectionEnd &&
 			selectionStart < content.length
 		) {
-			const start = content.substring(0, selectionStart).lastIndexOf('\n') + 1;
-			const isOneLine = !content.includes('\n');
+			let start = content.substring(0, selectionStart).lastIndexOf('\n');
+
+			if (start < 0) {
+				start = 0;
+			}
+
 			let end = content.indexOf('\n', selectionEnd);
 
 			if (end === -1) {
 				end = content.length;
 			}
 
-			if (isOneLine) {
-				setContent(prevContent => '> ' + prevContent);
-			} else {
-				const linesAbove = /.+\n/.test(content.substring(0, selectionStart));
-				const linesBelow = /\n.+/.test(
-					content.substring(selectionEnd, content.length)
-				);
-				setContent(
-					prevContent =>
-						prevContent.substring(0, start) +
-						`${linesAbove ? '\n' : ''}> ` +
-						prevContent.substring(start, end) +
-						(linesBelow ? '\n' : '') +
-						prevContent.substring(end, prevContent.length)
-				);
-			}
+			const linesAbove = linesAboveRegex.test(content.substring(0, start + 1));
+			const linesBelow = linesBelowRegex.test(
+				content.substring(end, content.length)
+			);
+
+			setContent(
+				prevContent =>
+					prevContent.substring(0, start) +
+					`${linesAbove ? '\n\n' : start === 0 ? '' : '\n'}> ` +
+					prevContent.substring(start + 1, end) +
+					(linesBelow ? '\n' : '') +
+					prevContent.substring(end, prevContent.length)
+			);
 		} else {
 			setContent(prevContent =>
 				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
@@ -371,12 +375,17 @@ const MarkdownTextArea = ({
 						prevContent.substring(end, prevContent.length)
 				);
 			} else {
-				const linesAbove = /.+\n/.test(content.substring(0, start + 1));
-				const linesBelow = /\n.+/.test(content.substring(end, content.length));
+				const linesAbove = linesAboveRegex.test(
+					content.substring(0, start + 1)
+				);
+				const linesBelow = linesBelowRegex.test(
+					content.substring(end, content.length)
+				);
+
 				setContent(
 					prevContent =>
 						prevContent.substring(0, start) +
-						`${linesAbove ? '\n\n' : ''}- ` +
+						`${linesAbove ? '\n\n' : start === 0 ? '' : '\n'}- ` +
 						prevContent.substring(start + 1, end) +
 						(linesBelow ? '\n' : '') +
 						prevContent.substring(end, prevContent.length)
