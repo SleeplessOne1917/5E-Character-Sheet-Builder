@@ -1,15 +1,16 @@
 import {
 	ChangeEventHandler,
 	FocusEvent,
+	KeyboardEvent,
 	MutableRefObject,
 	useCallback,
 	useEffect,
 	useRef,
 	useState
 } from 'react';
+import { LinkIcon, ListBulletIcon } from '@heroicons/react/20/solid';
 
 import Button from '../Button/Button';
-import { LinkIcon } from '@heroicons/react/20/solid';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
 import classes from './MarkdownTextArea.module.css';
 import { convertRemToPixels } from '../../services/remToPixelsService';
@@ -68,9 +69,9 @@ const MarkdownTextArea = ({
 	const [numberOfRows, setNumberOfRows] = useState(5);
 	const [numberOfCols, setNumberOfCols] = useState(20);
 	const [isPreview, setIsPreview] = useState(false);
-	const [changed, setChanged] =
-		useState<'bold' | 'italic' | 'header' | 'quote' | 'link' | null>();
-	const [shouldFocus, setShouldFocus] = useState(false);
+	const [changed, setChanged] = useState(false);
+	const [itemsBeforeEndToFocus, setItemsBeforeEndToFocus] =
+		useState<number | null>();
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
 
@@ -162,10 +163,10 @@ const MarkdownTextArea = ({
 			);
 		} else {
 			setContent(prevContent => prevContent + '****');
-			setShouldFocus(true);
+			setItemsBeforeEndToFocus(2);
 		}
 
-		setChanged('bold');
+		setChanged(true);
 	}, [content]);
 
 	const handleItalicClick = useCallback(() => {
@@ -204,10 +205,10 @@ const MarkdownTextArea = ({
 			);
 		} else {
 			setContent(prevContent => prevContent + '**');
-			setShouldFocus(true);
+			setItemsBeforeEndToFocus(1);
 		}
 
-		setChanged('italic');
+		setChanged(true);
 	}, [content]);
 
 	const handleHeaderClick = useCallback(() => {
@@ -240,10 +241,10 @@ const MarkdownTextArea = ({
 				prevContent =>
 					prevContent + (prevContent.length === 0 ? '#### ' : '\n#### ')
 			);
-			setShouldFocus(true);
+			setItemsBeforeEndToFocus(0);
 		}
 
-		setChanged('header');
+		setChanged(true);
 	}, [content]);
 
 	const handleQuoteClick = useCallback(() => {
@@ -293,10 +294,10 @@ const MarkdownTextArea = ({
 			setContent(prevContent =>
 				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
 			);
-			setShouldFocus(true);
+			setItemsBeforeEndToFocus(0);
 		}
 
-		setChanged('quote');
+		setChanged(true);
 	}, [content]);
 
 	const handleLinkClick = useCallback(() => {
@@ -335,44 +336,131 @@ const MarkdownTextArea = ({
 			);
 		} else {
 			setContent(prevContent => prevContent + '[](url)');
-			setShouldFocus(true);
+			setItemsBeforeEndToFocus(6);
 		}
 
-		setChanged('link');
+		setChanged(true);
+	}, [content]);
+
+	const handleBulletListClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (selectionStart && selectionEnd && selectionEnd <= content.length) {
+			let start = content.substring(0, selectionStart).lastIndexOf('\n');
+			if (start === -1) {
+				start = 0;
+			}
+
+			let end = content.indexOf('\n', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			let lineHasBullet = false;
+			if (/\n?\s*-\s+/.test(content.substring(start, end))) {
+				lineHasBullet = true;
+			}
+
+			if (lineHasBullet) {
+				setContent(
+					prevContent =>
+						prevContent.substring(0, start) +
+						prevContent.substring(start, end).replace(/(?!\n)\s*-\s+/, '') +
+						prevContent.substring(end, prevContent.length)
+				);
+			} else {
+				const linesAbove = /.+\n/.test(content.substring(0, start + 1));
+				const linesBelow = /\n.+/.test(content.substring(end, content.length));
+				setContent(
+					prevContent =>
+						prevContent.substring(0, start) +
+						`${linesAbove ? '\n\n' : ''}- ` +
+						prevContent.substring(start + 1, end) +
+						(linesBelow ? '\n' : '') +
+						prevContent.substring(end, prevContent.length)
+				);
+			}
+		} else {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '- ' : prevContent + '\n\n- '
+			);
+			setItemsBeforeEndToFocus(0);
+		}
+
+		setChanged(true);
 	}, [content]);
 
 	if (changed && textAreaRef.current?.value === content) {
-		if (shouldFocus) {
+		if (itemsBeforeEndToFocus !== undefined && itemsBeforeEndToFocus !== null) {
 			textAreaRef.current.focus();
 
-			if (changed === 'bold') {
-				textAreaRef.current.setSelectionRange(
-					content.length - 2,
-					content.length - 2
-				);
-			}
-			if (changed === 'italic') {
-				textAreaRef.current.setSelectionRange(
-					content.length - 1,
-					content.length - 1
-				);
-			}
-			if (changed === 'header' || changed === 'quote') {
-				textAreaRef.current.setSelectionRange(content.length, content.length);
-			}
-			if (changed === 'link') {
-				textAreaRef.current.setSelectionRange(
-					content.length - 6,
-					content.length - 6
-				);
-			}
+			textAreaRef.current.setSelectionRange(
+				content.length - itemsBeforeEndToFocus,
+				content.length - itemsBeforeEndToFocus
+			);
 
-			setShouldFocus(false);
+			setItemsBeforeEndToFocus(null);
 		}
 
 		onChange(content);
-		setChanged(null);
+		setChanged(false);
 	}
+
+	const handleTextAreaKeyDown = useCallback(
+		(event: KeyboardEvent<HTMLTextAreaElement>) => {
+			if (event.code === 'Enter') {
+				const selectionStart = textAreaRef.current?.selectionStart;
+				const selectionEnd = textAreaRef.current?.selectionEnd;
+				if (selectionStart && selectionEnd && selectionStart === selectionEnd) {
+					let start = content.substring(0, selectionStart).lastIndexOf('\n');
+					if (start === -1) {
+						start = 0;
+					}
+
+					let end = content.indexOf('\n', selectionEnd);
+
+					if (end === -1) {
+						end = content.length;
+					}
+
+					const lineHasBullet = /\n?\s*-\s+/.test(
+						content.substring(start, end)
+					);
+
+					if (lineHasBullet) {
+						event.preventDefault();
+						const lineHasContent = /\n?\s*-\s+\S+/.test(
+							content.substring(start, end)
+						);
+
+						if (lineHasContent) {
+							setContent(
+								prevContent =>
+									prevContent.substring(0, selectionStart) +
+									'\n- ' +
+									prevContent.substring(selectionEnd, prevContent.length)
+							);
+							setItemsBeforeEndToFocus(content.length - selectionEnd);
+						} else {
+							setContent(
+								prevContent =>
+									prevContent.substring(0, start) +
+									prevContent
+										.substring(start, end)
+										.replace(/(?!\n)\s*-\s+/, '') +
+									prevContent.substring(end, prevContent.length)
+							);
+						}
+
+						setChanged(true);
+					}
+				}
+			}
+		},
+		[content]
+	);
 
 	return (
 		<div className={classes.container} data-testid="markdown-text-area">
@@ -438,6 +526,14 @@ const MarkdownTextArea = ({
 						>
 							<LinkIcon className={classes['text-effect-button-icon']} />
 						</button>
+						<button
+							aria-label="Insert bulleted list"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleBulletListClick}
+						>
+							<ListBulletIcon className={classes['text-effect-button-icon']} />
+						</button>
 					</div>
 					<textarea
 						onChange={handleTextAreaChange}
@@ -450,6 +546,7 @@ const MarkdownTextArea = ({
 						onBlur={handleTextAreaBlur}
 						id={id}
 						value={content}
+						onKeyDown={handleTextAreaKeyDown}
 					></textarea>
 				</>
 			)}
