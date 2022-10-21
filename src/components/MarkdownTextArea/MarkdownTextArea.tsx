@@ -25,6 +25,9 @@ type MarkdownTextAreaProps = {
 	label?: string;
 };
 
+const isNotNullOrUndefined = (thing: any) =>
+	thing !== null && thing !== undefined;
+
 const calculateNumberOfRows = (content: string, cols: number) => {
 	return Math.max(
 		content.split(/(\n)/g).reduce<{ value: number; hasNewline: boolean }>(
@@ -75,6 +78,8 @@ const MarkdownTextArea = ({
 	const [changed, setChanged] = useState(false);
 	const [itemsBeforeEndToFocus, setItemsBeforeEndToFocus] =
 		useState<number | null>();
+	const [textAreaBlurToTextButton, setTextAreaBlurToTextButton] =
+		useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
 
@@ -121,10 +126,12 @@ const MarkdownTextArea = ({
 				event.relatedTarget?.innerHTML !== 'B' &&
 				event.relatedTarget?.innerHTML !== 'I' &&
 				event.relatedTarget?.innerHTML !== 'H' &&
-				event.relatedTarget?.innerHTML !== 'Q' &&
 				!event.relatedTarget?.innerHTML.startsWith('<svg')
 			) {
 				textAreaRef.current?.setSelectionRange(-1, -1);
+				setTextAreaBlurToTextButton(false);
+			} else {
+				setTextAreaBlurToTextButton(true);
 			}
 		},
 		[onBlur]
@@ -134,20 +141,26 @@ const MarkdownTextArea = ({
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent => prevContent + '****');
+			setItemsBeforeEndToFocus(2);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
 					'**' +
-					prevContent.substring(selectionStart, selectionEnd) +
+					prevContent.substring(selectionStart as number, selectionEnd) +
 					'**' +
-					prevContent.substring(selectionEnd, prevContent.length)
+					prevContent.substring(selectionEnd as number, prevContent.length)
 			);
 		} else if (
-			selectionStart &&
-			selectionEnd &&
-			selectionStart === selectionEnd &&
-			selectionStart < content.length
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
 		) {
 			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
 			let end = content.indexOf(' ', selectionEnd);
@@ -164,32 +177,36 @@ const MarkdownTextArea = ({
 					'**' +
 					prevContent.substring(end, prevContent.length)
 			);
-		} else {
-			setContent(prevContent => prevContent + '****');
-			setItemsBeforeEndToFocus(2);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	const handleItalicClick = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent => prevContent + '**');
+			setItemsBeforeEndToFocus(1);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
 					'*' +
-					prevContent.substring(selectionStart, selectionEnd) +
+					prevContent.substring(selectionStart as number, selectionEnd) +
 					'*' +
-					prevContent.substring(selectionEnd, prevContent.length)
+					prevContent.substring(selectionEnd as number, prevContent.length)
 			);
 		} else if (
-			selectionStart &&
-			selectionEnd &&
-			selectionStart === selectionEnd &&
-			selectionStart <= content.length
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
 		) {
 			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
 			let end = content.indexOf(' ', selectionEnd);
@@ -206,30 +223,37 @@ const MarkdownTextArea = ({
 					'*' +
 					prevContent.substring(end, prevContent.length)
 			);
-		} else {
-			setContent(prevContent => prevContent + '**');
-			setItemsBeforeEndToFocus(1);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	const handleHeaderClick = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+		if (!textAreaBlurToTextButton) {
+			setContent(
+				prevContent =>
+					prevContent + (prevContent.length === 0 ? '#### ' : '\n#### ')
+			);
+			setItemsBeforeEndToFocus(0);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
 					'#### ' +
-					prevContent.substring(selectionStart, prevContent.length)
+					prevContent.substring(selectionStart as number, prevContent.length)
 			);
 		} else if (
-			selectionStart &&
-			selectionEnd &&
-			selectionStart === selectionEnd &&
-			selectionStart < content.length
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
 		) {
 			const start = content.substring(0, selectionStart).lastIndexOf('\n') + 1;
 
@@ -239,35 +263,38 @@ const MarkdownTextArea = ({
 					'#### ' +
 					prevContent.substring(start, prevContent.length)
 			);
-		} else {
-			setContent(
-				prevContent =>
-					prevContent + (prevContent.length === 0 ? '#### ' : '\n#### ')
-			);
-			setItemsBeforeEndToFocus(0);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	const handleQuoteClick = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
+			);
+			setItemsBeforeEndToFocus(0);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
 					(selectionStart === 0 ? '> ' : '\n\n> ') +
-					prevContent.substring(selectionStart, selectionEnd) +
+					prevContent.substring(selectionStart as number, selectionEnd) +
 					'\n\n' +
-					prevContent.substring(selectionEnd, prevContent.length)
+					prevContent.substring(selectionEnd as number, prevContent.length)
 			);
 		} else if (
-			selectionStart &&
-			selectionEnd &&
-			selectionStart === selectionEnd &&
-			selectionStart < content.length
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
 		) {
 			let start = content.substring(0, selectionStart).lastIndexOf('\n');
 
@@ -294,34 +321,36 @@ const MarkdownTextArea = ({
 					(linesBelow ? '\n' : '') +
 					prevContent.substring(end, prevContent.length)
 			);
-		} else {
-			setContent(prevContent =>
-				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
-			);
-			setItemsBeforeEndToFocus(0);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	const handleLinkClick = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionStart !== selectionEnd) {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent => prevContent + '[](url)');
+			setItemsBeforeEndToFocus(6);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
 					'[' +
-					prevContent.substring(selectionStart, selectionEnd) +
+					prevContent.substring(selectionStart as number, selectionEnd) +
 					'](url)' +
-					prevContent.substring(selectionEnd, prevContent.length)
+					prevContent.substring(selectionEnd as number, prevContent.length)
 			);
 		} else if (
-			selectionStart &&
-			selectionEnd &&
-			selectionStart === selectionEnd &&
-			selectionStart < content.length
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
 		) {
 			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
 			let end = content.indexOf(' ', selectionEnd);
@@ -338,19 +367,25 @@ const MarkdownTextArea = ({
 					'](url)' +
 					prevContent.substring(end, prevContent.length)
 			);
-		} else {
-			setContent(prevContent => prevContent + '[](url)');
-			setItemsBeforeEndToFocus(6);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	const handleBulletListClick = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (selectionStart && selectionEnd && selectionEnd <= content.length) {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '- ' : prevContent + '\n\n- '
+			);
+			setItemsBeforeEndToFocus(0);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd)
+		) {
 			let start = content.substring(0, selectionStart).lastIndexOf('\n');
 			if (start === -1) {
 				start = 0;
@@ -391,15 +426,11 @@ const MarkdownTextArea = ({
 						prevContent.substring(end, prevContent.length)
 				);
 			}
-		} else {
-			setContent(prevContent =>
-				prevContent.length === 0 ? '- ' : prevContent + '\n\n- '
-			);
-			setItemsBeforeEndToFocus(0);
 		}
 
 		setChanged(true);
-	}, [content]);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
 
 	if (changed && textAreaRef.current?.value === content) {
 		if (itemsBeforeEndToFocus !== undefined && itemsBeforeEndToFocus !== null) {
