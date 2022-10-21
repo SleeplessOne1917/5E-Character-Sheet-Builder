@@ -6403,10 +6403,10 @@ eslint-plugin-storybook@^0.6.6:
     requireindex "^1.1.0"
     ts-dedent "^2.2.0"
 
-eslint-plugin-testing-library@^5.7.2:
-  version "5.7.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.7.2.tgz#c1b2112a40aab61f93e10859e8b2d81e54f0ce84"
-  integrity sha512-0ZmHeR/DUUgEzW8rwUBRWxuqntipDtpvxK0hymdHnLlABryJkzd+CAHr+XnISaVsTisZ5MLHp6nQF+8COHLLTA==
+eslint-plugin-testing-library@^5.9.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.9.0.tgz#772243d6848c9ac1a22ca4f742a1fe5fd378a052"
+  integrity sha512-iwPz6KNf/qc4rHMGaxn2vmS5snzuOqtia00D0FC2Wcp1xWM3J9w0/YzzrPv/UFHhLG0CwfQodyKmqL5+c6hGgg==
   dependencies:
     "@typescript-eslint/utils" "^5.13.0"
 
