@@ -525,7 +525,9 @@ const MarkdownTextArea = ({
 							type="button"
 							onClick={handleQuoteClick}
 						>
-							Q
+							<svg className={classes['text-effect-button-icon']}>
+								<use xlinkHref={`/Icons.svg#quote`} />
+							</svg>
 						</button>
 						<button
 							aria-label="Insert link"

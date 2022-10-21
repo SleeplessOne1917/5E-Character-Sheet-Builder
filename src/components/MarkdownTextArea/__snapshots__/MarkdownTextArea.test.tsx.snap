@@ -54,7 +54,13 @@ exports[`renders correctly by default 1`] = `
       class="text-effect-button"
       type="button"
     >
-      Q
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#quote"
+        />
+      </svg>
     </button>
     <button
       aria-label="Insert link"
@@ -158,7 +164,13 @@ exports[`renders correctly with error showing 1`] = `
       class="text-effect-button"
       type="button"
     >
-      Q
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#quote"
+        />
+      </svg>
     </button>
     <button
       aria-label="Insert link"
