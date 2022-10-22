@@ -119,6 +119,7 @@
     font-family: var(--font-display);
     font-weight: normal;
     font-style: normal;
+    z-index: 1;
 }
 
 @media (hover: hover) {
