@@ -448,13 +448,25 @@ const MarkdownTextArea = ({
 				const linesBelow = linesBelowRegex.test(
 					content.substring(end, content.length)
 				);
+				const lineAboveIsBullet = /(?:^|\n)(?!\n)\s*-\s+\S+$/.test(
+					content.substring(0, start)
+				);
+				const lineBelowIsBullet = /^\n(?!\n)\s*-\s+.*/.test(
+					content.substring(end, content.length)
+				);
 
 				setContent(
 					prevContent =>
 						prevContent.substring(0, start) +
-						`${linesAbove ? '\n\n' : start === 0 ? '' : '\n'}- ` +
+						`${
+							linesAbove && !lineAboveIsBullet
+								? '\n\n'
+								: start === 0
+								? ''
+								: '\n'
+						}- ` +
 						prevContent.substring(start + 1, end) +
-						(linesBelow ? '\n' : '') +
+						(linesBelow && !lineBelowIsBullet ? '\n' : '') +
 						prevContent.substring(end, prevContent.length)
 				);
 			}
@@ -616,9 +628,6 @@ const MarkdownTextArea = ({
 										prevContent.length
 									)
 							);
-							setItemsBeforeEndToFocus(
-								content.length - (selectionEnd as number)
-							);
 						} else {
 							setContent(
 								prevContent =>
@@ -631,6 +640,7 @@ const MarkdownTextArea = ({
 						}
 
 						setChanged(true);
+						setItemsBeforeEndToFocus(content.length - (selectionEnd as number));
 					} else if (endsWithListNumberRegexExec) {
 						event.preventDefault();
 						const lineHasContent = /\n?\s*\d+\.\s+\S+/.test(
