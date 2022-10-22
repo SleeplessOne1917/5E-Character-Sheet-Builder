@@ -59,7 +59,15 @@
     flex-wrap: wrap;
 }
 
+.text-effect-button-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: var(--davy);
+    color: var(--davy);
+}
+
 .text-effect-button {
+    position: relative;
     font-size: 1.1rem;
     cursor: pointer;
     background-color: var(--heaven-light);
@@ -94,15 +102,32 @@
     color: var(--davy-light);
 }
 
-.text-effect-button-icon {
-    width: 1rem;
-    height: 1rem;
-    fill: var(--davy);
-    color: var(--davy);
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    font-size: 0.85rem;
+    bottom: -128%;
+    border: 0.5px solid var(--heaven);
+    left: 40%;
+    padding: 0.3rem;
+    border-radius: 0.35rem;
+    transition: opacity 0.4s;
+    white-space: nowrap;
+    background-color: var(--davy-light);
+    color: var(--heaven-light);
+    font-family: var(--font-display);
+    font-weight: normal;
+    font-style: normal;
 }
 
 @media (hover: hover) {
     .text-effect-button:hover:not(:disabled) {
         background-color: var(--highlight-light);
+    }
+
+    .text-effect-button:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 }

@@ -5,10 +5,13 @@ import {
 	ListBulletIcon
 } from '@heroicons/react/20/solid';
 import {
+	CSSProperties,
 	ChangeEventHandler,
 	FocusEvent,
 	KeyboardEvent,
+	MouseEventHandler,
 	MutableRefObject,
+	PropsWithChildren,
 	useCallback,
 	useEffect,
 	useRef,
@@ -28,6 +31,14 @@ type MarkdownTextAreaProps = {
 	error?: string;
 	id?: string;
 	label?: string;
+};
+
+type TextEditButtonProps = {
+	label: string;
+	style?: CSSProperties;
+	onClick: MouseEventHandler<HTMLButtonElement>;
+	tooltip: string;
+	disabled?: boolean;
 };
 
 const isNotNullOrUndefined = (thing: any) =>
@@ -95,6 +106,27 @@ const calculateNumberOfRows = (content: string, cols: number) => {
 const linesAboveRegex = /\S+((?!\n)\s*)?\n$/;
 const linesBelowRegex = /^\n(?!\n)\s*\S+/;
 const endsWithNumberListRegex = /(?:(?:^\s*)|(?:\n\s*))(\d+)\.\s+(.*)$/;
+
+const TextEditButton = ({
+	label,
+	style,
+	onClick,
+	children,
+	tooltip,
+	disabled = false
+}: PropsWithChildren<TextEditButtonProps>) => (
+	<button
+		aria-label={label}
+		className={classes['text-effect-button']}
+		type="button"
+		onClick={onClick}
+		style={style}
+		disabled={disabled}
+	>
+		{children}
+		<span className={classes.tooltip}>{tooltip}</span>
+	</button>
+);
 
 const MarkdownTextArea = ({
 	value,
@@ -747,91 +779,82 @@ const MarkdownTextArea = ({
 			) : (
 				<>
 					<div className={classes['text-effect-buttons']}>
-						<button
-							aria-label="Insert header"
-							className={classes['text-effect-button']}
-							type="button"
+						<TextEditButton
+							label="Insert header"
 							onClick={handleHeaderClick}
 							style={{ fontFamily: 'var(--font-fantasy)' }}
+							tooltip="Header"
 						>
 							H
-						</button>
-						<button
-							aria-label="Insert bold text"
-							className={classes['text-effect-button']}
+						</TextEditButton>
+						<TextEditButton
+							label="Insert bold text"
 							onClick={handleBoldClick}
-							type="button"
 							style={{ fontWeight: 'bold' }}
+							tooltip="Bold"
 						>
 							B
-						</button>
-						<button
-							aria-label="Insert italic text"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Insert italic text"
 							onClick={handleItalicClick}
 							style={{ fontStyle: 'italic' }}
+							tooltip="Italic"
 						>
 							I
-						</button>
-						<button
-							aria-label="Insert block quote"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Insert blockquote"
 							onClick={handleQuoteClick}
+							tooltip="Blockquote"
 						>
 							<svg className={classes['text-effect-button-icon']}>
 								<use xlinkHref={`/Icons.svg#quote`} />
 							</svg>
-						</button>
-						<button
-							aria-label="Insert link"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Insert hyperlink"
 							onClick={handleLinkClick}
+							tooltip="Hyperlink"
 						>
 							<LinkIcon className={classes['text-effect-button-icon']} />
-						</button>
-						<button
-							aria-label="Insert bulleted list"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Insert bulleted list"
 							onClick={handleBulletListClick}
+							tooltip="Bulleted List"
 						>
 							<ListBulletIcon className={classes['text-effect-button-icon']} />
-						</button>
-						<button
-							aria-label="Insert numbered list"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Insert numbered list"
 							onClick={handleNumberedListClick}
+							tooltip="Numbered List"
 						>
 							<svg className={classes['text-effect-button-icon']}>
 								<use xlinkHref={`/Icons.svg#numbered-list`} />
 							</svg>
-						</button>
-						<button
-							aria-label="Undo"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Undo"
 							onClick={handleUndo}
 							disabled={currentUndoRedoIndex === 0}
+							tooltip="Undo - Ctrl + Z"
 						>
 							<ArrowUturnLeftIcon
 								className={classes['text-effect-button-icon']}
 							/>
-						</button>
-						<button
-							aria-label="Redo"
-							className={classes['text-effect-button']}
-							type="button"
+						</TextEditButton>
+						<TextEditButton
+							label="Redo"
 							onClick={handleRedo}
 							disabled={currentUndoRedoIndex === undoRedoStates.length - 1}
+							tooltip="Redo - Ctrl + Y"
 						>
 							<ArrowUturnRightIcon
 								className={classes['text-effect-button-icon']}
 							/>
-						</button>
+						</TextEditButton>
 					</div>
 					<textarea
 						onChange={handleTextAreaChange}
