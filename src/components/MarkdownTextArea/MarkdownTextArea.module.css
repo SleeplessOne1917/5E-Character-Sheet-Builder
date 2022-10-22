@@ -56,6 +56,7 @@
 .text-effect-buttons {
     display: flex;
     margin-bottom: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .text-effect-button {
@@ -70,12 +71,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 0.3rem;
+    margin: 0.3rem 0.3rem;
     color: var(--davy);
-}
-
-.text-effect-button:first-of-type {
-    margin-left: 0;
 }
 
 .text-effect-button:focus-visible {
@@ -83,8 +80,18 @@
     outline: var(--focus-outline);
 }
 
-.text-effect-button:active {
+.text-effect-button:active:not(:disabled) {
     background-color: var(--highlight) !important;
+}
+
+.text-effect-button:disabled {
+    background-color: var(--davy-super-light);
+    cursor: default;
+}
+
+.text-effect-button:disabled .text-effect-button-icon {
+    fill: var(--davy-light);
+    color: var(--davy-light);
 }
 
 .text-effect-button-icon {
@@ -95,7 +102,7 @@
 }
 
 @media (hover: hover) {
-    .text-effect-button:hover {
+    .text-effect-button:hover:not(:disabled) {
         background-color: var(--highlight-light);
     }
 }

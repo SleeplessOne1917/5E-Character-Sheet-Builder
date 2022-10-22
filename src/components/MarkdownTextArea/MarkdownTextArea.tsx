@@ -1,4 +1,10 @@
 import {
+	ArrowUturnLeftIcon,
+	ArrowUturnRightIcon,
+	LinkIcon,
+	ListBulletIcon
+} from '@heroicons/react/20/solid';
+import {
 	ChangeEventHandler,
 	FocusEvent,
 	KeyboardEvent,
@@ -8,7 +14,6 @@ import {
 	useRef,
 	useState
 } from 'react';
-import { LinkIcon, ListBulletIcon } from '@heroicons/react/20/solid';
 
 import Button from '../Button/Button';
 import MarkdownParser from '../MarkdownParser/MarkdownParser';
@@ -109,6 +114,9 @@ const MarkdownTextArea = ({
 		useState<number | null>();
 	const [textAreaBlurToTextButton, setTextAreaBlurToTextButton] =
 		useState(false);
+	const [undoRedoStates, setUndoRedoStates] = useState<string[]>([value ?? '']);
+	const [currentUndoRedoIndex, setCurrentUndoRedoIndex] = useState(0);
+	const [changeTimeout, setChangeTimeout] = useState<NodeJS.Timeout>();
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
 
@@ -137,6 +145,20 @@ const MarkdownTextArea = ({
 				onChange(event.target.value);
 				setContent(event.target.value);
 
+				if (changeTimeout) {
+					clearTimeout(changeTimeout);
+				}
+
+				const timeout = setTimeout(() => {
+					setUndoRedoStates(prev => [
+						...prev.slice(0, currentUndoRedoIndex + 1),
+						event.target.value
+					]);
+					setCurrentUndoRedoIndex(prev => prev + 1);
+				}, 750);
+
+				setChangeTimeout(timeout);
+
 				setNumberOfRows(
 					calculateNumberOfRows(
 						event.target.value,
@@ -144,7 +166,7 @@ const MarkdownTextArea = ({
 					)
 				);
 			},
-			[onChange]
+			[onChange, changeTimeout, currentUndoRedoIndex]
 		);
 
 	const handleTextAreaBlur = useCallback(
@@ -565,6 +587,22 @@ const MarkdownTextArea = ({
 		setTextAreaBlurToTextButton(false);
 	}, [content, textAreaBlurToTextButton]);
 
+	const handleUndo = useCallback(() => {
+		if (currentUndoRedoIndex > 0) {
+			setContent(undoRedoStates[currentUndoRedoIndex - 1]);
+			setChanged(true);
+			setCurrentUndoRedoIndex(prev => prev - 1);
+		}
+	}, [currentUndoRedoIndex, undoRedoStates]);
+
+	const handleRedo = useCallback(() => {
+		if (currentUndoRedoIndex < undoRedoStates.length - 1) {
+			setContent(undoRedoStates[currentUndoRedoIndex + 1]);
+			setChanged(true);
+			setCurrentUndoRedoIndex(prev => prev + 1);
+		}
+	}, [currentUndoRedoIndex, undoRedoStates]);
+
 	if (changed && textAreaRef.current?.value === content) {
 		if (itemsBeforeEndToFocus !== undefined && itemsBeforeEndToFocus !== null) {
 			textAreaRef.current.focus();
@@ -673,8 +711,19 @@ const MarkdownTextArea = ({
 					}
 				}
 			}
+			if (event.ctrlKey) {
+				if (event.code === 'KeyZ') {
+					event.preventDefault();
+					event.stopPropagation();
+					handleUndo();
+				} else if (event.code === 'KeyY') {
+					event.preventDefault();
+					event.stopPropagation();
+					handleRedo();
+				}
+			}
 		},
-		[content]
+		[content, handleUndo, handleRedo]
 	);
 
 	return (
@@ -760,6 +809,28 @@ const MarkdownTextArea = ({
 							<svg className={classes['text-effect-button-icon']}>
 								<use xlinkHref={`/Icons.svg#numbered-list`} />
 							</svg>
+						</button>
+						<button
+							aria-label="Undo"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleUndo}
+							disabled={currentUndoRedoIndex === 0}
+						>
+							<ArrowUturnLeftIcon
+								className={classes['text-effect-button-icon']}
+							/>
+						</button>
+						<button
+							aria-label="Redo"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleRedo}
+							disabled={currentUndoRedoIndex === undoRedoStates.length - 1}
+						>
+							<ArrowUturnRightIcon
+								className={classes['text-effect-button-icon']}
+							/>
 						</button>
 					</div>
 					<textarea
