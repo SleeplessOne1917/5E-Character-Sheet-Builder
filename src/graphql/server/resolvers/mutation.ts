@@ -119,7 +119,7 @@ const Mutation = {
 
 		const accessToken = jwt.sign(
 			{ username: user.username },
-			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '1h'
 			}
@@ -127,7 +127,7 @@ const Mutation = {
 
 		const refreshToken = jwt.sign(
 			{ username: user.username },
-			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '180d'
 			}
@@ -153,7 +153,7 @@ const Mutation = {
 
 		const accessToken = jwt.sign(
 			{ username: user.username },
-			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '1h'
 			}
@@ -161,7 +161,7 @@ const Mutation = {
 
 		const refreshToken = jwt.sign(
 			{ username: user.username },
-			process.env.NEXT_PUBLIC_JWT_SECRET as string,
+			process.env.JWT_SECRET as string,
 			{
 				expiresIn: '180d'
 			}
@@ -173,10 +173,7 @@ const Mutation = {
 		let username: string;
 		try {
 			username = (
-				jwt.verify(
-					refreshToken,
-					process.env.NEXT_PUBLIC_JWT_SECRET as string
-				) as {
+				jwt.verify(refreshToken, process.env.JWT_SECRET as string) as {
 					username: string;
 				}
 			).username;
@@ -184,13 +181,9 @@ const Mutation = {
 			throw new ApolloError('Refresh token expired');
 		}
 
-		return jwt.sign(
-			{ username },
-			process.env.NEXT_PUBLIC_JWT_SECRET as string,
-			{
-				expiresIn: '1h'
-			}
-		);
+		return jwt.sign({ username }, process.env.JWT_SECRET as string, {
+			expiresIn: '1h'
+		});
 	},
 	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request, { strict: true });

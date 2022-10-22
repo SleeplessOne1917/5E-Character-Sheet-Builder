@@ -22,7 +22,7 @@ const apolloServer = new ApolloServer({
 		let username: string | null;
 		try {
 			username = (
-				jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET as string) as {
+				jwt.verify(token, process.env.JWT_SECRET as string) as {
 					username: string;
 				}
 			).username;

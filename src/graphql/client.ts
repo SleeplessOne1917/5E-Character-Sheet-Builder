@@ -61,17 +61,12 @@ export const createAuthClient = () =>
 					});
 				},
 				willAuthError: ({ authState }) => {
-					try {
-						jwt.verify(
-							/* @ts-ignore */
-							authState.accessToken,
-							process.env.NEXT_PUBLIC_JWT_SECRET as string
-						);
-					} catch (e) {
-						return true;
-					}
+					const decodedToken = jwt.decode(
+						/* @ts-ignore */
+						authState.accessToken
+					) as jwt.JwtPayload;
 
-					return false;
+					return Date.now() >= (decodedToken?.exp ?? 0) * 1000;
 				}
 			}),
 			fetchExchange
