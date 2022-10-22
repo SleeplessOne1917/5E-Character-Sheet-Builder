@@ -605,10 +605,10 @@ const SpellForm = ({
 							value={values.description}
 							label="Description"
 							onBlur={handleBlur}
-							onChange={event => {
-								handleChange(event);
+							onChange={value => {
+								setFieldValue('description', value);
 								if (shouldUseReduxStore) {
-									handleDescriptionChange(event.target.value);
+									handleDescriptionChange(value);
 								}
 							}}
 							touched={touched.description}
@@ -619,10 +619,10 @@ const SpellForm = ({
 							value={values.atHigherLevels}
 							label="At Higher Levels"
 							onBlur={handleBlur}
-							onChange={event => {
-								handleChange(event);
+							onChange={value => {
+								setFieldValue('atHigherLevels', value);
 								if (shouldUseReduxStore) {
-									handleHigherLevelsChange(event.target.value);
+									handleHigherLevelsChange(value);
 								}
 							}}
 							touched={touched.atHigherLevels}

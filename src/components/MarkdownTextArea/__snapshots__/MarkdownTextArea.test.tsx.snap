@@ -22,6 +22,184 @@ exports[`renders correctly by default 1`] = `
       Preview
     </button>
   </div>
+  <div
+    class="text-effect-buttons"
+  >
+    <button
+      aria-label="Insert header"
+      class="text-effect-button"
+      style="font-family: var(--font-fantasy);"
+      type="button"
+    >
+      H
+      <span
+        class="tooltip"
+      >
+        Header - Ctrl + H
+      </span>
+    </button>
+    <button
+      aria-label="Insert bold text"
+      class="text-effect-button"
+      style="font-weight: bold;"
+      type="button"
+    >
+      B
+      <span
+        class="tooltip"
+      >
+        Bold - Ctrl + B
+      </span>
+    </button>
+    <button
+      aria-label="Insert italic text"
+      class="text-effect-button"
+      style="font-style: italic;"
+      type="button"
+    >
+      I
+      <span
+        class="tooltip"
+      >
+        Italic - Ctrl + I
+      </span>
+    </button>
+    <button
+      aria-label="Insert blockquote"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#quote"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Blockquote - Ctrl + Q
+      </span>
+    </button>
+    <button
+      aria-label="Insert hyperlink"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"
+        />
+        <path
+          d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Hyperlink - Ctrl + L
+      </span>
+    </button>
+    <button
+      aria-label="Insert bulleted list"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M6 4.75A.75.75 0 016.75 4h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 4.75zM6 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 10zm0 5.25a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75a.75.75 0 01-.75-.75zM1.99 4.75a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 15.25a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 10a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1V10z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Bulleted List - Ctrl + U
+      </span>
+    </button>
+    <button
+      aria-label="Insert numbered list"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#numbered-list"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Numbered List - Ctrl + O
+      </span>
+    </button>
+    <button
+      aria-label="Undo"
+      class="text-effect-button"
+      disabled=""
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M7.793 2.232a.75.75 0 01-.025 1.06L3.622 7.25h10.003a5.375 5.375 0 010 10.75H10.75a.75.75 0 010-1.5h2.875a3.875 3.875 0 000-7.75H3.622l4.146 3.957a.75.75 0 01-1.036 1.085l-5.5-5.25a.75.75 0 010-1.085l5.5-5.25a.75.75 0 011.06.025z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Undo - Ctrl + Z
+      </span>
+    </button>
+    <button
+      aria-label="Redo"
+      class="text-effect-button"
+      disabled=""
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 000 10.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 001.036 1.085l5.5-5.25a.75.75 0 000-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Redo - Ctrl + Y or Ctrl + Shift + Z
+      </span>
+    </button>
+  </div>
   <textarea
     class="text-input"
     id="description"
@@ -50,6 +228,184 @@ exports[`renders correctly with error showing 1`] = `
       type="button"
     >
       Preview
+    </button>
+  </div>
+  <div
+    class="text-effect-buttons"
+  >
+    <button
+      aria-label="Insert header"
+      class="text-effect-button"
+      style="font-family: var(--font-fantasy);"
+      type="button"
+    >
+      H
+      <span
+        class="tooltip"
+      >
+        Header - Ctrl + H
+      </span>
+    </button>
+    <button
+      aria-label="Insert bold text"
+      class="text-effect-button"
+      style="font-weight: bold;"
+      type="button"
+    >
+      B
+      <span
+        class="tooltip"
+      >
+        Bold - Ctrl + B
+      </span>
+    </button>
+    <button
+      aria-label="Insert italic text"
+      class="text-effect-button"
+      style="font-style: italic;"
+      type="button"
+    >
+      I
+      <span
+        class="tooltip"
+      >
+        Italic - Ctrl + I
+      </span>
+    </button>
+    <button
+      aria-label="Insert blockquote"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#quote"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Blockquote - Ctrl + Q
+      </span>
+    </button>
+    <button
+      aria-label="Insert hyperlink"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"
+        />
+        <path
+          d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Hyperlink - Ctrl + L
+      </span>
+    </button>
+    <button
+      aria-label="Insert bulleted list"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M6 4.75A.75.75 0 016.75 4h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 4.75zM6 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 10zm0 5.25a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75a.75.75 0 01-.75-.75zM1.99 4.75a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 15.25a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 10a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1V10z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Bulleted List - Ctrl + U
+      </span>
+    </button>
+    <button
+      aria-label="Insert numbered list"
+      class="text-effect-button"
+      type="button"
+    >
+      <svg
+        class="text-effect-button-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#numbered-list"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Numbered List - Ctrl + O
+      </span>
+    </button>
+    <button
+      aria-label="Undo"
+      class="text-effect-button"
+      disabled=""
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M7.793 2.232a.75.75 0 01-.025 1.06L3.622 7.25h10.003a5.375 5.375 0 010 10.75H10.75a.75.75 0 010-1.5h2.875a3.875 3.875 0 000-7.75H3.622l4.146 3.957a.75.75 0 01-1.036 1.085l-5.5-5.25a.75.75 0 010-1.085l5.5-5.25a.75.75 0 011.06.025z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Undo - Ctrl + Z
+      </span>
+    </button>
+    <button
+      aria-label="Redo"
+      class="text-effect-button"
+      disabled=""
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="text-effect-button-icon"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 000 10.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 001.036 1.085l5.5-5.25a.75.75 0 000-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      <span
+        class="tooltip"
+      >
+        Redo - Ctrl + Y or Ctrl + Shift + Z
+      </span>
     </button>
   </div>
   <textarea
