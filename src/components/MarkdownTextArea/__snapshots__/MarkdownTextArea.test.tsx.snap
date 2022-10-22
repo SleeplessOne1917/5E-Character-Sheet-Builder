@@ -35,7 +35,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Header
+        Header - Ctrl + H
       </span>
     </button>
     <button
@@ -48,7 +48,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Bold
+        Bold - Ctrl + B
       </span>
     </button>
     <button
@@ -61,7 +61,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Italic
+        Italic - Ctrl + I
       </span>
     </button>
     <button
@@ -79,7 +79,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Blockquote
+        Blockquote - Ctrl + Q
       </span>
     </button>
     <button
@@ -104,7 +104,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Hyperlink
+        Hyperlink - Ctrl + L
       </span>
     </button>
     <button
@@ -128,7 +128,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Bulleted List
+        Bulleted List - Ctrl + U
       </span>
     </button>
     <button
@@ -146,7 +146,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Numbered List
+        Numbered List - Ctrl + O
       </span>
     </button>
     <button
@@ -196,7 +196,7 @@ exports[`renders correctly by default 1`] = `
       <span
         class="tooltip"
       >
-        Redo - Ctrl + Y
+        Redo - Ctrl + Y or Ctrl + Shift + Z
       </span>
     </button>
   </div>
@@ -243,7 +243,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Header
+        Header - Ctrl + H
       </span>
     </button>
     <button
@@ -256,7 +256,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Bold
+        Bold - Ctrl + B
       </span>
     </button>
     <button
@@ -269,7 +269,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Italic
+        Italic - Ctrl + I
       </span>
     </button>
     <button
@@ -287,7 +287,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Blockquote
+        Blockquote - Ctrl + Q
       </span>
     </button>
     <button
@@ -312,7 +312,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Hyperlink
+        Hyperlink - Ctrl + L
       </span>
     </button>
     <button
@@ -336,7 +336,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Bulleted List
+        Bulleted List - Ctrl + U
       </span>
     </button>
     <button
@@ -354,7 +354,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Numbered List
+        Numbered List - Ctrl + O
       </span>
     </button>
     <button
@@ -404,7 +404,7 @@ exports[`renders correctly with error showing 1`] = `
       <span
         class="tooltip"
       >
-        Redo - Ctrl + Y
+        Redo - Ctrl + Y or Ctrl + Shift + Z
       </span>
     </button>
   </div>

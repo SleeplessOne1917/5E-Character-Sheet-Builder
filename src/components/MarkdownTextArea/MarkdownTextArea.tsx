@@ -230,14 +230,66 @@ const MarkdownTextArea = ({
 		[onBlur]
 	);
 
-	const handleBoldClick = useCallback(() => {
+	const handleBold = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
+		if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart !== selectionEnd
+		) {
+			setContent(
+				prevContent =>
+					prevContent.substring(0, selectionStart) +
+					'**' +
+					prevContent.substring(selectionStart as number, selectionEnd) +
+					'**' +
+					prevContent.substring(selectionEnd as number, prevContent.length)
+			);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd) &&
+			selectionStart === selectionEnd
+		) {
+			const start =
+				lastIndexOfRegex(content.substring(0, selectionStart), /\s/) + 1;
+			let end = indexOfRegex(content, /\s/, selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			setContent(
+				prevContent =>
+					prevContent.substring(0, start) +
+					'**' +
+					prevContent.substring(start, end) +
+					'**' +
+					prevContent.substring(end, prevContent.length)
+			);
+		}
+
+		setChanged(true);
+	}, [content]);
+
+	const handleBoldClick = useCallback(() => {
 		if (!textAreaBlurToTextButton) {
 			setContent(prevContent => prevContent + '****');
 			setItemsBeforeEndToFocus(2);
-		} else if (
+			setChanged(true);
+		} else {
+			handleBold();
+		}
+
+		setTextAreaBlurToTextButton(false);
+	}, [handleBold, textAreaBlurToTextButton]);
+
+	const handleItalic = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart !== selectionEnd
@@ -245,9 +297,9 @@ const MarkdownTextArea = ({
 			setContent(
 				prevContent =>
 					prevContent.substring(0, selectionStart) +
-					'**' +
+					'*' +
 					prevContent.substring(selectionStart as number, selectionEnd) +
-					'**' +
+					'*' +
 					prevContent.substring(selectionEnd as number, prevContent.length)
 			);
 		} else if (
@@ -266,75 +318,33 @@ const MarkdownTextArea = ({
 			setContent(
 				prevContent =>
 					prevContent.substring(0, start) +
-					'**' +
+					'*' +
 					prevContent.substring(start, end) +
-					'**' +
+					'*' +
 					prevContent.substring(end, prevContent.length)
 			);
 		}
 
 		setChanged(true);
-		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content]);
 
 	const handleItalicClick = useCallback(() => {
-		const selectionStart = textAreaRef.current?.selectionStart;
-		const selectionEnd = textAreaRef.current?.selectionEnd;
-
 		if (!textAreaBlurToTextButton) {
 			setContent(prevContent => prevContent + '**');
 			setItemsBeforeEndToFocus(1);
-		} else if (
-			isNotNullOrUndefined(selectionStart) &&
-			isNotNullOrUndefined(selectionEnd) &&
-			selectionStart !== selectionEnd
-		) {
-			setContent(
-				prevContent =>
-					prevContent.substring(0, selectionStart) +
-					'*' +
-					prevContent.substring(selectionStart as number, selectionEnd) +
-					'*' +
-					prevContent.substring(selectionEnd as number, prevContent.length)
-			);
-		} else if (
-			isNotNullOrUndefined(selectionStart) &&
-			isNotNullOrUndefined(selectionEnd) &&
-			selectionStart === selectionEnd
-		) {
-			const start =
-				lastIndexOfRegex(content.substring(0, selectionStart), /\s/) + 1;
-			let end = indexOfRegex(content, /\s/, selectionEnd);
-
-			if (end === -1) {
-				end = content.length;
-			}
-
-			setContent(
-				prevContent =>
-					prevContent.substring(0, start) +
-					'*' +
-					prevContent.substring(start, end) +
-					'*' +
-					prevContent.substring(end, prevContent.length)
-			);
+			setChanged(true);
+		} else {
+			handleItalic();
 		}
 
-		setChanged(true);
 		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [handleItalic, textAreaBlurToTextButton]);
 
-	const handleHeaderClick = useCallback(() => {
+	const handleHeader = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (!textAreaBlurToTextButton) {
-			setContent(
-				prevContent =>
-					prevContent + (prevContent.length === 0 ? '#### ' : '\n#### ')
-			);
-			setItemsBeforeEndToFocus(0);
-		} else if (
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart !== selectionEnd
@@ -361,19 +371,28 @@ const MarkdownTextArea = ({
 		}
 
 		setChanged(true);
-		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content]);
 
-	const handleQuoteClick = useCallback(() => {
+	const handleHeaderClick = useCallback(() => {
+		if (!textAreaBlurToTextButton) {
+			setContent(
+				prevContent =>
+					prevContent + (prevContent.length === 0 ? '#### ' : '\n#### ')
+			);
+			setItemsBeforeEndToFocus(0);
+			setChanged(true);
+		} else {
+			handleHeader();
+		}
+
+		setTextAreaBlurToTextButton(false);
+	}, [handleHeader, textAreaBlurToTextButton]);
+
+	const handleQuote = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (!textAreaBlurToTextButton) {
-			setContent(prevContent =>
-				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
-			);
-			setItemsBeforeEndToFocus(0);
-		} else if (
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart !== selectionEnd
@@ -419,17 +438,27 @@ const MarkdownTextArea = ({
 		}
 
 		setChanged(true);
-		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content]);
 
-	const handleLinkClick = useCallback(() => {
+	const handleQuoteClick = useCallback(() => {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '> ' : prevContent + '\n\n> '
+			);
+			setItemsBeforeEndToFocus(0);
+			setChanged(true);
+		} else {
+			handleQuote();
+		}
+
+		setTextAreaBlurToTextButton(false);
+	}, [handleQuote, textAreaBlurToTextButton]);
+
+	const handleLink = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (!textAreaBlurToTextButton) {
-			setContent(prevContent => prevContent + '[](url)');
-			setItemsBeforeEndToFocus(6);
-		} else if (
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart !== selectionEnd
@@ -466,19 +495,25 @@ const MarkdownTextArea = ({
 		}
 
 		setChanged(true);
-		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content]);
 
-	const handleBulletListClick = useCallback(() => {
+	const handleLinkClick = useCallback(() => {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent => prevContent + '[](url)');
+			setItemsBeforeEndToFocus(6);
+			setChanged(true);
+		} else {
+			handleLink();
+		}
+
+		setTextAreaBlurToTextButton(false);
+	}, [handleLink, textAreaBlurToTextButton]);
+
+	const handleBulletList = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (!textAreaBlurToTextButton) {
-			setContent(prevContent =>
-				prevContent.length === 0 ? '- ' : prevContent + '\n\n- '
-			);
-			setItemsBeforeEndToFocus(0);
-		} else if (
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd)
 		) {
@@ -537,34 +572,27 @@ const MarkdownTextArea = ({
 		}
 
 		setChanged(true);
-		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content]);
 
-	const handleNumberedListClick = useCallback(() => {
+	const handleBulletListClick = useCallback(() => {
+		if (!textAreaBlurToTextButton) {
+			setContent(prevContent =>
+				prevContent.length === 0 ? '- ' : prevContent + '\n\n- '
+			);
+			setItemsBeforeEndToFocus(0);
+			setChanged(true);
+		} else {
+			handleBulletList();
+		}
+
+		setTextAreaBlurToTextButton(false);
+	}, [handleBulletList, textAreaBlurToTextButton]);
+
+	const handleNumberedList = useCallback(() => {
 		const selectionStart = textAreaRef.current?.selectionStart;
 		const selectionEnd = textAreaRef.current?.selectionEnd;
 
-		if (!textAreaBlurToTextButton) {
-			const endsWithListNumberRegexExec = endsWithNumberListRegex.exec(content);
-			const currentListNumber = endsWithListNumberRegexExec
-				? parseInt(endsWithListNumberRegexExec[1])
-				: 0;
-			const currentListItem = endsWithListNumberRegexExec
-				? endsWithListNumberRegexExec[2]
-				: '';
-			if (endsWithListNumberRegexExec) {
-				if (currentListItem.length > 0) {
-					setContent(
-						prevContent => prevContent + `\n${currentListNumber + 1}. `
-					);
-				}
-			} else {
-				setContent(prevContent =>
-					prevContent.length === 0 ? '1. ' : prevContent + '\n\n1. '
-				);
-			}
-			setItemsBeforeEndToFocus(0);
-		} else if (
+		if (
 			isNotNullOrUndefined(selectionStart) &&
 			isNotNullOrUndefined(selectionEnd)
 		) {
@@ -626,8 +654,36 @@ const MarkdownTextArea = ({
 		}
 
 		setChanged(true);
+	}, [content]);
+
+	const handleNumberedListClick = useCallback(() => {
+		if (!textAreaBlurToTextButton) {
+			const endsWithListNumberRegexExec = endsWithNumberListRegex.exec(content);
+			const currentListNumber = endsWithListNumberRegexExec
+				? parseInt(endsWithListNumberRegexExec[1])
+				: 0;
+			const currentListItem = endsWithListNumberRegexExec
+				? endsWithListNumberRegexExec[2]
+				: '';
+			if (endsWithListNumberRegexExec) {
+				if (currentListItem.length > 0) {
+					setContent(
+						prevContent => prevContent + `\n${currentListNumber + 1}. `
+					);
+				}
+			} else {
+				setContent(prevContent =>
+					prevContent.length === 0 ? '1. ' : prevContent + '\n\n1. '
+				);
+			}
+			setItemsBeforeEndToFocus(0);
+			setChanged(true);
+		} else {
+			handleNumberedList();
+		}
+
 		setTextAreaBlurToTextButton(false);
-	}, [content, textAreaBlurToTextButton]);
+	}, [content, textAreaBlurToTextButton, handleNumberedList]);
 
 	const handleUndo = useCallback(() => {
 		if (currentUndoRedoIndex > 0) {
@@ -765,16 +821,50 @@ const MarkdownTextArea = ({
 			if (event.ctrlKey) {
 				if (event.code === 'KeyZ') {
 					event.preventDefault();
-					event.stopPropagation();
-					handleUndo();
+					if (event.shiftKey) {
+						handleRedo();
+					} else {
+						handleUndo();
+					}
 				} else if (event.code === 'KeyY') {
 					event.preventDefault();
-					event.stopPropagation();
 					handleRedo();
+				} else if (event.code === 'KeyB') {
+					event.preventDefault();
+					handleBold();
+				} else if (event.code === 'KeyI') {
+					event.preventDefault();
+					handleItalic();
+				} else if (event.code === 'KeyH') {
+					event.preventDefault();
+					handleHeader();
+				} else if (event.code === 'KeyQ') {
+					event.preventDefault();
+					handleQuote();
+				} else if (event.code === 'KeyL') {
+					event.preventDefault();
+					handleLink();
+				} else if (event.code === 'KeyU') {
+					event.preventDefault();
+					handleBulletList();
+				} else if (event.code === 'KeyO') {
+					event.preventDefault();
+					handleNumberedList();
 				}
 			}
 		},
-		[content, handleUndo, handleRedo]
+		[
+			content,
+			handleUndo,
+			handleRedo,
+			handleBold,
+			handleItalic,
+			handleHeader,
+			handleQuote,
+			handleLink,
+			handleBulletList,
+			handleNumberedList
+		]
 	);
 
 	return (
@@ -802,7 +892,7 @@ const MarkdownTextArea = ({
 							label="Insert header"
 							onClick={handleHeaderClick}
 							style={{ fontFamily: 'var(--font-fantasy)' }}
-							tooltip="Header"
+							tooltip="Header - Ctrl + H"
 						>
 							H
 						</TextEditButton>
@@ -810,7 +900,7 @@ const MarkdownTextArea = ({
 							label="Insert bold text"
 							onClick={handleBoldClick}
 							style={{ fontWeight: 'bold' }}
-							tooltip="Bold"
+							tooltip="Bold - Ctrl + B"
 						>
 							B
 						</TextEditButton>
@@ -818,14 +908,14 @@ const MarkdownTextArea = ({
 							label="Insert italic text"
 							onClick={handleItalicClick}
 							style={{ fontStyle: 'italic' }}
-							tooltip="Italic"
+							tooltip="Italic - Ctrl + I"
 						>
 							I
 						</TextEditButton>
 						<TextEditButton
 							label="Insert blockquote"
 							onClick={handleQuoteClick}
-							tooltip="Blockquote"
+							tooltip="Blockquote - Ctrl + Q"
 						>
 							<svg className={classes['text-effect-button-icon']}>
 								<use xlinkHref={`/Icons.svg#quote`} />
@@ -834,21 +924,21 @@ const MarkdownTextArea = ({
 						<TextEditButton
 							label="Insert hyperlink"
 							onClick={handleLinkClick}
-							tooltip="Hyperlink"
+							tooltip="Hyperlink - Ctrl + L"
 						>
 							<LinkIcon className={classes['text-effect-button-icon']} />
 						</TextEditButton>
 						<TextEditButton
 							label="Insert bulleted list"
 							onClick={handleBulletListClick}
-							tooltip="Bulleted List"
+							tooltip="Bulleted List - Ctrl + U"
 						>
 							<ListBulletIcon className={classes['text-effect-button-icon']} />
 						</TextEditButton>
 						<TextEditButton
 							label="Insert numbered list"
 							onClick={handleNumberedListClick}
-							tooltip="Numbered List"
+							tooltip="Numbered List - Ctrl + O"
 						>
 							<svg className={classes['text-effect-button-icon']}>
 								<use xlinkHref={`/Icons.svg#numbered-list`} />
@@ -868,7 +958,7 @@ const MarkdownTextArea = ({
 							label="Redo"
 							onClick={handleRedo}
 							disabled={currentUndoRedoIndex === undoRedoStates.length - 1}
-							tooltip="Redo - Ctrl + Y"
+							tooltip="Redo - Ctrl + Y or Ctrl + Shift + Z"
 						>
 							<ArrowUturnRightIcon
 								className={classes['text-effect-button-icon']}
