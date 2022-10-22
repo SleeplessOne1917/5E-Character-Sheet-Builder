@@ -194,7 +194,9 @@ const MarkdownTextArea = ({
 				}
 
 				const timeout = setTimeout(() => {
-					addUndo(event.target.value);
+					if (event.target.value !== undoRedoStates[currentUndoRedoIndex]) {
+						addUndo(event.target.value);
+					}
 				}, 750);
 
 				setChangeTimeout(timeout);
@@ -206,7 +208,7 @@ const MarkdownTextArea = ({
 					)
 				);
 			},
-			[onChange, changeTimeout, addUndo]
+			[onChange, changeTimeout, addUndo, undoRedoStates, currentUndoRedoIndex]
 		);
 
 	const handleTextAreaBlur = useCallback(
@@ -656,7 +658,10 @@ const MarkdownTextArea = ({
 
 			setItemsBeforeEndToFocus(null);
 		}
-		if (!changedFromUndoRedo) {
+		if (
+			!changedFromUndoRedo &&
+			content !== undoRedoStates[currentUndoRedoIndex]
+		) {
 			addUndo(content);
 		}
 
