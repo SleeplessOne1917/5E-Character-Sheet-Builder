@@ -149,6 +149,7 @@ const MarkdownTextArea = ({
 	const [undoRedoStates, setUndoRedoStates] = useState<string[]>([value ?? '']);
 	const [currentUndoRedoIndex, setCurrentUndoRedoIndex] = useState(0);
 	const [changeTimeout, setChangeTimeout] = useState<NodeJS.Timeout>();
+	const [changedFromUndoRedo, setChangedFromUndoRedo] = useState(false);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>();
 
@@ -171,6 +172,17 @@ const MarkdownTextArea = ({
 		};
 	}, [content]);
 
+	const addUndo = useCallback(
+		(str: string) => {
+			setUndoRedoStates(prev => [
+				...prev.slice(0, currentUndoRedoIndex + 1),
+				str
+			]);
+			setCurrentUndoRedoIndex(prev => prev + 1);
+		},
+		[currentUndoRedoIndex]
+	);
+
 	const handleTextAreaChange: ChangeEventHandler<HTMLTextAreaElement> =
 		useCallback(
 			event => {
@@ -182,11 +194,7 @@ const MarkdownTextArea = ({
 				}
 
 				const timeout = setTimeout(() => {
-					setUndoRedoStates(prev => [
-						...prev.slice(0, currentUndoRedoIndex + 1),
-						event.target.value
-					]);
-					setCurrentUndoRedoIndex(prev => prev + 1);
+					addUndo(event.target.value);
 				}, 750);
 
 				setChangeTimeout(timeout);
@@ -198,7 +206,7 @@ const MarkdownTextArea = ({
 					)
 				);
 			},
-			[onChange, changeTimeout, currentUndoRedoIndex]
+			[onChange, changeTimeout, addUndo]
 		);
 
 	const handleTextAreaBlur = useCallback(
@@ -622,6 +630,7 @@ const MarkdownTextArea = ({
 	const handleUndo = useCallback(() => {
 		if (currentUndoRedoIndex > 0) {
 			setContent(undoRedoStates[currentUndoRedoIndex - 1]);
+			setChangedFromUndoRedo(true);
 			setChanged(true);
 			setCurrentUndoRedoIndex(prev => prev - 1);
 		}
@@ -630,6 +639,7 @@ const MarkdownTextArea = ({
 	const handleRedo = useCallback(() => {
 		if (currentUndoRedoIndex < undoRedoStates.length - 1) {
 			setContent(undoRedoStates[currentUndoRedoIndex + 1]);
+			setChangedFromUndoRedo(true);
 			setChanged(true);
 			setCurrentUndoRedoIndex(prev => prev + 1);
 		}
@@ -646,9 +656,13 @@ const MarkdownTextArea = ({
 
 			setItemsBeforeEndToFocus(null);
 		}
+		if (!changedFromUndoRedo) {
+			addUndo(content);
+		}
 
 		onChange(content);
 		setChanged(false);
+		setChangedFromUndoRedo(false);
 	}
 
 	const handleTextAreaKeyDown = useCallback(
