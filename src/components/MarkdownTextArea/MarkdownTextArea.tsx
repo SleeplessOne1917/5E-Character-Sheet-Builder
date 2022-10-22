@@ -28,6 +28,34 @@ type MarkdownTextAreaProps = {
 const isNotNullOrUndefined = (thing: any) =>
 	thing !== null && thing !== undefined;
 
+const lastIndexOfRegex = (str: string, regex: RegExp) => {
+	let index = -1;
+
+	while (str.substring(index + 1, str.length).search(regex) > -1) {
+		index =
+			str.substring(index + 1, str.length).search(regex) +
+			(index > -1 ? str.substring(0, index + 1).length : 0);
+	}
+
+	return index;
+};
+
+const indexOfRegex = (str: string, regex: RegExp, startIndex = 0) => {
+	let start = startIndex;
+	if (start < 0) {
+		start = 0;
+	}
+	if (start >= str.length) {
+		return -1;
+	}
+
+	const index = str.substring(start, str.length).search(regex);
+
+	return index > -1
+		? index + (start > 0 ? str.substring(0, start).length : 0)
+		: index;
+};
+
 const calculateNumberOfRows = (content: string, cols: number) => {
 	return Math.max(
 		content.split(/(\n)/g).reduce<{ value: number; hasNewline: boolean }>(
@@ -162,8 +190,9 @@ const MarkdownTextArea = ({
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart === selectionEnd
 		) {
-			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
-			let end = content.indexOf(' ', selectionEnd);
+			const start =
+				lastIndexOfRegex(content.substring(0, selectionStart), /\s/) + 1;
+			let end = indexOfRegex(content, /\s/, selectionEnd);
 
 			if (end === -1) {
 				end = content.length;
@@ -208,8 +237,9 @@ const MarkdownTextArea = ({
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart === selectionEnd
 		) {
-			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
-			let end = content.indexOf(' ', selectionEnd);
+			const start =
+				lastIndexOfRegex(content.substring(0, selectionStart), /\s/) + 1;
+			let end = indexOfRegex(content, /\s/, selectionEnd);
 
 			if (end === -1) {
 				end = content.length;
@@ -352,8 +382,9 @@ const MarkdownTextArea = ({
 			isNotNullOrUndefined(selectionEnd) &&
 			selectionStart === selectionEnd
 		) {
-			const start = content.substring(0, selectionStart).lastIndexOf(' ') + 1;
-			let end = content.indexOf(' ', selectionEnd);
+			const start =
+				lastIndexOfRegex(content.substring(0, selectionStart), /\s/) + 1;
+			let end = indexOfRegex(content, /\s/, selectionEnd);
 
 			if (end === -1) {
 				end = content.length;
