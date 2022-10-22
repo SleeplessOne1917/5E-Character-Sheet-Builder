@@ -89,6 +89,7 @@ const calculateNumberOfRows = (content: string, cols: number) => {
 
 const linesAboveRegex = /\S+((?!\n)\s*)?\n$/;
 const linesBelowRegex = /^\n(?!\n)\s*\S+/;
+const endsWithNumberListRegex = /(?:(?:^\s*)|(?:\n\s*))(\d+)\.\s+(.*)$/;
 
 const MarkdownTextArea = ({
 	value,
@@ -463,6 +464,95 @@ const MarkdownTextArea = ({
 		setTextAreaBlurToTextButton(false);
 	}, [content, textAreaBlurToTextButton]);
 
+	const handleNumberedListClick = useCallback(() => {
+		const selectionStart = textAreaRef.current?.selectionStart;
+		const selectionEnd = textAreaRef.current?.selectionEnd;
+
+		if (!textAreaBlurToTextButton) {
+			const endsWithListNumberRegexExec = endsWithNumberListRegex.exec(content);
+			const currentListNumber = endsWithListNumberRegexExec
+				? parseInt(endsWithListNumberRegexExec[1])
+				: 0;
+			const currentListItem = endsWithListNumberRegexExec
+				? endsWithListNumberRegexExec[2]
+				: '';
+			if (endsWithListNumberRegexExec) {
+				if (currentListItem.length > 0) {
+					setContent(
+						prevContent => prevContent + `\n${currentListNumber + 1}. `
+					);
+				}
+			} else {
+				setContent(prevContent =>
+					prevContent.length === 0 ? '1. ' : prevContent + '\n\n1. '
+				);
+			}
+			setItemsBeforeEndToFocus(0);
+		} else if (
+			isNotNullOrUndefined(selectionStart) &&
+			isNotNullOrUndefined(selectionEnd)
+		) {
+			let start = content.substring(0, selectionStart).lastIndexOf('\n');
+			if (start === -1) {
+				start = 0;
+			}
+
+			let end = content.indexOf('\n', selectionEnd);
+
+			if (end === -1) {
+				end = content.length;
+			}
+
+			let lineHasNumber = false;
+			if (/\n?\s*\d+\.\s+/.test(content.substring(start, end))) {
+				lineHasNumber = true;
+			}
+
+			if (lineHasNumber) {
+				setContent(
+					prevContent =>
+						prevContent.substring(0, start) +
+						prevContent.substring(start, end).replace(/(?!\n)\s*\d+\.\s+/, '') +
+						prevContent.substring(end, prevContent.length)
+				);
+			} else {
+				const linesAbove = linesAboveRegex.test(
+					content.substring(0, start + 1)
+				);
+				const linesBelow = linesBelowRegex.test(
+					content.substring(end, content.length)
+				);
+				const linesAboveNumberListExec = endsWithNumberListRegex.exec(
+					content.substring(0, start)
+				);
+				const currentNumber = linesAboveNumberListExec
+					? parseInt(linesAboveNumberListExec[1])
+					: 0;
+				const linesBelowNumberList = /^\n(?!\n)\s*\d+\.\s+.*/.test(
+					content.substring(end, content.length)
+				);
+
+				setContent(
+					prevContent =>
+						prevContent.substring(0, start) +
+						`${
+							linesAbove && !linesAboveNumberListExec
+								? '\n\n'
+								: start === 0
+								? ''
+								: '\n'
+						}${currentNumber + 1}. ` +
+						prevContent.substring(start + 1, end) +
+						(linesBelow && !linesBelowNumberList ? '\n' : '') +
+						prevContent.substring(end, prevContent.length)
+				);
+			}
+		}
+
+		setChanged(true);
+		setTextAreaBlurToTextButton(false);
+	}, [content, textAreaBlurToTextButton]);
+
 	if (changed && textAreaRef.current?.value === content) {
 		if (itemsBeforeEndToFocus !== undefined && itemsBeforeEndToFocus !== null) {
 			textAreaRef.current.focus();
@@ -484,7 +574,11 @@ const MarkdownTextArea = ({
 			if (event.code === 'Enter') {
 				const selectionStart = textAreaRef.current?.selectionStart;
 				const selectionEnd = textAreaRef.current?.selectionEnd;
-				if (selectionStart && selectionEnd && selectionStart === selectionEnd) {
+				if (
+					isNotNullOrUndefined(selectionStart) &&
+					isNotNullOrUndefined(selectionEnd) &&
+					selectionStart === selectionEnd
+				) {
 					let start = content.substring(0, selectionStart).lastIndexOf('\n');
 					if (start === -1) {
 						start = 0;
@@ -499,6 +593,12 @@ const MarkdownTextArea = ({
 					const lineHasBullet = /\n?\s*-\s+/.test(
 						content.substring(start, end)
 					);
+					const endsWithListNumberRegexExec = endsWithNumberListRegex.exec(
+						content.substring(0, end)
+					);
+					const currentNumber = endsWithListNumberRegexExec
+						? parseInt(endsWithListNumberRegexExec[1])
+						: 0;
 
 					if (lineHasBullet) {
 						event.preventDefault();
@@ -511,9 +611,14 @@ const MarkdownTextArea = ({
 								prevContent =>
 									prevContent.substring(0, selectionStart) +
 									'\n- ' +
-									prevContent.substring(selectionEnd, prevContent.length)
+									prevContent.substring(
+										selectionEnd as number,
+										prevContent.length
+									)
 							);
-							setItemsBeforeEndToFocus(content.length - selectionEnd);
+							setItemsBeforeEndToFocus(
+								content.length - (selectionEnd as number)
+							);
 						} else {
 							setContent(
 								prevContent =>
@@ -526,6 +631,35 @@ const MarkdownTextArea = ({
 						}
 
 						setChanged(true);
+					} else if (endsWithListNumberRegexExec) {
+						event.preventDefault();
+						const lineHasContent = /\n?\s*\d+\.\s+\S+/.test(
+							content.substring(start, end)
+						);
+
+						if (lineHasContent) {
+							setContent(
+								prevContent =>
+									prevContent.substring(0, selectionStart) +
+									`\n${currentNumber + 1}. ` +
+									prevContent.substring(
+										selectionEnd as number,
+										prevContent.length
+									)
+							);
+						} else {
+							setContent(
+								prevContent =>
+									prevContent.substring(0, start) +
+									prevContent
+										.substring(start, end)
+										.replace(/(?!\n)\s*\d+\.\s+/, '') +
+									prevContent.substring(end, prevContent.length)
+							);
+						}
+
+						setChanged(true);
+						setItemsBeforeEndToFocus(content.length - (selectionEnd as number));
 					}
 				}
 			}
@@ -606,6 +740,16 @@ const MarkdownTextArea = ({
 							onClick={handleBulletListClick}
 						>
 							<ListBulletIcon className={classes['text-effect-button-icon']} />
+						</button>
+						<button
+							aria-label="Insert numbered list"
+							className={classes['text-effect-button']}
+							type="button"
+							onClick={handleNumberedListClick}
+						>
+							<svg className={classes['text-effect-button-icon']}>
+								<use xlinkHref={`/Icons.svg#numbered-list`} />
+							</svg>
 						</button>
 					</div>
 					<textarea
