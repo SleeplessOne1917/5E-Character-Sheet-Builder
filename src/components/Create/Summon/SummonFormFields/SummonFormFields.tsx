@@ -5,7 +5,7 @@ import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import Button from '../../../Button/Button';
 import { MONSTER_TYPES } from '../../../../constants/monsterTypeConstants';
-import { SIZES } from '../../../../constants/sizeContants';
+import { SIZES } from '../../../../constants/sizeConstants';
 import Select from '../../../Select/Select/Select';
 import Size from '../../../../types/size';
 import { Summon } from '../../../../types/summon';

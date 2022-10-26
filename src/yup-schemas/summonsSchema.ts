@@ -1,7 +1,7 @@
 import { array, number, object, string } from 'yup';
 
 import { MONSTER_TYPES } from '../constants/monsterTypeConstants';
-import { SIZES } from '../constants/sizeContants';
+import { SIZES } from '../constants/sizeConstants';
 
 const isGTE3 = (num: number | undefined) => !!num && num >= 3;
 const isLTE30 = (num: number | undefined) => !!num && num <= 30;

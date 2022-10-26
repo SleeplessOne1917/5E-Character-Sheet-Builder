@@ -1,8 +1,9 @@
-import { Schema } from 'mongoose';
-import { MONSTER_TYPES } from '../../constants/monsterTypeConstants';
-import { SIZES } from '../../constants/sizeContants';
 import { Item } from '../../types/db/item';
+import { MONSTER_TYPES } from '../../constants/monsterTypeConstants';
+import { SIZES } from '../../constants/sizeConstants';
+import { Schema } from 'mongoose';
 import { Summon } from '../../types/summon';
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 export const itemSchema = new Schema<Item>({
