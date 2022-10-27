@@ -8,7 +8,7 @@ type ArrowLinkProps = {
 };
 
 const ArrowLink = ({ href, text }: ArrowLinkProps) => (
-	<Link href={href}>
+	<Link href={href} passHref legacyBehavior>
 		<a className={classes['arrow-link']} data-testid="arrow-link">
 			{text}
 			<ArrowSmallRightIcon className={classes['link-arrow']} />

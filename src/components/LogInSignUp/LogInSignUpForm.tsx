@@ -100,10 +100,8 @@ const LogInSignUpForm = ({ type, schema, onSubmit }: LogInSignUpProps) => (
 					{type === 'logIn' ? 'Log In' : 'Sign Up'}
 				</Button>
 				{type === 'logIn' && (
-					<Link href="/forgot">
-						<a className={classes['forgot-link']}>
-							Forgot your username or password?
-						</a>
+					<Link href="/forgot" className={classes['forgot-link']}>
+						Forgot your username or password?
 					</Link>
 				)}
 			</form>

@@ -187,7 +187,7 @@ const typeDefs = gql`
 	type Mutation {
 		signUp(user: SignUpRequest!): AuthResponse!
 		logIn(user: LoginRequest!): AuthResponse!
-		token(refreshToken: String!): String!
+		token(refreshToken: String): String!
 		forgotUsername(request: ForgotUsernameRequest!): ForgotResponse!
 		forgotPassword(request: ForgotPasswordRequest!): ForgotResponse!
 		remindUsername(otlId: String!): String!

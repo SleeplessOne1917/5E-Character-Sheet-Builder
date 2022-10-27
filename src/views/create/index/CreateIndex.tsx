@@ -59,10 +59,8 @@ const CreateIndex = () => {
 			{!viewer && (
 				<div className={classes['create-account-blurb']}>
 					Create classes, spells, and more by{' '}
-					<Link href="/sign-up">
-						<a className={classes['create-account-link']}>
-							creating an account
-						</a>
+					<Link href="/sign-up" className={classes['create-account-link']}>
+						creating an account
 					</Link>
 					.
 				</div>

@@ -169,7 +169,11 @@ const Mutation = {
 
 		return { accessToken, refreshToken };
 	},
-	token: async (parent: never, { refreshToken }: { refreshToken: string }) => {
+	token: async (parent: never, { refreshToken }: { refreshToken: string | null }) => {
+		if (!refreshToken) {
+			throw new ApolloError('Refresh token cannot be null')
+		}
+
 		let username: string;
 		try {
 			username = (
