@@ -165,10 +165,10 @@ const raceSchema = object({
 		)
 		.optional(),
 	size: string()
-		.required('Summon size is required')
+		.required('Race size is required')
 		.test(
 			'is-valid-size',
-			'Summon size must be one of TINY, SMALL, MEDIUM, LARGE, HUGE, or GARGANTUAN',
+			'Race size must be one of "TINY", "SMALL", "MEDIUM", "LARGE", "HUGE", or "GARGANTUAN"',
 			value => !!value && SIZES.includes(value)
 		),
 	speed: number()
