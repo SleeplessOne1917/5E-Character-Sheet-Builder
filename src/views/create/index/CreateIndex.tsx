@@ -4,7 +4,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
 import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
 import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
-import { isEqual } from 'lodash';
+import { deepEquals } from '../../../services/objectService';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
@@ -16,12 +16,12 @@ const CreateIndex = () => {
 	const viewer = useAppSelector(state => state.viewer);
 
 	const editingCharacterChanged = useMemo(
-		() => !isEqual(editingCharacterInitialState, editingCharacter),
+		() => !deepEquals(editingCharacterInitialState, editingCharacter),
 		[editingCharacter]
 	);
 
 	const editingSpellChanged = useMemo(
-		() => !isEqual(editingSpellInitialState, editingSpell),
+		() => !deepEquals(editingSpellInitialState, editingSpell),
 		[editingSpell]
 	);
 
