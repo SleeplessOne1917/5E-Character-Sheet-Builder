@@ -8,6 +8,7 @@
     grid-template-areas: "content"
                           "buttons";
     font-family: var(--font-display);
+    overflow: hidden;
 }
 
 .content {
@@ -19,6 +20,7 @@
     justify-content: center;
     font-size: 1.5rem;
     padding: 0.5rem;
+    overflow-y: auto;
 }
 
 .buttons {
