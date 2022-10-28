@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { accessTokenKey } from './../constants/generalConstants';
 import { authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import jwt from 'jsonwebtoken';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 const defaultClient = createClient({
@@ -65,10 +65,10 @@ export const createAuthClient = () =>
 						return true;
 					}
 
-					const decodedToken = jwt.decode(
+					const decodedToken = jwt_decode(
 						/* @ts-ignore */
 						authState.accessToken
-					) as jwt.JwtPayload;
+					) as JwtPayload;
 
 					return Date.now() >= (decodedToken?.exp ?? 0) * 1000;
 				}

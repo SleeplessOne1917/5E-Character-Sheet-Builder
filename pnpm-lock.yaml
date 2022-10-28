@@ -48,6 +48,7 @@ specifiers:
   jest: ^29.2.0
   jest-environment-jsdom: ^29.2.1
   jsonwebtoken: ^8.5.1
+  jwt-decode: ^3.1.2
   lodash: ^4.17.21
   micro: ^9.4.1
   micro-cors: ^0.1.1
@@ -81,6 +82,7 @@ dependencies:
   graphql: 16.6.0
   idb-keyval: 6.2.0
   jsonwebtoken: 8.5.1
+  jwt-decode: 3.1.2
   lodash: 4.17.21
   micro: 9.4.1
   micro-cors: 0.1.1
@@ -12071,6 +12073,10 @@ packages:
     dependencies:
       jwa: 1.4.1
       safe-buffer: 5.2.1
+    dev: false
+
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
   /kareem/2.4.1:
