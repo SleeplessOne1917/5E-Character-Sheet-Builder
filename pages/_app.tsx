@@ -116,9 +116,9 @@ const MyApp = ({
 			<Image
 				src="/images/character-sheet-with-dice.jpg"
 				alt="Background image"
-				layout="fill"
 				style={{ zIndex: -50 }}
 				priority
+				fill
 			/>
 			<Header
 				onMenuIconClick={toggleMobileNav}

@@ -15,7 +15,7 @@ const LinkButton = ({
 	children,
 	tabIndex
 }: PropsWithChildren<LinkButtonProps>): JSX.Element => (
-	<Link href={href}>
+	<Link href={href} passHref legacyBehavior>
 		<a
 			className={classes['link-button']}
 			onClick={onClick}

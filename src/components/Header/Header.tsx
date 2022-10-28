@@ -20,7 +20,7 @@ const Header = ({
 	return (
 		<header className={classes.header} aria-label="Header" role="banner">
 			<div className={classes['brand-container']}>
-				<Link href="/">
+				<Link href="/" passHref legacyBehavior>
 					<a onClick={onLogoIconClick} aria-label="Home" data-testid="home">
 						<svg className={classes.logo}>
 							<use xlinkHref="/Icons.svg#logo" />
@@ -34,20 +34,20 @@ const Header = ({
 			<nav className={classes.navigation}>
 				<ul className={classes['navigation-list']}>
 					<li className={classes['navigation-list-item']}>
-						<Link href="/create">
-							<a className={classes['navigation-link']}>Create</a>
+						<Link href="/create" className={classes['navigation-link']}>
+							Create
 						</Link>
 					</li>
 					{!viewer && (
 						<>
 							<li className={classes['navigation-list-item']}>
-								<Link href="/log-in">
-									<a className={classes['navigation-link']}>Log In</a>
+								<Link href="/log-in" className={classes['navigation-link']}>
+									Log In
 								</Link>
 							</li>
 							<li className={classes['navigation-list-item']}>
-								<Link href="/sign-up">
-									<a className={classes['navigation-link']}>Sign Up</a>
+								<Link href="/sign-up" className={classes['navigation-link']}>
+									Sign Up
 								</Link>
 							</li>
 						</>
@@ -55,20 +55,22 @@ const Header = ({
 					{viewer && (
 						<>
 							<li className={classes['navigation-list-item']}>
-								<Link href="/my-stuff">
-									<a className={classes['navigation-link']}>My Stuff</a>
+								<Link href="/my-stuff" className={classes['navigation-link']}>
+									My Stuff
 								</Link>
 							</li>
 							<li className={classes['navigation-list-item']}>
-								<Link href="/account">
-									<a className={classes['navigation-link']}>Account</a>
+								<Link href="/account" className={classes['navigation-link']}>
+									Account
 								</Link>
 							</li>
 							<li className={classes['navigation-list-item']}>
-								<Link href="#">
-									<a className={classes['navigation-link']} onClick={logout}>
-										Log Out
-									</a>
+								<Link
+									href="#"
+									className={classes['navigation-link']}
+									onClick={logout}
+								>
+									Log Out
 								</Link>
 							</li>
 						</>

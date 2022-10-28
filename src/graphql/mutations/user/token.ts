@@ -1,7 +1,7 @@
 import { gql } from 'urql';
 
 const GET_TOKEN = gql`
-	mutation GetToken($refreshToken: String!) {
+	mutation GetToken($refreshToken: String) {
 		token(refreshToken: $refreshToken)
 	}
 `;

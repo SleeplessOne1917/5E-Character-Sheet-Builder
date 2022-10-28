@@ -4,7 +4,7 @@ import GET_TOKEN from '../../../graphql/mutations/user/token';
 
 type GetTokenData = { token: string };
 
-type GetTokenVariables = { refreshToken: string };
+type GetTokenVariables = { refreshToken: string | null };
 
 const useGetTokenMutation = () =>
 	useMutation<GetTokenData, GetTokenVariables>(GET_TOKEN);

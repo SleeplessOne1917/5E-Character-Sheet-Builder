@@ -146,7 +146,11 @@ const SectionBar = ({
 			>
 				{getSections(hasSpellcasting).map(section => (
 					<li key={section.section}>
-						<Link href={`/create/character/${section.section}`}>
+						<Link
+							href={`/create/character/${section.section}`}
+							passHref
+							legacyBehavior
+						>
 							<a
 								className={`${classes.link}${
 									section.section === selectedSection

@@ -61,6 +61,10 @@ export const createAuthClient = () =>
 					});
 				},
 				willAuthError: ({ authState }) => {
+					if (!authState) {
+						return true;
+					}
+
 					const decodedToken = jwt.decode(
 						/* @ts-ignore */
 						authState.accessToken
