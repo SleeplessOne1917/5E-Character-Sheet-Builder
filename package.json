@@ -30,6 +30,7 @@
     "mongoose": "^6.7.0",
     "next": "^13.0.0",
     "nodemailer": "^6.8.0",
+    "preact": "^10.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-html-email": "^3.0.0",
@@ -41,6 +42,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.0.0",
     "@storybook/addon-a11y": "^6.5.13",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
