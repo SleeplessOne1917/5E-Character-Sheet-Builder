@@ -20,14 +20,14 @@ jobs:
           node-version: 18
           cache: npm
       
-      - name: Install yarn
-        run: npm i -g yarn
+      - name: Install pnpm
+        run: npm i -g pnpm
       
       - name: Install dependencies
-        run: yarn
+        run: pnpm i
 
       - name: Run tests
-        run: yarn test
+        run: pnpm test
 
   lint:
     name: Lint the App
@@ -42,14 +42,14 @@ jobs:
           node-version: 18
           cache: npm
       
-      - name: Install yarn
-        run: npm i -g yarn
+      - name: Install pnpm
+        run: npm i -g pnpm
       
       - name: Install dependencies
-        run: yarn
+        run: pnpm i
 
       - name: Run linter
-        run: yarn lint
+        run: pnpm run lint
 
   github-release:
     name: Github Release
