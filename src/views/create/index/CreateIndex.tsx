@@ -53,6 +53,9 @@ const CreateIndex = () => {
 								} Spell`}
 							/>
 						</div>
+						<div className={classes['create-link-container']}>
+							<ArrowLink href={`${router.asPath}/race`} text="Create Race" />
+						</div>
 					</>
 				)}
 			</div>
