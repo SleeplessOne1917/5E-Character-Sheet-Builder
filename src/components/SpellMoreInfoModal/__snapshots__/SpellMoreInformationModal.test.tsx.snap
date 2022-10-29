@@ -129,20 +129,19 @@ exports[`renders correctly 1`] = `
         class="description"
       >
         <div
-          class="markdown"
+          style="display: flex; align-items: center; justify-content: center;"
         >
-          <p
-            class="paragraph"
+          <div
+            class="container"
           >
-            You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a wisdom saving throw or drop whatever it is holding and become frightened for the duration.
-          </p>
-          
-
-          <p
-            class="paragraph"
-          >
-            While frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a wisdom saving throw. On a successful save, the spell ends for that creature.
-          </p>
+            <svg
+              class="icon"
+            >
+              <use
+                xlink:href="/Icons.svg#spinner"
+              />
+            </svg>
+          </div>
         </div>
       </div>
       <div
