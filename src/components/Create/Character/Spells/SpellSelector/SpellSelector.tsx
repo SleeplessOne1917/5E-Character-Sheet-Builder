@@ -12,12 +12,29 @@ import {
 } from 'react';
 
 import Button from '../../../../Button/Button';
-import MarkdownParser from '../../../../MarkdownParser/MarkdownParser';
 import { Spell } from '../../../../../types/characterSheetBuilderAPI';
 import { SrdItem } from '../../../../../types/srd';
 import classes from './SpellSelector.module.css';
 import { handleKeyDownEvent } from '../../../../../services/handlerService';
 import useMediaQuery from '../../../../../hooks/useMediaQuery';
+import dynamic from 'next/dynamic';
+import LoadingSpinner from '../../../../LoadingSpinner/LoadingSpinner';
+const MarkdownParser = dynamic(
+	() => import('../../../../MarkdownParser/MarkdownParser'),
+	{
+		loading: () => (
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center'
+				}}
+			>
+				<LoadingSpinner />
+			</div>
+		)
+	}
+);
 
 type SpellSelectorProps = {
 	spell: Spell;

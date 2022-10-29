@@ -19,9 +19,26 @@ import {
 } from 'react';
 
 import Button from '../Button/Button';
-import MarkdownParser from '../MarkdownParser/MarkdownParser';
 import classes from './MarkdownTextArea.module.css';
 import { convertRemToPixels } from '../../services/remToPixelsService';
+import dynamic from 'next/dynamic';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+const MarkdownParser = dynamic(
+	() => import('../MarkdownParser/MarkdownParser'),
+	{
+		loading: () => (
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center'
+				}}
+			>
+				<LoadingSpinner />
+			</div>
+		)
+	}
+);
 
 type MarkdownTextAreaProps = {
 	value?: string;

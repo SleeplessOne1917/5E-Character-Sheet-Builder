@@ -1,12 +1,29 @@
 import { MutableRefObject, useCallback, useEffect, useRef } from 'react';
 
 import Button from '../Button/Button';
-import MarkdownParser from '../MarkdownParser/MarkdownParser';
 import ModalBackground from '../ModalBackground/ModalBackground';
 import { Spell } from '../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+const MarkdownParser = dynamic(
+	() => import('../MarkdownParser/MarkdownParser'),
+	{
+		loading: () => (
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center'
+				}}
+			>
+				<LoadingSpinner />
+			</div>
+		)
+	}
+);
 
 type SpellMoreInformationModalProps = {
 	shouldShowEditAndClasses?: boolean;

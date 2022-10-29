@@ -10,7 +10,24 @@ import {
 
 import classes from './Descriptor.module.css';
 import { handleKeyDownEvent } from '../../../../services/handlerService';
-import MarkdownParser from '../../../MarkdownParser/MarkdownParser';
+import dynamic from 'next/dynamic';
+import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
+const MarkdownParser = dynamic(
+	() => import('../../../MarkdownParser/MarkdownParser'),
+	{
+		loading: () => (
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center'
+				}}
+			>
+				<LoadingSpinner />
+			</div>
+		)
+	}
+);
 
 export type DescriptorProps = {
 	title: string;
