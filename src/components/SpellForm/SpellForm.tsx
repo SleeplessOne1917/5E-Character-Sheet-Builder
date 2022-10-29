@@ -20,6 +20,7 @@ import {
 	setRange,
 	setRitual,
 	setSchool,
+	setName,
 	setSummonProperties
 } from '../../redux/features/editingSpell';
 
@@ -35,7 +36,6 @@ import SummonFormFields from '../Create/Summon/SummonFormFields/SummonFormFields
 import TextInput from '../TextInput/TextInput';
 import classes from './SpellForm.module.css';
 import { doNothing } from '../../redux/features/editingCharacter';
-import { setName } from '../../redux/features/name';
 import spellSchema from '../../yup-schemas/spellSchema';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 
