@@ -1,0 +1,47 @@
+.form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.name-size-speed {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-label {
+    font-size: 1.3rem;
+}
+
+.input {
+    font-size: 1.3rem;
+    border-radius: 0.5rem;
+    background-color: var(--heaven-light);
+    font-family: var(--font-display);
+    color: var(--davy);
+    text-align: center;
+    border: 1px solid var(--davy);
+    width: 30%;
+}
+
+.input:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.input.error {
+    border: 3px solid var(--error-red);
+}
+.error-message {
+    color: var(--wine-red);
+    font-size: 1.2rem;
+}

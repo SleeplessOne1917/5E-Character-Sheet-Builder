@@ -27,6 +27,7 @@ import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
 import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
 import GET_DAMAGE_TYPES from './queries/5E-API/damage-types/getDamageTypes';
 import GET_SPELLCASTING_CLASSES from './queries/5E-API/class/getSpellcastingClasses';
+import GET_LANGUAGES from './queries/5E-API/languages/getLanguages';
 
 const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 
@@ -85,6 +86,9 @@ export const getSubrace = async (index: string) =>
 	await query<{ subrace: SrdFullSubraceItem }, { index: string }>(GET_SUBRACE, {
 		index
 	});
+
+export const getLanguages = async () =>
+	(await query<{ languages: SrdItem[] }>(GET_LANGUAGES)).data?.languages;
 
 export const getMagicSchools = async (): Promise<SrdItem[] | undefined> =>
 	(await query<{ magicSchools: SrdItem[] }>(GET_MAGIC_SCHOOLS)).data

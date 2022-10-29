@@ -4,6 +4,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
 import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
 import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
+import { initialState as editingRaceInitialState } from '../../../redux/features/editingRace';
 import { deepEquals } from '../../../services/objectService';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import { useMemo } from 'react';
@@ -13,6 +14,7 @@ const CreateIndex = () => {
 	const router = useRouter();
 	const editingCharacter = useAppSelector(state => state.editingCharacter);
 	const editingSpell = useAppSelector(state => state.editingSpell);
+	const editingRace = useAppSelector(state => state.editingRace);
 	const viewer = useAppSelector(state => state.viewer);
 
 	const editingCharacterChanged = useMemo(
@@ -23,6 +25,11 @@ const CreateIndex = () => {
 	const editingSpellChanged = useMemo(
 		() => !deepEquals(editingSpellInitialState, editingSpell),
 		[editingSpell]
+	);
+
+	const editingRaceChanged = useMemo(
+		() => !deepEquals(editingRaceInitialState, editingRace),
+		[editingRace]
 	);
 
 	return (
@@ -54,7 +61,12 @@ const CreateIndex = () => {
 							/>
 						</div>
 						<div className={classes['create-link-container']}>
-							<ArrowLink href={`${router.asPath}/race`} text="Create Race" />
+							<ArrowLink
+								href={`${router.asPath}/race`}
+								text={`${
+									editingRaceChanged ? 'Continue Editing' : 'Create'
+								} Race`}
+							/>
 						</div>
 					</>
 				)}

@@ -18,6 +18,7 @@ import rollGroups from './features/rollGroups';
 import toast from './features/toast';
 import viewer from './features/viewer';
 import editingSpell from './features/editingSpell';
+import editingRace from './features/editingRace';
 
 const getReducer = () => ({
 	toast,
@@ -28,7 +29,8 @@ const getReducer = () => ({
 	>,
 	rollGroups,
 	generationMethod,
-	editingSpell
+	editingSpell,
+	editingRace
 });
 
 const indexedDbCacheListener = createListenerMiddleware();

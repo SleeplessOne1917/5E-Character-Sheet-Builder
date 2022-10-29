@@ -635,11 +635,8 @@ const SpellForm = ({
 						disabled={isSubmitting}
 						size="large"
 						style={{ marginTop: '3rem' }}
-						onClick={() => {
-							console.log(errors);
-						}}
 					>
-						{shouldUseReduxStore ? 'Create Spell' : 'Edit Spell'}
+						{`${shouldUseReduxStore ? 'Create' : 'Edit'} Spell`}
 					</Button>
 				</form>
 			)}
