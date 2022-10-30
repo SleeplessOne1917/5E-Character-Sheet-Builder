@@ -3,14 +3,14 @@ import { Item } from '../../types/db/item';
 import Size from '../../types/size';
 
 type TraitState = {
-	id?: string;
 	name?: string;
+	description?: string;
 	proficiencies?: Item[];
 	proficiencyOptions?: {
 		choose?: number;
 		options: Item[];
 	};
-	hpBonusPerLevel?: number;
+	hpBonusPerLevel?: number | null;
 	spellOptions?: {
 		choose?: number;
 		options: Item[];
@@ -128,6 +128,99 @@ const editingRaceSlice = createSlice({
 		},
 		removeAbilityBonusOptions: state => {
 			delete state.abilityBonusOptions;
+		},
+		addTrait: state => {
+			state.traits = [...state.traits, {}];
+		},
+		removeTrait: (state, { payload }: PayloadAction<number>) => {
+			state.traits = state.traits.filter((val, index) => index !== payload);
+		},
+		setTraitName: (
+			state,
+			{
+				payload: { index, name }
+			}: PayloadAction<{ index: number; name: string }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			state.traits[index].name = name;
+		},
+		setTraitDescription: (
+			state,
+			{
+				payload: { index, description }
+			}: PayloadAction<{ index: number; description: string }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			state.traits[index].description = description;
+		},
+		addTraitProficiencies: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].proficiencies = [];
+		},
+		removeTraitProficiencies: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].proficiencies;
+		},
+		addTraitProficiencyOptions: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].proficiencyOptions = { options: [] };
+		},
+		removeTraitProficiencyOptions: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].proficiencyOptions;
+		},
+		addTraitHPBonus: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].hpBonusPerLevel = null;
+		},
+		removeTraitHPBonus: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].hpBonusPerLevel;
+		},
+		addTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].spellOptions = { options: [] };
+		},
+		removeTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].spellOptions;
+		},
+		addTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].subtraitOptions = { options: [] };
+		},
+		removeTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].subtraitOptions;
 		}
 	}
 });
@@ -145,7 +238,21 @@ export const {
 	addAbilityBonusOptions,
 	setAbilityBonusOptionsBonus,
 	setAbilityBonusOptionsNumberOfAbilityScores,
-	removeAbilityBonusOptions
+	removeAbilityBonusOptions,
+	addTrait,
+	removeTrait,
+	setTraitName,
+	setTraitDescription,
+	addTraitProficiencies,
+	removeTraitProficiencies,
+	addTraitProficiencyOptions,
+	removeTraitProficiencyOptions,
+	addTraitHPBonus,
+	removeTraitHPBonus,
+	addTraitSpellOptions,
+	removeTraitSpellOptions,
+	addTraitSubtraits,
+	removeTraitSubtraits
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

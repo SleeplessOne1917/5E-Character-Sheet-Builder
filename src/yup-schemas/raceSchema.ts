@@ -206,12 +206,18 @@ const raceSchema = object({
 	traits: array()
 		.of(
 			object({
-				id: string()
-					.required()
-					.max(50, 'Trait id cannot be more than 50 characters long'),
 				name: string()
-					.required()
+					.required('Trait name is required')
 					.max(50, 'Trait name cannot be more than 50 characters long'),
+				description: string()
+					.required('Description is required')
+					.test(
+						'not-whitespace',
+						'Description is required',
+						value => !!value && !/^\s*$/.test(value)
+					)
+					.min(1, 'Description is required')
+					.max(5000, 'Description cannot be longer than 5000 characters'),
 				proficiencies: array()
 					.of(
 						object({
@@ -229,6 +235,7 @@ const raceSchema = object({
 								)
 						})
 					)
+					.min(1, 'Must have at least 1 proficiency')
 					.optional(),
 				proficiencyOptions: object({
 					choose: number()
@@ -273,11 +280,13 @@ const raceSchema = object({
 							})
 						)
 						.required('Must have proficiencies to choose from')
+						.min(1, 'Must have at least 1 proficiency to choose from')
 				}).optional(),
 				hpBonusPerLevel: number()
 					.min(1, 'HP bonus cannot be lower than 1')
 					.max(10, 'HP bonus cannot be more than 10')
-					.optional(),
+					.optional()
+					.nullable(),
 				spellOptions: object({
 					choose: number()
 						.min(1, 'Cannot choose less than 1 spell option')
@@ -320,6 +329,7 @@ const raceSchema = object({
 									)
 							})
 						)
+						.min(1, 'Must have at least 1 spell to choose from')
 						.required('Must have spells to choose from')
 				}).optional(),
 				subtraitOptions: object({
@@ -350,17 +360,23 @@ const raceSchema = object({
 					options: array()
 						.of(
 							object({
-								id: string()
-									.required()
-									.max(
-										50,
-										'Subtrait option id cannot be more than 50 characters long'
-									),
 								name: string()
 									.required()
 									.max(
 										50,
 										'Subtrait option name cannot be more than 50 characters long'
+									),
+								description: string()
+									.required('Description is required')
+									.test(
+										'not-whitespace',
+										'Description is required',
+										value => !!value && !/^\s*$/.test(value)
+									)
+									.min(1, 'Description is required')
+									.max(
+										5000,
+										'Description cannot be longer than 5000 characters'
 									),
 								proficiencies: array()
 									.of(

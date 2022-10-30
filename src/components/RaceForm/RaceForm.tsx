@@ -6,9 +6,12 @@ import { useAppDispatch } from '../../hooks/reduxHooks';
 import {
 	addAbilityBonus,
 	addAbilityBonusOptions,
+	addTrait,
+	addTraitProficiencies,
 	EditingRaceState,
 	removeAbilityBonus,
 	removeAbilityBonusOptions,
+	removeTraitProficiencies,
 	setAbilityBonusAbilityScore,
 	setAbilityBonusBonus,
 	setAbilityBonusOptionsBonus,
@@ -17,7 +20,18 @@ import {
 	setName,
 	setNumLanguageOptions,
 	setSize,
-	setSpeed
+	setSpeed,
+	setTraitDescription,
+	setTraitName,
+	addTraitProficiencyOptions,
+	removeTraitProficiencyOptions,
+	addTraitHPBonus,
+	removeTraitHPBonus,
+	addTraitSpellOptions,
+	removeTraitSpellOptions,
+	addTraitSubtraits,
+	removeTraitSubtraits,
+	removeTrait
 } from '../../redux/features/editingRace';
 import { capitalize } from '../../services/capitalizeService';
 import { Item } from '../../types/db/item';
@@ -25,6 +39,8 @@ import Size from '../../types/size';
 import { AbilityItem, SrdItem } from '../../types/srd';
 import raceSchema from '../../yup-schemas/raceSchema';
 import Button, { ButtonType } from '../Button/Button';
+import Checkbox from '../Checkbox/Checkbox';
+import MarkdownTextArea from '../MarkdownTextArea/MarkdownTextArea';
 import MultiSelect from '../Select/MultiSelect/MultiSelect';
 import Select from '../Select/Select/Select';
 import TextInput from '../TextInput/TextInput';
@@ -793,6 +809,250 @@ const RaceForm = ({
 									</div>
 								)}
 						</div>
+					</div>
+					<div className={classes['traits-container']}>
+						{values.traits.map((trait, index) => (
+							<div className={classes.trait} key={index}>
+								<Button
+									size="small"
+									style={{
+										position: 'absolute',
+										top: '-0.3rem',
+										right: '-0.3rem',
+										borderTopRightRadius: '0.75rem'
+									}}
+									onClick={() => {
+										if (shouldUseReduxStore) {
+											dispatch(removeTrait(index));
+										}
+
+										setFieldValue(
+											'traits',
+											values.traits.filter((t, i) => i !== index),
+											false
+										);
+									}}
+								>
+									Remove trait
+								</Button>
+								<TextInput
+									label="Trait Name"
+									id={`traits.${index}.name`}
+									onChange={handleChange}
+									onBlur={event => {
+										if (shouldUseReduxStore) {
+											dispatch(
+												setTraitName({ index, name: event.target.value })
+											);
+										}
+
+										handleBlur(event);
+									}}
+									value={trait.name ?? ''}
+									touched={
+										clickedSubmit ||
+										(touched.traits && touched.traits[index]?.name)
+									}
+									error={
+										errors.traits
+											? (errors.traits[index] as FormikErrors<{ name: string }>)
+													?.name
+											: undefined
+									}
+								/>
+								<div style={{ alignSelf: 'stretch', marginTop: '1.5rem' }}>
+									<MarkdownTextArea
+										id={`traits.${index}.description`}
+										label="Description"
+										touched={
+											clickedSubmit ||
+											(touched.traits && touched.traits[index]?.description)
+										}
+										error={
+											errors.traits
+												? (
+														errors.traits[index] as FormikErrors<{
+															description: string;
+														}>
+												  )?.description
+												: undefined
+										}
+										value={trait.description}
+										onChange={value => {
+											setFieldValue(
+												`traits.${index}.description`,
+												value,
+												false
+											);
+										}}
+										onBlur={event => {
+											if (shouldUseReduxStore) {
+												dispatch(
+													setTraitDescription({
+														index,
+														description: event.target.value
+													})
+												);
+											}
+
+											handleBlur(event);
+										}}
+									/>
+									<div className={classes['checkbox-deck']}>
+										<Checkbox
+											label="Proficiencies"
+											checked={!!trait.proficiencies}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitProficiencies(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.proficiencies`,
+														[],
+														false
+													);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitProficiencies(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.proficiencies`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+										<Checkbox
+											label="Proficiency Options"
+											checked={!!trait.proficiencyOptions}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitProficiencyOptions(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.proficiencyOptions`,
+														{ options: [] },
+														false
+													);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitProficiencyOptions(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.proficiencyOptions`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+										<Checkbox
+											label="HP Bonus per Level"
+											checked={trait.hpBonusPerLevel !== undefined}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitHPBonus(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.hpBonusPerLevel`,
+														null,
+														false
+													);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitHPBonus(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.hpBonusPerLevel`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+										<Checkbox
+											label="Spell Options"
+											checked={!!trait.spellOptions}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitSpellOptions(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.spellOptions`,
+														{ options: [] },
+														false
+													);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitSpellOptions(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.spellOptions`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+										<Checkbox
+											label="Subtraits"
+											checked={!!trait.subtraitOptions}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitSubtraits(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.subtraitOptions`,
+														{ options: [] },
+														false
+													);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitSubtraits(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.subtraitOptions`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+									</div>
+								</div>
+							</div>
+						))}
+						{values.traits.length < 10 && (
+							<Button
+								positive
+								onClick={() => {
+									if (shouldUseReduxStore) {
+										dispatch(addTrait());
+									}
+
+									setFieldValue('traits', [...values.traits, {}], false);
+								}}
+								style={{ alignSelf: 'center', marginTop: '1rem' }}
+							>
+								Add trait
+							</Button>
+						)}
 					</div>
 					<Button
 						positive

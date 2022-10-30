@@ -137,6 +137,32 @@
     justify-content: space-around;
 }
 
+.traits-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.trait {
+    background-color: var(--heaven-light);
+    border: 2px solid var(--davy);
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.checkbox-deck {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
 @media (min-width: 768px) {
     .abilities {
         grid-template-rows: 1fr;
