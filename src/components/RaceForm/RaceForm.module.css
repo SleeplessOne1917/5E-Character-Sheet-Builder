@@ -16,7 +16,6 @@
 .abilities-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     width: 100%;
 }
 
@@ -24,7 +23,7 @@
     display: grid;
     grid-template-areas: "abilityBonuses"
                           "abilityBonusOptions";
-    grid-template-rows: 1fr 1fr;;
+    grid-template-rows: fit-content fit-content;;
     margin: 3rem 0;
 }
 
@@ -133,8 +132,14 @@
     font-size: 1.2rem;
 }
 
+.languages-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 @media (min-width: 768px) {
     .abilities {
+        grid-template-rows: 1fr;
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "abilityBonuses abilityBonusOptions";
     }

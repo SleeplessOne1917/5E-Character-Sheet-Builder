@@ -172,10 +172,6 @@ const raceSchema = object({
 			'sum-less-than-16',
 			'Sum of number of languages and numLanguageOptions must be less than or equal to 16',
 			(value, context) => {
-				if (!value) {
-					return false;
-				}
-
 				const {
 					parent: { languages }
 				} = <

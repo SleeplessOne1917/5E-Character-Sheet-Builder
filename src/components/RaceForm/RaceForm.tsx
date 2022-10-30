@@ -13,7 +13,9 @@ import {
 	setAbilityBonusBonus,
 	setAbilityBonusOptionsBonus,
 	setAbilityBonusOptionsNumberOfAbilityScores,
+	setLanguages,
 	setName,
+	setNumLanguageOptions,
 	setSize,
 	setSpeed
 } from '../../redux/features/editingRace';
@@ -23,6 +25,7 @@ import Size from '../../types/size';
 import { AbilityItem, SrdItem } from '../../types/srd';
 import raceSchema from '../../yup-schemas/raceSchema';
 import Button, { ButtonType } from '../Button/Button';
+import MultiSelect from '../Select/MultiSelect/MultiSelect';
 import Select from '../Select/Select/Select';
 import TextInput from '../TextInput/TextInput';
 import classes from './RaceForm.module.css';
@@ -676,6 +679,120 @@ const RaceForm = ({
 									Must select ability bonuses and/or ability bonus options
 								</div>
 							)}
+					</div>
+					<div className={classes['languages-container']}>
+						<MultiSelect
+							id="languages"
+							options={languages.map(language => ({
+								label: language.name,
+								value: language.index
+							}))}
+							values={values.languages.map(language => language.id)}
+							label="Languages Known"
+							touched={
+								clickedSubmit ||
+								(touched.languages?.length !== undefined
+									? false
+									: !!touched.languages)
+							}
+							error={
+								errors.languages
+									? typeof errors.languages === 'string'
+										? errors.languages
+										: (errors.languages[0] as FormikErrors<Item>).name
+									: undefined
+							}
+							onSelect={selectValues => {
+								const newLanguages = languages
+									.filter(language =>
+										(selectValues as string[]).includes(language.index)
+									)
+									.map<Item>(language => ({
+										id: language.index,
+										name: language.name
+									}));
+
+								if (shouldUseReduxStore) {
+									dispatch(setLanguages(newLanguages));
+								}
+
+								setFieldValue('languages', newLanguages, false);
+								setFieldTouched('languages', true, false);
+								setFieldError(
+									'languages',
+									newLanguages.length === 0
+										? 'Must have at least 1 language'
+										: ''
+								);
+
+								if (
+									(values.numLanguageOptions ?? 0) + newLanguages.length >
+									languages.length
+								) {
+									setFieldValue(
+										'numLanguageOptions',
+										languages.length - newLanguages.length,
+										false
+									);
+								}
+							}}
+						/>
+						<div className={classes['input-container']}>
+							<label
+								htmlFor="numLanguageOptions"
+								className={classes['input-label']}
+							>
+								Number of language options
+							</label>
+							<input
+								id="numLanguageOptions"
+								className={`${classes.input}${
+									(clickedSubmit || touched.numLanguageOptions) &&
+									errors.numLanguageOptions
+										? ` ${classes.error}`
+										: ''
+								}`}
+								placeholder={'\u2014'}
+								type="text"
+								onChange={event => {
+									setFieldValue(
+										'numLanguageOptions',
+										event.target.value,
+										false
+									);
+								}}
+								style={{ marginTop: '0.2rem' }}
+								value={values.numLanguageOptions ?? ''}
+								onBlur={event => {
+									const parsedValue = parseInt(event.target.value);
+									let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+									if (newValue && newValue < 0) {
+										newValue = 0;
+									}
+									if (
+										newValue &&
+										newValue > languages.length - values.languages.length
+									) {
+										newValue = languages.length - values.languages.length;
+									}
+
+									if (shouldUseReduxStore) {
+										dispatch(setNumLanguageOptions(newValue));
+									}
+									setFieldValue('numLanguageOptions', newValue, false);
+									setFieldTouched('numLanguageOptions', true, false);
+								}}
+							/>
+							{(clickedSubmit || touched.numLanguageOptions) &&
+								errors.numLanguageOptions && (
+									<div
+										className={classes['error-message']}
+										style={{ fontSize: '1rem' }}
+									>
+										{errors.numLanguageOptions}
+									</div>
+								)}
+						</div>
 					</div>
 					<Button
 						positive
