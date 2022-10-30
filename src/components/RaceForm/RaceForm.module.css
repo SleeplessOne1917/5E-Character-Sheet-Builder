@@ -13,6 +13,92 @@
     width: 100%;
 }
 
+.abilities-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.abilities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "abilityBonuses abilityBonusOptions";
+    margin: 3rem 0;
+}
+
+.abilities.error {
+    border: 3px solid var(--error-red);
+}
+
+.ability-bonuses {
+    grid-area: abilityBonuses;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ability-bonus {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--heaven-light);
+    border-radius: 1rem;
+    border: 1px solid var(--davy);
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    align-items: center;
+}
+
+.x-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--wine-red);
+}
+
+.x-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.x-button:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.ability-bonus-options {
+    grid-area: abilityBonusOptions;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.ability-bonus-options-fields {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.ability-bonus-options-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "bonusOptionsLabel bonusOptionsInput";
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.ability-bonus-options-field-label {
+    grid-area: bonusOptionsLabel;
+    font-size: 1.3rem;
+    text-align: right;
+}
+
+.ability-bonus-options-field-input {
+    grid-area: bonusOptionsInput;
+}
+
 .input-container {
     display: flex;
     flex-direction: column;

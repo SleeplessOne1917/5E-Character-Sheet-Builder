@@ -65,7 +65,6 @@ const raceSchema = object({
 			})
 		)
 		.required('Ability bonuses are required')
-		.min(1, 'At least 1 ability bonus is required')
 		.test(
 			'no-repeat-ability-bonuses',
 			'Cannot repeat ability bonuses',
@@ -97,6 +96,34 @@ const raceSchema = object({
 						checkedValues: []
 					}
 				).containsRepeats
+		)
+		.test(
+			'has-ability-bonuses',
+			'Must have at least one ability bonus',
+			(value, context) => {
+				if (!value) {
+					return false;
+				}
+
+				const {
+					parent: { abilityBonusOptions }
+				} = <
+					{
+						parent: {
+							abilityBonusOptions?: {
+								numberOfAbilityScores: number;
+								bonus: number;
+							};
+						};
+					}
+				>context;
+
+				if (value.length === 0) {
+					return (abilityBonusOptions?.bonus ?? 0) > 0;
+				}
+
+				return true;
+			}
 		),
 	abilityBonusOptions: object({
 		bonus: number()

@@ -24,6 +24,7 @@ type SelectProps = {
 	id?: string;
 	label?: string;
 	labelFontSize?: string;
+	errorFontSize?: string;
 };
 
 const Select = ({
@@ -36,7 +37,8 @@ const Select = ({
 	error,
 	id = 'select',
 	label,
-	labelFontSize = '1.5rem'
+	labelFontSize = '1.5rem',
+	errorFontSize = '1.5rem'
 }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -228,7 +230,12 @@ const Select = ({
 				</ul>
 			</div>
 			{touched && error && (
-				<div className={classes['error-message']}>{error}</div>
+				<div
+					className={classes['error-message']}
+					style={{ fontSize: errorFontSize }}
+				>
+					{error}
+				</div>
 			)}
 		</div>
 	);

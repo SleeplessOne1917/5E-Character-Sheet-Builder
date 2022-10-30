@@ -63,11 +63,90 @@ const editingRaceSlice = createSlice({
 		},
 		removeLanguage: (state, { payload }: PayloadAction<string>) => {
 			state.languages = state.languages.filter(({ id }) => id !== payload);
+		},
+		setNumLanguageOptions: (state, { payload }: PayloadAction<number>) => {
+			if (payload === 0) {
+				delete state.numLanguageOptions;
+			} else {
+				state.numLanguageOptions = payload;
+			}
+		},
+		addAbilityBonus: state => {
+			state.abilityBonuses = [...state.abilityBonuses, {}];
+		},
+		removeAbilityBonus: (state, { payload }: PayloadAction<number>) => {
+			state.abilityBonuses = state.abilityBonuses.filter(
+				(val, index) => index !== payload
+			);
+		},
+		setAbilityBonusBonus: (
+			state,
+			{
+				payload: { index, bonus }
+			}: PayloadAction<{ index: number; bonus?: number }>
+		) => {
+			while (index > state.abilityBonuses.length - 1) {
+				state.abilityBonuses = [...state.abilityBonuses, {}];
+			}
+
+			state.abilityBonuses[index].bonus = bonus;
+		},
+		setAbilityBonusAbilityScore: (
+			state,
+			{
+				payload: { index, abilityScore }
+			}: PayloadAction<{ index: number; abilityScore?: Item }>
+		) => {
+			while (index > state.abilityBonuses.length - 1) {
+				state.abilityBonuses = [...state.abilityBonuses, {}];
+			}
+
+			state.abilityBonuses[index].abilityScore = abilityScore;
+		},
+		addAbilityBonusOptions: state => {
+			state.abilityBonusOptions = {};
+		},
+		setAbilityBonusOptionsBonus: (
+			state,
+			{ payload }: PayloadAction<number | undefined>
+		) => {
+			if (!state.abilityBonusOptions) {
+				state.abilityBonusOptions = {};
+			}
+
+			state.abilityBonusOptions.bonus = payload;
+		},
+		setAbilityBonusOptionsNumberOfAbilityScores: (
+			state,
+			{ payload }: PayloadAction<number | undefined>
+		) => {
+			if (!state.abilityBonusOptions) {
+				state.abilityBonusOptions = {};
+			}
+
+			state.abilityBonusOptions.numberOfAbilityScores = payload;
+		},
+		removeAbilityBonusOptions: state => {
+			delete state.abilityBonusOptions;
 		}
 	}
 });
 
-export const { setName, setSize, setSpeed, addLanguage, removeLanguage } =
-	editingRaceSlice.actions;
+export const {
+	setName,
+	setSize,
+	setSpeed,
+	addLanguage,
+	removeLanguage,
+	setNumLanguageOptions,
+	addAbilityBonus,
+	removeAbilityBonus,
+	setAbilityBonusBonus,
+	setAbilityBonusAbilityScore,
+	addAbilityBonusOptions,
+	setAbilityBonusOptionsBonus,
+	setAbilityBonusOptionsNumberOfAbilityScores,
+	removeAbilityBonusOptions
+} = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;
