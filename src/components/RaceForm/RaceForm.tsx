@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
-import { FocusEventHandler, useCallback, useState } from 'react';
+import { FocusEventHandler, useCallback, useMemo, useState } from 'react';
 import { SIZES } from '../../constants/sizeConstants';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import {
@@ -31,12 +31,19 @@ import {
 	removeTraitSpellOptions,
 	addTraitSubtraits,
 	removeTraitSubtraits,
-	removeTrait
+	removeTrait,
+	setTraitProficiencies
 } from '../../redux/features/editingRace';
 import { capitalize } from '../../services/capitalizeService';
+import { getProficiencyTypeName } from '../../services/proficiencyTypeService';
 import { Item } from '../../types/db/item';
 import Size from '../../types/size';
-import { AbilityItem, SrdItem } from '../../types/srd';
+import {
+	AbilityItem,
+	ProficiencyType,
+	SrdItem,
+	SrdProficiencyItem
+} from '../../types/srd';
 import raceSchema from '../../yup-schemas/raceSchema';
 import Button, { ButtonType } from '../Button/Button';
 import Checkbox from '../Checkbox/Checkbox';
@@ -49,6 +56,7 @@ import classes from './RaceForm.module.css';
 type RaceFormProps = {
 	abilities: AbilityItem[];
 	languages: SrdItem[];
+	proficiencies: SrdProficiencyItem[];
 	shouldUseReduxStore: boolean;
 	initialValues: EditingRaceState;
 	handleFormikSubmit: (
@@ -60,12 +68,23 @@ type RaceFormProps = {
 const RaceForm = ({
 	abilities,
 	languages,
+	proficiencies,
 	shouldUseReduxStore,
 	initialValues,
 	handleFormikSubmit
 }: RaceFormProps) => {
 	const dispatch = useAppDispatch();
 	const [clickedSubmit, setClickedSubmit] = useState(false);
+	const [traitProficiencySelectedTypes, setTraitProficiencySelectedTypes] =
+		useState(
+			initialValues.traits.map(trait =>
+				trait.proficiencies && trait.proficiencies.length > 0
+					? proficiencies.find(
+							prof => prof.index === (trait.proficiencies as Item[])[0].id
+					  )?.type ?? null
+					: null
+			)
+		);
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		e => {
@@ -86,6 +105,15 @@ const RaceForm = ({
 			dispatch(setSpeed(value));
 		},
 		[dispatch]
+	);
+
+	const proficiencyTypes = useMemo(
+		() =>
+			proficiencies.reduce<ProficiencyType[]>(
+				(acc, cur) => (!acc.includes(cur.type) ? [...acc, cur.type] : acc),
+				[]
+			),
+		[proficiencies]
 	);
 
 	return (
@@ -750,6 +778,14 @@ const RaceForm = ({
 										languages.length - newLanguages.length,
 										false
 									);
+
+									if (shouldUseReduxStore) {
+										dispatch(
+											setNumLanguageOptions(
+												languages.length - newLanguages.length
+											)
+										);
+									}
 								}
 							}}
 						/>
@@ -825,6 +861,10 @@ const RaceForm = ({
 										if (shouldUseReduxStore) {
 											dispatch(removeTrait(index));
 										}
+
+										setTraitProficiencySelectedTypes(prev =>
+											prev.filter((val, i) => i !== index)
+										);
 
 										setFieldValue(
 											'traits',
@@ -917,6 +957,10 @@ const RaceForm = ({
 													if (shouldUseReduxStore) {
 														dispatch(removeTraitProficiencies(index));
 													}
+
+													setTraitProficiencySelectedTypes(prev =>
+														prev.map((v, i) => (i === index ? null : v))
+													);
 
 													setFieldValue(
 														`traits.${index}.proficiencies`,
@@ -1035,6 +1079,139 @@ const RaceForm = ({
 											}}
 										/>
 									</div>
+									{trait.proficiencies && (
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'space-around',
+												flexWrap: 'wrap'
+											}}
+										>
+											<Select
+												options={[{ label: '\u2014', value: 'blank' }].concat(
+													proficiencyTypes.map(pt => ({
+														label: getProficiencyTypeName(pt),
+														value: pt
+													}))
+												)}
+												label="Proficiency type"
+												id={`traits.${index}.proficiencyType`}
+												value={traitProficiencySelectedTypes[index] ?? 'blank'}
+												onChange={value => {
+													const newValue =
+														value === 'blank'
+															? null
+															: (value as ProficiencyType);
+													setTraitProficiencySelectedTypes(prev =>
+														prev.map((val, i) => (i === index ? newValue : val))
+													);
+
+													if ((trait.proficiencies?.length ?? 0) > 1) {
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitProficiencies({
+																	index,
+																	proficiencies: []
+																})
+															);
+														}
+
+														setFieldValue(
+															`traits.${index}.proficiencies`,
+															[],
+															false
+														);
+													}
+												}}
+											/>
+											{trait.proficiencies &&
+												trait.proficiencies.length > 0 && (
+													<p style={{ maxWidth: '30rem' }}>
+														{trait.proficiencies
+															.map(({ name }) => name.replace(/Skill: /g, ''))
+															.join(', ')}
+													</p>
+												)}
+											{traitProficiencySelectedTypes[index] && (
+												<MultiSelect
+													options={proficiencies
+														.filter(
+															prof =>
+																prof.type ===
+																	traitProficiencySelectedTypes[index] &&
+																!(
+																	values.traits
+																		.flatMap(t => t.proficiencies ?? [])
+																		.some(tp => tp.id === prof.index) &&
+																	!(trait.proficiencies ?? []).some(
+																		tp => tp.id === prof.index
+																	)
+																)
+														)
+														.map(prof => ({
+															label: prof.name.replace(/Skill: /g, ''),
+															value: prof.index
+														}))}
+													values={(trait.proficiencies ?? []).map(
+														({ id }) => id
+													)}
+													label="Proficiencies"
+													id={`traits.${index}.proficiencies`}
+													touched={
+														clickedSubmit ||
+														(touched.traits &&
+															touched.traits[index] &&
+															touched.traits[index].proficiencies)
+													}
+													error={
+														errors.traits && errors.traits[index]
+															? ((
+																	errors.traits[index] as FormikErrors<{
+																		proficiencies: Item[];
+																	}>
+															  ).proficiencies as string)
+															: undefined
+													}
+													onSelect={selectedValues => {
+														const newProficiencies = proficiencies
+															.filter(prof =>
+																selectedValues.includes(prof.index)
+															)
+															.map<Item>(prof => ({
+																id: prof.index,
+																name: prof.name
+															}));
+
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitProficiencies({
+																	index,
+																	proficiencies: newProficiencies
+																})
+															);
+														}
+
+														setFieldValue(
+															`traits.${index}.proficiencies`,
+															newProficiencies,
+															false
+														);
+														setFieldTouched(
+															`traits.${index}.proficiencies`,
+															true,
+															false
+														);
+														setFieldError(
+															`traits.${index}.proficiencies`,
+															newProficiencies.length === 0
+																? 'Must have at least 1 proficiency'
+																: undefined
+														);
+													}}
+												/>
+											)}
+										</div>
+									)}
 								</div>
 							</div>
 						))}
@@ -1046,6 +1223,7 @@ const RaceForm = ({
 										dispatch(addTrait());
 									}
 
+									setTraitProficiencySelectedTypes(prev => [...prev, null]);
 									setFieldValue('traits', [...values.traits, {}], false);
 								}}
 								style={{ alignSelf: 'center', marginTop: '1rem' }}

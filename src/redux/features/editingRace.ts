@@ -171,6 +171,17 @@ const editingRaceSlice = createSlice({
 			}
 			delete state.traits[payload].proficiencies;
 		},
+		setTraitProficiencies: (
+			state,
+			{
+				payload: { index, proficiencies }
+			}: PayloadAction<{ index: number; proficiencies: Item[] }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[index].proficiencies = proficiencies;
+		},
 		addTraitProficiencyOptions: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -245,6 +256,7 @@ export const {
 	setTraitDescription,
 	addTraitProficiencies,
 	removeTraitProficiencies,
+	setTraitProficiencies,
 	addTraitProficiencyOptions,
 	removeTraitProficiencyOptions,
 	addTraitHPBonus,

@@ -3,15 +3,16 @@ import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPa
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
 import { useAppSelector } from '../../../hooks/reduxHooks';
-import { AbilityItem, SrdItem } from '../../../types/srd';
+import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
 
 type RaceProps = {
 	loading: boolean;
 	abilities: AbilityItem[];
 	languages: SrdItem[];
+	proficiencies: SrdProficiencyItem[];
 };
 
-const Race = ({ loading, abilities, languages }: RaceProps) => {
+const Race = ({ loading, abilities, languages, proficiencies }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
 	const [initialValues, setInitialValues] = useState(editingRace);
 
@@ -27,6 +28,7 @@ const Race = ({ loading, abilities, languages }: RaceProps) => {
 						initialValues={initialValues}
 						shouldUseReduxStore
 						languages={languages}
+						proficiencies={proficiencies}
 					/>
 				</MainContent>
 			)}
