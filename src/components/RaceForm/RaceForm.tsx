@@ -34,7 +34,8 @@ import {
 	removeTrait,
 	setTraitProficiencies,
 	setTraitProficiencyOptionsChoose,
-	setTraitProficiencyOptionsOptions
+	setTraitProficiencyOptionsOptions,
+	setTraitHPBonus
 } from '../../redux/features/editingRace';
 import { capitalize } from '../../services/capitalizeService';
 import { getProficiencyTypeName } from '../../services/proficiencyTypeService';
@@ -1582,6 +1583,109 @@ const RaceForm = ({
 													}}
 												/>
 											)}
+										</div>
+									)}
+									{trait.hpBonusPerLevel !== undefined && (
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												border: '2px solid var(--davy)',
+												borderRadius: '0.5rem',
+												margin: '1rem 0',
+												padding: '1rem'
+											}}
+										>
+											<div className={classes['input-container']}>
+												<label
+													htmlFor={`traits.${index}.hpBonusPerLevel`}
+													className={classes['input-label']}
+												>
+													HP Bonus per Level
+												</label>
+												<input
+													id={`traits.${index}.hpBonusPerLevel`}
+													className={`${classes.input}${
+														(clickedSubmit ||
+															(touched.traits &&
+																touched.traits[index] &&
+																touched.traits[index]?.hpBonusPerLevel)) &&
+														errors.traits &&
+														errors.traits[index] &&
+														(
+															errors.traits[index] as FormikErrors<{
+																hpBonusPerLevel: number;
+															}>
+														)?.hpBonusPerLevel
+															? ` ${classes.error}`
+															: ''
+													}`}
+													placeholder={'\u2014'}
+													type="text"
+													onChange={event => {
+														setFieldValue(
+															`traits.${index}.hpBonusPerLevel`,
+															event.target.value,
+															false
+														);
+													}}
+													style={{ marginTop: '0.2rem' }}
+													value={trait.hpBonusPerLevel ?? ''}
+													onBlur={event => {
+														const parsedValue = parseInt(event.target.value);
+														let newValue = !isNaN(parsedValue)
+															? parsedValue
+															: null;
+														if (newValue !== null && newValue < 1) {
+															newValue = 1;
+														}
+														if (newValue && newValue > 10) {
+															newValue = 10;
+														}
+
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitHPBonus({
+																	index,
+																	hpBonus: newValue
+																})
+															);
+														}
+
+														setFieldValue(
+															`traits.${index}.hpBonusPerLevel`,
+															newValue,
+															false
+														);
+														setFieldTouched(
+															`traits.${index}.hpBonusPerLevel`,
+															true,
+															false
+														);
+													}}
+												/>
+												{(clickedSubmit ||
+													(touched.traits &&
+														touched.traits[index] &&
+														touched.traits[index]?.hpBonusPerLevel)) &&
+													errors.traits &&
+													errors.traits[index] &&
+													(
+														errors.traits[index] as FormikErrors<{
+															hpBonusPerLevel: number;
+														}>
+													)?.hpBonusPerLevel && (
+														<div className={classes['error-message']}>
+															{
+																(
+																	errors.traits[index] as FormikErrors<{
+																		hpBonusPerLevel: number;
+																	}>
+																)?.hpBonusPerLevel
+															}
+														</div>
+													)}
+											</div>
 										</div>
 									)}
 								</div>

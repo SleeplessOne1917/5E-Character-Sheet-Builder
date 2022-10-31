@@ -245,6 +245,17 @@ const editingRaceSlice = createSlice({
 			}
 			delete state.traits[payload].hpBonusPerLevel;
 		},
+		setTraitHPBonus: (
+			state,
+			{
+				payload: { index, hpBonus }
+			}: PayloadAction<{ index: number; hpBonus: number | null }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[index].hpBonusPerLevel = hpBonus;
+		},
 		addTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -299,6 +310,7 @@ export const {
 	setTraitProficiencyOptionsOptions,
 	addTraitHPBonus,
 	removeTraitHPBonus,
+	setTraitHPBonus,
 	addTraitSpellOptions,
 	removeTraitSpellOptions,
 	addTraitSubtraits,
