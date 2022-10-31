@@ -259,7 +259,7 @@ const raceSchema = object({
 									}
 								>context;
 
-								return (value ?? 0) < options.length;
+								return value < options.length;
 							}
 						),
 					options: array()
@@ -309,7 +309,7 @@ const raceSchema = object({
 									}
 								>context;
 
-								return (value ?? 0) < options.length;
+								return value < options.length;
 							}
 						),
 					options: array()

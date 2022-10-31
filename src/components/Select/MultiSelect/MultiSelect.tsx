@@ -1,6 +1,6 @@
 import classes from './MultiSelect.module.css';
 import selectClasses from '../Select.module.css';
-import { useCallback, useRef, useState, KeyboardEvent } from 'react';
+import { useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react';
 import Option from '../Option';
 import { handleKeyDownEvent } from '../../../services/handlerService';
 
@@ -12,7 +12,7 @@ type MultiSelectProps = {
 	error?: string;
 	fontSize?: string;
 	options: Option[];
-	values: (string | number)[];
+	values?: (string | number)[];
 	onSelect: (values: (string | number)[]) => void;
 };
 
@@ -29,6 +29,10 @@ const MultiSelect = ({
 }: MultiSelectProps) => {
 	const [selectedValues, setSelectedValues] = useState(values ?? []);
 	const [focusIndex, setFocusIndex] = useState(0);
+
+	useEffect(() => {
+		setSelectedValues(values ?? []);
+	}, [values]);
 
 	const listItemRefs = useRef<HTMLLIElement[]>([]);
 

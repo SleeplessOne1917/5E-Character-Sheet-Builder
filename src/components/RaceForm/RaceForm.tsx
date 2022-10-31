@@ -32,7 +32,9 @@ import {
 	addTraitSubtraits,
 	removeTraitSubtraits,
 	removeTrait,
-	setTraitProficiencies
+	setTraitProficiencies,
+	setTraitProficiencyOptionsChoose,
+	setTraitProficiencyOptionsOptions
 } from '../../redux/features/editingRace';
 import { capitalize } from '../../services/capitalizeService';
 import { getProficiencyTypeName } from '../../services/proficiencyTypeService';
@@ -85,6 +87,19 @@ const RaceForm = ({
 					: null
 			)
 		);
+	const [
+		traitProficiencyOptionsSelectedTypes,
+		setTraitProficiencyOptionsSelectedTypes
+	] = useState(
+		initialValues.traits.map(trait =>
+			trait.proficiencyOptions && trait.proficiencyOptions.options.length > 0
+				? proficiencies.find(
+						prof =>
+							prof.index === (trait.proficiencyOptions?.options as Item[])[0].id
+				  )?.type ?? null
+				: null
+		)
+	);
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		e => {
@@ -866,6 +881,10 @@ const RaceForm = ({
 											prev.filter((val, i) => i !== index)
 										);
 
+										setTraitProficiencyOptionsSelectedTypes(prev =>
+											prev.filter((val, i) => i !== index)
+										);
+
 										setFieldValue(
 											'traits',
 											values.traits.filter((t, i) => i !== index),
@@ -989,6 +1008,10 @@ const RaceForm = ({
 														dispatch(removeTraitProficiencyOptions(index));
 													}
 
+													setTraitProficiencyOptionsSelectedTypes(prev =>
+														prev.map((v, i) => (i === index ? null : v))
+													);
+
 													setFieldValue(
 														`traits.${index}.proficiencyOptions`,
 														undefined,
@@ -1084,7 +1107,11 @@ const RaceForm = ({
 											style={{
 												display: 'flex',
 												justifyContent: 'space-around',
-												flexWrap: 'wrap'
+												flexWrap: 'wrap',
+												border: '2px solid var(--davy)',
+												borderRadius: '0.5rem',
+												margin: '1rem 0',
+												padding: '1rem'
 											}}
 										>
 											<Select
@@ -1106,7 +1133,7 @@ const RaceForm = ({
 														prev.map((val, i) => (i === index ? newValue : val))
 													);
 
-													if ((trait.proficiencies?.length ?? 0) > 1) {
+													if ((trait.proficiencies?.length ?? 0) > 0) {
 														if (shouldUseReduxStore) {
 															dispatch(
 																setTraitProficiencies({
@@ -1142,6 +1169,11 @@ const RaceForm = ({
 																!(
 																	values.traits
 																		.flatMap(t => t.proficiencies ?? [])
+																		.concat(
+																			values.traits.flatMap(
+																				t => t.proficiencyOptions?.options ?? []
+																			)
+																		)
 																		.some(tp => tp.id === prof.index) &&
 																	!(trait.proficiencies ?? []).some(
 																		tp => tp.id === prof.index
@@ -1212,6 +1244,306 @@ const RaceForm = ({
 											)}
 										</div>
 									)}
+									{trait.proficiencyOptions && (
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'space-around',
+												flexWrap: 'wrap',
+												border: '2px solid var(--davy)',
+												borderRadius: '0.5rem',
+												margin: '1rem 0',
+												padding: '1rem'
+											}}
+										>
+											<div className={classes['input-container']}>
+												<label
+													htmlFor={`traits.${index}.proficiencyOptions.choose`}
+													className={classes['input-label']}
+												>
+													Number of proficiency options
+												</label>
+												<input
+													id={`traits.${index}.proficiencyOptions.choose`}
+													className={`${classes.input}${
+														(clickedSubmit ||
+															(touched.traits &&
+																touched.traits[index] &&
+																(
+																	touched.traits[index]
+																		.proficiencyOptions as FormikTouched<{
+																		choose: number;
+																	}>
+																)?.choose)) &&
+														errors.traits &&
+														errors.traits[index] &&
+														(
+															errors.traits[index] as FormikErrors<{
+																proficiencyOptions: { choose: number };
+															}>
+														).proficiencyOptions?.choose
+															? ` ${classes.error}`
+															: ''
+													}`}
+													placeholder={'\u2014'}
+													type="text"
+													onChange={event => {
+														setFieldValue(
+															`traits.${index}.proficiencyOptions.choose`,
+															event.target.value,
+															false
+														);
+													}}
+													style={{ marginTop: '0.2rem' }}
+													value={trait.proficiencyOptions.choose}
+													onBlur={event => {
+														const parsedValue = parseInt(event.target.value);
+														let newValue = !isNaN(parsedValue)
+															? parsedValue
+															: undefined;
+														if (newValue && newValue < 1) {
+															newValue = 1;
+														}
+														if (
+															newValue &&
+															traitProficiencyOptionsSelectedTypes[index] &&
+															(trait.proficiencyOptions?.options ?? []).length >
+																0 &&
+															newValue >=
+																(trait.proficiencyOptions?.options ?? []).length
+														) {
+															newValue =
+																(trait.proficiencyOptions?.options ?? [])
+																	.length - 1;
+														}
+
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitProficiencyOptionsChoose({
+																	index,
+																	choose: newValue
+																})
+															);
+														}
+														setFieldValue(
+															`traits.${index}.proficiencyOptions.choose`,
+															newValue,
+															false
+														);
+														setFieldTouched(
+															`traits.${index}.proficiencyOptions.choose`,
+															true,
+															false
+														);
+														setFieldError(
+															`traits.${index}.proficiencyOptions.choose`,
+															newValue === 0
+																? 'Cannot choose less than 1 proficiency option'
+																: !newValue
+																? 'Must have number of proficiencies to choose'
+																: undefined
+														);
+													}}
+												/>
+												{(clickedSubmit ||
+													(touched.traits &&
+														touched.traits[index] &&
+														(
+															touched.traits[index]
+																.proficiencyOptions as FormikTouched<{
+																choose: number;
+															}>
+														)?.choose)) &&
+													errors.traits &&
+													errors.traits[index] &&
+													(
+														errors.traits[index] as FormikErrors<{
+															proficiencyOptions: { choose: number };
+														}>
+													).proficiencyOptions?.choose && (
+														<div className={classes['error-message']}>
+															{
+																(
+																	errors.traits[index] as FormikErrors<{
+																		proficiencyOptions: { choose: number };
+																	}>
+																).proficiencyOptions?.choose
+															}
+														</div>
+													)}
+											</div>
+											<Select
+												options={[{ label: '\u2014', value: 'blank' }].concat(
+													proficiencyTypes.map(pt => ({
+														label: getProficiencyTypeName(pt),
+														value: pt
+													}))
+												)}
+												label="Proficiency type"
+												id={`traits.${index}.proficiencyOptions.proficiencyType`}
+												value={
+													traitProficiencyOptionsSelectedTypes[index] ?? 'blank'
+												}
+												onChange={value => {
+													const newValue =
+														value === 'blank'
+															? null
+															: (value as ProficiencyType);
+													const changed =
+														newValue !==
+														traitProficiencyOptionsSelectedTypes[index];
+													setTraitProficiencyOptionsSelectedTypes(prev =>
+														prev.map((val, i) => (i === index ? newValue : val))
+													);
+
+													if (
+														(trait.proficiencyOptions?.options?.length ?? 0) >
+															0 &&
+														changed
+													) {
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitProficiencyOptionsOptions({
+																	index,
+																	options: []
+																})
+															);
+														}
+
+														setFieldValue(
+															`traits.${index}.proficiencyOptions.options`,
+															[],
+															false
+														);
+													}
+												}}
+											/>
+											{trait.proficiencyOptions &&
+												trait.proficiencyOptions.options.length > 0 && (
+													<p style={{ maxWidth: '10rem' }}>
+														{trait.proficiencyOptions.options
+															.map(({ name }) => name.replace(/Skill: /g, ''))
+															.join(', ')}
+													</p>
+												)}
+											{traitProficiencyOptionsSelectedTypes[index] && (
+												<MultiSelect
+													options={proficiencies
+														.filter(
+															prof =>
+																prof.type ===
+																	traitProficiencyOptionsSelectedTypes[index] &&
+																!(
+																	values.traits
+																		.flatMap(t => t.proficiencies ?? [])
+																		.concat(
+																			values.traits.flatMap(
+																				t => t.proficiencyOptions?.options ?? []
+																			)
+																		)
+																		.some(tp => tp.id === prof.index) &&
+																	!(
+																		trait.proficiencyOptions?.options ?? []
+																	).some(tp => tp.id === prof.index)
+																)
+														)
+														.map(prof => ({
+															label: prof.name.replace(/Skill: /g, ''),
+															value: prof.index
+														}))}
+													values={(trait.proficiencyOptions.options ?? []).map(
+														({ id }) => id
+													)}
+													label="Proficiency Options"
+													id={`traits.${index}.proficiencyOptions.options`}
+													touched={
+														clickedSubmit ||
+														(touched.traits &&
+															touched.traits[index] &&
+															touched.traits[index].proficiencyOptions &&
+															!!(
+																touched.traits[index]
+																	.proficiencyOptions as FormikTouched<{
+																	options: Item[];
+																}>
+															).options)
+													}
+													error={
+														errors.traits && errors.traits[index]
+															? ((
+																	errors.traits[index] as FormikErrors<{
+																		proficiencyOptions: { options: Item[] };
+																	}>
+															  ).proficiencyOptions?.options as string)
+															: undefined
+													}
+													onSelect={selectedValues => {
+														const newProficiencies = proficiencies
+															.filter(prof =>
+																selectedValues.includes(prof.index)
+															)
+															.map<Item>(prof => ({
+																id: prof.index,
+																name: prof.name
+															}));
+
+														if (shouldUseReduxStore) {
+															dispatch(
+																setTraitProficiencyOptionsOptions({
+																	index,
+																	options: newProficiencies
+																})
+															);
+														}
+
+														setFieldValue(
+															`traits.${index}.proficiencyOptions.options`,
+															newProficiencies,
+															false
+														);
+														setFieldTouched(
+															`traits.${index}.proficiencyOptions.options`,
+															true,
+															false
+														);
+														setFieldError(
+															`traits.${index}.proficiencyOptions.options`,
+															newProficiencies.length === 0
+																? 'Must have at least 1 proficiency to choose from'
+																: undefined
+														);
+
+														if (
+															(trait.proficiencyOptions?.choose ?? 0) >=
+																newProficiencies.length &&
+															(trait.proficiencyOptions?.choose ?? 0) > 0
+														) {
+															const newChoose = newProficiencies.length - 1;
+															if (shouldUseReduxStore) {
+																dispatch(
+																	setTraitProficiencyOptionsChoose({
+																		index,
+																		choose: newChoose
+																	})
+																);
+															}
+															setFieldValue(
+																`traits.${index}.proficiencyOptions.choose`,
+																newChoose,
+																false
+															);
+															setFieldError(
+																`traits.${index}.proficiencyOptions.choose`,
+																newChoose === 0
+																	? 'Cannot choose less than 1 proficiency option'
+																	: undefined
+															);
+														}
+													}}
+												/>
+											)}
+										</div>
+									)}
 								</div>
 							</div>
 						))}
@@ -1224,6 +1556,10 @@ const RaceForm = ({
 									}
 
 									setTraitProficiencySelectedTypes(prev => [...prev, null]);
+									setTraitProficiencyOptionsSelectedTypes(prev => [
+										...prev,
+										null
+									]);
 									setFieldValue('traits', [...values.traits, {}], false);
 								}}
 								style={{ alignSelf: 'center', marginTop: '1rem' }}

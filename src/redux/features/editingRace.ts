@@ -17,6 +17,8 @@ type TraitState = {
 	};
 };
 
+/* eslint-disable @typescript-eslint/ban-ts-comment*/
+
 type TraitWithSubtraitState = TraitState & {
 	subtraitOptions?: {
 		choose?: number;
@@ -197,6 +199,40 @@ const editingRaceSlice = createSlice({
 			}
 			delete state.traits[payload].proficiencyOptions;
 		},
+		setTraitProficiencyOptionsChoose: (
+			state,
+			{
+				payload: { index, choose }
+			}: PayloadAction<{ index: number; choose?: number }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[index].proficiencyOptions) {
+				state.traits[index].proficiencyOptions = { choose, options: [] };
+			} else {
+				// @ts-ignore
+				state.traits[index].proficiencyOptions.choose = choose;
+			}
+		},
+		setTraitProficiencyOptionsOptions: (
+			state,
+			{
+				payload: { index, options }
+			}: PayloadAction<{ index: number; options: Item[] }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[index].proficiencyOptions) {
+				state.traits[index].proficiencyOptions = { options };
+			} else {
+				// @ts-ignore
+				state.traits[index].proficiencyOptions.options = options;
+			}
+		},
 		addTraitHPBonus: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -259,6 +295,8 @@ export const {
 	setTraitProficiencies,
 	addTraitProficiencyOptions,
 	removeTraitProficiencyOptions,
+	setTraitProficiencyOptionsChoose,
+	setTraitProficiencyOptionsOptions,
 	addTraitHPBonus,
 	removeTraitHPBonus,
 	addTraitSpellOptions,
