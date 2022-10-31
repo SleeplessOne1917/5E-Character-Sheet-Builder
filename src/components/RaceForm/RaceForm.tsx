@@ -1123,6 +1123,21 @@ const RaceForm = ({
 												)}
 												label="Proficiency type"
 												id={`traits.${index}.proficiencyType`}
+												touched={
+													clickedSubmit ||
+													(touched.traits &&
+														touched.traits[index] &&
+														touched.traits[index].proficiencies)
+												}
+												error={
+													errors.traits && errors.traits[index]
+														? ((
+																errors.traits[index] as FormikErrors<{
+																	proficiencies: Item[];
+																}>
+														  ).proficiencies as string)
+														: undefined
+												}
 												value={traitProficiencySelectedTypes[index] ?? 'blank'}
 												onChange={value => {
 													const newValue =
@@ -1383,6 +1398,31 @@ const RaceForm = ({
 												id={`traits.${index}.proficiencyOptions.proficiencyType`}
 												value={
 													traitProficiencyOptionsSelectedTypes[index] ?? 'blank'
+												}
+												touched={
+													clickedSubmit ||
+													(touched.traits &&
+														touched.traits[index].proficiencyOptions &&
+														!!(
+															touched.traits[index]
+																.proficiencyOptions as FormikTouched<{
+																options: Item[];
+															}>
+														).options)
+												}
+												error={
+													errors.traits &&
+													(
+														errors.traits[index] as FormikErrors<{
+															proficiencyOptions: { options: Item[] };
+														}>
+													).proficiencyOptions
+														? ((
+																errors.traits[index] as FormikErrors<{
+																	proficiencyOptions: { options: Item[] };
+																}>
+														  ).proficiencyOptions?.options as string)
+														: undefined
 												}
 												onChange={value => {
 													const newValue =
