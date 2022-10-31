@@ -1,6 +1,13 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
-import { FocusEventHandler, useCallback, useMemo, useState } from 'react';
+import {
+	ChangeEventHandler,
+	CSSProperties,
+	FocusEventHandler,
+	useCallback,
+	useMemo,
+	useState
+} from 'react';
 import { SIZES } from '../../constants/sizeConstants';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import {
@@ -67,6 +74,51 @@ type RaceFormProps = {
 		helpers: FormikHelpers<EditingRaceState>
 	) => Promise<void>;
 };
+
+type NumberTextInputProps = {
+	label: string;
+	id: string;
+	touched?: boolean;
+	error?: string;
+	value?: string | number | null;
+	onChange: ChangeEventHandler<HTMLInputElement>;
+	onBlur: FocusEventHandler<HTMLInputElement>;
+	errorStyle?: CSSProperties;
+};
+
+const NumberTextInput = ({
+	id,
+	label,
+	value,
+	touched,
+	error,
+	onBlur,
+	onChange,
+	errorStyle
+}: NumberTextInputProps) => (
+	<div className={classes['input-container']}>
+		<label htmlFor={id} className={classes['input-label']}>
+			{label}
+		</label>
+		<input
+			id={id}
+			className={`${classes.input}${
+				touched && error ? ` ${classes.error}` : ''
+			}`}
+			placeholder={'\u2014'}
+			type="text"
+			onChange={onChange}
+			style={{ marginTop: '0.2rem' }}
+			value={value ?? ''}
+			onBlur={onBlur}
+		/>
+		{touched && error && (
+			<div className={classes['error-message']} style={errorStyle}>
+				{error}
+			</div>
+		)}
+	</div>
+);
 
 const RaceForm = ({
 	abilities,
@@ -192,55 +244,43 @@ const RaceForm = ({
 								);
 							}}
 						/>
-						<div className={classes['input-container']}>
-							<label htmlFor="speed" className={classes['input-label']}>
-								Speed (in feet)
-							</label>
-							<input
-								id="speed"
-								className={`${classes.input}${
-									(touched.speed || clickedSubmit) && errors.speed
-										? ` ${classes.error}`
-										: ''
-								}`}
-								placeholder={'\u2014'}
-								type="text"
-								onChange={event => {
-									setFieldValue('speed', event.target.value, false);
-								}}
-								value={values.speed ?? ''}
-								onBlur={event => {
-									const parsedValue = parseInt(event.target.value);
-									let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
-									if (newValue && newValue < 5) {
-										newValue = 5;
+						<NumberTextInput
+							label="Speed (in feet)"
+							id="speed"
+							touched={touched.speed || clickedSubmit}
+							error={errors.speed}
+							value={values.speed}
+							onChange={event => {
+								setFieldValue('speed', event.target.value, false);
+							}}
+							onBlur={event => {
+								const parsedValue = parseInt(event.target.value);
+								let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+								if (newValue && newValue < 5) {
+									newValue = 5;
+								}
+								if (newValue && newValue > 100) {
+									newValue = 100;
+								}
+								if (newValue && newValue % 5 !== 0) {
+									if (newValue % 5 <= 2) {
+										newValue = newValue - (newValue % 5);
+									} else {
+										newValue = newValue + (5 - (newValue % 5));
 									}
-									if (newValue && newValue > 100) {
-										newValue = 100;
-									}
-									if (newValue && newValue % 5 !== 0) {
-										if (newValue % 5 <= 2) {
-											newValue = newValue - (newValue % 5);
-										} else {
-											newValue = newValue + (5 - (newValue % 5));
-										}
-									}
+								}
 
-									if (shouldUseReduxStore) {
-										handleSpeedBlur(newValue);
-									}
-									setFieldValue('speed', newValue, false);
-									setFieldTouched('speed', true, false);
-									setFieldError(
-										'speed',
-										newValue === undefined ? 'Speed is required' : undefined
-									);
-								}}
-							/>
-							{(touched.speed || clickedSubmit) && errors.speed && (
-								<div className={classes['error-message']}>{errors.speed}</div>
-							)}
-						</div>
+								if (shouldUseReduxStore) {
+									handleSpeedBlur(newValue);
+								}
+								setFieldValue('speed', newValue, false);
+								setFieldTouched('speed', true, false);
+								setFieldError(
+									'speed',
+									newValue === undefined ? 'Speed is required' : undefined
+								);
+							}}
+						/>
 					</div>
 					<div className={classes['abilities-container']}>
 						<div
@@ -375,100 +415,68 @@ const RaceForm = ({
 												);
 											}}
 										/>
-										<div className={classes['input-container']}>
-											<label
-												htmlFor={`abilityBonuses.${index}.bonus`}
-												className={classes['input-label']}
-											>
-												Bonus
-											</label>
-											<input
-												id={`abilityBonuses.${index}.bonus`}
-												className={`${classes.input}${
-													((touched.abilityBonuses &&
-														touched.abilityBonuses[index] &&
-														touched.abilityBonuses[index].bonus) ||
-														clickedSubmit) &&
-													errors.abilityBonuses &&
-													errors.abilityBonuses[index] &&
-													(
-														errors.abilityBonuses[index] as FormikErrors<{
-															bonus: number;
-														}>
-													).bonus
-														? ` ${classes.error}`
-														: ''
-												}`}
-												placeholder={'\u2014'}
-												type="text"
-												onChange={event => {
-													setFieldValue(
-														`abilityBonuses.${index}.bonus`,
-														event.target.value,
-														false
-													);
-												}}
-												value={abilityBonus.bonus ?? ''}
-												onBlur={event => {
-													const parsedValue = parseInt(event.target.value);
-													let newValue = !isNaN(parsedValue)
-														? parsedValue
-														: undefined;
-													if (newValue && newValue < -10) {
-														newValue = -10;
-													}
-													if (newValue && newValue > 10) {
-														newValue = 10;
-													}
+										<NumberTextInput
+											id={`abilityBonuses.${index}.bonus`}
+											label="Bonus"
+											value={abilityBonus.bonus}
+											touched={
+												(touched.abilityBonuses &&
+													touched.abilityBonuses[index] &&
+													touched.abilityBonuses[index]?.bonus) ||
+												clickedSubmit
+											}
+											error={
+												errors.abilityBonuses && errors.abilityBonuses[index]
+													? (
+															errors.abilityBonuses[index] as FormikErrors<{
+																bonus: number;
+															}>
+													  )?.bonus
+													: undefined
+											}
+											onChange={event => {
+												setFieldValue(
+													`abilityBonuses.${index}.bonus`,
+													event.target.value,
+													false
+												);
+											}}
+											onBlur={event => {
+												const parsedValue = parseInt(event.target.value);
+												let newValue = !isNaN(parsedValue)
+													? parsedValue
+													: undefined;
+												if (newValue && newValue < -10) {
+													newValue = -10;
+												}
+												if (newValue && newValue > 10) {
+													newValue = 10;
+												}
 
-													if (shouldUseReduxStore) {
-														dispatch(
-															setAbilityBonusBonus({ index, bonus: newValue })
-														);
-													}
-													setFieldValue(
-														`abilityBonuses.${index}.bonus`,
-														newValue,
-														false
+												if (shouldUseReduxStore) {
+													dispatch(
+														setAbilityBonusBonus({ index, bonus: newValue })
 													);
-													setFieldTouched(
-														`abilityBonuses.${index}.bonus`,
-														true,
-														false
-													);
-													setFieldError(
-														`abilityBonuses.${index}.bonus`,
-														newValue === undefined
-															? 'Ability bonus must have bonus'
-															: undefined
-													);
-												}}
-											/>
-											{((touched.abilityBonuses &&
-												touched.abilityBonuses[index] &&
-												touched.abilityBonuses[index].bonus) ||
-												clickedSubmit) &&
-												errors.abilityBonuses &&
-												errors.abilityBonuses[index] &&
-												(
-													errors.abilityBonuses[index] as FormikErrors<{
-														bonus: number;
-													}>
-												).bonus && (
-													<div
-														className={classes['error-message']}
-														style={{ fontSize: '1rem' }}
-													>
-														{
-															(
-																errors.abilityBonuses[index] as FormikErrors<{
-																	bonus: number;
-																}>
-															).bonus
-														}
-													</div>
-												)}
-										</div>
+												}
+												setFieldValue(
+													`abilityBonuses.${index}.bonus`,
+													newValue,
+													false
+												);
+												setFieldTouched(
+													`abilityBonuses.${index}.bonus`,
+													true,
+													false
+												);
+												setFieldError(
+													`abilityBonuses.${index}.bonus`,
+													newValue === undefined
+														? 'Ability bonus must have bonus'
+														: undefined
+												);
+											}}
+											errorStyle={{ fontSize: '1rem' }}
+										/>
 									</div>
 								))}
 								{values.abilityBonuses.length +
@@ -805,62 +813,36 @@ const RaceForm = ({
 								}
 							}}
 						/>
-						<div className={classes['input-container']}>
-							<label
-								htmlFor="numLanguageOptions"
-								className={classes['input-label']}
-							>
-								Number of language options
-							</label>
-							<input
-								id="numLanguageOptions"
-								className={`${classes.input}${
-									(clickedSubmit || touched.numLanguageOptions) &&
-									errors.numLanguageOptions
-										? ` ${classes.error}`
-										: ''
-								}`}
-								placeholder={'\u2014'}
-								type="text"
-								onChange={event => {
-									setFieldValue(
-										'numLanguageOptions',
-										event.target.value,
-										false
-									);
-								}}
-								style={{ marginTop: '0.2rem' }}
-								value={values.numLanguageOptions ?? ''}
-								onBlur={event => {
-									const parsedValue = parseInt(event.target.value);
-									let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
-									if (newValue && newValue < 0) {
-										newValue = 0;
-									}
-									if (
-										newValue &&
-										newValue > languages.length - values.languages.length
-									) {
-										newValue = languages.length - values.languages.length;
-									}
+						<NumberTextInput
+							id="numLanguageOptions"
+							label="Number of language options"
+							value={values.numLanguageOptions}
+							touched={clickedSubmit || touched.numLanguageOptions}
+							error={errors.numLanguageOptions}
+							onChange={event => {
+								setFieldValue('numLanguageOptions', event.target.value, false);
+							}}
+							onBlur={event => {
+								const parsedValue = parseInt(event.target.value);
+								let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+								if (newValue && newValue < 0) {
+									newValue = 0;
+								}
+								if (
+									newValue &&
+									newValue > languages.length - values.languages.length
+								) {
+									newValue = languages.length - values.languages.length;
+								}
 
-									if (shouldUseReduxStore) {
-										dispatch(setNumLanguageOptions(newValue));
-									}
-									setFieldValue('numLanguageOptions', newValue, false);
-									setFieldTouched('numLanguageOptions', true, false);
-								}}
-							/>
-							{(clickedSubmit || touched.numLanguageOptions) &&
-								errors.numLanguageOptions && (
-									<div
-										className={classes['error-message']}
-										style={{ fontSize: '1rem' }}
-									>
-										{errors.numLanguageOptions}
-									</div>
-								)}
-						</div>
+								if (shouldUseReduxStore) {
+									dispatch(setNumLanguageOptions(newValue));
+								}
+								setFieldValue('numLanguageOptions', newValue, false);
+								setFieldTouched('numLanguageOptions', true, false);
+							}}
+							errorStyle={{ fontSize: '1rem' }}
+						/>
 					</div>
 					<div className={classes['traits-container']}>
 						{values.traits.map((trait, index) => (
@@ -1131,7 +1113,9 @@ const RaceForm = ({
 														touched.traits[index].proficiencies)
 												}
 												error={
-													errors.traits && errors.traits[index]
+													errors.traits &&
+													errors.traits[index] &&
+													!traitProficiencySelectedTypes[index]
 														? ((
 																errors.traits[index] as FormikErrors<{
 																	proficiencies: Item[];
@@ -1272,96 +1256,12 @@ const RaceForm = ({
 												padding: '1rem'
 											}}
 										>
-											<div className={classes['input-container']}>
-												<label
-													htmlFor={`traits.${index}.proficiencyOptions.choose`}
-													className={classes['input-label']}
-												>
-													Number of proficiency options
-												</label>
-												<input
-													id={`traits.${index}.proficiencyOptions.choose`}
-													className={`${classes.input}${
-														(clickedSubmit ||
-															(touched.traits &&
-																touched.traits[index] &&
-																(
-																	touched.traits[index]
-																		.proficiencyOptions as FormikTouched<{
-																		choose: number;
-																	}>
-																)?.choose)) &&
-														errors.traits &&
-														errors.traits[index] &&
-														(
-															errors.traits[index] as FormikErrors<{
-																proficiencyOptions: { choose: number };
-															}>
-														).proficiencyOptions?.choose
-															? ` ${classes.error}`
-															: ''
-													}`}
-													placeholder={'\u2014'}
-													type="text"
-													onChange={event => {
-														setFieldValue(
-															`traits.${index}.proficiencyOptions.choose`,
-															event.target.value,
-															false
-														);
-													}}
-													style={{ marginTop: '0.2rem' }}
-													value={trait.proficiencyOptions.choose}
-													onBlur={event => {
-														const parsedValue = parseInt(event.target.value);
-														let newValue = !isNaN(parsedValue)
-															? parsedValue
-															: undefined;
-														if (newValue && newValue < 1) {
-															newValue = 1;
-														}
-														if (
-															newValue &&
-															traitProficiencyOptionsSelectedTypes[index] &&
-															(trait.proficiencyOptions?.options ?? []).length >
-																0 &&
-															newValue >=
-																(trait.proficiencyOptions?.options ?? []).length
-														) {
-															newValue =
-																(trait.proficiencyOptions?.options ?? [])
-																	.length - 1;
-														}
-
-														if (shouldUseReduxStore) {
-															dispatch(
-																setTraitProficiencyOptionsChoose({
-																	index,
-																	choose: newValue
-																})
-															);
-														}
-														setFieldValue(
-															`traits.${index}.proficiencyOptions.choose`,
-															newValue,
-															false
-														);
-														setFieldTouched(
-															`traits.${index}.proficiencyOptions.choose`,
-															true,
-															false
-														);
-														setFieldError(
-															`traits.${index}.proficiencyOptions.choose`,
-															newValue === 0
-																? 'Cannot choose less than 1 proficiency option'
-																: !newValue
-																? 'Must have number of proficiencies to choose'
-																: undefined
-														);
-													}}
-												/>
-												{(clickedSubmit ||
+											<NumberTextInput
+												id={`traits.${index}.proficiencyOptions.choose`}
+												label="Number of proficiency options"
+												value={trait.proficiencyOptions.choose}
+												touched={
+													clickedSubmit ||
 													(touched.traits &&
 														touched.traits[index] &&
 														(
@@ -1369,25 +1269,73 @@ const RaceForm = ({
 																.proficiencyOptions as FormikTouched<{
 																choose: number;
 															}>
-														)?.choose)) &&
-													errors.traits &&
-													errors.traits[index] &&
-													(
-														errors.traits[index] as FormikErrors<{
-															proficiencyOptions: { choose: number };
-														}>
-													).proficiencyOptions?.choose && (
-														<div className={classes['error-message']}>
-															{
-																(
-																	errors.traits[index] as FormikErrors<{
-																		proficiencyOptions: { choose: number };
-																	}>
-																).proficiencyOptions?.choose
-															}
-														</div>
-													)}
-											</div>
+														)?.choose)
+												}
+												error={
+													errors.traits && errors.traits[index]
+														? (
+																errors.traits[index] as FormikErrors<{
+																	proficiencyOptions: { choose: number };
+																}>
+														  ).proficiencyOptions?.choose
+														: undefined
+												}
+												onChange={event => {
+													setFieldValue(
+														`traits.${index}.proficiencyOptions.choose`,
+														event.target.value,
+														false
+													);
+												}}
+												onBlur={event => {
+													const parsedValue = parseInt(event.target.value);
+													let newValue = !isNaN(parsedValue)
+														? parsedValue
+														: undefined;
+													if (newValue && newValue < 1) {
+														newValue = 1;
+													}
+													if (
+														newValue &&
+														traitProficiencyOptionsSelectedTypes[index] &&
+														(trait.proficiencyOptions?.options ?? []).length >
+															0 &&
+														newValue >=
+															(trait.proficiencyOptions?.options ?? []).length
+													) {
+														newValue =
+															(trait.proficiencyOptions?.options ?? []).length -
+															1;
+													}
+
+													if (shouldUseReduxStore) {
+														dispatch(
+															setTraitProficiencyOptionsChoose({
+																index,
+																choose: newValue
+															})
+														);
+													}
+													setFieldValue(
+														`traits.${index}.proficiencyOptions.choose`,
+														newValue,
+														false
+													);
+													setFieldTouched(
+														`traits.${index}.proficiencyOptions.choose`,
+														true,
+														false
+													);
+													setFieldError(
+														`traits.${index}.proficiencyOptions.choose`,
+														newValue === 0
+															? 'Cannot choose less than 1 proficiency option'
+															: !newValue
+															? 'Must have number of proficiencies to choose'
+															: undefined
+													);
+												}}
+											/>
 											<Select
 												options={[{ label: '\u2014', value: 'blank' }].concat(
 													proficiencyTypes.map(pt => ({
@@ -1417,7 +1365,8 @@ const RaceForm = ({
 														errors.traits[index] as FormikErrors<{
 															proficiencyOptions: { options: Item[] };
 														}>
-													).proficiencyOptions
+													).proficiencyOptions &&
+													!traitProficiencyOptionsSelectedTypes[index]
 														? ((
 																errors.traits[index] as FormikErrors<{
 																	proficiencyOptions: { options: Item[] };
@@ -1596,96 +1545,65 @@ const RaceForm = ({
 												padding: '1rem'
 											}}
 										>
-											<div className={classes['input-container']}>
-												<label
-													htmlFor={`traits.${index}.hpBonusPerLevel`}
-													className={classes['input-label']}
-												>
-													HP Bonus per Level
-												</label>
-												<input
-													id={`traits.${index}.hpBonusPerLevel`}
-													className={`${classes.input}${
-														(clickedSubmit ||
-															(touched.traits &&
-																touched.traits[index] &&
-																touched.traits[index]?.hpBonusPerLevel)) &&
-														errors.traits &&
-														errors.traits[index] &&
-														(
-															errors.traits[index] as FormikErrors<{
-																hpBonusPerLevel: number;
-															}>
-														)?.hpBonusPerLevel
-															? ` ${classes.error}`
-															: ''
-													}`}
-													placeholder={'\u2014'}
-													type="text"
-													onChange={event => {
-														setFieldValue(
-															`traits.${index}.hpBonusPerLevel`,
-															event.target.value,
-															false
-														);
-													}}
-													style={{ marginTop: '0.2rem' }}
-													value={trait.hpBonusPerLevel ?? ''}
-													onBlur={event => {
-														const parsedValue = parseInt(event.target.value);
-														let newValue = !isNaN(parsedValue)
-															? parsedValue
-															: null;
-														if (newValue !== null && newValue < 1) {
-															newValue = 1;
-														}
-														if (newValue && newValue > 10) {
-															newValue = 10;
-														}
-
-														if (shouldUseReduxStore) {
-															dispatch(
-																setTraitHPBonus({
-																	index,
-																	hpBonus: newValue
-																})
-															);
-														}
-
-														setFieldValue(
-															`traits.${index}.hpBonusPerLevel`,
-															newValue,
-															false
-														);
-														setFieldTouched(
-															`traits.${index}.hpBonusPerLevel`,
-															true,
-															false
-														);
-													}}
-												/>
-												{(clickedSubmit ||
+											<NumberTextInput
+												id={`traits.${index}.hpBonusPerLevel`}
+												label="HP Bonus per Level"
+												value={trait.hpBonusPerLevel}
+												touched={
+													clickedSubmit ||
 													(touched.traits &&
 														touched.traits[index] &&
-														touched.traits[index]?.hpBonusPerLevel)) &&
-													errors.traits &&
-													errors.traits[index] &&
-													(
-														errors.traits[index] as FormikErrors<{
-															hpBonusPerLevel: number;
-														}>
-													)?.hpBonusPerLevel && (
-														<div className={classes['error-message']}>
-															{
-																(
-																	errors.traits[index] as FormikErrors<{
-																		hpBonusPerLevel: number;
-																	}>
-																)?.hpBonusPerLevel
-															}
-														</div>
-													)}
-											</div>
+														touched.traits[index]?.hpBonusPerLevel)
+												}
+												error={
+													errors.traits && errors.traits[index]
+														? (
+																errors.traits[index] as FormikErrors<{
+																	hpBonusPerLevel: number;
+																}>
+														  )?.hpBonusPerLevel
+														: undefined
+												}
+												onChange={event => {
+													setFieldValue(
+														`traits.${index}.hpBonusPerLevel`,
+														event.target.value,
+														false
+													);
+												}}
+												onBlur={event => {
+													const parsedValue = parseInt(event.target.value);
+													let newValue = !isNaN(parsedValue)
+														? parsedValue
+														: null;
+													if (newValue !== null && newValue < 1) {
+														newValue = 1;
+													}
+													if (newValue && newValue > 10) {
+														newValue = 10;
+													}
+
+													if (shouldUseReduxStore) {
+														dispatch(
+															setTraitHPBonus({
+																index,
+																hpBonus: newValue
+															})
+														);
+													}
+
+													setFieldValue(
+														`traits.${index}.hpBonusPerLevel`,
+														newValue,
+														false
+													);
+													setFieldTouched(
+														`traits.${index}.hpBonusPerLevel`,
+														true,
+														false
+													);
+												}}
+											/>
 										</div>
 									)}
 								</div>
