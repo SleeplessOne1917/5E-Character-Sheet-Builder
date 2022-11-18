@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { Item } from '../../types/db/item';
 import Size from '../../types/size';
 
@@ -15,6 +16,7 @@ type TraitState = {
 		choose?: number;
 		options: Item[];
 	};
+	spells?: Item[];
 };
 
 /* eslint-disable @typescript-eslint/ban-ts-comment*/
@@ -268,6 +270,18 @@ const editingRaceSlice = createSlice({
 			}
 			delete state.traits[payload].spellOptions;
 		},
+		addTraitSpells: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			state.traits[payload].spells = [];
+		},
+		removeTraitSpells: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+			delete state.traits[payload].spells;
+		},
 		addTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -314,7 +328,9 @@ export const {
 	addTraitSpellOptions,
 	removeTraitSpellOptions,
 	addTraitSubtraits,
-	removeTraitSubtraits
+	removeTraitSubtraits,
+	addTraitSpells,
+	removeTraitSpells
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

@@ -1,24 +1,38 @@
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
 import {
-	ChangeEventHandler,
+	AbilityItem,
+	ProficiencyType,
+	SrdItem,
+	SrdProficiencyItem
+} from '../../types/srd';
+import Button, { ButtonType } from '../Button/Button';
+import {
 	CSSProperties,
+	ChangeEventHandler,
 	FocusEventHandler,
 	useCallback,
 	useMemo,
 	useState
 } from 'react';
-import { SIZES } from '../../constants/sizeConstants';
-import { useAppDispatch } from '../../hooks/reduxHooks';
 import {
+	EditingRaceState,
 	addAbilityBonus,
 	addAbilityBonusOptions,
 	addTrait,
+	addTraitHPBonus,
 	addTraitProficiencies,
-	EditingRaceState,
+	addTraitProficiencyOptions,
+	addTraitSpellOptions,
+	addTraitSpells,
+	addTraitSubtraits,
 	removeAbilityBonus,
 	removeAbilityBonusOptions,
+	removeTrait,
+	removeTraitHPBonus,
 	removeTraitProficiencies,
+	removeTraitProficiencyOptions,
+	removeTraitSpellOptions,
+	removeTraitSpells,
+	removeTraitSubtraits,
 	setAbilityBonusAbilityScore,
 	setAbilityBonusBonus,
 	setAbilityBonusOptionsBonus,
@@ -29,39 +43,28 @@ import {
 	setSize,
 	setSpeed,
 	setTraitDescription,
+	setTraitHPBonus,
 	setTraitName,
-	addTraitProficiencyOptions,
-	removeTraitProficiencyOptions,
-	addTraitHPBonus,
-	removeTraitHPBonus,
-	addTraitSpellOptions,
-	removeTraitSpellOptions,
-	addTraitSubtraits,
-	removeTraitSubtraits,
-	removeTrait,
 	setTraitProficiencies,
 	setTraitProficiencyOptionsChoose,
-	setTraitProficiencyOptionsOptions,
-	setTraitHPBonus
+	setTraitProficiencyOptionsOptions
 } from '../../redux/features/editingRace';
-import { capitalize } from '../../services/capitalizeService';
-import { getProficiencyTypeName } from '../../services/proficiencyTypeService';
-import { Item } from '../../types/db/item';
-import Size from '../../types/size';
-import {
-	AbilityItem,
-	ProficiencyType,
-	SrdItem,
-	SrdProficiencyItem
-} from '../../types/srd';
-import raceSchema from '../../yup-schemas/raceSchema';
-import Button, { ButtonType } from '../Button/Button';
+import { Formik, FormikErrors, FormikHelpers, FormikTouched } from 'formik';
+
 import Checkbox from '../Checkbox/Checkbox';
+import { Item } from '../../types/db/item';
 import MarkdownTextArea from '../MarkdownTextArea/MarkdownTextArea';
 import MultiSelect from '../Select/MultiSelect/MultiSelect';
+import { SIZES } from '../../constants/sizeConstants';
 import Select from '../Select/Select/Select';
+import Size from '../../types/size';
 import TextInput from '../TextInput/TextInput';
+import { XMarkIcon } from '@heroicons/react/24/solid';
+import { capitalize } from '../../services/capitalizeService';
 import classes from './RaceForm.module.css';
+import { getProficiencyTypeName } from '../../services/proficiencyTypeService';
+import raceSchema from '../../yup-schemas/raceSchema';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 
 type RaceFormProps = {
 	abilities: AbilityItem[];
@@ -1024,6 +1027,29 @@ const RaceForm = ({
 
 													setFieldValue(
 														`traits.${index}.hpBonusPerLevel`,
+														undefined,
+														false
+													);
+												}
+											}}
+										/>
+										<Checkbox
+											label="Spells"
+											checked={!!trait.spells}
+											onChange={value => {
+												if (value) {
+													if (shouldUseReduxStore) {
+														dispatch(addTraitSpells(index));
+													}
+
+													setFieldValue(`traits.${index}.spells`, [], false);
+												} else {
+													if (shouldUseReduxStore) {
+														dispatch(removeTraitSpells(index));
+													}
+
+													setFieldValue(
+														`traits.${index}.spells`,
 														undefined,
 														false
 													);

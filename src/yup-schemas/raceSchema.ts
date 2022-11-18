@@ -287,6 +287,26 @@ const raceSchema = object({
 					.max(10, 'HP bonus cannot be more than 10')
 					.optional()
 					.nullable(),
+				spells: array()
+					.of(
+						object({
+							id: string()
+								.required()
+								.max(
+									50,
+									'Spell option id cannot be more than 50 characters long'
+								),
+							name: string()
+								.required()
+								.max(
+									50,
+									'Spell option name cannot be more than 50 characters long'
+								)
+						})
+					)
+					.min(1, 'Must have at least 1 spell if spells is specified')
+					.nullable()
+					.optional(),
 				spellOptions: object({
 					choose: number()
 						.min(1, 'Cannot choose less than 1 spell option')
@@ -448,6 +468,26 @@ const raceSchema = object({
 								hpBonusPerLevel: number()
 									.min(1, 'Subtrait HP bonus cannot be lower than 1')
 									.max(10, 'Subtrait HP bonus cannot be more than 10')
+									.optional(),
+								spells: array()
+									.of(
+										object({
+											id: string()
+												.required()
+												.max(
+													50,
+													'Spell option id cannot be more than 50 characters long'
+												),
+											name: string()
+												.required()
+												.max(
+													50,
+													'Spell option name cannot be more than 50 characters long'
+												)
+										})
+									)
+									.min(1, 'Must have at least 1 spell if spells is specified')
+									.nullable()
 									.optional(),
 								spellOptions: object({
 									choose: number()

@@ -159,8 +159,12 @@
 .checkbox-deck {
     display: flex;
     padding: 1rem;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: wrap;
+}
+
+.checkbox-deck > * {
+    margin: 0.5rem;
 }
 
 @media (min-width: 768px) {
