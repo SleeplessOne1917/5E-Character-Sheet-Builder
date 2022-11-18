@@ -18,7 +18,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
-import SpellSelector from '../../../Spells/SpellSelector/SpellSelector';
+import SpellSelector from '../../../../../Spells/SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
 import { mapSpell } from '../../../../../../services/spellsService';
 

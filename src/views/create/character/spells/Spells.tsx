@@ -6,7 +6,7 @@ import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner
 import MainContent from '../../../../components/MainContent/MainContent';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
-import SpellsSelector from '../../../../components/Create/Character/Spells/SpellsSelector/SpellsSelector';
+import SpellsSelector from '../../../../components/Spells/SpellsSelector/SpellsSelector';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';

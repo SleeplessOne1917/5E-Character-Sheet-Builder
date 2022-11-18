@@ -11,16 +11,17 @@ import {
 	useState
 } from 'react';
 
-import Button from '../../../../Button/Button';
-import { Spell } from '../../../../../types/characterSheetBuilderAPI';
-import { SrdItem } from '../../../../../types/srd';
+import Button from '../../Button/Button';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+import { Spell } from '../../../types/characterSheetBuilderAPI';
+import { SrdItem } from '../../../types/srd';
 import classes from './SpellSelector.module.css';
-import { handleKeyDownEvent } from '../../../../../services/handlerService';
-import useMediaQuery from '../../../../../hooks/useMediaQuery';
 import dynamic from 'next/dynamic';
-import LoadingSpinner from '../../../../LoadingSpinner/LoadingSpinner';
+import { handleKeyDownEvent } from '../../../services/handlerService';
+import useMediaQuery from '../../../hooks/useMediaQuery';
+
 const MarkdownParser = dynamic(
-	() => import('../../../../MarkdownParser/MarkdownParser'),
+	() => import('../../MarkdownParser/MarkdownParser'),
 	{
 		loading: () => (
 			<div

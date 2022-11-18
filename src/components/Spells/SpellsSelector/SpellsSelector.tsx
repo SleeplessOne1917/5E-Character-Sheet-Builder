@@ -8,21 +8,15 @@ import {
 import {
 	addClassSpell,
 	removeClassSpell
-} from '../../../../../redux/features/classInfo';
-import {
-	addSpell,
-	removeSpell
-} from '../../../../../redux/features/spellcasting';
-import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../../../hooks/reduxHooks';
+} from '../../../redux/features/classInfo';
+import { addSpell, removeSpell } from '../../../redux/features/spellcasting';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
-import Checkbox from '../../../../Checkbox/Checkbox';
-import { Item } from '../../../../../types/db/item';
+import Checkbox from '../../Checkbox/Checkbox';
+import { Item } from '../../../types/db/item';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import Select from '../../../../Select/Select/Select';
-import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import Select from '../../Select/Select/Select';
+import { Spell } from '../../../types/characterSheetBuilderAPI';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import styles from './SpellsSelector.module.css';
 

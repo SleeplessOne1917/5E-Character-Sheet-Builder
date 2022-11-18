@@ -14,7 +14,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import Preview from '../../../components/MyStuff/Preview/Preview';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
 import SpellItem from '../../../components/MyStuff/SpellItem/SpellItem';
-import SpellMoreInformationModal from '../../../components/SpellMoreInfoModal/SpellMoreInformationModal';
+import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
 import useLogout from '../../../hooks/useLogout';
 

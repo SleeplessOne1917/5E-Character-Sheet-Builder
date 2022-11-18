@@ -1,6 +1,6 @@
-import { AbilityItem, SpellComponent, SrdItem } from '../../types/srd';
-import Button, { ButtonType } from '../Button/Button';
-import { DeepError, DeepTouched, PartialBy } from '../../types/helpers';
+import { AbilityItem, SpellComponent, SrdItem } from '../../../types/srd';
+import Button, { ButtonType } from '../../Button/Button';
+import { DeepError, DeepTouched, PartialBy } from '../../../types/helpers';
 import { FocusEventHandler, useCallback } from 'react';
 import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import {
@@ -17,27 +17,27 @@ import {
 	setDuration,
 	setLevel,
 	setMaterial,
+	setName,
 	setRange,
 	setRitual,
 	setSchool,
-	setName,
 	setSummonProperties
-} from '../../redux/features/editingSpell';
+} from '../../../redux/features/editingSpell';
 
-import Checkbox from '../Checkbox/Checkbox';
-import { Item } from '../../types/db/item';
-import MarkdownTextArea from '../MarkdownTextArea/MarkdownTextArea';
-import MultiSelect from '../Select/MultiSelect/MultiSelect';
-import Option from '../Select/Option';
-import Select from '../Select/Select/Select';
-import { Spell } from '../../types/characterSheetBuilderAPI';
-import { Summon } from '../../types/summon';
-import SummonFormFields from '../Create/Summon/SummonFormFields/SummonFormFields';
-import TextInput from '../TextInput/TextInput';
+import Checkbox from '../../Checkbox/Checkbox';
+import { Item } from '../../../types/db/item';
+import MarkdownTextArea from '../../MarkdownTextArea/MarkdownTextArea';
+import MultiSelect from '../../Select/MultiSelect/MultiSelect';
+import Option from '../../Select/Option';
+import Select from '../../Select/Select/Select';
+import { Spell } from '../../../types/characterSheetBuilderAPI';
+import { Summon } from '../../../types/summon';
+import SummonFormFields from '../../Create/Summon/SummonFormFields/SummonFormFields';
+import TextInput from '../../TextInput/TextInput';
 import classes from './SpellForm.module.css';
-import { doNothing } from '../../redux/features/editingCharacter';
-import spellSchema from '../../yup-schemas/spellSchema';
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import { doNothing } from '../../../redux/features/editingCharacter';
+import spellSchema from '../../../yup-schemas/spellSchema';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
 
 type SpellFormProps = {
 	damageTypes: SrdItem[];

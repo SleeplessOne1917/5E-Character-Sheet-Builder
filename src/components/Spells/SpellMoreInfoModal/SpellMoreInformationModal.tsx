@@ -1,15 +1,16 @@
 import { MutableRefObject, useCallback, useEffect, useRef } from 'react';
 
-import Button from '../Button/Button';
-import ModalBackground from '../ModalBackground/ModalBackground';
-import { Spell } from '../../types/characterSheetBuilderAPI';
+import Button from '../../Button/Button';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+import ModalBackground from '../../ModalBackground/ModalBackground';
+import { Spell } from '../../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { useRouter } from 'next/router';
+
 const MarkdownParser = dynamic(
-	() => import('../MarkdownParser/MarkdownParser'),
+	() => import('../../MarkdownParser/MarkdownParser'),
 	{
 		loading: () => (
 			<div

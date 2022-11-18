@@ -16,7 +16,7 @@ import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
 import GET_TOKEN from '../../../graphql/mutations/user/token';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
-import SpellForm from '../../../components/SpellForm/SpellForm';
+import SpellForm from '../../../components/Spells/SpellForm/SpellForm';
 import { ToastType } from '../../../types/toast';
 import { show } from '../../../redux/features/toast';
 import useLogout from '../../../hooks/useLogout';

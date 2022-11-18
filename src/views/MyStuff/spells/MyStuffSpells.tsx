@@ -7,7 +7,7 @@ import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPa
 import MainContent from '../../../components/MainContent/MainContent';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
 import SpellItem from '../../../components/MyStuff/SpellItem/SpellItem';
-import SpellMoreInformationModal from '../../../components/SpellMoreInfoModal/SpellMoreInformationModal';
+import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
 import { useQuery } from 'urql';
 

@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import SpellMoreInformationModal from './SpellMoreInformationModal';
 
 export default {
-	title: 'Components/SpellMoreInformationModal',
+	title: 'Components/Spells/SpellMoreInformationModal',
 	component: SpellMoreInformationModal,
 	args: {
 		show: true,

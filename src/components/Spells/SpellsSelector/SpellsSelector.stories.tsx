@@ -2,10 +2,10 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Provider } from 'react-redux';
 import SpellsSelector from './SpellsSelector';
-import { getTestStore } from '../../../../../redux/store';
+import { getTestStore } from '../../../redux/store';
 
 export default {
-	title: 'Components/Create/Character/Spells/SpellsSelector',
+	title: 'Components/Spells/SpellsSelector',
 	component: SpellsSelector,
 	args: {
 		choose: 5,
