@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppReducers } from './../../types/redux';
-import { Spell } from '../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../types/characterSheetBuilderAPI';
 
 export type SpellcastingState = {
-	spells: Spell[];
+	spells: SpellItem[];
 	spellsKnown: number;
 	cantripsKnown: number;
 	highestSlotLevel: number;
@@ -18,7 +18,7 @@ export const initialState: SpellcastingState = {
 };
 
 export const reducers: AppReducers<SpellcastingState> = {
-	addSpell: (state, action: PayloadAction<Spell>) => {
+	addSpell: (state, action: PayloadAction<SpellItem>) => {
 		state.spells = [...state.spells, action.payload];
 	},
 	removeSpell: (state, action: PayloadAction<string>) => {

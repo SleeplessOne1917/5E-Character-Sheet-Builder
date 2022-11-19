@@ -1,10 +1,10 @@
 import Button from '../../../../Button/Button';
 import Descriptor from '../../Descriptor/Descriptor';
 import { ReactNode } from 'react';
-import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 import { SrdSubclassItem } from '../../../../../types/srd';
 import { getOrdinal } from '../../../../../services/ordinalService';
-import { mapSpell } from '../../../../../services/spellsService';
+import { mapSpellItem } from '../../../../../services/spellsService';
 import styles from './SubclassSelector.module.css';
 
 type SubclassSelectorProps = {
@@ -31,23 +31,23 @@ const SubclassSelector = ({
 			)
 		) {
 			const spellsByFeature = subclass.spells.reduce<
-				Map<string, Map<number, Spell[]>>
+				Map<string, Map<number, SpellItem[]>>
 			>((acc, cur) => {
 				const featureName = cur.prerequisites.find(p => p.name)?.name as string;
 				const level = cur.prerequisites.find(p => p.level)?.level as number;
 
 				if (!acc.get(featureName)) {
-					acc.set(featureName, new Map<number, Spell[]>());
+					acc.set(featureName, new Map<number, SpellItem[]>());
 				}
 
 				if (!acc.get(featureName)?.get(level)) {
 					acc.get(featureName)?.set(level, []);
 				}
 
-				acc.get(featureName)?.get(level)?.push(mapSpell(cur.spell));
+				acc.get(featureName)?.get(level)?.push(mapSpellItem(cur.spell));
 
 				return acc;
-			}, new Map<string, Map<number, Spell[]>>());
+			}, new Map<string, Map<number, SpellItem[]>>());
 
 			const tables: ReactNode[] = [];
 
@@ -91,7 +91,7 @@ const SubclassSelector = ({
 
 			spellsComponent = <>{tables}</>;
 		} else {
-			const spellsByLevel = subclass.spells.reduce<Map<number, Spell[]>>(
+			const spellsByLevel = subclass.spells.reduce<Map<number, SpellItem[]>>(
 				(acc, cur) => {
 					const level = cur.prerequisites.find(p => p.level)?.level as number;
 
@@ -99,11 +99,11 @@ const SubclassSelector = ({
 						acc.set(level, []);
 					}
 
-					acc.get(level)?.push(mapSpell(cur.spell));
+					acc.get(level)?.push(mapSpellItem(cur.spell));
 
 					return acc;
 				},
-				new Map<number, Spell[]>()
+				new Map<number, SpellItem[]>()
 			);
 
 			const rows: ReactNode[] = [];

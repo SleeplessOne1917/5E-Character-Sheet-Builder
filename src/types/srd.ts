@@ -124,7 +124,7 @@ export type BreathWeapon = {
 
 export type SpellComponent = 'V' | 'S' | 'M';
 
-export interface SrdSpellItem extends SrdItem {
+export interface SrdSpell extends SrdItem {
 	level: number;
 	components: SpellComponent[];
 	casting_time: string;
@@ -141,6 +141,11 @@ export interface SrdSpellItem extends SrdItem {
 	higher_level?: string[];
 	classes: SrdItem[];
 }
+
+export type SrdSpellItem = Pick<
+	SrdSpell,
+	'index' | 'name' | 'level' | 'school'
+>;
 
 export type SrdSpellItemChoice = {
 	choose: number;

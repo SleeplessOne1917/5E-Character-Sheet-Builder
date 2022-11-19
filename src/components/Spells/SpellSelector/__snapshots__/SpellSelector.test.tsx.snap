@@ -54,7 +54,6 @@ exports[`renders correctly 1`] = `
         </span>
         :
          
-        Cantrip
       </div>
       <div
         class="summary-item"
@@ -64,9 +63,7 @@ exports[`renders correctly 1`] = `
         >
           Casting time
         </span>
-        :
-         
-        ACTION
+        : 
       </div>
       <div
         class="summary-item"
@@ -78,7 +75,6 @@ exports[`renders correctly 1`] = `
         </span>
         :
          
-        1 hour
       </div>
       <div
         class="summary-item"
@@ -90,7 +86,6 @@ exports[`renders correctly 1`] = `
         </span>
         :
          
-        60 feet
       </div>
       <div
         class="summary-item"
@@ -102,7 +97,6 @@ exports[`renders correctly 1`] = `
         </span>
         :
          
-        Evocation
       </div>
       <div
         class="summary-item"
@@ -112,9 +106,7 @@ exports[`renders correctly 1`] = `
         >
           Components
         </span>
-        :
-         
-        V, S
+        : 
       </div>
     </div>
     <div
@@ -138,28 +130,7 @@ exports[`renders correctly 1`] = `
     </div>
     <div
       class="other"
-    >
-      <div
-        class="damage-display"
-      >
-        <div>
-          <span
-            class="summary-item-label"
-          >
-            Damage type
-          </span>
-          : 
-          Cold
-        </div>
-        <svg
-          class="damage-icon"
-        >
-          <use
-            xlink:href="/Icons.svg#cold"
-          />
-        </svg>
-      </div>
-    </div>
+    />
     <div
       class="buttons"
     >

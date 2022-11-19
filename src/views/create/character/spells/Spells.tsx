@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
+import CreateCharacterSpellsSelector from '../../../../components/Spells/CreateCharacterSpellsSelector/CreateCharacterSpellsSelector';
 import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
-import SpellsSelector from '../../../../components/Spells/SpellsSelector/SpellsSelector';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
@@ -78,7 +78,7 @@ const Spells = () => {
 							<LoadingSpinner />
 						</div>
 					) : (
-						<SpellsSelector
+						<CreateCharacterSpellsSelector
 							spells={allClassSpells.filter(({ level }) => level === 0)}
 							choose={spellcasting.cantripsKnown}
 						/>
@@ -102,7 +102,7 @@ const Spells = () => {
 						<LoadingSpinner />
 					</div>
 				) : (
-					<SpellsSelector
+					<CreateCharacterSpellsSelector
 						spells={[
 							...allClassSpells.filter(
 								({ level }) =>

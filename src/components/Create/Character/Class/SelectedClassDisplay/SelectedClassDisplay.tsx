@@ -76,7 +76,7 @@ import Select from '../../../../Select/Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../../services/ordinalService';
 import { getProficienciesByType } from '../../../../../graphql/srdClientService';
-import { mapSpell } from '../../../../../services/spellsService';
+import { mapSpellItem } from '../../../../../services/spellsService';
 import { rollDie } from '../../../../../services/diceService';
 import styles from './SelectedClassDisplay.module.css';
 import usePreparedSpells from '../../../../../hooks/usePreparedSpells';
@@ -1155,7 +1155,7 @@ const SelectedClassDisplay = ({
 					}
 
 					if (!characterSpellcasting.spells.some(s => s.id === spell.index)) {
-						dispatch(addSpell(mapSpell(spell)));
+						dispatch(addSpell(mapSpellItem(spell)));
 					}
 
 					if (
@@ -1293,7 +1293,7 @@ const SelectedClassDisplay = ({
 					}
 
 					if (!characterSpellcasting.spells.some(s => s.id === spell.index)) {
-						dispatch(addSpell(mapSpell(spell)));
+						dispatch(addSpell(mapSpellItem(spell)));
 					}
 
 					if (
@@ -1372,7 +1372,7 @@ const SelectedClassDisplay = ({
 						if (classSpells && classSpells.some(s => s.id === spell.index)) {
 							dispatch(removeClassSpell(spell.index));
 						} else {
-							dispatch(addSpell(mapSpell(spell)));
+							dispatch(addSpell(mapSpellItem(spell)));
 						}
 					}
 				}

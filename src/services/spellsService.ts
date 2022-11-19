@@ -1,13 +1,14 @@
+import { Spell, SpellItem } from '../types/characterSheetBuilderAPI';
+import { SrdSpell, SrdSpellItem } from '../types/srd';
 import {
+	getSpell as getSrdSpell,
 	getSpells as getSrdSpells,
 	getSpellsByClass as getSrdSpellsByClass
 } from '../graphql/srdClientService';
 
-import { Spell } from '../types/characterSheetBuilderAPI';
-import { SrdSpellItem } from '../types/srd';
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
 
-export const mapSpell = (spell: SrdSpellItem): Spell =>
+export const mapSpell = (spell: SrdSpell): Spell =>
 	Object.entries({
 		id: spell.index,
 		name: spell.name,
@@ -43,14 +44,35 @@ export const mapSpell = (spell: SrdSpellItem): Spell =>
 		{} as Spell
 	);
 
+export const mapSpellItem = ({
+	index,
+	name,
+	level,
+	school
+}: SrdSpellItem): SpellItem => ({
+	id: index,
+	name: name,
+	level: level,
+	school: {
+		id: school.index,
+		name: school.name
+	}
+});
+
+export const getSpell = async (index: string) => {
+	const spell = (await getSrdSpell(index)).data?.spell;
+
+	return spell ? mapSpell(spell) : undefined;
+};
+
 export const getSpellsByClass = async (klass: string | string[]) => {
 	const spells = (await getSrdSpellsByClass(klass)).data?.spells;
 
-	return spells?.map<Spell>(mapSpell);
+	return spells?.map<SpellItem>(mapSpellItem);
 };
 
 export const getSpells = async () => {
 	const spells = (await getSrdSpells()).data?.spells;
 
-	return spells?.map<Spell>(mapSpell);
+	return spells?.map<SpellItem>(mapSpellItem);
 };

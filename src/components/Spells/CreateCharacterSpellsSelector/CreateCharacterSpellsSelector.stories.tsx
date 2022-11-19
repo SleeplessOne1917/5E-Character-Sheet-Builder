@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import CreateCharacterSpellsSelector from './CreateCharacterSpellsSelector';
 import { Provider } from 'react-redux';
-import SpellsSelector from './SpellsSelector';
 import { getTestStore } from '../../../redux/store';
 
 export default {
-	title: 'Components/Spells/SpellsSelector',
-	component: SpellsSelector,
+	title: 'Components/Spells/CreateCharacterSpellsSelector',
+	component: CreateCharacterSpellsSelector,
 	args: {
 		choose: 5,
 		spells: [
@@ -154,10 +154,10 @@ export default {
 			</Provider>
 		)
 	]
-} as ComponentMeta<typeof SpellsSelector>;
+} as ComponentMeta<typeof CreateCharacterSpellsSelector>;
 
-const Template: ComponentStory<typeof SpellsSelector> = args => (
-	<SpellsSelector {...args} />
+const Template: ComponentStory<typeof CreateCharacterSpellsSelector> = args => (
+	<CreateCharacterSpellsSelector {...args} />
 );
 
 export const Default = Template.bind({});

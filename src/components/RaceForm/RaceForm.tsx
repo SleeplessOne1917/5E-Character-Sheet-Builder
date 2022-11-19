@@ -6,7 +6,7 @@ import Abilities from './Abilities/Abilities';
 import { EditingRaceState } from '../../redux/features/editingRace';
 import Languages from './Languages/Languages';
 import NameSizeSpeed from './NameSizeSpeed/NameSizseSpeed';
-import { Spell } from '../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../types/characterSheetBuilderAPI';
 import Traits from './Traits/Traits';
 import classes from './RaceForm.module.css';
 import raceSchema from '../../yup-schemas/raceSchema';
@@ -22,7 +22,7 @@ type RaceFormProps = {
 		values: EditingRaceState,
 		helpers: FormikHelpers<EditingRaceState>
 	) => Promise<void>;
-	srdSpells: Spell[];
+	spells: SpellItem[];
 };
 
 const RaceForm = ({
@@ -31,7 +31,7 @@ const RaceForm = ({
 	proficiencies,
 	shouldUseReduxStore,
 	initialValues,
-	srdSpells,
+	spells,
 	handleFormikSubmit
 }: RaceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
@@ -63,7 +63,7 @@ const RaceForm = ({
 						initialValues={initialValues}
 						proficiencies={proficiencies}
 						shouldUseReduxStore={shouldUseReduxStore}
-						srdSpells={srdSpells}
+						spells={spells}
 					/>
 					<Button
 						positive

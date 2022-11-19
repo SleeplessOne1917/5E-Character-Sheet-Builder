@@ -8,12 +8,7 @@ exports[`renders correctly default 1`] = `
   <div
     class="text"
   >
-    0
-    /
-    5
-     
-    cantrip
-    s selected
+    0/5 cantrips selected
   </div>
   <div
     class="filter-bar"
@@ -220,7 +215,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -230,9 +224,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -244,7 +236,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -256,7 +247,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            30 feet
           </div>
           <div
             class="summary-item"
@@ -268,7 +258,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Divination
           </div>
           <div
             class="summary-item"
@@ -278,9 +267,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            S
+            : 
           </div>
         </div>
         <div
@@ -304,13 +291,7 @@ exports[`renders correctly default 1`] = `
         </div>
         <div
           class="other"
-        >
-          <p
-            class="other-info"
-          >
-            Requires concentration.
-          </p>
-        </div>
+        />
         <div
           class="buttons"
         >
@@ -385,7 +366,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -395,9 +375,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -409,7 +387,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -421,7 +398,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Touch
           </div>
           <div
             class="summary-item"
@@ -433,7 +409,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Evocation
           </div>
           <div
             class="summary-item"
@@ -443,10 +418,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            V, M
-             (A firefly or phosphorescent moss.)
+            : 
           </div>
         </div>
         <div
@@ -545,7 +517,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -555,9 +526,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 minute
+            : 
           </div>
           <div
             class="summary-item"
@@ -569,7 +538,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -581,7 +549,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Touch
           </div>
           <div
             class="summary-item"
@@ -593,7 +560,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Transmutation
           </div>
           <div
             class="summary-item"
@@ -603,10 +569,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            V, S, M
-             (Two lodestones.)
+            : 
           </div>
         </div>
         <div
@@ -705,7 +668,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -715,9 +677,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -729,7 +689,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -741,7 +700,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            120 feet
           </div>
           <div
             class="summary-item"
@@ -753,7 +711,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Transmutation
           </div>
           <div
             class="summary-item"
@@ -763,10 +720,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            V, S, M
-             (A short piece of copper wire.)
+            : 
           </div>
         </div>
         <div
@@ -865,7 +819,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -875,9 +828,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -889,7 +840,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -901,7 +851,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            60 feet
           </div>
           <div
             class="summary-item"
@@ -913,7 +862,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Enchantment
           </div>
           <div
             class="summary-item"
@@ -923,9 +871,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            V
+            : 
           </div>
         </div>
         <div
@@ -949,28 +895,7 @@ exports[`renders correctly default 1`] = `
         </div>
         <div
           class="other"
-        >
-          <div
-            class="damage-display"
-          >
-            <div>
-              <span
-                class="summary-item-label"
-              >
-                Damage type
-              </span>
-              : 
-              Psychic
-            </div>
-            <svg
-              class="damage-icon"
-            >
-              <use
-                xlink:href="/Icons.svg#psychic"
-              />
-            </svg>
-          </div>
-        </div>
+        />
         <div
           class="buttons"
         >
@@ -1045,7 +970,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -1055,9 +979,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -1069,7 +991,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -1081,7 +1002,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            30 feet
           </div>
           <div
             class="summary-item"
@@ -1093,7 +1013,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Illusion
           </div>
           <div
             class="summary-item"
@@ -1103,10 +1022,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            S, M
-             (A bit of fleece.)
+            : 
           </div>
         </div>
         <div
@@ -1205,7 +1121,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Cantrip
           </div>
           <div
             class="summary-item"
@@ -1215,9 +1130,7 @@ exports[`renders correctly default 1`] = `
             >
               Casting time
             </span>
-            :
-             
-            1 action
+            : 
           </div>
           <div
             class="summary-item"
@@ -1229,7 +1142,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            1 hour
           </div>
           <div
             class="summary-item"
@@ -1241,7 +1153,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            120 feet
           </div>
           <div
             class="summary-item"
@@ -1253,7 +1164,6 @@ exports[`renders correctly default 1`] = `
             </span>
             :
              
-            Evocation
           </div>
           <div
             class="summary-item"
@@ -1263,10 +1173,7 @@ exports[`renders correctly default 1`] = `
             >
               Components
             </span>
-            :
-             
-            V, S, M
-             (A bit of phosphorus or wychwood, or a glowworm.)
+            : 
           </div>
         </div>
         <div
@@ -1290,13 +1197,7 @@ exports[`renders correctly default 1`] = `
         </div>
         <div
           class="other"
-        >
-          <p
-            class="other-info"
-          >
-            Requires concentration.
-          </p>
-        </div>
+        />
         <div
           class="buttons"
         >

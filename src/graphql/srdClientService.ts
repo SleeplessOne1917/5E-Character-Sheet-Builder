@@ -6,6 +6,7 @@ import {
 	SrdFullSubraceItem,
 	SrdItem,
 	SrdProficiencyItem,
+	SrdSpell,
 	SrdSpellItem,
 	SrdSubraceItem
 } from '../types/srd';
@@ -25,6 +26,7 @@ import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienc
 import GET_RACE from './queries/5E-API/race/getRace';
 import GET_RACES from './queries/5E-API/race/getRaces';
 import GET_SPELLCASTING_CLASSES from './queries/5E-API/class/getSpellcastingClasses';
+import GET_SRD_SPELL from './queries/5E-API/spells/getSrdSpell';
 import GET_SRD_SPELLS from './queries/5E-API/spells/getSrdSpells';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
@@ -121,3 +123,6 @@ export const getSpellsByClass = async (klass: string | string[]) =>
 
 export const getSpells = async () =>
 	await query<{ spells: SrdSpellItem[] }>(GET_SRD_SPELLS);
+
+export const getSpell = async (index: string) =>
+	await query<{ spell: SrdSpell }, { index: string }>(GET_SRD_SPELL, { index });

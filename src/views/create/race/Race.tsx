@@ -1,18 +1,20 @@
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
+import { SpellItem } from '../../../types/characterSheetBuilderAPI';
+import { useMemo, useState } from 'react';
 
+import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
-import { Spell } from '../../../types/characterSheetBuilderAPI';
 import { useAppSelector } from '../../../hooks/reduxHooks';
-import { useState } from 'react';
+import { useQuery } from 'urql';
 
 type RaceProps = {
 	loading: boolean;
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
-	srdSpells: Spell[];
+	srdSpells: SpellItem[];
 };
 
 const Race = ({
@@ -24,6 +26,19 @@ const Race = ({
 }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
 	const [initialValues, setInitialValues] = useState(editingRace);
+	const [spellsResult] = useQuery<{ spells: { spells: SpellItem[] } }>({
+		query: GET_SPELLS
+	});
+
+	const spells = useMemo(
+		() =>
+			srdSpells.concat(spellsResult.data?.spells.spells ?? []).sort((a, b) => {
+				const val = a.level - b.level;
+
+				return val === 0 ? a.name.localeCompare(b.name) : val;
+			}),
+		[srdSpells, spellsResult.data?.spells.spells]
+	);
 
 	return (
 		<>
@@ -38,7 +53,7 @@ const Race = ({
 						shouldUseReduxStore
 						languages={languages}
 						proficiencies={proficiencies}
-						srdSpells={srdSpells}
+						spells={spells}
 					/>
 				</MainContent>
 			)}

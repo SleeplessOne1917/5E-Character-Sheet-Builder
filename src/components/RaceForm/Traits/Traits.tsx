@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react';
 
 import Button from '../../Button/Button';
 import { Item } from '../../../types/db/item';
-import { Spell } from '../../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import Trait from './Trait/Trait';
 import classes from './Traits.module.css';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -18,7 +18,7 @@ type TraitsProps = {
 	shouldUseReduxStore: boolean;
 	clickedSubmit: boolean;
 	proficiencies: SrdProficiencyItem[];
-	srdSpells: Spell[];
+	spells: SpellItem[];
 	initialValues: EditingRaceState;
 };
 

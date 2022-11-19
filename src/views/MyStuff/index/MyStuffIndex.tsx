@@ -28,7 +28,7 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 
 	const [spellsResult, refetechSpells] = useQuery<{
-		spells: { spells: Spell[]; count: number };
+		spells: { spells: SpellItem[]; count: number };
 	}>({
 		query: GET_SPELLS,
 		variables: { limit: 5 }

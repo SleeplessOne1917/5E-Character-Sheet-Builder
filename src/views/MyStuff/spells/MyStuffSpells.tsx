@@ -31,7 +31,7 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 		pause: !spellId
 	});
 	const [spellsResult, _] = useQuery<{
-		spells: { spells: Spell[]; count: number };
+		spells: { spells: SpellItem[]; count: number };
 	}>({
 		query: GET_SPELLS,
 		variables: { limit: spellsPerPage, skip: (currentPage - 1) * spellsPerPage }

@@ -107,12 +107,26 @@
     font-weight: bold;
 }
 
+.loading {
+    display: flex;
+	justify-content: center;
+    align-items: center;
+    grid-area: summary / buttons;
+}
+
 @media screen and (min-width: 768px) {
     .selector-display {
         grid-template-columns: 65% auto;
         grid-template-rows: min-content auto;
         grid-template-areas: "summary buttons"
                             "description other";
+    }
+
+    .loading {
+        grid-column-start: summary;
+        grid-column-end: buttons;
+        grid-row-start: summary;
+        grid-row-end: description;
     }
 
     .selector-label {

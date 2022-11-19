@@ -20,7 +20,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ChoiceSelector from '../ChoiceSelector';
 import SpellSelector from '../../../../../Spells/SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
-import { mapSpell } from '../../../../../../services/spellsService';
+import { mapSpellItem } from '../../../../../../services/spellsService';
 
 type SpellChoiceSelectorProps = {
 	trait: SrdItem;
@@ -61,7 +61,7 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 
 	const handleAdd = useCallback(
 		(value: string) => {
-			const spell = mapSpell(
+			const spell = mapSpellItem(
 				choice.from.options
 					.map(option => option.item)
 					.find(option => option.index === value) as SrdSpellItem
@@ -112,10 +112,11 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 						<SpellSelector
 							key={`${trait.index}-${option.item.index}`}
 							item={trait}
-							spell={mapSpell(option.item)}
+							spell={mapSpellItem(option.item)}
 							onAdd={() => handleAdd(option.item.index)}
 							onRemove={() => handleRemove(option.item.index)}
 							selectValues={selectValues}
+							parentSelected={!selectValues.includes('blank')}
 						/>
 					))}
 			</div>
