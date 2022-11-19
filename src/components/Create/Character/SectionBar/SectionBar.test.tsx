@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
 
+import * as Router from 'next/router';
+
 import { render, screen } from '@testing-library/react';
 
 import SectionBar from './SectionBar';
-
-import * as Router from 'next/router';
 
 const mockRouter = (pathname: string) => {
 	const useRouter = jest.spyOn(Router, 'useRouter');
@@ -25,7 +25,8 @@ const mockRouter = (pathname: string) => {
 		events: { emit: jest.fn(), on: jest.fn(), off: jest.fn() },
 		isFallback: false,
 		isPreview: false,
-		isReady: true
+		isReady: true,
+		forward: () => {}
 	};
 	useRouter.mockReturnValue(router);
 };
