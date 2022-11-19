@@ -229,7 +229,7 @@ const Trait = ({
 		[shouldUseReduxStore, dispatch, setFieldValue, index]
 	);
 
-	const handleSubtraitsCheck = useCallback(
+	const handleCheckSubtraits = useCallback(
 		(value: boolean) => {
 			if (value) {
 				if (shouldUseReduxStore) {
@@ -299,6 +299,18 @@ const Trait = ({
 				}
 
 				setFieldValue(`traits.${index}.proficiencyOptions.options`, [], false);
+			}
+
+			if (changed) {
+				if (shouldUseReduxStore) {
+					dispatch(setTraitProficiencyOptionsChoose({ index }));
+				}
+
+				setFieldValue(
+					`traits.${index}.proficiencyOptions.choose`,
+					undefined,
+					false
+				);
 			}
 		},
 		[
@@ -681,7 +693,7 @@ const Trait = ({
 					<Checkbox
 						label="Subtraits"
 						checked={!!trait.subtraitOptions}
-						onChange={handleSubtraitsCheck}
+						onChange={handleCheckSubtraits}
 					/>
 				</div>
 				{trait.proficiencies && (
