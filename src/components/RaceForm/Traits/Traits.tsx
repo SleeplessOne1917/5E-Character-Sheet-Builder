@@ -26,7 +26,8 @@ const Traits = ({
 	shouldUseReduxStore,
 	proficiencies,
 	clickedSubmit,
-	initialValues
+	initialValues,
+	spells
 }: TraitsProps) => {
 	const [proficienciesSelectedTypes, setProficienciesSelectedTypes] = useState(
 		initialValues.traits.map(trait =>
@@ -125,6 +126,7 @@ const Traits = ({
 						handleSetSelectedProficiencyOptionsType(value, index)
 					}
 					proficiencies={proficiencies}
+					spells={spells}
 				/>
 			))}
 			{values.traits.length < 10 && (

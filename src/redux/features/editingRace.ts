@@ -282,6 +282,18 @@ const editingRaceSlice = createSlice({
 			}
 			delete state.traits[payload].spells;
 		},
+		setTraitSpells: (
+			state,
+			{
+				payload: { index, spells }
+			}: PayloadAction<{ index: number; spells: Item[] }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			state.traits[index].spells = spells;
+		},
 		addTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -330,7 +342,8 @@ export const {
 	addTraitSubtraits,
 	removeTraitSubtraits,
 	addTraitSpells,
-	removeTraitSpells
+	removeTraitSpells,
+	setTraitSpells
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

@@ -2,7 +2,8 @@ import {
 	ChangeEventHandler,
 	FocusEventHandler,
 	useCallback,
-	useMemo
+	useMemo,
+	useState
 } from 'react';
 import {
 	EditingRaceState,
@@ -24,7 +25,8 @@ import {
 	setTraitName,
 	setTraitProficiencies,
 	setTraitProficiencyOptionsChoose,
-	setTraitProficiencyOptionsOptions
+	setTraitProficiencyOptionsOptions,
+	setTraitSpells
 } from '../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
@@ -37,6 +39,8 @@ import MultiSelect from '../../../Select/MultiSelect/MultiSelect';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import Option from '../../../Select/Option';
 import Select from '../../../Select/Select/Select';
+import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
+import SpellsSelector from '../../../Spells/SpellsSelector/SpellsSelector';
 import TextInput from '../../../TextInput/TextInput';
 import classes from './Trait.module.css';
 import { getProficiencyTypeName } from '../../../../services/proficiencyTypeService';
@@ -53,6 +57,7 @@ type TraitProps = {
 	setSelectedProficiencyOptionsType: (value: ProficiencyType | null) => void;
 	onRemove: () => void;
 	proficiencies: SrdProficiencyItem[];
+	spells: SpellItem[];
 };
 
 const Trait = ({
@@ -65,7 +70,8 @@ const Trait = ({
 	setSelectedProficienciesType,
 	selectedProficiencyOptionsType,
 	setSelectedProficiencyOptionsType,
-	proficiencies
+	proficiencies,
+	spells
 }: TraitProps) => {
 	const {
 		handleChange,
@@ -78,6 +84,10 @@ const Trait = ({
 		setFieldError
 	} = useFormikContext<EditingRaceState>();
 	const dispatch = useAppDispatch();
+
+	const [selectedSpellsSpells, setSelectedSpellsSpells] = useState(
+		trait.spells?.map(({ id }) => id) ?? []
+	);
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		event => {
@@ -203,6 +213,8 @@ const Trait = ({
 				if (shouldUseReduxStore) {
 					dispatch(removeTraitSpells(index));
 				}
+
+				setSelectedSpellsSpells([]);
 
 				setFieldValue(`traits.${index}.spells`, undefined, false);
 			}
@@ -540,6 +552,53 @@ const Trait = ({
 		[shouldUseReduxStore, dispatch, setFieldTouched, setFieldValue, index]
 	);
 
+	const filterSpellsSpell = useCallback(
+		(spell: SpellItem) =>
+			!(
+				values.traits
+					.flatMap(t => t.spells ?? [])
+					.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
+					.some(t => t.id === spell.id) &&
+				!selectedSpellsSpells?.some(s => s === spell.id)
+			),
+		[values.traits, selectedSpellsSpells]
+	);
+
+	const handleSpellsAdd = useCallback(
+		(spell: SpellItem) => {
+			const newSpells = [
+				...(trait.spells ?? []),
+				{ id: spell.id, name: spell.name }
+			];
+
+			if (shouldUseReduxStore) {
+				dispatch(setTraitSpells({ index, spells: newSpells }));
+			}
+
+			setSelectedSpellsSpells(prev => [...prev, spell.id]);
+
+			setFieldValue(`traits.${index}.spells`, newSpells, false);
+		},
+		[index, dispatch, setFieldValue, shouldUseReduxStore, trait.spells]
+	);
+
+	const handleSpellsRemove = useCallback(
+		(spell: SpellItem) => {
+			const newSpells = [...(trait.spells ?? [])].filter(
+				s => s.id !== spell.id
+			);
+
+			if (shouldUseReduxStore) {
+				dispatch(setTraitSpells({ index, spells: newSpells }));
+			}
+
+			setSelectedSpellsSpells(prev => prev.filter(s => s !== spell.id));
+
+			setFieldValue(`traits.${index}.spells`, newSpells, false);
+		},
+		[index, dispatch, setFieldValue, shouldUseReduxStore, trait.spells]
+	);
+
 	const proficiencyTypeOptions = useMemo(
 		() =>
 			proficiencies.reduce<Option[]>(
@@ -613,6 +672,8 @@ const Trait = ({
 			values.traits
 		]
 	);
+
+	const levels = [...new Array(10).keys()];
 
 	return (
 		<div className={classes.trait}>
@@ -882,6 +943,24 @@ const Trait = ({
 							}
 							onChange={handleHPBonusChange}
 							onBlur={handleHPBonusBlur}
+						/>
+					</div>
+				)}
+				{trait.spells && (
+					<div className={classes['extra-deck']}>
+						{trait.spells && trait.spells.length > 0 && (
+							<p style={{ maxWidth: '30rem' }}>
+								{trait.spells.map(({ name }) => name).join(', ')}
+							</p>
+						)}
+						<SpellsSelector
+							spells={spells}
+							label="Spells"
+							filterSpell={filterSpellsSpell}
+							selectedSpells={selectedSpellsSpells}
+							levels={levels}
+							onAdd={handleSpellsAdd}
+							onRemove={handleSpellsRemove}
 						/>
 					</div>
 				)}

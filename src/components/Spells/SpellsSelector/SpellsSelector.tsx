@@ -12,7 +12,7 @@ type SpellsSelectorProps = {
 	spells: SpellItem[];
 	selectedSpells: string[];
 	label: string;
-	isSelected: boolean;
+	isSelected?: boolean;
 	levels: number[];
 	onAdd: (spell: SpellItem) => void;
 	onRemove: (spell: SpellItem) => void;
@@ -22,7 +22,7 @@ type SpellsSelectorProps = {
 const SpellsSelector = ({
 	spells,
 	label,
-	isSelected,
+	isSelected = false,
 	selectedSpells,
 	levels,
 	onAdd = () => {},
