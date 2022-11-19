@@ -37,7 +37,7 @@ exports[`renders correctly when logged in 1`] = `
     <li>
       <a
         class="link-button"
-        href="/#"
+        href="#"
         tabindex="-1"
       >
         Log Out

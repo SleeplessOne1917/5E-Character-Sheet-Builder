@@ -1,12 +1,13 @@
-import { useCallback, useMemo, useState } from 'react';
+import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import Button from '../../../components/Button/Button';
+import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
 import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
-import { Spell } from '../../../types/characterSheetBuilderAPI';
-import SpellItem from '../../../components/MyStuff/SpellItem/SpellItem';
+import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
 import { useQuery } from 'urql';
@@ -18,7 +19,17 @@ type MyStuffSpellsProps = {
 const spellsPerPage = 10;
 
 const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
+	const [spellId, setSpellId] = useState<string>();
+	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 	const [currentPage, setCurrentPage] = useState(1);
+
+	const [spellResult, refetechSpell] = useQuery<{
+		spell: Spell;
+	}>({
+		query: GET_SPELL,
+		variables: { id: spellId },
+		pause: !spellId
+	});
 	const [spellsResult, _] = useQuery<{
 		spells: { spells: Spell[]; count: number };
 	}>({
@@ -26,14 +37,19 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 		variables: { limit: spellsPerPage, skip: (currentPage - 1) * spellsPerPage }
 	});
 
-	const [selectedSpell, setSelectedSpell] = useState<Spell>();
+	useEffect(() => {
+		if (spellId && !(spellResult.fetching || spellResult.error)) {
+			setSelectedSpell(spellResult.data?.spell);
+		}
+	}, [spellId, spellResult.fetching, spellResult.error, spellResult.data]);
 
-	const handleShowMoreInfoModal = useCallback((spell: Spell) => {
-		setSelectedSpell(spell);
+	const handleShowMoreInfoModal = useCallback(({ id }: SpellItem) => {
+		setSpellId(id);
 	}, []);
 
 	const handleCloseShowMoreInfoModal = useCallback(() => {
 		setSelectedSpell(undefined);
+		setSpellId(undefined);
 	}, []);
 
 	const numPages = useMemo(
@@ -73,7 +89,7 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 							</div>
 						)}
 						{spellsResult.data.spells.spells.map(spell => (
-							<SpellItem
+							<SpellItemDisplay
 								spell={spell}
 								onMoreInfoClick={handleShowMoreInfoModal}
 								key={spell.id}
@@ -102,7 +118,9 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 			</MainContent>
 			<SpellMoreInformationModal
 				spell={selectedSpell}
-				show={!!selectedSpell}
+				show={!!spellId}
+				error={spellResult.error?.message}
+				loading={spellResult.fetching}
 				onClose={handleCloseShowMoreInfoModal}
 				shouldShowEditAndClasses
 			/>

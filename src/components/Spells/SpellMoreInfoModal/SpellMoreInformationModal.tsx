@@ -6,6 +6,7 @@ import ModalBackground from '../../ModalBackground/ModalBackground';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
+import { cleanMessage } from '../../../services/messageCleanerService';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
@@ -31,13 +32,17 @@ type SpellMoreInformationModalProps = {
 	show: boolean;
 	spell?: Spell;
 	onClose: () => void;
+	loading?: boolean;
+	error?: string;
 };
 
 const SpellMoreInformationModal = ({
 	show,
 	spell,
 	onClose,
-	shouldShowEditAndClasses = false
+	shouldShowEditAndClasses = false,
+	loading = false,
+	error
 }: SpellMoreInformationModalProps) => {
 	const closeButtonRef = useRef<HTMLButtonElement>();
 	const router = useRouter();
@@ -55,12 +60,6 @@ const SpellMoreInformationModal = ({
 	return (
 		<ModalBackground testId="spell-more-information-modal" show={show}>
 			<div className={classes.modal}>
-				<div className={classes['title-container']}>
-					<svg className={classes['title-icon']}>
-						<use xlinkHref={`/Icons.svg#${spell?.school.id}`} />
-					</svg>
-					<h3>{spell?.name}</h3>
-				</div>
 				<div className={classes['close-container']}>
 					<Button
 						onClick={onClose}
@@ -74,81 +73,112 @@ const SpellMoreInformationModal = ({
 						Close
 					</Button>
 				</div>
-				<div className={classes['content-container']}>
-					<div className={classes.summary}>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>Level</span>:{' '}
-							{spell?.level === 0 ? 'Cantrip' : spell?.level}
-						</div>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>
-								Casting time
-							</span>
-							: {spell?.castingTime}
-						</div>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>Duration</span>:{' '}
-							{spell?.duration}
-						</div>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>Range</span>:{' '}
-							{spell?.range}
-						</div>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>School</span>:{' '}
-							{spell?.school.name}
-						</div>
-						<div className={classes['summary-item']}>
-							<span className={classes['summary-item-label']}>Components</span>:{' '}
-							{spell?.components.join(', ')}
-							{spell?.material ? ` (${spell.material})` : ''}
-						</div>
-						{shouldShowEditAndClasses && (
-							<div className={classes['summary-item']}>
-								<span className={classes['summary-item-label']}>Classes</span>:{' '}
-								{spell?.classes.map(({ name }) => name).join(', ')}
-							</div>
-						)}
+				{loading && (
+					<div className={classes['whole-grid-container']}>
+						<LoadingSpinner />
 					</div>
-					<div className={classes.description}>
-						<MarkdownParser input={spell?.description ?? ''} />
-						{spell?.atHigherLevels && (
-							<MarkdownParser
-								input={'**At Higher Levels**: ' + spell.atHigherLevels}
-							/>
-						)}
+				)}
+				{error && (
+					<div className={classes['whole-grid-container']}>
+						<div className={classes['error-title']}>Error!</div>
+						<p className={classes['error-message']}>{cleanMessage(error)}</p>
 					</div>
-					<div className={classes.other}>
-						{spell?.concentration && (
-							<p className={classes['other-info']}>Requires concentration.</p>
-						)}
-						{spell?.ritual && (
-							<p className={classes['other-info']}>Can be cast as a ritual.</p>
-						)}
-						{spell?.damageType && (
-							<div className={classes['damage-display']}>
-								<div>
-									<span className={classes['summary-item-label']}>
-										Damage type
-									</span>
-									: {spell.damageType?.name}
+				)}
+				{!(loading || error) && (
+					<>
+						<div className={classes['title-container']}>
+							<svg className={classes['title-icon']}>
+								<use xlinkHref={`/Icons.svg#${spell?.school.id}`} />
+							</svg>
+							<h3>{spell?.name}</h3>
+						</div>
+						<div className={classes['content-container']}>
+							<div className={classes.summary}>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>Level</span>:{' '}
+									{spell?.level === 0 ? 'Cantrip' : spell?.level}
 								</div>
-								<svg className={classes['damage-icon']}>
-									<use xlinkHref={`/Icons.svg#${spell.damageType?.id}`} />
-								</svg>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>
+										Casting time
+									</span>
+									: {spell?.castingTime}
+								</div>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>
+										Duration
+									</span>
+									: {spell?.duration}
+								</div>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>Range</span>:{' '}
+									{spell?.range}
+								</div>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>School</span>:{' '}
+									{spell?.school.name}
+								</div>
+								<div className={classes['summary-item']}>
+									<span className={classes['summary-item-label']}>
+										Components
+									</span>
+									: {spell?.components.join(', ')}
+									{spell?.material ? ` (${spell.material})` : ''}
+								</div>
+								{shouldShowEditAndClasses && (
+									<div className={classes['summary-item']}>
+										<span className={classes['summary-item-label']}>
+											Classes
+										</span>
+										: {spell?.classes.map(({ name }) => name).join(', ')}
+									</div>
+								)}
 							</div>
-						)}
-						{shouldShowEditAndClasses && (
-							<Button
-								positive
-								onClick={handleEditClick}
-								style={{ width: '80%' }}
-							>
-								Edit
-							</Button>
-						)}
-					</div>
-				</div>
+							<div className={classes.description}>
+								<MarkdownParser input={spell?.description ?? ''} />
+								{spell?.atHigherLevels && (
+									<MarkdownParser
+										input={'**At Higher Levels**: ' + spell.atHigherLevels}
+									/>
+								)}
+							</div>
+							<div className={classes.other}>
+								{spell?.concentration && (
+									<p className={classes['other-info']}>
+										Requires concentration.
+									</p>
+								)}
+								{spell?.ritual && (
+									<p className={classes['other-info']}>
+										Can be cast as a ritual.
+									</p>
+								)}
+								{spell?.damageType && (
+									<div className={classes['damage-display']}>
+										<div>
+											<span className={classes['summary-item-label']}>
+												Damage type
+											</span>
+											: {spell.damageType?.name}
+										</div>
+										<svg className={classes['damage-icon']}>
+											<use xlinkHref={`/Icons.svg#${spell.damageType?.id}`} />
+										</svg>
+									</div>
+								)}
+								{shouldShowEditAndClasses && (
+									<Button
+										positive
+										onClick={handleEditClick}
+										style={{ width: '80%' }}
+									>
+										Edit
+									</Button>
+								)}
+							</div>
+						</div>
+					</>
+				)}
 			</div>
 		</ModalBackground>
 	);

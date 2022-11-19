@@ -173,6 +173,7 @@ exports[`renders correctly with error state 1`] = `
   </div>
   <div
     class="error-message"
+    style="font-size: 1.5rem;"
   >
     Your value sucks
   </div>

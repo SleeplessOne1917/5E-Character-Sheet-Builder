@@ -31,3 +31,13 @@ const Template: ComponentStory<typeof SpellMoreInformationModal> = args => (
 );
 
 export const Default = Template.bind({});
+
+export const Loading = Template.bind({});
+Loading.args = {
+	loading: true
+};
+
+export const Error = Template.bind({});
+Error.args = {
+	error: 'This is an error. Try closing and fetching again.'
+};

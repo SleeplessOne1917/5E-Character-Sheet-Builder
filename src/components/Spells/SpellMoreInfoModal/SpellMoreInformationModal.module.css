@@ -32,6 +32,7 @@
 }
 
 .close-container {
+    z-index: 101;
     grid-area: close;
     display: flex;
     align-items: flex-start;
@@ -107,6 +108,26 @@
     height: 2rem;
     width: 2rem;
     margin: 0.5rem;
+}
+
+.whole-grid-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    grid-row-start: title;
+    grid-column-start: title;
+    grid-row-end: content;
+    grid-column-end: close;
+    flex-direction: column;
+}
+
+.error-title {
+    font-size: 1.75rem;
+}
+
+.error-message {
+    padding: 2rem;
 }
 
 @media screen and (min-width: 768px) {

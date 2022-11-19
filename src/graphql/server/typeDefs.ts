@@ -180,7 +180,14 @@ const typeDefs = gql`
 
 	type Query {
 		viewer: String
-		spells(limit: Int! = 50, skip: Int): SpellsResponse!
+		spells(
+			limit: Int! = 50
+			skip: Int
+			name: String
+			level: Int
+			school: String
+			class: String
+		): SpellsResponse!
 		spell(id: ID!): Spell!
 	}
 

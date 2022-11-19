@@ -14,6 +14,13 @@ type SkipLimit = {
 	skip?: number;
 };
 
+type SpellsArgs = {
+	level?: number;
+	school?: string;
+	class?: string;
+	name?: string;
+} & SkipLimit;
+
 type WithId = {
 	id: string;
 };
@@ -23,7 +30,7 @@ const Query = {
 		username,
 	spells: async (
 		parent: never,
-		{ limit, skip }: SkipLimit,
+		{ limit, skip, level, school, class: klass, name }: SpellsArgs,
 		{ username }: ApolloContext
 	) => {
 		if (!username) {
@@ -36,9 +43,33 @@ const Query = {
 			throw new ApolloError(userDoesNotExist);
 		}
 
+		const filter = { userId } as {
+			userId: Types.ObjectId;
+			level?: number;
+			'school.id'?: string;
+			'classes.id'?: string;
+			name?: { $regex: RegExp };
+		};
+
+		if (level || level === 0) {
+			filter.level = level;
+		}
+
+		if (school) {
+			filter['school.id'] = school;
+		}
+
+		if (klass) {
+			filter['classes.id'] = klass;
+		}
+
+		if (name) {
+			filter.name = { $regex: new RegExp(name, 'i') };
+		}
+
 		return {
 			spells: (
-				await Spell.find({ userId })
+				await Spell.find(filter)
 					.skip(skip ?? 0)
 					.lean()
 					.limit(limit)

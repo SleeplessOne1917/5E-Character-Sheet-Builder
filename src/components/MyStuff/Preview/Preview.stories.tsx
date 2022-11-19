@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import Preview from './Preview';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
-import SpellItem from '../SpellItem/SpellItem';
+import SpellItemDisplay from '../SpellItem/SpellItemDisplay';
 
 const spells: Spell[] = [
 	{
@@ -112,7 +112,11 @@ export default {
 		title: 'Spells',
 		path: 'spells',
 		items: spells.map(spell => (
-			<SpellItem key={spell.id} spell={spell} onMoreInfoClick={() => {}} />
+			<SpellItemDisplay
+				key={spell.id}
+				spell={spell}
+				onMoreInfoClick={() => {}}
+			/>
 		))
 	}
 } as ComponentMeta<typeof Preview>;

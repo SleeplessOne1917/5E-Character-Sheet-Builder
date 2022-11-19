@@ -1,14 +1,17 @@
 import Button from '../../Button/Button';
-import { Spell } from '../../../types/characterSheetBuilderAPI';
-import classes from './SpellItem.module.css';
+import { SpellItem } from '../../../types/characterSheetBuilderAPI';
+import classes from './SpellItemDisplay.module.css';
 import { useCallback } from 'react';
 
-type SpellItemProps = {
-	spell: Spell;
-	onMoreInfoClick: (spell: Spell) => void;
+type SpellItemDisplayProps = {
+	spell: SpellItem;
+	onMoreInfoClick: (spell: SpellItem) => void;
 };
 
-const SpellItem = ({ spell, onMoreInfoClick }: SpellItemProps) => {
+const SpellItemDisplay = ({
+	spell,
+	onMoreInfoClick
+}: SpellItemDisplayProps) => {
 	const handleMoreInfoClick = useCallback(
 		() => onMoreInfoClick(spell),
 		[onMoreInfoClick, spell]
@@ -29,4 +32,4 @@ const SpellItem = ({ spell, onMoreInfoClick }: SpellItemProps) => {
 	);
 };
 
-export default SpellItem;
+export default SpellItemDisplay;

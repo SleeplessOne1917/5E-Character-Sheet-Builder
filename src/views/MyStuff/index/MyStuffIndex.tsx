@@ -1,3 +1,4 @@
+import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import {
 	accessTokenKey,
 	refreshTokenKey,
@@ -7,13 +8,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
+import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
 import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
 import GET_TOKEN from '../../../graphql/mutations/user/token';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import Preview from '../../../components/MyStuff/Preview/Preview';
-import { Spell } from '../../../types/characterSheetBuilderAPI';
-import SpellItem from '../../../components/MyStuff/SpellItem/SpellItem';
+import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
 import useLogout from '../../../hooks/useLogout';
@@ -23,14 +24,30 @@ type MyStuffIndexProps = {
 };
 
 const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
+	const [spellId, setSpellId] = useState<string>();
+	const [selectedSpell, setSelectedSpell] = useState<Spell>();
+
 	const [spellsResult, refetechSpells] = useQuery<{
 		spells: { spells: Spell[]; count: number };
 	}>({
 		query: GET_SPELLS,
 		variables: { limit: 5 }
 	});
+	const [spellResult, refetechSpell] = useQuery<{
+		spell: Spell;
+	}>({
+		query: GET_SPELL,
+		variables: { id: spellId },
+		pause: !spellId
+	});
 	const [_, getToken] = useMutation<{ token: string }>(GET_TOKEN);
 	const logout = useLogout();
+
+	useEffect(() => {
+		if (spellId && !(spellResult.fetching || spellResult.error)) {
+			setSelectedSpell(spellResult.data?.spell);
+		}
+	}, [spellId, spellResult.fetching, spellResult.error, spellResult.data]);
 
 	useEffect(() => {
 		if (spellsResult.error) {
@@ -52,16 +69,16 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 		}
 	}, [getToken, logout, refetechSpells, spellsResult.error]);
 
-	const [selectedSpell, setSelectedSpell] = useState<Spell>();
-
 	const isLoading = loading || spellsResult.fetching;
 
-	const handleSpellMoreInfoClick = useCallback((spell: Spell) => {
-		setSelectedSpell(spell);
+	const handleSpellMoreInfoClick = useCallback(({ id }: SpellItem) => {
+		console.log(id);
+		setSpellId(id);
 	}, []);
 
 	const handleSpellMoreInfoClose = useCallback(() => {
 		setSelectedSpell(undefined);
+		setSpellId(undefined);
 	}, []);
 
 	return (
@@ -89,7 +106,7 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 										title="Spells"
 										items={
 											spellsResult.data?.spells.spells.map(spell => (
-												<SpellItem
+												<SpellItemDisplay
 													spell={spell}
 													key={spell.id}
 													onMoreInfoClick={handleSpellMoreInfoClick}
@@ -101,8 +118,10 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 						</div>
 					</MainContent>
 					<SpellMoreInformationModal
-						show={!!selectedSpell}
+						show={!!spellId}
 						spell={selectedSpell}
+						error={spellResult.error?.message}
+						loading={spellResult.fetching}
 						onClose={handleSpellMoreInfoClose}
 						shouldShowEditAndClasses
 					/>

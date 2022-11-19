@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import SpellItem from './SpellItem';
+import SpellItemDisplay from './SpellItemDisplay';
 
 export default {
 	title: 'Components/MyStuff/SpellItem',
-	component: SpellItem,
+	component: SpellItemDisplay,
 	args: {
 		spell: {
 			id: 'ray-of-frost',
@@ -29,10 +29,10 @@ export default {
 			classes: [{ id: 'sorcerer', name: 'Sorcerer' }]
 		}
 	}
-} as ComponentMeta<typeof SpellItem>;
+} as ComponentMeta<typeof SpellItemDisplay>;
 
-const Template: ComponentStory<typeof SpellItem> = args => (
-	<SpellItem {...args} />
+const Template: ComponentStory<typeof SpellItemDisplay> = args => (
+	<SpellItemDisplay {...args} />
 );
 
 export const Default = Template.bind({});

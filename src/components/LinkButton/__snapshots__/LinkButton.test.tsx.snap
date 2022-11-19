@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 <a
   class="link-button"
-  href="/foo/bar"
+  href="foo/bar"
   tabindex="0"
 >
   Link Text
