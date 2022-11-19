@@ -1,0 +1,260 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly default 1`] = `
+<div
+  class="modal-container"
+  data-testid="spell-more-information-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="title-container"
+    >
+      <svg
+        class="title-icon"
+      >
+        <use
+          xlink:href="/Icons.svg#illusion"
+        />
+      </svg>
+      <h3>
+        Fear
+      </h3>
+    </div>
+    <div
+      class="content-container"
+    >
+      <div
+        class="summary"
+      >
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Level
+          </span>
+          :
+           
+          3
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Casting time
+          </span>
+          : 
+          1 action
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Duration
+          </span>
+          : 
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Range
+          </span>
+          :
+           
+          Self
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            School
+          </span>
+          :
+           
+          Illusion
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span
+            class="summary-item-label"
+          >
+            Components
+          </span>
+          : 
+          V, S, M
+           (A white feather or the heart of a hen.)
+        </div>
+      </div>
+      <div
+        class="description"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: center;"
+        >
+          <div
+            class="container"
+          >
+            <svg
+              class="icon"
+            >
+              <use
+                xlink:href="/Icons.svg#spinner"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div
+        class="other"
+      >
+        <p
+          class="other-info"
+        >
+          Requires concentration.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly error 1`] = `
+<div
+  class="modal-container"
+  data-testid="spell-more-information-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="whole-grid-container"
+    >
+      <div
+        class="error-title"
+      >
+        Error!
+      </div>
+      <p
+        class="error-message"
+      >
+        This is an error. Try closing and fetching again.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly loading 1`] = `
+<div
+  class="modal-container"
+  data-testid="spell-more-information-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="close-container"
+    >
+      <button
+        class="button negative"
+        style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem; display: flex; align-items: center;"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="close-icon"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+            fill-rule="evenodd"
+          />
+        </svg>
+        Close
+      </button>
+    </div>
+    <div
+      class="whole-grid-container"
+    >
+      <div
+        class="container"
+      >
+        <svg
+          class="icon"
+        >
+          <use
+            xlink:href="/Icons.svg#spinner"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+`;
