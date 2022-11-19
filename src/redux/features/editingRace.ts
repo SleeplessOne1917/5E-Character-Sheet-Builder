@@ -264,6 +264,40 @@ const editingRaceSlice = createSlice({
 			}
 			state.traits[payload].spellOptions = { options: [] };
 		},
+		setTraitSpellOptionsChoose: (
+			state,
+			{
+				payload: { index, choose }
+			}: PayloadAction<{ index: number; choose?: number }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[index].spellOptions) {
+				state.traits[index].spellOptions = { options: [] };
+			}
+
+			// @ts-ignore
+			state.traits[index].spellOptions.choose = choose;
+		},
+		setTraitSpellOptionsOptions: (
+			state,
+			{
+				payload: { index, options }
+			}: PayloadAction<{ index: number; options: Item[] }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[index].spellOptions) {
+				state.traits[index].spellOptions = { options: [] };
+			}
+
+			// @ts-ignore
+			state.traits[index].spellOptions.options = options;
+		},
 		removeTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
 			while (payload > state.traits.length - 1) {
 				state.traits = [...state.traits, {}];
@@ -343,7 +377,9 @@ export const {
 	removeTraitSubtraits,
 	addTraitSpells,
 	removeTraitSpells,
-	setTraitSpells
+	setTraitSpells,
+	setTraitSpellOptionsChoose,
+	setTraitSpellOptionsOptions
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

@@ -26,6 +26,8 @@ import {
 	setTraitProficiencies,
 	setTraitProficiencyOptionsChoose,
 	setTraitProficiencyOptionsOptions,
+	setTraitSpellOptionsChoose,
+	setTraitSpellOptionsOptions,
 	setTraitSpells
 } from '../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
@@ -87,6 +89,10 @@ const Trait = ({
 
 	const [selectedSpellsSpells, setSelectedSpellsSpells] = useState(
 		trait.spells?.map(({ id }) => id) ?? []
+	);
+
+	const [selectedSpellOptionsSpells, setSelectedSpellOptionsSpells] = useState(
+		trait.spellOptions?.options.map(({ id }) => id) ?? []
 	);
 
 	const handleNameBlur: FocusEventHandler<HTMLInputElement> = useCallback(
@@ -234,6 +240,8 @@ const Trait = ({
 				if (shouldUseReduxStore) {
 					dispatch(removeTraitSpellOptions(index));
 				}
+
+				setSelectedSpellOptionsSpells([]);
 
 				setFieldValue(`traits.${index}.spellOptions`, undefined, false);
 			}
@@ -564,6 +572,18 @@ const Trait = ({
 		[values.traits, selectedSpellsSpells]
 	);
 
+	const filterSpellOptionsSpell = useCallback(
+		(spell: SpellItem) =>
+			!(
+				values.traits
+					.flatMap(t => t.spells ?? [])
+					.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
+					.some(t => t.id === spell.id) &&
+				!selectedSpellOptionsSpells?.some(s => s === spell.id)
+			),
+		[values.traits, selectedSpellOptionsSpells]
+	);
+
 	const handleSpellsAdd = useCallback(
 		(spell: SpellItem) => {
 			const newSpells = [
@@ -597,6 +617,126 @@ const Trait = ({
 			setFieldValue(`traits.${index}.spells`, newSpells, false);
 		},
 		[index, dispatch, setFieldValue, shouldUseReduxStore, trait.spells]
+	);
+
+	const handleSpellOptionsChooseChange: ChangeEventHandler<HTMLInputElement> =
+		useCallback(
+			event => {
+				setFieldValue(
+					`traits.${index}.spellOptions.choose`,
+					event.target.value,
+					false
+				);
+			},
+			[index, setFieldValue]
+		);
+
+	const handleSpellOptionsChooseBlur: FocusEventHandler<HTMLInputElement> =
+		useCallback(
+			event => {
+				const parsedValue = parseInt(event.target.value);
+				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+
+				if (newValue && newValue < 1) {
+					newValue = 1;
+				}
+
+				const maxSize = (trait.spellOptions?.options ?? []).length;
+
+				if (newValue && newValue > maxSize) {
+					newValue = maxSize;
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setTraitProficiencyOptionsChoose({
+							index,
+							choose: newValue
+						})
+					);
+				}
+				setFieldValue(`traits.${index}.spellOptions.choose`, newValue, false);
+				setFieldTouched(`traits.${index}.spellOptions.choose`, true, false);
+				setFieldError(
+					`traits.${index}.spellOptions.choose`,
+					newValue === 0
+						? 'Must have at least 1 spell to choose from'
+						: !newValue
+						? 'Must have spells to choose from'
+						: undefined
+				);
+			},
+			[
+				dispatch,
+				index,
+				shouldUseReduxStore,
+				setFieldError,
+				setFieldTouched,
+				setFieldValue,
+				trait.spellOptions?.options
+			]
+		);
+
+	const handleSpellOptionsAdd = useCallback(
+		(spell: SpellItem) => {
+			const newSpells = [
+				...(trait.spellOptions?.options ?? []),
+				{ id: spell.id, name: spell.name }
+			];
+
+			if (shouldUseReduxStore) {
+				dispatch(setTraitSpellOptionsOptions({ index, options: newSpells }));
+			}
+
+			setSelectedSpellOptionsSpells(prev => [...prev, spell.id]);
+
+			setFieldValue(`traits.${index}.spellOptions.options`, newSpells, false);
+		},
+		[
+			index,
+			dispatch,
+			setFieldValue,
+			shouldUseReduxStore,
+			trait.spellOptions?.options
+		]
+	);
+
+	const handleSpellOptionsRemove = useCallback(
+		(spell: SpellItem) => {
+			const newSpells = [...(trait.spellOptions?.options ?? [])].filter(
+				s => s.id !== spell.id
+			);
+
+			if (shouldUseReduxStore) {
+				dispatch(setTraitSpellOptionsOptions({ index, options: newSpells }));
+			}
+
+			setSelectedSpellOptionsSpells(prev => prev.filter(s => s !== spell.id));
+
+			setFieldValue(`traits.${index}.spellOptions.options`, newSpells, false);
+
+			if ((trait.spellOptions?.choose ?? 0) > newSpells.length) {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setTraitSpellOptionsChoose({ index, choose: newSpells.length })
+					);
+				}
+
+				setFieldValue(
+					`traits.${index}.spellOptions.choose`,
+					newSpells.length,
+					false
+				);
+			}
+		},
+		[
+			index,
+			dispatch,
+			setFieldValue,
+			shouldUseReduxStore,
+			trait.spellOptions?.options,
+			trait.spellOptions?.choose
+		]
 	);
 
 	const proficiencyTypeOptions = useMemo(
@@ -961,6 +1101,60 @@ const Trait = ({
 							levels={levels}
 							onAdd={handleSpellsAdd}
 							onRemove={handleSpellsRemove}
+						/>
+					</div>
+				)}
+				{trait.spellOptions && (
+					<div
+						className={classes['extra-deck']}
+						style={{
+							flexWrap: 'nowrap',
+							flexDirection: 'column',
+							alignItems: 'center'
+						}}
+					>
+						<NumberTextInput
+							id={`traits.${index}.spellOptions.choose`}
+							label="Number of Spells to Choose From"
+							value={trait.spellOptions.choose}
+							touched={
+								clickedSubmit ||
+								(touched.traits &&
+									touched.traits[index] &&
+									(
+										touched.traits[index].spellOptions as FormikTouched<{
+											choose: number;
+										}>
+									).choose)
+							}
+							error={
+								errors.traits && errors.traits[index]
+									? (
+											errors.traits[index] as FormikErrors<{
+												spellOptions: { choose: number };
+											}>
+									  ).spellOptions?.choose
+									: undefined
+							}
+							onChange={handleSpellOptionsChooseChange}
+							onBlur={handleSpellOptionsChooseBlur}
+						/>
+						{trait.spellOptions.options &&
+							trait.spellOptions.options.length > 0 && (
+								<p style={{ maxWidth: '30rem' }}>
+									{trait.spellOptions.options
+										.map(({ name }) => name)
+										.join(', ')}
+								</p>
+							)}
+						<SpellsSelector
+							spells={spells}
+							label="Spell Options"
+							levels={levels}
+							selectedSpells={selectedSpellOptionsSpells}
+							filterSpell={filterSpellOptionsSpell}
+							onAdd={handleSpellOptionsAdd}
+							onRemove={handleSpellOptionsRemove}
 						/>
 					</div>
 				)}

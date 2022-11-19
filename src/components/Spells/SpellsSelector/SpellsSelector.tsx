@@ -57,6 +57,14 @@ const SpellsSelector = ({
 		setCurrentPage(1);
 	}, []);
 
+	const handleFilterOnlySelectedClick = useCallback(
+		(checked: boolean) => {
+			setFilterOnlySelected(checked);
+			resetPage();
+		},
+		[resetPage]
+	);
+
 	const handleSearchChange: ChangeEventHandler<HTMLInputElement> = useCallback(
 		event => {
 			setSearch(event.target.value);
@@ -108,8 +116,8 @@ const SpellsSelector = ({
 		() =>
 			filteredSpells.filter(
 				(val, index) =>
-					index > (currentPage - 1) * MAX_PAGE_SIZE &&
-					index < currentPage * MAX_PAGE_SIZE + 1
+					index >= (currentPage - 1) * MAX_PAGE_SIZE &&
+					index < currentPage * MAX_PAGE_SIZE
 			),
 		[currentPage, filteredSpells]
 	);
@@ -177,7 +185,7 @@ const SpellsSelector = ({
 					<Checkbox
 						label="Only Show Selected"
 						checked={filterOnlySelected}
-						onChange={checked => setFilterOnlySelected(checked)}
+						onChange={handleFilterOnlySelectedClick}
 						useAlternateStyle={isSelected}
 					/>
 				</div>
