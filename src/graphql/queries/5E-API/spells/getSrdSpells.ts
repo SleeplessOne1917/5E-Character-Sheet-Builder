@@ -1,6 +1,6 @@
 import { gql } from 'urql';
 
-const GET_SPELLS_BY_CLASS = gql`
+const GET_SRD_SPELLS = gql`
 	query SpellsByClass($class: StringFilter) {
 		spells(class: $class, limit: 500) {
 			index
@@ -33,4 +33,4 @@ const GET_SPELLS_BY_CLASS = gql`
 	}
 `;
 
-export default GET_SPELLS_BY_CLASS;
+export default GET_SRD_SPELLS;

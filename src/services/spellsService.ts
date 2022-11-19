@@ -1,7 +1,11 @@
+import {
+	getSpells as getSrdSpells,
+	getSpellsByClass as getSrdSpellsByClass
+} from '../graphql/srdClientService';
+
 import { Spell } from '../types/characterSheetBuilderAPI';
 import { SrdSpellItem } from '../types/srd';
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
-import { getSpellsByClass as getSrdSpellsByClass } from '../graphql/srdClientService';
 
 export const mapSpell = (spell: SrdSpellItem): Spell => ({
 	id: spell.index,
@@ -34,6 +38,12 @@ export const mapSpell = (spell: SrdSpellItem): Spell => ({
 
 export const getSpellsByClass = async (klass: string | string[]) => {
 	const spells = (await getSrdSpellsByClass(klass)).data?.spells;
+
+	return spells?.map<Spell>(mapSpell);
+};
+
+export const getSpells = async () => {
+	const spells = (await getSrdSpells()).data?.spells;
 
 	return spells?.map<Spell>(mapSpell);
 };

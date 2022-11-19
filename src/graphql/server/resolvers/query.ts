@@ -10,7 +10,7 @@ import { Types } from 'mongoose';
 import User from './../../../db/models/user';
 
 type SkipLimit = {
-	limit: number;
+	limit?: number;
 	skip?: number;
 };
 
@@ -67,13 +67,18 @@ const Query = {
 			filter.name = { $regex: new RegExp(name, 'i') };
 		}
 
+		let spells = Spell.find(filter);
+
+		if (limit) {
+			if (limit < 1) {
+				throw new ApolloError('Limit must be greater than 0');
+			}
+
+			spells = spells.skip(skip ?? 0).limit(limit);
+		}
+
 		return {
-			spells: (
-				await Spell.find(filter)
-					.skip(skip ?? 0)
-					.lean()
-					.limit(limit)
-			).map(spell => ({
+			spells: (await spells.lean()).map(spell => ({
 				...spell,
 				id: spell._id.toString()
 			})),

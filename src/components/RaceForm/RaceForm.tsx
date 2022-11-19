@@ -58,6 +58,7 @@ import MultiSelect from '../Select/MultiSelect/MultiSelect';
 import { SIZES } from '../../constants/sizeConstants';
 import Select from '../Select/Select/Select';
 import Size from '../../types/size';
+import { Spell } from '../../types/characterSheetBuilderAPI';
 import TextInput from '../TextInput/TextInput';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '../../services/capitalizeService';
@@ -76,6 +77,7 @@ type RaceFormProps = {
 		values: EditingRaceState,
 		helpers: FormikHelpers<EditingRaceState>
 	) => Promise<void>;
+	srdSpells: Spell[];
 };
 
 type NumberTextInputProps = {

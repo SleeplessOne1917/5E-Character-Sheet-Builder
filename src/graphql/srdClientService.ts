@@ -16,18 +16,18 @@ import { DocumentNode } from 'graphql';
 import GET_ABILITIES from './queries/5E-API/abilities/getAbilities';
 import GET_CLASS from './queries/5E-API/class/getClass';
 import GET_CLASSES from './queries/5E-API/class/getClasses';
+import GET_DAMAGE_TYPES from './queries/5E-API/damage-types/getDamageTypes';
 import GET_EQUIPMENTS from './queries/5E-API/equipment/getEquipments';
+import GET_LANGUAGES from './queries/5E-API/languages/getLanguages';
+import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
 import GET_MONSTER_TYPES from './queries/5E-API/monsters/getMonsterTypes';
 import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienciesByType';
 import GET_RACE from './queries/5E-API/race/getRace';
 import GET_RACES from './queries/5E-API/race/getRaces';
-import GET_SPELLS_BY_CLASS from './queries/5E-API/spells/getSpellsByClass';
+import GET_SPELLCASTING_CLASSES from './queries/5E-API/class/getSpellcastingClasses';
+import GET_SRD_SPELLS from './queries/5E-API/spells/getSrdSpells';
 import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
 import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
-import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
-import GET_DAMAGE_TYPES from './queries/5E-API/damage-types/getDamageTypes';
-import GET_SPELLCASTING_CLASSES from './queries/5E-API/class/getSpellcastingClasses';
-import GET_LANGUAGES from './queries/5E-API/languages/getLanguages';
 
 const client = createClient({ url: 'https://www.dnd5eapi.co/graphql' });
 
@@ -115,6 +115,9 @@ export const getMonsterTypes = async () =>
 
 export const getSpellsByClass = async (klass: string | string[]) =>
 	await query<{ spells: SrdSpellItem[] }, { class: string | string[] }>(
-		GET_SPELLS_BY_CLASS,
+		GET_SRD_SPELLS,
 		{ class: klass }
 	);
+
+export const getSpells = async () =>
+	await query<{ spells: SrdSpellItem[] }>(GET_SRD_SPELLS);

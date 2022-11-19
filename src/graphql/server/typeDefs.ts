@@ -181,7 +181,7 @@ const typeDefs = gql`
 	type Query {
 		viewer: String
 		spells(
-			limit: Int! = 50
+			limit: Int
 			skip: Int
 			name: String
 			level: Int

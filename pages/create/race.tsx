@@ -1,28 +1,33 @@
-import { GetStaticPropsResult, NextPage } from 'next';
-import {
-	getAbilities,
-	getLanguages,
-	getProficienciesByType
-} from '../../src/graphql/srdClientService';
-import useRedirectLoggedOffUser from '../../src/hooks/useRedirectLoggedOffUser';
 import {
 	AbilityItem,
 	ProficiencyType,
 	SrdItem,
 	SrdProficiencyItem
 } from '../../src/types/srd';
+import { GetStaticPropsResult, NextPage } from 'next';
+import {
+	getAbilities,
+	getLanguages,
+	getProficienciesByType
+} from '../../src/graphql/srdClientService';
+
 import RaceView from '../../src/views/create/race/Race';
+import { Spell } from '../../src/types/characterSheetBuilderAPI';
+import { getSpells } from '../../src/services/spellsService';
+import useRedirectLoggedOffUser from '../../src/hooks/useRedirectLoggedOffUser';
 
 type RacePageProps = {
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
+	srdSpells: Spell[];
 };
 
 const RacePage: NextPage<RacePageProps> = ({
 	abilities,
 	languages,
-	proficiencies
+	proficiencies,
+	srdSpells
 }) => {
 	const { loading } = useRedirectLoggedOffUser();
 
@@ -32,6 +37,7 @@ const RacePage: NextPage<RacePageProps> = ({
 			abilities={abilities}
 			languages={languages}
 			proficiencies={proficiencies}
+			srdSpells={srdSpells}
 		/>
 	);
 };
@@ -43,6 +49,7 @@ export const getStaticProps = async (): Promise<
 > => {
 	const abilities = (await getAbilities()) ?? [];
 	const languages = (await getLanguages()) ?? [];
+	const srdSpells = (await getSpells()) ?? [];
 
 	const proficiencyTypes: ProficiencyType[] = [
 		'ARMOR',
@@ -59,7 +66,8 @@ export const getStaticProps = async (): Promise<
 		props: {
 			abilities,
 			languages,
-			proficiencies
+			proficiencies,
+			srdSpells
 		}
 	};
 };
