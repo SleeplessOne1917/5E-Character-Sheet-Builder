@@ -1,0 +1,117 @@
+.abilities-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input {
+    font-size: 1.3rem;
+    border-radius: 0.5rem;
+    background-color: var(--heaven-light);
+    font-family: var(--font-display);
+    color: var(--davy);
+    text-align: center;
+    border: 1px solid var(--davy);
+    width: 30%;
+}
+
+.input:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.input.error {
+    border: 3px solid var(--error-red);
+}
+
+.abilities {
+    display: grid;
+    grid-template-areas: "abilityBonuses"
+                          "abilityBonusOptions";
+    grid-template-rows: fit-content fit-content;;
+    margin: 3rem 0;
+}
+
+.abilities.error {
+    border: 3px solid var(--error-red);
+}
+
+.ability-bonuses {
+    grid-area: abilityBonuses;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ability-bonus {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--heaven-light);
+    border-radius: 1rem;
+    border: 1px solid var(--davy);
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    align-items: center;
+}
+
+.x-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--wine-red);
+}
+
+.x-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.x-button:focus-visible {
+    outline: var(--focus-outline);
+}
+
+.ability-bonus-options {
+    grid-area: abilityBonusOptions;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.ability-bonus-options-fields {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.ability-bonus-options-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "bonusOptionsLabel bonusOptionsInput";
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.ability-bonus-options-field-label {
+    grid-area: bonusOptionsLabel;
+    font-size: 1.3rem;
+    text-align: right;
+}
+
+.ability-bonus-options-field-input {
+    grid-area: bonusOptionsInput;
+}
+
+.error-message {
+    color: var(--wine-red);
+    font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+    .abilities {
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "abilityBonuses abilityBonusOptions";
+    }
+}

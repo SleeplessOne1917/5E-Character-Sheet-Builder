@@ -21,7 +21,7 @@ type TraitState = {
 
 /* eslint-disable @typescript-eslint/ban-ts-comment*/
 
-type TraitWithSubtraitState = TraitState & {
+export type TraitWithSubtraitsState = TraitState & {
 	subtraitOptions?: {
 		choose?: number;
 		options: TraitState[];
@@ -39,7 +39,7 @@ export type EditingRaceState = {
 	numLanguageOptions?: number;
 	size?: Size;
 	speed?: number;
-	traits: TraitWithSubtraitState[];
+	traits: TraitWithSubtraitsState[];
 };
 
 export const initialState: EditingRaceState = {

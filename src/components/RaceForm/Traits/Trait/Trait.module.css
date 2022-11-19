@@ -1,0 +1,32 @@
+.trait {
+    background-color: var(--heaven-light);
+    border: 2px solid var(--davy);
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.checkbox-deck {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.checkbox-deck > * {
+    margin: 0.5rem;
+}
+
+.extra-deck {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    border: 2px solid var(--davy);
+    border-radius: 0.5rem;
+	margin: 1rem 0;
+    padding: 1rem;
+}

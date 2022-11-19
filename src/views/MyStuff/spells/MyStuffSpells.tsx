@@ -23,7 +23,7 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 	const [currentPage, setCurrentPage] = useState(1);
 
-	const [spellResult, refetechSpell] = useQuery<{
+	const [spellResult] = useQuery<{
 		spell: Spell;
 	}>({
 		query: GET_SPELL,

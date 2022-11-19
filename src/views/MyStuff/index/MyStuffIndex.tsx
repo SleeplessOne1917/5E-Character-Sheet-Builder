@@ -33,7 +33,7 @@ const MyStuffIndex = ({ loading }: MyStuffIndexProps) => {
 		query: GET_SPELLS,
 		variables: { limit: 5 }
 	});
-	const [spellResult, refetechSpell] = useQuery<{
+	const [spellResult] = useQuery<{
 		spell: Spell;
 	}>({
 		query: GET_SPELL,
