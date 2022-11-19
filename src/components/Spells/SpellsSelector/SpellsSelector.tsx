@@ -1,5 +1,6 @@
 import { ChangeEventHandler, useCallback, useMemo, useState } from 'react';
 
+import Button from '../../Button/Button';
 import Checkbox from '../../Checkbox/Checkbox';
 import { Item } from '../../../types/db/item';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
@@ -7,6 +8,7 @@ import Select from '../../Select/Select/Select';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import SpellSelector from '../SpellSelector/SpellSelector';
 import classes from './SpellsSelector.module.css';
+import useMediaQuery from '../../../hooks/useMediaQuery';
 
 type SpellsSelectorProps = {
 	spells: SpellItem[];
@@ -18,6 +20,8 @@ type SpellsSelectorProps = {
 	onRemove: (spell: SpellItem) => void;
 	filterSpell?: (spell: SpellItem) => boolean;
 };
+
+const MAX_PAGE_SIZE = 10;
 
 const SpellsSelector = ({
 	spells,
@@ -33,30 +37,48 @@ const SpellsSelector = ({
 	const [selectedSchool, setSelectedSchool] = useState('blank');
 	const [selectedLevel, setSelectedLevel] = useState<string | number>('blank');
 	const [filterOnlySelected, setFilterOnlySelected] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 
 	const selectorLabel = `Search ${
 		levels.length === 0 && spells[0].level === 0 ? 'cantrips' : 'spells'
 	}`;
 
+	const handlePreviousClick = useCallback(() => {
+		setCurrentPage(prev => prev - 1);
+	}, []);
+
+	const handleNextClick = useCallback(() => {
+		setCurrentPage(prev => prev + 1);
+	}, []);
+
+	const resetPage = useCallback(() => {
+		setCurrentPage(1);
+	}, []);
+
 	const handleSearchChange: ChangeEventHandler<HTMLInputElement> = useCallback(
 		event => {
 			setSearch(event.target.value);
+			resetPage();
 		},
-		[setSearch]
+		[setSearch, resetPage]
 	);
 
 	const handleSelectedSchoolChange = useCallback(
 		(value: string | number) => {
 			setSelectedSchool(value as string);
+			resetPage();
 		},
-		[setSelectedSchool]
+		[setSelectedSchool, resetPage]
 	);
 
 	const handleSelectedLevelChange = useCallback(
 		(value: string | number) => {
 			setSelectedLevel(value);
+			resetPage();
 		},
-		[setSelectedLevel]
+		[setSelectedLevel, resetPage]
 	);
 
 	const filteredSpells = useMemo(
@@ -78,6 +100,18 @@ const SpellsSelector = ({
 			selectedSpells,
 			filterSpell
 		]
+	);
+
+	const pages = Math.ceil(filteredSpells.length / MAX_PAGE_SIZE);
+
+	const pageSpells = useMemo(
+		() =>
+			filteredSpells.filter(
+				(val, index) =>
+					index > (currentPage - 1) * MAX_PAGE_SIZE &&
+					index < currentPage * MAX_PAGE_SIZE + 1
+			),
+		[currentPage, filteredSpells]
 	);
 
 	return (
@@ -149,8 +183,8 @@ const SpellsSelector = ({
 				</div>
 			</div>
 			<div className={classes['spells-container']}>
-				{filteredSpells.length > 0 ? (
-					filteredSpells.map(spell => (
+				{pageSpells.length > 0 ? (
+					pageSpells.map(spell => (
 						<SpellSelector
 							key={spell.id}
 							spell={spell}
@@ -164,6 +198,47 @@ const SpellsSelector = ({
 					<div className={classes['no-spells']}>No spells found.</div>
 				)}
 			</div>
+			{pages > 1 && (
+				<div className={classes['page-buttons']}>
+					{currentPage > 1 && (
+						<div
+							style={{
+								gridArea: 'prev',
+								display: 'flex',
+								justifyContent: 'center'
+							}}
+						>
+							<Button
+								positive
+								onClick={handlePreviousClick}
+								size={isMediumOrLarger ? 'medium' : 'small'}
+							>
+								Previous
+							</Button>
+						</div>
+					)}
+					<div className={classes['page-text']}>
+						Page {currentPage}/{pages}
+					</div>
+					{currentPage < pages && (
+						<div
+							style={{
+								gridArea: 'next',
+								display: 'flex',
+								justifyContent: 'center'
+							}}
+						>
+							<Button
+								positive
+								onClick={handleNextClick}
+								size={isMediumOrLarger ? 'medium' : 'small'}
+							>
+								Next
+							</Button>
+						</div>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };
