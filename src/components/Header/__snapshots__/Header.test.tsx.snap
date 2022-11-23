@@ -69,7 +69,7 @@ exports[`renders correctly when logged in 1`] = `
       >
         <a
           class="navigation-link"
-          href="/#"
+          href="#"
         >
           Log Out
         </a>
