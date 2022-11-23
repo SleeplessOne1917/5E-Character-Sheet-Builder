@@ -1,9 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import Size from '../../types/size';
 
-type TraitState = {
+export type TraitState = {
 	name?: string;
 	description?: string;
 	proficiencies?: Item[];
@@ -47,6 +47,34 @@ export const initialState: EditingRaceState = {
 	abilityBonuses: [],
 	languages: [],
 	traits: []
+};
+
+const prepStateForSubtrait = ({
+	state,
+	parentIndex,
+	index
+}: {
+	state: Draft<EditingRaceState>;
+	parentIndex: number;
+	index: number;
+}) => {
+	while (parentIndex > state.traits.length - 1) {
+		state.traits = [...state.traits, {}];
+	}
+
+	if (!state.traits[parentIndex].subtraitOptions) {
+		state.traits[parentIndex].subtraitOptions = { options: [] };
+	}
+
+	while (
+		index > (state.traits[parentIndex].subtraitOptions?.options ?? []).length
+	) {
+		// @ts-ignore
+		state.traits[parentIndex].subtraitOptions.options = [
+			...(state.traits[parentIndex].subtraitOptions?.options ?? []),
+			{}
+		];
+	}
 };
 
 const editingRaceSlice = createSlice({
@@ -339,6 +367,296 @@ const editingRaceSlice = createSlice({
 				state.traits = [...state.traits, {}];
 			}
 			delete state.traits[payload].subtraitOptions;
+		},
+		setSubtraitName: (
+			state,
+			{
+				payload: { parentIndex, index, name }
+			}: PayloadAction<{ parentIndex: number; index: number; name: string }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].name = name;
+		},
+		setSubtraitDescription: (
+			state,
+			{
+				payload: { parentIndex, index, description }
+			}: PayloadAction<{
+				parentIndex: number;
+				index: number;
+				description: string;
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].description =
+				description;
+		},
+		addSubtraitProficiencies: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].proficiencies =
+				[];
+		},
+		removeSubtraitProficiencies: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			delete state.traits[parentIndex].subtraitOptions?.options[index]
+				.proficiencies;
+		},
+		addSubtraitProficiencyOptions: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[
+				index
+			].proficiencyOptions = { options: [] };
+		},
+		removeSubtraitProficiencyOptions: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			delete state.traits[parentIndex].subtraitOptions?.options[index]
+				.proficiencyOptions;
+		},
+		addSubtraitHPBonus: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].hpBonusPerLevel =
+				null;
+		},
+		removeSubtraitHPBonus: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			delete state.traits[parentIndex].subtraitOptions?.options[index]
+				.hpBonusPerLevel;
+		},
+		addSubtraitSpells: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].spells = [];
+		},
+		removeSubtraitSpells: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			delete state.traits[parentIndex].subtraitOptions?.options[index].spells;
+		},
+		addSubtraitSpellOptions: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].spellOptions = {
+				options: []
+			};
+		},
+		removeSubtraitSpellOptions: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			delete state.traits[parentIndex].subtraitOptions?.options[index]
+				.spellOptions;
+		},
+		setSubtraitProficiencies: (
+			state,
+			{
+				payload: { parentIndex, index, proficiencies }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				proficiencies: Item[];
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].proficiencies =
+				proficiencies;
+		},
+		setSubtraitProficiencyOptionsChoose: (
+			state,
+			{
+				payload: { parentIndex, index, choose }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				choose?: number;
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[
+				index
+			].proficiencyOptions.choose = choose;
+		},
+		setSubtraitProficiencyOptionsOptions: (
+			state,
+			{
+				payload: { parentIndex, index, options }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				options?: Item[];
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[
+				index
+			].proficiencyOptions.options = options;
+		},
+		setSubtraitHPBonus: (
+			state,
+			{
+				payload: { parentIndex, index, hpBonus }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				hpBonus: number | null;
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].hpBonusPerLevel =
+				hpBonus;
+		},
+		setSubtraitSpells: (
+			state,
+			{
+				payload: { parentIndex, index, spells }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				spells?: Item[];
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[index].spells = spells;
+		},
+		setSubtraitSpellOptionsChoose: (
+			state,
+			{
+				payload: { parentIndex, index, choose }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				choose?: number;
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[
+				index
+			].spellOptions.choose = choose;
+		},
+		setSubtraitSpellOptionsOptions: (
+			state,
+			{
+				payload: { parentIndex, index, options }
+			}: PayloadAction<{
+				index: number;
+				parentIndex: number;
+				options?: Item[];
+			}>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options[
+				index
+			].spellOptions.options = options;
+		},
+		setTraitSubtraitOptionsChoose: (
+			state,
+			{
+				payload: { index, choose }
+			}: PayloadAction<{ index: number; choose?: number }>
+		) => {
+			while (index > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[index].subtraitOptions) {
+				state.traits[index].subtraitOptions = { options: [] };
+			}
+
+			// @ts-ignore
+			state.traits[index].subtraitOptions.choose = choose;
+		},
+		addTraitSubtrait: (state, { payload }: PayloadAction<number>) => {
+			while (payload > state.traits.length - 1) {
+				state.traits = [...state.traits, {}];
+			}
+
+			if (!state.traits[payload].subtraitOptions) {
+				state.traits[payload].subtraitOptions = { options: [] };
+			}
+
+			// @ts-ignore
+			state.traits[payload].subtraitOptions.options = [
+				// @ts-ignore
+				...state.traits[payload].subtraitOptions.options,
+				{}
+			];
 		}
 	}
 });
@@ -379,7 +697,28 @@ export const {
 	removeTraitSpells,
 	setTraitSpells,
 	setTraitSpellOptionsChoose,
-	setTraitSpellOptionsOptions
+	setTraitSpellOptionsOptions,
+	setSubtraitName,
+	setSubtraitDescription,
+	addSubtraitProficiencies,
+	removeSubtraitProficiencies,
+	addSubtraitProficiencyOptions,
+	removeSubtraitProficiencyOptions,
+	addSubtraitHPBonus,
+	removeSubtraitHPBonus,
+	addSubtraitSpells,
+	removeSubtraitSpells,
+	addSubtraitSpellOptions,
+	removeSubtraitSpellOptions,
+	setSubtraitProficiencies,
+	setSubtraitProficiencyOptionsChoose,
+	setSubtraitProficiencyOptionsOptions,
+	setSubtraitHPBonus,
+	setSubtraitSpells,
+	setSubtraitSpellOptionsChoose,
+	setSubtraitSpellOptionsOptions,
+	setTraitSubtraitOptionsChoose,
+	addTraitSubtrait
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

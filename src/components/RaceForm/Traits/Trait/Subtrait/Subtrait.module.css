@@ -1,5 +1,5 @@
 .trait {
-    background-color: var(--heaven-light);
+    background-color: var(--highlight-light);
     border: 2px solid var(--davy);
     border-radius: 0.75rem;
     display: flex;
@@ -18,12 +18,4 @@
     border-radius: 0.5rem;
 	margin: 1rem 0;
     padding: 1rem;
-}
-
-.subtraits-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 3rem;
 }

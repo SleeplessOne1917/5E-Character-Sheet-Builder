@@ -13,6 +13,7 @@ import {
 	addTraitProficiencyOptions,
 	addTraitSpellOptions,
 	addTraitSpells,
+	addTraitSubtrait,
 	addTraitSubtraits,
 	removeTraitHPBonus,
 	removeTraitProficiencies,
@@ -28,13 +29,14 @@ import {
 	setTraitProficiencyOptionsOptions,
 	setTraitSpellOptionsChoose,
 	setTraitSpellOptionsOptions,
-	setTraitSpells
+	setTraitSpells,
+	setTraitSubtraitOptionsChoose
 } from '../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
 
 import Button from '../../../Button/Button';
-import Checkbox from '../../../Checkbox/Checkbox';
+import CheckboxDeck from './CheckboxDeck/CheckboxDeck';
 import { Item } from '../../../../types/db/item';
 import MarkdownTextArea from '../../../MarkdownTextArea/MarkdownTextArea';
 import MultiSelect from '../../../Select/MultiSelect/MultiSelect';
@@ -43,6 +45,7 @@ import Option from '../../../Select/Option';
 import Select from '../../../Select/Select/Select';
 import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import SpellsSelector from '../../../Spells/SpellsSelector/SpellsSelector';
+import Subtrait from './Subtrait/Subtrait';
 import TextInput from '../../../TextInput/TextInput';
 import classes from './Trait.module.css';
 import { getProficiencyTypeName } from '../../../../services/proficiencyTypeService';
@@ -560,28 +563,42 @@ const Trait = ({
 		[shouldUseReduxStore, dispatch, setFieldTouched, setFieldValue, index]
 	);
 
+	const getSelectedSpells = useCallback(
+		() =>
+			values.traits
+				.flatMap(t => t.spells ?? [])
+				.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
+				.concat(
+					values.traits.flatMap(t =>
+						(t.subtraitOptions?.options ?? []).flatMap(o => o.spells ?? [])
+					)
+				)
+				.concat(
+					values.traits.flatMap(t =>
+						(t.subtraitOptions?.options ?? []).flatMap(
+							o => o.spellOptions?.options ?? []
+						)
+					)
+				),
+		[values.traits]
+	);
+
 	const filterSpellsSpell = useCallback(
 		(spell: SpellItem) =>
 			!(
-				values.traits
-					.flatMap(t => t.spells ?? [])
-					.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
-					.some(t => t.id === spell.id) &&
+				getSelectedSpells().some(t => t.id === spell.id) &&
 				!selectedSpellsSpells?.some(s => s === spell.id)
 			),
-		[values.traits, selectedSpellsSpells]
+		[getSelectedSpells, selectedSpellsSpells]
 	);
 
 	const filterSpellOptionsSpell = useCallback(
 		(spell: SpellItem) =>
 			!(
-				values.traits
-					.flatMap(t => t.spells ?? [])
-					.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
-					.some(t => t.id === spell.id) &&
+				getSelectedSpells().some(t => t.id === spell.id) &&
 				!selectedSpellOptionsSpells?.some(s => s === spell.id)
 			),
-		[values.traits, selectedSpellOptionsSpells]
+		[getSelectedSpells, selectedSpellOptionsSpells]
 	);
 
 	const handleSpellsAdd = useCallback(
@@ -649,7 +666,7 @@ const Trait = ({
 
 				if (shouldUseReduxStore) {
 					dispatch(
-						setTraitProficiencyOptionsChoose({
+						setTraitSpellOptionsChoose({
 							index,
 							choose: newValue
 						})
@@ -739,6 +756,82 @@ const Trait = ({
 		]
 	);
 
+	const handleSubtraitOptionsChooseChange: ChangeEventHandler<HTMLInputElement> =
+		useCallback(
+			event => {
+				setFieldValue(
+					`traits.${index}.subtraitOptions.choose`,
+					event.target.value,
+					false
+				);
+			},
+			[index, setFieldValue]
+		);
+
+	const handleSubtraitOptionsChooseBlur: FocusEventHandler<HTMLInputElement> =
+		useCallback(
+			event => {
+				const parsedValue = parseInt(event.target.value);
+				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+
+				if (newValue && newValue < 1) {
+					newValue = 1;
+				}
+
+				const maxSize = (trait.subtraitOptions?.options ?? []).length;
+
+				if (newValue && newValue > maxSize) {
+					newValue = maxSize;
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setTraitSubtraitOptionsChoose({
+							index,
+							choose: newValue
+						})
+					);
+				}
+				setFieldValue(
+					`traits.${index}.subtraitOptions.choose`,
+					newValue,
+					false
+				);
+				setFieldTouched(`traits.${index}.subtraitOptions.choose`, true, false);
+				setFieldError(
+					`traits.${index}.subtraitOptions.choose`,
+					!newValue ? 'Must choose at least 1 subtrait' : undefined
+				);
+			},
+			[
+				dispatch,
+				index,
+				shouldUseReduxStore,
+				setFieldError,
+				setFieldTouched,
+				setFieldValue,
+				trait.spellOptions?.options
+			]
+		);
+
+	const handleAddSubtrait = useCallback(() => {
+		if (shouldUseReduxStore) {
+			dispatch(addTraitSubtrait(index));
+		}
+
+		setFieldValue(
+			`traits.${index}.subtraitOptions.options`,
+			[...(trait.subtraitOptions?.options ?? []), {}],
+			false
+		);
+	}, [
+		dispatch,
+		shouldUseReduxStore,
+		setFieldValue,
+		index,
+		trait.subtraitOptions?.options
+	]);
+
 	const proficiencyTypeOptions = useMemo(
 		() =>
 			proficiencies.reduce<Option[]>(
@@ -751,6 +844,28 @@ const Trait = ({
 		[proficiencies]
 	);
 
+	const getProficienciesFromTraits = useCallback(
+		() =>
+			values.traits
+				.flatMap(t => t.proficiencies ?? [])
+				.concat(values.traits.flatMap(t => t.proficiencyOptions?.options ?? []))
+				.concat(
+					values.traits.flatMap(t =>
+						(t.subtraitOptions?.options ?? []).flatMap(
+							o => o.proficiencies ?? []
+						)
+					)
+				)
+				.concat(
+					values.traits.flatMap(t =>
+						(t.subtraitOptions?.options ?? []).flatMap(
+							o => o.proficiencyOptions?.options ?? []
+						)
+					)
+				),
+		[values.traits]
+	);
+
 	const proficienciesOptions = useMemo(
 		() =>
 			proficiencies
@@ -758,26 +873,22 @@ const Trait = ({
 					prof =>
 						prof.type === selectedProficienciesType &&
 						!(
-							values.traits
-								.flatMap(t => t.proficiencies ?? [])
-								.concat(
-									values.traits.flatMap(
-										t => t.proficiencyOptions?.options ?? []
-									)
-								)
-								.some(tp => tp.id === prof.index) &&
+							getProficienciesFromTraits().some(tp => tp.id === prof.index) &&
 							!(trait.proficiencies ?? []).some(tp => tp.id === prof.index)
 						)
 				)
-				.map(prof => ({
-					label: prof.name.replace(/Skill: /g, ''),
-					value: prof.index
-				})),
+				.map(
+					prof =>
+						({
+							label: prof.name.replace(/Skill: /g, ''),
+							value: prof.index
+						} as Option)
+				),
 		[
 			proficiencies,
 			selectedProficienciesType,
 			trait.proficiencies,
-			values.traits
+			getProficienciesFromTraits
 		]
 	);
 
@@ -788,14 +899,7 @@ const Trait = ({
 					prof =>
 						prof.type === selectedProficiencyOptionsType &&
 						!(
-							values.traits
-								.flatMap(t => t.proficiencies ?? [])
-								.concat(
-									values.traits.flatMap(
-										t => t.proficiencyOptions?.options ?? []
-									)
-								)
-								.some(tp => tp.id === prof.index) &&
+							getProficienciesFromTraits().some(tp => tp.id === prof.index) &&
 							!(trait.proficiencyOptions?.options ?? []).some(
 								tp => tp.id === prof.index
 							)
@@ -809,7 +913,7 @@ const Trait = ({
 			proficiencies,
 			selectedProficiencyOptionsType,
 			trait.proficiencyOptions?.options,
-			values.traits
+			getProficienciesFromTraits
 		]
 	);
 
@@ -865,38 +969,15 @@ const Trait = ({
 					onChange={handleDescriptionChange}
 					onBlur={handleDescriptionBlur}
 				/>
-				<div className={classes['checkbox-deck']}>
-					<Checkbox
-						label="Proficiencies"
-						checked={!!trait.proficiencies}
-						onChange={handleCheckProficiencies}
-					/>
-					<Checkbox
-						label="Proficiency Options"
-						checked={!!trait.proficiencyOptions}
-						onChange={handleCheckProficiencyOptions}
-					/>
-					<Checkbox
-						label="HP Bonus per Level"
-						checked={trait.hpBonusPerLevel !== undefined}
-						onChange={handleCheckHPBonus}
-					/>
-					<Checkbox
-						label="Spells"
-						checked={!!trait.spells}
-						onChange={handleCheckSpells}
-					/>
-					<Checkbox
-						label="Spell Options"
-						checked={!!trait.spellOptions}
-						onChange={handleCheckSpellOptions}
-					/>
-					<Checkbox
-						label="Subtraits"
-						checked={!!trait.subtraitOptions}
-						onChange={handleCheckSubtraits}
-					/>
-				</div>
+				<CheckboxDeck
+					trait={trait}
+					onHPBonusCheck={handleCheckHPBonus}
+					onProficienciesCheck={handleCheckProficiencies}
+					onProficiencyOptionsCheck={handleCheckProficiencyOptions}
+					onSpellOptionsCheck={handleCheckSpellOptions}
+					onSpellsCheck={handleCheckSpells}
+					onSubtraitsCheck={handleCheckSubtraits}
+				/>
 				{trait.proficiencies && (
 					<div className={classes['extra-deck']}>
 						<Select
@@ -1156,6 +1237,84 @@ const Trait = ({
 							onAdd={handleSpellOptionsAdd}
 							onRemove={handleSpellOptionsRemove}
 						/>
+					</div>
+				)}
+				{trait.subtraitOptions && (
+					<div
+						className={classes['extra-deck']}
+						style={{
+							flexWrap: 'nowrap',
+							flexDirection: 'column',
+							alignItems: 'center'
+						}}
+					>
+						<NumberTextInput
+							id={`traits.${index}.subtraitOptions.choose`}
+							label="Number of Subtraits to Select"
+							value={trait.subtraitOptions.choose}
+							touched={
+								clickedSubmit ||
+								(touched.traits &&
+									touched.traits[index] &&
+									(
+										touched.traits[index]?.subtraitOptions as FormikTouched<{
+											choose: number;
+										}>
+									)?.choose)
+							}
+							error={
+								errors.traits &&
+								errors.traits[index] &&
+								(typeof errors.traits[index] === 'string'
+									? (errors.traits[index] as string)
+									: (
+											errors.traits[index] as FormikErrors<{
+												subtraitOptions: {
+													choose?: number;
+												};
+											}>
+									  ).subtraitOptions?.choose)
+							}
+							onChange={handleSubtraitOptionsChooseChange}
+							onBlur={handleSubtraitOptionsChooseBlur}
+						/>
+						<div className={classes['subtraits-container']}>
+							{trait.subtraitOptions.options.map((subtrait, i) => (
+								<Subtrait
+									clickedSubmit={clickedSubmit}
+									filterSpellOptionsSpell={filterSpellOptionsSpell}
+									filterSpellsSpell={filterSpellsSpell}
+									index={i}
+									key={i}
+									onRemove={onRemove}
+									parentIndex={index}
+									proficiencies={proficiencies}
+									proficienciesOptions={proficienciesOptions}
+									proficiencyOptionsOptions={proficiencyOptionsOptions}
+									proficiencyTypeOptions={proficiencyTypeOptions}
+									selectedProficienciesType={selectedProficienciesType}
+									selectedProficiencyOptionsType={
+										selectedProficiencyOptionsType
+									}
+									setSelectedProficienciesType={setSelectedProficienciesType}
+									setSelectedProficiencyOptionsType={
+										setSelectedProficiencyOptionsType
+									}
+									shouldUseReduxStore={shouldUseReduxStore}
+									spells={spells}
+									subtrait={subtrait}
+								/>
+							))}
+							{trait.subtraitOptions.options.length < 10 && (
+								<Button
+									positive
+									onClick={handleAddSubtrait}
+									style={{ width: 'fit-content' }}
+								>
+									Add Subtrait
+								</Button>
+							)}
+						</div>
 					</div>
 				)}
 			</div>
