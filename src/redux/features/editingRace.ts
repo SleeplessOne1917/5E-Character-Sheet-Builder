@@ -583,7 +583,7 @@ const editingRaceSlice = createSlice({
 			}: PayloadAction<{
 				index: number;
 				parentIndex: number;
-				spells?: Item[];
+				spells: Item[];
 			}>
 		) => {
 			prepStateForSubtrait({ state, parentIndex, index });
@@ -657,6 +657,19 @@ const editingRaceSlice = createSlice({
 				...state.traits[payload].subtraitOptions.options,
 				{}
 			];
+		},
+		removeTraitSubtrait: (
+			state,
+			{
+				payload: { parentIndex, index }
+			}: PayloadAction<{ parentIndex: number; index: number }>
+		) => {
+			prepStateForSubtrait({ state, parentIndex, index });
+
+			// @ts-ignore
+			state.traits[parentIndex].subtraitOptions.options = state.traits[
+				parentIndex
+			].subtraitOptions?.options.filter((v, i) => i !== index);
 		}
 	}
 });
@@ -718,7 +731,8 @@ export const {
 	setSubtraitSpellOptionsChoose,
 	setSubtraitSpellOptionsOptions,
 	setTraitSubtraitOptionsChoose,
-	addTraitSubtrait
+	addTraitSubtrait,
+	removeTraitSubtrait
 } = editingRaceSlice.actions;
 
 export default editingRaceSlice.reducer;

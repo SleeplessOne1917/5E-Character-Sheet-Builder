@@ -381,7 +381,7 @@ const raceSchema = object({
 						.of(
 							object({
 								name: string()
-									.required()
+									.required('Subtrait name is required')
 									.max(
 										50,
 										'Subtrait option name cannot be more than 50 characters long'
@@ -402,13 +402,13 @@ const raceSchema = object({
 									.of(
 										object({
 											id: string()
-												.required()
+												.required('Subtrait proficiency id is required')
 												.max(
 													50,
 													'Subtrait proficiency id cannot be more than 50 characters long'
 												),
 											name: string()
-												.required()
+												.required('Subtrait proficiency name is required')
 												.max(
 													50,
 													'Subtrait proficiency name cannot be more than 50 characters long'
