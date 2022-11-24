@@ -20,8 +20,8 @@
     background-color: var(--wine-red);
 }
 
-.negative:active {
-    background-color: var(--wine-red-active) !important;
+.negative:active, .negative:not([disabled]):hover:active {
+    background-color: var(--wine-red-active);
 }
 
 .negative:disabled {
@@ -32,8 +32,8 @@
     background-color: var(--positive-green);
 }
 
-.positive:active {
-    background-color: var(--positive-green-active) !important;
+.positive:active, .positive:not([disabled]):hover:active {
+    background-color: var(--positive-green-active);
 }
 
 .positive:disabled {
