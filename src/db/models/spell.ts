@@ -1,9 +1,10 @@
+import { Model, Schema, Types, model, models } from 'mongoose';
+import { itemSchema, summonSchema } from './common';
+
+import Document from '../../types/db/document';
 import { Item } from '../../types/db/item';
 import { SpellComponent } from '../../types/srd';
 import { Summon } from '../../types/summon';
-import { Types, Schema, model, models, Model } from 'mongoose';
-import Document from '../../types/db/document';
-import { itemSchema, summonSchema } from './common';
 
 export interface ISpell {
 	userId: Types.ObjectId;
@@ -27,7 +28,7 @@ export interface ISpell {
 export interface ISpellDocument extends ISpell, Document {}
 
 const spellSchema = new Schema<ISpell>({
-	userId: { type: Schema.Types.ObjectId, required: true },
+	userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 	name: { type: String, required: true, trim: true },
 	level: { type: Number, required: true },
 	castingTime: { type: String, required: true, trim: true },
