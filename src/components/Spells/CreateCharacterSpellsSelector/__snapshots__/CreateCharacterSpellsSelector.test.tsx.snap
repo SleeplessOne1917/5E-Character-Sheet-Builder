@@ -167,6 +167,157 @@ exports[`renders correctly default 1`] = `
       data-testid="spell-selector"
     >
       <div
+        aria-label="True Strike"
+        class="selector-label"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="label-name-container"
+        >
+          <svg
+            class="label-icon"
+          >
+            <use
+              xlink:href="/Icons.svg#divination"
+            />
+          </svg>
+          True Strike
+        </div>
+        <svg
+          aria-hidden="true"
+          class="label-icon"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div
+        class="selector-display"
+        style="display: none;"
+      >
+        <div
+          class="summary"
+        >
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              Level
+            </span>
+            :
+             
+          </div>
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              Casting time
+            </span>
+            : 
+          </div>
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              Duration
+            </span>
+            :
+             
+          </div>
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              Range
+            </span>
+            :
+             
+          </div>
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              School
+            </span>
+            :
+             
+          </div>
+          <div
+            class="summary-item"
+          >
+            <span
+              class="summary-item-label"
+            >
+              Components
+            </span>
+            : 
+          </div>
+        </div>
+        <div
+          class="description"
+        >
+          <div
+            style="display: flex; align-items: center; justify-content: center;"
+          >
+            <div
+              class="container"
+            >
+              <svg
+                class="icon"
+              >
+                <use
+                  xlink:href="/Icons.svg#spinner"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="other"
+        />
+        <div
+          class="buttons"
+        >
+          <button
+            class="button positive"
+            style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+            type="button"
+          >
+            Add
+          </button>
+          <button
+            class="button negative"
+            disabled=""
+            style="font-size: 1.3rem; padding: 1rem; margin: 0.25rem;"
+            type="button"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="selector"
+      data-testid="spell-selector"
+    >
+      <div
         aria-label="Light"
         class="selector-label"
         role="button"
