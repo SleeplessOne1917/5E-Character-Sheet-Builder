@@ -2,7 +2,7 @@ import { ChangeEventHandler, FocusEventHandler, useCallback } from 'react';
 import {
 	EditingRaceState,
 	setLanguages,
-	setNumLanguageOptions
+	setNumberOfLanguageOptions
 } from '../../../redux/features/editingRace';
 import { FormikErrors, useFormikContext } from 'formik';
 
@@ -55,18 +55,18 @@ const Languages = ({
 			);
 
 			if (
-				(values.numLanguageOptions ?? 0) + newLanguages.length >
+				(values.numberOfLanguageOptions ?? 0) + newLanguages.length >
 				languages.length
 			) {
 				setFieldValue(
-					'numLanguageOptions',
+					'numberOfLanguageOptions',
 					languages.length - newLanguages.length,
 					false
 				);
 
 				if (shouldUseReduxStore) {
 					dispatch(
-						setNumLanguageOptions(languages.length - newLanguages.length)
+						setNumberOfLanguageOptions(languages.length - newLanguages.length)
 					);
 				}
 			}
@@ -78,14 +78,14 @@ const Languages = ({
 			dispatch,
 			languages,
 			shouldUseReduxStore,
-			values.numLanguageOptions
+			values.numberOfLanguageOptions
 		]
 	);
 
 	const handleNumberOfLanguageOptionsChange: ChangeEventHandler<HTMLInputElement> =
 		useCallback(
 			event => {
-				setFieldValue('numLanguageOptions', event.target.value, false);
+				setFieldValue('numberOfLanguageOptions', event.target.value, false);
 			},
 			[setFieldValue]
 		);
@@ -103,10 +103,10 @@ const Languages = ({
 				}
 
 				if (shouldUseReduxStore) {
-					dispatch(setNumLanguageOptions(newValue));
+					dispatch(setNumberOfLanguageOptions(newValue));
 				}
-				setFieldValue('numLanguageOptions', newValue, false);
-				setFieldTouched('numLanguageOptions', true, false);
+				setFieldValue('numberOfLanguageOptions', newValue, false);
+				setFieldTouched('numberOfLanguageOptions', true, false);
 			},
 			[
 				dispatch,
@@ -144,11 +144,11 @@ const Languages = ({
 				onSelect={handleLanguagesSelect}
 			/>
 			<NumberTextInput
-				id="numLanguageOptions"
+				id="numberOfLanguageOptions"
 				label="Number of language options"
-				value={values.numLanguageOptions}
-				touched={clickedSubmit || touched.numLanguageOptions}
-				error={errors.numLanguageOptions}
+				value={values.numberOfLanguageOptions}
+				touched={clickedSubmit || touched.numberOfLanguageOptions}
+				error={errors.numberOfLanguageOptions}
 				onChange={handleNumberOfLanguageOptionsChange}
 				onBlur={handleNumberOfLanguageOptionsBlur}
 				errorStyle={{ fontSize: '1rem' }}

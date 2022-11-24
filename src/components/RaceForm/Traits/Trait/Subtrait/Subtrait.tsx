@@ -1,7 +1,8 @@
 import BaseTrait, { ReduxActions } from '../BaseTrait/BaseTrait';
+import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
+import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
+import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 import {
-	EditingRaceState,
-	TraitState,
 	addSubtraitHPBonus,
 	addSubtraitProficiencies,
 	addSubtraitProficiencyOptions,
@@ -22,10 +23,8 @@ import {
 	setSubtraitSpellOptionsOptions,
 	setSubtraitSpells
 } from '../../../../../redux/features/editingRace';
-import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
 
-import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
+import Trait from '../../../../../types/trait';
 import { useMemo } from 'react';
 
 type SubtraitProps = {
@@ -34,7 +33,7 @@ type SubtraitProps = {
 	index: number;
 	shouldUseReduxStore: boolean;
 	clickedSubmit: boolean;
-	subtrait: TraitState;
+	subtrait: Trait;
 	selectedProficienciesType: ProficiencyType | null;
 	setSelectedProficienciesType: (value: ProficiencyType | null) => void;
 	selectedProficiencyOptionsType: ProficiencyType | null;
@@ -57,7 +56,7 @@ const Subtrait = ({
 	proficiencies,
 	spells
 }: SubtraitProps) => {
-	const { errors, touched } = useFormikContext<EditingRaceState>();
+	const { errors, touched } = useFormikContext<Omit<Race, 'id'>>();
 
 	const baseStr = useMemo(
 		() => `traits.${parentIndex}.subtraitOptions.options.${index}`,
@@ -68,22 +67,27 @@ const Subtrait = ({
 		() =>
 			clickedSubmit ||
 			(touched.traits &&
-				touched.traits[parentIndex] &&
-				touched.traits[parentIndex].subtraitOptions &&
-				(
-					touched.traits[parentIndex].subtraitOptions as unknown as Required<
-						FormikTouched<{
-							options: TraitState[];
-						}>
-					>
-				).options &&
-				(
-					touched.traits[parentIndex].subtraitOptions as unknown as Required<
-						FormikTouched<{
-							options: TraitState[];
-						}>
-					>
-				).options[index]),
+				(typeof touched.traits === 'boolean'
+					? touched.traits
+					: (touched.traits as FormikTouched<Trait>[])[parentIndex] &&
+					  (touched.traits as FormikTouched<Trait>[])[parentIndex]
+							.subtraitOptions &&
+					  (
+							(touched.traits as FormikTouched<Trait>[])[parentIndex]
+								.subtraitOptions as unknown as Required<
+								FormikTouched<{
+									options: Trait[];
+								}>
+							>
+					  ).options &&
+					  (
+							(touched.traits as FormikTouched<Trait>[])[parentIndex]
+								.subtraitOptions as unknown as Required<
+								FormikTouched<{
+									options: Trait[];
+								}>
+							>
+					  ).options[index])),
 		[parentIndex, index, touched.traits, clickedSubmit]
 	);
 

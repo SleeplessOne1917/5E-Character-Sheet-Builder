@@ -2,12 +2,8 @@ import BaseTrait, {
 	ReduxActions,
 	SubtraitReduxActions
 } from './BaseTrait/BaseTrait';
+import { useMemo } from 'react';
 import {
-	useMemo
-} from 'react';
-import {
-	EditingRaceState,
-	TraitWithSubtraitsState,
 	addTraitHPBonus,
 	addTraitProficiencies,
 	addTraitProficiencyOptions,
@@ -33,16 +29,17 @@ import {
 	setTraitSpells,
 	setTraitSubtraitOptionsChoose
 } from '../../../../redux/features/editingRace';
-import { FormikErrors, useFormikContext } from 'formik';
+import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
 
-import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
+import { Race, SpellItem } from '../../../../types/characterSheetBuilderAPI';
+import Trait from '../../../../types/trait';
 
 type TraitProps = {
 	index: number;
 	shouldUseReduxStore: boolean;
 	clickedSubmit: boolean;
-	trait: TraitWithSubtraitsState;
+	trait: Trait;
 	selectedProficienciesType: ProficiencyType | null;
 	setSelectedProficienciesType: (value: ProficiencyType | null) => void;
 	selectedProficiencyOptionsType: ProficiencyType | null;
@@ -65,20 +62,23 @@ const Trait = ({
 	proficiencies,
 	spells
 }: TraitProps) => {
-	const { touched, errors } = useFormikContext<EditingRaceState>();
+	const { touched, errors } = useFormikContext<Omit<Race, 'id'>>();
 
 	const baseStr = useMemo(() => `traits.${index}`, [index]);
 
 	const baseTouch = useMemo(
-		() => clickedSubmit || (touched.traits && touched.traits[index]),
+		() =>
+			clickedSubmit ||
+			(touched.traits &&
+				(typeof touched.traits === 'boolean'
+					? touched.traits
+					: (touched.traits as FormikTouched<Trait>[])[index])),
 		[index, touched.traits, clickedSubmit]
 	);
 
 	const baseError = useMemo(
 		() =>
-			errors.traits
-				? (errors.traits[index] as FormikErrors<TraitWithSubtraitsState>)
-				: undefined,
+			errors.traits ? (errors.traits[index] as FormikErrors<Trait>) : undefined,
 		[errors.traits, index]
 	);
 

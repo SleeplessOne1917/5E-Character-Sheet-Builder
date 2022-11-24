@@ -178,6 +178,58 @@ const typeDefs = gql`
 		spells: [Spell!]!
 	}
 
+	input AbilityBonusInput {
+		abilityScore: ItemInput!
+		bonus: Int!
+	}
+
+	input AbilityBonusOptionsInput {
+		bonus: Int!
+		numberOfAbilityScores: Int!
+	}
+
+	input ChooseOptionsInput {
+		choose: Int!
+		options: [ItemInput!]!
+	}
+
+	input SubtraitInput {
+		name: String!
+		description: String!
+		hpBonusPerLevel: Int
+		proficiencies: [ItemInput!]
+		proficiencyOptions: ChooseOptionsInput
+		spells: [ItemInput!]
+		spellOptions: ChooseOptionsInput
+	}
+
+	input SubtraitOptionsInput {
+		choose: Int!
+		options: [SubtraitInput!]!
+	}
+
+	input TraitInput {
+		name: String!
+		description: String!
+		hpBonusPerLevel: Int
+		proficiencies: [ItemInput!]
+		proficiencyOptions: ChooseOptionsInput
+		spells: [ItemInput!]
+		spellOptions: ChooseOptionsInput
+		subtraitOptions: SubtraitOptionsInput
+	}
+
+	input RaceInput {
+		name: String!
+		abilityBonuses: [AbilityBonusInput!]!
+		abilityBonusOptions: AbilityBonusOptionsInput
+		languages: [ItemInput!]!
+		numberOfLanguageOptions: Int
+		size: Size!
+		speed: Int!
+		traits: [TraitInput!]
+	}
+
 	type Query {
 		viewer: String
 		spells(
@@ -211,6 +263,7 @@ const typeDefs = gql`
 		): String!
 		createSpell(spell: SpellInput!): String!
 		updateSpell(id: ID!, spell: SpellInput!): String!
+		createRace(race: RaceInput!): String!
 	}
 `;
 

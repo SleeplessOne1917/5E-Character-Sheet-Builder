@@ -3,18 +3,18 @@ import { Item } from './db/item';
 type Trait = {
 	name: string;
 	description: string;
-	proficiencies: Item[];
-	proficiencyOptions: {
+	proficiencies?: Item[];
+	proficiencyOptions?: {
 		choose: number;
 		options: Item[];
 	};
-	hpBonusPerLevel: number;
-	spells: Item[];
-	spellOptions: {
+	hpBonusPerLevel?: number;
+	spells?: Item[];
+	spellOptions?: {
 		choose: number;
 		options: Item[];
 	};
-	subtraitOptions: {
+	subtraitOptions?: {
 		choose: number;
 		options: Omit<Trait, 'subtraitOptions'>[];
 	};

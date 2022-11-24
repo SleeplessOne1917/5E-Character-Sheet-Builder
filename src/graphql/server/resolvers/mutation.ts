@@ -1,3 +1,4 @@
+import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
 import User, { IUser } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
@@ -20,6 +21,7 @@ import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import jwt from 'jsonwebtoken';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
+import raceSchema from '../../../yup-schemas/raceSchema';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import spellSchema from '../../../yup-schemas/spellSchema';
@@ -80,6 +82,10 @@ type CreateSpellArgs = {
 type UpdateSpellArgs = {
 	id: string;
 	spell: Omit<ISpell, 'userId'>;
+};
+
+type CreateRaceArgs = {
+	race: Omit<IRace, 'userId'>;
 };
 
 const Mutation = {
@@ -169,9 +175,12 @@ const Mutation = {
 
 		return { accessToken, refreshToken };
 	},
-	token: async (parent: never, { refreshToken }: { refreshToken: string | null }) => {
+	token: async (
+		parent: never,
+		{ refreshToken }: { refreshToken: string | null }
+	) => {
 		if (!refreshToken) {
-			throw new ApolloError('Refresh token cannot be null')
+			throw new ApolloError('Refresh token cannot be null');
 		}
 
 		let username: string;
@@ -424,6 +433,31 @@ const Mutation = {
 		}
 
 		return 'Spell edited successfully';
+	},
+	createRace: async (
+		parent: never,
+		{ race }: CreateRaceArgs,
+		{ username }: ApolloContext
+	) => {
+		if (!username) {
+			throw new ApolloError(tokenExpired);
+		}
+
+		await raceSchema.validate(race, { strict: true });
+
+		const user = await User.findOne({ username });
+
+		if (!user) {
+			throw new ApolloError(userDoesNotExist);
+		}
+
+		try {
+			await Race.create({ ...race, userId: user._id });
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not create race');
+		}
+
+		return 'Race successfully created';
 	}
 };
 

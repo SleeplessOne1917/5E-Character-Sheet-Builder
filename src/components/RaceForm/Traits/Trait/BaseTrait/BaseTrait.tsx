@@ -6,12 +6,9 @@ import {
 	useMemo,
 	useState
 } from 'react';
-import {
-	EditingRaceState,
-	TraitWithSubtraitsState
-} from '../../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
+import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 
 import Button from '../../../../Button/Button';
 import CheckboxDeck from '../CheckboxDeck/CheckboxDeck';
@@ -21,10 +18,10 @@ import MultiSelect from '../../../../Select/MultiSelect/MultiSelect';
 import NumberTextInput from '../../../NumberTextInput/NumberTextInput';
 import Option from '../../../../Select/Option';
 import Select from '../../../../Select/Select/Select';
-import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 import SpellsSelector from '../../../../Spells/SpellsSelector/SpellsSelector';
 import Subtrait from '../Subtrait/Subtrait';
 import TextInput from '../../../../TextInput/TextInput';
+import Trait from '../../../../../types/trait';
 import classes from './BaseTrait.module.css';
 import { getProficiencyTypeName } from '../../../../../services/proficiencyTypeService';
 import { useAppDispatch } from '../../../../../hooks/reduxHooks';
@@ -67,7 +64,7 @@ export type SubtraitReduxActions = {
 type BaseTraitProps = {
 	onRemove: () => void;
 	shouldUseReduxStore: boolean;
-	trait: TraitWithSubtraitsState;
+	trait: Trait;
 	style?: CSSProperties;
 	selectedProficienciesType: ProficiencyType | null;
 	setSelectedProficienciesType: (value: ProficiencyType | null) => void;
@@ -76,8 +73,8 @@ type BaseTraitProps = {
 	proficiencies: SrdProficiencyItem[];
 	spells: SpellItem[];
 	baseStr: string;
-	baseTouch: boolean | FormikTouched<TraitWithSubtraitsState> | undefined;
-	baseError: FormikErrors<TraitWithSubtraitsState> | undefined;
+	baseTouch: boolean | FormikTouched<Trait> | undefined;
+	baseError: FormikErrors<Trait> | undefined;
 	reduxActions: ReduxActions;
 	subtraitReduxActions?: SubtraitReduxActions;
 	clickedSubmit: boolean;
@@ -130,7 +127,7 @@ const BaseTrait = ({
 		setFieldTouched,
 		setFieldError,
 		values
-	} = useFormikContext<EditingRaceState>();
+	} = useFormikContext<Omit<Race, 'id'>>();
 	const dispatch = useAppDispatch();
 
 	const [

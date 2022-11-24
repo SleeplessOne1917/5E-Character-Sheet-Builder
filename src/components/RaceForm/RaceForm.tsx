@@ -1,12 +1,12 @@
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../types/srd';
 import Button, { ButtonType } from '../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
+import { Race, SpellItem } from '../../types/characterSheetBuilderAPI';
 
 import Abilities from './Abilities/Abilities';
-import { EditingRaceState } from '../../redux/features/editingRace';
 import Languages from './Languages/Languages';
 import NameSizeSpeed from './NameSizeSpeed/NameSizseSpeed';
-import { SpellItem } from '../../types/characterSheetBuilderAPI';
+import { PartialBy } from '../../types/helpers';
 import Traits from './Traits/Traits';
 import classes from './RaceForm.module.css';
 import raceSchema from '../../yup-schemas/raceSchema';
@@ -17,12 +17,12 @@ type RaceFormProps = {
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
 	shouldUseReduxStore: boolean;
-	initialValues: EditingRaceState;
-	handleFormikSubmit: (
-		values: EditingRaceState,
-		helpers: FormikHelpers<EditingRaceState>
-	) => Promise<void>;
+	initialValues: PartialBy<Race, 'id'>;
 	spells: SpellItem[];
+	onSubmit: (
+		values: PartialBy<Race, 'id'>,
+		helpers: FormikHelpers<PartialBy<Race, 'id'>>
+	) => Promise<void>;
 };
 
 const RaceForm = ({
@@ -32,13 +32,13 @@ const RaceForm = ({
 	shouldUseReduxStore,
 	initialValues,
 	spells,
-	handleFormikSubmit
+	onSubmit
 }: RaceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
 
 	return (
 		<Formik
-			onSubmit={handleFormikSubmit}
+			onSubmit={onSubmit}
 			initialValues={initialValues}
 			validationSchema={raceSchema}
 		>

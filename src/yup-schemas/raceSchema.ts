@@ -139,7 +139,7 @@ const raceSchema = object({
 			'Sum of number of abilityBonuses and abilityScores must be less than or equal to 6',
 			(value, context) => {
 				if (!value) {
-					return false;
+					return true;
 				}
 
 				const {
@@ -162,15 +162,16 @@ const raceSchema = object({
 				);
 			}
 		)
-		.optional(),
+		.optional()
+		.default(undefined),
 	languages: array()
 		.of(languageSchema)
 		.required('Languages are required')
 		.min(1, 'Must have at least 1 language'),
-	numLanguageOptions: number()
+	numberOfLanguageOptions: number()
 		.test(
 			'sum-less-than-16',
-			'Sum of number of languages and numLanguageOptions must be less than or equal to 16',
+			'Sum of number of languages and numberOfLanguageOptions must be less than or equal to 16',
 			(value, context) => {
 				const {
 					parent: { languages }
@@ -281,7 +282,9 @@ const raceSchema = object({
 						)
 						.required('Must have proficiencies to choose from')
 						.min(1, 'Must have at least 1 proficiency to choose from')
-				}).optional(),
+				})
+					.optional()
+					.default(undefined),
 				hpBonusPerLevel: number()
 					.min(1, 'HP bonus cannot be lower than 1')
 					.max(10, 'HP bonus cannot be more than 10')
@@ -351,7 +354,9 @@ const raceSchema = object({
 						)
 						.min(1, 'Must have at least 1 spell to choose from')
 						.required('Must have spells to choose from')
-				}).optional(),
+				})
+					.optional()
+					.default(undefined),
 				subtraitOptions: object({
 					choose: number()
 						.min(1, 'Cannot choose less than 1 subtrait option')
@@ -464,7 +469,9 @@ const raceSchema = object({
 											})
 										)
 										.required('Must have proficiencies to choose from')
-								}).optional(),
+								})
+									.optional()
+									.default(undefined),
 								hpBonusPerLevel: number()
 									.min(1, 'Subtrait HP bonus cannot be lower than 1')
 									.max(10, 'Subtrait HP bonus cannot be more than 10')
@@ -532,11 +539,15 @@ const raceSchema = object({
 											})
 										)
 										.required('Must have subtrait spells to choose from')
-								}).optional()
+								})
+									.optional()
+									.default(undefined)
 							})
 						)
 						.required('Must have subtraits to choose from')
-				}).optional()
+				})
+					.optional()
+					.default(undefined)
 			})
 		)
 		.max(10, 'Cannot have more than 10 traits')

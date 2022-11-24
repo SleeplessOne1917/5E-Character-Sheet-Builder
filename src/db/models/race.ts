@@ -14,15 +14,15 @@ export interface IRace {
 		abilityScore: Item;
 		bonus: number;
 	}[];
-	abilityBonusOptions: {
+	abilityBonusOptions?: {
 		bonus: number;
 		numberOfAbilityScores: number;
 	};
 	languages: Item[];
-	numLanguageOptions: number;
+	numberOfLanguageOptions?: number;
 	size: Size;
 	speed: number;
-	traits: Trait[];
+	traits?: Trait[];
 }
 
 export interface IRaceDocument extends IRace, Document {}
@@ -92,14 +92,14 @@ const traitSchema = new Schema<Trait>({
 const raceSchema = new Schema<IRace>({
 	userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 	name: { type: String, required: true, trim: true },
-	abilityBonuses: abilityBonusesSchema,
-	abilityBonusOptions: [abilityBonusOptionsSchema],
-	languages: [itemSchema],
-	numLanguageOptions: Number,
+	abilityBonuses: { type: [abilityBonusesSchema], required: true },
+	abilityBonusOptions: abilityBonusOptionsSchema,
+	languages: { type: [itemSchema], required: true },
+	numberOfLanguageOptions: Number,
 	size: { type: String, required: true, enum: SIZES },
 	speed: { type: Number, required: true },
 	traits: [traitSchema]
 });
 
-export default (models.Spell ||
+export default (models.Race ||
 	model<IRaceDocument>('Race', raceSchema, 'races')) as Model<IRaceDocument>;

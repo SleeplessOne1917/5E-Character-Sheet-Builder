@@ -36,7 +36,7 @@ export type EditingRaceState = {
 		numberOfAbilityScores?: number;
 	};
 	languages: Item[];
-	numLanguageOptions?: number;
+	numberOfLanguageOptions?: number;
 	size?: Size;
 	speed?: number;
 	traits: TraitWithSubtraitsState[];
@@ -81,6 +81,7 @@ const editingRaceSlice = createSlice({
 	name: 'editingRace',
 	initialState,
 	reducers: {
+		resetRace: () => initialState,
 		setName: (state, { payload }: PayloadAction<string>) => {
 			state.name = payload;
 		},
@@ -93,14 +94,14 @@ const editingRaceSlice = createSlice({
 		setLanguages: (state, { payload }: PayloadAction<Item[]>) => {
 			state.languages = payload;
 		},
-		setNumLanguageOptions: (
+		setNumberOfLanguageOptions: (
 			state,
 			{ payload }: PayloadAction<number | undefined>
 		) => {
 			if (!payload) {
-				delete state.numLanguageOptions;
+				delete state.numberOfLanguageOptions;
 			} else {
-				state.numLanguageOptions = payload;
+				state.numberOfLanguageOptions = payload;
 			}
 		},
 		addAbilityBonus: state => {
@@ -675,11 +676,12 @@ const editingRaceSlice = createSlice({
 });
 
 export const {
+	resetRace,
 	setName,
 	setSize,
 	setSpeed,
 	setLanguages,
-	setNumLanguageOptions,
+	setNumberOfLanguageOptions,
 	addAbilityBonus,
 	removeAbilityBonus,
 	setAbilityBonusBonus,
