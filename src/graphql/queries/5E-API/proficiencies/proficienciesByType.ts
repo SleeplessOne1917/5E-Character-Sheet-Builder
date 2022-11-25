@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const GET_PROFICIENCIES_BY_TYPE = gql`
 	query ProficienciesByType($type: ProficiencyTypeFilter) {

@@ -1,12 +1,18 @@
 import { Spell, SpellItem } from '../types/characterSheetBuilderAPI';
 import { SrdSpell, SrdSpellItem } from '../types/srd';
 import {
+	getSpell as getCharacterSheetBuilderSpell,
+	getSpells as getCharacterSheetBuilderSpells,
+	getSpellsByClass as getCharacterSheetBuilderSpellsByClass
+} from '../graphql/characterSheetBuilderClientService';
+import {
 	getSpell as getSrdSpell,
 	getSpells as getSrdSpells,
 	getSpellsByClass as getSrdSpellsByClass
 } from '../graphql/srdClientService';
 
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
+import { isObjectId } from './objectIdService';
 
 export const mapSpell = (spell: SrdSpell): Spell =>
 	Object.entries({
@@ -59,20 +65,48 @@ export const mapSpellItem = ({
 	}
 });
 
-export const getSpell = async (index: string) => {
-	const spell = (await getSrdSpell(index)).data?.spell;
+export const getSpell = async (id: string) => {
+	if (isObjectId(id)) {
+		return (await getCharacterSheetBuilderSpell(id))?.data?.spell;
+	}
+
+	const spell = (await getSrdSpell(id)).data?.spell;
 
 	return spell ? mapSpell(spell) : undefined;
 };
 
-export const getSpellsByClass = async (klass: string | string[]) => {
-	const spells = (await getSrdSpellsByClass(klass)).data?.spells;
+const combineSpellArrays = ({
+	srdSpells,
+	characterSheetBuilderSpells
+}: {
+	srdSpells?: SpellItem[];
+	characterSheetBuilderSpells?: SpellItem[];
+}) =>
+	(srdSpells ?? []).concat(characterSheetBuilderSpells ?? []).sort((a, b) => {
+		const val = a.level - b.level;
 
-	return spells?.map<SpellItem>(mapSpellItem);
+		return val === 0 ? a.name.localeCompare(b.name) : val;
+	});
+
+export const getSpellsByClass = async (klass: string) => {
+	const srdSpells = (
+		await getSrdSpellsByClass(klass)
+	).data?.spells?.map<SpellItem>(mapSpellItem);
+
+	const characterSheetBuilderSpells = (
+		await getCharacterSheetBuilderSpellsByClass(klass)
+	).data?.spells;
+
+	return combineSpellArrays({ srdSpells, characterSheetBuilderSpells });
 };
 
 export const getSpells = async () => {
-	const spells = (await getSrdSpells()).data?.spells;
+	const srdSpells = (await getSrdSpells()).data?.spells?.map<SpellItem>(
+		mapSpellItem
+	);
 
-	return spells?.map<SpellItem>(mapSpellItem);
+	const characterSheetBuilderSpells = (await getCharacterSheetBuilderSpells())
+		.data?.spells;
+
+	return combineSpellArrays({ srdSpells, characterSheetBuilderSpells });
 };

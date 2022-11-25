@@ -7,10 +7,10 @@ import {
 } from 'react';
 
 import Link from 'next/link';
+import { capitalize } from '../../../../services/capitalizeService';
 import classes from './SectionBar.module.css';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
-import { useRouter } from 'next/router';
-import { capitalize } from '../../../../services/capitalizeService';
+import { usePathname } from 'next/navigation';
 
 export enum Section {
 	'race',
@@ -59,8 +59,8 @@ const SectionBar = ({
 	const [selectedSection, setSelectedSection] = useState(
 		getSections(hasSpellcasting)[0].section
 	);
-	const { pathname } = useRouter();
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+	const pathname = usePathname();
 
 	useEffect(() => {
 		const sections = getSections(hasSpellcasting);

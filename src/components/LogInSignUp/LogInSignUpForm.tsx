@@ -1,3 +1,5 @@
+'use client';
+
 import Button, { ButtonType } from '../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
@@ -5,7 +7,7 @@ import Link from 'next/link';
 import TextInput from '../TextInput/TextInput';
 import classes from './LogInSignUpForm.module.css';
 
-type LogInSignUpValues = {
+export type LogInSignUpValues = {
 	username: string;
 	password: string;
 	email?: string;

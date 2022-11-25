@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '../../../../Button/Button';
 import Descriptor from '../../Descriptor/Descriptor';
 import { ReactNode } from 'react';

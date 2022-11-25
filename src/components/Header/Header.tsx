@@ -1,20 +1,22 @@
+'use client';
+
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { MouseEventHandler } from 'react';
 import classes from './Header.module.css';
-import { useAppSelector } from '../../hooks/reduxHooks';
 import useLogout from '../../hooks/useLogout';
 
 type HeaderProps = {
 	onMenuIconClick: MouseEventHandler<SVGSVGElement>;
 	onLogoIconClick: MouseEventHandler<HTMLAnchorElement>;
+	username?: string;
 };
 
 const Header = ({
 	onMenuIconClick,
-	onLogoIconClick
+	onLogoIconClick,
+	username
 }: HeaderProps): JSX.Element => {
-	const viewer = useAppSelector(state => state.viewer);
 	const logout = useLogout();
 
 	return (
@@ -38,7 +40,7 @@ const Header = ({
 							Create
 						</Link>
 					</li>
-					{!viewer && (
+					{!username && (
 						<>
 							<li className={classes['navigation-list-item']}>
 								<Link href="/log-in" className={classes['navigation-link']}>
@@ -52,7 +54,7 @@ const Header = ({
 							</li>
 						</>
 					)}
-					{viewer && (
+					{username && (
 						<>
 							<li className={classes['navigation-list-item']}>
 								<Link href="/my-stuff" className={classes['navigation-link']}>

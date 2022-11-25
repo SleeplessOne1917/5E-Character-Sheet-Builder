@@ -1,24 +1,18 @@
+'use client';
+
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
-import { useCallback, useMemo, useState } from 'react';
-import { useMutation, useQuery } from 'urql';
+import { useCallback, useEffect, useState } from 'react';
+import { useMutation } from 'urql';
 
 import CREATE_RACE from '../../../graphql/mutations/race/createRace';
-import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
 import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
-import GET_TOKEN from '../../../graphql/mutations/user/token';
 import { FormikHelpers } from 'formik';
-import {
-	accessTokenKey,
-	refreshTokenKey,
-	tokenExpired
-} from '../../../constants/generalConstants';
 import { ToastType } from '../../../types/toast';
-import { useRouter } from 'next/router';
-import useLogout from '../../../hooks/useLogout';
+import { useRouter } from 'next/navigation';
 import { show } from '../../../redux/features/toast';
 import {
 	initialState as raceInitialState,
@@ -26,40 +20,32 @@ import {
 } from '../../../redux/features/editingRace';
 
 type RaceProps = {
-	loading: boolean;
+	username?: string;
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
-	srdSpells: SpellItem[];
+	spells: SpellItem[];
 };
 
 const Race = ({
-	loading,
+	username,
 	abilities,
 	languages,
 	proficiencies,
-	srdSpells
+	spells
 }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
 	const [_, createRace] = useMutation(CREATE_RACE);
-	const [__, getToken] = useMutation<{ token: string }>(GET_TOKEN);
 	const [initialValues, setInitialValues] = useState(editingRace);
-	const [spellsResult] = useQuery<{ spells: { spells: SpellItem[] } }>({
-		query: GET_SPELLS
-	});
-	const logout = useLogout();
+
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
-	const spells = useMemo(
-		() =>
-			srdSpells.concat(spellsResult.data?.spells.spells ?? []).sort((a, b) => {
-				const val = a.level - b.level;
-
-				return val === 0 ? a.name.localeCompare(b.name) : val;
-			}),
-		[srdSpells, spellsResult.data?.spells.spells]
-	);
+	useEffect(() => {
+		if (!username) {
+			router.replace('/');
+		}
+	}, [username, router]);
 
 	const handleSubmit = useCallback(
 		async (
@@ -68,40 +54,12 @@ const Race = ({
 		) => {
 			const result = await createRace({ race: values });
 			if (result.error) {
-				if (result.error.message === tokenExpired) {
-					const refreshToken = localStorage.getItem(refreshTokenKey);
-					const tokenResult = await getToken({ refreshToken });
-
-					if (tokenResult.error || !tokenResult.data) {
-						logout();
-						return;
-					}
-
-					localStorage.setItem(accessTokenKey, tokenResult.data.token);
-
-					const result2 = await createRace({ race: values });
-
-					if (result2.error) {
-						const toast = {
-							closeTimeoutSeconds: 10,
-							message: result2.error.message,
-							type: ToastType.error
-						};
-						dispatch(show(toast));
-					} else {
-						setInitialValues(raceInitialState);
-						resetForm();
-						dispatch(resetRace());
-						router.replace('/my-stuff');
-					}
-				} else {
-					const toast = {
-						closeTimeoutSeconds: 10,
-						message: result.error.message,
-						type: ToastType.error
-					};
-					dispatch(show(toast));
-				}
+				const toast = {
+					closeTimeoutSeconds: 10,
+					message: result.error.message,
+					type: ToastType.error
+				};
+				dispatch(show(toast));
 			} else {
 				setInitialValues(raceInitialState);
 				resetForm();
@@ -109,13 +67,13 @@ const Race = ({
 				router.replace('/my-stuff');
 			}
 		},
-		[dispatch, createRace, router, getToken, logout]
+		[dispatch, createRace, router]
 	);
 
 	return (
 		<>
-			{loading && <LoadingPageContent />}
-			{!loading && (
+			{!username && <LoadingPageContent />}
+			{username && (
 				<MainContent testId="create-race">
 					<h1>Create Race</h1>
 					<RaceForm

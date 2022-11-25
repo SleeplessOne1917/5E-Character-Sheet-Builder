@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '../../Button/Button';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import classes from './SpellItemDisplay.module.css';

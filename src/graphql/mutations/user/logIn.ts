@@ -1,11 +1,8 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const LOG_IN = gql`
 	mutation LogIn($user: LoginRequest!) {
-		logIn(user: $user) {
-			accessToken
-			refreshToken
-		}
+		logIn(user: $user)
 	}
 `;
 

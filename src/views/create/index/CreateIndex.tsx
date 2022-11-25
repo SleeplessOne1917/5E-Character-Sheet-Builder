@@ -1,21 +1,26 @@
+'use client';
+
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import Link from 'next/link';
 import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
-import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
-import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
-import { initialState as editingRaceInitialState } from '../../../redux/features/editingRace';
 import { deepEquals } from '../../../services/objectService';
+import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
+import { initialState as editingRaceInitialState } from '../../../redux/features/editingRace';
+import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import { useMemo } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
-const CreateIndex = () => {
-	const router = useRouter();
+type CreateIndexProps = {
+	username?: string;
+};
+
+const CreateIndex = ({ username }: CreateIndexProps) => {
 	const editingCharacter = useAppSelector(state => state.editingCharacter);
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const editingRace = useAppSelector(state => state.editingRace);
-	const viewer = useAppSelector(state => state.viewer);
+	const pathname = usePathname();
 
 	const editingCharacterChanged = useMemo(
 		() => !deepEquals(editingCharacterInitialState, editingCharacter),
@@ -38,7 +43,7 @@ const CreateIndex = () => {
 			<div className={classes.links}>
 				<div className={classes['create-link-container']}>
 					<ArrowLink
-						href={`${router.asPath}/character/race`}
+						href={`${pathname}/character/race`}
 						text={
 							editingCharacterChanged
 								? `Continue Editing ${
@@ -50,11 +55,11 @@ const CreateIndex = () => {
 						}
 					/>
 				</div>
-				{viewer && (
+				{username && (
 					<>
 						<div className={classes['create-link-container']}>
 							<ArrowLink
-								href={`${router.asPath}/spell`}
+								href={`${pathname}/spell`}
 								text={`${
 									editingSpellChanged ? 'Continue Editing' : 'Create'
 								} Spell`}
@@ -62,7 +67,7 @@ const CreateIndex = () => {
 						</div>
 						<div className={classes['create-link-container']}>
 							<ArrowLink
-								href={`${router.asPath}/race`}
+								href={`${pathname}/race`}
 								text={`${
 									editingRaceChanged ? 'Continue Editing' : 'Create'
 								} Race`}
@@ -71,7 +76,7 @@ const CreateIndex = () => {
 					</>
 				)}
 			</div>
-			{!viewer && (
+			{!username && (
 				<div className={classes['create-account-blurb']}>
 					Create classes, spells, and more by{' '}
 					<Link href="/sign-up" className={classes['create-account-link']}>

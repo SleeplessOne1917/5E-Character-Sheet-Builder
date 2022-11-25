@@ -1,17 +1,22 @@
+'use client';
+
 import { GITHUB_URL } from '../../constants/routeConstants';
 import LinkButton from '../LinkButton/LinkButton';
 import { MouseEventHandler } from 'react';
 import classes from './MobileNav.module.css';
-import { useAppSelector } from '../../hooks/reduxHooks';
 import useLogout from '../../hooks/useLogout';
 
 type MobileNavProps = {
 	isOpen: boolean;
 	onClickLink: MouseEventHandler<HTMLAnchorElement>;
+	username?: string;
 };
 
-const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
-	const viewer = useAppSelector(state => state.viewer);
+const MobileNav = ({
+	isOpen,
+	onClickLink,
+	username
+}: MobileNavProps): JSX.Element => {
 	const logout = useLogout();
 
 	return (
@@ -24,7 +29,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 						Create
 					</LinkButton>
 				</li>
-				{!viewer && (
+				{!username && (
 					<>
 						<li>
 							<LinkButton href="/log-in" onClick={onClickLink} tabIndex={-1}>
@@ -38,7 +43,7 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 						</li>
 					</>
 				)}
-				{viewer && (
+				{username && (
 					<>
 						<li>
 							<LinkButton href="/my-stuff" onClick={onClickLink} tabIndex={-1}>
@@ -54,8 +59,9 @@ const MobileNav = ({ isOpen, onClickLink }: MobileNavProps): JSX.Element => {
 							<LinkButton
 								href="#"
 								onClick={event => {
-									logout();
-									onClickLink(event);
+									logout().then(() => {
+										onClickLink(event);
+									});
 								}}
 								tabIndex={-1}
 							>

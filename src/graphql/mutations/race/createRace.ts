@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const CREATE_RACE = gql`
 	mutation CreateRace($race: RaceInput!) {

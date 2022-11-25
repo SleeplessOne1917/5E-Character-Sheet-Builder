@@ -1,7 +1,9 @@
-import { useAppSelector } from '../../../../../hooks/reduxHooks';
-import { Terrain } from '../../../../../types/srd';
+'use client';
+
 import Select from '../../../../Select/Select/Select';
+import { Terrain } from '../../../../../types/srd';
 import classes from './FavoredTerrainSelector.module.css';
+import { useAppSelector } from '../../../../../hooks/reduxHooks';
 
 type FavoredTerrainSelectorProps = {
 	value: Terrain | null;

@@ -1,12 +1,9 @@
-import Button, { ButtonType } from '../../components/Button/Button';
-import {
-	accessTokenKey,
-	refreshTokenKey,
-	tokenExpired
-} from '../../constants/generalConstants';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+'use client';
 
-import { Formik } from 'formik';
+import Button, { ButtonType } from '../../components/Button/Button';
+import { Formik, FormikHelpers } from 'formik';
+import { useCallback, useEffect } from 'react';
+
 import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import TextInput from '../../components/TextInput/TextInput';
@@ -14,25 +11,62 @@ import { ToastType } from '../../types/toast';
 import classes from './Account.module.css';
 import newPasswordSchema from '../../yup-schemas/newPasswordSchema';
 import { show } from '../../redux/features/toast';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 import useCreateNewPasswordMutation from '../../hooks/urql/mutations/useCreateNewPasswordMutation';
-import useGetTokenMutation from '../../hooks/urql/mutations/useGetTokenMutation';
-import useLogout from '../../hooks/useLogout';
+import { useRouter } from 'next/navigation';
 
 type AccountProps = {
-	loading: boolean;
+	username?: string;
 };
 
-const Account = ({ loading }: AccountProps) => {
-	const username = useAppSelector(state => state.viewer);
+type FormValues = {
+	currentPassword: string;
+	newPassword: string;
+	confirmPassword: string;
+};
+
+const Account = ({ username }: AccountProps) => {
 	const [_, createNewPassword] = useCreateNewPasswordMutation();
-	const [__, getToken] = useGetTokenMutation();
-	const logout = useLogout();
 	const dispatch = useAppDispatch();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!username) {
+			router.replace('/');
+		}
+	}, [username, router]);
+
+	const handleCreatePasswordSubmit = useCallback(
+		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+			const result = await createNewPassword(values);
+
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.data?.createNewPassword ?? '',
+						type: ToastType.success
+					})
+				);
+			}
+
+			resetForm();
+		},
+		[createNewPassword, dispatch]
+	);
 
 	return (
 		<>
-			{loading && <LoadingPageContent />}
-			{!loading && (
+			{!username && <LoadingPageContent />}
+			{username && (
 				<MainContent testId="account">
 					<h1>Account</h1>
 					<div className={classes['username-blurb']}>
@@ -47,62 +81,7 @@ const Account = ({ loading }: AccountProps) => {
 							confirmPassword: ''
 						}}
 						validationSchema={newPasswordSchema}
-						onSubmit={async (values, { resetForm }) => {
-							const result = await createNewPassword(values);
-
-							if (result.error) {
-								if (result.error.message === tokenExpired) {
-									const refreshToken = localStorage.getItem(refreshTokenKey);
-									const tokenResult = await getToken({ refreshToken });
-									if (tokenResult.error || !tokenResult.data) {
-										logout();
-										return;
-									}
-									localStorage.setItem(
-										accessTokenKey,
-										tokenResult.data?.token ?? ''
-									);
-
-									const result2 = await createNewPassword(values);
-
-									if (result2.error) {
-										dispatch(
-											show({
-												closeTimeoutSeconds: 10,
-												message: result2.error.message,
-												type: ToastType.error
-											})
-										);
-									} else {
-										dispatch(
-											show({
-												closeTimeoutSeconds: 10,
-												message: result2.data?.createNewPassword ?? '',
-												type: ToastType.success
-											})
-										);
-									}
-								} else {
-									dispatch(
-										show({
-											closeTimeoutSeconds: 10,
-											message: result.error.message,
-											type: ToastType.error
-										})
-									);
-								}
-							} else {
-								dispatch(
-									show({
-										closeTimeoutSeconds: 10,
-										message: result.data?.createNewPassword ?? '',
-										type: ToastType.success
-									})
-								);
-							}
-
-							resetForm();
-						}}
+						onSubmit={handleCreatePasswordSubmit}
 					>
 						{({
 							errors,

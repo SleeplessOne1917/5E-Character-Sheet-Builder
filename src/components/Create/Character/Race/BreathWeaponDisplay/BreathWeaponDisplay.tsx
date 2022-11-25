@@ -1,3 +1,5 @@
+'use client';
+
 import { BreathWeapon } from '../../../../../types/srd';
 import classes from './BreathWeaponDisplay.module.css';
 

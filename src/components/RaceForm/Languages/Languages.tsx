@@ -1,3 +1,5 @@
+'use client';
+
 import { ChangeEventHandler, FocusEventHandler, useCallback } from 'react';
 import {
 	EditingRaceState,

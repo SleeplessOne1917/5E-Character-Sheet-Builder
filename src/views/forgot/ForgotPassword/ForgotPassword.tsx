@@ -1,7 +1,11 @@
+'use client';
+
 import Button, { ButtonType } from '../../../components/Button/Button';
+import { Formik, FormikHelpers } from 'formik';
+import { useCallback, useEffect } from 'react';
 
 import FORGOT_PASSWORD from '../../../graphql/mutations/user/forgotPassword';
-import { Formik } from 'formik';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import TextInput from '../../../components/TextInput/TextInput';
 import { ToastType } from '../../../types/toast';
@@ -10,22 +14,60 @@ import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
-import { useRouter } from 'next/router';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
+import { useRouter } from 'next/navigation';
 
 type ForgotPasswordProps = {
-	loading: boolean;
+	username?: string;
 };
 
-const ForgotPassword = ({ loading }: ForgotPasswordProps) => {
+type FormValues = {
+	email: string;
+	username: string;
+};
+
+const ForgotPassword = ({ username }: ForgotPasswordProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [_, forgotPassword] = useMutation(FORGOT_PASSWORD);
 
+	useEffect(() => {
+		if (username) {
+			router.replace('/');
+		}
+	}, [username, router]);
+
+	const handleForgotPasswordSubmit = useCallback(
+		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+			const result = await forgotPassword({ request: values });
+
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 15,
+						message: result.data.forgotPassword.message,
+						type: ToastType.success
+					})
+				);
+				router.replace('/');
+			}
+
+			resetForm();
+		},
+		[forgotPassword, dispatch, router]
+	);
+
 	return (
 		<>
-			{loading && <LoadingPageContent />}
-			{!loading && (
+			{username && <LoadingPageContent />}
+			{!username && (
 				<MainContent testId="forgot-password">
 					<div className={classes.content}>
 						<h1>Reset your password</h1>
@@ -37,29 +79,7 @@ const ForgotPassword = ({ loading }: ForgotPasswordProps) => {
 						<Formik
 							initialValues={{ email: '', username: '' }}
 							validationSchema={forgotPasswordSchema}
-							onSubmit={async (values, { resetForm }) => {
-								const result = await forgotPassword({ request: values });
-
-								if (result.error) {
-									dispatch(
-										show({
-											closeTimeoutSeconds: 10,
-											message: result.error.message,
-											type: ToastType.error
-										})
-									);
-									resetForm();
-								}
-								dispatch(
-									show({
-										closeTimeoutSeconds: 15,
-										message: result.data.forgotPassword.message,
-										type: ToastType.success
-									})
-								);
-								resetForm();
-								router.replace('/');
-							}}
+							onSubmit={handleForgotPasswordSubmit}
 						>
 							{({
 								touched,

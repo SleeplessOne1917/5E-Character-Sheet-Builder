@@ -1,11 +1,8 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const SIGN_UP = gql`
 	mutation SignUp($user: SignUpRequest!) {
-		signUp(user: $user) {
-			accessToken
-			refreshToken
-		}
+		signUp(user: $user)
 	}
 `;
 

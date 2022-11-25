@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowSmallRightIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import classes from './ArrowLink.module.css';

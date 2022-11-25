@@ -1,5 +1,2 @@
-export const accessTokenKey = 'csbAccessToken';
-export const refreshTokenKey = 'csbRefreshToken';
-
-export const tokenExpired = 'Token expired';
+export const mustBeLoggedIn = 'Must be logged in';
 export const userDoesNotExist = 'User does not exist';

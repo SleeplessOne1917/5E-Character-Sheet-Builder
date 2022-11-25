@@ -1,4 +1,6 @@
-import { forwardRef, PropsWithChildren } from 'react';
+'use client';
+
+import { PropsWithChildren, forwardRef } from 'react';
 
 import classes from './MainContent.module.css';
 

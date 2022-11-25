@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../types/srd';
 import Button, { ButtonType } from '../Button/Button';
 import { Formik, FormikHelpers } from 'formik';

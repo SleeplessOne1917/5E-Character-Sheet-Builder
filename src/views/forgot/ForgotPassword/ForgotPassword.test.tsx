@@ -1,4 +1,4 @@
-import * as Router from 'next/router';
+import * as Router from 'next/navigation';
 import * as stories from './ForgotPassword.stories';
 
 import { render, screen } from '@testing-library/react';

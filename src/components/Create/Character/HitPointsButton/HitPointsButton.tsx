@@ -1,3 +1,5 @@
+'use client';
+
 import { KeyboardEventHandler, useCallback, useState } from 'react';
 
 import { HeartIcon } from '@heroicons/react/24/solid';

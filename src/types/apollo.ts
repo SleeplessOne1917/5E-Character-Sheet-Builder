@@ -1,3 +1,9 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
+import { IUserDocument } from '../db/models/user';
+
 export type ApolloContext = {
-	username: string | null;
+	user?: IUserDocument;
+	req: NextApiRequest;
+	res: NextApiResponse;
 };

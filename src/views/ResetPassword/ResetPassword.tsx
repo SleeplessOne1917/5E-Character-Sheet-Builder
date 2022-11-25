@@ -1,7 +1,10 @@
-import Button, { ButtonType } from '../../components/Button/Button';
-import { useEffect, useState } from 'react';
+'use client';
 
-import { Formik } from 'formik';
+import Button, { ButtonType } from '../../components/Button/Button';
+import { Formik, FormikHelpers } from 'formik';
+import { useCallback, useEffect, useState } from 'react';
+
+import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import RESET_PASSWORD from '../../graphql/mutations/user/resetPassword';
 import TextInput from '../../components/TextInput/TextInput';
@@ -14,15 +17,19 @@ import { show } from '../../redux/features/toast';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
-import { useRouter } from 'next/router';
-import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
+import { useRouter } from 'next/navigation';
 
 type ResetPasswordProps = {
 	otlId: string;
-	loggedInLoading: boolean;
+	username?: string;
 };
 
-const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
+type FormValues = {
+	password: string;
+	confirmPassword: string;
+};
+
+const ResetPassword = ({ otlId, username }: ResetPasswordProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
@@ -43,10 +50,45 @@ const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
 	}, [validateResetPassword, setLoading, otlId]);
 
 	useEffect(() => {
+		if (username) {
+			router.replace('/');
+		}
+	}, [username, router]);
+
+	useEffect(() => {
 		if (validateError || resetError) {
 			startCountdown();
 		}
 	}, [validateError, startCountdown, resetError, otlId]);
+
+	const handleResetPasswordSubmit = useCallback(
+		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+			const result = await resetPassword({ ...values, otlId });
+
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.data.resetPassword,
+						type: ToastType.success
+					})
+				);
+
+				router.replace('/log-in');
+			}
+
+			resetForm();
+		},
+		[resetPassword, dispatch, router, otlId]
+	);
 
 	let headerText: string;
 	let content: JSX.Element;
@@ -73,22 +115,7 @@ const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
 			<Formik
 				initialValues={{ password: '', confirmPassword: '' }}
 				validationSchema={resetPasswordSchema}
-				onSubmit={async (values, { resetForm }) => {
-					const result = await resetPassword({ ...values, otlId });
-
-					if (result.data) {
-						dispatch(
-							show({
-								closeTimeoutSeconds: 10,
-								message: result.data.resetPassword,
-								type: ToastType.success
-							})
-						);
-
-						resetForm();
-						router.replace('/log-in');
-					}
-				}}
+				onSubmit={handleResetPasswordSubmit}
 			>
 				{({
 					errors,
@@ -144,8 +171,8 @@ const ResetPassword = ({ otlId, loggedInLoading }: ResetPasswordProps) => {
 
 	return (
 		<>
-			{(loading || loggedInLoading) && <LoadingPageContent />}
-			{!(loading || loggedInLoading) && (
+			{(loading || username) && <LoadingPageContent />}
+			{!(loading || username) && (
 				<MainContent>
 					<div className={classes.content}>
 						<h1>{headerText}</h1>

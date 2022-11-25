@@ -1,22 +1,22 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
+import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import REMIND_USERNAME from '../../graphql/mutations/user/remindUsername';
 import classes from './UsernameReminder.module.css';
 import { cleanMessage } from '../../services/messageCleanerService';
 import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
-import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
+import { useRouter } from 'next/navigation';
 
 type UsernameReminderProps = {
 	otlId: string;
-	loggedInLoading: boolean;
+	username?: string;
 };
 
-const UsernameReminder = ({
-	otlId,
-	loggedInLoading
-}: UsernameReminderProps) => {
+const UsernameReminder = ({ otlId, username }: UsernameReminderProps) => {
 	const [loading, setLoading] = useState(true);
 	const [{ error, data }, remindUsername] = useMutation(REMIND_USERNAME);
 	const { secondsLeft, startCountdown } = useRedirectCountdown({
@@ -24,6 +24,7 @@ const UsernameReminder = ({
 		replace: true,
 		seconds: 10
 	});
+	const router = useRouter();
 
 	useEffect(() => {
 		remindUsername({ otlId }).then(() => {
@@ -36,6 +37,12 @@ const UsernameReminder = ({
 			startCountdown();
 		}
 	}, [startCountdown, error]);
+
+	useEffect(() => {
+		if (username) {
+			router.replace('/');
+		}
+	}, [username, router]);
 
 	let headerText: string;
 	let content: JSX.Element;
@@ -77,8 +84,8 @@ const UsernameReminder = ({
 
 	return (
 		<>
-			{(loading || loggedInLoading) && <LoadingPageContent />}
-			{!(loading || loggedInLoading) && (
+			{(loading || username) && <LoadingPageContent />}
+			{!(loading || username) && (
 				<MainContent>
 					<div className={classes.content}>
 						<h1>{headerText}</h1>

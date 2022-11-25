@@ -1,61 +1,68 @@
-import {
-	accessTokenKey,
-	refreshTokenKey
-} from '../../../constants/generalConstants';
+'use client';
 
-import { AuthResponse } from '../../../types/auth';
+import LogInSignUpForm, {
+	LogInSignUpValues
+} from '../../../components/LogInSignUp/LogInSignUpForm';
+import { useCallback, useEffect } from 'react';
+
+import { FormikHelpers } from 'formik';
 import LOG_IN from '../../../graphql/mutations/user/logIn';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
-import LogInSignUpForm from '../../../components/LogInSignUp/LogInSignUpForm';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
-import { fetchLoggedInUsername } from '../../../redux/features/viewer';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type LogInProps = {
-	loading: boolean;
+	username?: string;
 };
 
-const LogIn = ({ loading }: LogInProps): JSX.Element => {
+const LogIn = ({ username }: LogInProps): JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [_, logIn] = useMutation<{ logIn: AuthResponse }>(LOG_IN);
+	const [_, logIn] = useMutation(LOG_IN);
 	const router = useRouter();
+
+	useEffect(() => {
+		if (username) {
+			router.replace('/');
+		}
+	}, [username, router]);
+
+	const handleSubmit = useCallback(
+		async (
+			values: LogInSignUpValues,
+			{ resetForm }: FormikHelpers<LogInSignUpValues>
+		) => {
+			const { username, password } = values;
+			const result = await logIn({ user: { username, password } });
+			if (result.error) {
+				const toast = {
+					closeTimeoutSeconds: 10,
+					message: result.error.message,
+					type: ToastType.error
+				};
+				dispatch(show(toast));
+			} else {
+				router.replace('/');
+			}
+			resetForm();
+		},
+		[dispatch, router, logIn]
+	);
 
 	return (
 		<>
-			{loading && <LoadingPageContent />}
-			{!loading && (
+			{username && <LoadingPageContent />}
+			{!username && (
 				<MainContent>
 					<h1>Log In</h1>
 					<LogInSignUpForm
 						schema={logInSchema}
 						type="logIn"
-						onSubmit={async (values, { resetForm }) => {
-							const { username, password } = values;
-							const result = await logIn({ user: { username, password } });
-							if (result.error) {
-								const toast = {
-									closeTimeoutSeconds: 10,
-									message: result.error.message,
-									type: ToastType.error
-								};
-								dispatch(show(toast));
-							} else {
-								const { accessToken, refreshToken } = result.data
-									?.logIn as AuthResponse;
-
-								localStorage.setItem(accessTokenKey, accessToken);
-								localStorage.setItem(refreshTokenKey, refreshToken);
-
-								await dispatch(fetchLoggedInUsername());
-								router.replace('/');
-							}
-							resetForm();
-						}}
+						onSubmit={handleSubmit}
 					/>
 				</MainContent>
 			)}

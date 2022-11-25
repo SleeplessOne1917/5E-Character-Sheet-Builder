@@ -1,17 +1,20 @@
+'use client';
+
 import {
 	ChevronDownIcon,
 	ChevronRightIcon,
 	ChevronUpIcon
 } from '@heroicons/react/24/solid';
 import {
-	KeyboardEventHandler,
-	useState,
 	KeyboardEvent,
-	useCallback
+	KeyboardEventHandler,
+	useCallback,
+	useState
 } from 'react';
-import { handleKeyDownEvent } from '../../../../services/handlerService';
+
 import { SrdItem } from '../../../../types/srd';
 import classes from './Option.module.css';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
 
 type OptionProps = {
 	option: SrdItem;

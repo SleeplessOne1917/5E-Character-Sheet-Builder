@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const CREATE_SPELL = gql`
 	mutation CreateSpell($spell: SpellInput!) {

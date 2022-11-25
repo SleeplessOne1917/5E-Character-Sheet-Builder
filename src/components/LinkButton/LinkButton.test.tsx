@@ -1,9 +1,9 @@
+import * as Router from 'next/navigation';
 import * as stories from './LinkButton.stories';
 
 import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
-import * as Router from 'next/router';
 
 const { Default, Untabbable } = composeStories(stories);
 

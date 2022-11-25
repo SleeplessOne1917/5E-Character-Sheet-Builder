@@ -1,3 +1,5 @@
+'use client';
+
 import ReactMarkdown from 'react-markdown';
 import classes from './MarkdownParser.module.css';
 import { getMarkdownFromStringArray } from '../../services/markdownStringArrayToStringService';

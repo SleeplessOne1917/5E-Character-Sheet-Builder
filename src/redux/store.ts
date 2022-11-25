@@ -11,18 +11,15 @@ import editingCharacter, {
 	EditingCharacterState
 } from './features/editingCharacter';
 import { get, set } from 'idb-keyval';
-import { useEffect, useState } from 'react';
 
+import editingRace from './features/editingRace';
+import editingSpell from './features/editingSpell';
 import generationMethod from './features/generationMethod';
 import rollGroups from './features/rollGroups';
 import toast from './features/toast';
-import viewer from './features/viewer';
-import editingSpell from './features/editingSpell';
-import editingRace from './features/editingRace';
 
 const getReducer = () => ({
 	toast,
-	viewer,
 	editingCharacter: editingCharacter as Reducer<
 		EditingCharacterState,
 		AnyAction
@@ -48,7 +45,7 @@ const updateCache: ListenerEffect<
 
 const updateCachePredicate = () => true;
 
-const getStore = async () => {
+export const getStore = async () => {
 	indexedDbCacheListener.startListening({
 		predicate: updateCachePredicate,
 		effect: updateCache
@@ -71,27 +68,6 @@ const getStore = async () => {
 	}
 
 	return theStore;
-};
-
-export const useStore = () => {
-	const [theStore, setTheStore] = useState(getTestStore());
-	const [loadingStore, setLoadingStore] = useState(true);
-
-	useEffect(() => {
-		getStore().then(s => {
-			setTheStore(s);
-			setLoadingStore(false);
-		});
-
-		return () => {
-			indexedDbCacheListener.stopListening({
-				predicate: updateCachePredicate,
-				effect: updateCache
-			});
-		};
-	}, [setTheStore]);
-
-	return { store: theStore, loading: loadingStore };
 };
 
 export const getTestStore = (

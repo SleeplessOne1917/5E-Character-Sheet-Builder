@@ -1,3 +1,5 @@
+'use client';
+
 import { Land } from '../../../../../types/land';
 import Select from '../../../../Select/Select/Select';
 import classes from './LandSelector.module.css';

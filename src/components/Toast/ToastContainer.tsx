@@ -1,3 +1,5 @@
+'use client';
+
 import Toast from './Toast';
 import classes from './ToastContainer.module.css';
 

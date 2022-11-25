@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties, ChangeEventHandler, FocusEventHandler } from 'react';
 
 import classes from './NumberTextInput.module.css';

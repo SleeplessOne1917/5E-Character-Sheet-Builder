@@ -1,3 +1,5 @@
+'use client';
+
 import { MonsterSubtype, MonsterType } from '../../../../../types/srd';
 
 import Select from '../../../../Select/Select/Select';

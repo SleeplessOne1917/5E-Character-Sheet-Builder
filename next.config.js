@@ -11,7 +11,8 @@ const nextConfig = {
 		}
 
 		return config;
-	}
+	},
+	experimental: { appDir: true }
 };
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

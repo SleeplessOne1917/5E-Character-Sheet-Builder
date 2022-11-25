@@ -1,3 +1,5 @@
+'use client';
+
 import { ChangeEventHandler, useCallback, useMemo, useState } from 'react';
 
 import Button from '../../Button/Button';

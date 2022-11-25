@@ -1,3 +1,6 @@
+'use client';
+
+import { CSSProperties, useCallback } from 'react';
 import {
 	calculateModifier,
 	getTotalScore
@@ -6,14 +9,14 @@ import {
 	setAutoLevel as createSetAutoLevelAction,
 	setLevelHpBonus
 } from '../../../../redux/features/hp';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
+
+import { AutoLevelType } from '../../../../redux/features/hp';
 import Button from '../../../Button/Button';
 import ModalBackground from '../../../ModalBackground/ModalBackground';
 import RadioButton from '../../../RadioButton/RadioButton';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './HitPointsModal.module.css';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
-import { CSSProperties, useCallback } from 'react';
-import { AutoLevelType } from '../../../../redux/features/hp';
 import { getOrdinal } from '../../../../services/ordinalService';
 import { rollDie } from '../../../../services/diceService';
 import useHP from '../../../../hooks/useHP';

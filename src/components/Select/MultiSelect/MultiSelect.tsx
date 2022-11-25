@@ -1,8 +1,11 @@
-import classes from './MultiSelect.module.css';
-import selectClasses from '../Select.module.css';
-import { useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react';
+'use client';
+
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+
 import Option from '../Option';
+import classes from './MultiSelect.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
+import selectClasses from '../Select.module.css';
 
 type MultiSelectProps = {
 	id?: string;

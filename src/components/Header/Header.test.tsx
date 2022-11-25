@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import * as Router from 'next/router';
+import * as Router from 'next/navigation';
 import * as stories from './Header.stories';
 
 import { render, screen } from '@testing-library/react';

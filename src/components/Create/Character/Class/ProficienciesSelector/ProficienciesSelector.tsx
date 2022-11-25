@@ -1,22 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../../../hooks/reduxHooks';
-import { setClassProficiencies } from '../../../../../redux/features/classInfo';
-import {
-	addProficiency,
-	removeProficiency
-} from '../../../../../redux/features/proficiencies';
-import { getProficiencyTypeName } from '../../../../../services/proficiencyTypeService';
+'use client';
+
 import {
 	ProficiencyType,
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice
 } from '../../../../../types/srd';
-import Select from '../../../../Select/Select/Select';
+import {
+	addProficiency,
+	removeProficiency
+} from '../../../../../redux/features/proficiencies';
+import {
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../hooks/reduxHooks';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import Option from '../../../../Select/Option';
+import Select from '../../../../Select/Select/Select';
 import classes from './ProficienciesSelector.module.css';
+import { getProficiencyTypeName } from '../../../../../services/proficiencyTypeService';
+import { setClassProficiencies } from '../../../../../redux/features/classInfo';
 
 type ProficienciesSelectorProps = {
 	choice: SrdProficiencyItemChoice;

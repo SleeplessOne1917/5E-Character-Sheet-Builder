@@ -1,18 +1,11 @@
-import {
-	accessTokenKey,
-	refreshTokenKey
-} from './../constants/generalConstants';
-
-import { fetchLoggedInUsername } from './../redux/features/viewer';
-import { useAppDispatch } from './reduxHooks';
+import LOGOUT from '../graphql/mutations/user/logout';
+import { useMutation } from 'urql';
 
 const useLogout = () => {
-	const dispatch = useAppDispatch();
+	const [_, logout] = useMutation<{ logout: string }, undefined>(LOGOUT);
 
-	return () => {
-		localStorage.removeItem(accessTokenKey);
-		localStorage.removeItem(refreshTokenKey);
-		dispatch(fetchLoggedInUsername());
+	return async () => {
+		await logout(undefined);
 	};
 };
 

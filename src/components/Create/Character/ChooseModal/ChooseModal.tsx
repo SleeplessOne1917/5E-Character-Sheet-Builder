@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties, MutableRefObject, useEffect, useRef } from 'react';
 
 import Button from '../../../Button/Button';

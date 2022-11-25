@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const GET_CLASS = gql`
 	query Class($index: String) {

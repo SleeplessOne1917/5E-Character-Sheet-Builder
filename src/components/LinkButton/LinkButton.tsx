@@ -1,3 +1,5 @@
+'use client';
+
 import { MouseEventHandler, PropsWithChildren, memo } from 'react';
 
 import Link from 'next/link';
@@ -11,7 +13,7 @@ export type LinkButtonProps = {
 
 const LinkButton = ({
 	href,
-	onClick,
+	onClick = () => {},
 	children,
 	tabIndex
 }: PropsWithChildren<LinkButtonProps>): JSX.Element => (
@@ -25,9 +27,5 @@ const LinkButton = ({
 		</a>
 	</Link>
 );
-
-LinkButton.defaultProps = {
-	onClick: () => {}
-};
 
 export default memo(LinkButton);

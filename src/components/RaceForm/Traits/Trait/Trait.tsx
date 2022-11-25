@@ -1,3 +1,5 @@
+'use client';
+
 import BaseTrait, {
 	ReduxActions,
 	SubtraitReduxActions

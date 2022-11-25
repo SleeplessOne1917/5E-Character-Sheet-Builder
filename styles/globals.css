@@ -74,6 +74,14 @@ option {
   overflow: hidden;
 }
 
+#app [data-nextjs-scroll-focus-boundary]{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
 .resize-animation-stopper * {
   transition: none !important;
   animation: none !important;

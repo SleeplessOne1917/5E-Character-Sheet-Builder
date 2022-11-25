@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '../../../../Button/Button';
 import { ReactNode } from 'react';
 import classes from './ChoiceSelector.module.css';

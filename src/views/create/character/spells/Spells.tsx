@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 import CreateCharacterSpellsSelector from '../../../../components/Spells/CreateCharacterSpellsSelector/CreateCharacterSpellsSelector';
@@ -5,13 +7,13 @@ import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoB
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
-import { Spell } from '../../../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
 import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Spells = () => {
 	const classInfo = useAppSelector(state => state.editingCharacter.classInfo);
@@ -22,7 +24,7 @@ const Spells = () => {
 	const [isFetchingSpells, setIsFetchingSpells] = useState(true);
 	const { numberOfSpellsToPrepare, shouldPrepareSpells } = usePreparedSpells();
 
-	const [allClassSpells, setAllClassSpells] = useState<Spell[]>([]);
+	const [allClassSpells, setAllClassSpells] = useState<SpellItem[]>([]);
 
 	useEffect(() => {
 		setIsFetchingSpells(true);

@@ -1,3 +1,5 @@
+'use client';
+
 import { MouseEventHandler, memo } from 'react';
 
 import { AbilityItem } from '../../../../../../types/srd';

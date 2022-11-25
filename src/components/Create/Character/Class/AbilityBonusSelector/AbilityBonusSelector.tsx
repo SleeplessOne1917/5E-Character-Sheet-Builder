@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityItem } from '../../../../../types/srd';
 import AbilityScores from '../../../../../types/abilityScores';
 import { ReactNode } from 'react';

@@ -1,3 +1,5 @@
+'use client';
+
 import MainContent from '../../components/MainContent/MainContent';
 import classes from './404.module.css';
 import { useEffect } from 'react';

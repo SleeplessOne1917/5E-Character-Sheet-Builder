@@ -1,4 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
+
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import MainContent from '../MainContent/MainContent';
 

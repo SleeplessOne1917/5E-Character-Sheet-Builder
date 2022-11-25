@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	CSSProperties,
 	MutableRefObject,
@@ -15,8 +17,6 @@ import {
 	SrdSubtraitItemChoice
 } from '../../../../../types/srd';
 
-import { useAppSelector } from '../../../../../hooks/reduxHooks';
-
 import AbilityBonusChoiceSelector from '../ChoiceSelector/AbilityBonusChoiceSelector/AbilityBonusChoiceSelector';
 import BreathWeaponDisplay from '../BreathWeaponDisplay/BreathWeaponDisplay';
 import Descriptor from '../../Descriptor/Descriptor';
@@ -26,6 +26,7 @@ import ProficiencyChoiceSelector from '../ChoiceSelector/ProficiencyChoiceSelect
 import SpellChoiceSelector from '../ChoiceSelector/SpellChoiceSelector/SpellChoiceSelector';
 import classes from './SelectedRaceDisplay.module.css';
 import { getAbilityScoreDescription } from '../../../../../services/abilityBonusService';
+import { useAppSelector } from '../../../../../hooks/reduxHooks';
 import useMediaQuery from '../../../../../hooks/useMediaQuery';
 
 type SelectedRaceDisplayProps = {

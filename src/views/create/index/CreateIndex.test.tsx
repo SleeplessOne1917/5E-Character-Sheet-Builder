@@ -1,11 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import * as Router from 'next/navigation';
 import * as stories from './CreateIndex.stories';
+
+import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 
 const { Default } = composeStories(stories);
 
-import * as Router from 'next/router';
 
 const mockRouter = () => {
 	const useRouter = jest.spyOn(Router, 'useRouter');

@@ -17,7 +17,9 @@ exports[`renders correctly 1`] = `
       Your username is 
       <span
         class="username"
-      />
+      >
+        Lolbert
+      </span>
     </div>
     <h2
       class="reset-text"

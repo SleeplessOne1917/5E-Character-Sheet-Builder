@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const REMIND_USERNAME = gql`
 	mutation RemindUsername($otlId: String!) {

@@ -25,11 +25,5 @@ module.exports = {
 	managerWebpack: (config, options) => {
 		options.cache.set = () => Promise.resolve();
 		return config;
-	},
-	webpackFinal: async config => {
-		config.resolve.alias['jsonwebtoken'] = require.resolve(
-			'../__mocks__/jsonWebTokenMock.js'
-		);
-		return config;
 	}
 };

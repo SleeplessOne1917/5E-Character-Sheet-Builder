@@ -1,9 +1,11 @@
+'use client';
+
+import { AbilityItem } from '../../../../types/srd';
 import { AbilityScoresState } from '../../../../redux/features/abilityScores';
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';
-import { AbilityItem } from '../../../../types/srd';
-import { getTestStore } from '../../../../redux/store';
 import getMockEditingCharacter from '../../../../mock/editingCharacterMock';
+import { getTestStore } from '../../../../redux/store';
 
 const defaultInitialState: AbilityScoresState = {
 	str: {

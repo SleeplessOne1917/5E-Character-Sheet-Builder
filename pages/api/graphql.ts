@@ -3,34 +3,26 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloContext } from '../../src/types/apollo';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
+import { IUserDocument } from '../../src/db/models/user';
 import dbConnect from '../../src/db/dbConnect';
-import jwt from 'jsonwebtoken';
+import { getSession } from '../../src/services/sessionService';
 import schema from '../../src/graphql/server/schema';
 
 const cors = Cors();
 
 const apolloServer = new ApolloServer({
 	schema,
-	context: ({
-		req
+	context: async ({
+		req,
+		res
 	}: {
 		req: NextApiRequest;
 		res: NextApiResponse;
-	}): ApolloContext => {
-		const token = req.headers.authorization?.replace('Bearer ', '') ?? '';
+	}): Promise<ApolloContext> => {
+		const session = await getSession(req, res);
+		const user = session.user as IUserDocument | undefined;
 
-		let username: string | null;
-		try {
-			username = (
-				jwt.verify(token, process.env.JWT_SECRET as string) as {
-					username: string;
-				}
-			).username;
-		} catch (error) {
-			username = null;
-		}
-
-		return { username };
+		return { user, req, res };
 	}
 });
 

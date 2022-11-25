@@ -1,3 +1,5 @@
+'use client';
+
 import { KeyboardEventHandler, useCallback } from 'react';
 
 import classes from './RadioButton.module.css';

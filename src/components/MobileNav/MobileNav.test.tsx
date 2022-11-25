@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import * as Router from 'next/router';
+import * as Router from 'next/navigation';
 import * as stories from './MobileNav.stories';
 
 import { render, screen } from '@testing-library/react';
@@ -27,7 +27,8 @@ beforeAll(() => {
 		events: { emit: jest.fn(), on: jest.fn(), off: jest.fn() },
 		isFallback: false,
 		isPreview: false,
-		isReady: true
+		isReady: true,
+		forward: () => {}
 	};
 	useRouter.mockReturnValue(router);
 });

@@ -1,23 +1,25 @@
+'use client';
+
 import {
 	SrdProficiencyItem,
 	SrdProficiencyItemChoice
 } from '../../../../../../types/srd';
-import { useCallback, useEffect, useState } from 'react';
-
-import ChoiceSelector from '../ChoiceSelector';
-import Select from '../../../../../Select/Select/Select';
 import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../../../../hooks/reduxHooks';
+	addProficiency,
+	removeProficiency
+} from '../../../../../../redux/features/proficiencies';
 import {
 	addTraitProficiency,
 	removeTraitProficiency
 } from '../../../../../../redux/features/raceInfo';
 import {
-	addProficiency,
-	removeProficiency
-} from '../../../../../../redux/features/proficiencies';
+	useAppDispatch,
+	useAppSelector
+} from '../../../../../../hooks/reduxHooks';
+import { useCallback, useEffect, useState } from 'react';
+
+import ChoiceSelector from '../ChoiceSelector';
+import Select from '../../../../../Select/Select/Select';
 
 type OptionSelectorProps = {
 	choice: SrdProficiencyItemChoice;

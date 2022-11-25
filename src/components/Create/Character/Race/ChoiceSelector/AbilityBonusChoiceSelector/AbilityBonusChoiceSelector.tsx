@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityBonus, AbilityBonusChoice } from '../../../../../../types/srd';
 import {
 	useAppDispatch,

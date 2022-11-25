@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const CREATE_NEW_PASSWORD = gql`
 	mutation CreateNewPassword(

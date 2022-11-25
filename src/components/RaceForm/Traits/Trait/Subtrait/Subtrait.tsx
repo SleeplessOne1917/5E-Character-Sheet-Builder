@@ -1,3 +1,5 @@
+'use client';
+
 import BaseTrait, { ReduxActions } from '../BaseTrait/BaseTrait';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
@@ -97,25 +99,33 @@ const Subtrait = ({
 			errors.traits[parentIndex] &&
 			(
 				errors.traits[parentIndex] as FormikErrors<{
-					subtraitOptions: { options: TraitState[] };
+					subtraitOptions: { options: Trait[] };
 				}>
 			).subtraitOptions &&
 			(
 				errors.traits[parentIndex] as FormikErrors<{
-					subtraitOptions: { options: TraitState[] };
+					subtraitOptions: { options: Trait[] };
 				}>
 			).subtraitOptions?.options
 				? (
 						(
-							errors.traits[parentIndex] as Required<
-								FormikErrors<{
-									subtraitOptions: { options: TraitState[] };
+							(
+								(
+									errors as Required<
+										FormikErrors<{
+											traits: { subtraitOptions: { options: Trait[] } }[];
+										}>
+									>
+								).traits[parentIndex] as FormikErrors<{
+									subtraitOptions: { options: Trait[] };
 								}>
-							>
-						).subtraitOptions.options as FormikErrors<TraitState[]>
+							).subtraitOptions as FormikErrors<{
+								options: Trait[];
+							}>
+						).options as FormikErrors<Trait[]>
 				  )[index]
 				: undefined,
-		[errors.traits, parentIndex, index]
+		[errors, parentIndex, index]
 	);
 
 	const reduxActions: ReduxActions = useMemo(

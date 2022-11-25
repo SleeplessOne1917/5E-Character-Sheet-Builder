@@ -8,7 +8,7 @@ import { XCircleIcon } from '@heroicons/react/24/solid';
 import classes from './SpellMoreInformationModal.module.css';
 import { cleanMessage } from '../../../services/messageCleanerService';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const MarkdownParser = dynamic(
 	() => import('../../MarkdownParser/MarkdownParser'),

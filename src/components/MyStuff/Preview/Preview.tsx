@@ -1,3 +1,5 @@
+'use client';
+
 import ArrowLink from '../../ArrowLink/ArrowLink';
 import classes from './Preview.module.css';
 

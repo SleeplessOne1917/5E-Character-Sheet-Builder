@@ -1,5 +1,5 @@
 import CREATE_NEW_PASSWORD from '../../../graphql/mutations/user/createNewPassword';
-import { Operation, useMutation } from 'urql';
+import { useMutation } from 'urql';
 
 type CreateNewPasswordData = { createNewPassword: string };
 
@@ -15,8 +15,3 @@ const useCreateNewPasswordMutation = () =>
 	);
 
 export default useCreateNewPasswordMutation;
-
-export type CreateNewPasswordOperation = Operation<
-	CreateNewPasswordData,
-	CreateNewPasswordVariables
->;

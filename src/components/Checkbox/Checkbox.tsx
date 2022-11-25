@@ -1,3 +1,5 @@
+'use client';
+
 import { KeyboardEvent, useCallback, useState } from 'react';
 
 import { CheckIcon } from '@heroicons/react/20/solid';

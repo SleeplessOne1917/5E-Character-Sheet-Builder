@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityItem, MonsterType } from '../../../../types/srd';
 import { DeepError, DeepPartial, DeepTouched } from '../../../../types/helpers';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';

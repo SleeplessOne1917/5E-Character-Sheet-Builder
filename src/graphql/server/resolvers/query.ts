@@ -1,13 +1,8 @@
-import {
-	tokenExpired,
-	userDoesNotExist
-} from './../../../constants/generalConstants';
-
 import { ApolloContext } from './../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import Spell from './../../../db/models/spell';
 import { Types } from 'mongoose';
-import User from './../../../db/models/user';
+import { mustBeLoggedIn } from './../../../constants/generalConstants';
 
 type SkipLimit = {
 	limit?: number;
@@ -26,24 +21,18 @@ type WithId = {
 };
 
 const Query = {
-	viewer: async (parent: never, args: never, { username }: ApolloContext) =>
-		username,
+	viewer: (parent: never, args: never, { user }: ApolloContext) =>
+		user?.username,
 	spells: async (
 		parent: never,
 		{ limit, skip, level, school, class: klass, name }: SpellsArgs,
-		{ username }: ApolloContext
+		{ user }: ApolloContext
 	) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
-		const userId = (await User.findOne({ username }).lean())?._id;
-
-		if (!userId) {
-			throw new ApolloError(userDoesNotExist);
-		}
-
-		const filter = { userId } as {
+		const filter = { userId: user._id } as {
 			userId: Types.ObjectId;
 			level?: number;
 			'school.id'?: string;
@@ -67,14 +56,14 @@ const Query = {
 			filter.name = { $regex: new RegExp(name, 'i') };
 		}
 
-		let spells = Spell.find(filter);
+		let spells = Spell.find(filter).skip(skip ?? 0);
 
 		if (limit) {
 			if (limit < 1) {
 				throw new ApolloError('Limit must be greater than 0');
 			}
 
-			spells = spells.skip(skip ?? 0).limit(limit);
+			spells = spells.limit(limit);
 		}
 
 		return {
@@ -82,17 +71,17 @@ const Query = {
 				...spell,
 				id: spell._id.toString()
 			})),
-			count: await Spell.countDocuments({ userId })
+			count: await Spell.countDocuments({ userId: user._id })
 		};
 	},
-	spell: async (parent: never, { id }: WithId, { username }: ApolloContext) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+	spell: async (parent: never, { id }: WithId, { user }: ApolloContext) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
 		const spell = await Spell.findOne({
 			_id: new Types.ObjectId(id),
-			username
+			userId: user._id
 		}).lean();
 
 		if (!spell) {

@@ -1,17 +1,20 @@
+'use client';
+
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import {
 	KeyboardEventHandler,
+	ReactNode,
 	forwardRef,
 	memo,
 	useCallback,
-	useState,
-	ReactNode
+	useState
 } from 'react';
 
-import classes from './Descriptor.module.css';
-import { handleKeyDownEvent } from '../../../../services/handlerService';
-import dynamic from 'next/dynamic';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
+import classes from './Descriptor.module.css';
+import dynamic from 'next/dynamic';
+import { handleKeyDownEvent } from '../../../../services/handlerService';
+
 const MarkdownParser = dynamic(
 	() => import('../../../MarkdownParser/MarkdownParser'),
 	{

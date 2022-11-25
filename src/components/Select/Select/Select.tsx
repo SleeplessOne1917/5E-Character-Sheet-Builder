@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	CSSProperties,
 	KeyboardEvent,
@@ -8,8 +10,8 @@ import {
 	useState
 } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
-import Option from '../Option';
 
+import Option from '../Option';
 import classes from '../Select.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
 

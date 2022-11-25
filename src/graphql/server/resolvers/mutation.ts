@@ -1,15 +1,11 @@
 import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
-import User, { IUser } from '../../../db/models/user';
+import User, { IUser, IUserDocument } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
 	sendUsernameReminder
 } from './../../../services/sendEmailService';
-import {
-	tokenExpired,
-	userDoesNotExist
-} from './../../../constants/generalConstants';
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
@@ -18,8 +14,9 @@ import { Types } from 'mongoose';
 import UsernameOTL from '../../../db/models/usernameOTL';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
-import jwt from 'jsonwebtoken';
+import { getSession } from '../../../services/sessionService';
 import logInSchema from '../../../yup-schemas/logInSchema';
+import { mustBeLoggedIn } from './../../../constants/generalConstants';
 import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
 import raceSchema from '../../../yup-schemas/raceSchema';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
@@ -89,7 +86,11 @@ type CreateRaceArgs = {
 };
 
 const Mutation = {
-	signUp: async (parent: never, args: SignUpArgs) => {
+	signUp: async (
+		parent: never,
+		args: SignUpArgs,
+		{ req, res }: ApolloContext
+	) => {
 		const { user } = args;
 		await signUpSchema.validate(user, { strict: true });
 
@@ -114,8 +115,9 @@ const Mutation = {
 			newUser.emailHash = emailHash;
 		}
 
+		let sessionUser = undefined as unknown as IUserDocument;
 		try {
-			await User.create(newUser);
+			sessionUser = await User.create(newUser);
 		} catch (error) {
 			throwErrorWithCustomMessageInProd(
 				error as Error,
@@ -123,25 +125,16 @@ const Mutation = {
 			);
 		}
 
-		const accessToken = jwt.sign(
-			{ username: user.username },
-			process.env.JWT_SECRET as string,
-			{
-				expiresIn: '1h'
-			}
-		);
+		const session = await getSession(req, res);
+		session.user = sessionUser;
 
-		const refreshToken = jwt.sign(
-			{ username: user.username },
-			process.env.JWT_SECRET as string,
-			{
-				expiresIn: '180d'
-			}
-		);
-
-		return { accessToken, refreshToken };
+		return 'Signed up';
 	},
-	logIn: async (parent: never, args: LoginArgs) => {
+	logIn: async (
+		parent: never,
+		args: LoginArgs,
+		{ req, res }: ApolloContext
+	) => {
 		const user = args.user;
 		await logInSchema.validate(user, { strict: true });
 
@@ -157,46 +150,17 @@ const Mutation = {
 			throw new ApolloError('Username or password was incorrect');
 		}
 
-		const accessToken = jwt.sign(
-			{ username: user.username },
-			process.env.JWT_SECRET as string,
-			{
-				expiresIn: '1h'
-			}
-		);
+		const session = await getSession(req, res);
+		session.user = existingUser;
 
-		const refreshToken = jwt.sign(
-			{ username: user.username },
-			process.env.JWT_SECRET as string,
-			{
-				expiresIn: '180d'
-			}
-		);
-
-		return { accessToken, refreshToken };
+		return 'Logged in';
 	},
-	token: async (
-		parent: never,
-		{ refreshToken }: { refreshToken: string | null }
-	) => {
-		if (!refreshToken) {
-			throw new ApolloError('Refresh token cannot be null');
-		}
+	logout: async (parent: never, args: never, { res, req }: ApolloContext) => {
+		const session = await getSession(req, res);
 
-		let username: string;
-		try {
-			username = (
-				jwt.verify(refreshToken, process.env.JWT_SECRET as string) as {
-					username: string;
-				}
-			).username;
-		} catch (e) {
-			throw new ApolloError('Refresh token expired');
-		}
+		await session.destroy();
 
-		return jwt.sign({ username }, process.env.JWT_SECRET as string, {
-			expiresIn: '1h'
-		});
+		return 'Logged off';
 	},
 	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request, { strict: true });
@@ -351,19 +315,13 @@ const Mutation = {
 	createNewPassword: async (
 		parent: never,
 		args: CreateNewPasswordArgs,
-		{ username }: ApolloContext
+		{ user }: ApolloContext
 	) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
 		await newPasswordSchema.validate(args, { strict: true });
-
-		const user = await User.findOne({ username });
-
-		if (!user) {
-			throw new ApolloError(userDoesNotExist);
-		}
 
 		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
 			throw new ApolloError('Incorrect password provided');
@@ -375,7 +333,7 @@ const Mutation = {
 
 		const newPasswordHash = await hashValue(args.newPassword);
 		await User.updateOne(
-			{ username },
+			{ _id: user._id },
 			{ $set: { passwordHash: newPasswordHash } }
 		);
 
@@ -384,19 +342,13 @@ const Mutation = {
 	createSpell: async (
 		parent: never,
 		{ spell }: CreateSpellArgs,
-		{ username }: ApolloContext
+		{ user }: ApolloContext
 	) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
 		await spellSchema.validate(spell, { strict: true });
-
-		const user = await User.findOne({ username });
-
-		if (!user) {
-			throw new ApolloError(userDoesNotExist);
-		}
 
 		try {
 			Spell.create({ ...spell, userId: user._id });
@@ -409,23 +361,17 @@ const Mutation = {
 	updateSpell: async (
 		parent: never,
 		{ spell, id }: UpdateSpellArgs,
-		{ username }: ApolloContext
+		{ user }: ApolloContext
 	) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
 		await spellSchema.validate(spell, { strict: true });
 
-		const user = await User.findOne({ username });
-
-		if (!user) {
-			throw new ApolloError(userDoesNotExist);
-		}
-
 		try {
 			await Spell.updateOne(
-				{ _id: new Types.ObjectId(id), username },
+				{ _id: new Types.ObjectId(id), userId: user._id },
 				{ $set: spell }
 			);
 		} catch (e) {
@@ -437,19 +383,13 @@ const Mutation = {
 	createRace: async (
 		parent: never,
 		{ race }: CreateRaceArgs,
-		{ username }: ApolloContext
+		{ user }: ApolloContext
 	) => {
-		if (!username) {
-			throw new ApolloError(tokenExpired);
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
 		}
 
 		await raceSchema.validate(race, { strict: true });
-
-		const user = await User.findOne({ username });
-
-		if (!user) {
-			throw new ApolloError(userDoesNotExist);
-		}
 
 		try {
 			await Race.create({ ...race, userId: user._id });

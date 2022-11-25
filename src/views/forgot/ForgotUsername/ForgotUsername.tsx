@@ -1,7 +1,11 @@
+'use client';
+
 import Button, { ButtonType } from '../../../components/Button/Button';
+import { Formik, FormikHelpers } from 'formik';
+import { useCallback, useEffect } from 'react';
 
 import FORGOT_USERNAME from '../../../graphql/mutations/user/forgotUsername';
-import { Formik } from 'formik';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import TextInput from '../../../components/TextInput/TextInput';
 import { ToastType } from '../../../types/toast';
@@ -10,22 +14,59 @@ import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import { show } from '../../../redux/features/toast';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useMutation } from 'urql';
-import { useRouter } from 'next/router';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
+import { useRouter } from 'next/navigation';
 
 type ForgotUsernameProps = {
-	loading: boolean;
+	username?: string;
 };
 
-const ForgotUsername = ({ loading }: ForgotUsernameProps) => {
+type FormValues = {
+	email: string;
+};
+
+const ForgotUsername = ({ username }: ForgotUsernameProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [_, forgotUsername] = useMutation(FORGOT_USERNAME);
 
+	useEffect(() => {
+		if (username) {
+			router.replace('/');
+		}
+	}, [username, router]);
+
+	const handleForgotUsernameSubmit = useCallback(
+		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+			const result = await forgotUsername({ request: values });
+
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 15,
+						message: result.data.forgotUsername.message,
+						type: ToastType.success
+					})
+				);
+				router.replace('/');
+			}
+
+			resetForm();
+		},
+		[forgotUsername, dispatch, router]
+	);
+
 	return (
 		<>
-			{loading && <LoadingPageContent />}
-			{!loading && (
+			{username && <LoadingPageContent />}
+			{!username && (
 				<MainContent testId="forgot-username">
 					<div className={classes.content}>
 						<h1>Forgot username</h1>
@@ -36,30 +77,7 @@ const ForgotUsername = ({ loading }: ForgotUsernameProps) => {
 						<Formik
 							initialValues={{ email: '' }}
 							validationSchema={forgotUsernameSchema}
-							onSubmit={async (values, { resetForm }) => {
-								const result = await forgotUsername({ request: values });
-
-								if (result.error) {
-									dispatch(
-										show({
-											closeTimeoutSeconds: 10,
-											message: result.error.message,
-											type: ToastType.error
-										})
-									);
-									resetForm();
-								} else {
-									dispatch(
-										show({
-											closeTimeoutSeconds: 15,
-											message: result.data.forgotUsername.message,
-											type: ToastType.success
-										})
-									);
-									resetForm();
-									router.replace('/');
-								}
-							}}
+							onSubmit={handleForgotUsernameSubmit}
 						>
 							{({
 								touched,

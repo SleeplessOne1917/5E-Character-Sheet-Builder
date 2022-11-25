@@ -1,3 +1,5 @@
+'use client';
+
 import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -11,17 +13,19 @@ import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDis
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
 import { useQuery } from 'urql';
+import { useRouter } from 'next/navigation';
 
 type MyStuffSpellsProps = {
-	loading: boolean;
+	username?: string;
 };
 
 const spellsPerPage = 10;
 
-const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
+const MyStuffSpells = ({ username }: MyStuffSpellsProps) => {
 	const [spellId, setSpellId] = useState<string>();
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 	const [currentPage, setCurrentPage] = useState(1);
+	const router = useRouter();
 
 	const [spellResult] = useQuery<{
 		spell: Spell;
@@ -36,6 +40,12 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 		query: GET_SPELLS,
 		variables: { limit: spellsPerPage, skip: (currentPage - 1) * spellsPerPage }
 	});
+
+	useEffect(() => {
+		if (!username) {
+			router.replace('/');
+		}
+	}, [username, router]);
 
 	useEffect(() => {
 		if (spellId && !(spellResult.fetching || spellResult.error)) {
@@ -65,7 +75,7 @@ const MyStuffSpells = ({ loading }: MyStuffSpellsProps) => {
 		setCurrentPage(prev => prev + 1);
 	}, []);
 
-	return loading || spellsResult.fetching ? (
+	return !username || spellsResult.fetching ? (
 		<LoadingPageContent />
 	) : (
 		<>

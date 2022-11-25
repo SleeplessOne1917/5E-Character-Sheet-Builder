@@ -1,3 +1,5 @@
+'use client';
+
 import { SrdItem, SrdItemChoice } from '../../../../../../types/srd';
 import {
 	addLanguage,

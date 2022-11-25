@@ -1,3 +1,5 @@
+'use client';
+
 import classes from './LoadingSpinner.module.css';
 
 const LoadingSpinner = () => (

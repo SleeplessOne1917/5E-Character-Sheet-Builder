@@ -4,18 +4,15 @@ import Account from './Account';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import { getTestStore } from '../../redux/store';
-import loggedInViewerMock from '../../mock/loggedInViewerMock';
 
 const MockStore = ({ children }: PropsWithChildren) => (
-	<Provider store={getTestStore({ viewer: loggedInViewerMock })}>
-		{children}
-	</Provider>
+	<Provider store={getTestStore()}>{children}</Provider>
 );
 
 export default {
 	title: 'Views/Account',
 	component: Account,
-	args: { loading: false },
+	args: { username: 'Lolbert' },
 	decorators: [
 		Story => (
 			<MockStore>

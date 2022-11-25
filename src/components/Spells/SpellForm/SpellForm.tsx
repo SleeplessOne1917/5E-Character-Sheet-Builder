@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityItem, SpellComponent, SrdItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
 import { DeepError, DeepTouched, PartialBy } from '../../../types/helpers';
@@ -46,7 +48,7 @@ type SpellFormProps = {
 	srdClasses: SrdItem[];
 	shouldUseReduxStore: boolean;
 	initialValues: PartialBy<Spell, 'id'>;
-	handleFormikSubmit: (
+	onSubmit: (
 		values: PartialBy<Spell, 'id'>,
 		helpers: FormikHelpers<PartialBy<Spell, 'id'>>
 	) => Promise<void>;
@@ -55,7 +57,7 @@ type SpellFormProps = {
 const SpellForm = ({
 	abilities,
 	initialValues,
-	handleFormikSubmit,
+	onSubmit,
 	magicSchools,
 	srdClasses,
 	damageTypes,
@@ -172,7 +174,7 @@ const SpellForm = ({
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={handleFormikSubmit}
+			onSubmit={onSubmit}
 			validationSchema={spellSchema}
 			enableReinitialize
 		>

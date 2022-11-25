@@ -1,3 +1,5 @@
+'use client';
+
 import { SrdFeatureItem, SrdItem } from '../../../../../types/srd';
 import {
 	addFeatureSubfeature,

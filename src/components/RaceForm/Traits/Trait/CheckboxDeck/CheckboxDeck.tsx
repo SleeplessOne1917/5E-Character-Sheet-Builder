@@ -1,3 +1,5 @@
+'use client';
+
 import Checkbox from '../../../../Checkbox/Checkbox';
 import { PartialBy } from '../../../../../types/helpers';
 import { TraitWithSubtraitsState } from '../../../../../redux/features/editingRace';

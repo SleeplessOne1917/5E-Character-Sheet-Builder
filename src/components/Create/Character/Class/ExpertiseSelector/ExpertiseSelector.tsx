@@ -1,12 +1,15 @@
-import { useCallback } from 'react';
+'use client';
+
 import {
 	useAppDispatch,
 	useAppSelector
 } from '../../../../../hooks/reduxHooks';
-import { setExpertiseProficiency } from '../../../../../redux/features/classInfo';
-import { SrdProficiencyItem } from '../../../../../types/srd';
+
 import Select from '../../../../Select/Select/Select';
+import { SrdProficiencyItem } from '../../../../../types/srd';
 import classes from './ExpertiseSelector.module.css';
+import { setExpertiseProficiency } from '../../../../../redux/features/classInfo';
+import { useCallback } from 'react';
 
 const ExpertiseSelector = () => {
 	const proficiencies = useAppSelector(

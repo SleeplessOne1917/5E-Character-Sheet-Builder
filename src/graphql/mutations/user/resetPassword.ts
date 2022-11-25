@@ -1,4 +1,4 @@
-import { gql } from 'urql';
+import { gql } from 'urql/core';
 
 const RESET_PASSWORD = gql`
 	mutation ResetPassword(
