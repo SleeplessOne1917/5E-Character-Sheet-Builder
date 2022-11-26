@@ -398,7 +398,7 @@ const Abilities = ({
 										className={`${classes.input}${
 											(clickedSubmit ||
 												(
-													touched.abilityBonusOptions as FormikTouched<{
+													touched as unknown as FormikTouched<{
 														bonus: number;
 													}>
 												)?.bonus) &&
@@ -417,7 +417,7 @@ const Abilities = ({
 									/>
 									{(clickedSubmit ||
 										(
-											touched.abilityBonusOptions as FormikTouched<{
+											touched.abilityBonusOptions as unknown as FormikTouched<{
 												bonus: number;
 											}>
 										)?.bonus) &&
@@ -452,7 +452,7 @@ const Abilities = ({
 										className={`${classes.input}${
 											(clickedSubmit ||
 												(
-													touched.abilityBonusOptions as FormikTouched<{
+													touched.abilityBonusOptions as unknown as FormikTouched<{
 														numberOfAbilityScores: number;
 													}>
 												)?.numberOfAbilityScores) &&
@@ -471,7 +471,7 @@ const Abilities = ({
 									/>
 									{(clickedSubmit ||
 										(
-											touched.abilityBonusOptions as FormikTouched<{
+											touched.abilityBonusOptions as unknown as FormikTouched<{
 												numberOfAbilityScores: number;
 											}>
 										)?.numberOfAbilityScores) &&

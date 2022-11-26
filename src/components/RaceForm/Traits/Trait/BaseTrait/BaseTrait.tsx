@@ -909,7 +909,7 @@ const BaseTrait = ({
 	const getSelectedSpells = useCallback(
 		() =>
 			values.traits
-				.flatMap(t => t.spells ?? [])
+				?.flatMap(t => t.spells ?? [])
 				.concat(values.traits.flatMap(t => t.spellOptions?.options ?? []))
 				.concat(
 					values.traits.flatMap(t =>
@@ -929,7 +929,7 @@ const BaseTrait = ({
 	const filterSpellsSpell = useCallback(
 		(spell: SpellItem) =>
 			!(
-				getSelectedSpells().some(t => t.id === spell.id) &&
+				getSelectedSpells()?.some(t => t.id === spell.id) &&
 				!selectedSpellsSpells?.some(s => s === spell.id)
 			),
 		[getSelectedSpells, selectedSpellsSpells]
@@ -938,7 +938,7 @@ const BaseTrait = ({
 	const filterSpellOptionsSpell = useCallback(
 		(spell: SpellItem) =>
 			!(
-				getSelectedSpells().some(t => t.id === spell.id) &&
+				getSelectedSpells()?.some(t => t.id === spell.id) &&
 				!selectedSpellOptionsSpells?.some(s => s === spell.id)
 			),
 		[getSelectedSpells, selectedSpellOptionsSpells]
@@ -947,7 +947,7 @@ const BaseTrait = ({
 	const getProficienciesFromTraits = useCallback(
 		() =>
 			values.traits
-				.flatMap(t => t.proficiencies ?? [])
+				?.flatMap(t => t.proficiencies ?? [])
 				.concat(values.traits.flatMap(t => t.proficiencyOptions?.options ?? []))
 				.concat(
 					values.traits.flatMap(t =>
@@ -973,7 +973,7 @@ const BaseTrait = ({
 					prof =>
 						prof.type === selectedProficienciesType &&
 						!(
-							getProficienciesFromTraits().some(tp => tp.id === prof.index) &&
+							getProficienciesFromTraits()?.some(tp => tp.id === prof.index) &&
 							!(trait.proficiencies ?? []).some(tp => tp.id === prof.index)
 						)
 				)
@@ -999,7 +999,7 @@ const BaseTrait = ({
 					prof =>
 						prof.type === selectedProficiencyOptionsType &&
 						!(
-							getProficienciesFromTraits().some(tp => tp.id === prof.index) &&
+							getProficienciesFromTraits()?.some(tp => tp.id === prof.index) &&
 							!(trait.proficiencyOptions?.options ?? []).some(
 								tp => tp.id === prof.index
 							)

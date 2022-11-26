@@ -20,7 +20,7 @@ exports[`renders correctly 1`] = `
         <a
           class="arrow-link"
           data-testid="arrow-link"
-          href="/character/race"
+          href="/create/character/race"
         >
           Create Character
           <svg

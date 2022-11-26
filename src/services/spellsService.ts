@@ -11,6 +11,7 @@ import {
 	getSpellsByClass as getSrdSpellsByClass
 } from '../graphql/srdClientService';
 
+import { Client } from 'urql/core';
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
 import { isObjectId } from './objectIdService';
 
@@ -65,9 +66,9 @@ export const mapSpellItem = ({
 	}
 });
 
-export const getSpell = async (id: string) => {
+export const getSpell = async (id: string, client?: Client) => {
 	if (isObjectId(id)) {
-		return (await getCharacterSheetBuilderSpell(id))?.data?.spell;
+		return (await getCharacterSheetBuilderSpell(id, client))?.data?.spell;
 	}
 
 	const spell = (await getSrdSpell(id)).data?.spell;

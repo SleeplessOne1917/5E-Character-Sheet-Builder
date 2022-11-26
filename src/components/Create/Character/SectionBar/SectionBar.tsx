@@ -69,7 +69,7 @@ const SectionBar = ({
 				.map(({ section }) => section)
 				.join('|')})`
 		);
-		const match = pathname.match(pathRegex);
+		const match = pathname?.match(pathRegex);
 
 		if (match) {
 			const key = match[1];

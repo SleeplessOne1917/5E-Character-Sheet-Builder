@@ -1,12 +1,8 @@
 'use client';
 
-import {
-	EditingRaceState,
-	addTrait,
-	removeTrait
-} from '../../../redux/features/editingRace';
 import { ProficiencyType, SrdProficiencyItem } from '../../../types/srd';
 import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
+import { addTrait, removeTrait } from '../../../redux/features/editingRace';
 import { useCallback, useState } from 'react';
 
 import Button from '../../Button/Button';
@@ -53,7 +49,7 @@ const Traits = ({
 					: null
 			)
 		);
-	const { values, setFieldValue } = useFormikContext<EditingRaceState>();
+	const { values, setFieldValue } = useFormikContext<Omit<Race, 'id'>>();
 
 	const dispatch = useAppDispatch();
 
@@ -64,7 +60,7 @@ const Traits = ({
 
 		setProficienciesSelectedTypes(prev => [...(prev ?? []), null]);
 		setProficiencyOptionsSelectedTypes(prev => [...(prev ?? []), null]);
-		setFieldValue('traits', [...values.traits, {}], false);
+		setFieldValue('traits', [...(values.traits ?? []), {}], false);
 	}, [shouldUseReduxStore, dispatch, setFieldValue, values.traits]);
 
 	const handleRemoveTrait = useCallback(
@@ -83,7 +79,7 @@ const Traits = ({
 
 			setFieldValue(
 				'traits',
-				values.traits.filter((t, i) => i !== index),
+				(values.traits ?? []).filter((t, i) => i !== index),
 				false
 			);
 		},
@@ -110,7 +106,7 @@ const Traits = ({
 
 	return (
 		<div className={classes['traits-container']}>
-			{values.traits.map((trait, index) => (
+			{(values.traits ?? []).map((trait, index) => (
 				<Trait
 					index={index}
 					trait={trait}
@@ -138,7 +134,7 @@ const Traits = ({
 					spells={spells}
 				/>
 			))}
-			{values.traits.length < 10 && (
+			{(values.traits ?? []).length < 10 && (
 				<Button
 					positive
 					onClick={handleAddTrait}

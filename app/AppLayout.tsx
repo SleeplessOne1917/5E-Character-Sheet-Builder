@@ -9,6 +9,7 @@ import {
 	useState
 } from 'react';
 import { Provider as UrqlProvider, useQuery } from 'urql';
+import { getStoreAndCleanup, getTestStore } from '../src/redux/store';
 
 import GET_VIEWER from '../src/graphql/queries/CharacterSheetBuilder/getViewer';
 import Header from '../src/components/Header/Header';
@@ -17,12 +18,11 @@ import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import client from '../src/graphql/client';
-import { getStore } from '../src/redux/store';
 import { useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { usePathname } from 'next/navigation';
 
-const storePromise = getStore();
+const storePromise = getStoreAndCleanup();
 
 const AppLayout = ({
 	children
@@ -106,7 +106,16 @@ const AppLayout = ({
 const AppLayoutWrapper = ({
 	children
 }: PropsWithChildren<Record<string, unknown>>) => {
-	const store = use(storePromise);
+	const [store, cleanup] =
+		typeof window !== 'undefined'
+			? use(storePromise)
+			: [getTestStore(), () => {}];
+
+	useEffect(() => {
+		return () => {
+			cleanup();
+		};
+	}, [cleanup]);
 
 	return (
 		<ReduxProvider store={store}>

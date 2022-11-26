@@ -12,6 +12,7 @@ import editingCharacter, {
 } from './features/editingCharacter';
 import { get, set } from 'idb-keyval';
 
+import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 import editingRace from './features/editingRace';
 import editingSpell from './features/editingSpell';
 import generationMethod from './features/generationMethod';
@@ -45,7 +46,9 @@ const updateCache: ListenerEffect<
 
 const updateCachePredicate = () => true;
 
-export const getStore = async () => {
+export const getStoreAndCleanup = async (): Promise<
+	[ToolkitStore, () => void]
+> => {
 	indexedDbCacheListener.startListening({
 		predicate: updateCachePredicate,
 		effect: updateCache
@@ -64,10 +67,18 @@ export const getStore = async () => {
 
 	const theStore = configureStore(options);
 	if (!reduxCache) {
-		set(REDUX_CACHE_KEY, theStore.getState());
+		await set(REDUX_CACHE_KEY, theStore.getState());
 	}
 
-	return theStore;
+	return [
+		theStore,
+		() => {
+			indexedDbCacheListener.stopListening({
+				predicate: updateCachePredicate,
+				effect: updateCache
+			});
+		}
+	];
 };
 
 export const getTestStore = (

@@ -1,3 +1,5 @@
+'use client';
+
 import { AbilityItem, SrdItem } from '../../../../types/srd';
 import { useCallback, useEffect } from 'react';
 

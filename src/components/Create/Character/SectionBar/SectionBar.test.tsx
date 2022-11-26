@@ -6,29 +6,10 @@ import { render, screen } from '@testing-library/react';
 
 import SectionBar from './SectionBar';
 
-const mockRouter = (pathname: string) => {
-	const useRouter = jest.spyOn(Router, 'useRouter');
+const mockPathname = (pathname: string) => {
+	const useRouter = jest.spyOn(Router, 'usePathname');
 
-	const router: Router.NextRouter = {
-		push: () => Promise.resolve(true),
-		prefetch: () => Promise.resolve(),
-		pathname,
-		route: '',
-		query: {},
-		asPath: '',
-		basePath: '',
-		isLocaleDomain: true,
-		reload: jest.fn(),
-		replace: jest.fn(),
-		back: jest.fn(),
-		beforePopState: jest.fn(),
-		events: { emit: jest.fn(), on: jest.fn(), off: jest.fn() },
-		isFallback: false,
-		isPreview: false,
-		isReady: true,
-		forward: () => {}
-	};
-	useRouter.mockReturnValue(router);
+	useRouter.mockReturnValue(pathname);
 };
 
 const mockMatchMedia = (matches: boolean) => {
@@ -42,7 +23,7 @@ const mockMatchMedia = (matches: boolean) => {
 describe('renders correctly', () => {
 	it('normally', () => {
 		mockMatchMedia(true);
-		mockRouter('/create/character/race/');
+		mockPathname('/create/character/race/');
 
 		render(<SectionBar />);
 
@@ -51,7 +32,7 @@ describe('renders correctly', () => {
 
 	it('with spells', () => {
 		mockMatchMedia(true);
-		mockRouter('/create/character/race/');
+		mockPathname('/create/character/race/');
 
 		render(<SectionBar hasSpellcasting />);
 
@@ -65,7 +46,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at race', () => {
-		mockRouter('/create/character/race/');
+		mockPathname('/create/character/race/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -74,7 +55,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at class', () => {
-		mockRouter('/create/character/class/');
+		mockPathname('/create/character/class/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -83,7 +64,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at abilities', () => {
-		mockRouter('/create/character/abilities/');
+		mockPathname('/create/character/abilities/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -92,7 +73,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at description', () => {
-		mockRouter('/create/character/description/');
+		mockPathname('/create/character/description/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -101,7 +82,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at equipment', () => {
-		mockRouter('/create/character/equipment/');
+		mockPathname('/create/character/equipment/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(
@@ -110,7 +91,7 @@ describe('snaps to snapPercents', () => {
 	});
 
 	it('at finish', () => {
-		mockRouter('/create/character/finish/');
+		mockPathname('/create/character/finish/');
 		render(<SectionBar />);
 
 		expect(screen.getByTestId(/section-list/i)).toHaveStyle(

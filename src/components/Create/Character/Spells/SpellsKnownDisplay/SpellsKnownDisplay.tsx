@@ -1,21 +1,42 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { use, useCallback, useMemo, useState } from 'react';
 
 import Button from '../../../../Button/Button';
-import { Spell } from '../../../../../types/characterSheetBuilderAPI';
+import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 import SpellMoreInformationModal from '../../../../Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './SpellsKnownDisplay.module.css';
+import { getSpell } from '../../../../../services/spellsService';
 import { useAppSelector } from '../../../../../hooks/reduxHooks';
+import { useClient } from 'urql';
 
 const SpellsKnownDisplay = () => {
 	const spells = useAppSelector(
 		state => state.editingCharacter.spellcasting.spells
 	);
+	const [selectedSpellId, setSelectedSpellId] = useState<string>();
+
+	const client = useClient();
+
+	const selectedSpell = selectedSpellId
+		? use(getSpell(selectedSpellId, client))
+		: undefined;
+
+	const [showMore, setShowMore] = useState(false);
+
+	const handleShowMoreInfo = useCallback((spell: SpellItem) => {
+		setSelectedSpellId(spell.id);
+		setShowMore(true);
+	}, []);
+
+	const handleCloseModal = useCallback(() => {
+		setSelectedSpellId(undefined);
+		setShowMore(false);
+	}, []);
 
 	const spellsByLevel = useMemo(
 		() =>
-			spells.reduce<Map<number, Spell[]>>((acc, cur) => {
+			spells.reduce<Map<number, SpellItem[]>>((acc, cur) => {
 				if (!acc.get(cur.level)) {
 					acc.set(cur.level, [cur]);
 				} else {
@@ -23,19 +44,8 @@ const SpellsKnownDisplay = () => {
 				}
 
 				return acc;
-			}, new Map<number, Spell[]>()),
+			}, new Map<number, SpellItem[]>()),
 		[spells]
-	);
-
-	const [selectedSpell, setSelectedSpell] = useState(spells[0]);
-	const [showMore, setShowMore] = useState(false);
-
-	const handleShowMoreInfo = useCallback(
-		(spell: Spell) => {
-			setSelectedSpell(spell);
-			setShowMore(true);
-		},
-		[setSelectedSpell, setShowMore]
 	);
 
 	return (
@@ -49,7 +59,7 @@ const SpellsKnownDisplay = () => {
 								{level === 0 ? 'Cantrips' : `Level ${level}`}
 							</div>
 						].concat(
-							(spellsByLevel.get(level) as Spell[]).map((spell, index) => (
+							(spellsByLevel.get(level) as SpellItem[]).map((spell, index) => (
 								<div
 									key={spell.id}
 									className={`${classes.spell} ${
@@ -72,7 +82,8 @@ const SpellsKnownDisplay = () => {
 			<SpellMoreInformationModal
 				show={showMore}
 				spell={selectedSpell}
-				onClose={() => setShowMore(false)}
+				onClose={handleCloseModal}
+				loading={!selectedSpell}
 			/>
 		</>
 	);
