@@ -9,9 +9,9 @@ import { ToastType } from '../../types/toast';
 import classes from './Account.module.css';
 import newPasswordSchema from '../../yup-schemas/newPasswordSchema';
 import { show } from '../../redux/features/toast';
+import { trpc } from '../../common/trpcFrontend';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { useCallback } from 'react';
-import useCreateNewPasswordMutation from '../../hooks/urql/mutations/useCreateNewPasswordMutation';
 
 type AccountProps = {
 	username?: string;
@@ -24,34 +24,36 @@ type FormValues = {
 };
 
 const Account = ({ username }: AccountProps) => {
-	const [_, createNewPassword] = useCreateNewPasswordMutation();
 	const dispatch = useAppDispatch();
+
+	const createNewPasswordMutation =
+		trpc.password.createNewPassword.useMutation();
 
 	const handleCreatePasswordSubmit = useCallback(
 		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
-			const result = await createNewPassword(values);
+			try {
+				const result = await createNewPasswordMutation.mutateAsync(values);
 
-			if (result.error) {
 				dispatch(
 					show({
 						closeTimeoutSeconds: 10,
-						message: result.error.message,
-						type: ToastType.error
-					})
-				);
-			} else {
-				dispatch(
-					show({
-						closeTimeoutSeconds: 10,
-						message: result.data?.createNewPassword ?? '',
+						message: result,
 						type: ToastType.success
 					})
 				);
+			} catch (e) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: (e as Error).message,
+						type: ToastType.error
+					})
+				);
+			} finally {
+				resetForm();
 			}
-
-			resetForm();
 		},
-		[createNewPassword, dispatch]
+		[createNewPasswordMutation, dispatch]
 	);
 
 	return (

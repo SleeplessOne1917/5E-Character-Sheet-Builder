@@ -1,9 +1,10 @@
-import { procedure, router } from '../trpc';
+import { hashValue, verifyValue } from '../../../services/hashService';
+import { procedure, protectedProcedure, router } from '../trpc';
 
 import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
 import { TRPCError } from '@trpc/server';
 import User from '../../../db/models/user';
-import { hashValue } from '../../../services/hashService';
+import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
 import otlIdSchema from '../../../yup-schemas/otlIdSchema';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 
@@ -49,6 +50,27 @@ const passwordRouter = router({
 			}
 
 			return 'Password was reset';
+		}),
+	// This is the one for users to create a new password on their account page that requires your current password to update
+	createNewPassword: protectedProcedure
+		.input(newPasswordSchema)
+		.mutation(async ({ input, ctx: { user } }) => {
+			if (
+				!(await verifyValue(user?.passwordHash ?? '', input.currentPassword))
+			) {
+				throw new TRPCError({
+					message: 'Incorrect password provided',
+					code: 'UNAUTHORIZED'
+				});
+			}
+
+			const newPasswordHash = await hashValue(input.newPassword);
+			await User.updateOne(
+				{ _id: user?._id },
+				{ $set: { passwordHash: newPasswordHash } }
+			);
+
+			return 'Password successfully changed';
 		})
 });
 

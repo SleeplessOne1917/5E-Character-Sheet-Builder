@@ -1,22 +1,13 @@
 import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
-import { hashValue, verifyValue } from '../../../services/hashService';
 
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import { Types } from 'mongoose';
-import User from '../../../db/models/user';
 import { mustBeLoggedIn } from './../../../constants/generalConstants';
-import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
 import raceSchema from '../../../yup-schemas/raceSchema';
 import spellSchema from '../../../yup-schemas/spellSchema';
 import { throwErrorWithCustomMessageInProd } from '../../../server/character-sheet-builder/utils/trpcErrorUtils';
-
-type CreateNewPasswordArgs = {
-	currentPassword: string;
-	newPassword: string;
-	confirmPassword: string;
-};
 
 type CreateSpellArgs = {
 	spell: Omit<ISpell, 'userId'>;
@@ -32,34 +23,6 @@ type CreateRaceArgs = {
 };
 
 const Mutation = {
-	// This is the one for users to create a new password on their account page that requires your current password to update
-	createNewPassword: async (
-		parent: never,
-		args: CreateNewPasswordArgs,
-		{ user }: ApolloContext
-	) => {
-		if (!user) {
-			throw new ApolloError(mustBeLoggedIn);
-		}
-
-		await newPasswordSchema.validate(args, { strict: true });
-
-		if (!(await verifyValue(user.passwordHash, args.currentPassword))) {
-			throw new ApolloError('Incorrect password provided');
-		}
-
-		if (args.newPassword !== args.confirmPassword) {
-			throw new ApolloError('Passwords do not match');
-		}
-
-		const newPasswordHash = await hashValue(args.newPassword);
-		await User.updateOne(
-			{ _id: user._id },
-			{ $set: { passwordHash: newPasswordHash } }
-		);
-
-		return 'Password successfully changed';
-	},
 	createSpell: async (
 		parent: never,
 		{ spell }: CreateSpellArgs,
