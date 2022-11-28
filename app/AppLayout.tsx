@@ -2,35 +2,35 @@
 
 import {
 	PropsWithChildren,
-	use,
 	useCallback,
 	useEffect,
 	useMemo,
 	useState
 } from 'react';
-import { Provider as UrqlProvider, useQuery } from 'urql';
+import { SessionProvider, useSession } from 'next-auth/react';
 import { getStoreAndCleanup, getTestStore } from '../src/redux/store';
 
-import GET_VIEWER from '../src/graphql/queries/CharacterSheetBuilder/getViewer';
 import Header from '../src/components/Header/Header';
 import MobileNav from '../src/components/MobileNav/MobileNav';
 import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
+import { Session } from 'next-auth';
 import ToastContainer from '../src/components/Toast/ToastContainer';
+import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
+import { trpc } from '../src/common/trpc';
 import { useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { usePathname } from 'next/navigation';
 
-const storePromise = getStoreAndCleanup();
-
 const AppLayout = ({
 	children
 }: PropsWithChildren<Record<string, unknown>>): JSX.Element => {
+	const { data: session } = useSession();
+
 	const pathname = usePathname();
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 	const isLargeOrLarger = useMediaQuery('(min-width: 1024px)');
-	const [viewerData] = useQuery<{ viewer: string }>({ query: GET_VIEWER });
 	const currentLevel = useAppSelector(
 		state => state.editingCharacter.classInfo.level
 	);
@@ -85,7 +85,7 @@ const AppLayout = ({
 			<Header
 				onMenuIconClick={toggleMobileNav}
 				onLogoIconClick={closeMobileNav}
-				username={viewerData.data?.viewer}
+				username={session?.user?.name ?? undefined}
 			/>
 			<div id="app">
 				{pathname?.includes('create/character') && (
@@ -94,7 +94,7 @@ const AppLayout = ({
 				<MobileNav
 					isOpen={isMobileNavOpen}
 					onClickLink={closeMobileNav}
-					username={viewerData.data?.viewer}
+					username={session?.user?.name ?? undefined}
 				/>
 				{children}
 				<ToastContainer />
@@ -103,27 +103,36 @@ const AppLayout = ({
 	);
 };
 
-const AppLayoutWrapper = ({
-	children
-}: PropsWithChildren<Record<string, unknown>>) => {
-	const [store, cleanup] =
-		typeof window !== 'undefined'
-			? use(storePromise)
-			: [getTestStore(), () => {}];
+type AppLayouWrapperProps = PropsWithChildren<{
+	session: Session | null;
+	pageProps: Record<string, unknown>;
+}>;
+
+const AppLayoutWrapper = ({ children, session }: AppLayouWrapperProps) => {
+	const [store, setStore] = useState(getTestStore());
 
 	useEffect(() => {
+		let cleanup = () => {};
+		getStoreAndCleanup().then(([theStore, clnupFn]) => {
+			setStore(theStore);
+			cleanup = clnupFn;
+		});
 		return () => {
 			cleanup();
 		};
-	}, [cleanup]);
+	}, []);
 
 	return (
-		<ReduxProvider store={store}>
-			<UrqlProvider value={client}>
-				<AppLayout>{children}</AppLayout>
-			</UrqlProvider>
-		</ReduxProvider>
+		<SessionProvider session={session}>
+			<ReduxProvider store={store}>
+				<UrqlProvider value={client}>
+					<AppLayout>{children}</AppLayout>
+				</UrqlProvider>
+			</ReduxProvider>
+		</SessionProvider>
 	);
 };
 
-export default AppLayoutWrapper;
+export default trpc.withTRPC(AppLayoutWrapper) as (
+	props: AppLayouWrapperProps
+) => JSX.Element;

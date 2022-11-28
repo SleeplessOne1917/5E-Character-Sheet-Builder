@@ -5,24 +5,20 @@ import { useCallback, useEffect, useState } from 'react';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import Preview from '../../../components/MyStuff/Preview/Preview';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
 import { useQuery } from 'urql';
-import { useRouter } from 'next/navigation';
 
 type MyStuffIndexProps = {
-	username?: string;
 	spells: SpellItem[];
 };
 
-const MyStuffIndex = ({ username, spells }: MyStuffIndexProps) => {
+const MyStuffIndex = ({ spells }: MyStuffIndexProps) => {
 	const [spellId, setSpellId] = useState<string>();
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
-	const router = useRouter();
 
 	const [spellResult] = useQuery<{
 		spell: Spell;
@@ -31,12 +27,6 @@ const MyStuffIndex = ({ username, spells }: MyStuffIndexProps) => {
 		variables: { id: spellId },
 		pause: !spellId
 	});
-
-	useEffect(() => {
-		if (!username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	useEffect(() => {
 		if (spellId && !(spellResult.fetching || spellResult.error)) {
@@ -56,46 +46,41 @@ const MyStuffIndex = ({ username, spells }: MyStuffIndexProps) => {
 
 	return (
 		<>
-			{!username && <LoadingPageContent />}
-			{username && (
-				<>
-					<MainContent testId="my-stuff-index">
-						<h1>My Stuff</h1>
-						{spells.length === 0 && (
-							<div className={classes['no-items-container']}>
-								<p>
-									You haven&apos;t created anything yet. Whenever you create
-									anything, it will show up here.
-								</p>
-								<ArrowLink href="/create" text="Create Something" />
-							</div>
-						)}
-						<div className={classes.previews}>
-							{spells.length > 0 && (
-								<Preview
-									path="spells"
-									title="Spells"
-									items={spells.map(spell => (
-										<SpellItemDisplay
-											spell={spell}
-											key={spell.id}
-											onMoreInfoClick={handleSpellMoreInfoClick}
-										/>
-									))}
+			<MainContent testId="my-stuff-index">
+				<h1>My Stuff</h1>
+				{spells.length === 0 && (
+					<div className={classes['no-items-container']}>
+						<p>
+							You haven&apos;t created anything yet. Whenever you create
+							anything, it will show up here.
+						</p>
+						<ArrowLink href="/create" text="Create Something" />
+					</div>
+				)}
+				<div className={classes.previews}>
+					{spells.length > 0 && (
+						<Preview
+							path="spells"
+							title="Spells"
+							items={spells.map(spell => (
+								<SpellItemDisplay
+									spell={spell}
+									key={spell.id}
+									onMoreInfoClick={handleSpellMoreInfoClick}
 								/>
-							)}
-						</div>
-					</MainContent>
-					<SpellMoreInformationModal
-						show={!!spellId}
-						spell={selectedSpell}
-						error={spellResult.error?.message}
-						loading={spellResult.fetching}
-						onClose={handleSpellMoreInfoClose}
-						shouldShowEditAndClasses
-					/>
-				</>
-			)}
+							))}
+						/>
+					)}
+				</div>
+			</MainContent>
+			<SpellMoreInformationModal
+				show={!!spellId}
+				spell={selectedSpell}
+				error={spellResult.error?.message}
+				loading={spellResult.fetching}
+				onClose={handleSpellMoreInfoClose}
+				shouldShowEditAndClasses
+			/>
 		</>
 	);
 };

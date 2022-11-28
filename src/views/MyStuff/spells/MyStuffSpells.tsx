@@ -7,25 +7,18 @@ import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import Button from '../../../components/Button/Button';
 import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
 import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
 import { useQuery } from 'urql';
-import { useRouter } from 'next/navigation';
-
-type MyStuffSpellsProps = {
-	username?: string;
-};
 
 const spellsPerPage = 10;
 
-const MyStuffSpells = ({ username }: MyStuffSpellsProps) => {
+const MyStuffSpells = () => {
 	const [spellId, setSpellId] = useState<string>();
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 	const [currentPage, setCurrentPage] = useState(1);
-	const router = useRouter();
 
 	const [spellResult] = useQuery<{
 		spell: Spell;
@@ -40,12 +33,6 @@ const MyStuffSpells = ({ username }: MyStuffSpellsProps) => {
 		query: GET_SPELLS,
 		variables: { limit: spellsPerPage, skip: (currentPage - 1) * spellsPerPage }
 	});
-
-	useEffect(() => {
-		if (!username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	useEffect(() => {
 		if (spellId && !(spellResult.fetching || spellResult.error)) {
@@ -75,9 +62,7 @@ const MyStuffSpells = ({ username }: MyStuffSpellsProps) => {
 		setCurrentPage(prev => prev + 1);
 	}, []);
 
-	return !username || spellsResult.fetching ? (
-		<LoadingPageContent />
-	) : (
+	return (
 		<>
 			<MainContent>
 				<h1>My Spells</h1>

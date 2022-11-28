@@ -4,32 +4,21 @@ import LogInSignUpForm, {
 	LogInSignUpValues
 } from '../../../components/LogInSignUp/LogInSignUpForm';
 import { ToastShowPayload, show } from '../../../redux/features/toast';
-import { useCallback, useEffect } from 'react';
 
 import { FormikHelpers } from 'formik';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import SIGN_UP from '../../../graphql/mutations/user/signUp';
 import { ToastType } from '../../../types/toast';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useCallback } from 'react';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
-type SignUpProps = {
-	username?: string;
-};
-
-const SignUp = ({ username }: SignUpProps): JSX.Element => {
+const SignUp = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [_, signUp] = useMutation(SIGN_UP);
 	const router = useRouter();
-
-	useEffect(() => {
-		if (username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	const handleSubmit = useCallback(
 		async (
@@ -66,19 +55,14 @@ const SignUp = ({ username }: SignUpProps): JSX.Element => {
 	);
 
 	return (
-		<>
-			{username && <LoadingPageContent />}
-			{!username && (
-				<MainContent>
-					<h1>Sign Up</h1>
-					<LogInSignUpForm
-						schema={signUpSchema}
-						type="signUp"
-						onSubmit={handleSubmit}
-					/>
-				</MainContent>
-			)}
-		</>
+		<MainContent>
+			<h1>Sign Up</h1>
+			<LogInSignUpForm
+				schema={signUpSchema}
+				type="signUp"
+				onSubmit={handleSubmit}
+			/>
+		</MainContent>
 	);
 };
 

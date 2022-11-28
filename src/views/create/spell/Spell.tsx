@@ -5,12 +5,11 @@ import {
 	resetSpell,
 	initialState as spellInitialState
 } from '../../../redux/features/editingSpell';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FormikHelpers } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import SpellForm from '../../../components/Spells/SpellForm/SpellForm';
 import { ToastType } from '../../../types/toast';
@@ -23,13 +22,11 @@ type SpellProps = {
 	magicSchools: SrdItem[];
 	srdClasses: SrdItem[];
 	damageTypes: SrdItem[];
-	username?: string;
 	abilities: AbilityItem[];
 };
 
 const Spell = ({
 	magicSchools,
-	username,
 	damageTypes,
 	srdClasses,
 	abilities
@@ -39,12 +36,6 @@ const Spell = ({
 	const [initialValues, setInitialValues] = useState(editingSpell);
 	const [_, createSpell] = useMutation(CREATE_SPELL);
 	const router = useRouter();
-
-	useEffect(() => {
-		if (!username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	const handleSubmit = useCallback(
 		async (
@@ -70,23 +61,18 @@ const Spell = ({
 	);
 
 	return (
-		<>
-			{!username && <LoadingPageContent />}
-			{username && (
-				<MainContent testId="create-spell">
-					<h1>Create Spell</h1>
-					<SpellForm
-						abilities={abilities}
-						damageTypes={damageTypes}
-						magicSchools={magicSchools}
-						shouldUseReduxStore
-						srdClasses={srdClasses}
-						initialValues={initialValues as Omit<Spell, 'id'>}
-						onSubmit={handleSubmit}
-					/>
-				</MainContent>
-			)}
-		</>
+		<MainContent testId="create-spell">
+			<h1>Create Spell</h1>
+			<SpellForm
+				abilities={abilities}
+				damageTypes={damageTypes}
+				magicSchools={magicSchools}
+				shouldUseReduxStore
+				srdClasses={srdClasses}
+				initialValues={initialValues as Omit<Spell, 'id'>}
+				onSubmit={handleSubmit}
+			/>
+		</MainContent>
 	);
 };
 

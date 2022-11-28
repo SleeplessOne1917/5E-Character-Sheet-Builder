@@ -21,7 +21,6 @@ import { useRouter } from 'next/navigation';
 
 type ResetPasswordProps = {
 	otlId: string;
-	username?: string;
 };
 
 type FormValues = {
@@ -29,7 +28,7 @@ type FormValues = {
 	confirmPassword: string;
 };
 
-const ResetPassword = ({ otlId, username }: ResetPasswordProps) => {
+const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
@@ -48,12 +47,6 @@ const ResetPassword = ({ otlId, username }: ResetPasswordProps) => {
 			setLoading(false);
 		});
 	}, [validateResetPassword, setLoading, otlId]);
-
-	useEffect(() => {
-		if (username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	useEffect(() => {
 		if (validateError || resetError) {
@@ -171,8 +164,8 @@ const ResetPassword = ({ otlId, username }: ResetPasswordProps) => {
 
 	return (
 		<>
-			{(loading || username) && <LoadingPageContent />}
-			{!(loading || username) && (
+			{loading && <LoadingPageContent />}
+			{!loading && (
 				<MainContent>
 					<div className={classes.content}>
 						<h1>{headerText}</h1>

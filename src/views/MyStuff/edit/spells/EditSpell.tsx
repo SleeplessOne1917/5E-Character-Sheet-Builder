@@ -1,9 +1,7 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../../types/srd';
-import { useCallback, useEffect } from 'react';
 
-import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { PartialBy } from '../../../../types/helpers';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
@@ -12,11 +10,11 @@ import { ToastType } from '../../../../types/toast';
 import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { useCallback } from 'react';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
 type EditSpellProps = {
-	username?: string;
 	srdClasses: SrdItem[];
 	magicSchools: SrdItem[];
 	damageTypes: SrdItem[];
@@ -25,7 +23,6 @@ type EditSpellProps = {
 };
 
 const EditSpell = ({
-	username,
 	spell,
 	srdClasses,
 	magicSchools,
@@ -35,12 +32,6 @@ const EditSpell = ({
 	const [__, updateSpell] = useMutation(UPDATE_SPELL);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		if (!(username && spell)) {
-			router.replace('/');
-		}
-	}, [username, spell, router]);
 
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Spell, 'id'>) => {
@@ -61,9 +52,7 @@ const EditSpell = ({
 		[updateSpell, spell?.id, dispatch, router]
 	);
 
-	return !(username && spell) ? (
-		<LoadingPageContent />
-	) : (
+	return (
 		<MainContent>
 			<h1>Edit {spell?.name}</h1>
 			<SpellForm

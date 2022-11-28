@@ -1,10 +1,15 @@
 import MyStuffSpellsView from '../../../src/views/MyStuff/spells/MyStuffSpells';
-import { getViewer } from '../../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const MyStuffSpellsPage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <MyStuffSpellsView username={username} />;
+	if (!session?.user) {
+		redirect('/');
+	}
+
+	return <MyStuffSpellsView />;
 };
 
 export default MyStuffSpellsPage;

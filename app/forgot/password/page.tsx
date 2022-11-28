@@ -1,10 +1,15 @@
 import ForgotPasswordView from '../../../src/views/forgot/ForgotPassword/ForgotPassword';
-import { getViewer } from '../../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const ForgotPasswordPage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <ForgotPasswordView username={username} />;
+	if (session?.user) {
+		redirect('/');
+	}
+
+	return <ForgotPasswordView />;
 };
 
 export default ForgotPasswordPage;

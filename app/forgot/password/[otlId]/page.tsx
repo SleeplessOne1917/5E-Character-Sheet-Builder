@@ -1,14 +1,19 @@
 import ResetPasswordView from '../../../../src/views/ResetPassword/ResetPassword';
-import { getViewer } from '../../../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const ResetPasswordPage = async ({
 	params: { otlId }
 }: {
 	params: { otlId: string };
 }) => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <ResetPasswordView otlId={otlId} username={username} />;
+	if (session?.user) {
+		redirect('/');
+	}
+
+	return <ResetPasswordView otlId={otlId} />;
 };
 
 export default ResetPasswordPage;

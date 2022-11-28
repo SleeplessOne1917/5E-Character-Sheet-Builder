@@ -44,6 +44,3 @@ export const getLimitedSpells = async (limit: number, client?: Client) =>
 
 export const getSpell = async (id: string, client?: Client) =>
 	await query<{ spell: Spell }, { id: string }>(GET_SPELL, { id }, client);
-
-export const getViewer = async () =>
-	(await query<{ viewer: string }>(GET_SPELL)).data?.viewer;

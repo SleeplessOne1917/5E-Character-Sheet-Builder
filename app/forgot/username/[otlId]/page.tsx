@@ -1,14 +1,19 @@
 import UsernameReminderView from '../../../../src/views/UsernameReminder/UsernameReminder';
-import { getViewer } from '../../../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const UsernameReminderPage = async ({
 	params: { otlId }
 }: {
 	params: { otlId: string };
 }) => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <UsernameReminderView otlId={otlId} username={username} />;
+	if (session?.user) {
+		redirect('/');
+	}
+
+	return <UsernameReminderView otlId={otlId} />;
 };
 
 export default UsernameReminderPage;

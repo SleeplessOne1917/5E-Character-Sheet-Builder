@@ -1,10 +1,15 @@
 import ForgotIndexView from '../../src/views/forgot/ForgotIndex/ForgotIndex';
-import { getViewer } from '../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const ForgotIndexPage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <ForgotIndexView username={username} />;
+	if (session?.user) {
+		redirect('/');
+	}
+
+	return <ForgotIndexView />;
 };
 
 export default ForgotIndexPage;

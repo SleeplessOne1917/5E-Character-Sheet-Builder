@@ -77,7 +77,7 @@ import ProficienciesSelector from '../ProficienciesSelector/ProficienciesSelecto
 import Select from '../../../../Select/Select/Select';
 import SubclassSelector from '../SubclassSelector/SubclassSelector';
 import { getOrdinal } from '../../../../../services/ordinalService';
-import { getProficienciesByType } from '../../../../../graphql/srdClientService';
+import { getProficienciesByType } from '../../../../../server/5E-API/srdClientService';
 import { mapSpellItem } from '../../../../../services/spellsService';
 import { rollDie } from '../../../../../services/diceService';
 import styles from './SelectedClassDisplay.module.css';

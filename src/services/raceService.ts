@@ -1,7 +1,7 @@
 import {
 	getRace as getSrdRace,
 	getSubrace as getSrdSubrace
-} from '../graphql/srdClientService';
+} from '../server/5E-API/srdClientService';
 
 export const getRace = async (index: string) => await getSrdRace(index);
 

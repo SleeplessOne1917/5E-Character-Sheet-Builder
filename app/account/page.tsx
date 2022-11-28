@@ -1,10 +1,15 @@
 import AccountView from '../../src/views/Account/Account';
-import { getViewer } from '../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const AccountPage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <AccountView username={username} />;
+	if (!session?.user) {
+		redirect('/');
+	}
+
+	return <AccountView username={session.user.name ?? undefined} />;
 };
 
 export default AccountPage;

@@ -1,10 +1,15 @@
 import SignUpView from '../../src/views/LogInSignUp/SignUp/SignUp';
-import { getViewer } from '../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const SignUpPage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <SignUpView username={username} />;
+	if (session?.user) {
+		redirect('/');
+	}
+
+	return <SignUpView />;
 };
 
 export default SignUpPage;

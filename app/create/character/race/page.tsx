@@ -2,7 +2,7 @@ import {
 	getAbilities,
 	getRaces,
 	getSubraces
-} from '../../../../src/graphql/srdClientService';
+} from '../../../../src/server/5E-API/srdClientService';
 
 import RaceView from '../../../../src/views/create/character/race/Race';
 

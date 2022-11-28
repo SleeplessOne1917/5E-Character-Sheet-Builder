@@ -1,15 +1,17 @@
 import '../styles/globals.css';
 import '../styles/fonts.css';
 
-import { PropsWithChildren, use } from 'react';
-
 import AppLayout from './AppLayout';
 import Footer from '../src/components/Footer/Footer';
 import Image from 'next/image';
+import { PropsWithChildren } from 'react';
+import { getSession } from '../src/services/sessionService';
 
-const WrappedApp = async ({
+const App = async ({
 	children
 }: PropsWithChildren<Record<string, unknown>>) => {
+	const session = await getSession();
+
 	return (
 		<html lang="en">
 			<head>
@@ -66,11 +68,13 @@ const WrappedApp = async ({
 					priority
 					fill
 				/>
-				<AppLayout>{children}</AppLayout>
+				<AppLayout session={session} pageProps={{}}>
+					{children}
+				</AppLayout>
 				<Footer />
 			</body>
 		</html>
 	);
 };
 
-export default WrappedApp;
+export default App;

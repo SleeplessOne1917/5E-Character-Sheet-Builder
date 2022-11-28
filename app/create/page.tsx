@@ -1,10 +1,10 @@
 import CreateIndexView from '../../src/views/create/index/CreateIndex';
-import { getViewer } from '../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../src/services/sessionService';
 
 const CreatePage = async () => {
-	const username = await getViewer();
+	const session = await getSession();
 
-	return <CreateIndexView username={username} />;
+	return <CreateIndexView username={session?.user?.name ?? undefined} />;
 };
 
 export default CreatePage;

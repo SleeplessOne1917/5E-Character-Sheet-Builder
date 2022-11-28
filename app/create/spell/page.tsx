@@ -3,12 +3,19 @@ import {
 	getDamageTypes,
 	getMagicSchools,
 	getSpellcastingClasses
-} from '../../../src/graphql/srdClientService';
+} from '../../../src/server/5E-API/srdClientService';
 
 import SpellView from '../../../src/views/create/spell/Spell';
-import { getViewer } from '../../../src/graphql/characterSheetBuilderClientService';
+import { getSession } from '../../../src/services/sessionService';
+import { redirect } from 'next/navigation';
 
 const SpellPage = async () => {
+	const session = await getSession();
+
+	if (!session?.user) {
+		redirect('/');
+	}
+
 	const magicSchools = [...((await getMagicSchools()) ?? [])].sort((a, b) =>
 		a.name.localeCompare(b.name)
 	);
@@ -16,12 +23,9 @@ const SpellPage = async () => {
 	const damageTypes = (await getDamageTypes()) ?? [];
 	const abilities = (await getAbilities()) ?? [];
 
-	const username = await getViewer();
-
 	return (
 		<SpellView
 			magicSchools={magicSchools}
-			username={username}
 			srdClasses={classes}
 			damageTypes={damageTypes}
 			abilities={abilities}

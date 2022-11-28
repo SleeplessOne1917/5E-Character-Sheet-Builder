@@ -1,6 +1,6 @@
 import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
-import User, { IUser, IUserDocument } from '../../../db/models/user';
+import User, { IUser } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
@@ -14,7 +14,6 @@ import { Types } from 'mongoose';
 import UsernameOTL from '../../../db/models/usernameOTL';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
-import { getSession } from '../../../services/sessionService';
 import logInSchema from '../../../yup-schemas/logInSchema';
 import { mustBeLoggedIn } from './../../../constants/generalConstants';
 import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
@@ -86,11 +85,7 @@ type CreateRaceArgs = {
 };
 
 const Mutation = {
-	signUp: async (
-		parent: never,
-		args: SignUpArgs,
-		{ req, res }: ApolloContext
-	) => {
+	signUp: async (parent: never, args: SignUpArgs) => {
 		const { user } = args;
 		await signUpSchema.validate(user, { strict: true });
 
@@ -114,10 +109,8 @@ const Mutation = {
 			const emailHash = await hashValue(user.email);
 			newUser.emailHash = emailHash;
 		}
-
-		let sessionUser = undefined as unknown as IUserDocument;
 		try {
-			sessionUser = await User.create(newUser);
+			await User.create(newUser);
 		} catch (error) {
 			throwErrorWithCustomMessageInProd(
 				error as Error,
@@ -125,16 +118,9 @@ const Mutation = {
 			);
 		}
 
-		const session = await getSession(req, res);
-		session.user = sessionUser;
-
 		return 'Signed up';
 	},
-	logIn: async (
-		parent: never,
-		args: LoginArgs,
-		{ req, res }: ApolloContext
-	) => {
+	logIn: async (parent: never, args: LoginArgs) => {
 		const user = args.user;
 		await logInSchema.validate(user, { strict: true });
 
@@ -150,17 +136,7 @@ const Mutation = {
 			throw new ApolloError('Username or password was incorrect');
 		}
 
-		const session = await getSession(req, res);
-		session.user = existingUser;
-
 		return 'Logged in';
-	},
-	logout: async (parent: never, args: never, { res, req }: ApolloContext) => {
-		const session = await getSession(req, res);
-
-		await session.destroy();
-
-		return 'Logged off';
 	},
 	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request, { strict: true });

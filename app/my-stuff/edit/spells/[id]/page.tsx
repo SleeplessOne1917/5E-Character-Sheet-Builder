@@ -3,18 +3,23 @@ import {
 	getDamageTypes,
 	getMagicSchools,
 	getSpellcastingClasses
-} from '../../../../../src/graphql/srdClientService';
+} from '../../../../../src/server/5E-API/srdClientService';
 
 import EditSpellView from '../../../../../src/views/MyStuff/edit/spells/EditSpell';
+import { getSession } from '../../../../../src/services/sessionService';
 import { getSpell } from '../../../../../src/services/spellsService';
-import { getViewer } from '../../../../../src/graphql/characterSheetBuilderClientService';
+import { redirect } from 'next/navigation';
 
 const EditSpellPage = async ({
 	params: { id }
 }: {
 	params: { id: string };
 }) => {
-	const username = await getViewer();
+	const session = await getSession();
+
+	if (!session?.user) {
+		redirect('/');
+	}
 
 	const magicSchools = [...((await getMagicSchools()) ?? [])].sort((a, b) =>
 		a.name.localeCompare(b.name)
@@ -25,9 +30,12 @@ const EditSpellPage = async ({
 
 	const spell = id ? await getSpell(id as string) : undefined;
 
+	if (!spell) {
+		redirect('/');
+	}
+
 	return (
 		<EditSpellView
-			username={username}
 			magicSchools={magicSchools}
 			srdClasses={classes}
 			damageTypes={damageTypes}

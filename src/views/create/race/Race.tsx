@@ -1,11 +1,10 @@
 'use client';
 
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from 'urql';
 
 import CREATE_RACE from '../../../graphql/mutations/race/createRace';
-import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
 import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
@@ -20,32 +19,19 @@ import {
 } from '../../../redux/features/editingRace';
 
 type RaceProps = {
-	username?: string;
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
 	spells: SpellItem[];
 };
 
-const Race = ({
-	username,
-	abilities,
-	languages,
-	proficiencies,
-	spells
-}: RaceProps) => {
+const Race = ({ abilities, languages, proficiencies, spells }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
 	const [_, createRace] = useMutation(CREATE_RACE);
 	const [initialValues, setInitialValues] = useState(editingRace);
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		if (!username) {
-			router.replace('/');
-		}
-	}, [username, router]);
 
 	const handleSubmit = useCallback(
 		async (
@@ -71,23 +57,18 @@ const Race = ({
 	);
 
 	return (
-		<>
-			{!username && <LoadingPageContent />}
-			{username && (
-				<MainContent testId="create-race">
-					<h1>Create Race</h1>
-					<RaceForm
-						abilities={abilities}
-						initialValues={initialValues as Omit<Race, 'id'>}
-						shouldUseReduxStore
-						languages={languages}
-						proficiencies={proficiencies}
-						spells={spells}
-						onSubmit={handleSubmit}
-					/>
-				</MainContent>
-			)}
-		</>
+		<MainContent testId="create-race">
+			<h1>Create Race</h1>
+			<RaceForm
+				abilities={abilities}
+				initialValues={initialValues as Omit<Race, 'id'>}
+				shouldUseReduxStore
+				languages={languages}
+				proficiencies={proficiencies}
+				spells={spells}
+				onSubmit={handleSubmit}
+			/>
+		</MainContent>
 	);
 };
 

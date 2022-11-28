@@ -3,9 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloContext } from '../../src/types/apollo';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
-import { IUserDocument } from '../../src/db/models/user';
 import dbConnect from '../../src/db/dbConnect';
-import { getSession } from '../../src/services/sessionService';
 import schema from '../../src/graphql/server/schema';
 
 const cors = Cors();
@@ -19,10 +17,7 @@ const apolloServer = new ApolloServer({
 		req: NextApiRequest;
 		res: NextApiResponse;
 	}): Promise<ApolloContext> => {
-		const session = await getSession(req, res);
-		const user = session.user as IUserDocument | undefined;
-
-		return { user, req, res };
+		return { req, res };
 	}
 });
 
