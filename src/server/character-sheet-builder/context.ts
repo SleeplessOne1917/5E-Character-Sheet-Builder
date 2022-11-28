@@ -6,7 +6,7 @@ import { unstable_getServerSession } from 'next-auth';
 
 export const createContext = async ({ req, res }: CreateNextContextOptions) => {
 	await dbConnect();
-	const session = unstable_getServerSession(req, res, nextAuthOptions);
+	const session = await unstable_getServerSession(req, res, nextAuthOptions);
 
 	return { req, res, session };
 };

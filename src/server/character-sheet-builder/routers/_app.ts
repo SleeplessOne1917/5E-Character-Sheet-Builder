@@ -3,8 +3,11 @@ import { hashValue, verifyValue } from '../../../services/hashService';
 import { procedure, router } from '../trpc';
 
 import { TRPCError } from '@trpc/server';
+import forgotRouter from './forgot';
+import passwordRouter from './password';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import { throwErrorWithCustomMessageInProd } from '../utils/trpcErrorUtils';
+import usernameRouter from './username';
 
 export const appRouter = router({
 	signUp: procedure.input(signUpSchema).mutation(async ({ input }) => {
@@ -44,7 +47,10 @@ export const appRouter = router({
 		}
 
 		return 'Signed up';
-	})
+	}),
+	forgot: forgotRouter,
+	username: usernameRouter,
+	password: passwordRouter
 });
 
 export type AppRouter = typeof appRouter;

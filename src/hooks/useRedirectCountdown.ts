@@ -35,7 +35,9 @@ const useRedirectCountdown = ({
 				}
 			}, seconds * 1000);
 			countdownInterval = setInterval(() => {
-				setSecondsLeft(prevState => prevState - 1);
+				setSecondsLeft(prevState =>
+					prevState > 0 ? prevState - 1 : prevState
+				);
 			}, 1000);
 		}
 
