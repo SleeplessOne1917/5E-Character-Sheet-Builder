@@ -6,9 +6,21 @@ import { Types } from 'mongoose';
 import idSchema from '../../../yup-schemas/idSchema';
 import spellsQueryInputSchema from '../../../yup-schemas/spellsQueryInputSchema';
 
+type SpellsQueryInputType =
+	| {
+			skip?: number;
+			limit?: number;
+			class?: string;
+	  }
+	| undefined;
+
 const spellsRouter = router({
 	spells: protectedProcedure
-		.input(spellsQueryInputSchema)
+		.input(async val => {
+			await spellsQueryInputSchema.validate(val);
+
+			return val as SpellsQueryInputType;
+		})
 		.query(async ({ input, ctx: { user } }) => {
 			const filter = { userId: user._id } as {
 				userId: Types.ObjectId;
