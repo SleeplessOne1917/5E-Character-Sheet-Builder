@@ -9,7 +9,7 @@ import { ToastType } from '../../../types/toast';
 import classes from './ForgotUsername.module.css';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import { show } from '../../../redux/features/toast';
-import { trpc } from '../../../common/trpcFrontend';
+import { trpc } from '../../../common/trpc';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';

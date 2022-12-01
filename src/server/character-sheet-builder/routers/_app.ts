@@ -6,6 +6,7 @@ import { TRPCError } from '@trpc/server';
 import forgotRouter from './forgot';
 import passwordRouter from './password';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
+import spellsRouter from './spells';
 import { throwErrorWithCustomMessageInProd } from '../utils/trpcErrorUtils';
 import usernameRouter from './username';
 
@@ -50,7 +51,8 @@ export const appRouter = router({
 	}),
 	forgot: forgotRouter,
 	username: usernameRouter,
-	password: passwordRouter
+	password: passwordRouter,
+	spells: spellsRouter
 });
 
 export type AppRouter = typeof appRouter;
