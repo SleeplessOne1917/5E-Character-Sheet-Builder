@@ -42,7 +42,7 @@ const MyStuffIndex = () => {
 		<>
 			<MainContent testId="my-stuff-index">
 				<h1>My Stuff</h1>
-				{(spellsResult.data?.spells.length ?? 0) === 0 && (
+				{(spellsResult.data?.spells.spells.length ?? 0) === 0 && (
 					<div className={classes['no-items-container']}>
 						<p>
 							You haven&apos;t created anything yet. Whenever you create
@@ -52,11 +52,11 @@ const MyStuffIndex = () => {
 					</div>
 				)}
 				<div className={classes.previews}>
-					{(spellsResult.data?.spells.length ?? 0) > 0 && (
+					{(spellsResult.data?.spells.spells.length ?? 0) > 0 && (
 						<Preview
 							path="spells"
 							title="Spells"
-							items={(spellsResult.data?.spells ?? []).map(spell => (
+							items={(spellsResult.data?.spells.spells ?? []).map(spell => (
 								<SpellItemDisplay
 									spell={spell}
 									key={spell.id}

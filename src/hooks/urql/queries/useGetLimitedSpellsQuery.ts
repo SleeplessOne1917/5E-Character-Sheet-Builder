@@ -10,8 +10,10 @@ const useGetLimitedSpellsQuery = ({
 	skip?: number;
 } = {}) =>
 	useQuery<{
-		spells: SpellItem[];
-		count: number;
+		spells: {
+			spells: SpellItem[];
+			count: number;
+		};
 	}>({
 		query: GET_SPELLS,
 		variables: { limit, skip }

@@ -22,7 +22,7 @@ const useGetSpells = () => {
 	}, [spells]);
 
 	return {
-		spells: combineSpellArrays(spells, customSpellsResult.data?.spells),
+		spells: combineSpellArrays(spells, customSpellsResult.data?.spells.spells),
 		fetching: fetching || customSpellsResult.fetching
 	};
 };

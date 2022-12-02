@@ -43,8 +43,8 @@ const MyStuffSpells = () => {
 	}, []);
 
 	const numPages = useMemo(
-		() => Math.max((spellsResult.data?.count ?? 0) / spellsPerPage),
-		[spellsResult.data?.count]
+		() => Math.max((spellsResult.data?.spells.count ?? 0) / spellsPerPage),
+		[spellsResult.data?.spells.count]
 	);
 
 	const handlePrevPageClick = useCallback(() => {
@@ -61,7 +61,8 @@ const MyStuffSpells = () => {
 		<>
 			<MainContent>
 				<h1>My Spells</h1>
-				{(!spellsResult.data || spellsResult.data.spells.length === 0) && (
+				{(!spellsResult.data ||
+					spellsResult.data.spells.spells.length === 0) && (
 					<div className={classes['no-items-container']}>
 						<p>
 							You haven&apos;t created anything yet. Whenever you create
@@ -70,14 +71,14 @@ const MyStuffSpells = () => {
 						<ArrowLink href="/create/spell" text="Create Spell" />
 					</div>
 				)}
-				{spellsResult.data && spellsResult.data.spells.length > 0 && (
+				{spellsResult.data && spellsResult.data.spells.spells.length > 0 && (
 					<div className={classes.content}>
 						{numPages > 1 && (
 							<div className={classes['page-count']}>
 								Page {currentPage}/{numPages}
 							</div>
 						)}
-						{spellsResult.data.spells.map(spell => (
+						{spellsResult.data.spells.spells.map(spell => (
 							<SpellItemDisplay
 								spell={spell}
 								onMoreInfoClick={handleShowMoreInfoModal}
