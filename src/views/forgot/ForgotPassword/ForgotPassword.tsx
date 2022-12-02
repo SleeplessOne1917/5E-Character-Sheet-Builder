@@ -9,7 +9,7 @@ import { ToastType } from '../../../types/toast';
 import classes from './ForgotPassword.module.css';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import { show } from '../../../redux/features/toast';
-import { trpc } from '../../../common/trpcNext';
+import { trpc } from '../../../common/trpc';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';

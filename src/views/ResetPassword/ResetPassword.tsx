@@ -11,7 +11,7 @@ import { ToastType } from '../../types/toast';
 import classes from './ResetPassword.module.css';
 import resetPasswordSchema from '../../yup-schemas/resetPasswordSchema';
 import { show } from '../../redux/features/toast';
-import { trpc } from '../../common/trpcNext';
+import { trpc } from '../../common/trpc';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
 import { useRouter } from 'next/navigation';

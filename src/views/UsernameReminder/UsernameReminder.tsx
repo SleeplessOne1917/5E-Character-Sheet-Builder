@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
 import classes from './UsernameReminder.module.css';
-import { trpc } from '../../common/trpcNext';
+import { trpc } from '../../common/trpc';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
 
 type UsernameReminderProps = {

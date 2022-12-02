@@ -16,6 +16,7 @@ import {
 import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
 
 import Button from '../../Button/Button';
+import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import { SrdItem } from '../../../types/srd';
 import classes from './SpellSelector.module.css';
@@ -23,8 +24,9 @@ import dynamic from 'next/dynamic';
 import { getSpell } from '../../../services/spellsService';
 import { handleKeyDownEvent } from '../../../services/handlerService';
 import { isObjectId } from '../../../services/objectIdService';
-import { trpc } from '../../../common/trpcNext';
+import { trpc } from '../../../common/trpc';
 import useMediaQuery from '../../../hooks/useMediaQuery';
+import { useQuery } from 'urql';
 
 const MarkdownParser = dynamic(
 	() => import('../../MarkdownParser/MarkdownParser'),

@@ -8,6 +8,7 @@ import SpellMoreInformationModal from '../../../../Spells/SpellMoreInfoModal/Spe
 import classes from './SpellsKnownDisplay.module.css';
 import { getSpell } from '../../../../../services/spellsService';
 import { useAppSelector } from '../../../../../hooks/reduxHooks';
+import { useClient } from 'urql';
 
 const SpellsKnownDisplay = () => {
 	const spells = useAppSelector(
@@ -15,8 +16,10 @@ const SpellsKnownDisplay = () => {
 	);
 	const [selectedSpellId, setSelectedSpellId] = useState<string>();
 
+	const client = useClient();
+
 	const selectedSpell = selectedSpellId
-		? use(getSpell(selectedSpellId))
+		? use(getSpell(selectedSpellId, client))
 		: undefined;
 
 	const [showMore, setShowMore] = useState(false);

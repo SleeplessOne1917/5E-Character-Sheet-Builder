@@ -23,7 +23,6 @@
     "@urql/core": "^3.0.5",
     "argon2": "^0.30.2",
     "formik": "^2.2.9",
-    "graphql": "^16.6.0",
     "idb-keyval": "^6.2.0",
     "mongoose": "^6.7.5",
     "next": "^13.0.5",

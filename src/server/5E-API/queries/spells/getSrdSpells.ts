@@ -1,4 +1,4 @@
-import { gql } from '@urql/core';
+import { gql } from 'urql/core';
 
 const GET_SRD_SPELLS = gql`
 	query SpellsByClass($class: StringFilter) {

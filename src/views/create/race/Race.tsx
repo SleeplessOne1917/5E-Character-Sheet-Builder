@@ -15,7 +15,7 @@ import {
 	initialState as raceInitialState,
 	resetRace
 } from '../../../redux/features/editingRace';
-import { trpc } from '../../../common/trpcNext';
+import { trpc } from '../../../common/trpc';
 
 type RaceProps = {
 	abilities: AbilityItem[];

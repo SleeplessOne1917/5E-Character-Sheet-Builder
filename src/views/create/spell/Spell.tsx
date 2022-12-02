@@ -15,7 +15,7 @@ import { ToastType } from '../../../types/toast';
 import { show } from '../../../redux/features/toast';
 import { useRouter } from 'next/navigation';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
-import { trpc } from '../../../common/trpcNext';
+import { trpc } from '../../../common/trpc';
 
 type SpellProps = {
 	magicSchools: SrdItem[];

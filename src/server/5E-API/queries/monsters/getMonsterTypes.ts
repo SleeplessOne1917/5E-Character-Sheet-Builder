@@ -1,4 +1,4 @@
-import { gql } from '@urql/core';
+import { gql } from 'urql/core';
 
 const GET_MONSTER_TYPES = gql`
 	query MonsterTypes($type: MonsterTypeFilter) {

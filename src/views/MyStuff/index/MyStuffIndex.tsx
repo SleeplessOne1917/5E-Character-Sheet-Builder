@@ -10,7 +10,7 @@ import Preview from '../../../components/MyStuff/Preview/Preview';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
-import { trpc } from '../../../common/trpcNext';
+import { trpc } from '../../../common/trpc';
 
 const MyStuffIndex = () => {
 	const [spellId, setSpellId] = useState<string>();
