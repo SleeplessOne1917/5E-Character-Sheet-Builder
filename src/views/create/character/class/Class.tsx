@@ -50,7 +50,7 @@ import Option from '../../../../components/Create/Character/Option/Option';
 import SelectedClassDisplay from '../../../../components/Create/Character/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import { getClass } from '../../../../services/classService';
-import { getMonsterTypes } from '../../../../server/5E-API/srdClientService';
+import { getMonsterTypes } from '../../../../graphql/srdClientService';
 import { removeLevelHPBonus } from '../../../../redux/features/hp';
 import styles from './Class.module.css';
 

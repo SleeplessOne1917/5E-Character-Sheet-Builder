@@ -3,7 +3,7 @@ import {
 	getDamageTypes,
 	getMagicSchools,
 	getSpellcastingClasses
-} from '../../../src/server/5E-API/srdClientService';
+} from '../../../src/graphql/srdClientService';
 
 import SpellView from '../../../src/views/create/spell/Spell';
 import { getSession } from '../../../src/services/sessionService';

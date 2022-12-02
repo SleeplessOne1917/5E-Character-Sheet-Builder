@@ -2,7 +2,7 @@ import {
 	getAbilities,
 	getLanguages,
 	getProficienciesByType
-} from '../../../src/server/5E-API/srdClientService';
+} from '../../../src/graphql/srdClientService';
 
 import { ProficiencyType } from '../../../src/types/srd';
 import RaceView from '../../../src/views/create/race/Race';

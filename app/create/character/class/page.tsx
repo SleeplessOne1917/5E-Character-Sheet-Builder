@@ -1,7 +1,7 @@
 import {
 	getAbilities,
 	getClasses
-} from '../../../../src/server/5E-API/srdClientService';
+} from '../../../../src/graphql/srdClientService';
 
 import ClassView from '../../../../src/views/create/character/class/Class';
 

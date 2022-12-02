@@ -2,6 +2,8 @@ import {
 	AbilityItem,
 	MonsterSubtype,
 	MonsterType,
+	ProficiencyType,
+	SrdFullClassItem,
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
 	SrdItem,
@@ -9,30 +11,32 @@ import {
 	SrdSpell,
 	SrdSpellItem,
 	SrdSubraceItem
-} from '../../types/srd';
-import { ProficiencyType, SrdFullClassItem } from '../../types/srd';
+} from '../types/srd';
 import { TypedDocumentNode, createClient } from 'urql/core';
 
 import { DocumentNode } from 'graphql';
-import GET_ABILITIES from './queries/abilities/getAbilities';
-import GET_CLASS from './queries/class/getClass';
-import GET_CLASSES from './queries/class/getClasses';
-import GET_DAMAGE_TYPES from './queries/damage-types/getDamageTypes';
-import GET_EQUIPMENTS from './queries/equipment/getEquipments';
-import GET_LANGUAGES from './queries/languages/getLanguages';
-import GET_MAGIC_SCHOOLS from './queries/magic-schools/getMagicSchools';
-import GET_MONSTER_TYPES from './queries/monsters/getMonsterTypes';
-import GET_PROFICIENCIES_BY_TYPE from './queries/proficiencies/proficienciesByType';
-import GET_RACE from './queries/race/getRace';
-import GET_RACES from './queries/race/getRaces';
-import GET_SPELLCASTING_CLASSES from './queries/class/getSpellcastingClasses';
-import GET_SRD_SPELL from './queries/spells/getSrdSpell';
-import GET_SRD_SPELLS from './queries/spells/getSrdSpells';
-import GET_SUBRACE from './queries/subrace/getSubrace';
-import GET_SUBRACES from './queries/subrace/getSubraces';
+import GET_ABILITIES from './queries/5E-API/abilities/getAbilities';
+import GET_CLASS from './queries/5E-API/class/getClass';
+import GET_CLASSES from './queries/5E-API/class/getClasses';
+import GET_DAMAGE_TYPES from './queries/5E-API/damage-types/getDamageTypes';
+import GET_EQUIPMENTS from './queries/5E-API/equipment/getEquipments';
+import GET_LANGUAGES from './queries/5E-API/languages/getLanguages';
+import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
+import GET_MONSTER_TYPES from './queries/5E-API/monsters/getMonsterTypes';
+import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienciesByType';
+import GET_RACE from './queries/5E-API/race/getRace';
+import GET_RACES from './queries/5E-API/race/getRaces';
+import GET_SPELLCASTING_CLASSES from './queries/5E-API/class/getSpellcastingClasses';
+import GET_SRD_SPELL from './queries/5E-API/spells/getSrdSpell';
+import GET_SRD_SPELLS from './queries/5E-API/spells/getSrdSpells';
+import GET_SUBRACE from './queries/5E-API/subrace/getSubrace';
+import GET_SUBRACES from './queries/5E-API/subrace/getSubraces';
 
 const client = createClient({
-	url: 'https://www.dnd5eapi.co/graphql'
+	url: 'https://www.dnd5eapi.co/graphql',
+	fetchOptions: {
+		cache: 'force-cache'
+	}
 });
 
 const query = async <

@@ -18,7 +18,6 @@ import { Session } from 'next-auth';
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
-import { trpc } from '../src/common/trpc';
 import { useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { usePathname } from 'next/navigation';
@@ -105,7 +104,6 @@ const AppLayout = ({
 
 type AppLayouWrapperProps = PropsWithChildren<{
 	session: Session | null;
-	pageProps: Record<string, unknown>;
 }>;
 
 const AppLayoutWrapper = ({ children, session }: AppLayouWrapperProps) => {
@@ -133,6 +131,4 @@ const AppLayoutWrapper = ({ children, session }: AppLayouWrapperProps) => {
 	);
 };
 
-export default trpc.withTRPC(AppLayoutWrapper) as (
-	props: AppLayouWrapperProps
-) => JSX.Element;
+export default AppLayoutWrapper;

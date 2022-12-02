@@ -1,3 +1,3 @@
-import { getClass as getSrdClass } from '../server/5E-API/srdClientService';
+import { getClass as getSrdClass } from '../graphql/srdClientService';
 
 export const getClass = async (index: string) => await getSrdClass(index);

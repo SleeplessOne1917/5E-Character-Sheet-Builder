@@ -68,9 +68,7 @@ const App = async ({
 					priority
 					fill
 				/>
-				<AppLayout session={session} pageProps={{}}>
-					{children}
-				</AppLayout>
+				<AppLayout session={session}>{children}</AppLayout>
 				<Footer />
 			</body>
 		</html>

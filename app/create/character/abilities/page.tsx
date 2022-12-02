@@ -1,5 +1,5 @@
 import AbilitiesView from '../../../../src/views/create/character/abilities/Abilities';
-import { getAbilities } from '../../../../src/server/5E-API/srdClientService';
+import { getAbilities } from '../../../../src/graphql/srdClientService';
 
 const AbilitiesPage = async () => {
 	const abilities = (await getAbilities()) ?? [];

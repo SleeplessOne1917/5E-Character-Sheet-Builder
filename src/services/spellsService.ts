@@ -9,7 +9,7 @@ import {
 	getSpell as getSrdSpell,
 	getSpells as getSrdSpells,
 	getSpellsByClass as getSrdSpellsByClass
-} from '../server/5E-API/srdClientService';
+} from '../graphql/srdClientService';
 
 import { Client } from 'urql/core';
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
