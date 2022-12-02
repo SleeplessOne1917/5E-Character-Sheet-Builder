@@ -11,7 +11,7 @@ import {
 	SrdSubraceItem
 } from '../../types/srd';
 import { ProficiencyType, SrdFullClassItem } from '../../types/srd';
-import { TypedDocumentNode, createClient } from 'urql/core';
+import { TypedDocumentNode, createClient } from '@urql/core';
 
 import { DocumentNode } from 'graphql';
 import GET_ABILITIES from './queries/abilities/getAbilities';

@@ -9,7 +9,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
-import { trpc } from '../../../common/trpc';
+import { trpc } from '../../../common/trpcNext';
 
 const spellsPerPage = 10;
 

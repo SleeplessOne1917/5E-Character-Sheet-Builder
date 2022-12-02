@@ -16,9 +16,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import SectionBar from '../src/components/Create/Character/SectionBar/SectionBar';
 import { Session } from 'next-auth';
 import ToastContainer from '../src/components/Toast/ToastContainer';
-import { Provider as UrqlProvider } from 'urql';
-import client from '../src/graphql/client';
-import { trpc } from '../src/common/trpc';
+import { trpc } from '../src/common/trpcNext';
 import { useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { usePathname } from 'next/navigation';
@@ -125,9 +123,7 @@ const AppLayoutWrapper = ({ children, session }: AppLayouWrapperProps) => {
 	return (
 		<SessionProvider session={session}>
 			<ReduxProvider store={store}>
-				<UrqlProvider value={client}>
-					<AppLayout>{children}</AppLayout>
-				</UrqlProvider>
+				<AppLayout>{children}</AppLayout>
 			</ReduxProvider>
 		</SessionProvider>
 	);

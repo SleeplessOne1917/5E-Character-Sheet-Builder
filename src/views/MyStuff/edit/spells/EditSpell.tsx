@@ -10,7 +10,7 @@ import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellForm from '../../../../components/Spells/SpellForm/SpellForm';
 import { ToastType } from '../../../../types/toast';
 import { show } from '../../../../redux/features/toast';
-import { trpc } from '../../../../common/trpc';
+import { trpc } from '../../../../common/trpcNext';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useRouter } from 'next/navigation';
 
