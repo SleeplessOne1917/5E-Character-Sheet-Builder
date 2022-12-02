@@ -1,4 +1,4 @@
-import { TRPCError } from '@trpc/server';
+import { ApolloError } from 'apollo-server-micro';
 
 export const throwErrorWithCustomMessageInProd = (
 	error: Error,
@@ -6,8 +6,5 @@ export const throwErrorWithCustomMessageInProd = (
 ) => {
 	const isDevelopment =
 		(process.env.NODE_ENV || 'development') === 'development';
-
-	const msg = isDevelopment ? error.message : message;
-
-	throw new TRPCError({ message: msg, code: 'INTERNAL_SERVER_ERROR' });
+	throw isDevelopment ? error : new ApolloError(message);
 };

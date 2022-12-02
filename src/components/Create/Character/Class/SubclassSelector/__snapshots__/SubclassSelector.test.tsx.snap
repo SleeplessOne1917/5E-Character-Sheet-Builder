@@ -19,7 +19,6 @@ exports[`renders correctly normally 1`] = `
     <thead>
       <tr>
         <th>
-          Warlock
            Level
         </th>
         <th>
@@ -37,7 +36,7 @@ exports[`renders correctly normally 1`] = `
         <td
           class="italic"
         >
-          Foo, Bar
+          , 
         </td>
       </tr>
       <tr
@@ -49,7 +48,7 @@ exports[`renders correctly normally 1`] = `
         <td
           class="italic"
         >
-          Bad Touch, Flare
+          , 
         </td>
       </tr>
       <tr
@@ -61,7 +60,7 @@ exports[`renders correctly normally 1`] = `
         <td
           class="italic"
         >
-          Heals, Summon Joe
+          , 
         </td>
       </tr>
       <tr
@@ -73,7 +72,7 @@ exports[`renders correctly normally 1`] = `
         <td
           class="italic"
         >
-          Hyper Beam, Blast
+          , 
         </td>
       </tr>
       <tr
@@ -85,7 +84,7 @@ exports[`renders correctly normally 1`] = `
         <td
           class="italic"
         >
-          Mass  Heal, Mega Blast
+          , 
         </td>
       </tr>
     </tbody>
@@ -227,7 +226,6 @@ exports[`renders correctly when selected 1`] = `
     <thead>
       <tr>
         <th>
-          Warlock
            Level
         </th>
         <th>
@@ -245,7 +243,7 @@ exports[`renders correctly when selected 1`] = `
         <td
           class="italic"
         >
-          Foo, Bar
+          , 
         </td>
       </tr>
       <tr
@@ -257,7 +255,7 @@ exports[`renders correctly when selected 1`] = `
         <td
           class="italic"
         >
-          Bad Touch, Flare
+          , 
         </td>
       </tr>
       <tr
@@ -269,7 +267,7 @@ exports[`renders correctly when selected 1`] = `
         <td
           class="italic"
         >
-          Heals, Summon Joe
+          , 
         </td>
       </tr>
       <tr
@@ -281,7 +279,7 @@ exports[`renders correctly when selected 1`] = `
         <td
           class="italic"
         >
-          Hyper Beam, Blast
+          , 
         </td>
       </tr>
       <tr
@@ -293,7 +291,7 @@ exports[`renders correctly when selected 1`] = `
         <td
           class="italic"
         >
-          Mass  Heal, Mega Blast
+          , 
         </td>
       </tr>
     </tbody>

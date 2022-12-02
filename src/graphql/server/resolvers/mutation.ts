@@ -1,5 +1,6 @@
 import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
+import User, { IUser } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
 	sendResetPassword,
@@ -10,16 +11,17 @@ import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import ResetPasswordOTL from '../../../db/models/resetPasswordOTL';
 import { Types } from 'mongoose';
-import User from '../../../db/models/user';
 import UsernameOTL from '../../../db/models/usernameOTL';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
+import logInSchema from '../../../yup-schemas/logInSchema';
 import { mustBeLoggedIn } from './../../../constants/generalConstants';
 import newPasswordSchema from '../../../yup-schemas/newPasswordSchema';
 import raceSchema from '../../../yup-schemas/raceSchema';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
+import signUpSchema from '../../../yup-schemas/signUpSchema';
 import spellSchema from '../../../yup-schemas/spellSchema';
-import { throwErrorWithCustomMessageInProd } from '../../../server/character-sheet-builder/utils/trpcErrorUtils';
+import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
 interface LoginUserRequest {
 	username: string;
@@ -29,6 +31,14 @@ interface LoginUserRequest {
 interface SignUpUserRequest extends LoginUserRequest {
 	email?: string;
 }
+
+type LoginArgs = {
+	user: LoginUserRequest;
+};
+
+type SignUpArgs = {
+	user: SignUpUserRequest;
+};
 
 interface ForgotRequest {
 	email: string;
@@ -75,6 +85,59 @@ type CreateRaceArgs = {
 };
 
 const Mutation = {
+	signUp: async (parent: never, args: SignUpArgs) => {
+		const { user } = args;
+		await signUpSchema.validate(user, { strict: true });
+
+		const existingUser = await User.findOne({ username: user.username }).lean();
+		if (existingUser) {
+			throw new ApolloError('User already exists');
+		}
+
+		if (user.email) {
+			for await (const u of User.find().lean()) {
+				if (u.emailHash && (await verifyValue(u.emailHash, user.email))) {
+					throw new ApolloError('User already exists');
+				}
+			}
+		}
+
+		const passwordHash = await hashValue(user.password);
+		const newUser: IUser = { username: user.username, passwordHash };
+
+		if (user.email) {
+			const emailHash = await hashValue(user.email);
+			newUser.emailHash = emailHash;
+		}
+		try {
+			await User.create(newUser);
+		} catch (error) {
+			throwErrorWithCustomMessageInProd(
+				error as Error,
+				'Could not add user to database'
+			);
+		}
+
+		return 'Signed up';
+	},
+	logIn: async (parent: never, args: LoginArgs) => {
+		const user = args.user;
+		await logInSchema.validate(user, { strict: true });
+
+		const existingUser = await User.findOne({
+			username: user.username
+		}).lean();
+		if (
+			!(
+				existingUser &&
+				(await verifyValue(existingUser.passwordHash, user.password))
+			)
+		) {
+			throw new ApolloError('Username or password was incorrect');
+		}
+
+		return 'Logged in';
+	},
 	forgotUsername: async (parent: never, { request }: ForgotUsernameArgs) => {
 		await forgotUsernameSchema.validate(request, { strict: true });
 
