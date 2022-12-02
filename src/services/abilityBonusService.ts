@@ -1,8 +1,10 @@
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
 
-import { AbilityBonus } from './../types/srd';
+import { AbilityBonus } from '../db/models/race';
+import { Race } from '../types/characterSheetBuilderAPI';
+import { AbilityBonus as SrdAbilityBonus } from './../types/srd';
 
-export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
+export const getIsAllBonusesSame = (abilityBonuses: SrdAbilityBonus[]) =>
 	abilityBonuses.reduce(
 		(acc: { isSame: boolean; value?: number }, cur) => {
 			if (!acc.value) {
@@ -19,6 +21,85 @@ export const getIsAllBonusesSame = (abilityBonuses: AbilityBonus[]) =>
 		},
 		{ isSame: true, value: undefined }
 	);
+
+export const getIsAllBonusesSameWithRace = (abilityBonuses: AbilityBonus[]) =>
+	abilityBonuses.reduce(
+		(acc: { isSame: boolean; value?: number }, cur) => {
+			if (!acc.value) {
+				return {
+					...acc,
+					value: cur.bonus
+				};
+			} else {
+				return {
+					...acc,
+					isSame: acc.value === cur.bonus
+				};
+			}
+		},
+		{ isSame: true, value: undefined }
+	);
+
+export const getAbilityScoreDescriptionFromRace = (race: Race) => {
+	let description: string;
+	const abilityBonuses = race.abilityBonuses;
+
+	const allSameBonuses = getIsAllBonusesSameWithRace(abilityBonuses);
+
+	// There are 6 ability scores in total
+	if (allSameBonuses.isSame && abilityBonuses.length === 6) {
+		return `+${allSameBonuses.value} to all ability scores.`;
+	} else if (allSameBonuses.isSame && abilityBonuses.length > 1) {
+		description = `+${allSameBonuses.value} to ${abilityBonuses.reduce(
+			(acc, cur, index) =>
+				`${acc}${
+					index === abilityBonuses.length - 1 && !race.abilityBonusOptions
+						? 'and '
+						: ''
+				}${cur.abilityScore.name}${
+					index === abilityBonuses.length - 1
+						? ''
+						: abilityBonuses.length === 2 && !race.abilityBonusOptions
+						? ' '
+						: ', '
+				}`,
+			''
+		)}`;
+	} else if (abilityBonuses.length === 1) {
+		const abilityBonus = abilityBonuses[0];
+		description = `+${abilityBonus.bonus} to ${abilityBonus.abilityScore.name}`;
+	} else {
+		description = abilityBonuses.reduce(
+			(acc, cur, index) =>
+				`${acc}${
+					index === abilityBonuses.length - 1 && !race.abilityBonusOptions
+						? 'and '
+						: ''
+				}+${cur.bonus} ${cur.abilityScore.name}${
+					index === abilityBonuses.length - 1
+						? ''
+						: abilityBonuses.length === 2 && !race.abilityBonusOptions
+						? ' '
+						: ', '
+				}`,
+			''
+		);
+	}
+
+	if (race.abilityBonusOptions) {
+		description = `${description}, and ${
+			race.abilityBonusOptions.bonus > 0 ? '+' : '-'
+		}${race.abilityBonusOptions.bonus} to ${
+			race.abilityBonusOptions.numberOfAbilityScores
+		} of the remaining ability scores`;
+	}
+
+	if (!description.endsWith('.')) {
+		description = description + '.';
+	}
+
+	return description;
+};
 
 export const getAbilityScoreDescription = (
 	race: Partial<SrdFullRaceItem> & Pick<SrdFullRaceItem, 'ability_bonuses'>,

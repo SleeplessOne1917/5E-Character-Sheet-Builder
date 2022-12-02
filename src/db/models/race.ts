@@ -6,14 +6,16 @@ import Size from '../../types/size';
 import Trait from '../../types/trait';
 import { itemSchema } from './common';
 
+export type AbilityBonus = {
+	abilityScore: Item;
+	bonus: number;
+};
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 export interface IRace {
 	userId: Types.ObjectId;
 	name: string;
-	abilityBonuses: {
-		abilityScore: Item;
-		bonus: number;
-	}[];
+	abilityBonuses: AbilityBonus[];
 	abilityBonusOptions?: {
 		bonus: number;
 		numberOfAbilityScores: number;

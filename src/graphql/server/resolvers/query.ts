@@ -1,5 +1,6 @@
 import { ApolloContext } from './../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
+import Race from '../../../db/models/race';
 import Spell from './../../../db/models/spell';
 import { Types } from 'mongoose';
 import { mustBeLoggedIn } from './../../../constants/generalConstants';
@@ -10,10 +11,7 @@ type SkipLimit = {
 };
 
 type SpellsArgs = {
-	level?: number;
-	school?: string;
 	class?: string;
-	name?: string;
 } & SkipLimit;
 
 type WithId = {
@@ -21,11 +19,9 @@ type WithId = {
 };
 
 const Query = {
-	viewer: (parent: never, args: never, { user }: ApolloContext) =>
-		user?.username,
 	spells: async (
 		parent: never,
-		{ limit, skip, level, school, class: klass, name }: SpellsArgs,
+		{ limit, skip, class: klass }: SpellsArgs,
 		{ user }: ApolloContext
 	) => {
 		if (!user) {
@@ -34,26 +30,11 @@ const Query = {
 
 		const filter = { userId: user._id } as {
 			userId: Types.ObjectId;
-			level?: number;
-			'school.id'?: string;
 			'classes.id'?: string;
-			name?: { $regex: RegExp };
 		};
-
-		if (level || level === 0) {
-			filter.level = level;
-		}
-
-		if (school) {
-			filter['school.id'] = school;
-		}
 
 		if (klass) {
 			filter['classes.id'] = klass;
-		}
-
-		if (name) {
-			filter.name = { $regex: new RegExp(name, 'i') };
 		}
 
 		let spells = Spell.find(filter).skip(skip ?? 0);
@@ -89,6 +70,49 @@ const Query = {
 		}
 
 		return { ...spell, id: spell?._id.toString() };
+	},
+	races: async (
+		parent: never,
+		{ skip, limit }: SkipLimit,
+		{ user }: ApolloContext
+	) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
+		}
+
+		let races = Race.find().skip(skip ?? 0);
+
+		if (limit) {
+			if (limit < 1) {
+				throw new ApolloError('Limit must be greater than 0');
+			}
+
+			races = races.limit(limit);
+		}
+
+		return {
+			races: (await races.lean()).map(race => ({
+				...race,
+				id: race._id.toString()
+			})),
+			count: await Race.countDocuments({ userId: user._id })
+		};
+	},
+	race: async (parent: never, { id }: WithId, { user }: ApolloContext) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
+		}
+
+		const race = await Race.findOne({
+			_id: new Types.ObjectId(id),
+			userId: user._id
+		}).lean();
+
+		if (!race) {
+			throw new ApolloError('Race not found');
+		}
+
+		return { ...race, id: race?._id.toString() };
 	}
 };
 

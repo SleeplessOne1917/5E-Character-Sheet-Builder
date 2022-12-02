@@ -225,17 +225,69 @@ const typeDefs = gql`
 		traits: [TraitInput!]
 	}
 
+	type ChooseOptions {
+		choose: Int!
+		options: [Item!]!
+	}
+
+	type Subtrait {
+		name: String!
+		description: String!
+		hpBonusPerLevel: Int
+		proficiencies: [Item!]
+		proficiencyOptions: ChooseOptions
+		spells: [Item!]
+		spellOptions: ChooseOptions
+	}
+
+	type SubtraitOptions {
+		choose: Int!
+		options: [Subtrait]!
+	}
+
+	type AbilityBonus {
+		abilityScore: Item!
+		bonus: Int!
+	}
+
+	type AbilityBonusOptions {
+		bonus: Int!
+		numberOfAbilityScores: Int!
+	}
+
+	type Trait {
+		name: String!
+		description: String!
+		hpBonusPerLevel: Int
+		proficiencies: [Item!]
+		proficiencyOptions: ChooseOptions
+		spells: [Item!]
+		spellOptions: ChooseOptions
+		subtraitOptions: SubtraitOptions
+	}
+
+	type Race {
+		id: ID!
+		name: String!
+		abilityBonuses: [AbilityBonus!]!
+		abilityBonusOptions: AbilityBonusOptions
+		languages: [Item!]!
+		numberOfLanguageOptions: Int
+		size: Size!
+		speed: Int!
+		traits: [Trait!]
+	}
+
+	type RacesResponse {
+		count: Int!
+		races: [Race!]!
+	}
+
 	type Query {
-		viewer: String
-		spells(
-			limit: Int
-			skip: Int
-			name: String
-			level: Int
-			school: String
-			class: String
-		): SpellsResponse!
+		spells(limit: Int, skip: Int, class: String): SpellsResponse!
 		spell(id: ID!): Spell!
+		races(limit: Int, skip: Int): RacesResponse!
+		race(id: ID!): Race!
 	}
 
 	type Mutation {

@@ -1,4 +1,4 @@
-import * as stories from './SpellItemDisplay.stories';
+import * as stories from './ItemDisplay.stories';
 
 import { render, screen } from '@testing-library/react';
 
@@ -9,5 +9,5 @@ const { Default } = composeStories(stories);
 it('renders correctly', () => {
 	render(<Default />);
 
-	expect(screen.getByTestId('spell-item')).toMatchSnapshot();
+	expect(screen.getByTestId('item')).toMatchSnapshot();
 });

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  class="item"
+  data-testid="item"
+>
+  <div
+    class="info"
+  >
+    Foo
+  </div>
+  <button
+    class="button positive"
+    style="font-size: 0.7rem; padding: 0.3rem; margin: 0.25rem;"
+    type="button"
+  >
+    More Info
+  </button>
+</div>
+`;

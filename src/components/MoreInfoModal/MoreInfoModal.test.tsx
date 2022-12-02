@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import * as stories from './ChooseModal.stories';
+import * as stories from './MoreInfoModal.stories';
 
 import { render, screen } from '@testing-library/react';
 
@@ -45,7 +45,7 @@ it('calls onChoose when choose button is clicked', async () => {
 	const onChooseMock = jest.fn();
 	const oncloseMock = jest.fn();
 
-	render(<Default onChoose={onChooseMock} onClose={oncloseMock} />);
+	render(<Default onAction={onChooseMock} onClose={oncloseMock} />);
 
 	await userEvent.click(screen.getByText(/choose/i));
 
@@ -56,7 +56,7 @@ it('does not call onChoose when choose button disabled and clicked', async () =>
 	const onChooseMock = jest.fn();
 	const oncloseMock = jest.fn();
 
-	render(<Loading onChoose={onChooseMock} onClose={oncloseMock} />);
+	render(<Loading onAction={onChooseMock} onClose={oncloseMock} />);
 
 	await userEvent.click(screen.getByText(/choose/i));
 
@@ -68,7 +68,7 @@ it('calls onClose when cancel button is clicked', async () => {
 	const onCloseMock = jest.fn();
 	const onChooseMock = jest.fn();
 
-	render(<Default onChoose={onChooseMock} onClose={onCloseMock} />);
+	render(<Default onAction={onChooseMock} onClose={onCloseMock} />);
 
 	await userEvent.click(screen.getByText(/cancel/i));
 

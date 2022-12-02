@@ -2,46 +2,49 @@
 
 import { CSSProperties, MutableRefObject, useEffect, useRef } from 'react';
 
-import Button from '../../../Button/Button';
-import { Descriptor } from '../../../../types/creation';
-import DescriptorComponent from '../Descriptor/Descriptor';
-import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
-import ModalBackground from '../../../ModalBackground/ModalBackground';
-import classes from './ChooseModal.module.css';
+import Button from '../Button/Button';
+import { Descriptor } from '../../types/creation';
+import DescriptorComponent from '../Create/Character/Descriptor/Descriptor';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import ModalBackground from '../ModalBackground/ModalBackground';
+import classes from './MoreInfoModal.module.css';
 
-export type ChooseModalProps = {
+export type MoreInfoModalProps = {
 	show: boolean;
 	onClose: () => void;
-	onChoose: () => void;
+	onAction: () => void;
 	iconId: string;
 	loading?: boolean;
 	error?: boolean;
 	title: string;
 	descriptors?: Descriptor[];
 	otherDescriptors?: Descriptor[];
+	mode?: 'choose' | 'edit';
 };
 
-const ChooseModal = ({
+const buttonStyle: CSSProperties = {
+	flexGrow: 1,
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
+	fontSize: '2rem',
+	border: 0,
+	margin: 0,
+	borderRadius: 0
+};
+
+const MoreInfoModal = ({
 	show,
 	onClose,
-	onChoose,
+	onAction,
 	iconId,
 	loading = false,
 	error = false,
 	title,
 	descriptors,
-	otherDescriptors
-}: ChooseModalProps): JSX.Element => {
-	const buttonStyle: CSSProperties = {
-		flexGrow: 1,
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		fontSize: '2rem',
-		border: 0,
-		margin: 0,
-		borderRadius: 0
-	};
+	otherDescriptors,
+	mode = 'choose'
+}: MoreInfoModalProps): JSX.Element => {
 	const firstDescriptorRef = useRef<HTMLDivElement>();
 
 	useEffect(() => {
@@ -103,12 +106,12 @@ const ChooseModal = ({
 				</div>
 				<div className={classes['buttons-container']}>
 					<Button
-						onClick={onChoose}
+						onClick={onAction}
 						positive
 						style={buttonStyle}
 						disabled={loading || error}
 					>
-						Choose
+						{mode === 'choose' ? 'Choose' : 'Edit'}
 					</Button>
 					<Button onClick={onClose} style={buttonStyle}>
 						Cancel
@@ -119,4 +122,4 @@ const ChooseModal = ({
 	);
 };
 
-export default ChooseModal;
+export default MoreInfoModal;

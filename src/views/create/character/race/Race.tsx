@@ -32,11 +32,11 @@ import { getRace, getSubrace } from '../../../../services/raceService';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import Button from '../../../../components/Button/Button';
-import ChooseModal from '../../../../components/Create/Character/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
 import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
+import MoreInfoModal from '../../../../components/MoreInfoModal/MoreInfoModal';
 import Option from '../../../../components/Create/Character/Option/Option';
 import SelectedRaceDisplay from '../../../../components/Create/Character/Race/SelectedRaceDisplay/SelectedRaceDisplay';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
@@ -405,10 +405,10 @@ const Race = ({ races, subraces, abilities }: RaceProps): JSX.Element => {
 					</>
 				)}
 			</MainContent>
-			<ChooseModal
+			<MoreInfoModal
 				show={showSelectModal}
 				iconId={consideredRaceIndex ? consideredRaceIndex : 'custom-race'}
-				onChoose={chooseRace}
+				onAction={chooseRace}
 				onClose={closeSelectModal}
 				loading={loading}
 				error={error}

@@ -1,9 +1,10 @@
-import ChooseModal from './ChooseModal';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import MoreInfoModal from './MoreInfoModal';
 
 export default {
 	title: 'Components/Create/Character/ChooseModal',
-	component: ChooseModal,
+	component: MoreInfoModal,
 	args: {
 		show: true,
 		iconId: 'dragonborn',
@@ -30,13 +31,13 @@ export default {
 		]
 	},
 	argTypes: {
-		onChoose: { type: 'function' },
+		onAction: { type: 'function' },
 		onClose: { type: 'function' }
 	}
-} as ComponentMeta<typeof ChooseModal>;
+} as ComponentMeta<typeof MoreInfoModal>;
 
-const Template: ComponentStory<typeof ChooseModal> = args => (
-	<ChooseModal {...args} />
+const Template: ComponentStory<typeof MoreInfoModal> = args => (
+	<MoreInfoModal {...args} />
 );
 
 export const Default = Template.bind({});

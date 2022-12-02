@@ -41,11 +41,11 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 
 import Button from '../../../../components/Button/Button';
-import ChooseModal from '../../../../components/Create/Character/ChooseModal/ChooseModal';
 import ConfirmationModal from '../../../../components/ConfirmationModal/ConfirmationModal';
 import { Descriptor } from '../../../../types/creation';
 import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoBar/GeneralInfoBar';
 import MainContent from '../../../../components/MainContent/MainContent';
+import MoreInfoModal from '../../../../components/MoreInfoModal/MoreInfoModal';
 import Option from '../../../../components/Create/Character/Option/Option';
 import SelectedClassDisplay from '../../../../components/Create/Character/Class/SelectedClassDisplay/SelectedClassDisplay';
 import { XCircleIcon } from '@heroicons/react/24/solid';
@@ -385,10 +385,10 @@ const Class = ({ classes, abilities }: ClassProps): JSX.Element => {
 					</>
 				)}
 			</MainContent>
-			<ChooseModal
+			<MoreInfoModal
 				iconId={consideredClassIndex as string}
 				show={showSelectModal}
-				onChoose={handleChooseSelectModal}
+				onAction={handleChooseSelectModal}
 				onClose={handleCancelSelectModal}
 				descriptors={descriptors}
 				otherDescriptors={otherDescriptors}
