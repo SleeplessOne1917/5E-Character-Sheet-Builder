@@ -2,7 +2,9 @@
 
 import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
 import { useCallback, useState } from 'react';
+import { useMutation } from 'urql';
 
+import CREATE_RACE from '../../../graphql/mutations/race/createRace';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
 import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
@@ -15,7 +17,6 @@ import {
 	initialState as raceInitialState,
 	resetRace
 } from '../../../redux/features/editingRace';
-import { trpc } from '../../../common/trpc';
 
 type RaceProps = {
 	abilities: AbilityItem[];
@@ -26,7 +27,7 @@ type RaceProps = {
 
 const Race = ({ abilities, languages, proficiencies, spells }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
-	const createRaceMutation = trpc.races.createRace.useMutation();
+	const [_, createRace] = useMutation(CREATE_RACE);
 	const [initialValues, setInitialValues] = useState(editingRace);
 
 	const router = useRouter();
@@ -37,23 +38,22 @@ const Race = ({ abilities, languages, proficiencies, spells }: RaceProps) => {
 			values: Omit<Race, 'id'>,
 			{ resetForm }: FormikHelpers<Omit<Race, 'id'>>
 		) => {
-			try {
-				await createRaceMutation.mutateAsync(values);
-			} catch (e) {
+			const result = await createRace({ race: values });
+			if (result.error) {
 				const toast = {
 					closeTimeoutSeconds: 10,
-					message: (e as Error).message,
+					message: result.error.message,
 					type: ToastType.error
 				};
 				dispatch(show(toast));
+			} else {
+				setInitialValues(raceInitialState);
+				resetForm();
+				dispatch(resetRace());
+				router.replace('/my-stuff');
 			}
-
-			setInitialValues(raceInitialState);
-			resetForm();
-			dispatch(resetRace());
-			router.replace('/my-stuff');
 		},
-		[dispatch, createRaceMutation, router]
+		[dispatch, createRace, router]
 	);
 
 	return (

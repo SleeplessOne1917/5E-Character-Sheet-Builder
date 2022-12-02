@@ -5,7 +5,6 @@ import { procedure, router } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import forgotRouter from './forgot';
 import passwordRouter from './password';
-import racesRouter from './races';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import spellsRouter from './spells';
 import { throwErrorWithCustomMessageInProd } from '../utils/trpcErrorUtils';
@@ -53,8 +52,7 @@ export const appRouter = router({
 	forgot: forgotRouter,
 	username: usernameRouter,
 	password: passwordRouter,
-	spells: spellsRouter,
-	races: racesRouter
+	spells: spellsRouter
 });
 
 export type AppRouter = typeof appRouter;
