@@ -1,17 +1,17 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../../types/srd';
-import { useCallback, useEffect, useState } from 'react';
 
-import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { PartialBy } from '../../../../types/helpers';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellForm from '../../../../components/Spells/SpellForm/SpellForm';
 import { ToastType } from '../../../../types/toast';
+import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
 import { show } from '../../../../redux/features/toast';
-import { trpc } from '../../../../common/trpc';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { useCallback } from 'react';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
 type EditSpellProps = {
@@ -19,63 +19,48 @@ type EditSpellProps = {
 	magicSchools: SrdItem[];
 	damageTypes: SrdItem[];
 	abilities: AbilityItem[];
-	id: string;
+	spell?: Spell;
 };
 
 const EditSpell = ({
-	id,
+	spell,
 	srdClasses,
 	magicSchools,
 	damageTypes,
 	abilities
 }: EditSpellProps) => {
-	const editSpellMutation = trpc.spells.editSpell.useMutation();
+	const [__, updateSpell] = useMutation(UPDATE_SPELL);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const spellResult = trpc.spells.spell.useQuery(id);
-	const trpcContext = trpc.useContext();
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		if (spellResult.isSuccess) {
-			setLoading(false);
-		}
-	}, [spellResult.isSuccess]);
 
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Spell, 'id'>) => {
 			const { id: _, ...newSpell } = values;
-			try {
-				await editSpellMutation.mutateAsync({
-					id,
-					spell: newSpell
-				});
-			} catch (e) {
+			const result = await updateSpell({ id: spell?.id, spell: newSpell });
+
+			if (result.error) {
 				const toast = {
 					closeTimeoutSeconds: 10,
-					message: (e as Error).message,
+					message: result.error.message,
 					type: ToastType.error
 				};
 				dispatch(show(toast));
+			} else {
+				router.replace('/my-stuff/spells');
 			}
-
-			trpcContext.spells.spells.invalidate();
-			router.replace('/my-stuff/spells');
 		},
-		[editSpellMutation, id, dispatch, router, trpcContext.spells.spells]
+		[updateSpell, spell?.id, dispatch, router]
 	);
 
-	return loading ? (
-		<LoadingPageContent />
-	) : (
+	return (
 		<MainContent>
-			<h1>Edit {spellResult.data?.name}</h1>
+			<h1>Edit {spell?.name}</h1>
 			<SpellForm
 				abilities={abilities}
 				damageTypes={damageTypes}
 				magicSchools={magicSchools}
 				srdClasses={srdClasses}
-				initialValues={spellResult.data as Omit<Spell, 'id'>}
+				initialValues={spell as Omit<Spell, 'id'>}
 				shouldUseReduxStore={false}
 				onSubmit={handleSubmit}
 			/>

@@ -7,6 +7,7 @@ import {
 
 import EditSpellView from '../../../../../src/views/MyStuff/edit/spells/EditSpell';
 import { getSession } from '../../../../../src/services/sessionService';
+import { getSpell } from '../../../../../src/services/spellsService';
 import { redirect } from 'next/navigation';
 
 const EditSpellPage = async ({
@@ -27,13 +28,19 @@ const EditSpellPage = async ({
 	const damageTypes = (await getDamageTypes()) ?? [];
 	const abilities = (await getAbilities()) ?? [];
 
+	const spell = id ? await getSpell(id as string) : undefined;
+
+	if (!spell) {
+		redirect('/');
+	}
+
 	return (
 		<EditSpellView
 			magicSchools={magicSchools}
 			srdClasses={classes}
 			damageTypes={damageTypes}
 			abilities={abilities}
-			id={id}
+			spell={spell}
 		/>
 	);
 };
