@@ -24,6 +24,7 @@ import dynamic from 'next/dynamic';
 import { getSpell } from '../../../services/spellsService';
 import { handleKeyDownEvent } from '../../../services/handlerService';
 import { isObjectId } from '../../../services/objectIdService';
+import { trpc } from '../../../common/trpc';
 import useMediaQuery from '../../../hooks/useMediaQuery';
 import { useQuery } from 'urql';
 
@@ -71,16 +72,14 @@ const SpellSelector = ({
 	);
 	const isCustomSpell = isObjectId(spell.id);
 
-	const [customSpellResult] = useQuery<{ spell: Spell }, { id: string }>({
-		query: GET_SPELL,
-		variables: { id: spell.id },
-		pause: !(isOpen && isCustomSpell)
+	const customSpellResult = trpc.spells.spell.useQuery(spell.id, {
+		enabled: isOpen && isCustomSpell
 	});
 
 	useEffect(() => {
 		if (isOpen && !fullSpell) {
-			if (isCustomSpell && !customSpellResult.fetching) {
-				setFullSpell(customSpellResult.data?.spell);
+			if (isCustomSpell && customSpellResult.isSuccess) {
+				setFullSpell(customSpellResult.data);
 			} else if (!isCustomSpell) {
 				setIsLoadingSrdSpells(true);
 				getSpell(spell.id).then(sp => {
@@ -93,8 +92,8 @@ const SpellSelector = ({
 		isOpen,
 		fullSpell,
 		isCustomSpell,
-		customSpellResult.data?.spell,
-		customSpellResult.fetching,
+		customSpellResult.data,
+		customSpellResult.isSuccess,
 		spell.id
 	]);
 
@@ -110,7 +109,7 @@ const SpellSelector = ({
 		[toggleOpen]
 	);
 
-	const isLoading = isLoadingSrdSpells || customSpellResult.fetching;
+	const isLoading = isLoadingSrdSpells || customSpellResult.isFetching;
 
 	return (
 		<div
