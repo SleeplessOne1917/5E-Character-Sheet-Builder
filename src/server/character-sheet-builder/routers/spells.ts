@@ -91,6 +91,21 @@ const spellsRouter = router({
 			}
 
 			return 'Spell edited successfully';
+		}),
+	createSpell: protectedProcedure
+		.input(async val => {
+			await spellSchema.validate(val);
+
+			return val as Omit<Spell, 'id'>;
+		})
+		.mutation(async ({ input, ctx: { user } }) => {
+			try {
+				SpellModel.create({ ...input, userId: user._id });
+			} catch (e) {
+				throwErrorWithCustomMessageInProd(e as Error, 'Could not create spell');
+			}
+
+			return 'Spell successfully created';
 		})
 });
 

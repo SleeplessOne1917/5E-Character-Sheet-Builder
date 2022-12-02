@@ -23,10 +23,10 @@ const MyStuffIndex = () => {
 	});
 
 	useEffect(() => {
-		if (spellId && !(spellResult.isLoading || spellResult.error)) {
+		if (spellId && spellResult.isSuccess) {
 			setSelectedSpell(spellResult.data);
 		}
-	}, [spellId, spellResult.isLoading, spellResult.error, spellResult.data]);
+	}, [spellId, spellResult.isSuccess, spellResult.data]);
 
 	const handleSpellMoreInfoClick = useCallback(({ id }: SpellItem) => {
 		setSpellId(id);
