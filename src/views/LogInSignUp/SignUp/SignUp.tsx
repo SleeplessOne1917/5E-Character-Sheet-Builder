@@ -9,7 +9,7 @@ import { FormikHelpers } from 'formik';
 import MainContent from '../../../components/MainContent/MainContent';
 import { ToastType } from '../../../types/toast';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
-import { trpc } from '../../../common/trpc';
+import { trpc } from '../../../common/trpcFrontend';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';

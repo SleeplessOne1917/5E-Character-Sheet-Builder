@@ -9,7 +9,7 @@ import { ToastType } from '../../types/toast';
 import classes from './Account.module.css';
 import newPasswordSchema from '../../yup-schemas/newPasswordSchema';
 import { show } from '../../redux/features/toast';
-import { trpc } from '../../common/trpc';
+import { trpc } from '../../common/trpcFrontend';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { useCallback } from 'react';
 
