@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 
 import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
+import REMIND_USERNAME from '../../graphql/mutations/user/remindUsername';
 import classes from './UsernameReminder.module.css';
-import { trpc } from '../../common/trpcFrontend';
+import { cleanMessage } from '../../services/messageCleanerService';
+import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
 
 type UsernameReminderProps = {
@@ -13,8 +15,8 @@ type UsernameReminderProps = {
 };
 
 const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
-	const [fetched, setFetched] = useState(false);
-	const remindUsernameMutation = trpc.username.remind.useMutation();
+	const [loading, setLoading] = useState(true);
+	const [{ error, data }, remindUsername] = useMutation(REMIND_USERNAME);
 	const { secondsLeft, startCountdown } = useRedirectCountdown({
 		path: '/',
 		replace: true,
@@ -22,27 +24,26 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 	});
 
 	useEffect(() => {
-		if (!fetched) {
-			remindUsernameMutation.mutate(otlId);
-			setFetched(true);
-		}
-	}, [remindUsernameMutation, otlId, fetched]);
+		remindUsername({ otlId }).then(() => {
+			setLoading(false);
+		});
+	}, [otlId, remindUsername]);
 
 	useEffect(() => {
-		if (remindUsernameMutation.error) {
+		if (error) {
 			startCountdown();
 		}
-	}, [startCountdown, remindUsernameMutation.error]);
+	}, [startCountdown, error]);
 
 	let headerText: string;
 	let content: JSX.Element;
 
-	if (remindUsernameMutation.error) {
+	if (error) {
 		headerText = 'Error';
 		content = (
 			<>
 				<div className={classes['error-message']}>
-					{remindUsernameMutation.error.message}
+					{cleanMessage(error.message)}
 				</div>
 				<p className={classes['countdown-message']}>
 					You will be redirected back to the home page in{' '}
@@ -59,9 +60,7 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 			<>
 				<div className={classes['username-message']}>
 					Your username is:{' '}
-					<span className={classes.username}>
-						{remindUsernameMutation.data}
-					</span>
+					<span className={classes.username}>{data?.remindUsername}</span>
 				</div>
 				<p className={classes['username-warning']}>
 					Be sure to write down your username{' '}
@@ -74,12 +73,10 @@ const UsernameReminder = ({ otlId }: UsernameReminderProps) => {
 		);
 	}
 
-	const isLoading = remindUsernameMutation.isLoading || !fetched;
-
 	return (
 		<>
-			{isLoading && <LoadingPageContent />}
-			{!isLoading && (
+			{loading && <LoadingPageContent />}
+			{!loading && (
 				<MainContent>
 					<div className={classes.content}>
 						<h1>{headerText}</h1>

@@ -6,13 +6,16 @@ import { useCallback, useEffect, useState } from 'react';
 
 import LoadingPageContent from '../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../components/MainContent/MainContent';
+import RESET_PASSWORD from '../../graphql/mutations/user/resetPassword';
 import TextInput from '../../components/TextInput/TextInput';
 import { ToastType } from '../../types/toast';
+import VALIDATE_RESET_PASSWORD from '../../graphql/mutations/user/validateResetPassword';
 import classes from './ResetPassword.module.css';
+import { cleanMessage } from '../../services/messageCleanerService';
 import resetPasswordSchema from '../../yup-schemas/resetPasswordSchema';
 import { show } from '../../redux/features/toast';
-import { trpc } from '../../common/trpcFrontend';
 import { useAppDispatch } from '../../hooks/reduxHooks';
+import { useMutation } from 'urql';
 import useRedirectCountdown from '../../hooks/useRedirectCountdown';
 import { useRouter } from 'next/navigation';
 
@@ -26,12 +29,13 @@ type FormValues = {
 };
 
 const ResetPassword = ({ otlId }: ResetPasswordProps) => {
-	const [fetched, setFetched] = useState(false);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [error, setError] = useState<string>();
-	const resetPasswordMutation = trpc.password.resetPassword.useMutation();
-	const validateResetMutation = trpc.password.validateReset.useMutation();
+	const [loading, setLoading] = useState(true);
+	const [{ error: validateError }, validateResetPassword] = useMutation(
+		VALIDATE_RESET_PASSWORD
+	);
+	const [{ error: resetError }, resetPassword] = useMutation(RESET_PASSWORD);
 	const { secondsLeft, startCountdown } = useRedirectCountdown({
 		path: '/',
 		replace: true,
@@ -39,67 +43,56 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 	});
 
 	useEffect(() => {
-		if (!fetched) {
-			validateResetMutation
-				.mutateAsync(otlId)
-				.catch(e => {
-					setError((e as Error).message);
-				})
-				.finally(() => {
-					setFetched(true);
-				});
-		}
-	}, [validateResetMutation, otlId, fetched]);
+		validateResetPassword({ otlId }).then(() => {
+			setLoading(false);
+		});
+	}, [validateResetPassword, setLoading, otlId]);
 
 	useEffect(() => {
-		if (error) {
+		if (validateError || resetError) {
 			startCountdown();
 		}
-	}, [error, startCountdown]);
+	}, [validateError, startCountdown, resetError, otlId]);
 
 	const handleResetPasswordSubmit = useCallback(
 		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
-			try {
-				const result = await resetPasswordMutation.mutateAsync({
-					...values,
-					otlId
-				});
+			const result = await resetPassword({ ...values, otlId });
 
+			if (result.error) {
 				dispatch(
 					show({
 						closeTimeoutSeconds: 10,
-						message: result,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.data.resetPassword,
 						type: ToastType.success
 					})
 				);
 
 				router.replace('/log-in');
-			} catch (e) {
-				const errorMessage = (e as Error).message;
-				dispatch(
-					show({
-						closeTimeoutSeconds: 10,
-						message: errorMessage,
-						type: ToastType.error
-					})
-				);
-
-				setError(errorMessage);
-			} finally {
-				resetForm();
 			}
+
+			resetForm();
 		},
-		[resetPasswordMutation, dispatch, router, otlId]
+		[resetPassword, dispatch, router, otlId]
 	);
 
 	let headerText: string;
 	let content: JSX.Element;
 
-	if (error) {
+	if (validateError || resetError) {
 		headerText = 'Error';
 		content = (
 			<>
-				<div className={classes['error-message']}>{error}</div>
+				<div className={classes['error-message']}>
+					{cleanMessage(validateError?.message ?? resetError?.message ?? '')}
+				</div>
 				<p className={classes['countdown-message']}>
 					You will be redirected back to the home page in{' '}
 					<span className={classes.countdown}>
@@ -114,7 +107,7 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 		content = (
 			<Formik
 				initialValues={{ password: '', confirmPassword: '' }}
-				validationSchema={resetPasswordSchema.omit(['otlId'])}
+				validationSchema={resetPasswordSchema}
 				onSubmit={handleResetPasswordSubmit}
 			>
 				{({
@@ -169,12 +162,10 @@ const ResetPassword = ({ otlId }: ResetPasswordProps) => {
 		);
 	}
 
-	const isLoading = !fetched || validateResetMutation.isLoading;
-
 	return (
 		<>
-			{isLoading && <LoadingPageContent />}
-			{!isLoading && (
+			{loading && <LoadingPageContent />}
+			{!loading && (
 				<MainContent>
 					<div className={classes.content}>
 						<h1>{headerText}</h1>

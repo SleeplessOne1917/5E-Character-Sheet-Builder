@@ -13,8 +13,6 @@ const UsernameReminderPage = async ({
 		redirect('/');
 	}
 
-	console.log("I'm rerendering the server component like a fucking dumb fuck");
-
 	return <UsernameReminderView otlId={otlId} />;
 };
 

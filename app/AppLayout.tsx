@@ -18,7 +18,7 @@ import { Session } from 'next-auth';
 import ToastContainer from '../src/components/Toast/ToastContainer';
 import { Provider as UrqlProvider } from 'urql';
 import client from '../src/graphql/client';
-import { trpc } from '../src/common/trpcFrontend';
+import { trpc } from '../src/common/trpc';
 import { useAppSelector } from '../src/hooks/reduxHooks';
 import useMediaQuery from '../src/hooks/useMediaQuery';
 import { usePathname } from 'next/navigation';

@@ -3,15 +3,16 @@
 import Button, { ButtonType } from '../../../components/Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
+import FORGOT_USERNAME from '../../../graphql/mutations/user/forgotUsername';
 import MainContent from '../../../components/MainContent/MainContent';
 import TextInput from '../../../components/TextInput/TextInput';
 import { ToastType } from '../../../types/toast';
 import classes from './ForgotUsername.module.css';
 import forgotUsernameSchema from '../../../yup-schemas/forgotUsernameSchema';
 import { show } from '../../../redux/features/toast';
-import { trpc } from '../../../common/trpcFrontend';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useCallback } from 'react';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
 type FormValues = {
@@ -21,34 +22,34 @@ type FormValues = {
 const ForgotUsername = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const forgotUsernameMutation = trpc.forgot.username.useMutation();
+	const [_, forgotUsername] = useMutation(FORGOT_USERNAME);
 
 	const handleForgotUsernameSubmit = useCallback(
 		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
-			try {
-				const result = await forgotUsernameMutation.mutateAsync(values);
+			const result = await forgotUsername({ request: values });
 
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
 				dispatch(
 					show({
 						closeTimeoutSeconds: 15,
-						message: result,
+						message: result.data.forgotUsername.message,
 						type: ToastType.success
 					})
 				);
 				router.replace('/');
-			} catch (e) {
-				dispatch(
-					show({
-						closeTimeoutSeconds: 10,
-						message: (e as Error).message,
-						type: ToastType.error
-					})
-				);
-			} finally {
-				resetForm();
 			}
+
+			resetForm();
 		},
-		[forgotUsernameMutation, dispatch, router]
+		[forgotUsername, dispatch, router]
 	);
 
 	return (

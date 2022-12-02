@@ -3,15 +3,16 @@
 import Button, { ButtonType } from '../../../components/Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
+import FORGOT_PASSWORD from '../../../graphql/mutations/user/forgotPassword';
 import MainContent from '../../../components/MainContent/MainContent';
 import TextInput from '../../../components/TextInput/TextInput';
 import { ToastType } from '../../../types/toast';
 import classes from './ForgotPassword.module.css';
 import forgotPasswordSchema from '../../../yup-schemas/forgotPasswordSchema';
 import { show } from '../../../redux/features/toast';
-import { trpc } from '../../../common/trpcFrontend';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { useCallback } from 'react';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
 type FormValues = {
@@ -22,34 +23,34 @@ type FormValues = {
 const ForgotPassword = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const forgotPasswordMutation = trpc.forgot.password.useMutation();
+	const [_, forgotPassword] = useMutation(FORGOT_PASSWORD);
 
 	const handleForgotPasswordSubmit = useCallback(
 		async (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
-			try {
-				const result = await forgotPasswordMutation.mutateAsync(values);
+			const result = await forgotPassword({ request: values });
 
+			if (result.error) {
+				dispatch(
+					show({
+						closeTimeoutSeconds: 10,
+						message: result.error.message,
+						type: ToastType.error
+					})
+				);
+			} else {
 				dispatch(
 					show({
 						closeTimeoutSeconds: 15,
-						message: result,
+						message: result.data.forgotPassword.message,
 						type: ToastType.success
 					})
 				);
 				router.replace('/');
-			} catch (e) {
-				dispatch(
-					show({
-						closeTimeoutSeconds: 10,
-						message: (e as Error).message,
-						type: ToastType.error
-					})
-				);
-			} finally {
-				resetForm();
 			}
+
+			resetForm();
 		},
-		[forgotPasswordMutation, dispatch, router]
+		[forgotPassword, dispatch, router]
 	);
 
 	return (
