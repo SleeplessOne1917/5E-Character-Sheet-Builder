@@ -9,23 +9,19 @@ import {
 	KeyboardEventHandler,
 	memo,
 	useCallback,
-	useEffect,
 	useMemo,
 	useState
 } from 'react';
-import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
 
 import Button from '../../Button/Button';
-import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { SrdItem } from '../../../types/srd';
 import classes from './SpellSelector.module.css';
 import dynamic from 'next/dynamic';
-import { getSpell } from '../../../services/spellsService';
 import { handleKeyDownEvent } from '../../../services/handlerService';
-import { isObjectId } from '../../../services/objectIdService';
+import useGetSpell from '../../../hooks/useGetSpell';
 import useMediaQuery from '../../../hooks/useMediaQuery';
-import { useQuery } from 'urql';
 
 const MarkdownParser = dynamic(
 	() => import('../../MarkdownParser/MarkdownParser'),
@@ -62,41 +58,13 @@ const SpellSelector = ({
 	parentSelected = false
 }: SpellSelectorProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [isLoadingSrdSpells, setIsLoadingSrdSpells] = useState(false);
-	const [fullSpell, setFullSpell] = useState<Spell>();
 	const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
 	const isSelected = useMemo(
 		() => selectValues.includes(spell.id),
 		[selectValues, spell.id]
 	);
-	const isCustomSpell = isObjectId(spell.id);
 
-	const [customSpellResult] = useQuery<{ spell: Spell }, { id: string }>({
-		query: GET_SPELL,
-		variables: { id: spell.id },
-		pause: !(isOpen && isCustomSpell)
-	});
-
-	useEffect(() => {
-		if (isOpen && !fullSpell) {
-			if (isCustomSpell && !customSpellResult.fetching) {
-				setFullSpell(customSpellResult.data?.spell);
-			} else if (!isCustomSpell) {
-				setIsLoadingSrdSpells(true);
-				getSpell(spell.id).then(sp => {
-					setFullSpell(sp);
-					setIsLoadingSrdSpells(false);
-				});
-			}
-		}
-	}, [
-		isOpen,
-		fullSpell,
-		isCustomSpell,
-		customSpellResult.data?.spell,
-		customSpellResult.fetching,
-		spell.id
-	]);
+	const spellResult = useGetSpell(spell.id, { paused: !isOpen });
 
 	const toggleOpen = useCallback(
 		() => setIsOpen(prevState => !prevState),
@@ -109,8 +77,6 @@ const SpellSelector = ({
 		},
 		[toggleOpen]
 	);
-
-	const isLoading = isLoadingSrdSpells || customSpellResult.fetching;
 
 	return (
 		<div
@@ -144,71 +110,79 @@ const SpellSelector = ({
 				className={classes['selector-display']}
 				style={{ display: isOpen ? 'grid' : 'none' }}
 			>
-				{isLoading && (
+				{spellResult.fetching && (
 					<div className={classes.loading}>
 						<LoadingSpinner />
 					</div>
 				)}
-				{!isLoading && (
+				{!spellResult.fetching && (
 					<>
 						<div className={classes.summary}>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>Level</span>:{' '}
-								{fullSpell?.level === 0 ? 'Cantrip' : fullSpell?.level}
+								{spellResult.spell?.level === 0
+									? 'Cantrip'
+									: spellResult.spell?.level}
 							</div>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>
 									Casting time
 								</span>
-								: {fullSpell?.castingTime}
+								: {spellResult.spell?.castingTime}
 							</div>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>Duration</span>:{' '}
-								{fullSpell?.duration}
+								{spellResult.spell?.duration}
 							</div>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>Range</span>:{' '}
-								{fullSpell?.range}
+								{spellResult.spell?.range}
 							</div>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>School</span>:{' '}
-								{fullSpell?.school.name}
+								{spellResult.spell?.school.name}
 							</div>
 							<div className={classes['summary-item']}>
 								<span className={classes['summary-item-label']}>
 									Components
 								</span>
-								: {fullSpell?.components.join(', ')}
-								{fullSpell?.material ? ` (${fullSpell.material})` : ''}
+								: {spellResult.spell?.components.join(', ')}
+								{spellResult.spell?.material
+									? ` (${spellResult.spell.material})`
+									: ''}
 							</div>
 						</div>
 						<div className={classes.description}>
-							<MarkdownParser input={fullSpell?.description ?? ''} />
-							{fullSpell?.atHigherLevels && (
+							<MarkdownParser input={spellResult.spell?.description ?? ''} />
+							{spellResult.spell?.atHigherLevels && (
 								<MarkdownParser
-									input={'**At Higher Levels**: ' + fullSpell.atHigherLevels}
+									input={
+										'**At Higher Levels**: ' + spellResult.spell.atHigherLevels
+									}
 								/>
 							)}
 						</div>
 						<div className={classes.other}>
-							{fullSpell?.concentration && (
+							{spellResult.spell?.concentration && (
 								<p className={classes['other-info']}>Requires concentration.</p>
 							)}
-							{fullSpell?.ritual && (
+							{spellResult.spell?.ritual && (
 								<p className={classes['other-info']}>
 									Can be cast as a ritual.
 								</p>
 							)}
-							{fullSpell?.damageType && (
+							{spellResult.spell?.damageType && (
 								<div className={classes['damage-display']}>
 									<div>
 										<span className={classes['summary-item-label']}>
 											Damage type
 										</span>
-										: {fullSpell?.damageType.name}
+										: {spellResult.spell?.damageType.name}
 									</div>
 									<svg className={classes['damage-icon']}>
-										<use xlinkHref={`/Icons.svg#${fullSpell?.damageType.id}`} />
+										<use
+											xlinkHref={`/Icons.svg#${spellResult.spell?.damageType.id}`}
+										/>
 									</svg>
 								</div>
 							)}

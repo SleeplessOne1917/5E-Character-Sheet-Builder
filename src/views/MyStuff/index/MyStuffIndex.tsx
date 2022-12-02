@@ -4,29 +4,22 @@ import { Spell, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { useCallback, useEffect, useState } from 'react';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
-import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import Preview from '../../../components/MyStuff/Preview/Preview';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
-import { useQuery } from 'urql';
+import useGetLimitedSpellsQuery from '../../../hooks/urql/queries/useGetLimitedSpellsQuery';
+import useGetSpellQuery from '../../../hooks/urql/queries/useGetSpellQuery';
 
-type MyStuffIndexProps = {
-	spells: SpellItem[];
-};
-
-const MyStuffIndex = ({ spells }: MyStuffIndexProps) => {
+const MyStuffIndex = () => {
 	const [spellId, setSpellId] = useState<string>();
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 
-	const [spellResult] = useQuery<{
-		spell: Spell;
-	}>({
-		query: GET_SPELL,
-		variables: { id: spellId },
-		pause: !spellId
-	});
+	const [spellResult] = useGetSpellQuery(spellId);
+
+	const [spellsResult] = useGetLimitedSpellsQuery({ limit: 5 });
 
 	useEffect(() => {
 		if (spellId && !(spellResult.fetching || spellResult.error)) {
@@ -35,7 +28,6 @@ const MyStuffIndex = ({ spells }: MyStuffIndexProps) => {
 	}, [spellId, spellResult.fetching, spellResult.error, spellResult.data]);
 
 	const handleSpellMoreInfoClick = useCallback(({ id }: SpellItem) => {
-		console.log(id);
 		setSpellId(id);
 	}, []);
 
@@ -44,11 +36,13 @@ const MyStuffIndex = ({ spells }: MyStuffIndexProps) => {
 		setSpellId(undefined);
 	}, []);
 
-	return (
+	return spellsResult.fetching ? (
+		<LoadingPageContent />
+	) : (
 		<>
 			<MainContent testId="my-stuff-index">
 				<h1>My Stuff</h1>
-				{spells.length === 0 && (
+				{(spellsResult.data?.spells.length ?? 0) === 0 && (
 					<div className={classes['no-items-container']}>
 						<p>
 							You haven&apos;t created anything yet. Whenever you create
@@ -58,11 +52,11 @@ const MyStuffIndex = ({ spells }: MyStuffIndexProps) => {
 					</div>
 				)}
 				<div className={classes.previews}>
-					{spells.length > 0 && (
+					{(spellsResult.data?.spells.length ?? 0) > 0 && (
 						<Preview
 							path="spells"
 							title="Spells"
-							items={spells.map(spell => (
+							items={(spellsResult.data?.spells ?? []).map(spell => (
 								<SpellItemDisplay
 									spell={spell}
 									key={spell.id}

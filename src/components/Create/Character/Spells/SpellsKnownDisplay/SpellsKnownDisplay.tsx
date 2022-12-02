@@ -1,14 +1,13 @@
 'use client';
 
-import { use, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import Button from '../../../../Button/Button';
 import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 import SpellMoreInformationModal from '../../../../Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './SpellsKnownDisplay.module.css';
-import { getSpell } from '../../../../../services/spellsService';
 import { useAppSelector } from '../../../../../hooks/reduxHooks';
-import { useClient } from 'urql';
+import useGetSpell from '../../../../../hooks/useGetSpell';
 
 const SpellsKnownDisplay = () => {
 	const spells = useAppSelector(
@@ -16,11 +15,7 @@ const SpellsKnownDisplay = () => {
 	);
 	const [selectedSpellId, setSelectedSpellId] = useState<string>();
 
-	const client = useClient();
-
-	const selectedSpell = selectedSpellId
-		? use(getSpell(selectedSpellId, client))
-		: undefined;
+	const selectedSpellResult = useGetSpell(selectedSpellId);
 
 	const [showMore, setShowMore] = useState(false);
 
@@ -81,9 +76,9 @@ const SpellsKnownDisplay = () => {
 			</div>
 			<SpellMoreInformationModal
 				show={showMore}
-				spell={selectedSpell}
+				spell={selectedSpellResult.spell}
 				onClose={handleCloseModal}
-				loading={!selectedSpell}
+				loading={selectedSpellResult.fetching}
 			/>
 		</>
 	);

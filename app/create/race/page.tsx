@@ -7,7 +7,6 @@ import {
 import { ProficiencyType } from '../../../src/types/srd';
 import RaceView from '../../../src/views/create/race/Race';
 import { getSession } from '../../../src/services/sessionService';
-import { getSpells } from '../../../src/services/spellsService';
 import { redirect } from 'next/navigation';
 
 const proficiencyTypes: ProficiencyType[] = [
@@ -27,7 +26,6 @@ const RacePage = async () => {
 
 	const abilities = (await getAbilities()) ?? [];
 	const languages = (await getLanguages()) ?? [];
-	const spells = (await getSpells()) ?? [];
 
 	const proficiencies =
 		(await getProficienciesByType(proficiencyTypes))?.data?.proficiencies ?? [];
@@ -37,7 +35,6 @@ const RacePage = async () => {
 			abilities={abilities}
 			languages={languages}
 			proficiencies={proficiencies}
-			spells={spells}
 		/>
 	);
 };

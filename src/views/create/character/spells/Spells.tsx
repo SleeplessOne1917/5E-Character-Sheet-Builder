@@ -7,11 +7,10 @@ import GeneralInfoBar from '../../../../components/Create/Character/GeneralInfoB
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 import MainContent from '../../../../components/MainContent/MainContent';
-import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import SpellsKnownDisplay from '../../../../components/Create/Character/Spells/SpellsKnownDisplay/SpellsKnownDisplay';
-import { getSpellsByClass } from '../../../../services/spellsService';
 import styles from './Spells.module.css';
 import { useAppSelector } from '../../../../hooks/reduxHooks';
+import useGetSpellsByClass from '../../../../hooks/useGetSpellsByClass';
 import usePreparedSpells from '../../../../hooks/usePreparedSpells';
 import { useRouter } from 'next/navigation';
 
@@ -21,26 +20,9 @@ const Spells = () => {
 		state => state.editingCharacter.spellcasting
 	);
 	const [isLoading, setIsLoading] = useState(true);
-	const [isFetchingSpells, setIsFetchingSpells] = useState(true);
 	const { numberOfSpellsToPrepare, shouldPrepareSpells } = usePreparedSpells();
 
-	const [allClassSpells, setAllClassSpells] = useState<SpellItem[]>([]);
-
-	useEffect(() => {
-		setIsFetchingSpells(true);
-
-		if (classInfo.class) {
-			getSpellsByClass(classInfo.class.index).then(result => {
-				if (result) {
-					setAllClassSpells(result);
-				}
-				setIsFetchingSpells(false);
-			});
-		} else {
-			setAllClassSpells([]);
-			setIsFetchingSpells(false);
-		}
-	}, [classInfo.class, setAllClassSpells, setIsFetchingSpells]);
+	const classSpellsResult = useGetSpellsByClass(classInfo.class?.index);
 
 	const router = useRouter();
 
@@ -75,13 +57,15 @@ const Spells = () => {
 						Select {spellcasting.cantripsKnown} Cantrip
 						{spellcasting.cantripsKnown > 1 ? 's' : ''}
 					</h2>
-					{isFetchingSpells ? (
+					{classSpellsResult.fetching ? (
 						<div className={styles['loading-container']}>
 							<LoadingSpinner />
 						</div>
 					) : (
 						<CreateCharacterSpellsSelector
-							spells={allClassSpells.filter(({ level }) => level === 0)}
+							spells={classSpellsResult.spells.filter(
+								({ level }) => level === 0
+							)}
 							choose={spellcasting.cantripsKnown}
 						/>
 					)}
@@ -99,14 +83,14 @@ const Spells = () => {
 						{spellcasting.spellsKnown > 1 ? 's' : ''}
 					</h2>
 				)}
-				{isFetchingSpells ? (
+				{classSpellsResult.fetching ? (
 					<div className={styles['loading-container']}>
 						<LoadingSpinner />
 					</div>
 				) : (
 					<CreateCharacterSpellsSelector
 						spells={[
-							...allClassSpells.filter(
+							...classSpellsResult.spells.filter(
 								({ level }) =>
 									level >= 1 && level <= spellcasting.highestSlotLevel
 							)

@@ -3,8 +3,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloContext } from '../../src/types/apollo';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
+import { IUserDocument } from '../../src/db/models/user';
+import User from '../../src/db/models/user';
 import dbConnect from '../../src/db/dbConnect';
+import { nextAuthOptions } from '../../src/common/auth';
 import schema from '../../src/graphql/server/schema';
+import { unstable_getServerSession } from 'next-auth';
 
 const cors = Cors();
 
@@ -17,7 +21,15 @@ const apolloServer = new ApolloServer({
 		req: NextApiRequest;
 		res: NextApiResponse;
 	}): Promise<ApolloContext> => {
-		return { req, res };
+		const session = await unstable_getServerSession(req, res, nextAuthOptions);
+
+		let user: IUserDocument | undefined;
+
+		if (session && session.user) {
+			user = await User.findOne({ username: session.user.name }).lean();
+		}
+
+		return { req, res, user };
 	}
 });
 

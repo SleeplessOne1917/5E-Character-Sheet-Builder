@@ -150,7 +150,7 @@ const Mutation = {
 					userId: user._id,
 					createdAt: Date.now()
 				});
-				const link = `${process.env.PROTOCOL_AND_DOMAIN}/forgot/username/${otl.id}`;
+				const link = `${process.env.ORIGIN}/forgot/username/${otl.id}`;
 				sendUsernameReminder(request.email, link);
 				break;
 			}
@@ -173,7 +173,7 @@ const Mutation = {
 						userId: user._id,
 						createdAt: Date.now()
 					});
-					const link = `${process.env.PROTOCOL_AND_DOMAIN}/forgot/password/${otl.id}`;
+					const link = `${process.env.ORIGIN}/forgot/password/${otl.id}`;
 					sendResetPassword(request.email, link);
 				}
 			} else {

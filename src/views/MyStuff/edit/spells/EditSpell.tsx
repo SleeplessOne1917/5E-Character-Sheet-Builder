@@ -1,7 +1,9 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../../types/srd';
+import { useMutation } from 'urql';
 
+import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
 import { PartialBy } from '../../../../types/helpers';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
@@ -11,7 +13,7 @@ import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useCallback } from 'react';
-import { useMutation } from 'urql';
+import useGetSpellQuery from '../../../../hooks/urql/queries/useGetSpellQuery';
 import { useRouter } from 'next/navigation';
 
 type EditSpellProps = {
@@ -19,24 +21,26 @@ type EditSpellProps = {
 	magicSchools: SrdItem[];
 	damageTypes: SrdItem[];
 	abilities: AbilityItem[];
-	spell?: Spell;
+	id: string;
 };
 
 const EditSpell = ({
-	spell,
 	srdClasses,
 	magicSchools,
 	damageTypes,
-	abilities
+	abilities,
+	id
 }: EditSpellProps) => {
 	const [__, updateSpell] = useMutation(UPDATE_SPELL);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
+	const [spellResult] = useGetSpellQuery(id);
+
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Spell, 'id'>) => {
 			const { id: _, ...newSpell } = values;
-			const result = await updateSpell({ id: spell?.id, spell: newSpell });
+			const result = await updateSpell({ id, spell: newSpell });
 
 			if (result.error) {
 				const toast = {
@@ -49,18 +53,20 @@ const EditSpell = ({
 				router.replace('/my-stuff/spells');
 			}
 		},
-		[updateSpell, spell?.id, dispatch, router]
+		[updateSpell, id, dispatch, router]
 	);
 
-	return (
+	return spellResult.fetching ? (
+		<LoadingPageContent />
+	) : (
 		<MainContent>
-			<h1>Edit {spell?.name}</h1>
+			<h1>Edit {spellResult?.data?.spell.name}</h1>
 			<SpellForm
 				abilities={abilities}
 				damageTypes={damageTypes}
 				magicSchools={magicSchools}
 				srdClasses={srdClasses}
-				initialValues={spell as Omit<Spell, 'id'>}
+				initialValues={spellResult?.data?.spell as Omit<Spell, 'id'>}
 				shouldUseReduxStore={false}
 				onSubmit={handleSubmit}
 			/>

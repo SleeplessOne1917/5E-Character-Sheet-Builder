@@ -7,7 +7,7 @@ import { useMutation } from 'urql';
 import CREATE_RACE from '../../../graphql/mutations/race/createRace';
 import MainContent from '../../../components/MainContent/MainContent';
 import RaceForm from '../../../components/RaceForm/RaceForm';
-import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
+import { Race } from '../../../types/characterSheetBuilderAPI';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { FormikHelpers } from 'formik';
 import { ToastType } from '../../../types/toast';
@@ -17,18 +17,19 @@ import {
 	initialState as raceInitialState,
 	resetRace
 } from '../../../redux/features/editingRace';
+import useGetSpells from '../../../hooks/useGetSpells';
 
 type RaceProps = {
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
-	spells: SpellItem[];
 };
 
-const Race = ({ abilities, languages, proficiencies, spells }: RaceProps) => {
+const Race = ({ abilities, languages, proficiencies }: RaceProps) => {
 	const editingRace = useAppSelector(state => state.editingRace);
 	const [_, createRace] = useMutation(CREATE_RACE);
 	const [initialValues, setInitialValues] = useState(editingRace);
+	const spellsResult = useGetSpells();
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -65,7 +66,7 @@ const Race = ({ abilities, languages, proficiencies, spells }: RaceProps) => {
 				shouldUseReduxStore
 				languages={languages}
 				proficiencies={proficiencies}
-				spells={spells}
+				spells={spellsResult.spells ?? []}
 				onSubmit={handleSubmit}
 			/>
 		</MainContent>

@@ -1,19 +1,7 @@
 import { Spell, SpellItem } from '../types/characterSheetBuilderAPI';
 import { SrdSpell, SrdSpellItem } from '../types/srd';
-import {
-	getSpell as getCharacterSheetBuilderSpell,
-	getSpells as getCharacterSheetBuilderSpells,
-	getSpellsByClass as getCharacterSheetBuilderSpellsByClass
-} from '../graphql/characterSheetBuilderClientService';
-import {
-	getSpell as getSrdSpell,
-	getSpells as getSrdSpells,
-	getSpellsByClass as getSrdSpellsByClass
-} from '../graphql/srdClientService';
 
-import { Client } from 'urql/core';
 import { getMarkdownFromStringArray } from './markdownStringArrayToStringService';
-import { isObjectId } from './objectIdService';
 
 export const mapSpell = (spell: SrdSpell): Spell =>
 	Object.entries({
@@ -51,63 +39,23 @@ export const mapSpell = (spell: SrdSpell): Spell =>
 		{} as Spell
 	);
 
-export const mapSpellItem = ({
-	index,
-	name,
-	level,
-	school
-}: SrdSpellItem): SpellItem => ({
-	id: index,
-	name: name,
-	level: level,
+export const mapSpellItem = (spell: SrdSpellItem): SpellItem => ({
+	id: spell.index,
+	level: spell.level,
+	name: spell.name,
 	school: {
-		id: school.index,
-		name: school.name
+		id: spell.school.index,
+		name: spell.school.name
 	}
 });
 
-export const getSpell = async (id: string, client?: Client) => {
-	if (isObjectId(id)) {
-		return (await getCharacterSheetBuilderSpell(id, client))?.data?.spell;
-	}
+export const combineSpellArrays = (
+	...spellLists: (SpellItem[] | undefined)[]
+) =>
+	spellLists
+		.reduce((acc: SpellItem[], cur) => [...acc, ...(cur ?? [])], [])
+		.sort((a, b) => {
+			const val = a.level - b.level;
 
-	const spell = (await getSrdSpell(id)).data?.spell;
-
-	return spell ? mapSpell(spell) : undefined;
-};
-
-const combineSpellArrays = ({
-	srdSpells,
-	characterSheetBuilderSpells
-}: {
-	srdSpells?: SpellItem[];
-	characterSheetBuilderSpells?: SpellItem[];
-}) =>
-	(srdSpells ?? []).concat(characterSheetBuilderSpells ?? []).sort((a, b) => {
-		const val = a.level - b.level;
-
-		return val === 0 ? a.name.localeCompare(b.name) : val;
-	});
-
-export const getSpellsByClass = async (klass: string) => {
-	const srdSpells = (
-		await getSrdSpellsByClass(klass)
-	).data?.spells?.map<SpellItem>(mapSpellItem);
-
-	const characterSheetBuilderSpells = (
-		await getCharacterSheetBuilderSpellsByClass(klass)
-	).data?.spells;
-
-	return combineSpellArrays({ srdSpells, characterSheetBuilderSpells });
-};
-
-export const getSpells = async () => {
-	const srdSpells = (await getSrdSpells()).data?.spells?.map<SpellItem>(
-		mapSpellItem
-	);
-
-	const characterSheetBuilderSpells = (await getCharacterSheetBuilderSpells())
-		.data?.spells;
-
-	return combineSpellArrays({ srdSpells, characterSheetBuilderSpells });
-};
+			return val === 0 ? a.name.localeCompare(b.name) : val;
+		});
