@@ -4,9 +4,9 @@ import Spell, { ISpell } from './../../../db/models/spell';
 import { ApolloContext } from '../../../types/apollo';
 import { ApolloError } from 'apollo-server-micro';
 import { Types } from 'mongoose';
-import createSpellSchema from '../../../yup-schemas/createSpellSchema';
 import { mustBeLoggedIn } from './../../../constants/generalConstants';
 import raceSchema from '../../../yup-schemas/raceSchema';
+import spellSchema from '../../../yup-schemas/spellSchema';
 import { throwErrorWithCustomMessageInProd } from '../../../server/character-sheet-builder/utils/trpcErrorUtils';
 
 type CreateSpellArgs = {
@@ -32,7 +32,7 @@ const Mutation = {
 			throw new ApolloError(mustBeLoggedIn);
 		}
 
-		await createSpellSchema.validate(spell, { strict: true });
+		await spellSchema.validate(spell, { strict: true });
 
 		try {
 			Spell.create({ ...spell, userId: user._id });
@@ -41,6 +41,28 @@ const Mutation = {
 		}
 
 		return 'Spell successfully created';
+	},
+	updateSpell: async (
+		parent: never,
+		{ spell, id }: UpdateSpellArgs,
+		{ user }: ApolloContext
+	) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
+		}
+
+		await spellSchema.validate(spell, { strict: true });
+
+		try {
+			await Spell.updateOne(
+				{ _id: new Types.ObjectId(id), userId: user._id },
+				{ $set: spell }
+			);
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not edit spell');
+		}
+
+		return 'Spell edited successfully';
 	},
 	createRace: async (
 		parent: never,

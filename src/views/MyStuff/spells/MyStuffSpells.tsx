@@ -27,10 +27,10 @@ const MyStuffSpells = () => {
 	});
 
 	useEffect(() => {
-		if (spellId && spellResult.isSuccess) {
+		if (spellId && !(spellResult.isLoading || spellResult.error)) {
 			setSelectedSpell(spellResult.data);
 		}
-	}, [spellId, spellResult.isSuccess, spellResult.data]);
+	}, [spellId, spellResult.isLoading, spellResult.error, spellResult.data]);
 
 	const handleShowMoreInfoModal = useCallback(({ id }: SpellItem) => {
 		setSpellId(id);
