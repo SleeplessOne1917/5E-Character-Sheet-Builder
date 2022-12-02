@@ -5,11 +5,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
 import Button from '../../../components/Button/Button';
+import GET_SPELL from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpell';
+import GET_SPELLS from '../../../graphql/queries/CharacterSheetBuilder/spells/getSpells';
 import MainContent from '../../../components/MainContent/MainContent';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffSpells.module.css';
-import { trpc } from '../../../common/trpc';
+import { useQuery } from 'urql';
 
 const spellsPerPage = 10;
 
@@ -18,19 +20,25 @@ const MyStuffSpells = () => {
 	const [selectedSpell, setSelectedSpell] = useState<Spell>();
 	const [currentPage, setCurrentPage] = useState(1);
 
-	const spellResult = trpc.spells.spell.useQuery(spellId as string, {
-		enabled: !!spellId
+	const [spellResult] = useQuery<{
+		spell: Spell;
+	}>({
+		query: GET_SPELL,
+		variables: { id: spellId },
+		pause: !spellId
 	});
-	const spellsResult = trpc.spells.spells.useQuery({
-		limit: spellsPerPage,
-		skip: (currentPage - 1) * spellsPerPage
+	const [spellsResult, _] = useQuery<{
+		spells: { spells: SpellItem[]; count: number };
+	}>({
+		query: GET_SPELLS,
+		variables: { limit: spellsPerPage, skip: (currentPage - 1) * spellsPerPage }
 	});
 
 	useEffect(() => {
-		if (spellId && !(spellResult.isLoading || spellResult.error)) {
-			setSelectedSpell(spellResult.data);
+		if (spellId && !(spellResult.fetching || spellResult.error)) {
+			setSelectedSpell(spellResult.data?.spell);
 		}
-	}, [spellId, spellResult.isLoading, spellResult.error, spellResult.data]);
+	}, [spellId, spellResult.fetching, spellResult.error, spellResult.data]);
 
 	const handleShowMoreInfoModal = useCallback(({ id }: SpellItem) => {
 		setSpellId(id);
@@ -42,8 +50,8 @@ const MyStuffSpells = () => {
 	}, []);
 
 	const numPages = useMemo(
-		() => Math.max((spellsResult.data?.count ?? 0) / spellsPerPage),
-		[spellsResult.data?.count]
+		() => Math.max((spellsResult.data?.spells.count ?? 0) / spellsPerPage),
+		[spellsResult.data?.spells.count]
 	);
 
 	const handlePrevPageClick = useCallback(() => {
@@ -58,7 +66,8 @@ const MyStuffSpells = () => {
 		<>
 			<MainContent>
 				<h1>My Spells</h1>
-				{(!spellsResult.data || spellsResult.data.spells.length === 0) && (
+				{(!spellsResult.data ||
+					spellsResult.data.spells.spells.length === 0) && (
 					<div className={classes['no-items-container']}>
 						<p>
 							You haven&apos;t created anything yet. Whenever you create
@@ -67,14 +76,14 @@ const MyStuffSpells = () => {
 						<ArrowLink href="/create/spell" text="Create Spell" />
 					</div>
 				)}
-				{spellsResult.data && spellsResult.data.spells.length > 0 && (
+				{spellsResult.data && spellsResult.data.spells.spells.length > 0 && (
 					<div className={classes.content}>
 						{numPages > 1 && (
 							<div className={classes['page-count']}>
 								Page {currentPage}/{numPages}
 							</div>
 						)}
-						{spellsResult.data.spells.map(spell => (
+						{spellsResult.data.spells.spells.map(spell => (
 							<SpellItemDisplay
 								spell={spell}
 								onMoreInfoClick={handleShowMoreInfoModal}
@@ -106,7 +115,7 @@ const MyStuffSpells = () => {
 				spell={selectedSpell}
 				show={!!spellId}
 				error={spellResult.error?.message}
-				loading={spellResult.isLoading}
+				loading={spellResult.fetching}
 				onClose={handleCloseShowMoreInfoModal}
 				shouldShowEditAndClasses
 			/>
