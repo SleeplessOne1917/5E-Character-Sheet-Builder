@@ -11,7 +11,7 @@ const useGetSpellsByClass = (klass?: string) => {
 	const [fetching, setFetching] = useState(false);
 
 	const [customSpellsResult] = useQuery<
-		{ spells: SpellItem[] },
+		{ spells: { spells: SpellItem[]; count: number } },
 		{ class: string }
 	>({
 		query: GET_SPELLS,
@@ -30,7 +30,7 @@ const useGetSpellsByClass = (klass?: string) => {
 	}, [klass, spells]);
 
 	return {
-		spells: combineSpellArrays(spells, customSpellsResult.data?.spells),
+		spells: combineSpellArrays(spells, customSpellsResult.data?.spells.spells),
 		fetching: fetching || customSpellsResult.fetching
 	};
 };
