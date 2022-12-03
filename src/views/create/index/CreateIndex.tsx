@@ -73,6 +73,9 @@ const CreateIndex = ({ username }: CreateIndexProps) => {
 								} Race`}
 							/>
 						</div>
+						<div className={classes['create-link-container']}>
+							<ArrowLink href={`${pathname}/subrace`} text="Create Subrace" />
+						</div>
 					</>
 				)}
 			</div>
