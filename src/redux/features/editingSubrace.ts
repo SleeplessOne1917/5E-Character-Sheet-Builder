@@ -1,8 +1,10 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import Size from '../../types/size';
 import { TraitWithSubtraitsState } from './editingRace';
+
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 type EditingSubraceStateOverrides = {
 	abilityBonuses?: boolean;
@@ -35,6 +37,12 @@ const initialState: EditingSubraceState = {
 	traits: []
 };
 
+const prepOverrides = (state: Draft<EditingSubraceState>) => {
+	if (!state.overrides) {
+		state.overrides = {};
+	}
+};
+
 const editingSubraceSlice = createSlice({
 	name: 'editingSubrace',
 	initialState,
@@ -42,10 +50,64 @@ const editingSubraceSlice = createSlice({
 		resetSubrace: () => initialState,
 		setName: (state, { payload }: PayloadAction<string>) => {
 			state.name = payload;
+		},
+		setOverridesAbilityBonuses: (
+			state,
+			{ payload }: PayloadAction<boolean>
+		) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.abilityBonuses = payload;
+		},
+		setOverridesAbilityBonusOptions: (
+			state,
+			{ payload }: PayloadAction<boolean>
+		) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.abilityBonusOptions = payload;
+		},
+		setOverridesLanguages: (state, { payload }: PayloadAction<boolean>) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.languages = payload;
+		},
+		setOverridesNumberOfLanguageOptions: (
+			state,
+			{ payload }: PayloadAction<boolean>
+		) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.numberOfLanguageOptions = payload;
+		},
+		setOverridesSize: (state, { payload }: PayloadAction<boolean>) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.size = payload;
+		},
+		setOverridesSpeed: (state, { payload }: PayloadAction<boolean>) => {
+			prepOverrides(state);
+
+			// @ts-ignore
+			state.overrides.speed = payload;
 		}
 	}
 });
 
-export const { resetSubrace, setName } = editingSubraceSlice.actions;
+export const {
+	resetSubrace,
+	setName,
+	setOverridesAbilityBonuses,
+	setOverridesAbilityBonusOptions,
+	setOverridesLanguages,
+	setOverridesNumberOfLanguageOptions,
+	setOverridesSize,
+	setOverridesSpeed
+} = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;

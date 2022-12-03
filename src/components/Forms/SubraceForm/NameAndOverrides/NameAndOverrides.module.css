@@ -3,15 +3,40 @@
     grid-template-areas: 'name'
                          'overrides';
     grid-template-columns: auto;
+    gap: 5rem;
     grid-template-rows: min-content auto;
+    width: 100%;
 }
 
 .name {
     grid-area: name;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overrides-container {
+    grid-area: overrides;
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overrides-text {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .overrides {
-    grid-area: overrides;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+}
+
+.overrides > * {
+    margin: 0.3rem;
 }
 
 @media (min-width: 768px) {
@@ -19,5 +44,6 @@
         grid-template-areas: 'name overrides';
         grid-template-rows: auto;
         grid-template-columns: 1fr 1fr;
+        width: 90%;
     }
 }
