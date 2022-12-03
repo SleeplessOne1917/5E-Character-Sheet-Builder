@@ -11,8 +11,7 @@
 .name {
     grid-area: name;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
 }
 
 .overrides-container {

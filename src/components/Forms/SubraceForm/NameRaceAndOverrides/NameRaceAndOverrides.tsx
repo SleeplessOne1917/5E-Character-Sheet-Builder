@@ -6,27 +6,41 @@ import {
 	setOverridesLanguages,
 	setOverridesNumberOfLanguageOptions,
 	setOverridesSize,
-	setOverridesSpeed
+	setOverridesSpeed,
+	setRace
 } from '../../../../redux/features/editingSubrace';
-import { FocusEventHandler, useCallback } from 'react';
+import { FocusEventHandler, useCallback, useMemo } from 'react';
 
 import Checkbox from '../../../Checkbox/Checkbox';
+import { Item } from '../../../../types/db/item';
+import Option from '../../../Select/Option';
+import Select from '../../../Select/Select/Select';
 import TextInput from '../../../TextInput/TextInput';
-import classes from './NameAndOverrides.module.css';
+import classes from './NameRaceAndOverrides.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useFormikContext } from 'formik';
 
 type NameAndOverridesProps = {
 	shouldUseReduxStore: boolean;
 	clickedSubmit: boolean;
+	races: Item[];
 };
 
-const NameAndOverrides = ({
+const NameRaceAndOverrides = ({
 	shouldUseReduxStore,
-	clickedSubmit
+	clickedSubmit,
+	races
 }: NameAndOverridesProps) => {
-	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
-		useFormikContext<EditingSubraceState>();
+	const {
+		values,
+		errors,
+		touched,
+		handleChange,
+		handleBlur,
+		setFieldValue,
+		setFieldError,
+		setFieldTouched
+	} = useFormikContext<EditingSubraceState>();
 	const dispatch = useAppDispatch();
 
 	const prepOverrides = useCallback(() => {
@@ -118,6 +132,36 @@ const NameAndOverrides = ({
 		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
 	);
 
+	const handleRaceSelect = useCallback(
+		(id: string | number) => {
+			const newRace = id === 'blank' ? undefined : races.find(r => r.id === id);
+
+			if (shouldUseReduxStore) {
+				dispatch(setRace(newRace));
+			}
+
+			setFieldValue('race', newRace, false);
+			setFieldTouched('race', true, false);
+			setFieldError('race', !newRace ? 'Race is required' : undefined);
+		},
+		[
+			races,
+			dispatch,
+			shouldUseReduxStore,
+			setFieldError,
+			setFieldTouched,
+			setFieldValue
+		]
+	);
+
+	const raceOptions = useMemo(
+		() => [
+			{ label: '\u2014', value: 'blank' },
+			...races.map<Option>(r => ({ label: r.name, value: r.id }))
+		],
+		[races]
+	);
+
 	return (
 		<div className={classes.container}>
 			<div className={classes.name}>
@@ -129,6 +173,15 @@ const NameAndOverrides = ({
 					touched={clickedSubmit || touched.name}
 					onChange={handleChange}
 					onBlur={handleNameBlur}
+				/>
+				<Select
+					id="race"
+					options={raceOptions}
+					value={values.race?.id ?? 'blank'}
+					error={errors.race}
+					touched={clickedSubmit || touched.race}
+					label="Race"
+					onChange={handleRaceSelect}
 				/>
 			</div>
 			<div className={classes['overrides-container']}>
@@ -173,4 +226,4 @@ const NameAndOverrides = ({
 	);
 };
 
-export default NameAndOverrides;
+export default NameRaceAndOverrides;

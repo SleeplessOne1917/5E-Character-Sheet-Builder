@@ -32,7 +32,7 @@ export type EditingSubraceState = {
 	race?: Item;
 };
 
-const initialState: EditingSubraceState = {
+export const initialState: EditingSubraceState = {
 	name: '',
 	traits: []
 };
@@ -95,6 +95,9 @@ const editingSubraceSlice = createSlice({
 
 			// @ts-ignore
 			state.overrides.speed = payload;
+		},
+		setRace: (state, { payload }: PayloadAction<Item | undefined>) => {
+			state.race = payload;
 		}
 	}
 });
@@ -107,7 +110,8 @@ export const {
 	setOverridesLanguages,
 	setOverridesNumberOfLanguageOptions,
 	setOverridesSize,
-	setOverridesSpeed
+	setOverridesSpeed,
+	setRace
 } = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;

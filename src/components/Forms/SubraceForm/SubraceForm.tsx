@@ -5,18 +5,21 @@ import { useMemo, useState } from 'react';
 
 import { EditingSubraceState } from '../../../redux/features/editingSubrace';
 import { Formik } from 'formik';
-import NameAndOverrides from './NameAndOverrides/NameAndOverrides';
+import { Item } from '../../../types/db/item';
+import NameRaceAndOverrides from './NameRaceAndOverrides/NameRaceAndOverrides';
 import classes from './SubraceForm.module.css';
 import subraceSchema from '../../../yup-schemas/subraceSchema';
 
 type SubraceFormProps = {
 	initialValues: EditingSubraceState;
 	shouldUseReduxStore?: boolean;
+	races: Item[];
 };
 
 const SubraceForm = ({
 	initialValues,
-	shouldUseReduxStore = false
+	shouldUseReduxStore = false,
+	races
 }: SubraceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
 
@@ -28,9 +31,10 @@ const SubraceForm = ({
 		>
 			{({ isSubmitting }) => (
 				<form className={classes.form}>
-					<NameAndOverrides
+					<NameRaceAndOverrides
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
+						races={races}
 					/>
 					<Button
 						positive
