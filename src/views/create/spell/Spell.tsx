@@ -17,6 +17,7 @@ import { show } from '../../../redux/features/toast';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
+import { cleanFormValues } from '../../../services/formValueCleaner';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -42,7 +43,9 @@ const Spell = ({
 			values: Omit<Spell, 'id'>,
 			{ resetForm }: FormikHelpers<Omit<Spell, 'id'>>
 		) => {
-			const result = await createSpell({ spell: values });
+			const result = await createSpell({
+				spell: cleanFormValues<Omit<Spell, 'id'>>(values)
+			});
 			if (result.error) {
 				const toast = {
 					closeTimeoutSeconds: 10,

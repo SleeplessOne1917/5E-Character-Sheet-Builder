@@ -10,6 +10,7 @@ import { Spell } from '../../../../types/characterSheetBuilderAPI';
 import SpellForm from '../../../../components/Spells/SpellForm/SpellForm';
 import { ToastType } from '../../../../types/toast';
 import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
+import { cleanFormValues } from '../../../../services/formValueCleaner';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import useGetSpellQuery from '../../../../hooks/urql/queries/useGetSpellQuery';
@@ -51,7 +52,10 @@ const EditSpell = ({
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Spell, 'id'>) => {
 			const { id: _, ...newSpell } = values;
-			const result = await updateSpell({ id, spell: newSpell });
+			const result = await updateSpell({
+				id,
+				spell: cleanFormValues<PartialBy<Spell, 'id'>>(newSpell)
+			});
 
 			if (result.error) {
 				const toast = {

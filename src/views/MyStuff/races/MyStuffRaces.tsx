@@ -88,6 +88,9 @@ const MyStuffRaces = () => {
 				title={raceResult.data?.race.name ?? ''}
 				descriptors={descriptors}
 				otherDescriptors={otherDescriptors}
+				mode="edit"
+				loading={raceResult.fetching}
+				error={!!raceResult.error}
 			/>
 		</>
 	);

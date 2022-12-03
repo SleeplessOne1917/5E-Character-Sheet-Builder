@@ -18,6 +18,7 @@ import {
 	resetRace
 } from '../../../redux/features/editingRace';
 import useGetSpells from '../../../hooks/useGetSpells';
+import { cleanFormValues } from '../../../services/formValueCleaner';
 
 type RaceProps = {
 	abilities: AbilityItem[];
@@ -39,7 +40,9 @@ const Race = ({ abilities, languages, proficiencies }: RaceProps) => {
 			values: Omit<Race, 'id'>,
 			{ resetForm }: FormikHelpers<Omit<Race, 'id'>>
 		) => {
-			const result = await createRace({ race: values });
+			const result = await createRace({
+				race: cleanFormValues<Omit<Race, 'id'>>(values)
+			});
 			if (result.error) {
 				const toast = {
 					closeTimeoutSeconds: 10,

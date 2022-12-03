@@ -14,6 +14,7 @@ import { Race } from '../../../../types/characterSheetBuilderAPI';
 import RaceForm from '../../../../components/RaceForm/RaceForm';
 import { ToastType } from '../../../../types/toast';
 import UPDATE_RACE from '../../../../graphql/mutations/race/updateRace';
+import { cleanFormValues } from '../../../../services/formValueCleaner';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import useGetLimitedSpellsQuery from '../../../../hooks/urql/queries/useGetLimitedSpellsQuery';
@@ -54,7 +55,10 @@ const EditRace = ({
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Race, 'id'>) => {
 			const { id: _, ...newRace } = values;
-			const result = await updateRace({ id, race: newRace });
+			const result = await updateRace({
+				id,
+				race: cleanFormValues<PartialBy<Race, 'id'>>(newRace)
+			});
 
 			if (result.error) {
 				const toast = {

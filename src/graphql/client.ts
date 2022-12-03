@@ -48,10 +48,15 @@ const defaultClient = createClient({
 					updateRace,
 					createRace
 				}
+			},
+			keys: {
+				spells: () => null,
+				races: () => null
 			}
 		}),
 		fetchExchange
-	]
+	],
+	maskTypename: true
 });
 
 export default defaultClient;

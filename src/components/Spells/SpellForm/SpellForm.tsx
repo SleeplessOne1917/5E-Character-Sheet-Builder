@@ -37,6 +37,7 @@ import { Summon } from '../../../types/summon';
 import SummonFormFields from '../../Create/Summon/SummonFormFields/SummonFormFields';
 import TextInput from '../../TextInput/TextInput';
 import classes from './SpellForm.module.css';
+import { cleanFormValues } from '../../../services/formValueCleaner';
 import { doNothing } from '../../../redux/features/editingCharacter';
 import spellSchema from '../../../yup-schemas/spellSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -173,7 +174,7 @@ const SpellForm = ({
 
 	return (
 		<Formik
-			initialValues={initialValues}
+			initialValues={cleanFormValues<PartialBy<Spell, 'id'>>(initialValues)}
 			onSubmit={onSubmit}
 			validationSchema={spellSchema}
 			enableReinitialize

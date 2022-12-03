@@ -114,7 +114,7 @@ const MoreInfoModal = ({
 						{mode === 'choose' ? 'Choose' : 'Edit'}
 					</Button>
 					<Button onClick={onClose} style={buttonStyle}>
-						Cancel
+						{mode === 'choose' ? 'Cancel' : 'Close'}
 					</Button>
 				</div>
 			</div>
