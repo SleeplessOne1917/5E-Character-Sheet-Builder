@@ -17,8 +17,8 @@ import UPDATE_RACE from '../../../../graphql/mutations/race/updateRace';
 import { cleanFormValues } from '../../../../services/formValueCleaner';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
-import useGetLimitedSpellsQuery from '../../../../hooks/urql/queries/useGetLimitedSpellsQuery';
 import useGetRaceQuery from '../../../../hooks/urql/queries/useGetRaceQuery';
+import useGetSpells from '../../../../hooks/useGetSpells';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
@@ -35,7 +35,7 @@ const EditRace = ({
 	languages,
 	proficiencies
 }: EditRaceProps) => {
-	const [spellsResult] = useGetLimitedSpellsQuery();
+	const spellsResult = useGetSpells();
 	const [raceResult] = useGetRaceQuery(id);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
@@ -83,7 +83,7 @@ const EditRace = ({
 				abilities={abilities}
 				languages={languages}
 				proficiencies={proficiencies}
-				spells={spellsResult.data?.spells.spells ?? []}
+				spells={spellsResult.spells ?? []}
 				onSubmit={handleSubmit}
 				initialValues={raceResult.data?.race as Omit<Race, 'id'>}
 			/>
