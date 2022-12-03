@@ -59,6 +59,7 @@ const chooseOptionsSchema = new Schema<{ choose: number; options: Item[] }>({
 const subtraitSchema = new Schema<Trait>({
 	// @ts-ignore
 	_id: false,
+	uuid: { type: String, required: true, trim: true, unique: true },
 	name: { type: String, required: true, trim: true },
 	description: { type: String, required: true, trim: true },
 	hpBonusPerLevel: Number,
@@ -81,6 +82,7 @@ const subtraitOptionsSchema = new Schema<{
 const traitSchema = new Schema<Trait>({
 	// @ts-ignore
 	_id: false,
+	uuid: { type: String, required: true, trim: true, unique: true },
 	name: { type: String, required: true, trim: true },
 	description: { type: String, required: true, trim: true },
 	hpBonusPerLevel: Number,

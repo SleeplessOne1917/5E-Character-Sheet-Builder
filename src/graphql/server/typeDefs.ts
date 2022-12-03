@@ -189,6 +189,7 @@ const typeDefs = gql`
 	}
 
 	input SubtraitInput {
+		uuid: ID!
 		name: String!
 		description: String!
 		hpBonusPerLevel: Int
@@ -204,6 +205,7 @@ const typeDefs = gql`
 	}
 
 	input TraitInput {
+		uuid: ID!
 		name: String!
 		description: String!
 		hpBonusPerLevel: Int
@@ -231,6 +233,7 @@ const typeDefs = gql`
 	}
 
 	type Subtrait {
+		uuid: ID!
 		name: String!
 		description: String!
 		hpBonusPerLevel: Int
@@ -256,6 +259,7 @@ const typeDefs = gql`
 	}
 
 	type Trait {
+		uuid: ID!
 		name: String!
 		description: String!
 		hpBonusPerLevel: Int

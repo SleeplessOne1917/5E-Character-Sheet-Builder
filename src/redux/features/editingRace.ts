@@ -2,8 +2,10 @@ import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import Size from '../../types/size';
+import { v4 as uuidV4 } from 'uuid';
 
 export type TraitState = {
+	uuid: string;
 	name?: string;
 	description?: string;
 	proficiencies?: Item[];
@@ -49,6 +51,18 @@ export const initialState: EditingRaceState = {
 	traits: []
 };
 
+const prepStateForTrait = ({
+	state,
+	index
+}: {
+	state: Draft<EditingRaceState>;
+	index: number;
+}) => {
+	while (index > state.traits.length - 1) {
+		state.traits = [...state.traits, { uuid: uuidV4() }];
+	}
+};
+
 const prepStateForSubtrait = ({
 	state,
 	parentIndex,
@@ -58,9 +72,7 @@ const prepStateForSubtrait = ({
 	parentIndex: number;
 	index: number;
 }) => {
-	while (parentIndex > state.traits.length - 1) {
-		state.traits = [...state.traits, {}];
-	}
+	prepStateForTrait({ index: parentIndex, state });
 
 	if (!state.traits[parentIndex].subtraitOptions) {
 		state.traits[parentIndex].subtraitOptions = { options: [] };
@@ -72,7 +84,7 @@ const prepStateForSubtrait = ({
 		// @ts-ignore
 		state.traits[parentIndex].subtraitOptions.options = [
 			...(state.traits[parentIndex].subtraitOptions?.options ?? []),
-			{}
+			{ uuid: uuidV4() }
 		];
 	}
 };
@@ -163,7 +175,7 @@ const editingRaceSlice = createSlice({
 			delete state.abilityBonusOptions;
 		},
 		addTrait: state => {
-			state.traits = [...state.traits, {}];
+			state.traits = [...state.traits, { uuid: uuidV4() }];
 		},
 		removeTrait: (state, { payload }: PayloadAction<number>) => {
 			state.traits = state.traits.filter((val, index) => index !== payload);
@@ -174,9 +186,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, name }
 			}: PayloadAction<{ index: number; name: string }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			state.traits[index].name = name;
 		},
@@ -186,22 +196,18 @@ const editingRaceSlice = createSlice({
 				payload: { index, description }
 			}: PayloadAction<{ index: number; description: string }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			state.traits[index].description = description;
 		},
 		addTraitProficiencies: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].proficiencies = [];
 		},
 		removeTraitProficiencies: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			delete state.traits[payload].proficiencies;
 		},
 		setTraitProficiencies: (
@@ -210,24 +216,20 @@ const editingRaceSlice = createSlice({
 				payload: { index, proficiencies }
 			}: PayloadAction<{ index: number; proficiencies: Item[] }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
+
 			state.traits[index].proficiencies = proficiencies;
 		},
 		addTraitProficiencyOptions: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].proficiencyOptions = { options: [] };
 		},
 		removeTraitProficiencyOptions: (
 			state,
 			{ payload }: PayloadAction<number>
 		) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
 			delete state.traits[payload].proficiencyOptions;
 		},
 		setTraitProficiencyOptionsChoose: (
@@ -236,9 +238,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, choose }
 			}: PayloadAction<{ index: number; choose?: number }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			if (!state.traits[index].proficiencyOptions) {
 				state.traits[index].proficiencyOptions = { choose, options: [] };
@@ -253,9 +253,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, options }
 			}: PayloadAction<{ index: number; options: Item[] }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			if (!state.traits[index].proficiencyOptions) {
 				state.traits[index].proficiencyOptions = { options };
@@ -265,15 +263,13 @@ const editingRaceSlice = createSlice({
 			}
 		},
 		addTraitHPBonus: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].hpBonusPerLevel = null;
 		},
 		removeTraitHPBonus: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			delete state.traits[payload].hpBonusPerLevel;
 		},
 		setTraitHPBonus: (
@@ -282,15 +278,13 @@ const editingRaceSlice = createSlice({
 				payload: { index, hpBonus }
 			}: PayloadAction<{ index: number; hpBonus: number | null }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
+
 			state.traits[index].hpBonusPerLevel = hpBonus;
 		},
 		addTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].spellOptions = { options: [] };
 		},
 		setTraitSpellOptionsChoose: (
@@ -299,9 +293,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, choose }
 			}: PayloadAction<{ index: number; choose?: number }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			if (!state.traits[index].spellOptions) {
 				state.traits[index].spellOptions = { options: [] };
@@ -316,9 +308,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, options }
 			}: PayloadAction<{ index: number; options: Item[] }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			if (!state.traits[index].spellOptions) {
 				state.traits[index].spellOptions = { options: [] };
@@ -328,21 +318,18 @@ const editingRaceSlice = createSlice({
 			state.traits[index].spellOptions.options = options;
 		},
 		removeTraitSpellOptions: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			delete state.traits[payload].spellOptions;
 		},
 		addTraitSpells: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].spells = [];
 		},
 		removeTraitSpells: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			delete state.traits[payload].spells;
 		},
 		setTraitSpells: (
@@ -351,22 +338,18 @@ const editingRaceSlice = createSlice({
 				payload: { index, spells }
 			}: PayloadAction<{ index: number; spells: Item[] }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			state.traits[index].spells = spells;
 		},
 		addTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			state.traits[payload].subtraitOptions = { options: [] };
 		},
 		removeTraitSubtraits: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
+
 			delete state.traits[payload].subtraitOptions;
 		},
 		setSubtraitName: (
@@ -632,9 +615,7 @@ const editingRaceSlice = createSlice({
 				payload: { index, choose }
 			}: PayloadAction<{ index: number; choose?: number }>
 		) => {
-			while (index > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index, state });
 
 			if (!state.traits[index].subtraitOptions) {
 				state.traits[index].subtraitOptions = { options: [] };
@@ -644,9 +625,7 @@ const editingRaceSlice = createSlice({
 			state.traits[index].subtraitOptions.choose = choose;
 		},
 		addTraitSubtrait: (state, { payload }: PayloadAction<number>) => {
-			while (payload > state.traits.length - 1) {
-				state.traits = [...state.traits, {}];
-			}
+			prepStateForTrait({ index: payload, state });
 
 			if (!state.traits[payload].subtraitOptions) {
 				state.traits[payload].subtraitOptions = { options: [] };
@@ -656,7 +635,7 @@ const editingRaceSlice = createSlice({
 			state.traits[payload].subtraitOptions.options = [
 				// @ts-ignore
 				...state.traits[payload].subtraitOptions.options,
-				{}
+				{ uuid: uuidV4() }
 			];
 		},
 		removeTraitSubtrait: (

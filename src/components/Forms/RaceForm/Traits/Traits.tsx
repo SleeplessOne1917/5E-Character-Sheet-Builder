@@ -12,6 +12,7 @@ import Trait from './Trait/Trait';
 import classes from './Traits.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useFormikContext } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 
 type TraitsProps = {
 	shouldUseReduxStore: boolean;
@@ -60,7 +61,11 @@ const Traits = ({
 
 		setProficienciesSelectedTypes(prev => [...(prev ?? []), null]);
 		setProficiencyOptionsSelectedTypes(prev => [...(prev ?? []), null]);
-		setFieldValue('traits', [...(values.traits ?? []), {}], false);
+		setFieldValue(
+			'traits',
+			[...(values.traits ?? []), { uuid: uuidv4() }],
+			false
+		);
 	}, [shouldUseReduxStore, dispatch, setFieldValue, values.traits]);
 
 	const handleRemoveTrait = useCallback(
@@ -112,7 +117,7 @@ const Traits = ({
 					trait={trait}
 					clickedSubmit={clickedSubmit}
 					shouldUseReduxStore={shouldUseReduxStore}
-					key={index}
+					key={trait.uuid}
 					onRemove={() => handleRemoveTrait(index)}
 					selectedProficienciesType={
 						proficienciesSelectedTypes

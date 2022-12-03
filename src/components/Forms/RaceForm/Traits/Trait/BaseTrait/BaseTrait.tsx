@@ -33,6 +33,7 @@ import Trait from '../../../../../../types/trait';
 import classes from './BaseTrait.module.css';
 import { getProficiencyTypeName } from '../../../../../../services/proficiencyTypeService';
 import { useAppDispatch } from '../../../../../../hooks/reduxHooks';
+import { v4 as uuidv4 } from 'uuid';
 
 type ActionReturnType = {
 	payload: { index?: number; parentIndex?: number } | number;
@@ -856,7 +857,7 @@ const BaseTrait = ({
 
 		setFieldValue(
 			`${baseStr}.subtraitOptions.options`,
-			[...(trait.subtraitOptions?.options ?? []), {}],
+			[...(trait.subtraitOptions?.options ?? []), { uuid: uuidv4() }],
 			false
 		);
 	}, [
@@ -1338,7 +1339,7 @@ const BaseTrait = ({
 								<Subtrait
 									clickedSubmit={clickedSubmit}
 									index={i}
-									key={i}
+									key={subtrait.uuid}
 									onRemove={() => handleRemoveSubtrait(i)}
 									parentIndex={index}
 									proficiencies={proficiencies}

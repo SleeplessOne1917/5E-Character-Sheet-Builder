@@ -1,6 +1,7 @@
 import { Item } from './db/item';
 
 type Trait = {
+	uuid: string;
 	name: string;
 	description: string;
 	proficiencies?: Item[];

@@ -1,14 +1,32 @@
-import { array, InferType, number, object, string } from 'yup';
+import { array, boolean, InferType, number, object, string } from 'yup';
 import { SIZES } from '../constants/sizeConstants';
 import abilitySchema from './abilitySchema';
 import languageSchema from './languageSchema';
 import traitSchema from './traitSchema';
 
-const raceSchema = object({
+const subraceSchema = object({
 	name: string()
 		.min(1, 'Name is required')
 		.max(50, 'Name must be 50 characters or less')
 		.required('Name is required'),
+	race: object({
+		id: string()
+			.required()
+			.max(50, 'Race id cannot be more than 50 characters long'),
+		name: string()
+			.required()
+			.max(50, 'Race name cannot be more than 50 characters long')
+	}).required('Race is required'),
+	overrides: object({
+		abilityBonuses: boolean().optional().default(false),
+		abilityBonusOptions: boolean().optional().default(false),
+		languages: boolean().optional().default(false),
+		numberOfLanguageOptions: boolean().optional().default(false),
+		size: boolean().optional().default(false),
+		speed: boolean().optional().default(false)
+	})
+		.optional()
+		.default(undefined),
 	abilityBonuses: array()
 		.of(
 			object({
@@ -21,13 +39,46 @@ const raceSchema = object({
 					.max(10, 'Ability bonus cannot be higher than 10')
 			})
 		)
-		.required('Ability bonuses are required')
+		.when('overrides.abilityBonuses', {
+			is: true,
+			then: schema =>
+				schema
+					.required('Ability bonuses are required')
+					.test(
+						'has-ability-bonuses',
+						'Must have at least one ability bonus',
+						(value, context) => {
+							if (!value) {
+								return false;
+							}
+
+							const {
+								parent: { abilityBonusOptions }
+							} = <
+								{
+									parent: {
+										abilityBonusOptions?: {
+											numberOfAbilityScores: number;
+											bonus: number;
+										};
+									};
+								}
+							>context;
+
+							if (value.length === 0) {
+								return (abilityBonusOptions?.bonus ?? 0) > 0;
+							}
+
+							return true;
+						}
+					),
+			otherwise: schema => schema.optional().default(undefined)
+		})
 		.test(
 			'no-repeat-ability-bonuses',
 			'Cannot repeat ability bonuses',
 			value =>
-				!!value &&
-				!value.reduce<{
+				!value?.reduce<{
 					containsRepeats: boolean;
 					checkedValues: string[];
 				}>(
@@ -53,34 +104,6 @@ const raceSchema = object({
 						checkedValues: []
 					}
 				).containsRepeats
-		)
-		.test(
-			'has-ability-bonuses',
-			'Must have at least one ability bonus',
-			(value, context) => {
-				if (!value) {
-					return false;
-				}
-
-				const {
-					parent: { abilityBonusOptions }
-				} = <
-					{
-						parent: {
-							abilityBonusOptions?: {
-								numberOfAbilityScores: number;
-								bonus: number;
-							};
-						};
-					}
-				>context;
-
-				if (value.length === 0) {
-					return (abilityBonusOptions?.bonus ?? 0) > 0;
-				}
-
-				return true;
-			}
 		),
 	abilityBonusOptions: object({
 		bonus: number()
@@ -123,8 +146,14 @@ const raceSchema = object({
 		.default(undefined),
 	languages: array()
 		.of(languageSchema)
-		.required('Languages are required')
-		.min(1, 'Must have at least 1 language'),
+		.when('overrides.languages', {
+			is: true,
+			then: schema =>
+				schema
+					.required('Languages are required')
+					.min(1, 'Must have at least 1 language'),
+			otherwise: schema => schema.optional().default(undefined)
+		}),
 	numberOfLanguageOptions: number()
 		.test(
 			'sum-less-than-16',
@@ -146,25 +175,37 @@ const raceSchema = object({
 		)
 		.optional(),
 	size: string()
-		.required('Race size is required')
 		.test(
 			'is-valid-size',
 			'Race size must be one of "TINY", "SMALL", "MEDIUM", "LARGE", "HUGE", or "GARGANTUAN"',
 			value => !!value && SIZES.includes(value)
-		),
+		)
+		.when('overrides.size', {
+			is: true,
+			then: schema => schema.required('Race size is required'),
+			otherwise: schema => schema.optional().default(undefined)
+		}),
 	speed: number()
-		.required('Speed is required')
 		.min(5, 'Speed must be at least 5')
 		.max(100, 'Speed cannot be higher than 100')
 		.test(
 			'divisible-by-five',
 			'Speed must be divisible by 5',
 			value => !!value && value % 5 === 0
-		),
+		)
+		.when('overrides.speed', {
+			is: true,
+			then: schema => schema.required('Speed is required'),
+			otherwise: schema => schema.optional().default(undefined)
+		}),
+	omittedRaceTraits: array()
+		.of(string().max(50, 'Trait UUID cannot be longer than 50 characters'))
+		.optional()
+		.default(undefined),
 	traits: array()
 		.of(traitSchema)
 		.max(10, 'Cannot have more than 10 traits')
 		.optional()
 });
 
-export default raceSchema;
+export default subraceSchema;

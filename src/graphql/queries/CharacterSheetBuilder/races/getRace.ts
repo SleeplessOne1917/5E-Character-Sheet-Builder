@@ -24,6 +24,7 @@ const GET_RACE = gql`
 			size
 			speed
 			traits {
+				uuid
 				name
 				description
 				hpBonusPerLevel
@@ -52,6 +53,7 @@ const GET_RACE = gql`
 				subtraitOptions {
 					choose
 					options {
+						uuid
 						name
 						description
 						hpBonusPerLevel
