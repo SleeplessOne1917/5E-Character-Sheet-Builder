@@ -15,6 +15,7 @@ import { get, set } from 'idb-keyval';
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 import editingRace from './features/editingRace';
 import editingSpell from './features/editingSpell';
+import editingSubrace from './features/editingSubrace';
 import generationMethod from './features/generationMethod';
 import rollGroups from './features/rollGroups';
 import toast from './features/toast';
@@ -28,7 +29,8 @@ const getReducer = () => ({
 	rollGroups,
 	generationMethod,
 	editingSpell,
-	editingRace
+	editingRace,
+	editingSubrace
 });
 
 const indexedDbCacheListener = createListenerMiddleware();

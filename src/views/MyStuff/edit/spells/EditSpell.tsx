@@ -1,7 +1,7 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../../types/srd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
@@ -71,6 +71,11 @@ const EditSpell = ({
 		[updateSpell, id, dispatch, router]
 	);
 
+	const initialValues = useMemo(
+		() => cleanFormValues<Omit<Spell, 'id'>>(spellResult.data?.spell),
+		[spellResult.data?.spell]
+	);
+
 	return loading ? (
 		<LoadingPageContent />
 	) : (
@@ -81,7 +86,7 @@ const EditSpell = ({
 				damageTypes={damageTypes}
 				magicSchools={magicSchools}
 				srdClasses={srdClasses}
-				initialValues={spellResult?.data?.spell as Omit<Spell, 'id'>}
+				initialValues={initialValues}
 				shouldUseReduxStore={false}
 				onSubmit={handleSubmit}
 			/>

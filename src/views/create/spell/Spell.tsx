@@ -1,11 +1,8 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../types/srd';
-import {
-	resetSpell,
-	initialState as spellInitialState
-} from '../../../redux/features/editingSpell';
-import { useCallback, useState } from 'react';
+import { resetSpell } from '../../../redux/features/editingSpell';
+import { useCallback, useEffect, useState } from 'react';
 import { FormikHelpers } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
@@ -18,6 +15,7 @@ import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
 import { cleanFormValues } from '../../../services/formValueCleaner';
+import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 
 type SpellProps = {
 	magicSchools: SrdItem[];
@@ -34,9 +32,15 @@ const Spell = ({
 }: SpellProps) => {
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const dispatch = useAppDispatch();
-	const [initialValues, setInitialValues] = useState(editingSpell);
 	const [_, createSpell] = useMutation(CREATE_SPELL);
 	const router = useRouter();
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (editingSpell) {
+			setLoading(false);
+		}
+	}, [editingSpell]);
 
 	const handleSubmit = useCallback(
 		async (
@@ -54,7 +58,6 @@ const Spell = ({
 				};
 				dispatch(show(toast));
 			} else {
-				setInitialValues(spellInitialState);
 				resetForm();
 				dispatch(resetSpell(undefined));
 				router.replace('/my-stuff');
@@ -63,7 +66,9 @@ const Spell = ({
 		[dispatch, createSpell, router]
 	);
 
-	return (
+	return loading ? (
+		<LoadingPageContent />
+	) : (
 		<MainContent testId="create-spell">
 			<h1>Create Spell</h1>
 			<SpellForm
@@ -72,7 +77,7 @@ const Spell = ({
 				magicSchools={magicSchools}
 				shouldUseReduxStore
 				srdClasses={srdClasses}
-				initialValues={initialValues as Omit<Spell, 'id'>}
+				initialValues={editingSpell as Omit<Spell, 'id'>}
 				onSubmit={handleSubmit}
 			/>
 		</MainContent>

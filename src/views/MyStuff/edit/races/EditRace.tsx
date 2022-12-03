@@ -5,7 +5,7 @@ import {
 	SrdItem,
 	SrdProficiencyItem
 } from '../../../../types/srd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
@@ -74,6 +74,11 @@ const EditRace = ({
 		[updateRace, id, dispatch, router]
 	);
 
+	const initialValues = useMemo(
+		() => cleanFormValues<Omit<Race, 'id'>>(raceResult.data?.race),
+		[raceResult.data?.race]
+	);
+
 	return loading ? (
 		<LoadingPageContent />
 	) : (
@@ -85,7 +90,7 @@ const EditRace = ({
 				proficiencies={proficiencies}
 				spells={spellsResult.spells ?? []}
 				onSubmit={handleSubmit}
-				initialValues={raceResult.data?.race as Omit<Race, 'id'>}
+				initialValues={initialValues}
 			/>
 		</MainContent>
 	);

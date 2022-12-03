@@ -11,7 +11,6 @@ import NameSizeSpeed from './NameSizeSpeed/NameSizseSpeed';
 import { PartialBy } from '../../../types/helpers';
 import Traits from './Traits/Traits';
 import classes from './RaceForm.module.css';
-import { cleanFormValues } from '../../../services/formValueCleaner';
 import raceSchema from '../../../yup-schemas/raceSchema';
 import { useState } from 'react';
 
@@ -42,7 +41,7 @@ const RaceForm = ({
 	return (
 		<Formik
 			onSubmit={onSubmit}
-			initialValues={cleanFormValues<PartialBy<Race, 'id'>>(initialValues)}
+			initialValues={initialValues}
 			validationSchema={raceSchema}
 		>
 			{({ handleSubmit, isSubmitting }) => (

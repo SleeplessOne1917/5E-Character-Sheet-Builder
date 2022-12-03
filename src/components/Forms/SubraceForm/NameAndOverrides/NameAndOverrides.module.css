@@ -1,0 +1,23 @@
+.container {
+    display: grid;
+    grid-template-areas: 'name'
+                         'overrides';
+    grid-template-columns: auto;
+    grid-template-rows: min-content auto;
+}
+
+.name {
+    grid-area: name;
+}
+
+.overrides {
+    grid-area: overrides;
+}
+
+@media (min-width: 768px) {
+    .container {
+        grid-template-areas: 'name overrides';
+        grid-template-rows: auto;
+        grid-template-columns: 1fr 1fr;
+    }
+}
