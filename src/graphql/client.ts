@@ -50,8 +50,16 @@ const defaultClient = createClient({
 				}
 			},
 			keys: {
-				spells: () => null,
-				races: () => null
+				SpellsResponse: () => null,
+				RacesResponse: () => null,
+				NameDescription: () => null,
+				Summon: () => null,
+				Item: () => null,
+				ChooseOptions: () => null,
+				Subtrait: () => null,
+				SubtraitOptions: () => null,
+				AbilityBonusOptions: () => null,
+				Trait: () => null
 			}
 		}),
 		fetchExchange
