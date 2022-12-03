@@ -35,6 +35,9 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   color: var(--davy);
 }
 
@@ -52,20 +55,12 @@ option {
   cursor: pointer;
 }
 
-#__next {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 ::selection {
   background-color: var(--highlight-light);
   color: 	#705555;
 }
 
 #app {
-  height: 100%; 
   flex-grow: 1;
   z-index: 10;
   display: flex;
@@ -78,7 +73,6 @@ option {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
 }
 
