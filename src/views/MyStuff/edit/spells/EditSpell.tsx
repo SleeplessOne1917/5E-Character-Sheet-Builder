@@ -7,7 +7,7 @@ import LoadingPageContent from '../../../../components/LoadingPageContent/Loadin
 import MainContent from '../../../../components/MainContent/MainContent';
 import { PartialBy } from '../../../../types/helpers';
 import { Spell } from '../../../../types/characterSheetBuilderAPI';
-import SpellForm from '../../../../components/Spells/SpellForm/SpellForm';
+import SpellForm from '../../../../components/Forms/SpellForm/SpellForm';
 import { ToastType } from '../../../../types/toast';
 import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
 import { cleanFormValues } from '../../../../services/formValueCleaner';

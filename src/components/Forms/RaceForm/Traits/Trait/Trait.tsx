@@ -30,12 +30,12 @@ import {
 	setTraitSpellOptionsOptions,
 	setTraitSpells,
 	setTraitSubtraitOptionsChoose
-} from '../../../../redux/features/editingRace';
+} from '../../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
+import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
 
-import { Race, SpellItem } from '../../../../types/characterSheetBuilderAPI';
-import Trait from '../../../../types/trait';
+import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
+import Trait from '../../../../../types/trait';
 
 type TraitProps = {
 	index: number;

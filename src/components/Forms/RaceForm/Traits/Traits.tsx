@@ -1,16 +1,16 @@
 'use client';
 
-import { ProficiencyType, SrdProficiencyItem } from '../../../types/srd';
-import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
-import { addTrait, removeTrait } from '../../../redux/features/editingRace';
+import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
+import { Race, SpellItem } from '../../../../types/characterSheetBuilderAPI';
+import { addTrait, removeTrait } from '../../../../redux/features/editingRace';
 import { useCallback, useState } from 'react';
 
-import Button from '../../Button/Button';
-import { Item } from '../../../types/db/item';
-import { PartialBy } from '../../../types/helpers';
+import Button from '../../../Button/Button';
+import { Item } from '../../../../types/db/item';
+import { PartialBy } from '../../../../types/helpers';
 import Trait from './Trait/Trait';
 import classes from './Traits.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useFormikContext } from 'formik';
 
 type TraitsProps = {

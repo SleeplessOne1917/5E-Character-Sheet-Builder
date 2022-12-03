@@ -1,5 +1,7 @@
-import CharacterIndexView from '../../../src/views/create/character/index/CharacterIndex';
+import { redirect } from 'next/navigation';
 
-const CharacterIndexPage = () => <CharacterIndexView />;
+const CharacterIndexPage = () => {
+	redirect('create/character/race');
+};
 
 export default CharacterIndexPage;

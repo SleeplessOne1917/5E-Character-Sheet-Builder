@@ -1,18 +1,18 @@
 'use client';
 
-import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../types/srd';
-import Button, { ButtonType } from '../Button/Button';
+import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
+import Button, { ButtonType } from '../../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
-import { Race, SpellItem } from '../../types/characterSheetBuilderAPI';
+import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
 
 import Abilities from './Abilities/Abilities';
 import Languages from './Languages/Languages';
 import NameSizeSpeed from './NameSizeSpeed/NameSizseSpeed';
-import { PartialBy } from '../../types/helpers';
+import { PartialBy } from '../../../types/helpers';
 import Traits from './Traits/Traits';
 import classes from './RaceForm.module.css';
-import { cleanFormValues } from '../../services/formValueCleaner';
-import raceSchema from '../../yup-schemas/raceSchema';
+import { cleanFormValues } from '../../../services/formValueCleaner';
+import raceSchema from '../../../yup-schemas/raceSchema';
 import { useState } from 'react';
 
 type RaceFormProps = {

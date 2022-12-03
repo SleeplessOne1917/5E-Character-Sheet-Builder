@@ -2,8 +2,14 @@
 
 import BaseTrait, { ReduxActions } from '../BaseTrait/BaseTrait';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
-import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
+import {
+	ProficiencyType,
+	SrdProficiencyItem
+} from '../../../../../../types/srd';
+import {
+	Race,
+	SpellItem
+} from '../../../../../../types/characterSheetBuilderAPI';
 import {
 	addSubtraitHPBonus,
 	addSubtraitProficiencies,
@@ -24,9 +30,9 @@ import {
 	setSubtraitSpellOptionsChoose,
 	setSubtraitSpellOptionsOptions,
 	setSubtraitSpells
-} from '../../../../../redux/features/editingRace';
+} from '../../../../../../redux/features/editingRace';
 
-import Trait from '../../../../../types/trait';
+import Trait from '../../../../../../types/trait';
 import { useMemo } from 'react';
 
 type SubtraitProps = {

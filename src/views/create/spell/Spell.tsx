@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 import CREATE_SPELL from '../../../graphql/mutations/spell/createSpell';
 import MainContent from '../../../components/MainContent/MainContent';
-import SpellForm from '../../../components/Spells/SpellForm/SpellForm';
+import SpellForm from '../../../components/Forms/SpellForm/SpellForm';
 import { ToastType } from '../../../types/toast';
 import { show } from '../../../redux/features/toast';
 import { useMutation } from 'urql';

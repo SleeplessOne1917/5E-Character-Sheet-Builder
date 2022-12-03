@@ -11,7 +11,7 @@ import LoadingPageContent from '../../../../components/LoadingPageContent/Loadin
 import MainContent from '../../../../components/MainContent/MainContent';
 import { PartialBy } from '../../../../types/helpers';
 import { Race } from '../../../../types/characterSheetBuilderAPI';
-import RaceForm from '../../../../components/RaceForm/RaceForm';
+import RaceForm from '../../../../components/Forms/RaceForm/RaceForm';
 import { ToastType } from '../../../../types/toast';
 import UPDATE_RACE from '../../../../graphql/mutations/race/updateRace';
 import { cleanFormValues } from '../../../../services/formValueCleaner';

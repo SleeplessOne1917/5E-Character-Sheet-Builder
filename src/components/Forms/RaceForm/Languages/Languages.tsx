@@ -5,15 +5,15 @@ import {
 	EditingRaceState,
 	setLanguages,
 	setNumberOfLanguageOptions
-} from '../../../redux/features/editingRace';
+} from '../../../../redux/features/editingRace';
 import { FormikErrors, useFormikContext } from 'formik';
 
-import { Item } from '../../../types/db/item';
-import MultiSelect from '../../Select/MultiSelect/MultiSelect';
-import NumberTextInput from '../NumberTextInput/NumberTextInput';
-import { SrdItem } from '../../../types/srd';
+import { Item } from '../../../../types/db/item';
+import MultiSelect from '../../../Select/MultiSelect/MultiSelect';
+import NumberTextInput from '../../NumberTextInput/NumberTextInput';
+import { SrdItem } from '../../../../types/srd';
 import classes from './Languages.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
 type LanguagesProps = {
 	languages: SrdItem[];

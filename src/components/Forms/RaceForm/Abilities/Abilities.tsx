@@ -17,17 +17,17 @@ import {
 	setAbilityBonusBonus,
 	setAbilityBonusOptionsBonus,
 	setAbilityBonusOptionsNumberOfAbilityScores
-} from '../../../redux/features/editingRace';
+} from '../../../../redux/features/editingRace';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 
-import { AbilityItem } from '../../../types/srd';
-import Button from '../../Button/Button';
-import { Item } from '../../../types/db/item';
-import NumberTextInput from '../NumberTextInput/NumberTextInput';
-import Select from '../../Select/Select/Select';
+import { AbilityItem } from '../../../../types/srd';
+import Button from '../../../Button/Button';
+import { Item } from '../../../../types/db/item';
+import NumberTextInput from '../../NumberTextInput/NumberTextInput';
+import Select from '../../../Select/Select/Select';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import classes from './Abilities.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
 type AbilitiesProps = {
 	clickedSubmit: boolean;

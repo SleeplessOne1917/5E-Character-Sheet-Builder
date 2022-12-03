@@ -9,24 +9,30 @@ import {
 	useState
 } from 'react';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
-import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
+import {
+	ProficiencyType,
+	SrdProficiencyItem
+} from '../../../../../../types/srd';
+import {
+	Race,
+	SpellItem
+} from '../../../../../../types/characterSheetBuilderAPI';
 
-import Button from '../../../../Button/Button';
+import Button from '../../../../../Button/Button';
 import CheckboxDeck from '../CheckboxDeck/CheckboxDeck';
-import { Item } from '../../../../../types/db/item';
-import MarkdownTextArea from '../../../../MarkdownTextArea/MarkdownTextArea';
-import MultiSelect from '../../../../Select/MultiSelect/MultiSelect';
-import NumberTextInput from '../../../NumberTextInput/NumberTextInput';
-import Option from '../../../../Select/Option';
-import Select from '../../../../Select/Select/Select';
-import SpellsSelector from '../../../../Spells/SpellsSelector/SpellsSelector';
+import { Item } from '../../../../../../types/db/item';
+import MarkdownTextArea from '../../../../../MarkdownTextArea/MarkdownTextArea';
+import MultiSelect from '../../../../../Select/MultiSelect/MultiSelect';
+import NumberTextInput from '../../../../NumberTextInput/NumberTextInput';
+import Option from '../../../../../Select/Option';
+import Select from '../../../../../Select/Select/Select';
+import SpellsSelector from '../../../../../Spells/SpellsSelector/SpellsSelector';
 import Subtrait from '../Subtrait/Subtrait';
-import TextInput from '../../../../TextInput/TextInput';
-import Trait from '../../../../../types/trait';
+import TextInput from '../../../../../TextInput/TextInput';
+import Trait from '../../../../../../types/trait';
 import classes from './BaseTrait.module.css';
-import { getProficiencyTypeName } from '../../../../../services/proficiencyTypeService';
-import { useAppDispatch } from '../../../../../hooks/reduxHooks';
+import { getProficiencyTypeName } from '../../../../../../services/proficiencyTypeService';
+import { useAppDispatch } from '../../../../../../hooks/reduxHooks';
 
 type ActionReturnType = {
 	payload: { index?: number; parentIndex?: number } | number;

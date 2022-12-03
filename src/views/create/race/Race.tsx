@@ -6,7 +6,7 @@ import { useMutation } from 'urql';
 
 import CREATE_RACE from '../../../graphql/mutations/race/createRace';
 import MainContent from '../../../components/MainContent/MainContent';
-import RaceForm from '../../../components/RaceForm/RaceForm';
+import RaceForm from '../../../components/Forms/RaceForm/RaceForm';
 import { Race } from '../../../types/characterSheetBuilderAPI';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { FormikHelpers } from 'formik';

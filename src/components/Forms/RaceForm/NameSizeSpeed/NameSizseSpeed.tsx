@@ -6,16 +6,16 @@ import {
 	setName,
 	setSize,
 	setSpeed
-} from '../../../redux/features/editingRace';
+} from '../../../../redux/features/editingRace';
 
-import NumberTextInput from '../NumberTextInput/NumberTextInput';
-import { SIZES } from '../../../constants/sizeConstants';
-import Select from '../../Select/Select/Select';
-import Size from '../../../types/size';
-import TextInput from '../../TextInput/TextInput';
-import { capitalize } from '../../../services/capitalizeService';
+import NumberTextInput from '../../NumberTextInput/NumberTextInput';
+import { SIZES } from '../../../../constants/sizeConstants';
+import Select from '../../../Select/Select/Select';
+import Size from '../../../../types/size';
+import TextInput from '../../../TextInput/TextInput';
+import { capitalize } from '../../../../services/capitalizeService';
 import classes from './NameSizeSpeed.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { useFormikContext } from 'formik';
 
 type NameSizeSpeedProps = {

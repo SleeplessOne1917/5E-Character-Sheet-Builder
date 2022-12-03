@@ -1,8 +1,8 @@
 'use client';
 
-import Checkbox from '../../../../Checkbox/Checkbox';
-import { PartialBy } from '../../../../../types/helpers';
-import { TraitWithSubtraitsState } from '../../../../../redux/features/editingRace';
+import Checkbox from '../../../../../Checkbox/Checkbox';
+import { PartialBy } from '../../../../../../types/helpers';
+import { TraitWithSubtraitsState } from '../../../../../../redux/features/editingRace';
 import classes from './CheckboxDeck.module.css';
 
 type CheckboxDeckProps = {

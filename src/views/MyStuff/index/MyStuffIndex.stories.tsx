@@ -4,14 +4,9 @@ import MyStuffIndex from './MyStuffIndex';
 
 export default {
 	title: 'Views/MyStuff/Index',
-	component: MyStuffIndex,
-	args: {
-		loading: false
-	}
+	component: MyStuffIndex
 } as ComponentMeta<typeof MyStuffIndex>;
 
-const Template: ComponentStory<typeof MyStuffIndex> = args => (
-	<MyStuffIndex {...args} />
-);
+const Template: ComponentStory<typeof MyStuffIndex> = () => <MyStuffIndex />;
 
 export const Default = Template.bind({});
