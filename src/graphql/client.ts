@@ -27,6 +27,15 @@ const createSpell = (result: DataFields, args: Variables, cache: Cache) => {
 	invalidateCache('spells')(result, args, cache);
 };
 
+const updateRace = (result: DataFields, args: Variables, cache: Cache) => {
+	cache.invalidate({ __typename: 'Race', id: args.id as string });
+	invalidateCache('races')(result, args, cache);
+};
+
+const createRace = (result: DataFields, args: Variables, cache: Cache) => {
+	invalidateCache('races')(result, args, cache);
+};
+
 const defaultClient = createClient({
 	url: `/api/graphql`,
 	exchanges: [
@@ -35,7 +44,9 @@ const defaultClient = createClient({
 			updates: {
 				Mutation: {
 					updateSpell,
-					createSpell
+					createSpell,
+					updateRace,
+					createRace
 				}
 			}
 		}),

@@ -1,7 +1,7 @@
 'use client';
 
 import { AbilityItem, SrdItem } from '../../../../types/srd';
-import { useMutation } from 'urql';
+import { useCallback, useEffect, useState } from 'react';
 
 import LoadingPageContent from '../../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../../components/MainContent/MainContent';
@@ -12,8 +12,8 @@ import { ToastType } from '../../../../types/toast';
 import UPDATE_SPELL from '../../../../graphql/mutations/spell/updateSpell';
 import { show } from '../../../../redux/features/toast';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
-import { useCallback } from 'react';
 import useGetSpellQuery from '../../../../hooks/urql/queries/useGetSpellQuery';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/navigation';
 
 type EditSpellProps = {
@@ -34,8 +34,19 @@ const EditSpell = ({
 	const [__, updateSpell] = useMutation(UPDATE_SPELL);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const [loading, setLoading] = useState(true);
 
 	const [spellResult] = useGetSpellQuery(id);
+
+	useEffect(() => {
+		if (!spellResult.fetching) {
+			if (spellResult.error) {
+				router.replace('/my-stuff');
+			} else {
+				setLoading(false);
+			}
+		}
+	}, [spellResult.fetching, spellResult.error, router]);
 
 	const handleSubmit = useCallback(
 		async (values: PartialBy<Spell, 'id'>) => {
@@ -56,7 +67,7 @@ const EditSpell = ({
 		[updateSpell, id, dispatch, router]
 	);
 
-	return spellResult.fetching ? (
+	return loading ? (
 		<LoadingPageContent />
 	) : (
 		<MainContent>

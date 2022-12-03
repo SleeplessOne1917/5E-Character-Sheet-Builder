@@ -18,7 +18,7 @@ type RaceFormProps = {
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
-	shouldUseReduxStore: boolean;
+	shouldUseReduxStore?: boolean;
 	initialValues: PartialBy<Race, 'id'>;
 	spells: SpellItem[];
 	onSubmit: (
@@ -31,7 +31,7 @@ const RaceForm = ({
 	abilities,
 	languages,
 	proficiencies,
-	shouldUseReduxStore,
+	shouldUseReduxStore = false,
 	initialValues,
 	spells,
 	onSubmit

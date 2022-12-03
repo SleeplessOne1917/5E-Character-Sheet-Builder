@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-const EditIndexPage = () => {
+const EditRacesIndexPage = () => {
 	redirect('/my-stuff');
 };
 
-export default EditIndexPage;
+export default EditRacesIndexPage;

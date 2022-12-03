@@ -84,6 +84,11 @@ type CreateRaceArgs = {
 	race: Omit<IRace, 'userId'>;
 };
 
+type UpdateRaceArgs = {
+	id: string;
+	race: Omit<IRace, 'userId'>;
+};
+
 const Mutation = {
 	signUp: async (parent: never, args: SignUpArgs) => {
 		const { user } = args;
@@ -374,6 +379,28 @@ const Mutation = {
 		}
 
 		return 'Race successfully created';
+	},
+	updateRace: async (
+		parent: never,
+		{ race, id }: UpdateRaceArgs,
+		{ user }: ApolloContext
+	) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
+		}
+
+		await raceSchema.validate(race, { strict: true });
+
+		try {
+			await Race.updateOne(
+				{ _id: new Types.ObjectId(id), userId: user._id },
+				{ $set: race }
+			);
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not edit race');
+		}
+
+		return 'Race edited successfully';
 	}
 };
 

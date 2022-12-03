@@ -1,5 +1,7 @@
-import EditIndexView from '../../../../src/views/MyStuff/edit/index/EditIndex';
+import { redirect } from 'next/navigation';
 
-const EditSpellsIndexPage = () => <EditIndexView />;
+const EditSpellsIndexPage = () => {
+	redirect('/my-stuff');
+};
 
 export default EditSpellsIndexPage;

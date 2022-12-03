@@ -311,6 +311,7 @@ const typeDefs = gql`
 		createSpell(spell: SpellInput!): String!
 		updateSpell(id: ID!, spell: SpellInput!): String!
 		createRace(race: RaceInput!): String!
+		updateRace(id: ID!, race: RaceInput!): String!
 	}
 `;
 
