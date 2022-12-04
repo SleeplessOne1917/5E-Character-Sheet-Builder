@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from 'react';
 
+import { AbilityItem } from '../../../types/srd';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import SubraceForm from '../../../components/Forms/SubraceForm/SubraceForm';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import useGetRaces from '../../../hooks/useGetRaces';
 
-const Subrace = () => {
+type SubraceProps = {
+	abilities: AbilityItem[];
+};
+
+const Subrace = ({ abilities }: SubraceProps) => {
 	const editingSubrace = useAppSelector(state => state.editingSubrace);
 	const [loading, setLoading] = useState(true);
 	const racesResult = useGetRaces();
@@ -28,6 +33,7 @@ const Subrace = () => {
 				initialValues={editingSubrace}
 				shouldUseReduxStore
 				races={racesResult.races}
+				abilities={abilities}
 			/>
 		</MainContent>
 	);

@@ -1,5 +1,7 @@
 import {
 	EditingSubraceState,
+	removeAbilityBonus,
+	removeAbilityBonusOptions,
 	setName,
 	setOverridesAbilityBonusOptions,
 	setOverridesAbilityBonuses,
@@ -14,6 +16,7 @@ import { FocusEventHandler, useCallback, useMemo } from 'react';
 import Checkbox from '../../../Checkbox/Checkbox';
 import { Item } from '../../../../types/db/item';
 import Option from '../../../Select/Option';
+import { Race } from '../../../../types/characterSheetBuilderAPI';
 import Select from '../../../Select/Select/Select';
 import TextInput from '../../../TextInput/TextInput';
 import classes from './NameRaceAndOverrides.module.css';
@@ -24,12 +27,16 @@ type NameAndOverridesProps = {
 	shouldUseReduxStore: boolean;
 	clickedSubmit: boolean;
 	races: Item[];
+	onRaceChange: (id?: string) => void;
+	race?: Race;
 };
 
 const NameRaceAndOverrides = ({
 	shouldUseReduxStore,
 	clickedSubmit,
-	races
+	races,
+	race,
+	onRaceChange
 }: NameAndOverridesProps) => {
 	const {
 		values,
@@ -66,10 +73,37 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesAbilityBonuses(value));
 			}
 
+			if (!value) {
+				values.abilityBonuses?.forEach((abilityBonus, index) => {
+					if (
+						race?.abilityBonuses.some(
+							ab => ab.abilityScore.id === abilityBonus.abilityScore?.id
+						)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(removeAbilityBonus(index));
+						}
+
+						setFieldValue(
+							'abilityBonuses',
+							values.abilityBonuses?.filter((ab, i) => i !== index),
+							false
+						);
+					}
+				});
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.abilityBonuses', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			race?.abilityBonuses,
+			values.abilityBonuses
+		]
 	);
 
 	const handleCheckOverridesAbilityBonusOptions = useCallback(
@@ -78,10 +112,24 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesAbilityBonusOptions(value));
 			}
 
+			if (!value && race?.abilityBonusOptions) {
+				if (shouldUseReduxStore) {
+					dispatch(removeAbilityBonusOptions());
+				}
+
+				setFieldValue('abilityBonusOptions', undefined, false);
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.abilityBonusOptions', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			race?.abilityBonusOptions
+		]
 	);
 
 	const handleCheckOverridesLanguages = useCallback(
@@ -140,6 +188,8 @@ const NameRaceAndOverrides = ({
 				dispatch(setRace(newRace));
 			}
 
+			onRaceChange(newRace?.id);
+
 			setFieldValue('race', newRace, false);
 			setFieldTouched('race', true, false);
 			setFieldError('race', !newRace ? 'Race is required' : undefined);
@@ -150,7 +200,8 @@ const NameRaceAndOverrides = ({
 			shouldUseReduxStore,
 			setFieldError,
 			setFieldTouched,
-			setFieldValue
+			setFieldValue,
+			onRaceChange
 		]
 	);
 

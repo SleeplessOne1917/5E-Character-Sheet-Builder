@@ -43,6 +43,19 @@ const prepOverrides = (state: Draft<EditingSubraceState>) => {
 	}
 };
 
+const prepAbilityBonuses = (
+	state: Draft<EditingSubraceState>,
+	index: number
+) => {
+	if (!state.abilityBonuses) {
+		state.abilityBonuses = [];
+	}
+
+	while (index > state.abilityBonuses.length - 1) {
+		state.abilityBonuses = [...state.abilityBonuses, {}];
+	}
+};
+
 const editingSubraceSlice = createSlice({
 	name: 'editingSubrace',
 	initialState,
@@ -98,6 +111,62 @@ const editingSubraceSlice = createSlice({
 		},
 		setRace: (state, { payload }: PayloadAction<Item | undefined>) => {
 			state.race = payload;
+		},
+		removeAbilityBonus: (state, { payload }: PayloadAction<number>) => {
+			state.abilityBonuses = state.abilityBonuses?.filter(
+				(v, i) => i !== payload
+			);
+		},
+		setAbilityBonusAbilityScore: (
+			state,
+			{
+				payload: { index, abilityScore }
+			}: PayloadAction<{ index: number; abilityScore?: Item }>
+		) => {
+			prepAbilityBonuses(state, index);
+
+			// @ts-ignore
+			state.abilityBonuses[index].abilityScore = abilityScore;
+		},
+		setAbilityBonusBonus: (
+			state,
+			{
+				payload: { index, bonus }
+			}: PayloadAction<{ index: number; bonus?: number }>
+		) => {
+			prepAbilityBonuses(state, index);
+
+			// @ts-ignore
+			state.abilityBonuses[index].bonus = bonus;
+		},
+		addAbilityBonus: state => {
+			state.abilityBonuses = [...(state.abilityBonuses ?? []), {}];
+		},
+		setAbilityBonusOptionsBonus: (
+			state,
+			{ payload }: PayloadAction<number | undefined>
+		) => {
+			if (!state.abilityBonusOptions) {
+				state.abilityBonusOptions = {};
+			}
+
+			state.abilityBonusOptions.bonus = payload;
+		},
+		setAbilityBonusOptionsNumberOfAbilityScores: (
+			state,
+			{ payload }: PayloadAction<number | undefined>
+		) => {
+			if (!state.abilityBonusOptions) {
+				state.abilityBonusOptions = {};
+			}
+
+			state.abilityBonusOptions.numberOfAbilityScores = payload;
+		},
+		addAbilityBonusOptions: state => {
+			state.abilityBonusOptions = {};
+		},
+		removeAbilityBonusOptions: state => {
+			delete state.abilityBonusOptions;
 		}
 	}
 });
@@ -111,7 +180,15 @@ export const {
 	setOverridesNumberOfLanguageOptions,
 	setOverridesSize,
 	setOverridesSpeed,
-	setRace
+	setRace,
+	removeAbilityBonus,
+	setAbilityBonusAbilityScore,
+	setAbilityBonusBonus,
+	addAbilityBonus,
+	setAbilityBonusOptionsBonus,
+	setAbilityBonusOptionsNumberOfAbilityScores,
+	addAbilityBonusOptions,
+	removeAbilityBonusOptions
 } = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;

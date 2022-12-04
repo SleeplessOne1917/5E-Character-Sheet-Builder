@@ -14,11 +14,11 @@ const useGetSpell = (
 	const [spell, setSpell] = useState<Spell>();
 	const [fetching, setFetching] = useState(false);
 	const [customSpellResult] = useGetSpellQuery(id, {
-		paused: paused || !isObjectId(id)
+		paused: !id || paused || !isObjectId(id)
 	});
 
 	useEffect(() => {
-		if (id && !(isObjectId(id) || spell || paused)) {
+		if (id && !(isObjectId(id) || spell?.id === id || paused)) {
 			setFetching(true);
 			getSpell(id).then(s => {
 				setSpell(mapSpell(s.data?.spell as SrdSpell));

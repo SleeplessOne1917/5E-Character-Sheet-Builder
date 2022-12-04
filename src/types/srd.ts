@@ -1,4 +1,5 @@
 import AbilityScores from './abilityScores';
+import Size from './size';
 
 export interface SrdItem {
 	index: string;
@@ -173,7 +174,7 @@ export type AbilityBonus = {
 };
 
 export interface SrdFullRaceItem extends SrdItem {
-	size: string;
+	size: Size;
 	age: string;
 	size_description: string;
 	alignment: string;
