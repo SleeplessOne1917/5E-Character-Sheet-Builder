@@ -1,3 +1,5 @@
+'use client';
+
 import GenericTraits, { TraitsReduxActions } from '../../Traits/GenericTraits';
 import {
 	addTrait,
@@ -33,7 +35,6 @@ const Traits = ({
 		TraitComponent={Trait}
 		clickedSubmit={clickedSubmit}
 		initialValues={initialValues}
-		maxTraits={5}
 		proficiencies={proficiencies}
 		shouldUseReduxStore={shouldUseReduxStore}
 		spells={spells}

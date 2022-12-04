@@ -1,3 +1,5 @@
+'use client';
+
 import GenericTraits, { TraitsReduxActions } from '../../Traits/GenericTraits';
 import { addTrait, removeTrait } from '../../../../redux/features/editingRace';
 
@@ -30,7 +32,6 @@ const Traits = ({
 		TraitComponent={Trait}
 		clickedSubmit={clickedSubmit}
 		initialValues={initialValues}
-		maxTraits={10}
 		proficiencies={proficiencies}
 		shouldUseReduxStore={shouldUseReduxStore}
 		spells={spells}

@@ -33,7 +33,6 @@ type GenericTraitsProps = {
 			'reduxActions' | 'subtraitsReduxActions' | 'SubtraitComponent'
 		>
 	) => JSX.Element;
-	maxTraits: number;
 	reduxActions: TraitsReduxActions;
 };
 
@@ -44,7 +43,6 @@ const GenericTraits = ({
 	initialValues,
 	spells,
 	TraitComponent,
-	maxTraits,
 	reduxActions: { addTrait, removeTrait }
 }: GenericTraitsProps) => {
 	const [proficienciesSelectedTypes, setProficienciesSelectedTypes] = useState(
@@ -158,7 +156,7 @@ const GenericTraits = ({
 					spells={spells}
 				/>
 			))}
-			{(values.traits ?? []).length < maxTraits && (
+			{(values.traits ?? []).length < 10 && (
 				<Button
 					positive
 					onClick={handleAddTrait}

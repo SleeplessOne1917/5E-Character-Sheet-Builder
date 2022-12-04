@@ -1,3 +1,5 @@
+'use client';
+
 import GenericSubtrait, {
 	SubtraitReduxActions
 } from '../../Traits/Trait/Subtrait/GenericSubtrait';
