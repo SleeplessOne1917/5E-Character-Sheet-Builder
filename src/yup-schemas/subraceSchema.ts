@@ -177,12 +177,12 @@ const subraceSchema = object({
 	size: string()
 		.test(
 			'is-valid-size',
-			'Race size must be one of "TINY", "SMALL", "MEDIUM", "LARGE", "HUGE", or "GARGANTUAN"',
-			value => !!value && SIZES.includes(value)
+			'Subrace size must be one of "TINY", "SMALL", "MEDIUM", "LARGE", "HUGE", or "GARGANTUAN"',
+			value => !value || SIZES.includes(value)
 		)
 		.when('overrides.size', {
 			is: true,
-			then: schema => schema.required('Race size is required'),
+			then: schema => schema.required('Subrace size is required'),
 			otherwise: schema => schema.optional().default(undefined)
 		}),
 	speed: number()
@@ -191,7 +191,7 @@ const subraceSchema = object({
 		.test(
 			'divisible-by-five',
 			'Speed must be divisible by 5',
-			value => !!value && value % 5 === 0
+			value => !value || value % 5 === 0
 		)
 		.when('overrides.speed', {
 			is: true,

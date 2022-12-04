@@ -9,7 +9,9 @@ import {
 	setOverridesNumberOfLanguageOptions,
 	setOverridesSize,
 	setOverridesSpeed,
-	setRace
+	setRace,
+	setSize,
+	setSpeed
 } from '../../../../redux/features/editingSubrace';
 import { FocusEventHandler, useCallback, useMemo } from 'react';
 
@@ -118,6 +120,7 @@ const NameRaceAndOverrides = ({
 				}
 
 				setFieldValue('abilityBonusOptions', undefined, false);
+				setFieldTouched('abilityBonusOptions', false, false);
 			}
 
 			prepOverrides();
@@ -128,7 +131,8 @@ const NameRaceAndOverrides = ({
 			setFieldValue,
 			dispatch,
 			shouldUseReduxStore,
-			race?.abilityBonusOptions
+			race?.abilityBonusOptions,
+			setFieldTouched
 		]
 	);
 
@@ -162,10 +166,27 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesSize(value));
 			}
 
+			if (!value) {
+				if (shouldUseReduxStore) {
+					dispatch(setSize(undefined));
+				}
+
+				setFieldValue('size', undefined, false);
+				setFieldTouched('size', false, false);
+				setFieldError('size', undefined);
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.size', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			setFieldTouched,
+			setFieldError
+		]
 	);
 
 	const handleCheckOverridesSpeed = useCallback(
@@ -174,10 +195,27 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesSpeed(value));
 			}
 
+			if (!value) {
+				if (shouldUseReduxStore) {
+					dispatch(setSpeed(undefined));
+				}
+
+				setFieldValue('speed', undefined, false);
+				setFieldTouched('speed', false, false);
+				setFieldError('speed', undefined);
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.speed', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			setFieldTouched,
+			setFieldError
+		]
 	);
 
 	const handleRaceSelect = useCallback(

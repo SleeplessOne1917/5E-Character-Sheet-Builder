@@ -14,6 +14,7 @@ import { Item } from '../../../types/db/item';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import NameRaceAndOverrides from './NameRaceAndOverrides/NameRaceAndOverrides';
 import { Race } from '../../../types/characterSheetBuilderAPI';
+import SizeAndSpeed from './SizeAndSpeed/SizeAndSpeed';
 import classes from './SubraceForm.module.css';
 import subraceSchema from '../../../yup-schemas/subraceSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -100,6 +101,10 @@ const SubraceForm = ({
 						races={races}
 						onRaceChange={handleRaceChange}
 						race={raceResult.race}
+					/>
+					<SizeAndSpeed
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
 					/>
 					{raceResult.fetching && !(raceResult.race || raceResult.error) && (
 						<LoadingSpinner />

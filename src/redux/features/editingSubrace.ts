@@ -167,6 +167,12 @@ const editingSubraceSlice = createSlice({
 		},
 		removeAbilityBonusOptions: state => {
 			delete state.abilityBonusOptions;
+		},
+		setSize: (state, { payload }: PayloadAction<Size | undefined>) => {
+			state.size = payload;
+		},
+		setSpeed: (state, { payload }: PayloadAction<number | undefined>) => {
+			state.speed = payload;
 		}
 	}
 });
@@ -188,7 +194,9 @@ export const {
 	setAbilityBonusOptionsBonus,
 	setAbilityBonusOptionsNumberOfAbilityScores,
 	addAbilityBonusOptions,
-	removeAbilityBonusOptions
+	removeAbilityBonusOptions,
+	setSize,
+	setSpeed
 } = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;
