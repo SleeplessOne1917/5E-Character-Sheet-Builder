@@ -1,0 +1,21 @@
+.item {
+    background-color: var(--heaven-light);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 2px solid var(--davy);
+    margin: 1rem 0;;
+}
+
+.title {
+    font-size: 1.25rem;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}

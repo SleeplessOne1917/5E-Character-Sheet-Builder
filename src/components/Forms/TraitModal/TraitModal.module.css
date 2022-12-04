@@ -1,0 +1,44 @@
+.modal {
+    width: 100%;
+    height: 100%;
+    background-color: var(--heaven);
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 4fr 1fr;
+    grid-template-areas: "title"
+                        "content"
+                        "buttons";
+    font-family: var(--font-display);
+    overflow-x: hidden;
+}
+
+.title {
+    grid-area: title;
+    font-size: 2rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.content {
+    grid-area: content;
+    padding: 2.5rem;
+}
+
+.buttons {
+    grid-area: buttons;
+    display: flex;
+}
+
+@media screen and (min-width: 768px) {
+    .modal {
+        height: 80%;
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .modal {
+        height: 60%;
+        width: 60%;
+    }
+}

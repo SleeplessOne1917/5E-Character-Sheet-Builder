@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import MoreInfoModal from './MoreInfoModal';
 
 export default {
-	title: 'Components/Create/Character/ChooseModal',
+	title: 'Components/MoreInfoModal',
 	component: MoreInfoModal,
 	args: {
 		show: true,

@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 2rem;
+
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.include-omit-container {
+    display: grid;
+    grid-template-areas: "include"
+                            "omit";
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 1fr;
+    margin: 1rem;
+    width: 100%;
+}
+
+.include {
+    width: 100%;
+    grid-area: include;
+}
+
+.omit {
+    width: 100%;
+    grid-area: omit;
+}
+
+.include-omit-title {
+    font-size: 1.25rem;
+    text-align: center;
+    margin: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+    .include-omit-container {
+        grid-template-areas: "include omit";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 100%;
+    }
+}

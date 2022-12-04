@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`redners correctly include 1`] = `
+<div
+  class="modal-container"
+  data-testid="trait-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="title"
+    >
+      Foo the Bar
+    </div>
+    <div
+      class="content"
+    >
+      <div
+        style="display: flex; align-items: center; justify-content: center;"
+      >
+        <div
+          class="container"
+        >
+          <svg
+            class="icon"
+          >
+            <use
+              xlink:href="/Icons.svg#spinner"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="buttons"
+    >
+      <button
+        class="button positive"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0; width: 50%;"
+        type="button"
+      >
+        Include
+         Trait
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0; width: 50%;"
+        type="button"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`redners correctly omit 1`] = `
+<div
+  class="modal-container"
+  data-testid="trait-modal"
+  style="display: flex;"
+>
+  <div
+    class="modal"
+  >
+    <div
+      class="title"
+    >
+      Foo the Bar
+    </div>
+    <div
+      class="content"
+    >
+      <div
+        class="markdown"
+      >
+        <p
+          class="paragraph"
+        >
+          Your natrual fooness gives you advantage on saving throws against bar.
+        </p>
+      </div>
+    </div>
+    <div
+      class="buttons"
+    >
+      <button
+        class="button positive"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0; width: 50%;"
+        type="button"
+      >
+        Omit
+         Trait
+      </button>
+      <button
+        class="button negative"
+        style="font-size: 2rem; padding: 1rem; margin: 0px; flex-grow: 1; display: flex; justify-content: center; align-items: center; border: 0px; border-radius: 0; width: 50%;"
+        type="button"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+`;

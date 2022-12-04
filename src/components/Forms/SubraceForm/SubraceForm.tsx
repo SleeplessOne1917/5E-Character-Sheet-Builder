@@ -5,6 +5,7 @@ import Button, { ButtonType } from '../../Button/Button';
 import {
 	EditingSubraceState,
 	removeAbilityBonus,
+	removeOmittedRaceTraits,
 	setLanguages
 } from '../../../redux/features/editingSubrace';
 import { Formik, useFormikContext } from 'formik';
@@ -12,6 +13,7 @@ import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { useCallback, useEffect, useState } from 'react';
 
 import Abilities from './Abilities/Abilities';
+import IncludeOmitTraits from './IncludeOmitTraits/IncludeOmitTraits';
 import { Item } from '../../../types/db/item';
 import Languages from './Languages/Languages';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
@@ -78,6 +80,12 @@ const RaceResetter = ({ race, shouldUseReduxStore }: RaceResetterProps) => {
 					}
 				});
 			}
+
+			if (shouldUseReduxStore) {
+				dispatch(removeOmittedRaceTraits());
+			}
+
+			setFieldValue('omittedRaceTraits', undefined, false);
 		}
 	}, [
 		race,
@@ -154,6 +162,12 @@ const SubraceForm = ({
 								race={raceResult.race}
 								languages={languages}
 							/>
+							{raceResult.race.traits && raceResult.race.traits.length > 0 && (
+								<IncludeOmitTraits
+									race={raceResult.race}
+									shouldUseReduxStore={shouldUseReduxStore}
+								/>
+							)}
 						</>
 					)}
 					<Traits

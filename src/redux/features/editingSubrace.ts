@@ -702,6 +702,17 @@ const editingSubraceSlice = createSlice({
 			state.traits[parentIndex].subtraitOptions.options = state.traits[
 				parentIndex
 			].subtraitOptions?.options.filter((v, i) => i !== index);
+		},
+		addOmittedRaceTrait: (state, { payload }: PayloadAction<string>) => {
+			state.omittedRaceTraits = [...(state.omittedRaceTraits ?? []), payload];
+		},
+		removeOmittedRaceTrait: (state, { payload }: PayloadAction<string>) => {
+			state.omittedRaceTraits = state.omittedRaceTraits?.filter(
+				r => r !== payload
+			);
+		},
+		removeOmittedRaceTraits: state => {
+			delete state.omittedRaceTraits;
 		}
 	}
 });
@@ -772,7 +783,10 @@ export const {
 	setTraitSpellOptionsChoose,
 	setTraitSpellOptionsOptions,
 	setTraitSpells,
-	setTraitSubtraitOptionsChoose
+	setTraitSubtraitOptionsChoose,
+	addOmittedRaceTrait,
+	removeOmittedRaceTrait,
+	removeOmittedRaceTraits
 } = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;
