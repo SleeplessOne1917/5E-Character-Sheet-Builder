@@ -1,6 +1,6 @@
 'use client';
 
-import { AbilityItem, SrdItem } from '../../../types/srd';
+import { AbilityItem, SrdItem, SrdProficiencyItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
 import {
 	EditingSubraceState,
@@ -8,6 +8,7 @@ import {
 	setLanguages
 } from '../../../redux/features/editingSubrace';
 import { Formik, useFormikContext } from 'formik';
+import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
 import { useCallback, useEffect, useState } from 'react';
 
 import Abilities from './Abilities/Abilities';
@@ -15,8 +16,8 @@ import { Item } from '../../../types/db/item';
 import Languages from './Languages/Languages';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import NameRaceAndOverrides from './NameRaceAndOverrides/NameRaceAndOverrides';
-import { Race } from '../../../types/characterSheetBuilderAPI';
 import SizeAndSpeed from './SizeAndSpeed/SizeAndSpeed';
+import Traits from './Traits/Traits';
 import classes from './SubraceForm.module.css';
 import subraceSchema from '../../../yup-schemas/subraceSchema';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -28,6 +29,8 @@ type SubraceFormProps = {
 	races: Item[];
 	abilities: AbilityItem[];
 	languages: SrdItem[];
+	proficiencies: SrdProficiencyItem[];
+	spells: SpellItem[];
 };
 
 type RaceResetterProps = {
@@ -95,7 +98,9 @@ const SubraceForm = ({
 	shouldUseReduxStore = false,
 	races,
 	abilities,
-	languages
+	languages,
+	proficiencies,
+	spells
 }: SubraceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
 	const [raceId, setRaceId] = useState<string | undefined>(
@@ -115,7 +120,7 @@ const SubraceForm = ({
 			}}
 			validationSchema={subraceSchema}
 		>
-			{({ isSubmitting, handleSubmit, errors }) => (
+			{({ isSubmitting, handleSubmit }) => (
 				<form className={classes.form} onSubmit={handleSubmit}>
 					<RaceResetter
 						race={raceResult.race}
@@ -151,6 +156,13 @@ const SubraceForm = ({
 							/>
 						</>
 					)}
+					<Traits
+						clickedSubmit={clickedSubmit}
+						initialValues={initialValues}
+						proficiencies={proficiencies}
+						shouldUseReduxStore={shouldUseReduxStore}
+						spells={spells}
+					/>
 					<Button
 						positive
 						type={ButtonType.submit}

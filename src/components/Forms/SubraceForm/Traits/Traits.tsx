@@ -1,5 +1,8 @@
 import GenericTraits, { TraitsReduxActions } from '../../Traits/GenericTraits';
-import { addTrait, removeTrait } from '../../../../redux/features/editingRace';
+import {
+	addTrait,
+	removeTrait
+} from '../../../../redux/features/editingSubrace';
 
 import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import { SrdProficiencyItem } from '../../../../types/srd';
@@ -30,7 +33,7 @@ const Traits = ({
 		TraitComponent={Trait}
 		clickedSubmit={clickedSubmit}
 		initialValues={initialValues}
-		maxTraits={10}
+		maxTraits={5}
 		proficiencies={proficiencies}
 		shouldUseReduxStore={shouldUseReduxStore}
 		spells={spells}

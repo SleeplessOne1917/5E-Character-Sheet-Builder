@@ -9,7 +9,7 @@ type Trait = {
 		choose: number;
 		options: Item[];
 	};
-	hpBonusPerLevel?: number;
+	hpBonusPerLevel?: number | null;
 	spells?: Item[];
 	spellOptions?: {
 		choose: number;

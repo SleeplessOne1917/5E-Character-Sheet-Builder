@@ -1,41 +1,47 @@
 'use client';
 
-import BaseTrait, { ReduxActions } from '../BaseTrait/BaseTrait';
+import BaseTrait, { TraitActions, TraitValues } from '../BaseTrait/BaseTrait';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import {
-	ProficiencyType,
-	SrdProficiencyItem
-} from '../../../../../../types/srd';
-import {
-	Race,
-	SpellItem
-} from '../../../../../../types/characterSheetBuilderAPI';
-import {
-	addSubtraitHPBonus,
-	addSubtraitProficiencies,
-	addSubtraitProficiencyOptions,
-	addSubtraitSpellOptions,
-	addSubtraitSpells,
-	removeSubtraitHPBonus,
-	removeSubtraitProficiencies,
-	removeSubtraitProficiencyOptions,
-	removeSubtraitSpellOptions,
-	removeSubtraitSpells,
-	setSubtraitDescription,
-	setSubtraitHPBonus,
-	setSubtraitName,
-	setSubtraitProficiencies,
-	setSubtraitProficiencyOptionsChoose,
-	setSubtraitProficiencyOptionsOptions,
-	setSubtraitSpellOptionsChoose,
-	setSubtraitSpellOptionsOptions,
-	setSubtraitSpells
-} from '../../../../../../redux/features/editingRace';
+import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
 
-import Trait from '../../../../../../types/trait';
+import { Item } from '../../../../../types/db/item';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { SpellItem } from '../../../../../types/characterSheetBuilderAPI';
+import Trait from '../../../../../types/trait';
 import { useMemo } from 'react';
 
-type SubtraitProps = {
+type ActionCreatorType<
+	T extends Record<string, any> = Record<string, unknown>
+> = (
+	val: {
+		parentIndex: number;
+		index: number;
+	} & T
+) => PayloadAction<{ parentIndex: number; index: number } & T>;
+
+export type SubtraitReduxActions = {
+	addSubtraitHPBonus: ActionCreatorType;
+	addSubtraitProficiencies: ActionCreatorType;
+	addSubtraitProficiencyOptions: ActionCreatorType;
+	addSubtraitSpellOptions: ActionCreatorType;
+	addSubtraitSpells: ActionCreatorType;
+	removeSubtraitHPBonus: ActionCreatorType;
+	removeSubtraitProficiencies: ActionCreatorType;
+	removeSubtraitProficiencyOptions: ActionCreatorType;
+	removeSubtraitSpellOptions: ActionCreatorType;
+	removeSubtraitSpells: ActionCreatorType;
+	setSubtraitDescription: ActionCreatorType<{ description: string }>;
+	setSubtraitHPBonus: ActionCreatorType<{ hpBonus: number | null }>;
+	setSubtraitName: ActionCreatorType<{ name: string }>;
+	setSubtraitProficiencies: ActionCreatorType<{ proficiencies: Item[] }>;
+	setSubtraitProficiencyOptionsChoose: ActionCreatorType<{ choose?: number }>;
+	setSubtraitProficiencyOptionsOptions: ActionCreatorType<{ options?: Item[] }>;
+	setSubtraitSpellOptionsChoose: ActionCreatorType<{ choose?: number }>;
+	setSubtraitSpellOptionsOptions: ActionCreatorType<{ options?: Item[] }>;
+	setSubtraitSpells: ActionCreatorType<{ spells: Item[] }>;
+};
+
+export type GenericSubtraitProps = {
 	onRemove: () => void;
 	parentIndex: number;
 	index: number;
@@ -48,9 +54,10 @@ type SubtraitProps = {
 	setSelectedProficiencyOptionsType: (value: ProficiencyType | null) => void;
 	proficiencies: SrdProficiencyItem[];
 	spells: SpellItem[];
+	reduxActions: SubtraitReduxActions;
 };
 
-const Subtrait = ({
+const GenericSubtrait = ({
 	onRemove,
 	parentIndex,
 	index,
@@ -62,9 +69,30 @@ const Subtrait = ({
 	selectedProficiencyOptionsType,
 	setSelectedProficiencyOptionsType,
 	proficiencies,
-	spells
-}: SubtraitProps) => {
-	const { errors, touched } = useFormikContext<Omit<Race, 'id'>>();
+	spells,
+	reduxActions: {
+		addSubtraitHPBonus,
+		addSubtraitProficiencies,
+		addSubtraitProficiencyOptions,
+		addSubtraitSpellOptions,
+		addSubtraitSpells,
+		removeSubtraitHPBonus,
+		removeSubtraitProficiencies,
+		removeSubtraitProficiencyOptions,
+		removeSubtraitSpellOptions,
+		removeSubtraitSpells,
+		setSubtraitDescription,
+		setSubtraitHPBonus,
+		setSubtraitName,
+		setSubtraitProficiencies,
+		setSubtraitProficiencyOptionsChoose,
+		setSubtraitProficiencyOptionsOptions,
+		setSubtraitSpellOptionsChoose,
+		setSubtraitSpellOptionsOptions,
+		setSubtraitSpells
+	}
+}: GenericSubtraitProps) => {
+	const { errors, touched } = useFormikContext<TraitValues>();
 
 	const baseStr = useMemo(
 		() => `traits.${parentIndex}.subtraitOptions.options.${index}`,
@@ -134,7 +162,7 @@ const Subtrait = ({
 		[errors, parentIndex, index]
 	);
 
-	const reduxActions: ReduxActions = useMemo(
+	const reduxActions: TraitActions = useMemo(
 		() => ({
 			addHPBonus: () => addSubtraitHPBonus({ parentIndex, index }),
 			addProficiencies: () => addSubtraitProficiencies({ parentIndex, index }),
@@ -167,7 +195,29 @@ const Subtrait = ({
 				setSubtraitSpellOptionsOptions({ parentIndex, index, options }),
 			setSpells: spells => setSubtraitSpells({ parentIndex, index, spells })
 		}),
-		[parentIndex, index]
+		[
+			parentIndex,
+			index,
+			addSubtraitHPBonus,
+			addSubtraitProficiencies,
+			addSubtraitProficiencyOptions,
+			addSubtraitSpellOptions,
+			addSubtraitSpells,
+			removeSubtraitHPBonus,
+			removeSubtraitProficiencies,
+			removeSubtraitProficiencyOptions,
+			removeSubtraitSpellOptions,
+			removeSubtraitSpells,
+			setSubtraitDescription,
+			setSubtraitHPBonus,
+			setSubtraitName,
+			setSubtraitProficiencies,
+			setSubtraitProficiencyOptionsChoose,
+			setSubtraitProficiencyOptionsOptions,
+			setSubtraitSpellOptionsChoose,
+			setSubtraitSpellOptionsOptions,
+			setSubtraitSpells
+		]
 	);
 
 	return (
@@ -192,4 +242,4 @@ const Subtrait = ({
 	);
 };
 
-export default Subtrait;
+export default GenericSubtrait;

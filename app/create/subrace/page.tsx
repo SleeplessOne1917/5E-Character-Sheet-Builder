@@ -1,20 +1,21 @@
 import {
 	getAbilities,
-	getLanguages
+	getLanguages,
+	getProficienciesByType
 } from '../../../src/graphql/srdClientService';
 
-// import { ProficiencyType } from '../../../src/types/srd';
+import { ProficiencyType } from '../../../src/types/srd';
 import SubraceView from '../../../src/views/create/subrace/Subrace';
 import { getSession } from '../../../src/services/sessionService';
 import { redirect } from 'next/navigation';
 
-// const proficiencyTypes: ProficiencyType[] = [
-// 	'ARMOR',
-// 	'WEAPONS',
-// 	'SKILLS',
-// 	'ARTISANS_TOOLS',
-// 	'MUSICAL_INSTRUMENTS'
-// ];
+const proficiencyTypes: ProficiencyType[] = [
+	'ARMOR',
+	'WEAPONS',
+	'SKILLS',
+	'ARTISANS_TOOLS',
+	'MUSICAL_INSTRUMENTS'
+];
 
 const SubracePage = async () => {
 	const session = await getSession();
@@ -26,10 +27,16 @@ const SubracePage = async () => {
 	const abilities = (await getAbilities()) ?? [];
 	const languages = (await getLanguages()) ?? [];
 
-	// const proficiencies =
-	// 	(await getProficienciesByType(proficiencyTypes))?.data?.proficiencies ?? [];
+	const proficiencies =
+		(await getProficienciesByType(proficiencyTypes))?.data?.proficiencies ?? [];
 
-	return <SubraceView abilities={abilities} languages={languages} />;
+	return (
+		<SubraceView
+			abilities={abilities}
+			languages={languages}
+			proficiencies={proficiencies}
+		/>
+	);
 };
 
 export default SubracePage;

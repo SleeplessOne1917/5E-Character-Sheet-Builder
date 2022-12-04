@@ -1,12 +1,11 @@
 'use client';
 
-import Checkbox from '../../../../../Checkbox/Checkbox';
-import { PartialBy } from '../../../../../../types/helpers';
-import { TraitWithSubtraitsState } from '../../../../../../redux/features/editingRace';
+import Checkbox from '../../../../Checkbox/Checkbox';
+import Trait from '../../../../../types/trait';
 import classes from './CheckboxDeck.module.css';
 
 type CheckboxDeckProps = {
-	trait: PartialBy<TraitWithSubtraitsState, 'subtraitOptions'>;
+	trait: Trait;
 	onProficienciesCheck: (value: boolean) => void;
 	onProficiencyOptionsCheck: (value: boolean) => void;
 	onHPBonusCheck: (value: boolean) => void;

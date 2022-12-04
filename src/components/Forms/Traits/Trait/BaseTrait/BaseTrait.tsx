@@ -9,38 +9,35 @@ import {
 	useState
 } from 'react';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
-import {
-	ProficiencyType,
-	SrdProficiencyItem
-} from '../../../../../../types/srd';
-import {
-	Race,
-	SpellItem
-} from '../../../../../../types/characterSheetBuilderAPI';
+import { ProficiencyType, SrdProficiencyItem } from '../../../../../types/srd';
+import { Race, SpellItem } from '../../../../../types/characterSheetBuilderAPI';
 
-import Button from '../../../../../Button/Button';
+import Button from '../../../../Button/Button';
 import CheckboxDeck from '../CheckboxDeck/CheckboxDeck';
-import { Item } from '../../../../../../types/db/item';
-import MarkdownTextArea from '../../../../../MarkdownTextArea/MarkdownTextArea';
-import MultiSelect from '../../../../../Select/MultiSelect/MultiSelect';
-import NumberTextInput from '../../../../NumberTextInput/NumberTextInput';
-import Option from '../../../../../Select/Option';
-import Select from '../../../../../Select/Select/Select';
-import SpellsSelector from '../../../../../Spells/SpellsSelector/SpellsSelector';
-import Subtrait from '../Subtrait/Subtrait';
-import TextInput from '../../../../../TextInput/TextInput';
-import Trait from '../../../../../../types/trait';
+import { DeepPartial } from '../../../../../types/helpers';
+import { GenericSubtraitProps } from '../Subtrait/GenericSubtrait';
+import { Item } from '../../../../../types/db/item';
+import MarkdownTextArea from '../../../../MarkdownTextArea/MarkdownTextArea';
+import MultiSelect from '../../../../Select/MultiSelect/MultiSelect';
+import NumberTextInput from '../../../NumberTextInput/NumberTextInput';
+import Option from '../../../../Select/Option';
+import Select from '../../../../Select/Select/Select';
+import SpellsSelector from '../../../../Spells/SpellsSelector/SpellsSelector';
+import TextInput from '../../../../TextInput/TextInput';
+import Trait from '../../../../../types/trait';
 import classes from './BaseTrait.module.css';
-import { getProficiencyTypeName } from '../../../../../../services/proficiencyTypeService';
-import { useAppDispatch } from '../../../../../../hooks/reduxHooks';
+import { getProficiencyTypeName } from '../../../../../services/proficiencyTypeService';
+import { useAppDispatch } from '../../../../../hooks/reduxHooks';
 import { v4 as uuidv4 } from 'uuid';
+
+export type TraitValues = DeepPartial<Pick<Race, 'traits'>>;
 
 type ActionReturnType = {
 	payload: { index?: number; parentIndex?: number } | number;
 	type: string;
 };
 
-export type ReduxActions = {
+export type TraitActions = {
 	setName: (name: string) => ActionReturnType;
 	setDescription: (description: string) => ActionReturnType;
 	addProficiencies: () => ActionReturnType;
@@ -62,7 +59,7 @@ export type ReduxActions = {
 	setSpellOptionsOptions: (options: Item[]) => ActionReturnType;
 };
 
-export type SubtraitReduxActions = {
+export type SubtraitActions = {
 	addSubtraits: () => ActionReturnType;
 	removeSubtraits: () => ActionReturnType;
 	setChoose: (choose?: number) => ActionReturnType;
@@ -84,10 +81,13 @@ type BaseTraitProps = {
 	baseStr: string;
 	baseTouch: boolean | FormikTouched<Trait> | undefined;
 	baseError: FormikErrors<Trait> | undefined;
-	reduxActions: ReduxActions;
-	subtraitReduxActions?: SubtraitReduxActions;
+	reduxActions: TraitActions;
+	subtraitReduxActions?: SubtraitActions;
 	clickedSubmit: boolean;
 	index: number;
+	SubtraitComponent?: (
+		props: Omit<GenericSubtraitProps, 'reduxActions'>
+	) => JSX.Element;
 };
 
 const BaseTrait = ({
@@ -127,7 +127,8 @@ const BaseTrait = ({
 	},
 	subtraitReduxActions,
 	clickedSubmit,
-	index
+	index,
+	SubtraitComponent
 }: BaseTraitProps) => {
 	const {
 		handleChange,
@@ -136,7 +137,7 @@ const BaseTrait = ({
 		setFieldTouched,
 		setFieldError,
 		values
-	} = useFormikContext<Omit<Race, 'id'>>();
+	} = useFormikContext<TraitValues>();
 	const dispatch = useAppDispatch();
 
 	const [
@@ -1301,7 +1302,7 @@ const BaseTrait = ({
 						/>
 					</div>
 				)}
-				{trait.subtraitOptions && (
+				{trait.subtraitOptions && !!SubtraitComponent && (
 					<div
 						className={classes['extra-deck']}
 						style={{
@@ -1336,7 +1337,7 @@ const BaseTrait = ({
 						/>
 						<div className={classes['subtraits-container']}>
 							{trait.subtraitOptions.options.map((subtrait, i) => (
-								<Subtrait
+								<SubtraitComponent
 									clickedSubmit={clickedSubmit}
 									index={i}
 									key={subtrait.uuid}
