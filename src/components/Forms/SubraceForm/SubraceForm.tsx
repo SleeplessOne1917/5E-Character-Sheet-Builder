@@ -8,8 +8,12 @@ import {
 	removeOmittedRaceTraits,
 	setLanguages
 } from '../../../redux/features/editingSubrace';
-import { Formik, useFormikContext } from 'formik';
-import { Race, SpellItem } from '../../../types/characterSheetBuilderAPI';
+import { Formik, FormikHelpers, useFormikContext } from 'formik';
+import {
+	Race,
+	SpellItem,
+	Subrace
+} from '../../../types/characterSheetBuilderAPI';
 import { useCallback, useEffect, useState } from 'react';
 
 import Abilities from './Abilities/Abilities';
@@ -26,13 +30,17 @@ import { useAppDispatch } from '../../../hooks/reduxHooks';
 import useGetRace from '../../../hooks/useGetRace';
 
 type SubraceFormProps = {
-	initialValues: EditingSubraceState;
+	initialValues: Omit<Subrace, 'id'>;
 	shouldUseReduxStore?: boolean;
 	races: Item[];
 	abilities: AbilityItem[];
 	languages: SrdItem[];
 	proficiencies: SrdProficiencyItem[];
 	spells: SpellItem[];
+	onSubmit: (
+		values: Omit<Subrace, 'id'>,
+		helpers: FormikHelpers<Omit<Subrace, 'id'>>
+	) => Promise<void>;
 };
 
 type RaceResetterProps = {
@@ -108,7 +116,8 @@ const SubraceForm = ({
 	abilities,
 	languages,
 	proficiencies,
-	spells
+	spells,
+	onSubmit
 }: SubraceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
 	const [raceId, setRaceId] = useState<string | undefined>(
@@ -123,9 +132,7 @@ const SubraceForm = ({
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={(val, { resetForm }) => {
-				resetForm();
-			}}
+			onSubmit={onSubmit}
 			validationSchema={subraceSchema}
 		>
 			{({ isSubmitting, handleSubmit }) => (

@@ -43,7 +43,7 @@ const spellSchema = new Schema<ISpell>({
 	atHigherLevels: { type: String, trim: true },
 	damageType: itemSchema,
 	classes: { type: [itemSchema], required: true },
-	summons: [summonSchema]
+	summons: { type: [summonSchema], default: undefined }
 });
 
 export default (models.Spell ||

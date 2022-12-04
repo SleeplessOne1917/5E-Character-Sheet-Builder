@@ -3,6 +3,7 @@ import { MONSTER_TYPES } from '../../constants/monsterTypeConstants';
 import { SIZES } from '../../constants/sizeConstants';
 import { Schema } from 'mongoose';
 import { Summon } from '../../types/summon';
+import Trait from '../../types/trait';
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
@@ -45,8 +46,77 @@ export const summonSchema = new Schema<Summon>({
 	senses: { type: String, required: true, trim: true },
 	languages: { type: String, required: true, trim: true },
 	proficiencyBonus: { type: String, required: true, trim: true },
-	specialAbilities: [nameDescriptionSchema],
+	specialAbilities: { type: [nameDescriptionSchema], default: undefined },
 	actions: { type: [nameDescriptionSchema], required: true },
-	bonusActions: [nameDescriptionSchema],
-	reactions: [nameDescriptionSchema]
+	bonusActions: { type: [nameDescriptionSchema], default: undefined },
+	reactions: { type: [nameDescriptionSchema], default: undefined }
 });
+
+export const abilityBonusSchema = new Schema<{
+	abilityScore: Item;
+	bonus: number;
+}>({
+	// @ts-ignore
+	_id: false,
+	abilityScore: { type: itemSchema, required: true },
+	bonus: { type: Number, required: true }
+});
+
+export const abilityBonusOptionsSchema = new Schema<{
+	abilityScore: Item;
+	bonus: number;
+}>({
+	// @ts-ignore
+	_id: false,
+	numberOfAbilityScores: { type: Number, required: true },
+	bonus: { type: Number, required: true }
+});
+
+const chooseOptionsSchema = new Schema<{ choose: number; options: Item[] }>({
+	// @ts-ignore
+	_id: false,
+	choose: { type: Number, required: true },
+	options: { type: [itemSchema], required: true }
+});
+
+const subtraitSchema = new Schema<Trait>({
+	// @ts-ignore
+	_id: false,
+	uuid: { type: String, required: true, trim: true, unique: true },
+	name: { type: String, required: true, trim: true },
+	description: { type: String, required: true, trim: true },
+	hpBonusPerLevel: Number,
+	proficiencies: [itemSchema],
+	proficiencyOptions: chooseOptionsSchema,
+	spells: { type: [itemSchema], default: undefined },
+	spellOptions: chooseOptionsSchema
+});
+
+const subtraitOptionsSchema = new Schema<{
+	choose: number;
+	options: Omit<Trait, 'subtraitOptions'>[];
+}>({
+	// @ts-ignore
+	_id: false,
+	choose: { type: Number, required: true },
+	options: { type: [subtraitSchema], required: true }
+});
+
+export const traitSchema = new Schema<Trait>({
+	// @ts-ignore
+	_id: false,
+	uuid: { type: String, required: true, trim: true, unique: true },
+	name: { type: String, required: true, trim: true },
+	description: { type: String, required: true, trim: true },
+	hpBonusPerLevel: Number,
+	proficiencies: { type: [itemSchema], default: undefined },
+	proficiencyOptions: chooseOptionsSchema,
+	spells: { type: [itemSchema], default: undefined },
+	spellOptions: chooseOptionsSchema,
+	subtraitOptions: subtraitOptionsSchema
+});
+
+export type AbilityBonus = {
+	abilityScore: Item;
+	bonus: number;
+};

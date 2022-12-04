@@ -1,5 +1,6 @@
 import Race, { IRace } from '../../../db/models/race';
 import Spell, { ISpell } from './../../../db/models/spell';
+import Subrace, { ISubrace } from '../../../db/models/subrace';
 import User, { IUser } from '../../../db/models/user';
 import { hashValue, verifyValue } from '../../../services/hashService';
 import {
@@ -21,6 +22,7 @@ import raceSchema from '../../../yup-schemas/raceSchema';
 import resetPasswordSchema from '../../../yup-schemas/resetPasswordSchema';
 import signUpSchema from '../../../yup-schemas/signUpSchema';
 import spellSchema from '../../../yup-schemas/spellSchema';
+import subraceSchema from '../../../yup-schemas/subraceSchema';
 import { throwErrorWithCustomMessageInProd } from '../../utils/apolloErrorUtils';
 
 interface LoginUserRequest {
@@ -87,6 +89,10 @@ type CreateRaceArgs = {
 type UpdateRaceArgs = {
 	id: string;
 	race: Omit<IRace, 'userId'>;
+};
+
+type CreateSubraceArgs = {
+	subrace: Omit<ISubrace, 'userId'>;
 };
 
 const Mutation = {
@@ -401,6 +407,25 @@ const Mutation = {
 		}
 
 		return 'Race edited successfully';
+	},
+	createSubrace: async (
+		parent: never,
+		{ subrace }: CreateSubraceArgs,
+		{ user }: ApolloContext
+	) => {
+		if (!user) {
+			throw new ApolloError(mustBeLoggedIn);
+		}
+
+		await subraceSchema.validate(subrace, { strict: true });
+
+		try {
+			await Subrace.create({ ...subrace, userId: user._id });
+		} catch (e) {
+			throwErrorWithCustomMessageInProd(e as Error, 'Could not create subrace');
+		}
+
+		return 'Subrace successfully created';
 	}
 };
 

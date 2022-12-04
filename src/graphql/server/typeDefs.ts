@@ -227,6 +227,19 @@ const typeDefs = gql`
 		traits: [TraitInput!]
 	}
 
+	input SubraceInput {
+		name: String!
+		race: ItemInput!
+		abilityBonuses: [AbilityBonusInput!]
+		abilityBonusOptions: AbilityBonusOptionsInput
+		languages: [ItemInput!]
+		numberOfLanguageOptions: Int
+		size: Size
+		speed: Int
+		omittedRaceTraits: [String!]
+		traits: [TraitInput!]
+	}
+
 	type ChooseOptions {
 		choose: Int!
 		options: [Item!]!
@@ -316,6 +329,7 @@ const typeDefs = gql`
 		updateSpell(id: ID!, spell: SpellInput!): String!
 		createRace(race: RaceInput!): String!
 		updateRace(id: ID!, race: RaceInput!): String!
+		createSubrace(subrace: SubraceInput!): String!
 	}
 `;
 
