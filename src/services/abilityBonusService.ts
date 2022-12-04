@@ -1,6 +1,6 @@
 import { SrdFullRaceItem, SrdFullSubraceItem } from '../types/srd';
 
-import { AbilityBonus } from '../db/models/race';
+import { AbilityBonus } from '../db/models/common';
 import { Race } from '../types/characterSheetBuilderAPI';
 import { AbilityBonus as SrdAbilityBonus } from './../types/srd';
 
@@ -40,9 +40,11 @@ export const getIsAllBonusesSameWithRace = (abilityBonuses: AbilityBonus[]) =>
 		{ isSame: true, value: undefined }
 	);
 
-export const getAbilityScoreDescriptionFromRace = (race: Race) => {
+export const getAbilityScoreDescriptionFromRace = (
+	race: Partial<Pick<Race, 'abilityBonusOptions' | 'abilityBonuses'>>
+) => {
 	let description: string;
-	const abilityBonuses = race.abilityBonuses;
+	const abilityBonuses = race.abilityBonuses ?? [];
 
 	const allSameBonuses = getIsAllBonusesSameWithRace(abilityBonuses);
 
@@ -86,12 +88,14 @@ export const getAbilityScoreDescriptionFromRace = (race: Race) => {
 		);
 	}
 
+	const hasAbilityBonuses = abilityBonuses.length > 0;
+
 	if (race.abilityBonusOptions) {
-		description = `${description}, and ${
-			race.abilityBonusOptions.bonus > 0 ? '+' : '-'
+		description = `${description}${hasAbilityBonuses ? ', and ' : ''}${
+			race.abilityBonusOptions.bonus >= 0 ? '+' : '-'
 		}${race.abilityBonusOptions.bonus} to ${
 			race.abilityBonusOptions.numberOfAbilityScores
-		} of the remaining ability scores`;
+		}${hasAbilityBonuses ? ' of the remaining' : ''} ability scores`;
 	}
 
 	if (!description.endsWith('.')) {

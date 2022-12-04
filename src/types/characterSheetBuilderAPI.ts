@@ -1,14 +1,17 @@
 import { IRace } from '../db/models/race';
 import { ISpell } from './../db/models/spell';
 import { ISubrace } from '../db/models/subrace';
+import { Types } from 'mongoose';
 
 export type WithId = { id: string };
 
-export type Spell = Omit<ISpell & WithId, 'userId'>;
+type APIType<T extends { userId: Types.ObjectId }> = Omit<T & WithId, 'userId'>;
 
-export type Race = Omit<IRace & WithId, 'userId'>;
+export type Spell = APIType<ISpell>;
 
-export type Subrace = Omit<ISubrace & WithId, 'userId'>;
+export type Race = APIType<IRace>;
+
+export type Subrace = APIType<ISubrace>;
 
 export type SpellItem = Pick<Spell, 'name' | 'id' | 'school' | 'level'>;
 

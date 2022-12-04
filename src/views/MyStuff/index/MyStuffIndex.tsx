@@ -1,5 +1,9 @@
 'use client';
 
+import {
+	getRaceDescriptors,
+	getSubraceDescriptors
+} from '../../../services/descriptorsHelpers';
 import { useCallback, useMemo, useState } from 'react';
 
 import ArrowLink from '../../../components/ArrowLink/ArrowLink';
@@ -13,11 +17,12 @@ import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import SpellItemDisplay from '../../../components/MyStuff/SpellItem/SpellItemDisplay';
 import SpellMoreInformationModal from '../../../components/Spells/SpellMoreInfoModal/SpellMoreInformationModal';
 import classes from './MyStuffIndex.module.css';
-import { getRaceDescriptors } from '../../../services/descriptorsHelpers';
 import useGetLimitedRacesQuery from '../../../hooks/urql/queries/useGetLimitedRacesQuery';
 import useGetLimitedSpellsQuery from '../../../hooks/urql/queries/useGetLimitedSpellsQuery';
+import useGetLimitedSubracesQuery from '../../../hooks/urql/queries/useGetLimitedSubracesQuery';
 import useGetRaceQuery from '../../../hooks/urql/queries/useGetRaceQuery';
 import useGetSpellQuery from '../../../hooks/urql/queries/useGetSpellQuery';
+import useGetSubraceQuery from '../../../hooks/urql/queries/useGetSubraceQuery';
 import { useRouter } from 'next/navigation';
 
 const MyStuffIndex = () => {
@@ -28,8 +33,12 @@ const MyStuffIndex = () => {
 	const [raceId, setRaceId] = useState<string>();
 	const [raceResult] = useGetRaceQuery(raceId);
 
+	const [subraceId, setSubraceId] = useState<string>();
+	const [subraceResult] = useGetSubraceQuery(subraceId);
+
 	const [spellsResult] = useGetLimitedSpellsQuery({ limit: 5 });
 	const [racesResult] = useGetLimitedRacesQuery({ limit: 5 });
+	const [subracesResult] = useGetLimitedSubracesQuery({ limit: 5 });
 
 	const handleSpellMoreInfoClick = useCallback(({ id }: SpellItem) => {
 		setSpellId(id);
@@ -47,6 +56,18 @@ const MyStuffIndex = () => {
 		router.push(`/my-stuff/edit/races/${raceId}`);
 	}, [router, raceId]);
 
+	const handleSubraceMoreInfoClose = useCallback(() => {
+		setSubraceId(undefined);
+	}, []);
+
+	const handleSubraceMoreInfoClick = useCallback(({ id }: Item) => {
+		setSubraceId(id);
+	}, []);
+
+	const handleSubraceEdit = useCallback(() => {
+		router.push(`/my-stuff/edit/subraces/${subraceId}`);
+	}, [router, subraceId]);
+
 	const handleRaceMoreInfoClose = useCallback(() => {
 		setRaceId(undefined);
 	}, []);
@@ -59,6 +80,14 @@ const MyStuffIndex = () => {
 		[raceResult.data?.race]
 	);
 
+	const {
+		descriptors: subraceDescriptors,
+		otherDescriptors: subraceOtherDescriptors
+	} = useMemo(
+		() => getSubraceDescriptors(subraceResult.data?.subrace),
+		[subraceResult.data?.subrace]
+	);
+
 	return spellsResult.fetching || racesResult.fetching ? (
 		<LoadingPageContent />
 	) : (
@@ -66,7 +95,8 @@ const MyStuffIndex = () => {
 			<MainContent testId="my-stuff-index">
 				<h1>My Stuff</h1>
 				{(spellsResult.data?.spells.spells.length ?? 0) === 0 &&
-					(racesResult.data?.races.races.length ?? 0) === 0 && (
+					(racesResult.data?.races.races.length ?? 0) === 0 &&
+					(subracesResult.data?.subraces.subraces.length ?? 0) === 0 && (
 						<div className={classes['no-items-container']}>
 							<p>
 								You haven&apos;t created anything yet. Whenever you create
@@ -102,6 +132,21 @@ const MyStuffIndex = () => {
 							))}
 						/>
 					)}
+					{(subracesResult.data?.subraces.subraces.length ?? 0) > 0 && (
+						<Preview
+							path="subraces"
+							title="Subraces"
+							items={(subracesResult.data?.subraces.subraces ?? []).map(
+								subrace => (
+									<ItemDisplay
+										item={subrace}
+										key={subrace.id}
+										onMoreInfoClick={handleSubraceMoreInfoClick}
+									/>
+								)
+							)}
+						/>
+					)}
 				</div>
 			</MainContent>
 			<SpellMoreInformationModal
@@ -123,6 +168,18 @@ const MyStuffIndex = () => {
 				mode="edit"
 				descriptors={raceDescriptors}
 				otherDescriptors={raceOtherDescriptors}
+			/>
+			<MoreInfoModal
+				iconId="custom-race"
+				onAction={handleSubraceEdit}
+				onClose={handleSubraceMoreInfoClose}
+				show={!!subraceId}
+				title={subraceResult.data?.subrace.name ?? ''}
+				error={!!subraceResult.error}
+				loading={subraceResult.fetching}
+				mode="edit"
+				descriptors={subraceDescriptors}
+				otherDescriptors={subraceOtherDescriptors}
 			/>
 		</>
 	);
