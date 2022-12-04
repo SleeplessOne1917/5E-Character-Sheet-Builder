@@ -36,6 +36,15 @@ const createRace = (result: DataFields, args: Variables, cache: Cache) => {
 	invalidateCache('races')(result, args, cache);
 };
 
+const updateSubrace = (result: DataFields, args: Variables, cache: Cache) => {
+	cache.invalidate({ __typename: 'Subrace', id: args.id as string });
+	invalidateCache('subraces')(result, args, cache);
+};
+
+const createSubrace = (result: DataFields, args: Variables, cache: Cache) => {
+	invalidateCache('subraces')(result, args, cache);
+};
+
 const defaultClient = createClient({
 	url: `/api/graphql`,
 	exchanges: [
@@ -46,7 +55,9 @@ const defaultClient = createClient({
 					updateSpell,
 					createSpell,
 					updateRace,
-					createRace
+					createRace,
+					updateSubrace,
+					createSubrace
 				}
 			},
 			keys: {

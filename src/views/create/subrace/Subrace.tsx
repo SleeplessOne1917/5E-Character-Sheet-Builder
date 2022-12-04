@@ -69,7 +69,7 @@ const Subrace = ({ abilities, languages, proficiencies }: SubraceProps) => {
 		<MainContent>
 			<h1>Create Subrace</h1>
 			<SubraceForm
-				initialValues={editingSubrace}
+				initialValues={editingSubrace as Omit<Subrace, 'id'>}
 				shouldUseReduxStore
 				races={racesResult.races}
 				abilities={abilities}
