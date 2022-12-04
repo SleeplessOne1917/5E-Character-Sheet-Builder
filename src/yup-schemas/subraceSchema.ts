@@ -11,10 +11,10 @@ const subraceSchema = object({
 		.required('Name is required'),
 	race: object({
 		id: string()
-			.required()
+			.required('Race id is required')
 			.max(50, 'Race id cannot be more than 50 characters long'),
 		name: string()
-			.required()
+			.required('Race name is required')
 			.max(50, 'Race name cannot be more than 50 characters long')
 	}).required('Race is required'),
 	overrides: object({

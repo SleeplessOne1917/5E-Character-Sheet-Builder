@@ -28,7 +28,11 @@ const useGetSpell = (
 	}, [id, spell, paused]);
 
 	return {
-		spell: isObjectId(id) ? customSpellResult.data?.spell : spell,
+		spell: !id
+			? undefined
+			: isObjectId(id)
+			? customSpellResult.data?.spell
+			: spell,
 		fetching: fetching || customSpellResult.fetching
 	};
 };

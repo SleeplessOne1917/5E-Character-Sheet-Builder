@@ -34,7 +34,7 @@ const useGetRace = (
 	}, [id, race, paused]);
 
 	return {
-		race: isObjectId(id) ? customRaceResult.data?.race : race,
+		race: !id ? undefined : isObjectId(id) ? customRaceResult.data?.race : race,
 		fetching: fetching || customRaceResult.fetching,
 		error: isObjectId(id) ? customRaceResult.error?.message : error
 	};

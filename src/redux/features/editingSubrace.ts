@@ -173,6 +173,19 @@ const editingSubraceSlice = createSlice({
 		},
 		setSpeed: (state, { payload }: PayloadAction<number | undefined>) => {
 			state.speed = payload;
+		},
+		setLanguages: (state, { payload }: PayloadAction<Item[] | undefined>) => {
+			state.languages = payload;
+		},
+		setNumberOfLanguageOptions: (
+			state,
+			{ payload }: PayloadAction<number | undefined>
+		) => {
+			if (!payload) {
+				delete state.numberOfLanguageOptions;
+			} else {
+				state.numberOfLanguageOptions = payload;
+			}
 		}
 	}
 });
@@ -196,7 +209,9 @@ export const {
 	addAbilityBonusOptions,
 	removeAbilityBonusOptions,
 	setSize,
-	setSpeed
+	setSpeed,
+	setLanguages,
+	setNumberOfLanguageOptions
 } = editingSubraceSlice.actions;
 
 export default editingSubraceSlice.reducer;

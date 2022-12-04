@@ -2,7 +2,9 @@ import {
 	EditingSubraceState,
 	removeAbilityBonus,
 	removeAbilityBonusOptions,
+	setLanguages,
 	setName,
+	setNumberOfLanguageOptions,
 	setOverridesAbilityBonusOptions,
 	setOverridesAbilityBonuses,
 	setOverridesLanguages,
@@ -14,6 +16,7 @@ import {
 	setSpeed
 } from '../../../../redux/features/editingSubrace';
 import { FocusEventHandler, useCallback, useMemo } from 'react';
+import { FormikErrors, useFormikContext } from 'formik';
 
 import Checkbox from '../../../Checkbox/Checkbox';
 import { Item } from '../../../../types/db/item';
@@ -23,7 +26,6 @@ import Select from '../../../Select/Select/Select';
 import TextInput from '../../../TextInput/TextInput';
 import classes from './NameRaceAndOverrides.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
-import { useFormikContext } from 'formik';
 
 type NameAndOverridesProps = {
 	shouldUseReduxStore: boolean;
@@ -142,10 +144,29 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesLanguages(value));
 			}
 
+			if (!value && values.languages) {
+				const newLanguages = values.languages.filter(
+					language => !race?.languages.some(l => l.id === language.id)
+				);
+
+				if (shouldUseReduxStore) {
+					dispatch(setLanguages(newLanguages));
+				}
+
+				setFieldValue('languages', newLanguages, false);
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.languages', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			values.languages,
+			race?.languages
+		]
 	);
 
 	const handleCheckOverridesNumberOfLanguageOptions = useCallback(
@@ -154,10 +175,24 @@ const NameRaceAndOverrides = ({
 				dispatch(setOverridesNumberOfLanguageOptions(value));
 			}
 
+			if (!value && race?.numberOfLanguageOptions) {
+				if (shouldUseReduxStore) {
+					dispatch(setNumberOfLanguageOptions(undefined));
+				}
+
+				setFieldValue('numberOfLanguageOptions', undefined, false);
+			}
+
 			prepOverrides();
 			setFieldValue('overrides.numberOfLanguageOptions', value, false);
 		},
-		[prepOverrides, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			prepOverrides,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			race?.numberOfLanguageOptions
+		]
 	);
 
 	const handleCheckOverridesSize = useCallback(
@@ -267,7 +302,11 @@ const NameRaceAndOverrides = ({
 					id="race"
 					options={raceOptions}
 					value={values.race?.id ?? 'blank'}
-					error={errors.race}
+					error={
+						!errors.race || typeof errors.race === 'string'
+							? errors.race
+							: (errors.race as FormikErrors<{ id: string; name: string }>).name
+					}
 					touched={clickedSubmit || touched.race}
 					label="Race"
 					onChange={handleRaceSelect}

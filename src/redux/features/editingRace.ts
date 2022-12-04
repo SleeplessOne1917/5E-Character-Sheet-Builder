@@ -103,8 +103,8 @@ const editingRaceSlice = createSlice({
 		setSpeed: (state, { payload }: PayloadAction<number | undefined>) => {
 			state.speed = payload;
 		},
-		setLanguages: (state, { payload }: PayloadAction<Item[]>) => {
-			state.languages = payload;
+		setLanguages: (state, { payload }: PayloadAction<Item[] | undefined>) => {
+			state.languages = payload ?? [];
 		},
 		setNumberOfLanguageOptions: (
 			state,

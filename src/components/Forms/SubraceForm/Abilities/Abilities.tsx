@@ -62,7 +62,7 @@ const Abilities = ({
 	);
 
 	const shouldErrorIfEmpty = useMemo(
-		() => values.overrides?.abilityBonuses && showAbilityBonusOptions,
+		() => !!values.overrides?.abilityBonuses && showAbilityBonusOptions,
 		[values.overrides?.abilityBonuses, showAbilityBonusOptions]
 	);
 

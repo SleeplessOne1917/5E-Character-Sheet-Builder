@@ -1,8 +1,8 @@
 'use client';
 
+import { AbilityItem, SrdItem } from '../../../types/srd';
 import { useEffect, useState } from 'react';
 
-import { AbilityItem } from '../../../types/srd';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import SubraceForm from '../../../components/Forms/SubraceForm/SubraceForm';
@@ -11,9 +11,10 @@ import useGetRaces from '../../../hooks/useGetRaces';
 
 type SubraceProps = {
 	abilities: AbilityItem[];
+	languages: SrdItem[];
 };
 
-const Subrace = ({ abilities }: SubraceProps) => {
+const Subrace = ({ abilities, languages }: SubraceProps) => {
 	const editingSubrace = useAppSelector(state => state.editingSubrace);
 	const [loading, setLoading] = useState(true);
 	const racesResult = useGetRaces();
@@ -34,6 +35,7 @@ const Subrace = ({ abilities }: SubraceProps) => {
 				shouldUseReduxStore
 				races={racesResult.races}
 				abilities={abilities}
+				languages={languages}
 			/>
 		</MainContent>
 	);

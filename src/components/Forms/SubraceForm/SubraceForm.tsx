@@ -1,16 +1,18 @@
 'use client';
 
+import { AbilityItem, SrdItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
 import {
 	EditingSubraceState,
-	removeAbilityBonus
+	removeAbilityBonus,
+	setLanguages
 } from '../../../redux/features/editingSubrace';
 import { Formik, useFormikContext } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 
 import Abilities from './Abilities/Abilities';
-import { AbilityItem } from '../../../types/srd';
 import { Item } from '../../../types/db/item';
+import Languages from './Languages/Languages';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import NameRaceAndOverrides from './NameRaceAndOverrides/NameRaceAndOverrides';
 import { Race } from '../../../types/characterSheetBuilderAPI';
@@ -25,6 +27,7 @@ type SubraceFormProps = {
 	shouldUseReduxStore?: boolean;
 	races: Item[];
 	abilities: AbilityItem[];
+	languages: SrdItem[];
 };
 
 type RaceResetterProps = {
@@ -37,23 +40,41 @@ const RaceResetter = ({ race, shouldUseReduxStore }: RaceResetterProps) => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		if (race && !values.overrides?.abilityBonuses) {
-			values.abilityBonuses?.forEach((abilityBonus, index) => {
-				if (
-					race.abilityBonuses.some(
-						ab => ab.abilityScore.id === abilityBonus.abilityScore?.id
-					)
-				) {
-					if (shouldUseReduxStore) {
-						dispatch(removeAbilityBonus(index));
-					}
+		if (race) {
+			if (!values.overrides?.abilityBonuses) {
+				values.abilityBonuses?.forEach((abilityBonus, index) => {
+					if (
+						race.abilityBonuses.some(
+							ab => ab.abilityScore.id === abilityBonus.abilityScore?.id
+						)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(removeAbilityBonus(index));
+						}
 
-					setFieldValue(
-						'abilityBonuses',
-						values.abilityBonuses?.filter((ab, i) => i !== index)
-					);
-				}
-			});
+						setFieldValue(
+							'abilityBonuses',
+							values.abilityBonuses?.filter((ab, i) => i !== index)
+						);
+					}
+				});
+			}
+
+			if (!values.overrides?.languages) {
+				values.languages?.forEach(language => {
+					if (race.languages.some(l => l.id === language.id)) {
+						const newLanguages = values.languages?.filter(
+							l => l.id !== language.id
+						);
+
+						if (shouldUseReduxStore) {
+							dispatch(setLanguages(newLanguages));
+						}
+
+						setFieldValue('languages', newLanguages, false);
+					}
+				});
+			}
 		}
 	}, [
 		race,
@@ -61,7 +82,9 @@ const RaceResetter = ({ race, shouldUseReduxStore }: RaceResetterProps) => {
 		setFieldValue,
 		values.abilityBonuses,
 		shouldUseReduxStore,
-		values.overrides?.abilityBonuses
+		values.overrides?.abilityBonuses,
+		values.languages,
+		values.overrides?.languages
 	]);
 
 	return <></>;
@@ -71,7 +94,8 @@ const SubraceForm = ({
 	initialValues,
 	shouldUseReduxStore = false,
 	races,
-	abilities
+	abilities,
+	languages
 }: SubraceFormProps) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
 	const [raceId, setRaceId] = useState<string | undefined>(
@@ -86,10 +110,12 @@ const SubraceForm = ({
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={() => {}}
+			onSubmit={(val, { resetForm }) => {
+				resetForm();
+			}}
 			validationSchema={subraceSchema}
 		>
-			{({ isSubmitting, handleSubmit }) => (
+			{({ isSubmitting, handleSubmit, errors }) => (
 				<form className={classes.form} onSubmit={handleSubmit}>
 					<RaceResetter
 						race={raceResult.race}
@@ -110,12 +136,20 @@ const SubraceForm = ({
 						<LoadingSpinner />
 					)}
 					{raceResult.race && (
-						<Abilities
-							abilities={abilities}
-							clickedSubmit={clickedSubmit}
-							shouldUseReduxStore={shouldUseReduxStore}
-							race={raceResult.race}
-						/>
+						<>
+							<Abilities
+								abilities={abilities}
+								clickedSubmit={clickedSubmit}
+								shouldUseReduxStore={shouldUseReduxStore}
+								race={raceResult.race}
+							/>
+							<Languages
+								clickedSubmit={clickedSubmit}
+								shouldUseReduxStore={shouldUseReduxStore}
+								race={raceResult.race}
+								languages={languages}
+							/>
+						</>
 					)}
 					<Button
 						positive
