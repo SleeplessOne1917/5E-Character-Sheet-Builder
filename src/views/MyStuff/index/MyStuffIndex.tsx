@@ -88,7 +88,9 @@ const MyStuffIndex = () => {
 		[subraceResult.data?.subrace]
 	);
 
-	return spellsResult.fetching || racesResult.fetching ? (
+	return spellsResult.fetching ||
+		racesResult.fetching ||
+		subracesResult.fetching ? (
 		<LoadingPageContent />
 	) : (
 		<>

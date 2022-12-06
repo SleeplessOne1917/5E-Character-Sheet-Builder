@@ -75,7 +75,8 @@ const defaultClient = createClient({
 		}),
 		fetchExchange
 	],
-	maskTypename: true
+	maskTypename: true,
+	requestPolicy: 'cache-and-network'
 });
 
 export default defaultClient;
