@@ -2,7 +2,6 @@
 
 import {
 	Action,
-	ActionCreatorWithPayload,
 	PayloadAction
 } from '@reduxjs/toolkit';
 
