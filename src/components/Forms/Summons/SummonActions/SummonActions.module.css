@@ -1,0 +1,10 @@
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+}

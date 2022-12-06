@@ -1,4 +1,4 @@
-import { AbilityBonus } from '../db/models/race';
+import { AbilityBonus } from '../db/models/common';
 import { Item } from '../types/db/item';
 import { Race } from '../types/characterSheetBuilderAPI';
 import { SrdFullRaceItem } from '../types/srd';

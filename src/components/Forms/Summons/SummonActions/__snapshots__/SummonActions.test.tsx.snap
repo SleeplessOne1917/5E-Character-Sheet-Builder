@@ -24,15 +24,15 @@ exports[`renders correctly for actions 1`] = `
         >
           <input
             class="input"
-            id="summon-0-actions-0-name"
-            name="summon-0-actions-0-name"
+            id="summons.0.actions.0.name"
+            name="summons.0.actions.0.name"
             type="text"
             value=""
           />
         </div>
         <label
           class="label"
-          for="summon-0-actions-0-name"
+          for="summons.0.actions.0.name"
         >
           Name
         </label>
@@ -40,7 +40,7 @@ exports[`renders correctly for actions 1`] = `
     </div>
     <label
       class="action-description-label"
-      for="summons-0-actions-0-description"
+      for="summons.0.actions.0.description"
     >
       Description
     </label>
@@ -49,7 +49,7 @@ exports[`renders correctly for actions 1`] = `
     >
       <textarea
         class="text-input"
-        id="summons-0-actions-0-description"
+        id="summons.0.actions.0.description"
         rows="7"
       />
     </div>

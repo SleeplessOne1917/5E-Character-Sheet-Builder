@@ -1,0 +1,12 @@
+.name-and-level {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .name-and-level {
+        justify-content: space-around;
+    }
+}

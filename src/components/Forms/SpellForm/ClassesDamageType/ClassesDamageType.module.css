@@ -1,0 +1,39 @@
+.classes-damage-type {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, auto);
+    grid-template-areas: "classes"
+                         "damageType";
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.damage-type-container {
+    grid-area: damageType;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.classes-container {
+    grid-area: classes;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.damage-type-icon {
+    margin-top: 1rem;
+    width: 5rem;
+    height: 5rem;
+}
+
+@media (min-width: 768px) {
+    .classes-damage-type {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 100%;
+        grid-template-areas: "classes damageType";
+    }
+}

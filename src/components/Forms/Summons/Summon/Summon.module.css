@@ -1,10 +1,3 @@
-.summons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
 .summon {
     margin: 1rem 0;
     border: 3px solid var(--davy);
@@ -12,11 +5,6 @@
     padding: 1rem;
     border-radius: 1rem;
     position: relative;
-}
-
-.button-icon {
-    width: 2.5rem;
-    height: 2.5rem;
 }
 
 .close-button-icon {

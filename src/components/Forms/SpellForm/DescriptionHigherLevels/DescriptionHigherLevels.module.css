@@ -1,0 +1,9 @@
+.description-higher-levels {
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.description-higher-levels > * {
+    margin: 1rem 0;
+}
+
