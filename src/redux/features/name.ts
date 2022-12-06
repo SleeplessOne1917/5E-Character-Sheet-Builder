@@ -1,16 +1,14 @@
-import { AppReducers } from './../../types/redux';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-export const initialState = '';
 
-export const reducers: AppReducers<string> = {
-	setName: (state, { payload }: PayloadAction<string>) => payload
-};
+export const initialState = '';
 
 const nameSlice = createSlice({
 	name: 'name',
 	initialState,
-	reducers
+	reducers: {
+		setName: (state, { payload }: PayloadAction<string>) => payload
+	}
 });
 
 export const { setName } = nameSlice.actions;

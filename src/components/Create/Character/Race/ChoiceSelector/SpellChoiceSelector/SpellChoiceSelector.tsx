@@ -20,6 +20,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import ChoiceSelector from '../ChoiceSelector';
+import { Spell } from '../../../../../../types/characterSheetBuilderAPI';
 import SpellSelector from '../../../../../Spells/SpellSelector/SpellSelector';
 import classes from './SpellChoiceSelector.module.css';
 import { mapSpellItem } from '../../../../../../services/spellsService';
@@ -70,7 +71,7 @@ const SpellChoiceSelector = ({ choice, trait }: SpellChoiceSelectorProps) => {
 			);
 
 			dispatch(addSpell(spell));
-			dispatch(addTraitSpell({ index: trait.index, spell }));
+			dispatch(addTraitSpell({ index: trait.index, spell: spell as Spell }));
 		},
 		[choice, dispatch, trait.index]
 	);
