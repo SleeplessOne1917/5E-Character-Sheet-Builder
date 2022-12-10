@@ -1166,7 +1166,7 @@ const SelectedClassDisplay = ({
 							classInfo.subclassSpells.some(s => s.id === spell.index)
 						)
 					) {
-						dispatch(addSubclassSpell(mapSpellItem(spell)));
+						dispatch(addSubclassSpell(spell));
 					}
 				}
 			}
@@ -1304,7 +1304,7 @@ const SelectedClassDisplay = ({
 							classInfo.subclassSpells.some(s => s.id === spell.index)
 						)
 					) {
-						dispatch(addSubclassSpell(mapSpellItem(spell)));
+						dispatch(addSubclassSpell(spell));
 					}
 				}
 			}
@@ -1369,7 +1369,7 @@ const SelectedClassDisplay = ({
 								p => p.level && p.level <= classInfo.level
 							) && s.prerequisites.some(p => p.index?.includes(value as string))
 					)) {
-						dispatch(addSubclassSpell(mapSpellItem(spell)));
+						dispatch(addSubclassSpell(spell));
 
 						if (classSpells && classSpells.some(s => s.id === spell.index)) {
 							dispatch(removeClassSpell(spell.index));

@@ -1,20 +1,10 @@
 'use client';
 
-import {
-	AbilityScoresState,
-	createAbilityScoreSlice
-} from '../../../../redux/features/abilityScores';
-import { AnyAction, Reducer } from '@reduxjs/toolkit';
-import {
-	EditingCharacterState,
-	createEditingCharacterReducer
-} from '../../../../redux/features/editingCharacter';
-
 import { AbilityItem } from '../../../../types/srd';
-import { DeepPartial } from '../../../../types/helpers';
+import { AbilityScoresState } from '../../../../redux/features/abilityScores';
 import { Provider } from 'react-redux';
 import { ReactNode } from 'react';
-import { deepMerge } from '../../../../services/objectService';
+import getMockEditingCharacter from '../../../../mock/editingCharacterMock';
 import { getTestStore } from '../../../../redux/store';
 
 const defaultInitialState: AbilityScoresState = {
@@ -35,19 +25,17 @@ const defaultInitialState: AbilityScoresState = {
 };
 
 const MockStore = ({
-	overrideValues = {},
+	overrideValues,
 	children
 }: {
-	overrideValues?: DeepPartial<AbilityScoresState>;
+	overrideValues?: Partial<AbilityScoresState>;
 	children: ReactNode;
 }) => (
 	<Provider
 		store={getTestStore({
-			editingCharacter: createEditingCharacterReducer({
-				abilityScores: createAbilityScoreSlice(
-					deepMerge(defaultInitialState, overrideValues)
-				).reducer
-			}) as Reducer<EditingCharacterState, AnyAction>
+			editingCharacter: getMockEditingCharacter({
+				abilityScores: { ...defaultInitialState, ...overrideValues }
+			})
 		})}
 	>
 		{children}

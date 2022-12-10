@@ -2,7 +2,6 @@
 
 import { AbilityItem, SrdItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
-import { DeepPartial, PartialBy } from '../../../types/helpers';
 import { Formik, FormikHelpers } from 'formik';
 import {
 	addSummon,
@@ -15,8 +14,8 @@ import ClassesDamageType from './ClassesDamageType/ClassesDamageType';
 import ComponentsSchoolRitualConcentration from './ComponentsSchoolRitualConcentration/ComponentsSchoolRitualConcentration';
 import DescriptionHigherLevels from './DescriptionHigherLevels/DescriptionHigherLevels';
 import NameAndLevel from './NameAndLevel/NameAndLevel';
+import { PartialBy } from '../../../types/helpers';
 import { Spell } from '../../../types/characterSheetBuilderAPI';
-import { Summon } from '../../../types/summon';
 import Summons from '../Summons/Summons/Summons';
 import classes from './SpellForm.module.css';
 import { doNothing } from '../../../redux/features/editingCharacter';
@@ -67,17 +66,14 @@ const SpellForm = ({
 						actions={
 							shouldUseReduxStore
 								? {
-										add: () => addSummon(),
+										add: addSummon,
 										set: setSummonProperties,
 										delete: deleteSummon
 								  }
 								: {
 										add: doNothing,
-										set: (_: {
-											index: number;
-											overrideProps: DeepPartial<Summon>;
-										}) => doNothing,
-										delete: (_: number) => doNothing
+										set: doNothing,
+										delete: doNothing
 								  }
 						}
 						abilities={abilities}

@@ -1,9 +1,3 @@
-import {
-	AnyAction,
-	Reducer,
-	combineReducers,
-	createSlice
-} from '@reduxjs/toolkit';
 import { SrdItem, SrdProficiencyItem } from '../../types/srd';
 import abilityScores, {
 	AbilityScoresState,
@@ -13,6 +7,7 @@ import classInfo, {
 	ClassInfoState,
 	initialState as classInitialState
 } from './classInfo';
+import { combineReducers, createSlice } from '@reduxjs/toolkit';
 import hp, { HPState, initialState as hpInitialState } from './hp';
 import languages, { initialState as languagesInitialState } from './languages';
 import name, { initialState as nameInitialState } from './name';
@@ -41,17 +36,6 @@ export type EditingCharacterState = {
 	hp: HPState;
 };
 
-type OverrideReducersType = {
-	abilityScores?: Reducer<AbilityScoresState, AnyAction>;
-	raceInfo?: Reducer<RaceInfoState, AnyAction>;
-	languages?: Reducer<SrdItem[], AnyAction>;
-	proficiencies?: Reducer<SrdProficiencyItem[], AnyAction>;
-	spellcasting?: Reducer<SpellcastingState, AnyAction>;
-	classInfo?: Reducer<ClassInfoState, AnyAction>;
-	name?: Reducer<string, AnyAction>;
-	hp?: Reducer<HPState, AnyAction>;
-};
-
 export const initialState: EditingCharacterState = {
 	abilityScores: abilityScoresInitialState,
 	raceInfo: raceInitialState,
@@ -71,24 +55,20 @@ const editingCharacterSlice = createSlice({
 	}
 });
 
+const wholeReducer = combineReducers({
+	abilityScores,
+	raceInfo,
+	languages,
+	proficiencies,
+	spellcasting,
+	classInfo,
+	name,
+	hp
+});
+
 export const { doNothing } = editingCharacterSlice.actions;
 
-export const createEditingCharacterReducer = (
-	overrideReducers: OverrideReducersType = {}
-) =>
-	reduceReducers<EditingCharacterState>(
-		editingCharacterSlice.reducer,
-		combineReducers({
-			abilityScores,
-			raceInfo,
-			languages,
-			proficiencies,
-			spellcasting,
-			classInfo,
-			name,
-			hp,
-			...overrideReducers
-		})
-	);
-
-export default createEditingCharacterReducer();
+export default reduceReducers<EditingCharacterState>(
+	editingCharacterSlice.reducer,
+	wholeReducer
+);

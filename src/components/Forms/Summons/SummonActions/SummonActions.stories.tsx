@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Formik } from 'formik';
 import { Provider } from 'react-redux';
 import SummonActions from './SummonActions';
-import { createSpellSlice } from '../../../../redux/features/editingSpell';
+import getEditingSpellMock from '../../../../mock/editingSpellMock';
 import { getTestStore } from '../../../../redux/store';
 
 export default {
@@ -17,9 +17,9 @@ export default {
 		Story => (
 			<Provider
 				store={getTestStore({
-					editingSpell: createSpellSlice({
+					editingSpell: getEditingSpellMock({
 						summons: [{ actions: [{ name: '', description: '' }] }]
-					}).reducer
+					})
 				})}
 			>
 				<Story />
