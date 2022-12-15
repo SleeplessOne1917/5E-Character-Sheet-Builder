@@ -6,6 +6,7 @@ import MainContent from '../../../components/MainContent/MainContent';
 import classes from './CreateIndex.module.css';
 import { deepEquals } from '../../../services/objectService';
 import { initialState as editingCharacterInitialState } from '../../../redux/features/editingCharacter';
+import { initialState as editingClassInitialState } from '../../../redux/features/editingClass';
 import { initialState as editingRaceInitialState } from '../../../redux/features/editingRace';
 import { initialState as editingSpellInitialState } from '../../../redux/features/editingSpell';
 import { initialState as editingSubraceInitialState } from '../../../redux/features/editingSubrace';
@@ -22,6 +23,8 @@ const CreateIndex = ({ username }: CreateIndexProps) => {
 	const editingSpell = useAppSelector(state => state.editingSpell);
 	const editingRace = useAppSelector(state => state.editingRace);
 	const editingSubrace = useAppSelector(state => state.editingSubrace);
+	const editingClass = useAppSelector(state => state.editingClass);
+
 	const pathname = usePathname();
 
 	const editingCharacterChanged = useMemo(
@@ -42,6 +45,11 @@ const CreateIndex = ({ username }: CreateIndexProps) => {
 	const editingSubraceChanged = useMemo(
 		() => !deepEquals(editingSubraceInitialState, editingSubrace),
 		[editingSubrace]
+	);
+
+	const editingClassChanged = useMemo(
+		() => !deepEquals(editingClassInitialState, editingClass),
+		[editingClass]
 	);
 
 	return (
@@ -86,6 +94,14 @@ const CreateIndex = ({ username }: CreateIndexProps) => {
 								text={`${
 									editingSubraceChanged ? 'Continue Editing' : 'Create'
 								} Subrace`}
+							/>
+						</div>
+						<div className={classes['create-link-container']}>
+							<ArrowLink
+								href={`${pathname}/class`}
+								text={`${
+									editingClassChanged ? 'Continue Editing' : 'Create'
+								} Class`}
 							/>
 						</div>
 					</>

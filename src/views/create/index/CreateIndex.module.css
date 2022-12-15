@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    margin: 1rem 0;
 }
 
 .create-account-blurb {
@@ -28,10 +29,9 @@
 }
 
 .links {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-auto-rows: auto;
-    gap: 3rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 @media (hover: hover) {

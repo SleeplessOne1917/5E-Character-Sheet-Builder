@@ -3,10 +3,14 @@ import abilitySchema from './abilitySchema';
 
 const validateIsEquipmentCategory = (value: any) =>
 	value.equipmentCategory &&
-	typeof value.equipmentCategory === 'string' &&
+	typeof value.equipmentCategory === 'object' &&
 	value.choose &&
 	typeof value.choose === 'number' &&
-	Object.keys(value).length === 2;
+	Object.keys(value).length === 2 &&
+	value.item.id &&
+	typeof value.equipmentCategory.id === 'string' &&
+	value.item.name &&
+	typeof value.equipmentCategory.name === 'string';
 
 const validateIsItemAndCount = (value: any) =>
 	value.count &&
@@ -221,7 +225,7 @@ const classSchema = object({
 	startingEquipment: array()
 		.of(
 			object({
-				quantity: number()
+				count: number()
 					.required('Quantity is required')
 					.min(1, 'Quantity must be at least 1'),
 				item: object({

@@ -13,6 +13,7 @@ import editingCharacter, {
 import { get, set } from 'idb-keyval';
 
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
+import editingClass from './features/editingClass';
 import editingRace from './features/editingRace';
 import editingSpell from './features/editingSpell';
 import editingSubrace from './features/editingSubrace';
@@ -30,7 +31,8 @@ const getReducer = () => ({
 	generationMethod,
 	editingSpell,
 	editingRace,
-	editingSubrace
+	editingSubrace,
+	editingClass
 });
 
 const indexedDbCacheListener = createListenerMiddleware();
