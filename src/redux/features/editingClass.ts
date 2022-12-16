@@ -1,6 +1,7 @@
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
-import { createSlice } from '@reduxjs/toolkit';
 import proficiencies from './proficiencies';
 
 type Choose = {
@@ -68,7 +69,16 @@ export const initialState: EditingClassState = {
 const editingClassSlice = createSlice({
 	name: 'editingClass',
 	initialState,
-	reducers: {}
+	reducers: {
+		setName: (state, { payload }: PayloadAction<string>) => {
+			state.name = payload;
+		},
+		setHitDie: (state, { payload }: PayloadAction<number | undefined>) => {
+			state.hitDie = payload;
+		}
+	}
 });
+
+export const { setName, setHitDie } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
