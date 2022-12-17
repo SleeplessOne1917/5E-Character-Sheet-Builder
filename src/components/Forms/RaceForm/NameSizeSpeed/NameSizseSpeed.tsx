@@ -79,7 +79,7 @@ const NameSizeSpeed = ({
 
 	const handleSpeedBlur: FocusEventHandler<HTMLInputElement> = useCallback(
 		event => {
-			const parsedValue = parseInt(event.target.value);
+			const parsedValue = parseInt(event.target.value, 10);
 			let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
 			if (newValue && newValue < 5) {
 				newValue = 5;

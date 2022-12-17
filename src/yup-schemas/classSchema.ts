@@ -48,12 +48,12 @@ const startingEquipmentChoiceSchema = object({
 				} = <
 					{
 						parent: {
-							options: any[];
+							options?: any[];
 						};
 					}
 				>context;
 
-				return value < options.length;
+				return value < (options?.length ?? 0);
 			}
 		),
 	options: array()
@@ -94,12 +94,12 @@ const proficiencyChoiceSchema = object({
 				} = <
 					{
 						parent: {
-							options: any[];
+							options?: any[];
 						};
 					}
 				>context;
 
-				return value < options.length;
+				return value < (options?.length ?? 0);
 			}
 		),
 	options: array()
@@ -130,12 +130,12 @@ const proficiencyChoiceSchema = object({
 							} = <
 								{
 									parent: {
-										options: any[];
+										options?: any[];
 									};
 								}
 							>context;
 
-							return (value ?? 0) < options.length;
+							return (value ?? 0) < (options?.length ?? 0);
 						}
 					),
 				options: array()

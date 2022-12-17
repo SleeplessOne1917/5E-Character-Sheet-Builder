@@ -7,9 +7,14 @@ import { EditingClassState } from '../../../redux/features/editingClass';
 import { FormikHelpers } from 'formik';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
+import { SrdProficiencyItem } from '../../../types/srd';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 
-const Class = () => {
+type ClassProps = {
+	proficiencies: SrdProficiencyItem[];
+};
+
+const Class = ({ proficiencies }: ClassProps) => {
 	const editingClass = useAppSelector(state => state.editingClass);
 	const [loading, setLoading] = useState(true);
 
@@ -36,6 +41,7 @@ const Class = () => {
 				onSubmit={handleSubmit}
 				initialValues={editingClass}
 				shouldUseReduxStore
+				proficiencies={proficiencies}
 			/>
 		</MainContent>
 	);

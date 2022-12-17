@@ -5,6 +5,8 @@ import { Formik, FormikHelpers } from 'formik';
 
 import { EditingClassState } from '../../../redux/features/editingClass';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
+import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
+import { SrdProficiencyItem } from '../../../types/srd';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
 import { useState } from 'react';
@@ -12,6 +14,7 @@ import { useState } from 'react';
 type ClassForm = {
 	initialValues: EditingClassState;
 	shouldUseReduxStore?: boolean;
+	proficiencies: SrdProficiencyItem[];
 	onSubmit: (
 		values: EditingClassState,
 		helpers: FormikHelpers<EditingClassState>
@@ -21,6 +24,7 @@ type ClassForm = {
 const ClassForm = ({
 	initialValues,
 	shouldUseReduxStore = false,
+	proficiencies,
 	onSubmit
 }: ClassForm) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
@@ -36,6 +40,11 @@ const ClassForm = ({
 					<NameAndHitDie
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
+					/>
+					<ProficienciesAndProficiencyChoices
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						proficiencies={proficiencies}
 					/>
 					<Button
 						positive

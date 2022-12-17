@@ -78,14 +78,14 @@ const NameAndHitDie = ({
 				label="Name"
 				value={values.name}
 				error={errors.name}
-				touched={touched.name}
+				touched={clickedSubmit || touched.name}
 				onChange={handleChange}
 				onBlur={handleNameBlur}
 			/>
 			<Select
 				options={hitDieOptions}
 				error={errors.hitDie}
-				touched={touched.hitDie}
+				touched={clickedSubmit || touched.hitDie}
 				id="hitDie"
 				label="Hit Die"
 				value={values.hitDie ?? 'blank'}

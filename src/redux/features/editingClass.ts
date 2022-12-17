@@ -2,16 +2,15 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
-import proficiencies from './proficiencies';
 
-type Choose = {
+export type Choose = {
 	choose?: number;
-	options: Item[];
+	options?: Partial<Item>[];
 };
 
-type ProficiciencyChoice = {
+export type ProficiencyChoice = {
 	choose?: number;
-	options?: XOR<Item, Choose>[];
+	options?: Partial<XOR<Item, Choose>>[];
 };
 
 type CountedItem = {
@@ -32,7 +31,7 @@ export type EditingClassState = {
 	name: string;
 	hitDie?: number;
 	proficiencies: Item[];
-	proficiencyChoices?: ProficiciencyChoice[];
+	proficiencyChoices?: ProficiencyChoice[];
 	savingThrows: Item[];
 	spellcasting?: {
 		level?: number;
@@ -50,7 +49,7 @@ export type EditingClassState = {
 			minimumScore?: number;
 		}[];
 		proficiencies: Item[];
-		proficiencyChoices?: ProficiciencyChoice[];
+		proficiencyChoices?: ProficiencyChoice[];
 	};
 };
 
@@ -75,10 +74,58 @@ const editingClassSlice = createSlice({
 		},
 		setHitDie: (state, { payload }: PayloadAction<number | undefined>) => {
 			state.hitDie = payload;
+		},
+		setProficiencies: (state, { payload }: PayloadAction<Item[]>) => {
+			state.proficiencies = payload;
+		},
+		addProficiencyChoice: state => {
+			if (!state.proficiencyChoices) {
+				state.proficiencyChoices = [];
+			}
+
+			state.proficiencyChoices.push({});
+		},
+		removeProficiencyChoice: (state, { payload }: PayloadAction<number>) => {
+			state.proficiencyChoices = state.proficiencyChoices?.filter(
+				(val, i) => i !== payload
+			);
+
+			if (
+				state.proficiencyChoices?.length &&
+				state.proficiencyChoices.length === 0
+			) {
+				delete state.proficiencyChoices;
+			}
+		},
+		setProficiencyChoice: (
+			state,
+			{
+				payload: { index, proficiencyChoice }
+			}: PayloadAction<{
+				index: number;
+				proficiencyChoice: ProficiencyChoice;
+			}>
+		) => {
+			if (!state.proficiencyChoices) {
+				state.proficiencyChoices = [];
+			}
+
+			while (state.proficiencyChoices.length < index + 1) {
+				state.proficiencyChoices.push({});
+			}
+
+			state.proficiencyChoices[index] = proficiencyChoice;
 		}
 	}
 });
 
-export const { setName, setHitDie } = editingClassSlice.actions;
+export const {
+	setName,
+	setHitDie,
+	setProficiencies,
+	addProficiencyChoice,
+	removeProficiencyChoice,
+	setProficiencyChoice
+} = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
