@@ -1,12 +1,13 @@
 'use client';
 
+import { AbilityItem, SrdProficiencyItem } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
 import { EditingClassState } from '../../../redux/features/editingClass';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
-import { SrdProficiencyItem } from '../../../types/srd';
+import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
 import { useState } from 'react';
@@ -15,6 +16,7 @@ type ClassForm = {
 	initialValues: EditingClassState;
 	shouldUseReduxStore?: boolean;
 	proficiencies: SrdProficiencyItem[];
+	abilities: AbilityItem[];
 	onSubmit: (
 		values: EditingClassState,
 		helpers: FormikHelpers<EditingClassState>
@@ -25,6 +27,7 @@ const ClassForm = ({
 	initialValues,
 	shouldUseReduxStore = false,
 	proficiencies,
+	abilities,
 	onSubmit
 }: ClassForm) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
@@ -45,6 +48,11 @@ const ClassForm = ({
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						proficiencies={proficiencies}
+					/>
+					<SavingThrowsAndSpellcasting
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						abilities={abilities}
 					/>
 					<Button
 						positive

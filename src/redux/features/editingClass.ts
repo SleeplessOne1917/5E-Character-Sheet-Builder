@@ -32,7 +32,7 @@ export type EditingClassState = {
 	hitDie?: number;
 	proficiencies: Item[];
 	proficiencyChoices?: ProficiencyChoice[];
-	savingThrows: Item[];
+	savingThrows: (Item | null)[];
 	spellcasting?: {
 		level?: number;
 		ability?: Item;
@@ -56,7 +56,7 @@ export type EditingClassState = {
 export const initialState: EditingClassState = {
 	name: '',
 	proficiencies: [],
-	savingThrows: [],
+	savingThrows: [null, null],
 	startingEquipment: [],
 	subclassFlavor: '',
 	multiclassing: {
@@ -115,6 +115,37 @@ const editingClassSlice = createSlice({
 			}
 
 			state.proficiencyChoices[index] = proficiencyChoice;
+		},
+		setSavingThrow: (
+			state,
+			{
+				payload: { index, savingThrow }
+			}: PayloadAction<{ index: number; savingThrow: Item | null }>
+		) => {
+			state.savingThrows[index] = savingThrow;
+		},
+		addSpellcasting: state => {
+			state.spellcasting = { level: 1 };
+		},
+		removeSpellcasting: state => {
+			delete state.spellcasting;
+		},
+		setSpellcastingAbility: (
+			state,
+			{ payload }: PayloadAction<Item | undefined>
+		) => {
+			if (!state.spellcasting) {
+				state.spellcasting = { level: 1 };
+			}
+
+			state.spellcasting.ability = payload;
+		},
+		setSpellcastingLevel: (state, { payload }: PayloadAction<number>) => {
+			if (!state.spellcasting) {
+				state.spellcasting = {};
+			}
+
+			state.spellcasting.level = payload;
 		}
 	}
 });
@@ -125,7 +156,12 @@ export const {
 	setProficiencies,
 	addProficiencyChoice,
 	removeProficiencyChoice,
-	setProficiencyChoice
+	setProficiencyChoice,
+	setSavingThrow,
+	addSpellcasting,
+	removeSpellcasting,
+	setSpellcastingAbility,
+	setSpellcastingLevel
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

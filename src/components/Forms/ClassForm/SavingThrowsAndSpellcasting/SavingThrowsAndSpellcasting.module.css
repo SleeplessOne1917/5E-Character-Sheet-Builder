@@ -1,0 +1,22 @@
+.section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.saving-throws {
+    display: flex;
+    align-items: center;
+}
+
+.ability-level {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

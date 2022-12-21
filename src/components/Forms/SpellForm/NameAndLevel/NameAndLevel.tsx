@@ -15,6 +15,13 @@ type NameAndLevelProps = {
 	shouldUseReduxStore: boolean;
 };
 
+const levelOptions = [{ value: 'blank', label: '\u2014' } as Option].concat(
+	[...Array(10).keys()].map(level => ({
+		value: level,
+		label: `${level === 0 ? 'Cantrip' : level}`
+	}))
+);
+
 const NameAndLevel = ({ shouldUseReduxStore }: NameAndLevelProps) => {
 	const {
 		handleBlur,
@@ -59,17 +66,6 @@ const NameAndLevel = ({ shouldUseReduxStore }: NameAndLevelProps) => {
 			setFieldValue,
 			shouldUseReduxStore
 		]
-	);
-
-	const levelOptions = useMemo(
-		() =>
-			[{ value: 'blank', label: '\u2014' } as Option].concat(
-				[...Array(10).keys()].map(level => ({
-					value: level,
-					label: `${level === 0 ? 'Cantrip' : level}`
-				}))
-			),
-		[]
 	);
 
 	return (

@@ -63,16 +63,17 @@ const Select = ({
 		[options, selectedIndex]
 	);
 
-	const defaultIndex = value ? getValueIndex(value) : selectedIndex;
-
-	const [focusIndex, setFocusIndex] = useState<number>(
-		value ? getValueIndex(value) : selectedIndex
+	const getDefaultIndex = useCallback(
+		() => (value ? getValueIndex(value) : selectedIndex),
+		[value, getValueIndex, selectedIndex]
 	);
+
+	const [focusIndex, setFocusIndex] = useState<number>(getDefaultIndex());
 
 	const closeSelect = useCallback(() => {
 		setIsOpen(false);
-		setFocusIndex(defaultIndex);
-	}, [setIsOpen, setFocusIndex, defaultIndex]);
+		setFocusIndex(getDefaultIndex());
+	}, [setIsOpen, setFocusIndex, getDefaultIndex]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: Event) => {
@@ -89,7 +90,10 @@ const Select = ({
 
 	useEffect(() => {
 		listItemRefs.current = listItemRefs.current.slice(0, options.length);
-	}, [options]);
+		if (value || value === 0) {
+			setFocusIndex(getDefaultIndex());
+		}
+	}, [options, value, getDefaultIndex]);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -140,7 +144,7 @@ const Select = ({
 			switch (e.code) {
 				case 'Escape':
 					e.preventDefault();
-					setFocusIndex(defaultIndex);
+					setFocusIndex(getDefaultIndex());
 					setIsOpen(false);
 					break;
 				case 'ArrowUp':
@@ -159,7 +163,7 @@ const Select = ({
 					break;
 			}
 		},
-		[setIsOpen, setFocusIndex, options, defaultIndex]
+		[setIsOpen, setFocusIndex, options, getDefaultIndex]
 	);
 
 	return (
@@ -190,7 +194,7 @@ const Select = ({
 					ref={buttonRef as MutableRefObject<HTMLButtonElement>}
 					data-testid={testId ? `${testId}-button` : 'select-button'}
 				>
-					{options[defaultIndex].label}
+					{options[getDefaultIndex()].label}
 					{isOpen ? (
 						<ChevronUpIcon className={classes.icon} />
 					) : (
@@ -201,7 +205,7 @@ const Select = ({
 					tabIndex={-1}
 					style={listStyle}
 					role="listbox"
-					aria-activedescendant={options[defaultIndex].label}
+					aria-activedescendant={options[getDefaultIndex()].label}
 					className={classes.list}
 					onKeyDown={handleListKeyDown}
 					data-testid={testId ? `${testId}-list` : 'select-list'}
@@ -211,14 +215,18 @@ const Select = ({
 							key={option.value}
 							tabIndex={0}
 							role="option"
-							aria-selected={defaultIndex === index}
+							aria-selected={getDefaultIndex() === index}
 							className={`${classes.item}${
-								defaultIndex === index ? ` ${classes.selected}` : ''
+								getDefaultIndex() === index ? ` ${classes.selected}` : ''
 							}`}
 							onClick={() => handleChange(option.value)}
 							onKeyDown={event => handleItemKeyDown(event, option.value)}
 							ref={element => {
-								listItemRefs.current[index] = element as HTMLLIElement;
+								if (listItemRefs.current.length >= index + 1) {
+									listItemRefs.current[index] = element as HTMLLIElement;
+								} else {
+									listItemRefs.current.push(element as HTMLLIElement);
+								}
 							}}
 							data-testid={
 								testId
