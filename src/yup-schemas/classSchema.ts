@@ -212,6 +212,26 @@ const classSchema = object({
 		.of(number().min(1, 'Proficiency bonus must be at least 1'))
 		.length(20, 'Must have 1 proficiency bonus for each level')
 		.required('Proficiency bonuses are required'),
+	abilityScoreBonusLevels: array()
+		.of(
+			number()
+				.min(1, 'Ability score bonus level cannot be less than 1')
+				.max(20, 'Ability score bonus level cannot be greater than 20')
+		)
+		.required('Ability score bonus levels are required')
+		.test(
+			'no-repeat-levels',
+			'Ability score bonus levels cannot repeat',
+			values =>
+				!!values &&
+				!values.reduce<{ viewed: number[]; hasRepeat: boolean }>(
+					(acc, cur) =>
+						acc.viewed.includes(cur as number)
+							? { viewed: [...acc.viewed, cur as number], hasRepeat: true }
+							: { ...acc, viewed: [...acc.viewed, cur as number] },
+					{ viewed: [], hasRepeat: false }
+				).hasRepeat
+		),
 	savingThrows: array()
 		.of(abilitySchema)
 		.length(2, 'Class must have 2 saving throws'),

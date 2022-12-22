@@ -9,13 +9,17 @@
     top: -1rem;
     background-color: var(--davy);
     color: var(--heaven-light);
-    z-index: 1;
+    z-index: 2;
 }
 
 .levels td, .levels th {
     text-align: center;
     padding: 0.5rem;
     max-width: 75%;
+}
+
+.levels td > *, .levels th > * {
+    margin: 0 auto;
 }
 
 .level {
@@ -32,4 +36,5 @@
     color: var(--heaven-light);
     position: sticky;
     left: -1rem;
+    z-index: 1;
 }

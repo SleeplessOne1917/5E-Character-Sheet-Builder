@@ -10,6 +10,8 @@ import {
 import {
 	EditingClassState,
 	SpellSlotsAndCantrips,
+	addAbilityScoreBonusLevel,
+	removeAbilityScoreBonusLevel,
 	setProficiencyBonus,
 	setSpellcastingCantripsKnown,
 	setSpellcastingSpellSlots,
@@ -17,6 +19,7 @@ import {
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 
+import Checkbox from '../../../Checkbox/Checkbox';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './Levels.module.css';
@@ -77,11 +80,11 @@ const ProficiencyBonuses = ({
 	);
 
 	useEffect(() => {
-		setMaxWidth(numberOfColumns > 2 ? '1000px' : undefined);
+		setMaxWidth(numberOfColumns > 3 ? '1000px' : undefined);
 	}, [numberOfColumns]);
 
 	useEffect(() => {
-		if (numberOfColumns > 2) {
+		if (numberOfColumns > 3) {
 			if (isTripleExtraLarge) {
 				setLeft('0');
 			} else if (isDoubleExtraLarge) {
@@ -506,12 +509,45 @@ const ProficiencyBonuses = ({
 		]
 	);
 
+	const getHandleAbilityScoreBonusChange = useCallback(
+		(level: number) => (value: boolean) => {
+			if (value) {
+				if (shouldUseReduxStore) {
+					dispatch(addAbilityScoreBonusLevel(level));
+				}
+
+				setFieldValue(
+					'abilityScoreBonusLevels',
+					[...values.abilityScoreBonusLevels, level],
+					false
+				);
+			} else {
+				if (shouldUseReduxStore) {
+					dispatch(removeAbilityScoreBonusLevel(level));
+				}
+
+				setFieldValue(
+					'abilityScoreBonusLevels',
+					values.abilityScoreBonusLevels.filter(l => l !== level),
+					false
+				);
+			}
+		},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			values.abilityScoreBonusLevels
+		]
+	);
+
 	return (
 		<table className={styles.levels} style={{ maxWidth, left }}>
 			<thead>
 				<tr>
 					<th>Class Level</th>
 					<th>Proficiency Bonus</th>
+					<th>Ability Score Bonus</th>
 					{values.spellcasting?.handleSpells === 'spells-known' && (
 						<th>Spells Known</th>
 					)}
@@ -540,6 +576,14 @@ const ProficiencyBonuses = ({
 								onBlur={getHandleBonusBlur(i)}
 								hideLabel
 								errorStyle={{ fontSize: '0.7rem' }}
+							/>
+						</td>
+						<td className={styles.bonus}>
+							<Checkbox
+								label={`Enable Ability Score Bonus for Level ${i + 1}`}
+								checked={values.abilityScoreBonusLevels.includes(i + 1)}
+								onChange={getHandleAbilityScoreBonusChange(i + 1)}
+								hideLabel
 							/>
 						</td>
 						{values.spellcasting?.handleSpells === 'spells-known' && (

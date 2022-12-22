@@ -11,13 +11,15 @@ type CheckboxProps = {
 	label: string;
 	onChange: (value: boolean) => void;
 	useAlternateStyle?: boolean;
+	hideLabel?: boolean;
 };
 
 const Checkbox = ({
 	checked,
 	onChange,
 	label,
-	useAlternateStyle = false
+	useAlternateStyle = false,
+	hideLabel = false
 }: CheckboxProps) => {
 	const [isChecked, setIsChecked] = useState(checked ?? false);
 
@@ -49,11 +51,12 @@ const Checkbox = ({
 				tabIndex={0}
 				role="checkbox"
 				aria-checked={isChecked}
+				aria-label={label}
 				onKeyDown={handleKeyDown}
 			>
 				{(checked || isChecked) && <CheckIcon className={classes.check} />}
 			</div>
-			{label}
+			{!hideLabel && label}
 		</label>
 	);
 };

@@ -49,6 +49,7 @@ export type EditingClassState = {
 	proficiencies: Item[];
 	proficiencyChoices?: ProficiencyChoice[];
 	proficiencyBonuses: (number | null)[];
+	abilityScoreBonusLevels: number[];
 	savingThrows: (Item | null)[];
 	spellcasting?: {
 		level: number;
@@ -79,6 +80,7 @@ export const initialState: EditingClassState = {
 	name: '',
 	proficiencies: [],
 	proficiencyBonuses: [...Array(20).keys()].map(() => null),
+	abilityScoreBonusLevels: [],
 	savingThrows: [null, null],
 	startingEquipment: [],
 	subclassFlavor: '',
@@ -398,6 +400,17 @@ const editingClassSlice = createSlice({
 					state.proficiencyBonuses[i] = proficiencyBonus;
 				}
 			}
+		},
+		addAbilityScoreBonusLevel: (state, { payload }: PayloadAction<number>) => {
+			state.abilityScoreBonusLevels.push(payload);
+		},
+		removeAbilityScoreBonusLevel: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			state.abilityScoreBonusLevels = state.abilityScoreBonusLevels.filter(
+				level => level !== payload
+			);
 		}
 	}
 });
@@ -422,7 +435,9 @@ export const {
 	setIsHalfCaster,
 	setKnowsCantrips,
 	setHandleSpells,
-	setProficiencyBonus
+	setProficiencyBonus,
+	addAbilityScoreBonusLevel,
+	removeAbilityScoreBonusLevel
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
