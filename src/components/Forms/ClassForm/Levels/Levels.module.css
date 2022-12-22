@@ -2,8 +2,6 @@
     border: 5px solid var(--davy);
     position: relative;
     border-collapse: collapse;
-    min-width: 1000px;
-    left: 20rem;
 }
 
 .levels thead th {
@@ -17,6 +15,7 @@
 .levels td, .levels th {
     text-align: center;
     padding: 0.5rem;
+    max-width: 75%;
 }
 
 .level {
@@ -33,46 +32,4 @@
     color: var(--heaven-light);
     position: sticky;
     left: -1rem;
-}
-
-@media screen and (min-width: 512px) {
-    .levels {
-        left: 15rem;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .levels {
-        left: 10rem;
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    .levels {
-        left: 4rem;
-    }
-}
-
-@media screen and (min-width: 1280px) {
-    .levels {
-        left: 11rem;
-    }
-}
-
-@media screen and (min-width: 1536px) {
-    .levels {
-        left: 8.5rem;
-    }
-}
-
-@media screen and (min-width: 1792px) {
-    .levels {
-        left: 4.6rem;
-    }
-}
-
-@media screen and (min-width: 2048px) {
-    .levels {
-        left: 0;
-    }
 }

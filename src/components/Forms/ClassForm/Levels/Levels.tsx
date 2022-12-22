@@ -1,8 +1,11 @@
 import {
 	ChangeEventHandler,
 	FocusEventHandler,
+	PropsWithChildren,
 	useCallback,
-	useMemo
+	useEffect,
+	useMemo,
+	useState
 } from 'react';
 import {
 	EditingClassState,
@@ -18,6 +21,7 @@ import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './Levels.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 type ProficiencyBonusType = {
 	clickedSubmit: boolean;
@@ -38,6 +42,16 @@ const ProficiencyBonuses = ({
 		setFieldError
 	} = useFormikContext<EditingClassState>();
 
+	const [maxWidth, setMaxWidth] = useState<string>();
+	const [left, setLeft] = useState<string>();
+
+	const isTripleExtraLarge = useMediaQuery('(min-width: 1792px)');
+	const isDoubleExtraLarge = useMediaQuery('(min-width: 1536px)');
+	const isExtraLarge = useMediaQuery('(min-width: 1280px)');
+	const isLarge = useMediaQuery('(min-width: 1024px)');
+	const isMedium = useMediaQuery('(min-width: 768px)');
+	const isSmall = useMediaQuery('(min-width: 512px)');
+
 	const includeLevel1 = useMemo(
 		() => values.spellcasting?.level === 1,
 		[values.spellcasting?.level]
@@ -50,6 +64,51 @@ const ProficiencyBonuses = ({
 			),
 		[values.spellcasting?.isHalfCaster, values.spellcasting?.knowsCantrips]
 	);
+
+	const numberOfColumns = useMemo(
+		() =>
+			2 +
+			(values.spellcasting
+				? (values.spellcasting?.isHalfCaster ? 5 : 9) +
+				  (values.spellcasting?.knowsCantrips ? 1 : 0) +
+				  (values.spellcasting?.handleSpells === 'spells-known' ? 1 : 0)
+				: 0),
+		[values.spellcasting]
+	);
+
+	useEffect(() => {
+		setMaxWidth(numberOfColumns > 2 ? '1000px' : undefined);
+	}, [numberOfColumns]);
+
+	useEffect(() => {
+		if (numberOfColumns > 2) {
+			if (isTripleExtraLarge) {
+				setLeft('0');
+			} else if (isDoubleExtraLarge) {
+				setLeft('4rem');
+			} else if (isExtraLarge) {
+				setLeft('8rem');
+			} else if (isLarge) {
+				setLeft('0');
+			} else if (isMedium) {
+				setLeft('6rem');
+			} else if (isSmall) {
+				setLeft('10rem');
+			} else {
+				setLeft('15rem');
+			}
+		} else {
+			setLeft(undefined);
+		}
+	}, [
+		numberOfColumns,
+		isDoubleExtraLarge,
+		isExtraLarge,
+		isLarge,
+		isMedium,
+		isSmall,
+		isTripleExtraLarge
+	]);
 
 	const getBonusTouched = useCallback(
 		(index: number) =>
@@ -448,7 +507,7 @@ const ProficiencyBonuses = ({
 	);
 
 	return (
-		<table className={styles.levels}>
+		<table className={styles.levels} style={{ maxWidth, left }}>
 			<thead>
 				<tr>
 					<th>Class Level</th>
