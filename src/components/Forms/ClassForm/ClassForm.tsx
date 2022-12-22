@@ -8,6 +8,7 @@ import { EditingClassState } from '../../../redux/features/editingClass';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
 import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
+import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ type ClassForm = {
 		values: EditingClassState,
 		helpers: FormikHelpers<EditingClassState>
 	) => Promise<void>;
+	spells: SpellItem[];
 };
 
 const ClassForm = ({
@@ -28,6 +30,7 @@ const ClassForm = ({
 	shouldUseReduxStore = false,
 	proficiencies,
 	abilities,
+	spells,
 	onSubmit
 }: ClassForm) => {
 	const [clickedSubmit, setClickedSubmit] = useState(false);
@@ -53,6 +56,7 @@ const ClassForm = ({
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						abilities={abilities}
+						spells={spells}
 					/>
 					<Button
 						positive

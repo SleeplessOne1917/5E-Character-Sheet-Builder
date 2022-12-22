@@ -13,6 +13,7 @@ type NumberTextInputProps = {
 	onChange: ChangeEventHandler<HTMLInputElement>;
 	onBlur: FocusEventHandler<HTMLInputElement>;
 	errorStyle?: CSSProperties;
+	hideLabel?: boolean;
 };
 
 const NumberTextInput = ({
@@ -23,12 +24,15 @@ const NumberTextInput = ({
 	error,
 	onBlur,
 	onChange,
-	errorStyle
+	errorStyle,
+	hideLabel = false
 }: NumberTextInputProps) => (
 	<div className={classes['input-container']}>
-		<label htmlFor={id} className={classes['input-label']}>
-			{label}
-		</label>
+		{!hideLabel && (
+			<label htmlFor={id} className={classes['input-label']}>
+				{label}
+			</label>
+		)}
 		<input
 			id={id}
 			className={`${classes.input}${
@@ -40,6 +44,7 @@ const NumberTextInput = ({
 			style={{ marginTop: '0.2rem' }}
 			value={value ?? ''}
 			onBlur={onBlur}
+			aria-label={label}
 		/>
 		{touched && error && (
 			<div className={classes['error-message']} style={errorStyle}>

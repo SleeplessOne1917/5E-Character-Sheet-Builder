@@ -1,4 +1,5 @@
-import { array, mixed, number, object, string } from 'yup';
+import { array, boolean, mixed, number, object, string } from 'yup';
+import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
 
 const validateIsEquipmentCategory = (value: any) =>
@@ -215,10 +216,124 @@ const classSchema = object({
 			.required('Spellcasting level required')
 			.test(
 				'valid-spellcasting-level',
-				'Spellcasting level must be between 1 and 20 inclusive',
-				value => !!value && (value >= 1 || value <= 20)
+				'Spellcasting level must be 1 or 2',
+				value => !!value && (value === 1 || value === 2)
 			),
-		ability: abilitySchema.required('Spellcasting ability required')
+		isHalfCaster: boolean().required('isHalfCaster is required'),
+		handleSpells: string()
+			.required('Handle Spells is required')
+			.test(
+				'handle-spells-is-valid',
+				'Handle Spells must be either "prepare" or "spells-known"',
+				value => !!value && (value === 'prepare' || value === 'spells-known')
+			),
+		knowsCantrips: boolean().required('Knows Cantrips is required'),
+		ability: abilitySchema
+			.required('Spellcasting ability required')
+			.test(
+				'mental-ability',
+				'Ability must be Charisma, Wisdom, or Intelligence',
+				value =>
+					!!value &&
+					(value.id === 'cha' || value.id === 'wis' || value.id === 'int')
+			),
+		spells: array()
+			.of(
+				object({
+					id: string()
+						.required()
+						.max(50, 'Spell id cannot be more than 50 characters long'),
+					name: string()
+						.required()
+						.max(50, 'Spell name cannot be more than 50 characters long')
+				})
+			)
+			.min(1, 'Must have at least 1 spell')
+			.required('Spells are required')
+			.test('no-repeats', 'Cannot have multiple of the same spell', values => {
+				if (!values) {
+					return false;
+				}
+
+				return !values.reduce<{
+					checkedSpells: Partial<Item>[];
+					hasRepeat: boolean;
+				}>(
+					(acc, cur) =>
+						acc.checkedSpells.some(spell => spell.id === cur.id)
+							? { checkedSpells: [...acc.checkedSpells, cur], hasRepeat: true }
+							: { ...acc, checkedSpells: [...acc.checkedSpells, cur] },
+					{ checkedSpells: [], hasRepeat: false }
+				).hasRepeat;
+			}),
+		spellSlotsAndCantripsPerLevel: array()
+			.of(
+				object({
+					spellsKnown: number().min(1, 'Must know at least 1 spell').nullable(),
+					cantrips: number().min(1, 'Must have at least 1 cantrip').nullable(),
+					level1: number()
+						.min(1, 'Level 1 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level2: number()
+						.min(1, 'Level 2 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level3: number()
+						.min(1, 'Level 3 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level4: number()
+						.min(1, 'Level 4 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level5: number()
+						.min(1, 'Level 5 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level6: number()
+						.min(1, 'Level 6 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level7: number()
+						.min(1, 'Level 7 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level8: number()
+						.min(1, 'Level 8 spell slot must be greater than or equal to 1')
+						.nullable(),
+					level9: number()
+						.min(1, 'Level 9 spell slot must be greater than or equal to 1')
+						.nullable()
+				})
+			)
+			.required('Spell slots and cantrips are required')
+			.length(
+				20,
+				'Must have 20 spell slot and cantrip numbers, one for each class level'
+			)
+			.test(
+				'earlier-levels-not-larger-than-higher-levels',
+				'Cannot have more spells slots in a level lower than a level with fewer spell slots.',
+				value => {
+					if (!value) {
+						return false;
+					}
+
+					for (let i = 0; i < value.length - 1; ++i) {
+						if (
+							(value[i].spellsKnown ?? 0) > (value[i + 1].spellsKnown ?? 0) ||
+							(value[i].cantrips ?? 0) > (value[i + 1].cantrips ?? 0) ||
+							(value[i].level1 ?? 0) > (value[i + 1].level1 ?? 0) ||
+							(value[i].level2 ?? 0) > (value[i + 1].level2 ?? 0) ||
+							(value[i].level3 ?? 0) > (value[i + 1].level3 ?? 0) ||
+							(value[i].level4 ?? 0) > (value[i + 1].level4 ?? 0) ||
+							(value[i].level5 ?? 0) > (value[i + 1].level5 ?? 0) ||
+							(value[i].level6 ?? 0) > (value[i + 1].level6 ?? 0) ||
+							(value[i].level7 ?? 0) > (value[i + 1].level7 ?? 0) ||
+							(value[i].level8 ?? 0) > (value[i + 1].level8 ?? 0) ||
+							(value[i].level9 ?? 0) > (value[i + 1].level9 ?? 0)
+						) {
+							return false;
+						}
+					}
+
+					return true;
+				}
+			)
 	})
 		.optional()
 		.default(undefined),

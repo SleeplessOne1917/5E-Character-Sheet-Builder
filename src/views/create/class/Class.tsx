@@ -9,6 +9,7 @@ import { FormikHelpers } from 'formik';
 import LoadingPageContent from '../../../components/LoadingPageContent/LoadingPageContent';
 import MainContent from '../../../components/MainContent/MainContent';
 import { useAppSelector } from '../../../hooks/reduxHooks';
+import useGetSpells from '../../../hooks/useGetSpells';
 
 type ClassProps = {
 	proficiencies: SrdProficiencyItem[];
@@ -18,6 +19,7 @@ type ClassProps = {
 const Class = ({ proficiencies, abilities }: ClassProps) => {
 	const editingClass = useAppSelector(state => state.editingClass);
 	const [loading, setLoading] = useState(true);
+	const spellsResult = useGetSpells();
 
 	useEffect(() => {
 		if (editingClass) {
@@ -44,6 +46,7 @@ const Class = ({ proficiencies, abilities }: ClassProps) => {
 				shouldUseReduxStore
 				proficiencies={proficiencies}
 				abilities={abilities}
+				spells={spellsResult.spells}
 			/>
 		</MainContent>
 	);

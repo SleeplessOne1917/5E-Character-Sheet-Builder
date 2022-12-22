@@ -1,6 +1,6 @@
 'use client';
 
-import { FocusEventHandler, useCallback, useMemo } from 'react';
+import { FocusEventHandler, useCallback } from 'react';
 import { setLevel, setName } from '../../../../redux/features/editingSpell';
 
 import Option from '../../../Select/Option';

@@ -75,7 +75,7 @@ const Race = ({ abilities, languages, proficiencies }: RaceProps) => {
 				shouldUseReduxStore
 				languages={languages}
 				proficiencies={proficiencies}
-				spells={spellsResult.spells ?? []}
+				spells={spellsResult.spells}
 				onSubmit={handleSubmit}
 			/>
 		</MainContent>

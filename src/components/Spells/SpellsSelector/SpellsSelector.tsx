@@ -1,6 +1,12 @@
 'use client';
 
-import { ChangeEventHandler, useCallback, useMemo, useState } from 'react';
+import {
+	ChangeEventHandler,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState
+} from 'react';
 
 import Button from '../../Button/Button';
 import Checkbox from '../../Checkbox/Checkbox';
@@ -46,6 +52,16 @@ const SpellsSelector = ({
 	const selectorLabel = `Search ${
 		levels.length === 0 && spells[0].level === 0 ? 'cantrips' : 'spells'
 	}`;
+
+	useEffect(() => {
+		if (
+			!levels.includes(
+				selectedLevel === 'blank' ? -1 : (selectedLevel as number)
+			)
+		) {
+			setSelectedLevel('blank');
+		}
+	}, [levels, selectedLevel]);
 
 	const handlePreviousClick = useCallback(() => {
 		setCurrentPage(prev => prev - 1);
@@ -179,7 +195,13 @@ const SpellsSelector = ({
 										label: `${level}`
 									}))
 								)}
-								value={selectedLevel}
+								value={
+									levels.includes(
+										selectedLevel === 'blank' ? -1 : (selectedLevel as number)
+									)
+										? selectedLevel
+										: 'blank'
+								}
 								onChange={handleSelectedLevelChange}
 							/>
 						</div>

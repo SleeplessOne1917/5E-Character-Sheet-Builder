@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
@@ -27,6 +27,22 @@ type Multiple = {
 	items: XOR<CountedItem, ChooseEquipmentCategory>[];
 };
 
+export type SpellSlotsAndCantrips = {
+	spellsKnown: number | null;
+	cantrips: number | null;
+	level1: number | null;
+	level2: number | null;
+	level3: number | null;
+	level4: number | null;
+	level5: number | null;
+	level6: number | null;
+	level7: number | null;
+	level8: number | null;
+	level9: number | null;
+};
+
+export type HandleSpellsType = 'prepare' | 'spells-known';
+
 export type EditingClassState = {
 	name: string;
 	hitDie?: number;
@@ -34,8 +50,13 @@ export type EditingClassState = {
 	proficiencyChoices?: ProficiencyChoice[];
 	savingThrows: (Item | null)[];
 	spellcasting?: {
-		level?: number;
+		level: number;
 		ability?: Item;
+		spells: Item[];
+		isHalfCaster: boolean;
+		handleSpells?: HandleSpellsType;
+		knowsCantrips: boolean;
+		spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
 	};
 	startingEquipment: CountedItem[];
 	startingEquipmentOptions?: {
@@ -62,6 +83,32 @@ export const initialState: EditingClassState = {
 	multiclassing: {
 		prerequisiteOptions: [],
 		proficiencies: []
+	}
+};
+
+const prepSpellcasting = (state: Draft<EditingClassState>) => {
+	if (!state.spellcasting) {
+		state.spellcasting = {
+			level: 1,
+			spells: [],
+			knowsCantrips: true,
+			isHalfCaster: false,
+			spellSlotsAndCantripsPerLevel: [
+				...Array(20).keys()
+			].map<SpellSlotsAndCantrips>(() => ({
+				spellsKnown: null,
+				cantrips: null,
+				level1: null,
+				level2: null,
+				level3: null,
+				level4: null,
+				level5: null,
+				level6: null,
+				level7: null,
+				level8: null,
+				level9: null
+			}))
+		};
 	}
 };
 
@@ -125,7 +172,27 @@ const editingClassSlice = createSlice({
 			state.savingThrows[index] = savingThrow;
 		},
 		addSpellcasting: state => {
-			state.spellcasting = { level: 1 };
+			state.spellcasting = {
+				level: 1,
+				spells: [],
+				knowsCantrips: true,
+				isHalfCaster: false,
+				spellSlotsAndCantripsPerLevel: [
+					...Array(20).keys()
+				].map<SpellSlotsAndCantrips>(() => ({
+					spellsKnown: null,
+					cantrips: null,
+					level1: null,
+					level2: null,
+					level3: null,
+					level4: null,
+					level5: null,
+					level6: null,
+					level7: null,
+					level8: null,
+					level9: null
+				}))
+			};
 		},
 		removeSpellcasting: state => {
 			delete state.spellcasting;
@@ -134,18 +201,177 @@ const editingClassSlice = createSlice({
 			state,
 			{ payload }: PayloadAction<Item | undefined>
 		) => {
-			if (!state.spellcasting) {
-				state.spellcasting = { level: 1 };
-			}
+			prepSpellcasting(state);
 
+			//@ts-ignore
 			state.spellcasting.ability = payload;
 		},
 		setSpellcastingLevel: (state, { payload }: PayloadAction<number>) => {
 			if (!state.spellcasting) {
-				state.spellcasting = {};
+				state.spellcasting = {
+					spells: [],
+					spellSlotsAndCantripsPerLevel: [
+						...Array(20).keys()
+					].map<SpellSlotsAndCantrips>(() => ({
+						cantrips: 1,
+						level1: null,
+						level2: null,
+						level3: null,
+						level4: null,
+						level5: null,
+						level6: null,
+						level7: null,
+						level8: null,
+						level9: null
+					}))
+				};
 			}
 
 			state.spellcasting.level = payload;
+		},
+		addSpellcastingSpell: (state, { payload }: PayloadAction<Item>) => {
+			prepSpellcasting(state);
+
+			//@ts-ignore
+			state.spellcasting.spells.push(payload);
+		},
+		removeSpellcastingSpell: (state, { payload }: PayloadAction<string>) => {
+			prepSpellcasting(state);
+
+			//@ts-ignore
+			state.spellcasting.spells = state.spellcasting?.spells.filter(
+				({ id }) => id !== payload
+			);
+		},
+		setSpellcastingSpellsKnown: (
+			state,
+			{
+				payload: { classLevel, spellsKnown }
+			}: PayloadAction<{ classLevel: number; spellsKnown: number | null }>
+		) => {
+			prepSpellcasting(state);
+
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i].spellsKnown ||
+					(state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown ??
+						0) < (spellsKnown ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown =
+						spellsKnown;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if (
+					(state.spellcasting?.spellSlotsAndCantripsPerLevel[i].spellsKnown ??
+						0) > (spellsKnown ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown =
+						spellsKnown;
+				}
+			}
+		},
+		setSpellcastingCantripsKnown: (
+			state,
+			{
+				payload: { classLevel, cantrips }
+			}: PayloadAction<{ classLevel: number; cantrips: number | null }>
+		) => {
+			prepSpellcasting(state);
+
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ||
+					(state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips ?? 0) <
+						(cantrips ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips =
+						cantrips;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if (
+					(state.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ?? 0) >
+					(cantrips ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips =
+						cantrips;
+				}
+			}
+		},
+		setSpellcastingSpellSlots: (
+			state,
+			{
+				payload: { classLevel, spellLevel, slots }
+			}: PayloadAction<{
+				classLevel: number;
+				spellLevel: number;
+				slots: number | null;
+			}>
+		) => {
+			prepSpellcasting(state);
+
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					//@ts-ignore
+					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i][
+						`level${spellLevel}`
+					] ||
+					//@ts-ignore
+					(state.spellcasting.spellSlotsAndCantripsPerLevel[i][
+						`level${spellLevel}`
+					] ?? 0) < (slots ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i][
+						`level${spellLevel}`
+					] = slots;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if (
+					//@ts-ignore
+					(state.spellcasting.spellSlotsAndCantripsPerLevel[i][
+						`level${spellLevel}`
+					] ?? 0) < (slots ?? 0)
+				) {
+					//@ts-ignore
+					state.spellcasting.spellSlotsAndCantripsPerLevel[i][
+						`level${spellLevel}`
+					] = slots;
+				}
+			}
+		},
+		setIsHalfCaster: (state, { payload }: PayloadAction<boolean>) => {
+			prepSpellcasting(state);
+
+			//@ts-ignore
+			state.spellcasting.isHalfCaster = payload;
+		},
+		setKnowsCantrips: (state, { payload }: PayloadAction<boolean>) => {
+			prepSpellcasting(state);
+
+			//@ts-ignore
+			state.spellcasting.knowsCantrips = payload;
+		},
+		setHandleSpells: (
+			state,
+			{ payload }: PayloadAction<HandleSpellsType | undefined>
+		) => {
+			prepSpellcasting(state);
+
+			//@ts-ignore
+			state.spellcasting.handleSpells = payload;
 		}
 	}
 });
@@ -161,7 +387,15 @@ export const {
 	addSpellcasting,
 	removeSpellcasting,
 	setSpellcastingAbility,
-	setSpellcastingLevel
+	setSpellcastingLevel,
+	addSpellcastingSpell,
+	removeSpellcastingSpell,
+	setSpellcastingSpellsKnown,
+	setSpellcastingCantripsKnown,
+	setSpellcastingSpellSlots,
+	setIsHalfCaster,
+	setKnowsCantrips,
+	setHandleSpells
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

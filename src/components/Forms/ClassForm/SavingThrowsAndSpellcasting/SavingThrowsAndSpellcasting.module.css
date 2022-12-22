@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     margin: 1rem 0;
+    width: 100%;
+    padding: 1rem;
 }
 
 .title {
@@ -13,10 +15,62 @@
 .saving-throws {
     display: flex;
     align-items: center;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 .ability-level {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.spells {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+.error {
+    border: 5px solid var(--error-red);
+}
+
+.error-message {
+    margin-top: 0.5rem;
+    color: var(--wine-red);
+    font-size: 1.3rem;
+}
+
+.levels {
+    border: 5px solid var(--davy);
+    table-layout: fixed;
+    position: relative;
+    border-collapse: collapse;
+}
+
+.levels th {
+    position: sticky;
+    top: -1rem;
+    background-color: var(--davy);
+    color: var(--heaven-light);
+}
+
+.levels td, .levels th {
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.level {
+    width: 100%;
+    background-color: var(--heaven-light);
+}
+
+.level:nth-of-type(even) {
+    background-color: var(--highlight-light);
 }

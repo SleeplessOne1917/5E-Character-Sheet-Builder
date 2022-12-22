@@ -90,6 +90,8 @@ type BaseTraitProps = {
 	) => JSX.Element;
 };
 
+const levels = [...new Array(10).keys()];
+
 const BaseTrait = ({
 	onRemove,
 	shouldUseReduxStore,
@@ -899,8 +901,6 @@ const BaseTrait = ({
 			trait.subtraitOptions?.options
 		]
 	);
-
-	const levels = [...new Array(10).keys()];
 
 	const proficiencyTypeOptions = useMemo(
 		() =>
