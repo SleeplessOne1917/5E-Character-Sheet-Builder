@@ -1,0 +1,78 @@
+.levels {
+    border: 5px solid var(--davy);
+    position: relative;
+    border-collapse: collapse;
+    min-width: 1000px;
+    left: 20rem;
+}
+
+.levels thead th {
+    position: sticky;
+    top: -1rem;
+    background-color: var(--davy);
+    color: var(--heaven-light);
+    z-index: 1;
+}
+
+.levels td, .levels th {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.level {
+    background-color: var(--heaven-light);
+}
+
+.level:nth-of-type(even) {
+    background-color: var(--highlight-light);
+}
+
+.level th {
+    background-color: var(--davy);
+    font-weight: bold;
+    color: var(--heaven-light);
+    position: sticky;
+    left: -1rem;
+}
+
+@media screen and (min-width: 512px) {
+    .levels {
+        left: 15rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .levels {
+        left: 10rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .levels {
+        left: 4rem;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .levels {
+        left: 11rem;
+    }
+}
+
+@media screen and (min-width: 1536px) {
+    .levels {
+        left: 8.5rem;
+    }
+}
+
+@media screen and (min-width: 1792px) {
+    .levels {
+        left: 4.6rem;
+    }
+}
+
+@media screen and (min-width: 2048px) {
+    .levels {
+        left: 0;
+    }
+}

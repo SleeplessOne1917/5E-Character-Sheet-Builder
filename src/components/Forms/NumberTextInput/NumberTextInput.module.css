@@ -16,7 +16,7 @@
     color: var(--davy);
     text-align: center;
     border: 1px solid var(--davy);
-    width: 30%;
+    width: 3rem;
 }
 
 .input:focus-visible {

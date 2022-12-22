@@ -46,31 +46,3 @@
     color: var(--wine-red);
     font-size: 1.3rem;
 }
-
-.levels {
-    border: 5px solid var(--davy);
-    table-layout: fixed;
-    position: relative;
-    border-collapse: collapse;
-}
-
-.levels th {
-    position: sticky;
-    top: -1rem;
-    background-color: var(--davy);
-    color: var(--heaven-light);
-}
-
-.levels td, .levels th {
-    text-align: center;
-    padding: 0.5rem 0;
-}
-
-.level {
-    width: 100%;
-    background-color: var(--heaven-light);
-}
-
-.level:nth-of-type(even) {
-    background-color: var(--highlight-light);
-}

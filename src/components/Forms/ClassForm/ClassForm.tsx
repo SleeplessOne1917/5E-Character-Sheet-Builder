@@ -5,6 +5,7 @@ import Button, { ButtonType } from '../../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
 import { EditingClassState } from '../../../redux/features/editingClass';
+import Levels from './Levels/Levels';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
 import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
@@ -57,6 +58,10 @@ const ClassForm = ({
 						shouldUseReduxStore={shouldUseReduxStore}
 						abilities={abilities}
 						spells={spells}
+					/>
+					<Levels
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
 					/>
 					<Button
 						positive

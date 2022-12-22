@@ -1,12 +1,6 @@
 'use client';
 
 import {
-	ChangeEventHandler,
-	FocusEventHandler,
-	useCallback,
-	useMemo
-} from 'react';
-import {
 	EditingClassState,
 	HandleSpellsType,
 	SpellSlotsAndCantrips,
@@ -25,17 +19,16 @@ import {
 	setSpellcastingSpellsKnown
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
+import { useCallback, useMemo } from 'react';
 
 import { AbilityItem } from '../../../../types/srd';
 import Button from '../../../Button/Button';
 import Checkbox from '../../../Checkbox/Checkbox';
 import { Item } from '../../../../types/db/item';
-import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import Option from '../../../Select/Option';
 import Select from '../../../Select/Select/Select';
 import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import SpellsSelector from '../../../Spells/SpellsSelector/SpellsSelector';
-import { getOrdinal } from '../../../../services/ordinalService';
 import styles from './SavingThrowsAndSpellcasting.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
@@ -129,12 +122,7 @@ const SavingThrowsAndSpellcasting = ({
 		[errors.spellcasting]
 	);
 
-	const includeLevel1 = useMemo(
-		() => values.spellcasting?.level === 1,
-		[values.spellcasting?.level]
-	);
-
-	const levels = useMemo(
+	const spellLevels = useMemo(
 		() =>
 			[...new Array(!values.spellcasting?.isHalfCaster ? 10 : 6).keys()].filter(
 				level => (!values.spellcasting?.knowsCantrips ? level > 0 : true)
@@ -163,18 +151,6 @@ const SavingThrowsAndSpellcasting = ({
 				? spellsErrorMessage
 				: undefined,
 		[errors.spellcasting]
-	);
-
-	const numberOfLevelColumns = useMemo(
-		() =>
-			(values.spellcasting?.isHalfCaster ? 6 : 10) +
-			(values.spellcasting?.knowsCantrips ? 1 : 0) +
-			(values.spellcasting?.handleSpells === 'spells-known' ? 1 : 0),
-		[
-			values.spellcasting?.isHalfCaster,
-			values.spellcasting?.knowsCantrips,
-			values.spellcasting?.handleSpells
-		]
 	);
 
 	const handleSpellsTouched = useMemo(
@@ -449,327 +425,8 @@ const SavingThrowsAndSpellcasting = ({
 	);
 
 	const filterSpells = useCallback(
-		(spell: SpellItem) => levels.includes(spell.level),
-		[levels]
-	);
-
-	const getSpellSlotsTouched = useCallback(
-		(index: number, level: number): boolean | undefined =>
-			touched.spellcasting &&
-			(
-				touched.spellcasting as unknown as FormikTouched<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel &&
-			(
-				touched.spellcasting as unknown as FormikTouched<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel![index] &&
-			(level === 0
-				? (
-						touched.spellcasting as unknown as FormikTouched<{
-							spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-						}>
-				  ).spellSlotsAndCantripsPerLevel![index].cantrips
-				: //@ts-ignore
-				  (
-						touched.spellcasting as unknown as FormikTouched<{
-							spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-						}>
-				  ).spellSlotsAndCantripsPerLevel![index][`level${level}`]),
-		[touched.spellcasting]
-	);
-
-	const getSpellSlotSlotsError = useCallback(
-		(index: number, level: number): string | undefined =>
-			errors.spellcasting &&
-			(
-				errors.spellcasting as unknown as FormikErrors<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel &&
-			(
-				errors.spellcasting as unknown as FormikErrors<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel![index] &&
-			(level === 0
-				? (
-						(
-							errors.spellcasting as unknown as FormikErrors<{
-								spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-							}>
-						).spellSlotsAndCantripsPerLevel![index] as FormikErrors<{
-							cantrips: number;
-						}>
-				  ).cantrips
-				: //@ts-ignore
-				  (
-						errors.spellcasting as unknown as FormikErrors<{
-							spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-						}>
-				  ).spellSlotsAndCantripsPerLevel![index][`level${level}`]),
-		[errors.spellcasting]
-	);
-
-	const getSpellsKnownTouched = useCallback(
-		(index: number): boolean | undefined =>
-			touched.spellcasting &&
-			(
-				touched.spellcasting as unknown as FormikTouched<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel &&
-			(
-				touched.spellcasting as unknown as FormikTouched<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel![index] &&
-			(
-				touched.spellcasting as unknown as FormikTouched<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel![index].spellsKnown,
-		[touched.spellcasting]
-	);
-
-	const getSpellsKnownError = useCallback(
-		(index: number): string | undefined =>
-			errors.spellcasting &&
-			(
-				errors.spellcasting as unknown as FormikErrors<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel &&
-			(
-				errors.spellcasting as unknown as FormikErrors<{
-					spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-				}>
-			).spellSlotsAndCantripsPerLevel![index] &&
-			(
-				(
-					errors.spellcasting as unknown as FormikErrors<{
-						spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
-					}>
-				).spellSlotsAndCantripsPerLevel![index] as FormikErrors<{
-					spellsKnown: number;
-				}>
-			).spellsKnown,
-		[errors.spellcasting]
-	);
-
-	const getHandleSpellSlotsChange = useCallback(
-		(index: number, level: number): ChangeEventHandler<HTMLInputElement> =>
-			event => {
-				setFieldValue(
-					`spellcasting.spellSlotsAndCantripsPerLevel.${index}.${
-						level === 0 ? 'cantrips' : `level${level}`
-					}`,
-					event.target.value,
-					false
-				);
-			},
-		[setFieldValue]
-	);
-
-	const getHandleSpellSlotsBlur = useCallback(
-		(index: number, level: number): FocusEventHandler<HTMLInputElement> =>
-			event => {
-				const parsedValue = parseInt(event.target.value, 10);
-				let newValue = !isNaN(parsedValue) ? parsedValue : null;
-
-				if ((newValue || newValue === 0) && newValue < 1) {
-					newValue = 1;
-				}
-
-				if (shouldUseReduxStore) {
-					if (level === 0) {
-						dispatch(
-							setSpellcastingCantripsKnown({
-								classLevel: index + 1,
-								cantrips: newValue
-							})
-						);
-					} else {
-						dispatch(
-							setSpellcastingSpellSlots({
-								classLevel: index + 1,
-								spellLevel: level,
-								slots: newValue
-							})
-						);
-					}
-				}
-
-				for (let i = index; i < 20; ++i) {
-					if (
-						level === 0 &&
-						(i === index ||
-							!values.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ||
-							(values.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips ??
-								0) < (newValue ?? 0))
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.cantrips`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.cantrips`,
-							true,
-							false
-						);
-					} else if (
-						i === index ||
-						//@ts-ignore
-						!values.spellcasting?.spellSlotsAndCantripsPerLevel[i][
-							`level${level}`
-						] ||
-						//@ts-ignore
-						(values.spellcasting.spellSlotsAndCantripsPerLevel[i][
-							`level${level}`
-						] ?? 0) < (newValue ?? 0)
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.level${level}`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.level${level}`,
-							true,
-							false
-						);
-					}
-				}
-				for (let i = index - 1; i >= 0; --i) {
-					if (
-						level === 0 &&
-						(values.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ??
-							0) > (newValue ?? 0)
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.cantrips`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.cantrips`,
-							true,
-							false
-						);
-					} else if (
-						//@ts-ignore
-						(values.spellcasting.spellSlotsAndCantripsPerLevel[i][
-							`level${level}`
-						] ?? 0) > (newValue ?? 0)
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.level${level}`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.level${level}`,
-							true,
-							false
-						);
-					}
-				}
-			},
-		[
-			shouldUseReduxStore,
-			dispatch,
-			setFieldTouched,
-			setFieldValue,
-			values.spellcasting?.spellSlotsAndCantripsPerLevel
-		]
-	);
-
-	const getHandleSpellsKnownChange = useCallback(
-		(index: number): ChangeEventHandler<HTMLInputElement> =>
-			event => {
-				setFieldValue(
-					`spellcasting.spellSlotsAndCantripsPerLevel.${index}.spellsKnown`,
-					event.target.value,
-					false
-				);
-			},
-		[setFieldValue]
-	);
-
-	const getHandleSpellsKnownBlur = useCallback(
-		(index: number): FocusEventHandler<HTMLInputElement> =>
-			event => {
-				const parsedValue = parseInt(event.target.value, 10);
-				let newValue = !isNaN(parsedValue) ? parsedValue : null;
-
-				if ((newValue || newValue === 0) && newValue < 1) {
-					newValue = 1;
-				}
-
-				if (shouldUseReduxStore) {
-					dispatch(
-						setSpellcastingSpellsKnown({
-							classLevel: index + 1,
-							spellsKnown: newValue
-						})
-					);
-				}
-
-				for (let i = index; i < 20; ++i) {
-					if (
-						i === index ||
-						!values.spellcasting?.spellSlotsAndCantripsPerLevel[i]
-							.spellsKnown ||
-						(values.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown ??
-							0) < (newValue ?? 0)
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`,
-							true,
-							false
-						);
-					}
-				}
-
-				for (let i = index - 1; i >= 0; --i) {
-					if (
-						(values.spellcasting?.spellSlotsAndCantripsPerLevel[i]
-							.spellsKnown ?? 0) > (newValue ?? 0)
-					) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`,
-							newValue,
-							false
-						);
-
-						setFieldTouched(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`,
-							true,
-							false
-						);
-					}
-				}
-			},
-		[
-			shouldUseReduxStore,
-			dispatch,
-			setFieldTouched,
-			setFieldValue,
-			values.spellcasting?.spellSlotsAndCantripsPerLevel
-		]
+		(spell: SpellItem) => spellLevels.includes(spell.level),
+		[spellLevels]
 	);
 
 	const handleIsHalfCasterChange = useCallback(
@@ -1006,7 +663,7 @@ const SavingThrowsAndSpellcasting = ({
 						>
 							<SpellsSelector
 								label="Spells"
-								levels={levels}
+								levels={spellLevels}
 								selectedSpells={selectedSpells}
 								spells={spells}
 								onAdd={handleAddSpellcastingSpell}
@@ -1020,133 +677,6 @@ const SavingThrowsAndSpellcasting = ({
 									</div>
 								)}
 						</div>
-						<table className={styles.levels}>
-							<thead>
-								<tr>
-									<th
-										style={{
-											width: `calc(100% / ${numberOfLevelColumns})`
-										}}
-									>
-										Class Level
-									</th>
-									{values.spellcasting.handleSpells === 'spells-known' && (
-										<th
-											style={{
-												width: `calc(100% / ${numberOfLevelColumns})`
-											}}
-										>
-											Spells Known
-										</th>
-									)}
-									{levels.map(level => (
-										<th
-											key={level}
-											style={{
-												width: `calc(100% / ${numberOfLevelColumns})`
-											}}
-										>
-											{level === 0
-												? 'Cantrips Known'
-												: `${getOrdinal(level)} Level Spell Slots`}
-										</th>
-									))}
-								</tr>
-							</thead>
-							<tbody>
-								{values.spellcasting.spellSlotsAndCantripsPerLevel
-									.filter((_, i) => i + 1 >= values.spellcasting!.level)
-									.map((levelInfo, i) => (
-										<tr key={i} className={styles.level}>
-											<td
-												style={{
-													width: `calc(100% / ${numberOfLevelColumns})`,
-													fontWeight: 'bold'
-												}}
-											>
-												{i + (includeLevel1 ? 1 : 2)}
-											</td>
-											{values.spellcasting!.handleSpells === 'spells-known' && (
-												<td
-													style={{
-														width: `calc(100% / ${numberOfLevelColumns})`
-													}}
-												>
-													<NumberTextInput
-														id={`spellcasting.spellSlotsAndCantripsPerLevel.${
-															i + (includeLevel1 ? 0 : 1)
-														}.spellsKnown`}
-														label={`Level ${
-															i + (includeLevel1 ? 1 : 2)
-														} Spells Known`}
-														error={getSpellsKnownError(
-															i + (includeLevel1 ? 0 : 1)
-														)}
-														touched={
-															clickedSubmit ||
-															getSpellsKnownTouched(i + (includeLevel1 ? 0 : 1))
-														}
-														value={levelInfo.spellsKnown}
-														onChange={getHandleSpellsKnownChange(
-															i + (includeLevel1 ? 0 : 1)
-														)}
-														onBlur={getHandleSpellsKnownBlur(
-															i + (includeLevel1 ? 0 : 1)
-														)}
-														hideLabel
-														errorStyle={{ fontSize: '0.7rem' }}
-													/>
-												</td>
-											)}
-											{levels.map(level => (
-												<td
-													key={level}
-													style={{
-														width: `calc(100% / ${numberOfLevelColumns})`
-													}}
-												>
-													<NumberTextInput
-														id={`spellcasting.spellSlotsAndCantripsPerLevel.${
-															i + (includeLevel1 ? 0 : 1)
-														}.${level === 0 ? 'cantrips' : `level${level}`}`}
-														label={`Level ${i + (includeLevel1 ? 1 : 2)} ${
-															level === 0
-																? 'Cantrips Known'
-																: `${getOrdinal(level)} Level Spell Slots`
-														}`}
-														error={getSpellSlotSlotsError(
-															i + (includeLevel1 ? 0 : 1),
-															level
-														)}
-														touched={
-															clickedSubmit ||
-															getSpellSlotsTouched(
-																i + (includeLevel1 ? 0 : 1),
-																level
-															)
-														}
-														value={
-															level === 0
-																? levelInfo.cantrips //@ts-ignore
-																: levelInfo[`level${level}`]
-														}
-														onChange={getHandleSpellSlotsChange(
-															i + (includeLevel1 ? 0 : 1),
-															level
-														)}
-														onBlur={getHandleSpellSlotsBlur(
-															i + (includeLevel1 ? 0 : 1),
-															level
-														)}
-														hideLabel
-														errorStyle={{ fontSize: '0.7rem' }}
-													/>
-												</td>
-											))}
-										</tr>
-									))}
-							</tbody>
-						</table>
 					</>
 				)}
 			</div>

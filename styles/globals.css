@@ -19,11 +19,13 @@
   --positive-green: #435B29;
   --positive-green-hover: #6c7f58;
   --positive-green-active: #34461f;
-  --small: 640px;
+  --small: 512px;
   --medium: 768px;
   --large: 1024px;
   --extra-large: 1280px;
   --double-extra-large: 1536px;
+  --triple-extra-large: 1792px;
+  --quadruple-extra-large: 2048px;
   --focus-outline: 5px solid var(--highlight);
 }
 

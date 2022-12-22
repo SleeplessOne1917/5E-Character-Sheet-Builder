@@ -208,6 +208,10 @@ const classSchema = object({
 		.min(1, 'Must have at least 1 proficiency choice')
 		.optional()
 		.default(undefined),
+	proficiencyBonuses: array()
+		.of(number().min(1, 'Proficiency bonus must be at least 1'))
+		.length(20, 'Must have 1 proficiency bonus for each level')
+		.required('Proficiency bonuses are required'),
 	savingThrows: array()
 		.of(abilitySchema)
 		.length(2, 'Class must have 2 saving throws'),

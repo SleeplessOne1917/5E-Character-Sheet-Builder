@@ -48,6 +48,7 @@ export type EditingClassState = {
 	hitDie?: number;
 	proficiencies: Item[];
 	proficiencyChoices?: ProficiencyChoice[];
+	proficiencyBonuses: (number | null)[];
 	savingThrows: (Item | null)[];
 	spellcasting?: {
 		level: number;
@@ -77,6 +78,7 @@ export type EditingClassState = {
 export const initialState: EditingClassState = {
 	name: '',
 	proficiencies: [],
+	proficiencyBonuses: [...Array(20).keys()].map(() => null),
 	savingThrows: [null, null],
 	startingEquipment: [],
 	subclassFlavor: '',
@@ -343,7 +345,7 @@ const editingClassSlice = createSlice({
 					//@ts-ignore
 					(state.spellcasting.spellSlotsAndCantripsPerLevel[i][
 						`level${spellLevel}`
-					] ?? 0) < (slots ?? 0)
+					] ?? 0) > (slots ?? 0)
 				) {
 					//@ts-ignore
 					state.spellcasting.spellSlotsAndCantripsPerLevel[i][
@@ -372,6 +374,30 @@ const editingClassSlice = createSlice({
 
 			//@ts-ignore
 			state.spellcasting.handleSpells = payload;
+		},
+		setProficiencyBonus: (
+			state,
+			{
+				payload: { classLevel, proficiencyBonus }
+			}: PayloadAction<{ classLevel: number; proficiencyBonus: number | null }>
+		) => {
+			prepSpellcasting(state);
+
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					!state.proficiencyBonuses[i] ||
+					(state.proficiencyBonuses[i] ?? 0) < (proficiencyBonus ?? 0)
+				) {
+					state.proficiencyBonuses[i] = proficiencyBonus;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if ((state.proficiencyBonuses[i] ?? 0) > (proficiencyBonus ?? 0)) {
+					state.proficiencyBonuses[i] = proficiencyBonus;
+				}
+			}
 		}
 	}
 });
@@ -395,7 +421,8 @@ export const {
 	setSpellcastingSpellSlots,
 	setIsHalfCaster,
 	setKnowsCantrips,
-	setHandleSpells
+	setHandleSpells,
+	setProficiencyBonus
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
