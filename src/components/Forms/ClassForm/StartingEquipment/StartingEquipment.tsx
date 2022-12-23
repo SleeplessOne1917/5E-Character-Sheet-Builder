@@ -307,7 +307,7 @@ const StartingEuipment = ({
 					</div>
 				))}
 			</div>
-			{values.startingEquipment.length < 15 && (
+			{values.startingEquipment.length < 10 && (
 				<Button positive onClick={handleAddStartingEquipment}>
 					Add Starting Equipment
 				</Button>

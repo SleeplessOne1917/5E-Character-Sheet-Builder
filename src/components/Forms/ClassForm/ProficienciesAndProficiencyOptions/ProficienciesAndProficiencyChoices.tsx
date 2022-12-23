@@ -1250,7 +1250,7 @@ const ProficienciesAndProficiencyChoices = ({
 										</div>
 									))}
 								</div>
-								{(values.proficiencyChoices?.length ?? 0) < 5 && (
+								{(options?.length ?? 0) < 5 && (
 									<Button positive size="small" onClick={getHandleAddOption(i)}>
 										Add Option
 									</Button>

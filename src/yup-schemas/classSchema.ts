@@ -156,6 +156,8 @@ const proficiencyChoiceSchema = object({
 								.required('Proficiency name required')
 						})
 					)
+					.min(1, 'Must have at least 1 option')
+					.max(5, 'Cannot have more than 5 options')
 					.optional()
 					.default(undefined)
 			}).test(
@@ -175,6 +177,7 @@ const proficiencyChoiceSchema = object({
 		)
 		.required('Must have proficiencies to choose from')
 		.min(1, 'Must have at least 1 proficiency to choose from')
+		.max(5, 'Cannot have more than 5 proficiency Options')
 });
 
 const proficiencySchema = object({
@@ -206,6 +209,7 @@ const classSchema = object({
 	proficiencyChoices: array()
 		.of(proficiencyChoiceSchema)
 		.min(1, 'Must have at least 1 proficiency choice')
+		.max(5, 'Cannot have more than 5 proficiency choices')
 		.optional()
 		.default(undefined),
 	proficiencyBonuses: array()
@@ -378,7 +382,8 @@ const classSchema = object({
 			})
 		)
 		.required('Starting equipment is required')
-		.min(1, 'Must have at least 1 starting equipment'),
+		.min(1, 'Must have at least 1 starting equipment')
+		.max(10, 'Cannot have more than 10 starting equipments'),
 	startingEquipmentOptions: array()
 		.of(startingEquipmentChoiceSchema)
 		.optional()
