@@ -88,6 +88,8 @@
     flex-direction: column;
     height: fit-content;
     margin: 0.5rem 0;
+    min-width: 20rem;
+    background-color: var(--heaven-light);
 }
 
 .from-label {
@@ -123,7 +125,7 @@
     border: 1px solid var(--davy);
     border-radius: 1rem;
     position: relative;
-    background-color: var(--heaven);
+    background-color: var(--heaven-light);
 }
 
 .option-from-label {
