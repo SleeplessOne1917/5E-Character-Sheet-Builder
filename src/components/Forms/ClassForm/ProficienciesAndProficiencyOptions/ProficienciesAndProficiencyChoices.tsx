@@ -40,7 +40,7 @@ type OptionType = 'item' | 'choose';
 
 const optionTypeOptions: Option[] = [
 	{ label: 'Proficiency', value: 'item' },
-	{ label: 'Choice', value: 'choice' }
+	{ label: 'Choice', value: 'choose' }
 ];
 
 const optionProficiencyErrorMessage = 'Option proficiency is required';
@@ -1075,15 +1075,17 @@ const ProficienciesAndProficiencyChoices = ({
 							>
 								<XMarkIcon className={styles['close-button-icon']} /> Remove
 							</Button>
-							<NumberTextInput
-								id={`proficiencyChoices.${i}.choose`}
-								label="Choose"
-								error={getChooseError(i)}
-								touched={clickedSubmit || getChooseTouched(i)}
-								value={choose}
-								onChange={getHandleChooseChange(i)}
-								onBlur={getHandleChooseBlur(i)}
-							/>
+							<div className={styles['choose-container']}>
+								<NumberTextInput
+									id={`proficiencyChoices.${i}.choose`}
+									label="Choose"
+									error={getChooseError(i)}
+									touched={clickedSubmit || getChooseTouched(i)}
+									value={choose}
+									onChange={getHandleChooseChange(i)}
+									onBlur={getHandleChooseBlur(i)}
+								/>
+							</div>
 							<div className={styles['from-container']}>
 								<div className={styles['from-label']}>From</div>
 								<div className={styles['options-container']}>
@@ -1143,18 +1145,20 @@ const ProficienciesAndProficiencyChoices = ({
 													)}
 												</>
 											) : (
-												<>
-													<NumberTextInput
-														id={`proficiencyChoices.${i}.options.${j}.choose`}
-														label="Choose"
-														error={getOptionsChooseError(i, j)}
-														touched={
-															clickedSubmit || getOptionsChooseTouched(i, j)
-														}
-														value={option.choose}
-														onChange={getHandleOptionsChooseChange(i, j)}
-														onBlur={getHandleOptionsChooseChangeBlur(i, j)}
-													/>
+												<div className={styles['nested-choice-container']}>
+													<div className={styles['choose-container']}>
+														<NumberTextInput
+															id={`proficiencyChoices.${i}.options.${j}.choose`}
+															label="Choose"
+															error={getOptionsChooseError(i, j)}
+															touched={
+																clickedSubmit || getOptionsChooseTouched(i, j)
+															}
+															value={option.choose}
+															onChange={getHandleOptionsChooseChange(i, j)}
+															onBlur={getHandleOptionsChooseChangeBlur(i, j)}
+														/>
+													</div>
 													<div className={styles['from-container']}>
 														<div className={styles['option-from-label']}>
 															From
@@ -1235,7 +1239,7 @@ const ProficienciesAndProficiencyChoices = ({
 																</div>
 															))}
 														</div>
-														{(option.options?.length ?? 0) < 5 && (
+														{(option.options?.length ?? 0) < 20 && (
 															<Button
 																positive
 																size="small"
@@ -1245,12 +1249,12 @@ const ProficienciesAndProficiencyChoices = ({
 															</Button>
 														)}
 													</div>
-												</>
+												</div>
 											)}
 										</div>
 									))}
 								</div>
-								{(options?.length ?? 0) < 5 && (
+								{(options?.length ?? 0) < 20 && (
 									<Button positive size="small" onClick={getHandleAddOption(i)}>
 										Add Option
 									</Button>

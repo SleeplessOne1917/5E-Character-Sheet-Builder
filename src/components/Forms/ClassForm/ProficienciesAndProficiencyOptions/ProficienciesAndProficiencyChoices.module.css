@@ -83,13 +83,24 @@
     padding: 0.5rem;
     border: 2px solid var(--davy);
     border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0.5rem 0;
     min-width: 20rem;
+    max-width: 100%;
     background-color: var(--heaven-light);
+}
+
+.nested-choice-container {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    margin-top: 1rem;
+}
+
+.choose-container {
+    margin: auto 0;
 }
 
 .from-label {
@@ -105,13 +116,13 @@
 
 .options-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .option {
-    margin: 0.7rem 0;
+    margin: 0.7rem;
     padding: 1rem;
     border: 1px solid var(--davy);
     border-radius: 1rem;
@@ -120,7 +131,7 @@
 }
 
 .sub-option {
-    margin: 0.7rem 0;
+    margin: 0.7rem;
     padding: 1rem;
     border: 1px solid var(--davy);
     border-radius: 1rem;
@@ -131,4 +142,16 @@
 .option-from-label {
     font-size: 1.25rem;
     font-weight: bold;
+}
+
+@media screen and (min-width: 768px) {
+    .choice {
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+        max-width: 80%;
+    }
+
+    .from-container {
+        margin-top: 0;
+    }
 }

@@ -157,7 +157,7 @@ const proficiencyChoiceSchema = object({
 						})
 					)
 					.min(1, 'Must have at least 1 option')
-					.max(5, 'Cannot have more than 5 options')
+					.max(20, 'Cannot have more than 20 options')
 					.optional()
 					.default(undefined)
 			}).test(
@@ -177,7 +177,7 @@ const proficiencyChoiceSchema = object({
 		)
 		.required('Must have proficiencies to choose from')
 		.min(1, 'Must have at least 1 proficiency to choose from')
-		.max(5, 'Cannot have more than 5 proficiency Options')
+		.max(20, 'Cannot have more than 20 proficiency Options')
 });
 
 const proficiencySchema = object({
