@@ -365,8 +365,8 @@ const classSchema = object({
 		.of(
 			object({
 				count: number()
-					.required('Quantity is required')
-					.min(1, 'Quantity must be at least 1'),
+					.required('Count is required')
+					.min(1, 'Count must be at least 1'),
 				item: object({
 					id: string()
 						.required()

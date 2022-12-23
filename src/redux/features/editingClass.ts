@@ -13,7 +13,7 @@ export type ProficiencyChoice = {
 	options?: Partial<XOR<Item, Choose>>[];
 };
 
-type CountedItem = {
+export type CountedItem = {
 	count?: number;
 	item?: Item;
 };
@@ -411,6 +411,38 @@ const editingClassSlice = createSlice({
 			state.abilityScoreBonusLevels = state.abilityScoreBonusLevels.filter(
 				level => level !== payload
 			);
+		},
+		addStartingEquipment: state => {
+			state.startingEquipment.push({});
+		},
+		removeStartingEquipment: (state, { payload }: PayloadAction<number>) => {
+			state.startingEquipment = state.startingEquipment.filter(
+				(_, i) => i !== payload
+			);
+		},
+		setStartingEquipmentItem: (
+			state,
+			{
+				payload: { index, item }
+			}: PayloadAction<{ index: number; item?: Item }>
+		) => {
+			while (state.startingEquipment.length <= index) {
+				state.startingEquipment.push({});
+			}
+
+			state.startingEquipment[index].item = item;
+		},
+		setStartingEquipmentCount: (
+			state,
+			{
+				payload: { index, count }
+			}: PayloadAction<{ index: number; count?: number }>
+		) => {
+			while (state.startingEquipment.length <= index) {
+				state.startingEquipment.push({});
+			}
+
+			state.startingEquipment[index].count = count;
 		}
 	}
 });
@@ -437,7 +469,11 @@ export const {
 	setHandleSpells,
 	setProficiencyBonus,
 	addAbilityScoreBonusLevel,
-	removeAbilityScoreBonusLevel
+	removeAbilityScoreBonusLevel,
+	addStartingEquipment,
+	removeStartingEquipment,
+	setStartingEquipmentCount,
+	setStartingEquipmentItem
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

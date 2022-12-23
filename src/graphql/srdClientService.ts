@@ -3,6 +3,7 @@ import {
 	MonsterSubtype,
 	MonsterType,
 	ProficiencyType,
+	SrdEquipmentItem,
 	SrdFullClassItem,
 	SrdFullRaceItem,
 	SrdFullSubraceItem,
@@ -86,7 +87,8 @@ export const getAbilities = async (): Promise<AbilityItem[] | undefined> =>
 		?.abilityScores;
 
 export const getEquipments = async (): Promise<SrdItem[] | undefined> =>
-	(await query<{ equipments: SrdItem[] }>(GET_EQUIPMENTS))?.data?.equipments;
+	(await query<{ equipments: SrdEquipmentItem[] }>(GET_EQUIPMENTS))?.data
+		?.equipments;
 
 export const getSubraces = async () =>
 	await query<{ subraces: SrdSubraceItem[] }>(GET_SUBRACES);

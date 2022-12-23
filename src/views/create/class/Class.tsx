@@ -1,6 +1,10 @@
 'use client';
 
-import { AbilityItem, SrdProficiencyItem } from '../../../types/srd';
+import {
+	AbilityItem,
+	SrdEquipmentItem,
+	SrdProficiencyItem
+} from '../../../types/srd';
 import { useCallback, useEffect, useState } from 'react';
 
 import ClassForm from '../../../components/Forms/ClassForm/ClassForm';
@@ -14,9 +18,10 @@ import useGetSpells from '../../../hooks/useGetSpells';
 type ClassProps = {
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
+	equipments: SrdEquipmentItem[];
 };
 
-const Class = ({ proficiencies, abilities }: ClassProps) => {
+const Class = ({ proficiencies, abilities, equipments }: ClassProps) => {
 	const editingClass = useAppSelector(state => state.editingClass);
 	const [loading, setLoading] = useState(true);
 	const spellsResult = useGetSpells();
@@ -47,6 +52,7 @@ const Class = ({ proficiencies, abilities }: ClassProps) => {
 				proficiencies={proficiencies}
 				abilities={abilities}
 				spells={spellsResult.spells}
+				equipments={equipments}
 			/>
 		</MainContent>
 	);

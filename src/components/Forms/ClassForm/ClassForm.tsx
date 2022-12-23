@@ -1,6 +1,10 @@
 'use client';
 
-import { AbilityItem, SrdProficiencyItem } from '../../../types/srd';
+import {
+	AbilityItem,
+	SrdEquipmentItem,
+	SrdProficiencyItem
+} from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
@@ -10,6 +14,7 @@ import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
 import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
+import StartingEuipment from './StartingEquipment/StartingEquipment';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
 import { useState } from 'react';
@@ -19,6 +24,7 @@ type ClassForm = {
 	shouldUseReduxStore?: boolean;
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
+	equipments: SrdEquipmentItem[];
 	onSubmit: (
 		values: EditingClassState,
 		helpers: FormikHelpers<EditingClassState>
@@ -31,6 +37,7 @@ const ClassForm = ({
 	shouldUseReduxStore = false,
 	proficiencies,
 	abilities,
+	equipments,
 	spells,
 	onSubmit
 }: ClassForm) => {
@@ -62,6 +69,11 @@ const ClassForm = ({
 					<Levels
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
+					/>
+					<StartingEuipment
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						equipments={equipments}
 					/>
 					<Button
 						positive

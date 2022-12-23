@@ -257,7 +257,7 @@ export type ClassLevel = {
 	};
 };
 
-interface SrdEquipmentItem extends SrdItem {
+interface SrdContainerItem extends SrdItem {
 	contents?: { quantity: number; item: SrdItem }[];
 }
 
@@ -270,7 +270,7 @@ type SrdEquipmentCategoryChoiceOption = {
 
 type SrdCountedReferenceOption = {
 	count: number;
-	of: SrdEquipmentItem;
+	of: SrdContainerItem;
 	prerequisites: { type: string; proficiency: SrdProficiencyItem }[];
 };
 
@@ -306,7 +306,7 @@ export interface SrdFullClassItem extends SrdItem {
 	proficiencies: SrdProficiencyItem[];
 	saving_throws: AbilityItem[];
 	spellcasting?: ClassSpellcasting;
-	starting_equipment: { quantity: number; equipment: SrdEquipmentItem }[];
+	starting_equipment: { quantity: number; equipment: SrdContainerItem }[];
 	class_levels: ClassLevel[];
 	proficiency_choices: SrdProficiencyItemChoice[];
 	starting_equipment_options: SrdStartingEquipmentChoice[];
@@ -320,3 +320,7 @@ export type Terrain =
 	| 'forest'
 	| 'grassland'
 	| 'swamp';
+
+export interface SrdEquipmentItem extends SrdItem {
+	equipment_category: SrdItem;
+}
