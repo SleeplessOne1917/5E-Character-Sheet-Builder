@@ -3,6 +3,9 @@ import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
 
+export type ItemType = 'item' | 'category';
+export type OptionType = ItemType | 'multiple';
+
 export type Choose = {
 	choose?: number;
 	options?: Partial<Item>[];
@@ -24,7 +27,7 @@ type ChooseEquipmentCategory = {
 };
 
 type Multiple = {
-	items: XOR<CountedItem, ChooseEquipmentCategory>[];
+	items: (XOR<CountedItem, ChooseEquipmentCategory> & { itemType: ItemType })[];
 };
 
 export type SpellSlotsAndCantrips = {
@@ -42,6 +45,13 @@ export type SpellSlotsAndCantrips = {
 };
 
 export type HandleSpellsType = 'prepare' | 'spells-known';
+
+export type StartingEquipmentChoiceType = {
+	choose?: number;
+	options: (XOR<CountedItem, XOR<ChooseEquipmentCategory, Multiple>> & {
+		optionType: OptionType;
+	})[];
+};
 
 export type EditingClassState = {
 	name: string;
@@ -61,10 +71,7 @@ export type EditingClassState = {
 		spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
 	};
 	startingEquipment: CountedItem[];
-	startingEquipmentOptions?: {
-		choose?: number;
-		options?: XOR<CountedItem, XOR<ChooseEquipmentCategory, Multiple>>;
-	}[];
+	startingEquipmentChoices?: StartingEquipmentChoiceType[];
 	subclassFlavor: string;
 	multiclassing: {
 		prerequisiteOptions: {
@@ -113,6 +120,59 @@ const prepSpellcasting = (state: Draft<EditingClassState>) => {
 				level9: null
 			}))
 		};
+	}
+};
+
+const prepStartingEquipmentChoice = (
+	state: Draft<EditingClassState>,
+	index: number
+) => {
+	if (!state.startingEquipmentChoices) {
+		state.startingEquipmentChoices = [];
+	}
+	while (state.startingEquipmentChoices!.length <= index) {
+		state.startingEquipmentChoices.push({ options: [] });
+	}
+};
+
+const prepStartingEquipmentChoiceOption = (
+	state: Draft<EditingClassState>,
+	choiceIndex: number,
+	optionIndex: number
+) => {
+	prepStartingEquipmentChoice(state, choiceIndex);
+
+	while (
+		state.startingEquipmentChoices![choiceIndex].options.length <= optionIndex
+	) {
+		state.startingEquipmentChoices![choiceIndex].options.push({
+			optionType: 'item'
+		});
+	}
+};
+
+const prepStartingEquipmentChoiceOptionItem = (
+	state: Draft<EditingClassState>,
+	choiceIndex: number,
+	optionIndex: number,
+	itemIndex: number
+) => {
+	prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+	if (
+		!state.startingEquipmentChoices![choiceIndex].options[optionIndex].items
+	) {
+		state.startingEquipmentChoices![choiceIndex].options[optionIndex].items =
+			[];
+	}
+
+	while (
+		state.startingEquipmentChoices![choiceIndex].options[optionIndex].items!
+			.length <= itemIndex
+	) {
+		state.startingEquipmentChoices![choiceIndex].options[
+			optionIndex
+		].items!.push({ itemType: 'item' });
 	}
 };
 
@@ -443,6 +503,295 @@ const editingClassSlice = createSlice({
 			}
 
 			state.startingEquipment[index].count = count;
+		},
+		addStartingEquipmentChoice: state => {
+			if (!state.startingEquipmentChoices) {
+				state.startingEquipmentChoices = [];
+			}
+
+			state.startingEquipmentChoices.push({ options: [] });
+		},
+		removeStartingEquipmentChoice: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			state.startingEquipmentChoices = state.startingEquipmentChoices?.filter(
+				(_, i) => i !== payload
+			);
+
+			if (state.startingEquipmentChoices?.length === 0) {
+				delete state.startingEquipmentChoices;
+			}
+		},
+		setStartingEquipmentChoiceChoose: (
+			state,
+			{
+				payload: { index, choose }
+			}: PayloadAction<{ index: number; choose?: number }>
+		) => {
+			prepStartingEquipmentChoice(state, index);
+
+			state.startingEquipmentChoices![index].choose = choose;
+		},
+		addStartingEquipmentChoiceOption: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			prepStartingEquipmentChoice(state, payload);
+
+			state.startingEquipmentChoices![payload].options!.push({
+				optionType: 'item'
+			});
+		},
+		removeStartingEquipmentChoiceOption: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex }
+			}: PayloadAction<{ choiceIndex: number; optionIndex: number }>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options =
+				state.startingEquipmentChoices![choiceIndex].options.filter(
+					(_, i) => i !== optionIndex
+				);
+		},
+		setStartingEquipmentChoiceOptionType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, optionType }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				optionType: OptionType;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex] = {
+				optionType
+			};
+		},
+		setStartingEquipmentChoiceOptionCount: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, count }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				count?: number;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].count =
+				count;
+		},
+		setStartingEquipmentChoiceOptionItem: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, item }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				item?: Item;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].item =
+				item;
+		},
+		setStartingEquipmentChoiceOptionChoose: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, choose }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				choose?: number;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].choose =
+				choose;
+		},
+		setStartingEquipmentChoiceOptionEquipmentCategory: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, equipmentCategory }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				equipmentCategory?: Item;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			state.startingEquipmentChoices![choiceIndex].options[
+				optionIndex
+			].equipmentCategory = equipmentCategory;
+		},
+		addStartingEquipmentChoiceOptionItem: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex }
+			}: PayloadAction<{ choiceIndex: number; optionIndex: number }>
+		) => {
+			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
+
+			if (
+				!state.startingEquipmentChoices![choiceIndex].options[optionIndex].items
+			) {
+				state.startingEquipmentChoices![choiceIndex].options[
+					optionIndex
+				].items = [];
+			}
+
+			state.startingEquipmentChoices![choiceIndex].options[
+				optionIndex
+			].items!.push({ itemType: 'item' });
+		},
+		removeStartingEquipmentChoiceOptionItem: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items =
+				state.startingEquipmentChoices![choiceIndex].options[
+					optionIndex
+				].items?.filter((_, i) => i !== itemIndex);
+
+			if (
+				state.startingEquipmentChoices![choiceIndex].options[optionIndex].items
+					?.length === 0
+			) {
+				delete state.startingEquipmentChoices![choiceIndex].options[optionIndex]
+					.items;
+			}
+		},
+		setStartingEquipmentChoiceOptionItemType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex, itemType }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+				itemType: ItemType;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
+				itemIndex
+			] = { itemType };
+		},
+		setStartingEquipmentChoiceOptionItemCount: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex, count }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+				count?: number;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
+				itemIndex
+			].count = count;
+		},
+		setStartingEquipmentChoiceOptionItemItem: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex, item }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+				item?: Item;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
+				itemIndex
+			].item = item;
+		},
+		setStartingEquipmentChoiceOptionItemChoose: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex, choose }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+				choose?: number;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
+				itemIndex
+			].choose = choose;
+		},
+		setStartingEquipmentChoiceOptionItemEquipmentCategory: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, itemIndex, equipmentCategory }
+			}: PayloadAction<{
+				choiceIndex: number;
+				optionIndex: number;
+				itemIndex: number;
+				equipmentCategory?: Item;
+			}>
+		) => {
+			prepStartingEquipmentChoiceOptionItem(
+				state,
+				choiceIndex,
+				optionIndex,
+				itemIndex
+			);
+
+			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
+				itemIndex
+			].equipmentCategory = equipmentCategory;
 		}
 	}
 });
@@ -473,7 +822,24 @@ export const {
 	addStartingEquipment,
 	removeStartingEquipment,
 	setStartingEquipmentCount,
-	setStartingEquipmentItem
+	setStartingEquipmentItem,
+	addStartingEquipmentChoice,
+	removeStartingEquipmentChoice,
+	setStartingEquipmentChoiceChoose,
+	addStartingEquipmentChoiceOption,
+	setStartingEquipmentChoiceOptionType,
+	removeStartingEquipmentChoiceOption,
+	setStartingEquipmentChoiceOptionCount,
+	setStartingEquipmentChoiceOptionItem,
+	setStartingEquipmentChoiceOptionChoose,
+	setStartingEquipmentChoiceOptionEquipmentCategory,
+	addStartingEquipmentChoiceOptionItem,
+	removeStartingEquipmentChoiceOptionItem,
+	setStartingEquipmentChoiceOptionItemType,
+	setStartingEquipmentChoiceOptionItemCount,
+	setStartingEquipmentChoiceOptionItemItem,
+	setStartingEquipmentChoiceOptionItemChoose,
+	setStartingEquipmentChoiceOptionItemEquipmentCategory
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

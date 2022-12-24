@@ -1,36 +1,7 @@
-import { array, boolean, mixed, number, object, string } from 'yup';
+import { array, boolean, number, object, string } from 'yup';
 import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
-
-const validateIsEquipmentCategory = (value: any) =>
-	value.equipmentCategory &&
-	typeof value.equipmentCategory === 'object' &&
-	value.choose &&
-	typeof value.choose === 'number' &&
-	Object.keys(value).length === 2 &&
-	value.item.id &&
-	typeof value.equipmentCategory.id === 'string' &&
-	value.item.name &&
-	typeof value.equipmentCategory.name === 'string';
-
-const validateIsItemAndCount = (value: any) =>
-	value.count &&
-	typeof value.count === 'number' &&
-	value.item &&
-	typeof value.item === 'object' &&
-	Object.keys(value).length === 2 &&
-	value.item.id &&
-	typeof value.item.id === 'string' &&
-	value.item.name &&
-	typeof value.item.name === 'string';
-
-const validateIsMultiple = (value: any) =>
-	value.items &&
-	Array.isArray(value.items) &&
-	value.items.every(
-		(item: any) =>
-			validateIsEquipmentCategory(item) || validateIsItemAndCount(item)
-	);
+import getItemSchema from './getItemSchema';
 
 const startingEquipmentChoiceSchema = object({
 	choose: number()
@@ -59,23 +30,84 @@ const startingEquipmentChoiceSchema = object({
 		),
 	options: array()
 		.of(
-			mixed().test(
-				'is-valid-option',
-				'Options must be either object with "choose" and "equipmentCategory", "count" and "item", or "items" properties',
-				value => {
-					if (!value || typeof value !== 'object') {
-						return false;
+			object({
+				optionType: string()
+					.required('Option type is reuiqred')
+					.oneOf(['item', 'category', 'multiple']),
+				choose: number()
+					.min(1, 'Cannot choose less than 1 option')
+					.when('optionType', {
+						is: 'category',
+						then: schema => schema.required('Choose is required'),
+						otherwise: schema => schema.optional().default(undefined)
+					}),
+				equipmentCategory: getItemSchema('Equipment category').when(
+					'optionType',
+					{
+						is: 'category',
+						then: schema => schema.required('Equipment category is required'),
+						otherwise: schema => schema.optional().default(undefined)
 					}
-
-					return (
-						validateIsEquipmentCategory(value) ||
-						validateIsItemAndCount(value) ||
-						validateIsMultiple(value)
-					);
-				}
-			)
+				),
+				item: getItemSchema('Item').when('optionType', {
+					is: 'item',
+					then: schema => schema.required('Item is required'),
+					otherwise: schema => schema.optional().default(undefined)
+				}),
+				count: number()
+					.min(1, 'Count must be at least 1')
+					.when('optionType', {
+						is: 'item',
+						then: schema => schema.required('Count is required'),
+						otherwise: schema => schema.optional().default(undefined)
+					}),
+				items: array()
+					.of(
+						object({
+							itemType: string()
+								.required('Item type is reuiqred')
+								.oneOf(['item', 'category']),
+							choose: number()
+								.min(1, 'Cannot choose less than 1 option')
+								.when('itemType', {
+									is: 'category',
+									then: schema => schema.required('Choose is required'),
+									otherwise: schema => schema.optional().default(undefined)
+								}),
+							equipmentCategory: getItemSchema('Equipment category').when(
+								'itemType',
+								{
+									is: 'category',
+									then: schema =>
+										schema.required('Equipment Category is required'),
+									otherwise: schema => schema.optional().default(undefined)
+								}
+							),
+							item: getItemSchema('Item').when('itemType', {
+								is: 'item',
+								then: schema => schema.required('Item is required'),
+								otherwise: schema => schema.optional().default(undefined)
+							}),
+							count: number()
+								.min(1, 'Count must be at least 1')
+								.when('itemType', {
+									is: 'item',
+									then: schema => schema.required('Count is required'),
+									otherwise: schema => schema.optional().default(undefined)
+								})
+						})
+					)
+					.when('optionType', {
+						is: 'multiple',
+						then: schema => schema.required('Items are required'),
+						otherwise: schema => schema.optional().default(undefined)
+					})
+					.min(1, 'Must have at least 1 item')
+					.max(5, 'Cannot have more than 5 items')
+			})
 		)
 		.min(1, 'There must be at least 1 option to choose from')
+		.max(5, 'Cannot choose from more than 5 options')
 });
 
 const proficiencyChoiceSchema = object({
@@ -180,15 +212,6 @@ const proficiencyChoiceSchema = object({
 		.max(20, 'Cannot have more than 20 proficiency Options')
 });
 
-const proficiencySchema = object({
-	id: string()
-		.required()
-		.max(50, 'Proficiency id cannot be more than 50 characters long'),
-	name: string()
-		.required()
-		.max(50, 'Proficiency name cannot be more than 50 characters long')
-});
-
 const classSchema = object({
 	name: string()
 		.min(1, 'Name is required')
@@ -203,7 +226,7 @@ const classSchema = object({
 				!!value && (value === 6 || value === 8 || value === 10 || value === 12)
 		),
 	proficiencies: array()
-		.of(proficiencySchema)
+		.of(getItemSchema('Proficiency'))
 		.min(1, 'Must have at least 1 proficiency')
 		.optional(),
 	proficiencyChoices: array()
@@ -371,21 +394,16 @@ const classSchema = object({
 				count: number()
 					.required('Count is required')
 					.min(1, 'Count must be at least 1'),
-				item: object({
-					id: string()
-						.required()
-						.max(50, 'Item id cannot be more than 50 characters long'),
-					name: string()
-						.required()
-						.max(50, 'Item name cannot be more than 50 characters long')
-				}).required('Item is required')
+				item: getItemSchema('Item').required('Item is required')
 			})
 		)
 		.required('Starting equipment is required')
 		.min(1, 'Must have at least 1 starting equipment')
 		.max(10, 'Cannot have more than 10 starting equipments'),
-	startingEquipmentOptions: array()
+	startingEquipmentChoices: array()
 		.of(startingEquipmentChoiceSchema)
+		.min(1, 'Must have at least 1 starting equipment option')
+		.max(5, 'Cannot have more than 5 starting equipment options')
 		.optional()
 		.default(undefined),
 	subclassFlavor: string().required('Subclass flavor text is required'),
@@ -400,7 +418,7 @@ const classSchema = object({
 			})
 		),
 		proficiencies: array()
-			.of(proficiencySchema)
+			.of(getItemSchema('Proficiency'))
 			.required('Multiclassing proficiencies are required')
 			.min(1, 'Must have at least 1 multiclassing proficiency'),
 		proficiencyChoices: array()

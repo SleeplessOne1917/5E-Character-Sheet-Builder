@@ -1,7 +1,8 @@
+'use client';
+
 import {
 	ChangeEventHandler,
 	FocusEventHandler,
-	PropsWithChildren,
 	useCallback,
 	useEffect,
 	useMemo,

@@ -48,6 +48,22 @@ h1, h2, h3, h4 {
   align-self: center;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+font-size: 1.4rem;
+}
+
+h3 {
+font-size: 1rem;
+}
+
+h4 {
+font-size: 0.7rem;
+}
+
 select {
   cursor: pointer;
 }
@@ -106,14 +122,14 @@ option {
   }
 
   h2 {
-    font-size: 2.5rem;
-  }
-
-  h3 {
     font-size: 2rem;
   }
 
-  h4 {
+  h3 {
     font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.2rem;
   }
 }

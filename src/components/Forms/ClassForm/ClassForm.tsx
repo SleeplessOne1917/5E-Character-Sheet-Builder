@@ -3,6 +3,7 @@
 import {
 	AbilityItem,
 	SrdEquipmentItem,
+	SrdItem,
 	SrdProficiencyItem
 } from '../../../types/srd';
 import Button, { ButtonType } from '../../Button/Button';
@@ -14,6 +15,7 @@ import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
 import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
+import StartingEquipmentOptions from './StartingEquipmentOptions/StartingEquipmentOptions';
 import StartingEuipment from './StartingEquipment/StartingEquipment';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
@@ -25,6 +27,7 @@ type ClassForm = {
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
 	equipments: SrdEquipmentItem[];
+	equipmentCategories: SrdItem[];
 	onSubmit: (
 		values: EditingClassState,
 		helpers: FormikHelpers<EditingClassState>
@@ -38,6 +41,7 @@ const ClassForm = ({
 	proficiencies,
 	abilities,
 	equipments,
+	equipmentCategories,
 	spells,
 	onSubmit
 }: ClassForm) => {
@@ -74,6 +78,12 @@ const ClassForm = ({
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						equipments={equipments}
+					/>
+					<StartingEquipmentOptions
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						equipments={equipments}
+						equipmentCategories={equipmentCategories}
 					/>
 					<Button
 						positive

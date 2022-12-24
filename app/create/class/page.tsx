@@ -1,5 +1,6 @@
 import {
 	getAbilities,
+	getEquipmentCategories,
 	getEquipments,
 	getProficienciesByType
 } from '../../../src/graphql/srdClientService';
@@ -28,12 +29,14 @@ const ClassPage = async () => {
 		(await getProficienciesByType(proficiencyTypes))?.data?.proficiencies ?? [];
 	const abilities = (await getAbilities()) ?? [];
 	const equipments = (await getEquipments()) ?? [];
+	const equipmentCategories = (await getEquipmentCategories()) ?? [];
 
 	return (
 		<ClassView
 			proficiencies={proficiencies}
 			abilities={abilities}
 			equipments={equipments}
+			equipmentCategories={equipmentCategories}
 		/>
 	);
 };

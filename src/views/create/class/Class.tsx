@@ -3,6 +3,7 @@
 import {
 	AbilityItem,
 	SrdEquipmentItem,
+	SrdItem,
 	SrdProficiencyItem
 } from '../../../types/srd';
 import { useCallback, useEffect, useState } from 'react';
@@ -19,9 +20,15 @@ type ClassProps = {
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
 	equipments: SrdEquipmentItem[];
+	equipmentCategories: SrdItem[];
 };
 
-const Class = ({ proficiencies, abilities, equipments }: ClassProps) => {
+const Class = ({
+	proficiencies,
+	abilities,
+	equipments,
+	equipmentCategories
+}: ClassProps) => {
 	const editingClass = useAppSelector(state => state.editingClass);
 	const [loading, setLoading] = useState(true);
 	const spellsResult = useGetSpells();
@@ -53,6 +60,7 @@ const Class = ({ proficiencies, abilities, equipments }: ClassProps) => {
 				abilities={abilities}
 				spells={spellsResult.spells}
 				equipments={equipments}
+				equipmentCategories={equipmentCategories}
 			/>
 		</MainContent>
 	);
