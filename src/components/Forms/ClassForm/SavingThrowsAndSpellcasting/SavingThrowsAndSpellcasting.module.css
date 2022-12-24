@@ -39,6 +39,7 @@
 
 .error {
     border: 5px solid var(--error-red);
+    border-radius: 1rem;
 }
 
 .error-message {

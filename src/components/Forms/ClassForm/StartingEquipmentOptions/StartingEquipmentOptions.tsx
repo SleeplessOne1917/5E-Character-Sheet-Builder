@@ -56,6 +56,8 @@ const chooseErrorMessage = 'Must have number of options to choose';
 const countErrorMessage = 'Count is required';
 const itemErrorMessage = 'Item is required';
 const equipmentCategoryErrorMessage = 'Equipment category is required';
+const optionsErrorMessage = 'There must be at least 1 option to choose from';
+const itemsErrorMessage = 'Must have at least 1 item';
 
 const optionTypeOptions: Option[] = [
 	{ label: 'Item', value: 'item' },
@@ -137,6 +139,106 @@ const StartingEquipmentOptions = ({
 		[equipmentCategories]
 	);
 
+	const getChoiceError = useCallback(
+		function get<T>(index: number) {
+			return errors.startingEquipmentChoices
+				? (
+						errors.startingEquipmentChoices as unknown as FormikErrors<
+							StartingEquipmentChoiceType[]
+						>
+				  )[index]
+					? ((
+							errors.startingEquipmentChoices as unknown as FormikErrors<
+								StartingEquipmentChoiceType[]
+							>
+					  )[index] as FormikErrors<T>)
+					: undefined
+				: undefined;
+		},
+		[errors.startingEquipmentChoices]
+	);
+
+	const getChoiceTouched = useCallback(
+		function get<T>(index: number) {
+			return touched.startingEquipmentChoices
+				? (
+						touched.startingEquipmentChoices as unknown as FormikErrors<
+							StartingEquipmentChoiceType[]
+						>
+				  )[index]
+					? ((
+							touched.startingEquipmentChoices as unknown as FormikErrors<
+								StartingEquipmentChoiceType[]
+							>
+					  )[index] as FormikTouched<T>)
+					: undefined
+				: undefined;
+		},
+		[touched.startingEquipmentChoices]
+	);
+
+	const getOptionError = useCallback(
+		function get<T>(choiceIndex: number, optionIndex: number) {
+			return getChoiceError<{ options: T[] }>(choiceIndex)?.options &&
+				typeof getChoiceError<{ options: T[] }>(choiceIndex)?.options !==
+					'string'
+				? (getChoiceError<{ options: T[] }>(choiceIndex)!.options![
+						optionIndex
+				  ] as FormikErrors<T>)
+				: undefined;
+		},
+		[getChoiceError]
+	);
+
+	const getOptionTouched = useCallback(
+		function get<T>(choiceIndex: number, optionIndex: number) {
+			return getChoiceTouched<{ options: T[] }>(choiceIndex)?.options &&
+				typeof getChoiceTouched<{ options: T[] }>(choiceIndex)?.options !==
+					'boolean'
+				? ((getChoiceTouched<{ options: T[] }>(choiceIndex)!
+						.options as FormikTouched<T[]>)![
+						optionIndex
+				  ] as unknown as FormikTouched<T>)
+				: undefined;
+		},
+		[getChoiceTouched]
+	);
+
+	const getItemError = useCallback(
+		function get<T>(
+			choiceIndex: number,
+			optionIndex: number,
+			itemIndex: number
+		) {
+			return getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)
+				?.items &&
+				typeof getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)
+					?.items !== 'string'
+				? (getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)!.items![
+						itemIndex
+				  ] as FormikErrors<T>)
+				: undefined;
+		},
+		[getOptionError]
+	);
+
+	const getItemTouched = useCallback(
+		function get<T>(
+			choiceIndex: number,
+			optionIndex: number,
+			itemIndex: number
+		) {
+			return getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)
+				?.items &&
+				typeof getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)
+					?.items !== 'boolean'
+				? (getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)!
+						.items![itemIndex] as FormikTouched<T>)
+				: undefined;
+		},
+		[getOptionTouched]
+	);
+
 	const handleAddChoice = useCallback(() => {
 		if (shouldUseReduxStore) {
 			dispatch(addStartingEquipmentChoice());
@@ -190,27 +292,15 @@ const StartingEquipmentOptions = ({
 
 	const getChooseError = useCallback(
 		(index: number) =>
-			errors.startingEquipmentChoices
-				? (
-						errors.startingEquipmentChoices as unknown as FormikErrors<
-							StartingEquipmentChoiceType[]
-						>
-				  )[index]?.choose
-					? chooseErrorMessage
-					: undefined
+			getChoiceError<{ choose: number }>(index)?.choose
+				? chooseErrorMessage
 				: undefined,
-		[errors.startingEquipmentChoices]
+		[getChoiceError]
 	);
 
 	const getChooseTouched = useCallback(
-		(index: number) =>
-			touched.startingEquipmentChoices &&
-			(
-				touched.startingEquipmentChoices as unknown as FormikTouched<
-					StartingEquipmentChoiceType[]
-				>
-			)[index]?.choose,
-		[touched.startingEquipmentChoices]
+		(index: number) => !!getChoiceTouched<{ choose: number }>(index)?.choose,
+		[getChoiceTouched]
 	);
 
 	const getHandleChooseChange = useCallback(
@@ -270,19 +360,20 @@ const StartingEquipmentOptions = ({
 				prev.map((ecs, i) => (i === index ? [...ecs, []] : ecs))
 			);
 
-			setFieldValue(
-				`${getChoiceStr(index)}.options`,
-				[
-					...values.startingEquipmentChoices![index].options,
-					{ optionType: 'item' }
-				],
-				false
-			);
+			const field = `${getChoiceStr(index)}.options`;
+			const oldOptions = values.startingEquipmentChoices![index].options;
+
+			setFieldValue(field, [...oldOptions, { optionType: 'item' }], false);
+
+			if (oldOptions.length === 0) {
+				setFieldError(field, undefined);
+			}
 		},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
+			setFieldError,
 			values.startingEquipmentChoices
 		]
 	);
@@ -307,91 +398,42 @@ const StartingEquipmentOptions = ({
 				)
 			);
 
-			setFieldValue(
-				`${getChoiceStr(choiceIndex)}.options`,
-				values.startingEquipmentChoices![choiceIndex].options.filter(
-					(_, i) => i !== optionIndex
-				)
-			);
+			const newOptions = values.startingEquipmentChoices![
+				choiceIndex
+			].options.filter((_, i) => i !== optionIndex);
+			const field = `${getChoiceStr(choiceIndex)}.options`;
+
+			setFieldValue(field, newOptions, false);
+
+			if (newOptions.length === 0) {
+				setFieldTouched(field, true, false);
+				setFieldError(field, optionsErrorMessage);
+			}
 		},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
+			setFieldTouched,
+			setFieldError,
 			values.startingEquipmentChoices
 		]
 	);
 
-	const getOptionError = useCallback(
-		function get<T>(choiceIndex: number, optionIndex: number) {
-			return errors.startingEquipmentChoices
-				? (
-						errors.startingEquipmentChoices as unknown as FormikErrors<
-							StartingEquipmentChoiceType[]
-						>
-				  )[choiceIndex]
-					? (
-							(
-								errors.startingEquipmentChoices as unknown as FormikErrors<
-									StartingEquipmentChoiceType[]
-								>
-							)[choiceIndex]!.options as FormikErrors<T[]>
-					  )[optionIndex]
-					: undefined
-				: undefined;
-		},
-		[errors.startingEquipmentChoices]
+	const getChoiceOptionsError = useCallback(
+		(index: number) =>
+			typeof getChoiceError<StartingEquipmentChoiceType>(index)?.options ===
+			'string'
+				? optionsErrorMessage
+				: undefined,
+		[getChoiceError]
 	);
 
-	const getOptionTouched = useCallback(
-		function get<T>(choiceIndex: number, optionIndex: number) {
-			return touched.startingEquipmentChoices
-				? (
-						touched.startingEquipmentChoices as unknown as FormikTouched<
-							StartingEquipmentChoiceType[]
-						>
-				  )[choiceIndex]
-					? (
-							(
-								touched.startingEquipmentChoices as unknown as FormikErrors<
-									StartingEquipmentChoiceType[]
-								>
-							)[choiceIndex]!.options as FormikTouched<T[]>
-					  )[optionIndex]
-					: undefined
-				: undefined;
-		},
-		[touched.startingEquipmentChoices]
-	);
-
-	const getItemError = useCallback(
-		function get<T>(
-			choiceIndex: number,
-			optionIndex: number,
-			itemIndex: number
-		) {
-			return getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)?.items
-				? (getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)!.items![
-						itemIndex
-				  ] as FormikErrors<T>)
-				: undefined;
-		},
-		[getOptionError]
-	);
-
-	const getItemTouched = useCallback(
-		function get<T>(
-			choiceIndex: number,
-			optionIndex: number,
-			itemIndex: number
-		) {
-			return getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)
-				?.items
-				? (getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)!
-						.items![itemIndex] as FormikTouched<T>)
-				: undefined;
-		},
-		[getOptionTouched]
+	const getChoiceOptionsTouched = useCallback(
+		(index: number) =>
+			typeof getChoiceTouched<StartingEquipmentChoiceType>(index)?.options ===
+			'boolean',
+		[getChoiceTouched]
 	);
 
 	const getHandleOptionTypeChange = useCallback(
@@ -784,20 +826,22 @@ const StartingEquipmentOptions = ({
 				)
 			);
 
-			setFieldValue(
-				`${getOptionStr(choiceIndex, optionIndex)}.items`,
-				[
-					...(values.startingEquipmentChoices![choiceIndex].options[optionIndex]
-						.items ?? []),
-					{ itemType: 'item' }
-				],
-				false
-			);
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.items`;
+			const oldItems =
+				values.startingEquipmentChoices![choiceIndex].options[optionIndex]
+					.items ?? [];
+
+			setFieldValue(field, [...oldItems, { itemType: 'item' }], false);
+
+			if (oldItems.length === 0) {
+				setFieldError(field, undefined);
+			}
 		},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
+			setFieldError,
 			values.startingEquipmentChoices
 		]
 	);
@@ -827,19 +871,43 @@ const StartingEquipmentOptions = ({
 			const newItems = values.startingEquipmentChoices![choiceIndex].options[
 				optionIndex
 			].items?.filter((_, i) => i !== itemIndex);
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.items`;
 
 			setFieldValue(
-				getItemStr(choiceIndex, optionIndex, itemIndex),
+				field,
 				(newItems?.length ?? 0) > 0 ? newItems : undefined,
 				false
 			);
+
+			if ((newItems?.length ?? 0) === 0) {
+				setFieldTouched(field, true, false);
+				setFieldError(field, itemsErrorMessage);
+			}
 		},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
+			setFieldTouched,
+			setFieldError,
 			values.startingEquipmentChoices
 		]
+	);
+
+	const getOptionItemsError = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			typeof getOptionError<{ items: Item[] }>(choiceIndex, optionIndex)
+				?.items === 'string'
+				? itemsErrorMessage
+				: undefined,
+		[getOptionError]
+	);
+
+	const getOptionItemsTouched = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			typeof getOptionTouched<{ items: Item[] }>(choiceIndex, optionIndex)
+				?.items === 'boolean',
+		[getOptionTouched]
 	);
 
 	const getHandleItemTypeChange = useCallback(
@@ -1241,7 +1309,22 @@ const StartingEquipmentOptions = ({
 							/>
 						</div>
 						<div className={styles['from-container']}>
-							<div className={styles['from-label']}>From</div>
+							<div
+								className={`${styles['from-label-container']}${
+									(clickedSubmit || getChoiceOptionsTouched(i)) &&
+									getChoiceOptionsError(i)
+										? ` ${styles.error}`
+										: ''
+								}`}
+							>
+								<div className={styles['from-label']}>From</div>
+								{(clickedSubmit || getChoiceOptionsTouched(i)) &&
+									getChoiceOptionsError(i) && (
+										<div className={styles['error-message']}>
+											{getChoiceOptionsError(i)}
+										</div>
+									)}
+							</div>
 							<div className={styles['options-container']}>
 								{choice.options.map((option, j) => (
 									<div key={j} className={styles.option}>
@@ -1345,7 +1428,22 @@ const StartingEquipmentOptions = ({
 										)}
 										{option.optionType === 'multiple' && (
 											<div className={styles['from-container']}>
-												<div className={styles['items-label']}>Items</div>
+												<div
+													className={`${styles['from-label-container']}${
+														(clickedSubmit || getOptionItemsTouched(i, j)) &&
+														getOptionItemsError(i, j)
+															? ` ${styles.error}`
+															: ''
+													}`}
+												>
+													<div className={styles['items-label']}>Items</div>
+													{(clickedSubmit || getOptionItemsTouched(i, j)) &&
+														getOptionItemsError(i, j) && (
+															<div className={styles['error-message']}>
+																{getOptionItemsError(i, j)}
+															</div>
+														)}
+												</div>
 												<div className={styles['options-container']}>
 													{option.items?.map((item, k) => (
 														<div key={k} className={styles.item}>

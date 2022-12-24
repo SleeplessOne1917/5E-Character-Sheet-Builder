@@ -108,6 +108,7 @@ const startingEquipmentChoiceSchema = object({
 		)
 		.min(1, 'There must be at least 1 option to choose from')
 		.max(5, 'Cannot choose from more than 5 options')
+		.required('Options are required')
 });
 
 const proficiencyChoiceSchema = object({

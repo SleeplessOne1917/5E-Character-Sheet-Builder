@@ -38,6 +38,22 @@
     margin-top: 1rem;
 }
 
+.from-label-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.error {
+    border: 5px solid var(--error-red);
+    border-radius: 1rem;
+}
+
+.error-message {
+    color: var(--wine-red);
+}
+
 .from-label {
     font-size: 1.5rem;
 }
