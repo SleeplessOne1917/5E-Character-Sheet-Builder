@@ -220,12 +220,7 @@ const classSchema = object({
 		.required('Name is required'),
 	hitDie: number()
 		.required('Hit die is required')
-		.test(
-			'valid-hit-die',
-			'Hit die must be 6, 8, 10, or 12',
-			value =>
-				!!value && (value === 6 || value === 8 || value === 10 || value === 12)
-		),
+		.oneOf([6, 8, 10, 12], 'Hit die must be 6, 8, 10, or 12'),
 	proficiencies: array()
 		.of(getItemSchema('Proficiency'))
 		.min(1, 'Must have at least 1 proficiency')

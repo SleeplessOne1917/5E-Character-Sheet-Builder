@@ -258,8 +258,8 @@ const StartingEuipment = ({
 	);
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.title}>Starting Equipment</div>
+		<section className={styles.container}>
+			<h2>Starting Equipment</h2>
 			<div className={styles.equipments}>
 				{values.startingEquipment.map((equipment, i) => (
 					<div key={i} className={styles.equipment}>
@@ -314,7 +314,7 @@ const StartingEuipment = ({
 					Add Starting Equipment
 				</Button>
 			)}
-		</div>
+		</section>
 	);
 };
 

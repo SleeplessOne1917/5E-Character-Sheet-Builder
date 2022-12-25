@@ -6,11 +6,6 @@
     width: 100%;
 }
 
-.title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
 .equipments {
     display: flex;
     align-items: center;

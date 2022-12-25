@@ -543,98 +543,66 @@ const ProficiencyBonuses = ({
 	);
 
 	return (
-		<table className={styles.levels} style={{ maxWidth, left }}>
-			<thead>
-				<tr>
-					<th>Class Level</th>
-					<th>Proficiency Bonus</th>
-					<th>Ability Score Bonus</th>
-					{values.spellcasting?.handleSpells === 'spells-known' && (
-						<th>Spells Known</th>
-					)}
-					{values.spellcasting &&
-						spellLevels.map(level => (
-							<th key={level}>
-								{level === 0
-									? 'Cantrips Known'
-									: `${getOrdinal(level)} Level Spell Slots`}
-							</th>
-						))}
-				</tr>
-			</thead>
-			<tbody>
-				{values.proficiencyBonuses.map((bonus, i) => (
-					<tr key={i} className={styles.level}>
-						<th>{i + 1}</th>
-						<td>
-							<NumberTextInput
-								id={`proficiencyBonuses.${i}`}
-								label={`Level ${i + 1} Proficiency Bonus`}
-								error={getBonusError(i)}
-								touched={clickedSubmit || getBonusTouched(i)}
-								value={bonus}
-								onChange={getHandleBonusChange(i)}
-								onBlur={getHandleBonusBlur(i)}
-								hideLabel
-								errorStyle={{ fontSize: '0.7rem' }}
-							/>
-						</td>
-						<td className={styles.bonus}>
-							<Checkbox
-								label={`Enable Ability Score Bonus for Level ${i + 1}`}
-								checked={values.abilityScoreBonusLevels.includes(i + 1)}
-								onChange={getHandleAbilityScoreBonusChange(i + 1)}
-								hideLabel
-							/>
-						</td>
+		<section className={styles.container}>
+			<h2>Levels</h2>
+			<table className={styles.levels} style={{ maxWidth, left }}>
+				<thead>
+					<tr>
+						<th>Class Level</th>
+						<th>Proficiency Bonus</th>
+						<th>Ability Score Bonus</th>
 						{values.spellcasting?.handleSpells === 'spells-known' && (
-							<td>
-								{includeLevel1 || i > 0 ? (
-									<NumberTextInput
-										id={`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`}
-										label={`Level ${i + 1} Spells Known`}
-										error={getSpellsKnownError(i)}
-										touched={clickedSubmit || getSpellsKnownTouched(i)}
-										value={
-											values.spellcasting.spellSlotsAndCantripsPerLevel[i]
-												.spellsKnown
-										}
-										onChange={getHandleSpellsKnownChange(i)}
-										onBlur={getHandleSpellsKnownBlur(i)}
-										hideLabel
-										errorStyle={{ fontSize: '0.7rem' }}
-									/>
-								) : (
-									' '
-								)}
-							</td>
+							<th>Spells Known</th>
 						)}
 						{values.spellcasting &&
 							spellLevels.map(level => (
-								<td key={level}>
+								<th key={level}>
+									{level === 0
+										? 'Cantrips Known'
+										: `${getOrdinal(level)} Level Spell Slots`}
+								</th>
+							))}
+					</tr>
+				</thead>
+				<tbody>
+					{values.proficiencyBonuses.map((bonus, i) => (
+						<tr key={i} className={styles.level}>
+							<th>{i + 1}</th>
+							<td>
+								<NumberTextInput
+									id={`proficiencyBonuses.${i}`}
+									label={`Level ${i + 1} Proficiency Bonus`}
+									error={getBonusError(i)}
+									touched={clickedSubmit || getBonusTouched(i)}
+									value={bonus}
+									onChange={getHandleBonusChange(i)}
+									onBlur={getHandleBonusBlur(i)}
+									hideLabel
+									errorStyle={{ fontSize: '0.7rem' }}
+								/>
+							</td>
+							<td className={styles.bonus}>
+								<Checkbox
+									label={`Enable Ability Score Bonus for Level ${i + 1}`}
+									checked={values.abilityScoreBonusLevels.includes(i + 1)}
+									onChange={getHandleAbilityScoreBonusChange(i + 1)}
+									hideLabel
+								/>
+							</td>
+							{values.spellcasting?.handleSpells === 'spells-known' && (
+								<td>
 									{includeLevel1 || i > 0 ? (
 										<NumberTextInput
-											id={`spellcasting.spellSlotsAndCantripsPerLevel.${i}.${
-												level === 0 ? 'cantrips' : `level${level}`
-											}`}
-											label={`Level ${i + 1} ${
-												level === 0
-													? 'Cantrips Known'
-													: `${getOrdinal(level)} Level Spell Slots`
-											}`}
-											error={getSpellSlotSlotsError(i, level)}
-											touched={clickedSubmit || getSpellSlotsTouched(i, level)}
+											id={`spellcasting.spellSlotsAndCantripsPerLevel.${i}.spellsKnown`}
+											label={`Level ${i + 1} Spells Known`}
+											error={getSpellsKnownError(i)}
+											touched={clickedSubmit || getSpellsKnownTouched(i)}
 											value={
-												level === 0
-													? values.spellcasting!.spellSlotsAndCantripsPerLevel[
-															i
-													  ].cantrips //@ts-ignore
-													: values.spellcasting.spellSlotsAndCantripsPerLevel[
-															i
-													  ][`level${level}`]
+												values.spellcasting.spellSlotsAndCantripsPerLevel[i]
+													.spellsKnown
 											}
-											onChange={getHandleSpellSlotsChange(i, level)}
-											onBlur={getHandleSpellSlotsBlur(i, level)}
+											onChange={getHandleSpellsKnownChange(i)}
+											onBlur={getHandleSpellsKnownBlur(i)}
 											hideLabel
 											errorStyle={{ fontSize: '0.7rem' }}
 										/>
@@ -642,11 +610,47 @@ const ProficiencyBonuses = ({
 										' '
 									)}
 								</td>
-							))}
-					</tr>
-				))}
-			</tbody>
-		</table>
+							)}
+							{values.spellcasting &&
+								spellLevels.map(level => (
+									<td key={level}>
+										{includeLevel1 || i > 0 ? (
+											<NumberTextInput
+												id={`spellcasting.spellSlotsAndCantripsPerLevel.${i}.${
+													level === 0 ? 'cantrips' : `level${level}`
+												}`}
+												label={`Level ${i + 1} ${
+													level === 0
+														? 'Cantrips Known'
+														: `${getOrdinal(level)} Level Spell Slots`
+												}`}
+												error={getSpellSlotSlotsError(i, level)}
+												touched={
+													clickedSubmit || getSpellSlotsTouched(i, level)
+												}
+												value={
+													level === 0
+														? values.spellcasting!
+																.spellSlotsAndCantripsPerLevel[i].cantrips //@ts-ignore
+														: values.spellcasting.spellSlotsAndCantripsPerLevel[
+																i
+														  ][`level${level}`]
+												}
+												onChange={getHandleSpellSlotsChange(i, level)}
+												onBlur={getHandleSpellSlotsBlur(i, level)}
+												hideLabel
+												errorStyle={{ fontSize: '0.7rem' }}
+											/>
+										) : (
+											' '
+										)}
+									</td>
+								))}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</section>
 	);
 };
 

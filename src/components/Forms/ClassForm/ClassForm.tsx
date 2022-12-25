@@ -12,9 +12,11 @@ import { Formik, FormikHelpers } from 'formik';
 import { EditingClassState } from '../../../redux/features/editingClass';
 import Levels from './Levels/Levels';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
-import ProficienciesAndProficiencyChoices from './ProficienciesAndProficiencyOptions/ProficienciesAndProficiencyChoices';
-import SavingThrowsAndSpellcasting from './SavingThrowsAndSpellcasting/SavingThrowsAndSpellcasting';
+import Proficiencies from './Proficiencies/Proficiencies';
+import ProficiencyChoices from './ProficiencyChoices/ProficiencyChoices';
+import SavingThrows from './SavingThrows/SavingThrows';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
+import Spellcasting from './Spellcasting/Spellcasting';
 import StartingEquipmentOptions from './StartingEquipmentOptions/StartingEquipmentOptions';
 import StartingEuipment from './StartingEquipment/StartingEquipment';
 import classSchema from '../../../yup-schemas/classSchema';
@@ -59,12 +61,22 @@ const ClassForm = ({
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 					/>
-					<ProficienciesAndProficiencyChoices
+					<Proficiencies
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						proficiencies={proficiencies}
 					/>
-					<SavingThrowsAndSpellcasting
+					<ProficiencyChoices
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						proficiencies={proficiencies}
+					/>
+					<SavingThrows
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+						abilities={abilities}
+					/>
+					<Spellcasting
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						abilities={abilities}

@@ -1,23 +1,10 @@
-.section-container {
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 1rem 0;
     width: 100%;
     padding: 1rem;
-}
-
-.title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-.saving-throws {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-around;
-    flex-wrap: wrap;
 }
 
 .ability-level {

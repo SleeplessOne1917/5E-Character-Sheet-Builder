@@ -11,7 +11,6 @@ import {
 	setHandleSpells,
 	setIsHalfCaster,
 	setKnowsCantrips,
-	setSavingThrow,
 	setSpellcastingAbility,
 	setSpellcastingCantripsKnown,
 	setSpellcastingLevel,
@@ -29,17 +28,15 @@ import Option from '../../../Select/Option';
 import Select from '../../../Select/Select/Select';
 import { SpellItem } from '../../../../types/characterSheetBuilderAPI';
 import SpellsSelector from '../../../Spells/SpellsSelector/SpellsSelector';
-import styles from './SavingThrowsAndSpellcasting.module.css';
+import styles from './Spellcasting.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
-type SavingThrowsAndSpellcastingProps = {
+type SpellcastingProps = {
 	clickedSubmit: boolean;
 	shouldUseReduxStore: boolean;
 	abilities: AbilityItem[];
 	spells: SpellItem[];
 };
-
-const savingThrowErrorMessage = 'Saving throws required';
 
 const spellcastingLevelOptions = [...Array(2).keys()].map(level => ({
 	value: level + 1,
@@ -60,7 +57,7 @@ const SavingThrowsAndSpellcasting = ({
 	spells,
 	clickedSubmit,
 	shouldUseReduxStore
-}: SavingThrowsAndSpellcastingProps) => {
+}: SpellcastingProps) => {
 	const {
 		values,
 		errors,
@@ -71,7 +68,7 @@ const SavingThrowsAndSpellcasting = ({
 	} = useFormikContext<EditingClassState>();
 	const dispatch = useAppDispatch();
 
-	const spellcastingAbilities = useMemo(
+	const spellcastingAbilityOptions = useMemo(
 		() =>
 			[{ label: '\u2014', value: 'blank' } as Option].concat(
 				abilities
@@ -173,77 +170,6 @@ const SavingThrowsAndSpellcasting = ({
 				}>
 			).handleSpells,
 		[errors.spellcasting]
-	);
-
-	const getAbilitiesOptions = useCallback(
-		(index: number) =>
-			abilities
-				.map<Option>(ability => ({
-					value: ability.index,
-					label: ability.full_name
-				}))
-				.filter(
-					({ value }) =>
-						!values.savingThrows.some(savingThrow => savingThrow?.id === value)
-				)
-				.concat(
-					values.savingThrows[index]
-						? [
-								{
-									value: values.savingThrows[index]?.id,
-									label: values.savingThrows[index]?.name
-								} as Option
-						  ]
-						: []
-				)
-				.concat([{ label: '\u2014', value: 'blank' } as Option]),
-		[abilities, values.savingThrows]
-	);
-
-	const getSavingThrowError = useCallback(
-		(index: number) =>
-			errors.savingThrows
-				? (errors.savingThrows as (string | undefined)[])[index]
-					? savingThrowErrorMessage
-					: undefined
-				: undefined,
-		[errors.savingThrows]
-	);
-
-	const getSavingThrowTouched = useCallback(
-		(index: number) =>
-			touched.savingThrows
-				? (touched.savingThrows as unknown as boolean[])[index]
-				: undefined,
-		[touched.savingThrows]
-	);
-
-	const getHandleSavingThrowChange = useCallback(
-		(index: number) => (value: string | number) => {
-			const foundAbility = abilities.find(ability => ability.index === value);
-			const newSavingThrow = foundAbility
-				? ({ id: foundAbility.index, name: foundAbility.full_name } as Item)
-				: null;
-
-			if (shouldUseReduxStore) {
-				dispatch(setSavingThrow({ index, savingThrow: newSavingThrow }));
-			}
-
-			setFieldValue(`savingThrows.${index}`, newSavingThrow, false);
-			setFieldTouched(`savingThrows.${index}`, true, false);
-			setFieldError(
-				`savingThrows.${index}`,
-				!foundAbility ? savingThrowErrorMessage : undefined
-			);
-		},
-		[
-			abilities,
-			dispatch,
-			setFieldError,
-			setFieldTouched,
-			setFieldValue,
-			shouldUseReduxStore
-		]
 	);
 
 	const handleAddSpellcasting = useCallback(() => {
@@ -581,106 +507,84 @@ const SavingThrowsAndSpellcasting = ({
 	);
 
 	return (
-		<>
-			<div className={styles['section-container']}>
-				<div className={styles.title}>Saving Throws</div>
-				<div className={styles['saving-throws']}>
-					{values.savingThrows.map((savingThrow, i) => (
-						<Select
-							key={i}
-							options={getAbilitiesOptions(i)}
-							id={`savingThrows.${i}`}
-							label={`Saving Throw ${i + 1}`}
-							value={savingThrow?.id ?? 'blank'}
-							error={getSavingThrowError(i)}
-							touched={clickedSubmit || getSavingThrowTouched(i)}
-							onChange={getHandleSavingThrowChange(i)}
-						/>
-					))}
-				</div>
-			</div>
-			<div
-				className={styles['section-container']}
-				style={{ backgroundColor: 'var(--highlight-light)' }}
-			>
-				<div className={styles.title}>Spellcasting</div>
-				{!values.spellcasting && (
-					<Button positive onClick={handleAddSpellcasting}>
-						Add Spellcasting
+		<section className={styles.container}>
+			<h2>Spellcasting</h2>
+			{!values.spellcasting && (
+				<Button positive onClick={handleAddSpellcasting}>
+					Add Spellcasting
+				</Button>
+			)}
+			{values.spellcasting && (
+				<>
+					<Button onClick={handleRemoveSpellcasting}>
+						Remove Spellcasting
 					</Button>
-				)}
-				{values.spellcasting && (
-					<>
-						<Button onClick={handleRemoveSpellcasting}>
-							Remove Spellcasting
-						</Button>
-						<div className={styles['ability-level']}>
-							<Select
-								id="spellcasting.ability"
-								label="Ability"
-								options={spellcastingAbilities}
-								value={values.spellcasting.ability?.id ?? 'blank'}
-								touched={clickedSubmit || spellcastingAbilityTouched}
-								error={spellcastingAbilityError}
-								onChange={handleSpellcastingAbilityChange}
-							/>
-							<Select
-								id="spellcasting.level"
-								label="Start Level"
-								value={values.spellcasting.level ?? 'blank'}
-								options={spellcastingLevelOptions}
-								touched={clickedSubmit || spellcastingLevelTouched}
-								error={spellcastingLevelError}
-								onChange={handleSpellcastingLevelChange}
-							/>
-							<Checkbox
-								label="Half Caster"
-								checked={values.spellcasting.isHalfCaster}
-								onChange={handleIsHalfCasterChange}
-							/>
-							<Checkbox
-								label="Knows Cantrips"
-								checked={values.spellcasting.knowsCantrips}
-								onChange={handleKnowsCantripsChange}
-							/>
-							<Select
-								id="spellcasting.handleSpells"
-								label="Handle Spells"
-								options={spellcastingHandleSpellsOptions}
-								value={values.spellcasting.handleSpells ?? 'blank'}
-								touched={clickedSubmit || handleSpellsTouched}
-								error={handleSpellsError}
-								onChange={handleHandleSpellsChange}
-							/>
-						</div>
-						<div
-							className={`${styles.spells}${
-								(spellcastingSpellsTouched || clickedSubmit) &&
-								spellcastingSpellsError
-									? ` ${styles.error}`
-									: ''
-							}`}
-						>
-							<SpellsSelector
-								label="Spells"
-								levels={spellLevels}
-								selectedSpells={selectedSpells}
-								spells={spells}
-								onAdd={handleAddSpellcastingSpell}
-								onRemove={handleRemoveSpellcastingSpell}
-								filterSpell={filterSpells}
-							/>
-							{(spellcastingSpellsTouched || clickedSubmit) &&
-								spellcastingSpellsError && (
-									<div className={styles['error-message']}>
-										{spellcastingSpellsError}
-									</div>
-								)}
-						</div>
-					</>
-				)}
-			</div>
-		</>
+					<div className={styles['ability-level']}>
+						<Select
+							id="spellcasting.ability"
+							label="Ability"
+							options={spellcastingAbilityOptions}
+							value={values.spellcasting.ability?.id ?? 'blank'}
+							touched={clickedSubmit || spellcastingAbilityTouched}
+							error={spellcastingAbilityError}
+							onChange={handleSpellcastingAbilityChange}
+						/>
+						<Select
+							id="spellcasting.level"
+							label="Start Level"
+							value={values.spellcasting.level ?? 'blank'}
+							options={spellcastingLevelOptions}
+							touched={clickedSubmit || spellcastingLevelTouched}
+							error={spellcastingLevelError}
+							onChange={handleSpellcastingLevelChange}
+						/>
+						<Checkbox
+							label="Half Caster"
+							checked={values.spellcasting.isHalfCaster}
+							onChange={handleIsHalfCasterChange}
+						/>
+						<Checkbox
+							label="Knows Cantrips"
+							checked={values.spellcasting.knowsCantrips}
+							onChange={handleKnowsCantripsChange}
+						/>
+						<Select
+							id="spellcasting.handleSpells"
+							label="Handle Spells"
+							options={spellcastingHandleSpellsOptions}
+							value={values.spellcasting.handleSpells ?? 'blank'}
+							touched={clickedSubmit || handleSpellsTouched}
+							error={handleSpellsError}
+							onChange={handleHandleSpellsChange}
+						/>
+					</div>
+					<div
+						className={`${styles.spells}${
+							(spellcastingSpellsTouched || clickedSubmit) &&
+							spellcastingSpellsError
+								? ` ${styles.error}`
+								: ''
+						}`}
+					>
+						<SpellsSelector
+							label="Spells"
+							levels={spellLevels}
+							selectedSpells={selectedSpells}
+							spells={spells}
+							onAdd={handleAddSpellcastingSpell}
+							onRemove={handleRemoveSpellcastingSpell}
+							filterSpell={filterSpells}
+						/>
+						{(spellcastingSpellsTouched || clickedSubmit) &&
+							spellcastingSpellsError && (
+								<div className={styles['error-message']}>
+									{spellcastingSpellsError}
+								</div>
+							)}
+					</div>
+				</>
+			)}
+		</section>
 	);
 };
 

@@ -13,7 +13,6 @@ import {
 	ProficiencyChoice,
 	addProficiencyChoice,
 	removeProficiencyChoice,
-	setProficiencies,
 	setProficiencyChoice
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
@@ -21,16 +20,15 @@ import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
 
 import Button from '../../../Button/Button';
 import { Item } from '../../../../types/db/item';
-import MultiSelect from '../../../Select/MultiSelect/MultiSelect';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import Option from '../../../Select/Option';
 import Select from '../../../Select/Select/Select';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { getProficiencyTypeName } from '../../../../services/proficiencyTypeService';
-import styles from './ProficienciesAndProficiencyChoices.module.css';
+import styles from './ProficiencyChoices.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
-type ProficienciesAndProficiencyOptionsProps = {
+type ProficiencyOptionsProps = {
 	clickedSubmit: boolean;
 	shouldUseReduxStore: boolean;
 	proficiencies: SrdProficiencyItem[];
@@ -45,16 +43,11 @@ const optionTypeOptions: Option[] = [
 
 const optionProficiencyErrorMessage = 'Option proficiency is required';
 
-type ProficiencyGroup = {
-	type: ProficiencyType;
-	proficiencies: SrdProficiencyItem[];
-};
-
-const ProficienciesAndProficiencyChoices = ({
+const ProficiencyChoices = ({
 	clickedSubmit,
 	shouldUseReduxStore,
 	proficiencies
-}: ProficienciesAndProficiencyOptionsProps) => {
+}: ProficiencyOptionsProps) => {
 	const {
 		values,
 		errors,
@@ -63,8 +56,7 @@ const ProficienciesAndProficiencyChoices = ({
 		setFieldTouched,
 		setFieldError
 	} = useFormikContext<EditingClassState>();
-	const [selectedProficienciesType, setSelectedProficienciesType] =
-		useState<string | null>(null);
+
 	const [optionsSelectedProficiencyTypes, setOptionsSelectedProficiencyTypes] =
 		useState(
 			values.proficiencyChoices?.map(
@@ -116,110 +108,6 @@ const ProficienciesAndProficiencyChoices = ({
 				[{ label: '\u2014', value: 'blank' }]
 			),
 		[proficiencies]
-	);
-
-	const proficienciesValues = useMemo(
-		() => values.proficiencies.map(proficiency => proficiency.id),
-		[values]
-	);
-
-	const proficienciesError = useMemo(
-		() =>
-			typeof errors.proficiencies === 'string' || !errors.proficiencies
-				? errors.proficiencies
-				: typeof errors.proficiencies[0] === 'string'
-				? errors.proficiencies[0]
-				: errors.proficiencies[0].name,
-		[errors]
-	);
-
-	const proficienciesOptions = useMemo(
-		() =>
-			proficiencies
-				.filter(
-					proficiency =>
-						proficiency.type === selectedProficienciesType &&
-						!values.proficiencyChoices
-							?.flatMap(choice => choice.options)
-							.some(option => option?.id === proficiency.index) &&
-						!values.proficiencyChoices
-							?.flatMap(choice => choice.options)
-							.flatMap(option => option?.options)
-							.some(option => option?.id === proficiency.index)
-				)
-				.map<Option>(proficiency => ({
-					label: proficiency.name.replace(/Skill: /, ''),
-					value: proficiency.index
-				})),
-		[proficiencies, selectedProficienciesType, values.proficiencyChoices]
-	);
-
-	const proficiencyGroups = useMemo(
-		() =>
-			values.proficiencies.reduce<ProficiencyGroup[]>((acc, cur) => {
-				const proficiency = proficiencies.find(prof => prof.index === cur.id)!;
-
-				if (
-					acc.length > 0 &&
-					acc.some(group => group.type === proficiency.type)
-				) {
-					return acc.map(group =>
-						group.type === proficiency.type
-							? {
-									...group,
-									proficiencies: [...group.proficiencies, proficiency]
-							  }
-							: group
-					);
-				} else {
-					return [
-						...acc,
-						{
-							type: proficiency.type,
-							proficiencies: [proficiency]
-						} as ProficiencyGroup
-					];
-				}
-			}, []),
-		[values.proficiencies, proficiencies]
-	);
-
-	const handleChangeProficienciesType = useCallback(
-		(value: string | number) => {
-			const newValue = value !== 'blank' ? (value as string) : null;
-			setSelectedProficienciesType(newValue);
-		},
-		[]
-	);
-
-	const handleProficienciesChange = useCallback(
-		(values: (string | number)[]) => {
-			const newValues = proficiencies
-				.filter(proficiency => values.includes(proficiency.index))
-				.map<Item>(proficiency => ({
-					id: proficiency.index,
-					name: proficiency.name
-				}));
-
-			if (shouldUseReduxStore) {
-				dispatch(setProficiencies(newValues));
-			}
-
-			setFieldValue('proficiencies', newValues, false);
-			setFieldTouched('proficiencies', true, false);
-			setFieldError(
-				'proficiencies',
-				newValues.length === 0 ? 'Must have at least 1 proficiency' : undefined
-			);
-		},
-		[
-			proficiencies,
-			shouldUseReduxStore,
-			dispatch,
-			setFieldError,
-			setFieldTouched,
-			setFieldValue
-		]
 	);
 
 	const handleAddProficiencyChoice = useCallback(() => {
@@ -1003,274 +891,219 @@ const ProficienciesAndProficiencyChoices = ({
 	);
 
 	return (
-		<div className={styles.container}>
-			<div
-				className={`${styles['proficiencies-container']}${
-					(clickedSubmit || touched.proficiencies) && proficienciesError
-						? ` ${styles.error}`
-						: ''
-				}`}
-			>
-				<div className={styles.title}>Proficiencies</div>
-				<div className={styles.proficiencies}>
-					<Select
-						id="proficiencies-type"
-						label="Proficiency Type"
-						value={selectedProficienciesType ?? 'blank'}
-						options={proficiencyTypeOptions}
-						onChange={handleChangeProficienciesType}
-					/>
-					{selectedProficienciesType && (
-						<MultiSelect
-							id="proficiencies"
-							label="Proficiencies"
-							values={proficienciesValues}
-							error={proficienciesError}
-							touched={clickedSubmit || !!touched.proficiencies}
-							options={proficienciesOptions}
-							onSelect={handleProficienciesChange}
-						/>
-					)}
-					{proficiencyGroups.length > 0 && (
-						<div className={styles['proficiency-groups']}>
-							{proficiencyGroups.map(group => (
-								<div key={group.type} className={styles['proficiency-group']}>
-									<div className={styles['proficiency-group-title']}>
-										{getProficiencyTypeName(group.type)}
-									</div>
-									<ul className={styles['proficiency-group-list']}>
-										{group.proficiencies.map(prof => (
-											<li key={prof.index}>
-												{prof.name.replace(/Skill: /, '')}
-											</li>
-										))}
-									</ul>
-								</div>
-							))}
+		<section className={styles.container}>
+			<h2>Proficiency Choices</h2>
+			<div className={styles['choices-container']}>
+				{values.proficiencyChoices?.map(({ choose, options }, i) => (
+					<div key={i} className={styles.choice}>
+						<Button
+							size="small"
+							style={{
+								position: 'absolute',
+								top: 0,
+								right: 0,
+								display: 'flex',
+								alignItems: 'center',
+								marginRight: '-0.1rem',
+								marginTop: '-0.1rem',
+								borderTopRightRadius: '1rem'
+							}}
+							onClick={getHandleRemoveProficiencyChoice(i)}
+						>
+							<XMarkIcon className={styles['close-button-icon']} /> Remove
+						</Button>
+						<div className={styles['choose-container']}>
+							<NumberTextInput
+								id={`proficiencyChoices.${i}.choose`}
+								label="Choose"
+								error={getChooseError(i)}
+								touched={clickedSubmit || getChooseTouched(i)}
+								value={choose}
+								onChange={getHandleChooseChange(i)}
+								onBlur={getHandleChooseBlur(i)}
+							/>
 						</div>
-					)}
-					{(clickedSubmit || touched.proficiencies) && proficienciesError && (
-						<div className={styles['error-message']}>{proficienciesError}</div>
-					)}
-				</div>
-			</div>
-			<div className={styles['proficiency-choices-container']}>
-				<div className={styles.title}>Proficiency Choices</div>
-				<div className={styles['choices-container']}>
-					{values.proficiencyChoices?.map(({ choose, options }, i) => (
-						<div key={i} className={styles.choice}>
-							<Button
-								size="small"
-								style={{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-									display: 'flex',
-									alignItems: 'center',
-									marginRight: '-0.1rem',
-									marginTop: '-0.1rem',
-									borderTopRightRadius: '1rem'
-								}}
-								onClick={getHandleRemoveProficiencyChoice(i)}
-							>
-								<XMarkIcon className={styles['close-button-icon']} /> Remove
-							</Button>
-							<div className={styles['choose-container']}>
-								<NumberTextInput
-									id={`proficiencyChoices.${i}.choose`}
-									label="Choose"
-									error={getChooseError(i)}
-									touched={clickedSubmit || getChooseTouched(i)}
-									value={choose}
-									onChange={getHandleChooseChange(i)}
-									onBlur={getHandleChooseBlur(i)}
-								/>
-							</div>
-							<div className={styles['from-container']}>
-								<div className={styles['from-label']}>From</div>
-								<div className={styles['options-container']}>
-									{options?.map((option, j) => (
-										<div key={j} className={styles.option}>
-											<Button
-												size="small"
-												style={{
-													position: 'absolute',
-													top: 0,
-													right: 0,
-													display: 'flex',
-													alignItems: 'center',
-													marginRight: '-0.1rem',
-													marginTop: '-0.1rem',
-													borderTopRightRadius: '1rem'
-												}}
-												onClick={getHandleRemoveOption(i, j)}
-											>
-												<XMarkIcon className={styles['close-button-icon']} />{' '}
-												Remove
-											</Button>
-											<Select
-												options={optionTypeOptions}
-												id={`proficiencyChoices.${i}.options.${j}.optionType`}
-												label="Option Type"
-												value={optionTypes[i][j]}
-												onChange={getHandleOptionTypeChange(i, j)}
-											/>
-											{optionTypes[i][j] === 'item' ? (
-												<>
+						<div className={styles['from-container']}>
+							<div className={styles['from-label']}>From</div>
+							<div className={styles['options-container']}>
+								{options?.map((option, j) => (
+									<div key={j} className={styles.option}>
+										<Button
+											size="small"
+											style={{
+												position: 'absolute',
+												top: 0,
+												right: 0,
+												display: 'flex',
+												alignItems: 'center',
+												marginRight: '-0.1rem',
+												marginTop: '-0.1rem',
+												borderTopRightRadius: '1rem'
+											}}
+											onClick={getHandleRemoveOption(i, j)}
+										>
+											<XMarkIcon className={styles['close-button-icon']} />{' '}
+											Remove
+										</Button>
+										<Select
+											options={optionTypeOptions}
+											id={`proficiencyChoices.${i}.options.${j}.optionType`}
+											label="Option Type"
+											value={optionTypes[i][j]}
+											onChange={getHandleOptionTypeChange(i, j)}
+										/>
+										{optionTypes[i][j] === 'item' ? (
+											<>
+												<Select
+													id={`proficiencyChoices.${i}.options.${j}.proficiencyType`}
+													options={proficiencyTypeOptions}
+													label="Proficiency Type"
+													value={
+														optionsSelectedProficiencyTypes[i][j] ?? 'blank'
+													}
+													onChange={getHandleOptionProficiencyTypeChange(i, j)}
+												/>
+												{optionsSelectedProficiencyTypes[i][j] && (
 													<Select
-														id={`proficiencyChoices.${i}.options.${j}.proficiencyType`}
-														options={proficiencyTypeOptions}
-														label="Proficiency Type"
-														value={
-															optionsSelectedProficiencyTypes[i][j] ?? 'blank'
+														id={`proficiencyChoices.${i}.options.${j}.proficiency`}
+														options={getOptionsProficiencyOptions(i, j)}
+														label="Proficiency"
+														error={getOptionsProficiencyError(i, j)}
+														touched={
+															clickedSubmit ||
+															getOptionsProficiencyTouched(i, j)
 														}
-														onChange={getHandleOptionProficiencyTypeChange(
-															i,
-															j
-														)}
+														value={option.id ?? 'blank'}
+														onChange={getHandleOptionsProficiencyChange(i, j)}
 													/>
-													{optionsSelectedProficiencyTypes[i][j] && (
-														<Select
-															id={`proficiencyChoices.${i}.options.${j}.proficiency`}
-															options={getOptionsProficiencyOptions(i, j)}
-															label="Proficiency"
-															error={getOptionsProficiencyError(i, j)}
-															touched={
-																clickedSubmit ||
-																getOptionsProficiencyTouched(i, j)
-															}
-															value={option.id ?? 'blank'}
-															onChange={getHandleOptionsProficiencyChange(i, j)}
-														/>
-													)}
-												</>
-											) : (
-												<div className={styles['nested-choice-container']}>
-													<div className={styles['choose-container']}>
-														<NumberTextInput
-															id={`proficiencyChoices.${i}.options.${j}.choose`}
-															label="Choose"
-															error={getOptionsChooseError(i, j)}
-															touched={
-																clickedSubmit || getOptionsChooseTouched(i, j)
-															}
-															value={option.choose}
-															onChange={getHandleOptionsChooseChange(i, j)}
-															onBlur={getHandleOptionsChooseChangeBlur(i, j)}
-														/>
+												)}
+											</>
+										) : (
+											<div className={styles['nested-choice-container']}>
+												<div className={styles['choose-container']}>
+													<NumberTextInput
+														id={`proficiencyChoices.${i}.options.${j}.choose`}
+														label="Choose"
+														error={getOptionsChooseError(i, j)}
+														touched={
+															clickedSubmit || getOptionsChooseTouched(i, j)
+														}
+														value={option.choose}
+														onChange={getHandleOptionsChooseChange(i, j)}
+														onBlur={getHandleOptionsChooseChangeBlur(i, j)}
+													/>
+												</div>
+												<div className={styles['from-container']}>
+													<div className={styles['option-from-label']}>
+														From
 													</div>
-													<div className={styles['from-container']}>
-														<div className={styles['option-from-label']}>
-															From
-														</div>
-														<div className={styles['options-container']}>
-															{option.options?.map((op, k) => (
-																<div key={k} className={styles['sub-option']}>
-																	<Button
-																		size="small"
-																		style={{
-																			position: 'absolute',
-																			top: 0,
-																			right: 0,
-																			display: 'flex',
-																			alignItems: 'center',
-																			marginRight: '-0.1rem',
-																			marginTop: '-0.1rem',
-																			borderTopRightRadius: '1rem'
-																		}}
-																		onClick={getHandleOptionsRemoveOption(
+													<div className={styles['options-container']}>
+														{option.options?.map((op, k) => (
+															<div key={k} className={styles['sub-option']}>
+																<Button
+																	size="small"
+																	style={{
+																		position: 'absolute',
+																		top: 0,
+																		right: 0,
+																		display: 'flex',
+																		alignItems: 'center',
+																		marginRight: '-0.1rem',
+																		marginTop: '-0.1rem',
+																		borderTopRightRadius: '1rem'
+																	}}
+																	onClick={getHandleOptionsRemoveOption(
+																		i,
+																		j,
+																		k
+																	)}
+																>
+																	<XMarkIcon
+																		className={styles['close-button-icon']}
+																	/>{' '}
+																	Remove
+																</Button>
+																<Select
+																	id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiencyType`}
+																	label="Proficiency Type"
+																	options={proficiencyTypeOptions}
+																	value={
+																		optionsOptionsSelectedProficiencyTypes[i][
+																			j
+																		][k] ?? 'blank'
+																	}
+																	onChange={getHandleOptionsOptionsProficiencyTypeChange(
+																		i,
+																		j,
+																		k
+																	)}
+																/>
+																{optionsOptionsSelectedProficiencyTypes[i][j][
+																	k
+																] && (
+																	<Select
+																		id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiency`}
+																		value={op.id ?? 'blank'}
+																		options={getOptionsOptionsProficiencyOptions(
 																			i,
 																			j,
 																			k
 																		)}
-																	>
-																		<XMarkIcon
-																			className={styles['close-button-icon']}
-																		/>{' '}
-																		Remove
-																	</Button>
-																	<Select
-																		id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiencyType`}
-																		label="Proficiency Type"
-																		options={proficiencyTypeOptions}
-																		value={
-																			optionsOptionsSelectedProficiencyTypes[i][
-																				j
-																			][k] ?? 'blank'
+																		label="Proficiency"
+																		touched={
+																			clickedSubmit ||
+																			getOptionsOptionsProficiencyTouched(
+																				i,
+																				j,
+																				k
+																			)
 																		}
-																		onChange={getHandleOptionsOptionsProficiencyTypeChange(
+																		error={getOptionsOptionsProficiencyError(
+																			i,
+																			j,
+																			k
+																		)}
+																		onChange={getHandleOptionsOptionsProficiencyChange(
 																			i,
 																			j,
 																			k
 																		)}
 																	/>
-																	{optionsOptionsSelectedProficiencyTypes[i][j][
-																		k
-																	] && (
-																		<Select
-																			id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiency`}
-																			value={op.id ?? 'blank'}
-																			options={getOptionsOptionsProficiencyOptions(
-																				i,
-																				j,
-																				k
-																			)}
-																			label="Proficiency"
-																			touched={
-																				clickedSubmit ||
-																				getOptionsOptionsProficiencyTouched(
-																					i,
-																					j,
-																					k
-																				)
-																			}
-																			error={getOptionsOptionsProficiencyError(
-																				i,
-																				j,
-																				k
-																			)}
-																			onChange={getHandleOptionsOptionsProficiencyChange(
-																				i,
-																				j,
-																				k
-																			)}
-																		/>
-																	)}
-																</div>
-															))}
-														</div>
-														{(option.options?.length ?? 0) < 20 && (
-															<Button
-																positive
-																size="small"
-																onClick={getHandleOptionsAddOption(i, j)}
-															>
-																Add Option
-															</Button>
-														)}
+																)}
+															</div>
+														))}
 													</div>
+													{(option.options?.length ?? 0) < 20 && (
+														<Button
+															positive
+															size="small"
+															onClick={getHandleOptionsAddOption(i, j)}
+														>
+															Add Option
+														</Button>
+													)}
 												</div>
-											)}
-										</div>
-									))}
-								</div>
-								{(options?.length ?? 0) < 20 && (
-									<Button positive size="small" onClick={getHandleAddOption(i)}>
-										Add Option
-									</Button>
-								)}
+											</div>
+										)}
+									</div>
+								))}
 							</div>
+							{(options?.length ?? 0) < 20 && (
+								<Button positive size="small" onClick={getHandleAddOption(i)}>
+									Add Option
+								</Button>
+							)}
 						</div>
-					))}
-				</div>
-				{(values.proficiencyChoices?.length ?? 0) < 5 && (
-					<Button positive onClick={handleAddProficiencyChoice}>
-						Add Proficiciency Choice
-					</Button>
-				)}
+					</div>
+				))}
 			</div>
-		</div>
+			{(values.proficiencyChoices?.length ?? 0) < 5 && (
+				<Button positive onClick={handleAddProficiencyChoice}>
+					Add Proficiciency Choice
+				</Button>
+			)}
+		</section>
 	);
 };
 
-export default ProficienciesAndProficiencyChoices;
+export default ProficiencyChoices;
