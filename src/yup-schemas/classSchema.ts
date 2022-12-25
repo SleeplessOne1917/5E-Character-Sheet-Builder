@@ -142,7 +142,7 @@ const proficiencyChoiceSchema = object({
 				optionType: string()
 					.required('Option type is required')
 					.oneOf(
-						['proficiency', 'choice'],
+						['proficiency', 'choice', 'type'],
 						'Option type must be one of "proficiency" or "choice"'
 					),
 				proficiency: getItemSchema('Proficiency').when('optionType', {
@@ -150,8 +150,15 @@ const proficiencyChoiceSchema = object({
 					then: schema => schema.required('Proficiency is required'),
 					otherwise: schema => schema.optional().default(undefined)
 				}),
+				proficiencyType: string()
+					.max(50, 'Proficiency type cannot be longer than 50 characters')
+					.when('optionType', {
+						is: 'type',
+						then: schema => schema.required('Proficiency type is required'),
+						otherwise: schema => schema.optional().default(undefined)
+					}),
 				choose: number()
-					.min(1, 'Cannot choose less than 1 proficiency option')
+					.min(1, 'Choose cannot be less than 1')
 					.test(
 						'less-than-options',
 						'Choose must be lower than the number of options',
@@ -172,23 +179,39 @@ const proficiencyChoiceSchema = object({
 					.when('optionType', {
 						is: 'choice',
 						then: schema => schema.required('Choose is required'),
-						otherwise: schema => schema.optional().default(undefined)
+						otherwise: schema =>
+							schema.when('optionType', {
+								is: 'type',
+								then: schema => schema.required('Choose is required'),
+								otherwise: schema => schema.optional().default(undefined)
+							})
 					}),
 				options: array()
 					.of(
 						object({
-							id: string()
-								.max(
-									50,
-									'Proficiency option id cannot be more than 50 characters long'
-								)
-								.required('Proficiency ID required'),
-							name: string()
-								.max(
-									50,
-									'Proficiency option name cannot be more than 50 characters long'
-								)
-								.required('Proficiency name required')
+							optionType: string()
+								.required('Option type is required')
+								.oneOf(['proficiency', 'type']),
+							proficiency: getItemSchema('Proficiency').when('optionType', {
+								is: 'proficiency',
+								then: schema => schema.required('Proficiency is required'),
+								otherwise: schema => schema.optional().default(undefined)
+							}),
+							choose: number()
+								.min(1, 'Choose cannot be less than 1')
+								.when('optionType', {
+									is: 'type',
+									then: schema => schema.required('Choose is required'),
+									otherwise: schema => schema.optional().default(undefined)
+								}),
+							proficiencyType: string()
+								.max(50, 'Proficiency type cannot be longer than 50 characters')
+								.when('optionType', {
+									is: 'type',
+									then: schema =>
+										schema.required('Proficiency type is required'),
+									otherwise: schema => schema.optional().default(undefined)
+								})
 						})
 					)
 					.min(1, 'Must have at least 1 option')

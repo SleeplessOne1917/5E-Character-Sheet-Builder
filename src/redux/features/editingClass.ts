@@ -5,16 +5,26 @@ import { XOR } from '../../types/helpers';
 
 export type ItemType = 'item' | 'category';
 export type StartingEquipmentOptionType = ItemType | 'multiple';
-export type ProficiencyOptionType = 'proficiency' | 'choice';
+export type ProficiencySuboptionType = 'proficiency' | 'type';
+export type ProficiencyOptionType = ProficiencySuboptionType | 'choice';
 
 export type Choose = {
 	choose?: number;
-	options?: (Item | null)[];
+	options?: (Partial<
+		XOR<{ proficiency: Item }, { proficiencyType: string; choose: number }>
+	> & {
+		optionType: ProficiencySuboptionType;
+	})[];
 };
 
 export type ProficiencyChoice = {
 	choose?: number;
-	options: (Partial<XOR<{ proficiency: Item }, Choose>> & {
+	options: (Partial<
+		XOR<
+			XOR<{ proficiency: Item }, Choose>,
+			{ proficiencyType: string; choose: number }
+		>
+	> & {
 		optionType: ProficiencyOptionType;
 	})[];
 };
@@ -177,9 +187,9 @@ const prepProficiencyChoiceOptionSuboption = (
 		state.proficiencyChoices![choiceIndex].options[optionIndex].options!
 			.length <= suboptionIndex
 	) {
-		state.proficiencyChoices![choiceIndex].options[optionIndex].options!.push(
-			{}
-		);
+		state.proficiencyChoices![choiceIndex].options[optionIndex].options!.push({
+			optionType: 'proficiency'
+		});
 	}
 };
 
@@ -334,6 +344,18 @@ const editingClassSlice = createSlice({
 			state.proficiencyChoices![choiceIndex].options[optionIndex].choose =
 				choose;
 		},
+		setProficiencyChoiceOptionProficiencyType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, proficiencyType }
+			}: PayloadAction<{ proficiencyType?: string } & WithOptionIndex>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			state.proficiencyChoices![choiceIndex].options[
+				optionIndex
+			].proficiencyType = proficiencyType;
+		},
 		addProficiencyChoiceOptionSuboption: (
 			state,
 			{ payload: { choiceIndex, optionIndex } }: PayloadAction<WithOptionIndex>
@@ -348,7 +370,7 @@ const editingClassSlice = createSlice({
 			}
 
 			state.proficiencyChoices![choiceIndex].options[optionIndex].options?.push(
-				null
+				{ optionType: 'proficiency' }
 			);
 		},
 		removeProficiencyChoiceOptionSuboption: (
@@ -377,6 +399,25 @@ const editingClassSlice = createSlice({
 					.options;
 			}
 		},
+		setProficiencyChoiceOptionSuboptionType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, suboptionIndex, optionType }
+			}: PayloadAction<
+				{ optionType: ProficiencySuboptionType } & WithSubOptionIndex
+			>
+		) => {
+			prepProficiencyChoiceOptionSuboption(
+				state,
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options![
+				suboptionIndex
+			].optionType = optionType;
+		},
 		setProficiencyChoiceOptionSuboptionProficiency: (
 			state,
 			{
@@ -392,7 +433,41 @@ const editingClassSlice = createSlice({
 
 			state.proficiencyChoices![choiceIndex].options[optionIndex].options![
 				suboptionIndex
-			] = proficiency ?? null;
+			].proficiency = proficiency;
+		},
+		setProficiencyChoiceOptionSuboptionChoose: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, suboptionIndex, choose }
+			}: PayloadAction<{ choose?: number } & WithSubOptionIndex>
+		) => {
+			prepProficiencyChoiceOptionSuboption(
+				state,
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options![
+				suboptionIndex
+			].choose = choose;
+		},
+		setProficiencyChoiceOptionSuboptionProficiencyType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, suboptionIndex, proficiencyType }
+			}: PayloadAction<{ proficiencyType?: string } & WithSubOptionIndex>
+		) => {
+			prepProficiencyChoiceOptionSuboption(
+				state,
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options![
+				suboptionIndex
+			].proficiencyType = proficiencyType;
 		},
 		setSavingThrow: (
 			state,
@@ -999,7 +1074,11 @@ export const {
 	setProficiencyChoiceOptionChoose,
 	addProficiencyChoiceOptionSuboption,
 	removeProficiencyChoiceOptionSuboption,
-	setProficiencyChoiceOptionSuboptionProficiency
+	setProficiencyChoiceOptionSuboptionProficiency,
+	setProficiencyChoiceOptionProficiencyType,
+	setProficiencyChoiceOptionSuboptionChoose,
+	setProficiencyChoiceOptionSuboptionProficiencyType,
+	setProficiencyChoiceOptionSuboptionType
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

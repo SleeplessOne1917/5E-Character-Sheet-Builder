@@ -11,6 +11,7 @@ import {
 	EditingClassState,
 	ProficiencyChoice,
 	ProficiencyOptionType,
+	ProficiencySuboptionType,
 	addProficiencyChoice,
 	addProficiencyChoiceOption,
 	addProficiencyChoiceOptionSuboption,
@@ -20,7 +21,11 @@ import {
 	setProficiencyChoiceChoose,
 	setProficiencyChoiceOptionChoose,
 	setProficiencyChoiceOptionProficiency,
+	setProficiencyChoiceOptionProficiencyType,
+	setProficiencyChoiceOptionSuboptionChoose,
 	setProficiencyChoiceOptionSuboptionProficiency,
+	setProficiencyChoiceOptionSuboptionProficiencyType,
+	setProficiencyChoiceOptionSuboptionType,
 	setProficiencyChoiceOptionType
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
@@ -42,14 +47,20 @@ type ProficiencyOptionsProps = {
 	proficiencies: SrdProficiencyItem[];
 };
 
-const optionTypeOptions: Option[] = [
+const suboptionTypeOptions: Option[] = [
 	{ label: 'Proficiency', value: 'proficiency' },
+	{ label: 'Proficiency Type', value: 'type' }
+];
+
+const optionTypeOptions: Option[] = [
+	...suboptionTypeOptions,
 	{ label: 'Choice', value: 'choice' }
 ];
 
 const chooseErrorMessage = 'Choose is required';
 const proficiencyErrorMessage = 'Proficiency is required';
 const optionsErrorMessage = 'Must have at least 1 option';
+const proficiencyTypeErrorMessage = 'Proficiency type is required';
 
 const getChoiceStr = (index: number) => `proficiencyChoices.${index}`;
 const getOptionStr = (choiceIndex: number, optionIndex: number) =>
@@ -81,8 +92,9 @@ const ProficiencyChoices = ({
 					options?.map(option =>
 						option.choose || option.options
 							? null
-							: proficiencies.find(({ index }) => index === option.id)?.type ??
-							  null
+							: proficiencies.find(
+									({ index }) => index === option.proficiency?.id
+							  )?.type ?? null
 					) ?? []
 			) ?? []
 		);
@@ -97,8 +109,9 @@ const ProficiencyChoices = ({
 						? []
 						: option.options?.map(
 								op =>
-									proficiencies.find(({ index }) => index === op?.id)?.type ??
-									null
+									proficiencies.find(
+										({ index }) => index === op?.proficiency?.id
+									)?.type ?? null
 						  ) ?? []
 				) ?? []
 		) ?? []
@@ -211,6 +224,36 @@ const ProficiencyChoices = ({
 				: undefined;
 		},
 		[getChoiceTouched]
+	);
+
+	const getSuboptionError = useCallback(
+		function get<T>(
+			choiceIndex: number,
+			optionIndex: number,
+			suboptionIndex: number
+		) {
+			return getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)
+				?.options
+				? (getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)!
+						.options![suboptionIndex] as FormikErrors<T>)
+				: undefined;
+		},
+		[getOptionError]
+	);
+
+	const getSuboptionTouched = useCallback(
+		function get<T>(
+			choiceIndex: number,
+			optionIndex: number,
+			suboptionIndex: number
+		) {
+			return getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)
+				?.options
+				? (getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)!
+						.options![suboptionIndex] as FormikTouched<T>)
+				: undefined;
+		},
+		[getOptionTouched]
 	);
 
 	const getChooseError = useCallback(
@@ -395,7 +438,7 @@ const ProficiencyChoices = ({
 		[shouldUseReduxStore, setFieldValue, values.proficiencyChoices, dispatch]
 	);
 
-	const getHandleOptionProficiencyTypeChange = useCallback(
+	const getHandleOptionProficiencyProficiencyTypeChange = useCallback(
 		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
 			const newValue = value !== 'blank' ? (value as ProficiencyType) : null;
 
@@ -534,7 +577,7 @@ const ProficiencyChoices = ({
 		]
 	);
 
-	const getOptionsChooseError = useCallback(
+	const getOptionChooseError = useCallback(
 		(choiceIndex: number, optionIndex: number) =>
 			getOptionError<{ choose: number }>(choiceIndex, optionIndex)?.choose
 				? chooseErrorMessage
@@ -542,13 +585,13 @@ const ProficiencyChoices = ({
 		[getOptionError]
 	);
 
-	const getOptionsChooseTouched = useCallback(
+	const getOptionChooseTouched = useCallback(
 		(choiceIndex: number, optionIndex: number) =>
 			getOptionTouched<{ choose: number }>(choiceIndex, optionIndex)?.choose,
 		[getOptionTouched]
 	);
 
-	const getHandleOptionsChooseChange = useCallback(
+	const getHandleOptionChooseChange = useCallback(
 		(
 				choiceIndex: number,
 				optionIndex: number
@@ -563,7 +606,7 @@ const ProficiencyChoices = ({
 		[setFieldValue]
 	);
 
-	const getHandleOptionsChooseChangeBlur = useCallback(
+	const getHandleOptionChooseChangeBlur = useCallback(
 		(
 				choiceIndex: number,
 				optionIndex: number
@@ -601,6 +644,50 @@ const ProficiencyChoices = ({
 		]
 	);
 
+	const getOptionProficiencyTypeError = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionError<{ proficiencyType: string }>(choiceIndex, optionIndex)
+				?.proficiencyType
+				? proficiencyTypeErrorMessage
+				: undefined,
+		[getOptionError]
+	);
+
+	const getOptionProficiencyTypeTouched = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionTouched<{ proficiencyType: string }>(choiceIndex, optionIndex)
+				?.proficiencyType,
+		[getOptionTouched]
+	);
+
+	const getHandleOptionProficiencyTypeChange = useCallback(
+		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
+			const newValue = value !== 'blank' ? (value as string) : undefined;
+
+			if (shouldUseReduxStore) {
+				dispatch(
+					setProficiencyChoiceOptionProficiencyType({
+						choiceIndex,
+						optionIndex,
+						proficiencyType: newValue
+					})
+				);
+			}
+
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.proficiencyType`;
+			setFieldValue(field, newValue, false);
+			setFieldTouched(field, true, false);
+			setFieldError(field, !newValue ? proficiencyTypeErrorMessage : undefined);
+		},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			setFieldError
+		]
+	);
+
 	const getHandleOptionAddSuboption = useCallback(
 		(choiceIndex: number, optionIndex: number) => () => {
 			if (shouldUseReduxStore) {
@@ -626,7 +713,11 @@ const ProficiencyChoices = ({
 				[];
 			const field = `${getOptionStr(choiceIndex, optionIndex)}.options`;
 
-			setFieldValue(field, [...oldOptions, null], false);
+			setFieldValue(
+				field,
+				[...oldOptions, { optionType: 'proficiency' }],
+				false
+			);
 
 			if (oldOptions.length === 0) {
 				setFieldError(field, undefined);
@@ -687,6 +778,36 @@ const ProficiencyChoices = ({
 		]
 	);
 
+	const getHandleSuboptionTypeChange = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			(value: string | number) => {
+				const newValue = value as ProficiencySuboptionType;
+				if (
+					values.proficiencyChoices![choiceIndex].options[optionIndex].options![
+						suboptionIndex
+					].optionType !== newValue
+				) {
+					if (shouldUseReduxStore) {
+						dispatch(
+							setProficiencyChoiceOptionSuboptionType({
+								choiceIndex,
+								optionIndex,
+								suboptionIndex,
+								optionType: newValue
+							})
+						);
+					}
+
+					setFieldValue(
+						getSuboptionStr(choiceIndex, optionIndex, suboptionIndex),
+						{ optionType: newValue },
+						false
+					);
+				}
+			},
+		[shouldUseReduxStore, dispatch, setFieldValue, values.proficiencyChoices]
+	);
+
 	const getOptionSuboptionsError = useCallback(
 		(choiceIndex: number, optionIndex: number) =>
 			typeof getOptionError<{ options: object[] }>(choiceIndex, optionIndex)
@@ -705,7 +826,7 @@ const ProficiencyChoices = ({
 		[getOptionTouched]
 	);
 
-	const getHandleOptionSuboptionProficiencyTypeChange = useCallback(
+	const getHandleOptionSuboptionProficiencyProficiencyTypeChange = useCallback(
 		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
 			(value: string | number) => {
 				const newValue = value !== 'blank' ? (value as ProficiencyType) : null;
@@ -740,8 +861,12 @@ const ProficiencyChoices = ({
 					);
 
 					setFieldValue(
-						`${getSuboptionStr(choiceIndex, optionIndex, suboptionIndex)}`,
-						null,
+						`${getSuboptionStr(
+							choiceIndex,
+							optionIndex,
+							suboptionIndex
+						)}.proficiency`,
+						undefined,
 						false
 					);
 				}
@@ -775,7 +900,7 @@ const ProficiencyChoices = ({
 							!values.proficiencyChoices
 								?.flatMap(pc => pc.options)
 								.flatMap(option => option?.options)
-								.some(option => option?.id === proficiency.index)
+								.some(option => option?.proficiency?.id === proficiency.index)
 					)
 					.map<Option>(proficiency => ({
 						label: proficiency.name.replace(/Skill: /, ''),
@@ -783,16 +908,19 @@ const ProficiencyChoices = ({
 					}))
 					.concat(
 						values.proficiencyChoices![choiceIndex].options![optionIndex]
-							.options![suboptionIndex]
+							.options![suboptionIndex].proficiency
 							? [
 									{
 										label: values.proficiencyChoices![choiceIndex].options![
 											optionIndex
-										].options![suboptionIndex]!.name.replace(/Skill: /, ''),
+										].options![suboptionIndex]!.proficiency!.name.replace(
+											/Skill: /,
+											''
+										),
 										value:
 											values.proficiencyChoices![choiceIndex].options![
 												optionIndex
-											].options![suboptionIndex]!.id
+											].options![suboptionIndex]!.proficiency!.id
 									} as Option
 							  ]
 							: []
@@ -806,27 +934,29 @@ const ProficiencyChoices = ({
 		]
 	);
 
-	const getOptionSuboptionProficiencyTouched = useCallback(
-		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
-			getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)?.options
-				? !!getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)!
-						.options![suboptionIndex]
-				: undefined,
-		[getOptionTouched]
-	);
-
 	const getOptionSuboptionProficiencyError = useCallback(
 		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
-			getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)?.options
-				? getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)!
-						.options![suboptionIndex]
-					? proficiencyErrorMessage
-					: undefined
+			getSuboptionError<{ proficiency: Item }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)
+				? proficiencyErrorMessage
 				: undefined,
-		[getOptionError]
+		[getSuboptionError]
 	);
 
-	const getHandleOptionsOptionsProficiencyChange = useCallback(
+	const getOptionSuboptionProficiencyTouched = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			!!getSuboptionTouched<{ proficiency: Item }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)?.proficiency,
+		[getSuboptionTouched]
+	);
+
+	const getHandleOptionSuboptionProficiencyChange = useCallback(
 		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
 			(value: string | number) => {
 				const foundProficiency = proficiencies.find(
@@ -847,7 +977,11 @@ const ProficiencyChoices = ({
 					);
 				}
 
-				const field = getSuboptionStr(choiceIndex, optionIndex, suboptionIndex);
+				const field = `${getSuboptionStr(
+					choiceIndex,
+					optionIndex,
+					suboptionIndex
+				)}.proficiency`;
 
 				setFieldValue(field, newProficiency, false);
 				setFieldTouched(field, true, false);
@@ -863,6 +997,146 @@ const ProficiencyChoices = ({
 			setFieldTouched,
 			setFieldValue,
 			proficiencies
+		]
+	);
+
+	const getOptionSuboptionChooseError = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getSuboptionError<{ choose: number }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)?.choose
+				? chooseErrorMessage
+				: undefined,
+		[getSuboptionError]
+	);
+
+	const getOptionSuboptionChooseTouched = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getSuboptionTouched<{ choose: number }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)?.choose,
+		[getSuboptionTouched]
+	);
+
+	const getHandleOptionSuboptionChooseChange = useCallback(
+		(
+				choiceIndex: number,
+				optionIndex: number,
+				suboptionIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`${getSuboptionStr(choiceIndex, optionIndex, suboptionIndex)}.choose`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getHandleOptionSuboptionChooseBlur = useCallback(
+		(
+				choiceIndex: number,
+				optionIndex: number,
+				suboptionIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+
+				if (newValue !== undefined && newValue < 1) {
+					newValue = 1;
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setProficiencyChoiceOptionSuboptionChoose({
+							choiceIndex,
+							optionIndex,
+							suboptionIndex,
+							choose: newValue
+						})
+					);
+				}
+
+				const field = `${getSuboptionStr(
+					choiceIndex,
+					optionIndex,
+					suboptionIndex
+				)}.choose`;
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+				setFieldError(field, !newValue ? chooseErrorMessage : undefined);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldError,
+			setFieldTouched,
+			setFieldValue
+		]
+	);
+
+	const getOptionSuboptionProficiencyTypeError = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getSuboptionError<{ proficiencyType: string }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)?.proficiencyType
+				? proficiencyTypeErrorMessage
+				: undefined,
+		[getSuboptionError]
+	);
+
+	const getOptionSuboptionProficiencyTypeTouched = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getSuboptionTouched<{ proficiencyType: string }>(
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			)?.proficiencyType,
+		[getSuboptionTouched]
+	);
+
+	const getHandleOptionSuboptionProficiencyTypeChange = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			(value: string | number) => {
+				const newValue = value !== 'blank' ? (value as string) : undefined;
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setProficiencyChoiceOptionSuboptionProficiencyType({
+							choiceIndex,
+							optionIndex,
+							suboptionIndex,
+							proficiencyType: newValue
+						})
+					);
+				}
+
+				const field = `${getSuboptionStr(
+					choiceIndex,
+					optionIndex,
+					suboptionIndex
+				)}.proficiencyType`;
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+				setFieldError(
+					field,
+					!newValue ? proficiencyTypeErrorMessage : undefined
+				);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldError,
+			setFieldTouched,
+			setFieldValue
 		]
 	);
 
@@ -922,7 +1196,7 @@ const ProficiencyChoices = ({
 														value={
 															optionsSelectedProficiencyTypes[i][j] ?? 'blank'
 														}
-														onChange={getHandleOptionProficiencyTypeChange(
+														onChange={getHandleOptionProficiencyProficiencyTypeChange(
 															i,
 															j
 														)}
@@ -943,19 +1217,49 @@ const ProficiencyChoices = ({
 													)}
 												</>
 											)}
+											{option.optionType === 'type' && (
+												<>
+													<NumberTextInput
+														id={`${getOptionStr(i, j)}.choose`}
+														label="Choose"
+														error={getOptionChooseError(i, j)}
+														touched={
+															clickedSubmit || getOptionChooseTouched(i, j)
+														}
+														value={option.choose}
+														onChange={getHandleOptionChooseChange(i, j)}
+														onBlur={getHandleOptionChooseChangeBlur(i, j)}
+													/>
+													<Select
+														id={`${getOptionStr(i, j)}.proficiencyType`}
+														label="From"
+														error={getOptionProficiencyTypeError(i, j)}
+														touched={
+															clickedSubmit ||
+															getOptionProficiencyTypeTouched(i, j)
+														}
+														value={option.proficiencyType ?? 'blank'}
+														options={proficiencyTypeOptions}
+														onChange={getHandleOptionProficiencyTypeChange(
+															i,
+															j
+														)}
+													/>
+												</>
+											)}
 											{option.optionType === 'choice' && (
 												<div className={styles['nested-choice-container']}>
 													<div className={styles['choose-container']}>
 														<NumberTextInput
 															id={`${getOptionStr(i, j)}.choose`}
 															label="Choose"
-															error={getOptionsChooseError(i, j)}
+															error={getOptionChooseError(i, j)}
 															touched={
-																clickedSubmit || getOptionsChooseTouched(i, j)
+																clickedSubmit || getOptionChooseTouched(i, j)
 															}
 															value={option.choose}
-															onChange={getHandleOptionsChooseChange(i, j)}
-															onBlur={getHandleOptionsChooseChangeBlur(i, j)}
+															onChange={getHandleOptionChooseChange(i, j)}
+															onBlur={getHandleOptionChooseChangeBlur(i, j)}
 														/>
 													</div>
 													<div className={styles['from-container']}>
@@ -994,55 +1298,138 @@ const ProficiencyChoices = ({
 																			i,
 																			j,
 																			k
-																		)}.proficiencyType`}
-																		label="Proficiency Type"
-																		options={proficiencyTypeOptions}
-																		value={
-																			optionsOptionsSelectedProficiencyTypes[i][
-																				j
-																			][k] ?? 'blank'
-																		}
-																		onChange={getHandleOptionSuboptionProficiencyTypeChange(
+																		)}.optionType`}
+																		options={suboptionTypeOptions}
+																		value={op.optionType}
+																		label="Option Type"
+																		onChange={getHandleSuboptionTypeChange(
 																			i,
 																			j,
 																			k
 																		)}
 																	/>
-																	{optionsOptionsSelectedProficiencyTypes[i][j][
-																		k
-																	] && (
-																		<Select
-																			id={`${getSuboptionStr(
-																				i,
-																				j,
-																				k
-																			)}.proficiency`}
-																			value={op?.id ?? 'blank'}
-																			options={getOptionSuboptionsProficiencyOptions(
-																				i,
-																				j,
-																				k
-																			)}
-																			label="Proficiency"
-																			touched={
-																				clickedSubmit ||
-																				getOptionSuboptionProficiencyTouched(
+																	{op.optionType === 'proficiency' && (
+																		<>
+																			<Select
+																				id={`${getSuboptionStr(
 																					i,
 																					j,
 																					k
-																				)
-																			}
-																			error={getOptionSuboptionProficiencyError(
-																				i,
-																				j,
-																				k
+																				)}.proficiencyType`}
+																				label="Proficiency Type"
+																				options={proficiencyTypeOptions}
+																				value={
+																					optionsOptionsSelectedProficiencyTypes[
+																						i
+																					][j][k] ?? 'blank'
+																				}
+																				onChange={getHandleOptionSuboptionProficiencyProficiencyTypeChange(
+																					i,
+																					j,
+																					k
+																				)}
+																			/>
+																			{optionsOptionsSelectedProficiencyTypes[
+																				i
+																			][j][k] && (
+																				<Select
+																					id={`${getSuboptionStr(
+																						i,
+																						j,
+																						k
+																					)}.proficiency`}
+																					value={op?.proficiency?.id ?? 'blank'}
+																					options={getOptionSuboptionsProficiencyOptions(
+																						i,
+																						j,
+																						k
+																					)}
+																					label="Proficiency"
+																					touched={
+																						clickedSubmit ||
+																						getOptionSuboptionProficiencyTouched(
+																							i,
+																							j,
+																							k
+																						)
+																					}
+																					error={getOptionSuboptionProficiencyError(
+																						i,
+																						j,
+																						k
+																					)}
+																					onChange={getHandleOptionSuboptionProficiencyChange(
+																						i,
+																						j,
+																						k
+																					)}
+																				/>
 																			)}
-																			onChange={getHandleOptionsOptionsProficiencyChange(
-																				i,
-																				j,
-																				k
-																			)}
-																		/>
+																		</>
+																	)}
+																	{op.optionType === 'type' && (
+																		<>
+																			<NumberTextInput
+																				id={`${getSuboptionStr(
+																					i,
+																					j,
+																					k
+																				)}.choose`}
+																				label="Choose"
+																				value={op.choose}
+																				error={getOptionSuboptionChooseError(
+																					i,
+																					j,
+																					k
+																				)}
+																				touched={
+																					clickedSubmit ||
+																					getOptionSuboptionChooseTouched(
+																						i,
+																						j,
+																						k
+																					)
+																				}
+																				onChange={getHandleOptionSuboptionChooseChange(
+																					i,
+																					j,
+																					k
+																				)}
+																				onBlur={getHandleOptionSuboptionChooseBlur(
+																					i,
+																					j,
+																					k
+																				)}
+																			/>
+																			<Select
+																				id={`${getSuboptionStr(
+																					i,
+																					j,
+																					k
+																				)}.proficiencyType`}
+																				label="From"
+																				options={proficiencyTypeOptions}
+																				value={op.proficiencyType}
+																				error={getOptionSuboptionProficiencyTypeError(
+																					i,
+																					j,
+																					k
+																				)}
+																				touched={
+																					clickedSubmit ||
+																					getOptionSuboptionProficiencyTypeTouched(
+																						i,
+																						j,
+																						k
+																					)
+																				}
+																				onChange={getHandleOptionSuboptionProficiencyTypeChange(
+																					i,
+																					j,
+																					k
+																				)}
+																			/>
+																		</>
 																	)}
 																</div>
 															))}

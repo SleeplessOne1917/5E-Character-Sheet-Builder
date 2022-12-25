@@ -283,7 +283,8 @@ const StartingEuipment = ({
 			setFieldError,
 			setFieldTouched,
 			setFieldValue,
-			equipments
+			equipments,
+			magicItems
 		]
 	);
 
