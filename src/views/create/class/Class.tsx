@@ -20,6 +20,7 @@ type ClassProps = {
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
 	equipments: SrdEquipmentItem[];
+	magicItems: SrdEquipmentItem[];
 	equipmentCategories: SrdItem[];
 };
 
@@ -27,6 +28,7 @@ const Class = ({
 	proficiencies,
 	abilities,
 	equipments,
+	magicItems,
 	equipmentCategories
 }: ClassProps) => {
 	const editingClass = useAppSelector(state => state.editingClass);
@@ -61,6 +63,7 @@ const Class = ({
 				spells={spellsResult.spells}
 				equipments={equipments}
 				equipmentCategories={equipmentCategories}
+				magicItems={magicItems}
 			/>
 		</MainContent>
 	);

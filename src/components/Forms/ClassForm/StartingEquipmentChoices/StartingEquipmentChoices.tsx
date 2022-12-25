@@ -49,6 +49,7 @@ type StartingEquipmentOptionsProps = {
 	clickedSubmit: boolean;
 	shouldUseReduxStore: boolean;
 	equipments: SrdEquipmentItem[];
+	magicItems: SrdEquipmentItem[];
 	equipmentCategories: SrdItem[];
 };
 
@@ -83,6 +84,7 @@ const getItemStr = (
 const StartingEquipmentOptions = ({
 	clickedSubmit,
 	equipments,
+	magicItems,
 	equipmentCategories,
 	shouldUseReduxStore
 }: StartingEquipmentOptionsProps) => {
@@ -108,7 +110,10 @@ const StartingEquipmentOptions = ({
 			choice.options.map(
 				option =>
 					equipments.find(eq => eq.index === option.item?.id)
-						?.equipment_category.index ?? null
+						?.equipment_category.index ??
+					magicItems.find(mi => mi.index === option.item?.id)
+						?.equipment_category.index ??
+					null
 			)
 		) ?? []
 	);
@@ -123,7 +128,10 @@ const StartingEquipmentOptions = ({
 					option.items?.map(
 						item =>
 							equipments.find(eq => eq.index === item?.item?.id)
-								?.equipment_category.index ?? null
+								?.equipment_category.index ??
+							magicItems.find(mi => mi.index === option.item?.id)
+								?.equipment_category.index ??
+							null
 					) ?? []
 			)
 		) ?? []
@@ -132,9 +140,10 @@ const StartingEquipmentOptions = ({
 	const equipmentCategoryOptions = useMemo(
 		() =>
 			[{ label: '\u2014', value: 'blank' } as Option].concat(
-				equipmentCategories
-					.filter(cat => cat.index !== 'mounts_and_vehicles')
-					.map(({ index, name }) => ({ label: name, value: index }))
+				equipmentCategories.map(({ index, name }) => ({
+					label: name,
+					value: index
+				}))
 			),
 		[equipmentCategories]
 	);
@@ -653,9 +662,14 @@ const StartingEquipmentOptions = ({
 
 	const getHandleItemChange = useCallback(
 		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
-			const foundEquipment = equipments.find(
+			let foundEquipment = equipments.find(
 				equipment => equipment.index === value
 			);
+			if (!foundEquipment) {
+				foundEquipment = magicItems.find(
+					magicItem => magicItem.index === value
+				);
+			}
 			const newItem: Item | undefined = foundEquipment
 				? { id: foundEquipment.index, name: foundEquipment.name }
 				: undefined;
@@ -681,7 +695,8 @@ const StartingEquipmentOptions = ({
 			setFieldValue,
 			setFieldTouched,
 			setFieldError,
-			equipments
+			equipments,
+			magicItems
 		]
 	);
 
@@ -1101,9 +1116,14 @@ const StartingEquipmentOptions = ({
 	const getHandleOptionItemItemChange = useCallback(
 		(choiceIndex: number, optionIndex: number, itemIndex: number) =>
 			(value: string | number) => {
-				const foundEquipment = equipments.find(
+				let foundEquipment = equipments.find(
 					equipment => equipment.index === value
 				);
+				if (!foundEquipment) {
+					foundEquipment = magicItems.find(
+						magicItem => magicItem.index === value
+					);
+				}
 				const newItem: Item | undefined = foundEquipment
 					? { id: foundEquipment.index, name: foundEquipment.name }
 					: undefined;
@@ -1130,7 +1150,8 @@ const StartingEquipmentOptions = ({
 			setFieldError,
 			setFieldTouched,
 			setFieldValue,
-			equipments
+			equipments,
+			magicItems
 		]
 	);
 

@@ -16,14 +16,17 @@ import {
 	setStartingEquipmentItem
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
+import { SrdEquipmentItem, SrdItem } from '../../../../types/srd';
+import { ToastShowPayload, show } from '../../../../redux/features/toast';
 
 import Button from '../../../Button/Button';
 import { Item } from '../../../../types/db/item';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import Option from '../../../Select/Option';
+import RemoveButton from '../../../RemoveButton/RemoveButton';
 import Select from '../../../Select/Select/Select';
-import { SrdEquipmentItem } from '../../../../types/srd';
-import { XMarkIcon } from '@heroicons/react/20/solid';
+import { ToastType } from '../../../../types/toast';
+import { getEquipmentCategoryWithEquipment } from '../../../../graphql/srdClientService';
 import styles from './StartingEquipment.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
@@ -31,6 +34,8 @@ type StartingEquipmentProps = {
 	clickedSubmit: boolean;
 	shouldUseReduxStore: boolean;
 	equipments: SrdEquipmentItem[];
+	magicItems: SrdEquipmentItem[];
+	equipmentCategories: SrdItem[];
 };
 
 const countErrorMessage = 'Count is required';
@@ -39,7 +44,9 @@ const itemErrorMessage = 'Item is required';
 const StartingEuipment = ({
 	clickedSubmit,
 	shouldUseReduxStore,
-	equipments
+	equipments,
+	magicItems,
+	equipmentCategories
 }: StartingEquipmentProps) => {
 	const {
 		values,
@@ -51,19 +58,16 @@ const StartingEuipment = ({
 	} = useFormikContext<EditingClassState>();
 	const dispatch = useAppDispatch();
 
+	const [equipmentByCategory, setEquipmentByCategory] = useState<
+		Record<string, SrdItem[]>
+	>({});
+
 	const equipmentCategoryOptions = useMemo(
 		() =>
 			[{ label: '\u2014', value: 'blank' } as Option].concat(
-				equipments.reduce<Option[]>(
-					(acc, { equipment_category: { index, name } }) =>
-						!acc.some(({ value }) => value === index) &&
-						index !== 'mounts-and-vehicles'
-							? [...acc, { label: name, value: index } as Option]
-							: acc,
-					[]
-				)
+				equipmentCategories.map(cat => ({ label: cat.name, value: cat.index }))
 			),
-		[equipments]
+		[equipmentCategories]
 	);
 
 	const [selectedEquipmentCategories, setSelectedEquipmentCategories] =
@@ -71,7 +75,10 @@ const StartingEuipment = ({
 			values.startingEquipment.map(
 				({ item }) =>
 					equipments.find(equipment => equipment.index === item?.id)
-						?.equipment_category.index ?? null
+						?.equipment_category.index ??
+					magicItems.find(magicItem => magicItem.index === item?.id)
+						?.equipment_category.index ??
+					null
 			)
 		);
 
@@ -194,19 +201,38 @@ const StartingEuipment = ({
 	);
 
 	const getItemOptions = useCallback(
-		(index: number) =>
-			[{ label: '\u2014', value: 'blank' } as Option].concat(
-				equipments
-					.filter(
-						({ equipment_category }) =>
-							equipment_category.index === selectedEquipmentCategories[index]
-					)
-					.map<Option>(equipment => ({
-						label: equipment.name,
-						value: equipment.index
+		(category: string | null) => {
+			let options = [{ label: '\u2014', value: 'blank' } as Option];
+
+			if (category && equipmentByCategory[category]) {
+				options = options.concat(
+					equipmentByCategory[category].map(cat => ({
+						label: cat.name,
+						value: cat.index
 					}))
-			),
-		[equipments, selectedEquipmentCategories]
+				);
+			} else if (category) {
+				getEquipmentCategoryWithEquipment(category).then(result => {
+					if (result.data) {
+						setEquipmentByCategory(prev => ({
+							...prev,
+							[category]: result.data?.equipmentCategory.equipment ?? []
+						}));
+					} else if (result.error) {
+						const toastShowPayload: ToastShowPayload = {
+							message: 'Error fetching equipment',
+							type: ToastType.error,
+							closeTimeoutSeconds: 5
+						};
+
+						dispatch(show(toastShowPayload));
+					}
+				});
+			}
+
+			return options;
+		},
+		[dispatch, equipmentByCategory]
 	);
 
 	const getItemError = useCallback(
@@ -228,10 +254,14 @@ const StartingEuipment = ({
 
 	const getHandleItemChange = useCallback(
 		(index: number) => (value: string | number) => {
-			const newId = value !== 'blank' ? (value as string) : undefined;
-			const foundEquipment = equipments.find(
-				equipment => equipment.index === newId
+			let foundEquipment = equipments.find(
+				equipment => equipment.index === value
 			);
+			if (!foundEquipment) {
+				foundEquipment = magicItems.find(
+					magicItem => magicItem.index === value
+				);
+			}
 			const newItem: Item | undefined = foundEquipment
 				? { id: foundEquipment.index, name: foundEquipment.name }
 				: undefined;
@@ -264,22 +294,7 @@ const StartingEuipment = ({
 				<div className={styles.equipments}>
 					{values.startingEquipment.map((equipment, i) => (
 						<div key={i} className={styles.equipment}>
-							<Button
-								size="small"
-								style={{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-									display: 'flex',
-									alignItems: 'center',
-									marginRight: '-0.1rem',
-									marginTop: '-0.1rem',
-									borderTopRightRadius: '1rem'
-								}}
-								onClick={getHandleRemoveStartingEquipment(i)}
-							>
-								<XMarkIcon className={styles['close-button-icon']} /> Remove
-							</Button>
+							<RemoveButton onClick={getHandleRemoveStartingEquipment(i)} />
 							<NumberTextInput
 								id={`startingEquipment.${i}.count`}
 								label="Count"
@@ -300,7 +315,7 @@ const StartingEuipment = ({
 								<Select
 									id={`startingEquipment.${i}.item`}
 									label="Item"
-									options={getItemOptions(i)}
+									options={getItemOptions(selectedEquipmentCategories[i])}
 									value={equipment.item?.id ?? 'blank'}
 									error={getItemError(i)}
 									touched={clickedSubmit || getItemTouched(i)}

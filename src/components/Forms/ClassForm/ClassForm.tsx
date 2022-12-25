@@ -29,6 +29,7 @@ type ClassForm = {
 	proficiencies: SrdProficiencyItem[];
 	abilities: AbilityItem[];
 	equipments: SrdEquipmentItem[];
+	magicItems: SrdEquipmentItem[];
 	equipmentCategories: SrdItem[];
 	onSubmit: (
 		values: EditingClassState,
@@ -43,6 +44,7 @@ const ClassForm = ({
 	proficiencies,
 	abilities,
 	equipments,
+	magicItems,
 	equipmentCategories,
 	spells,
 	onSubmit
@@ -90,12 +92,15 @@ const ClassForm = ({
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						equipments={equipments}
+						equipmentCategories={equipmentCategories}
+						magicItems={magicItems}
 					/>
 					<StartingEquipmentChoices
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						equipments={equipments}
 						equipmentCategories={equipmentCategories}
+						magicItems={magicItems}
 					/>
 					<Button
 						positive

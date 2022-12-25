@@ -2,6 +2,7 @@ import {
 	getAbilities,
 	getEquipmentCategories,
 	getEquipments,
+	getMagicItems,
 	getProficienciesByType
 } from '../../../src/graphql/srdClientService';
 
@@ -30,6 +31,7 @@ const ClassPage = async () => {
 	const abilities = (await getAbilities()) ?? [];
 	const equipments = (await getEquipments()) ?? [];
 	const equipmentCategories = (await getEquipmentCategories()) ?? [];
+	const magicItems = (await getMagicItems()) ?? [];
 
 	return (
 		<ClassView
@@ -37,6 +39,7 @@ const ClassPage = async () => {
 			abilities={abilities}
 			equipments={equipments}
 			equipmentCategories={equipmentCategories}
+			magicItems={magicItems}
 		/>
 	);
 };

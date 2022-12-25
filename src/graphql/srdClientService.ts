@@ -24,6 +24,7 @@ import GET_EQUIPMENTS from './queries/5E-API/equipment/getEquipments';
 import GET_EQUIPMENT_CATEGORIES from './queries/5E-API/equipment-categories/getEquipmentCategories';
 import GET_EQUIPMENT_CATEGORY_WITH_EQUIPMENT from './queries/5E-API/equipment-categories/getEquipmentCategoryWithEquipment';
 import GET_LANGUAGES from './queries/5E-API/languages/getLanguages';
+import GET_MAGIC_ITEMS from './queries/5E-API/magic-items/magicItems';
 import GET_MAGIC_SCHOOLS from './queries/5E-API/magic-schools/getMagicSchools';
 import GET_MONSTER_TYPES from './queries/5E-API/monsters/getMonsterTypes';
 import GET_PROFICIENCIES_BY_TYPE from './queries/5E-API/proficiencies/proficienciesByType';
@@ -84,19 +85,19 @@ export const getClass = async (index: string) =>
 		index
 	});
 
-export const getAbilities = async (): Promise<AbilityItem[] | undefined> =>
+export const getAbilities = async () =>
 	(await query<{ abilityScores: AbilityItem[] }>(GET_ABILITIES))?.data
 		?.abilityScores;
 
-export const getEquipments = async (): Promise<
-	SrdEquipmentItem[] | undefined
-> =>
+export const getEquipments = async () =>
 	(await query<{ equipments: SrdEquipmentItem[] }>(GET_EQUIPMENTS))?.data
 		?.equipments;
 
-export const getEquipmentCategories = async (): Promise<
-	SrdItem[] | undefined
-> =>
+export const getMagicItems = async () =>
+	(await query<{ magicItems: SrdEquipmentItem[] }>(GET_MAGIC_ITEMS)).data
+		?.magicItems;
+
+export const getEquipmentCategories = async () =>
 	(await query<{ equipmentCategories: SrdItem[] }>(GET_EQUIPMENT_CATEGORIES))
 		.data?.equipmentCategories;
 
@@ -111,7 +112,7 @@ export const getSubrace = async (index: string) =>
 export const getLanguages = async () =>
 	(await query<{ languages: SrdItem[] }>(GET_LANGUAGES))?.data?.languages;
 
-export const getMagicSchools = async (): Promise<SrdItem[] | undefined> =>
+export const getMagicSchools = async () =>
 	(await query<{ magicSchools: SrdItem[] }>(GET_MAGIC_SCHOOLS))?.data
 		?.magicSchools;
 
