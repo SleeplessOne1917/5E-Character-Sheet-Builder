@@ -114,7 +114,7 @@ const startingEquipmentChoiceSchema = object({
 const proficiencyChoiceSchema = object({
 	choose: number()
 		.min(1, 'Cannot choose less than 1 proficiency option')
-		.required('Must have number of proficiencies to choose')
+		.required('Choose is required')
 		.test(
 			'less-than-options',
 			'Choose must be lower than the number of options',
@@ -139,20 +139,17 @@ const proficiencyChoiceSchema = object({
 	options: array()
 		.of(
 			object({
-				id: string()
-					.max(
-						50,
-						'Proficiency option id cannot be more than 50 characters long'
-					)
-					.optional()
-					.default(undefined),
-				name: string()
-					.max(
-						50,
-						'Proficiency option name cannot be more than 50 characters long'
-					)
-					.optional()
-					.default(undefined),
+				optionType: string()
+					.required('Option type is required')
+					.oneOf(
+						['proficiency', 'choice'],
+						'Option type must be one of "proficiency" or "choice"'
+					),
+				proficiency: getItemSchema('Proficiency').when('optionType', {
+					is: 'proficiency',
+					then: schema => schema.required('Proficiency is required'),
+					otherwise: schema => schema.optional().default(undefined)
+				}),
 				choose: number()
 					.min(1, 'Cannot choose less than 1 proficiency option')
 					.test(
@@ -171,7 +168,12 @@ const proficiencyChoiceSchema = object({
 
 							return (value ?? 0) < (options?.length ?? 0);
 						}
-					),
+					)
+					.when('optionType', {
+						is: 'choice',
+						then: schema => schema.required('Choose is required'),
+						otherwise: schema => schema.optional().default(undefined)
+					}),
 				options: array()
 					.of(
 						object({
@@ -190,27 +192,17 @@ const proficiencyChoiceSchema = object({
 						})
 					)
 					.min(1, 'Must have at least 1 option')
-					.max(20, 'Cannot have more than 20 options')
-					.optional()
-					.default(undefined)
-			}).test(
-				'is-valid-proficiency-option',
-				'Options must either have name and ID or choose and options',
-				value => {
-					if (!value) {
-						return false;
-					}
-
-					return (
-						(value.id && value.name) ||
-						((value.choose || value.choose === 0) && value.options)
-					);
-				}
-			)
+					.max(5, 'Cannot have more than 5 options')
+					.when('optionType', {
+						is: 'choice',
+						then: schema => schema.required('Options are required'),
+						otherwise: schema => schema.optional().default(undefined)
+					})
+			})
 		)
 		.required('Must have proficiencies to choose from')
 		.min(1, 'Must have at least 1 proficiency to choose from')
-		.max(20, 'Cannot have more than 20 proficiency Options')
+		.max(5, 'Cannot have more than 5 proficiency Options')
 });
 
 const classSchema = object({

@@ -10,8 +10,8 @@ import {
 import {
 	EditingClassState,
 	ItemType,
-	OptionType,
 	StartingEquipmentChoiceType,
+	StartingEquipmentOptionType,
 	addStartingEquipmentChoice,
 	addStartingEquipmentChoiceOption,
 	addStartingEquipmentChoiceOptionItem,
@@ -438,7 +438,7 @@ const StartingEquipmentOptions = ({
 
 	const getHandleOptionTypeChange = useCallback(
 		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
-			const newValue = value as OptionType;
+			const newValue = value as StartingEquipmentOptionType;
 
 			if (
 				newValue !==

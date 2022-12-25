@@ -4,16 +4,19 @@ import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
 
 export type ItemType = 'item' | 'category';
-export type OptionType = ItemType | 'multiple';
+export type StartingEquipmentOptionType = ItemType | 'multiple';
+export type ProficiencyOptionType = 'proficiency' | 'choice';
 
 export type Choose = {
 	choose?: number;
-	options?: Partial<Item>[];
+	options?: (Item | null)[];
 };
 
 export type ProficiencyChoice = {
 	choose?: number;
-	options?: Partial<XOR<Item, Choose>>[];
+	options: (Partial<XOR<{ proficiency: Item }, Choose>> & {
+		optionType: ProficiencyOptionType;
+	})[];
 };
 
 export type CountedItem = {
@@ -49,7 +52,7 @@ export type HandleSpellsType = 'prepare' | 'spells-known';
 export type StartingEquipmentChoiceType = {
 	choose?: number;
 	options: (XOR<CountedItem, XOR<ChooseEquipmentCategory, Multiple>> & {
-		optionType: OptionType;
+		optionType: StartingEquipmentOptionType;
 	})[];
 };
 
@@ -82,6 +85,14 @@ export type EditingClassState = {
 		proficiencyChoices?: ProficiencyChoice[];
 	};
 };
+
+type WithIndex = { index: number };
+
+type WithOptionIndex = { choiceIndex: number; optionIndex: number };
+
+type WithItemIndex = { itemIndex: number } & WithOptionIndex;
+
+type WithSubOptionIndex = { suboptionIndex: number } & WithOptionIndex;
 
 export const initialState: EditingClassState = {
 	name: '',
@@ -120,6 +131,55 @@ const prepSpellcasting = (state: Draft<EditingClassState>) => {
 				level9: null
 			}))
 		};
+	}
+};
+
+const prepProficiencyChoice = (
+	state: Draft<EditingClassState>,
+	index: number
+) => {
+	if (!state.proficiencyChoices) {
+		state.proficiencyChoices = [];
+	}
+
+	while (state.proficiencyChoices.length < index + 1) {
+		state.proficiencyChoices.push({ options: [] });
+	}
+};
+
+const prepProficiencyChoiceOption = (
+	state: Draft<EditingClassState>,
+	choiceIndex: number,
+	optionIndex: number
+) => {
+	prepProficiencyChoice(state, choiceIndex);
+
+	while (state.proficiencyChoices![choiceIndex].options.length <= optionIndex) {
+		state.proficiencyChoices![choiceIndex].options.push({
+			optionType: 'proficiency'
+		});
+	}
+};
+
+const prepProficiencyChoiceOptionSuboption = (
+	state: Draft<EditingClassState>,
+	choiceIndex: number,
+	optionIndex: number,
+	suboptionIndex: number
+) => {
+	prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+	if (!state.proficiencyChoices![choiceIndex].options[optionIndex].options) {
+		state.proficiencyChoices![choiceIndex].options[optionIndex].options = [];
+	}
+
+	while (
+		state.proficiencyChoices![choiceIndex].options[optionIndex].options!
+			.length <= suboptionIndex
+	) {
+		state.proficiencyChoices![choiceIndex].options[optionIndex].options!.push(
+			{}
+		);
 	}
 };
 
@@ -194,38 +254,145 @@ const editingClassSlice = createSlice({
 				state.proficiencyChoices = [];
 			}
 
-			state.proficiencyChoices.push({});
+			state.proficiencyChoices.push({ options: [] });
 		},
 		removeProficiencyChoice: (state, { payload }: PayloadAction<number>) => {
 			state.proficiencyChoices = state.proficiencyChoices?.filter(
 				(val, i) => i !== payload
 			);
 
-			if (
-				state.proficiencyChoices?.length &&
-				state.proficiencyChoices.length === 0
-			) {
+			if ((state.proficiencyChoices?.length ?? 0) === 0) {
 				delete state.proficiencyChoices;
 			}
 		},
-		setProficiencyChoice: (
+		setProficiencyChoiceChoose: (
 			state,
 			{
-				payload: { index, proficiencyChoice }
-			}: PayloadAction<{
-				index: number;
-				proficiencyChoice: ProficiencyChoice;
-			}>
+				payload: { index, choose }
+			}: PayloadAction<{ choose?: number } & WithIndex>
 		) => {
-			if (!state.proficiencyChoices) {
-				state.proficiencyChoices = [];
+			prepProficiencyChoice(state, index);
+
+			state.proficiencyChoices![index].choose = choose;
+		},
+		addProficiencyChoiceOption: (state, { payload }: PayloadAction<number>) => {
+			prepProficiencyChoice(state, payload);
+
+			state.proficiencyChoices![payload].options.push({
+				optionType: 'proficiency'
+			});
+		},
+		setProficiencyChoiceOptionType: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, optionType }
+			}: PayloadAction<
+				{
+					optionType: ProficiencyOptionType;
+				} & WithOptionIndex
+			>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].optionType =
+				optionType;
+		},
+		removeProficiencyChoiceOption: (
+			state,
+			{ payload: { choiceIndex, optionIndex } }: PayloadAction<WithOptionIndex>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			state.proficiencyChoices![choiceIndex].options =
+				state.proficiencyChoices![choiceIndex].options.filter(
+					(_, i) => i !== optionIndex
+				);
+		},
+		setProficiencyChoiceOptionProficiency: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, proficiency }
+			}: PayloadAction<
+				{
+					proficiency?: Item;
+				} & WithOptionIndex
+			>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].proficiency =
+				proficiency;
+		},
+		setProficiencyChoiceOptionChoose: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, choose }
+			}: PayloadAction<{ choose?: number } & WithOptionIndex>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].choose =
+				choose;
+		},
+		addProficiencyChoiceOptionSuboption: (
+			state,
+			{ payload: { choiceIndex, optionIndex } }: PayloadAction<WithOptionIndex>
+		) => {
+			prepProficiencyChoiceOption(state, choiceIndex, optionIndex);
+
+			if (
+				!state.proficiencyChoices![choiceIndex].options[optionIndex].options
+			) {
+				state.proficiencyChoices![choiceIndex].options[optionIndex].options =
+					[];
 			}
 
-			while (state.proficiencyChoices.length < index + 1) {
-				state.proficiencyChoices.push({});
-			}
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options?.push(
+				null
+			);
+		},
+		removeProficiencyChoiceOptionSuboption: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, suboptionIndex }
+			}: PayloadAction<WithSubOptionIndex>
+		) => {
+			prepProficiencyChoiceOptionSuboption(
+				state,
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			);
 
-			state.proficiencyChoices[index] = proficiencyChoice;
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options =
+				state.proficiencyChoices![choiceIndex].options[
+					optionIndex
+				].options?.filter((_, i) => i !== suboptionIndex);
+
+			if (
+				state.proficiencyChoices![choiceIndex].options[optionIndex].options
+					?.length === 0
+			) {
+				delete state.proficiencyChoices![choiceIndex].options[optionIndex]
+					.options;
+			}
+		},
+		setProficiencyChoiceOptionSuboptionProficiency: (
+			state,
+			{
+				payload: { choiceIndex, optionIndex, suboptionIndex, proficiency }
+			}: PayloadAction<{ proficiency?: Item } & WithSubOptionIndex>
+		) => {
+			prepProficiencyChoiceOptionSuboption(
+				state,
+				choiceIndex,
+				optionIndex,
+				suboptionIndex
+			);
+
+			state.proficiencyChoices![choiceIndex].options[optionIndex].options![
+				suboptionIndex
+			] = proficiency ?? null;
 		},
 		setSavingThrow: (
 			state,
@@ -482,9 +649,7 @@ const editingClassSlice = createSlice({
 		},
 		setStartingEquipmentItem: (
 			state,
-			{
-				payload: { index, item }
-			}: PayloadAction<{ index: number; item?: Item }>
+			{ payload: { index, item } }: PayloadAction<{ item?: Item } & WithIndex>
 		) => {
 			while (state.startingEquipment.length <= index) {
 				state.startingEquipment.push({});
@@ -496,7 +661,7 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { index, count }
-			}: PayloadAction<{ index: number; count?: number }>
+			}: PayloadAction<{ count?: number } & WithIndex>
 		) => {
 			while (state.startingEquipment.length <= index) {
 				state.startingEquipment.push({});
@@ -527,7 +692,7 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { index, choose }
-			}: PayloadAction<{ index: number; choose?: number }>
+			}: PayloadAction<{ choose?: number } & WithIndex>
 		) => {
 			prepStartingEquipmentChoice(state, index);
 
@@ -545,9 +710,7 @@ const editingClassSlice = createSlice({
 		},
 		removeStartingEquipmentChoiceOption: (
 			state,
-			{
-				payload: { choiceIndex, optionIndex }
-			}: PayloadAction<{ choiceIndex: number; optionIndex: number }>
+			{ payload: { choiceIndex, optionIndex } }: PayloadAction<WithOptionIndex>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -560,11 +723,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, optionType }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				optionType: OptionType;
-			}>
+			}: PayloadAction<
+				{
+					optionType: StartingEquipmentOptionType;
+				} & WithOptionIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -576,11 +739,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, count }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				count?: number;
-			}>
+			}: PayloadAction<
+				{
+					count?: number;
+				} & WithOptionIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -591,11 +754,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, item }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				item?: Item;
-			}>
+			}: PayloadAction<
+				{
+					item?: Item;
+				} & WithOptionIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -606,11 +769,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, choose }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				choose?: number;
-			}>
+			}: PayloadAction<
+				{
+					choose?: number;
+				} & WithOptionIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -621,11 +784,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, equipmentCategory }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				equipmentCategory?: Item;
-			}>
+			}: PayloadAction<
+				{
+					equipmentCategory?: Item;
+				} & WithOptionIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -635,9 +798,7 @@ const editingClassSlice = createSlice({
 		},
 		addStartingEquipmentChoiceOptionItem: (
 			state,
-			{
-				payload: { choiceIndex, optionIndex }
-			}: PayloadAction<{ choiceIndex: number; optionIndex: number }>
+			{ payload: { choiceIndex, optionIndex } }: PayloadAction<WithOptionIndex>
 		) => {
 			prepStartingEquipmentChoiceOption(state, choiceIndex, optionIndex);
 
@@ -657,11 +818,7 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-			}>
+			}: PayloadAction<WithItemIndex>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -687,12 +844,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex, itemType }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-				itemType: ItemType;
-			}>
+			}: PayloadAction<
+				{
+					itemType: ItemType;
+				} & WithItemIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -709,12 +865,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex, count }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-				count?: number;
-			}>
+			}: PayloadAction<
+				{
+					count?: number;
+				} & WithItemIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -731,12 +886,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex, item }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-				item?: Item;
-			}>
+			}: PayloadAction<
+				{
+					item?: Item;
+				} & WithItemIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -753,12 +907,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex, choose }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-				choose?: number;
-			}>
+			}: PayloadAction<
+				{
+					choose?: number;
+				} & WithItemIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -775,12 +928,11 @@ const editingClassSlice = createSlice({
 			state,
 			{
 				payload: { choiceIndex, optionIndex, itemIndex, equipmentCategory }
-			}: PayloadAction<{
-				choiceIndex: number;
-				optionIndex: number;
-				itemIndex: number;
-				equipmentCategory?: Item;
-			}>
+			}: PayloadAction<
+				{
+					equipmentCategory?: Item;
+				} & WithItemIndex
+			>
 		) => {
 			prepStartingEquipmentChoiceOptionItem(
 				state,
@@ -802,7 +954,6 @@ export const {
 	setProficiencies,
 	addProficiencyChoice,
 	removeProficiencyChoice,
-	setProficiencyChoice,
 	setSavingThrow,
 	addSpellcasting,
 	removeSpellcasting,
@@ -839,7 +990,16 @@ export const {
 	setStartingEquipmentChoiceOptionItemCount,
 	setStartingEquipmentChoiceOptionItemItem,
 	setStartingEquipmentChoiceOptionItemChoose,
-	setStartingEquipmentChoiceOptionItemEquipmentCategory
+	setStartingEquipmentChoiceOptionItemEquipmentCategory,
+	setProficiencyChoiceChoose,
+	addProficiencyChoiceOption,
+	removeProficiencyChoiceOption,
+	setProficiencyChoiceOptionType,
+	setProficiencyChoiceOptionProficiency,
+	setProficiencyChoiceOptionChoose,
+	addProficiencyChoiceOptionSuboption,
+	removeProficiencyChoiceOptionSuboption,
+	setProficiencyChoiceOptionSuboptionProficiency
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

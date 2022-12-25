@@ -260,55 +260,57 @@ const StartingEuipment = ({
 	return (
 		<section className={styles.container}>
 			<h2>Starting Equipment</h2>
-			<div className={styles.equipments}>
-				{values.startingEquipment.map((equipment, i) => (
-					<div key={i} className={styles.equipment}>
-						<Button
-							size="small"
-							style={{
-								position: 'absolute',
-								top: 0,
-								right: 0,
-								display: 'flex',
-								alignItems: 'center',
-								marginRight: '-0.1rem',
-								marginTop: '-0.1rem',
-								borderTopRightRadius: '1rem'
-							}}
-							onClick={getHandleRemoveStartingEquipment(i)}
-						>
-							<XMarkIcon className={styles['close-button-icon']} /> Remove
-						</Button>
-						<NumberTextInput
-							id={`startingEquipment.${i}.count`}
-							label="Count"
-							error={getCountError(i)}
-							touched={clickedSubmit || getCountTouched(i)}
-							value={equipment.count}
-							onChange={getHandleCountChange(i)}
-							onBlur={getHandleCountBlur(i)}
-						/>
-						<Select
-							id={`startingEquipment.${i}.category`}
-							label="Equipment Category"
-							options={equipmentCategoryOptions}
-							value={selectedEquipmentCategories[i] ?? 'blank'}
-							onChange={getHandleEquipmentCategoryChange(i)}
-						/>
-						{selectedEquipmentCategories[i] && (
-							<Select
-								id={`startingEquipment.${i}.item`}
-								label="Item"
-								options={getItemOptions(i)}
-								value={equipment.item?.id ?? 'blank'}
-								error={getItemError(i)}
-								touched={clickedSubmit || getItemTouched(i)}
-								onChange={getHandleItemChange(i)}
+			{values.startingEquipment.length > 0 && (
+				<div className={styles.equipments}>
+					{values.startingEquipment.map((equipment, i) => (
+						<div key={i} className={styles.equipment}>
+							<Button
+								size="small"
+								style={{
+									position: 'absolute',
+									top: 0,
+									right: 0,
+									display: 'flex',
+									alignItems: 'center',
+									marginRight: '-0.1rem',
+									marginTop: '-0.1rem',
+									borderTopRightRadius: '1rem'
+								}}
+								onClick={getHandleRemoveStartingEquipment(i)}
+							>
+								<XMarkIcon className={styles['close-button-icon']} /> Remove
+							</Button>
+							<NumberTextInput
+								id={`startingEquipment.${i}.count`}
+								label="Count"
+								error={getCountError(i)}
+								touched={clickedSubmit || getCountTouched(i)}
+								value={equipment.count}
+								onChange={getHandleCountChange(i)}
+								onBlur={getHandleCountBlur(i)}
 							/>
-						)}
-					</div>
-				))}
-			</div>
+							<Select
+								id={`startingEquipment.${i}.category`}
+								label="Equipment Category"
+								options={equipmentCategoryOptions}
+								value={selectedEquipmentCategories[i] ?? 'blank'}
+								onChange={getHandleEquipmentCategoryChange(i)}
+							/>
+							{selectedEquipmentCategories[i] && (
+								<Select
+									id={`startingEquipment.${i}.item`}
+									label="Item"
+									options={getItemOptions(i)}
+									value={equipment.item?.id ?? 'blank'}
+									error={getItemError(i)}
+									touched={clickedSubmit || getItemTouched(i)}
+									onChange={getHandleItemChange(i)}
+								/>
+							)}
+						</div>
+					))}
+				</div>
+			)}
 			{values.startingEquipment.length < 10 && (
 				<Button positive onClick={handleAddStartingEquipment}>
 					Add Starting Equipment

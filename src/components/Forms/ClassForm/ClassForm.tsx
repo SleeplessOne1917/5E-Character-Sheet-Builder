@@ -107,7 +107,7 @@ const ClassForm = ({
 							setClickedSubmit(true);
 						}}
 					>
-						{`${shouldUseReduxStore ? 'Create' : 'Edit'} Race`}
+						{`${shouldUseReduxStore ? 'Create' : 'Edit'} Class`}
 					</Button>
 				</form>
 			)}

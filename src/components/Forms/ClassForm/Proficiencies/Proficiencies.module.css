@@ -4,6 +4,8 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
+    padding: 0.5rem;
+    border-radius: 1rem;
 }
 
 .proficiencies {
@@ -36,7 +38,7 @@
 }
 
 .error {
-    border: 2px solid var(--error-red);
+    border: 5px solid var(--error-red);
 }
 
 .error-message {

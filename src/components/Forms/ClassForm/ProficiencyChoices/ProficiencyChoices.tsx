@@ -11,9 +11,19 @@ import {
 	Choose,
 	EditingClassState,
 	ProficiencyChoice,
+	ProficiencyOptionType,
 	addProficiencyChoice,
+	addProficiencyChoiceOption,
+	addProficiencyChoiceOptionSuboption,
 	removeProficiencyChoice,
-	setProficiencyChoice
+	removeProficiencyChoiceOption,
+	removeProficiencyChoiceOptionSuboption,
+	setProficiencyChoice,
+	setProficiencyChoiceChoose,
+	setProficiencyChoiceOptionChoose,
+	setProficiencyChoiceOptionProficiency,
+	setProficiencyChoiceOptionSuboptionProficiency,
+	setProficiencyChoiceOptionType
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { ProficiencyType, SrdProficiencyItem } from '../../../../types/srd';
@@ -34,14 +44,22 @@ type ProficiencyOptionsProps = {
 	proficiencies: SrdProficiencyItem[];
 };
 
-type OptionType = 'item' | 'choose';
-
 const optionTypeOptions: Option[] = [
-	{ label: 'Proficiency', value: 'item' },
-	{ label: 'Choice', value: 'choose' }
+	{ label: 'Proficiency', value: 'proficiency' },
+	{ label: 'Choice', value: 'choice' }
 ];
 
-const optionProficiencyErrorMessage = 'Option proficiency is required';
+const chooseErrorMessage = 'Choose is required';
+const proficiencyErrorMessage = 'Proficiency is required';
+
+const getChoiceStr = (index: number) => `proficiencyChoices.${index}`;
+const getOptionStr = (choiceIndex: number, optionIndex: number) =>
+	`${getChoiceStr(choiceIndex)}.options.${optionIndex}`;
+const getSuboptionStr = (
+	choiceIndex: number,
+	optionIndex: number,
+	suboptionIndex: number
+) => `${getOptionStr(choiceIndex, optionIndex)}.options.${suboptionIndex}`;
 
 const ProficiencyChoices = ({
 	clickedSubmit,
@@ -76,11 +94,11 @@ const ProficiencyChoices = ({
 		values.proficiencyChoices?.map(
 			({ options }) =>
 				options?.map(option =>
-					option.id || option.name
+					option.proficiency?.id || option.proficiency?.name
 						? []
 						: option.options?.map(
 								op =>
-									proficiencies.find(({ index }) => index === op.id)?.type ??
+									proficiencies.find(({ index }) => index === op?.id)?.type ??
 									null
 						  ) ?? []
 				) ?? []
@@ -88,15 +106,6 @@ const ProficiencyChoices = ({
 	);
 
 	const dispatch = useAppDispatch();
-
-	const [optionTypes, setOptionTypes] = useState(
-		values.proficiencyChoices?.map(
-			({ options }) =>
-				options?.map<OptionType>(option =>
-					option.choose || option.options ? 'choose' : 'item'
-				) ?? []
-		) ?? []
-	);
 
 	const proficiencyTypeOptions = useMemo(
 		() =>
@@ -115,13 +124,12 @@ const ProficiencyChoices = ({
 			dispatch(addProficiencyChoice());
 		}
 
-		setOptionTypes(prev => [...prev, []]);
 		setOptionsSelectedProficiencyTypes(prev => [...prev, []]);
 		setOptionsOptionsSelectedProficiencyTypes(prev => [...prev, []]);
 
 		setFieldValue(
 			'proficiencyChoices',
-			[...(values.proficiencyChoices ?? []), {}],
+			[...(values.proficiencyChoices ?? []), { options: [] }],
 			false
 		);
 	}, [setFieldValue, dispatch, values.proficiencyChoices, shouldUseReduxStore]);
@@ -132,7 +140,6 @@ const ProficiencyChoices = ({
 				dispatch(removeProficiencyChoice(index));
 			}
 
-			setOptionTypes(prev => prev.filter((ots, i) => i !== index));
 			setOptionsSelectedProficiencyTypes(prev =>
 				prev.filter((pts, i) => i !== index)
 			);
@@ -140,44 +147,81 @@ const ProficiencyChoices = ({
 				prev.filter((pts, i) => i !== index)
 			);
 
+			const newChoices = values.proficiencyChoices?.filter(
+				(val, i) => i !== index
+			);
+
 			setFieldValue(
 				'proficiencyChoices',
-				values.proficiencyChoices?.filter((val, i) => i !== index),
+				(newChoices?.length ?? 0) > 0 ? newChoices : undefined,
 				false
 			);
 		},
 		[shouldUseReduxStore, dispatch, setFieldValue, values.proficiencyChoices]
 	);
 
-	const getChooseError = useCallback(
+	const getChoiceError = useCallback(
 		(index: number) =>
 			errors.proficiencyChoices
 				? (
 						errors.proficiencyChoices as unknown as FormikErrors<
 							ProficiencyChoice[]
 						>
-				  )[index]?.choose
+				  )[index]
 				: undefined,
 		[errors.proficiencyChoices]
 	);
 
-	const getChooseTouched = useCallback(
+	const getChoiceTouched = useCallback(
 		(index: number) =>
 			touched.proficiencyChoices
 				? (
 						touched.proficiencyChoices as unknown as FormikTouched<
 							ProficiencyChoice[]
 						>
-				  )[index]?.choose
+				  )[index]
 				: undefined,
 		[touched.proficiencyChoices]
+	);
+
+	const getOptionError = useCallback(
+		function get<T>(choiceIndex: number, optionIndex: number) {
+			return getChoiceError(choiceIndex)?.options
+				? (getChoiceError(choiceIndex)!.options![
+						optionIndex
+				  ] as FormikErrors<T>)
+				: undefined;
+		},
+		[getChoiceError]
+	);
+
+	const getOptionTouched = useCallback(
+		function get<T>(choiceIndex: number, optionIndex: number) {
+			return getChoiceTouched(choiceIndex)?.options
+				? (getChoiceTouched(choiceIndex)!.options![
+						optionIndex
+				  ] as FormikTouched<T>)
+				: undefined;
+		},
+		[getChoiceTouched]
+	);
+
+	const getChooseError = useCallback(
+		(index: number) =>
+			getChoiceError(index)?.choose ? chooseErrorMessage : undefined,
+		[getChoiceError]
+	);
+
+	const getChooseTouched = useCallback(
+		(index: number) => getChoiceTouched(index)?.choose,
+		[getChoiceTouched]
 	);
 
 	const getHandleChooseChange = useCallback(
 		(index: number): ChangeEventHandler<HTMLInputElement> =>
 			event => {
 				setFieldValue(
-					`proficiencyChoices.${index}.choose`,
+					`${getChoiceStr(index)}.choose`,
 					event.target.value,
 					false
 				);
@@ -196,49 +240,29 @@ const ProficiencyChoices = ({
 				}
 
 				if (shouldUseReduxStore) {
-					const proficiencyChoice: ProficiencyChoice = {
-						...values.proficiencyChoices![index],
-						choose: newValue
-					};
-					dispatch(
-						setProficiencyChoice({
-							index,
-							proficiencyChoice
-						})
-					);
+					dispatch(setProficiencyChoiceChoose({ index, choose: newValue }));
 				}
 
-				setFieldValue(`proficiencyChoices.${index}.choose`, newValue, false);
-				setFieldTouched(`proficiencyChoices.${index}.choose`, true, false);
-				setFieldError(
-					`proficiencyChoices.${index}.choose`,
-					!newValue ? 'Must have number of proficiencies to choose' : undefined
-				);
+				const field = `${getChoiceStr(index)}.choose`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+				setFieldError(field, !newValue ? chooseErrorMessage : undefined);
 			},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
 			setFieldError,
-			setFieldTouched,
-			values.proficiencyChoices
+			setFieldTouched
 		]
 	);
 
 	const getHandleAddOption = useCallback(
 		(index: number) => () => {
 			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![index],
-					options: [...(values.proficiencyChoices![index].options ?? []), {}]
-				};
-
-				dispatch(setProficiencyChoice({ index, proficiencyChoice }));
+				dispatch(addProficiencyChoiceOption(index));
 			}
-
-			setOptionTypes(prev =>
-				prev.map((ots, i) => (i === index ? [...ots, 'item'] : ots))
-			);
 
 			setOptionsSelectedProficiencyTypes(prev =>
 				prev.map((proficiencyTypeList, i) =>
@@ -255,8 +279,11 @@ const ProficiencyChoices = ({
 			);
 
 			setFieldValue(
-				`proficiencyChoices.${index}.options`,
-				[...(values.proficiencyChoices![index].options ?? []), {}],
+				`${getChoiceStr(index)}.options`,
+				[
+					...(values.proficiencyChoices![index].options ?? []),
+					{ optionType: 'proficiency' }
+				],
 				false
 			);
 		},
@@ -264,128 +291,111 @@ const ProficiencyChoices = ({
 	);
 
 	const getHandleRemoveOption = useCallback(
-		(i: number, j: number) => () => {
+		(choiceIndex: number, optionIndex: number) => () => {
 			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.filter(
-						(option, k) => k !== j
-					)
-				};
-
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
+				dispatch(removeProficiencyChoiceOption({ choiceIndex, optionIndex }));
 			}
 
-			setOptionTypes(prev =>
-				prev.map((ots, k) => (k === i ? ots.filter((ot, l) => l !== j) : ots))
-			);
-
 			setOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypeList, k) =>
-					k === i
-						? proficiencyTypeList.filter((pt, l) => l !== j)
+				prev.map((proficiencyTypeList, i) =>
+					i === choiceIndex
+						? proficiencyTypeList.filter((_, j) => j !== optionIndex)
 						: proficiencyTypeList
 				)
 			);
 
 			setOptionsOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypeListList, k) =>
-					k === i
-						? proficiencyTypeListList.filter((ptl, l) => l !== j)
+				prev.map((proficiencyTypeListList, i) =>
+					i === choiceIndex
+						? proficiencyTypeListList.filter((_, j) => j !== optionIndex)
 						: proficiencyTypeListList
 				)
 			);
 
 			setFieldValue(
-				`proficiencyChoices.${i}.options`,
-				values.proficiencyChoices![i].options?.filter((option, k) => k !== j)
+				`${getChoiceStr(choiceIndex)}.options`,
+				values.proficiencyChoices![choiceIndex].options?.filter(
+					(_, i) => i !== optionIndex
+				)
 			);
 		},
 		[values.proficiencyChoices, dispatch, setFieldValue, shouldUseReduxStore]
 	);
 
 	const getHandleOptionTypeChange = useCallback(
-		(i: number, j: number) => (value: string | number) => {
-			const newOption = { ...values.proficiencyChoices![i].options![j] };
-			if ((value as OptionType) === 'item') {
-				delete newOption.choose;
-				delete newOption.options;
-			} else {
-				delete newOption.id;
-				delete newOption.name;
+		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
+			const newValue = value as ProficiencyOptionType;
+
+			if (
+				newValue !==
+				values.proficiencyChoices![choiceIndex].options[optionIndex].optionType
+			) {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setProficiencyChoiceOptionType({
+							choiceIndex,
+							optionIndex,
+							optionType: newValue
+						})
+					);
+				}
+
+				setFieldValue(
+					getOptionStr(choiceIndex, optionIndex),
+					{ optionType: newValue },
+					false
+				);
 			}
-
-			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.map((option, k) =>
-						k === j ? newOption : option
-					)
-				};
-
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
-			}
-
-			setFieldValue(`proficiencyChoices.${i}.options.${j}`, newOption, false);
-
-			setOptionTypes(prev =>
-				prev.map((optionTypeList, k) =>
-					k === i
-						? optionTypeList.map((optionType, l) =>
-								l === j ? (value as OptionType) : optionType
-						  )
-						: optionTypeList
-				)
-			);
 		},
 		[shouldUseReduxStore, setFieldValue, values.proficiencyChoices, dispatch]
 	);
 
 	const getHandleOptionProficiencyTypeChange = useCallback(
-		(i: number, j: number) => (value: string | number) => {
+		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
 			const newValue = value !== 'blank' ? (value as ProficiencyType) : null;
 
-			if (newValue !== optionsSelectedProficiencyTypes[i][j]) {
+			if (
+				newValue !== optionsSelectedProficiencyTypes[choiceIndex][optionIndex]
+			) {
 				if (shouldUseReduxStore) {
-					const proficiencyChoice: ProficiencyChoice = {
-						...values.proficiencyChoices![i],
-						options: values.proficiencyChoices![i].options?.map((option, k) =>
-							k === j ? {} : option
-						)
-					};
-
-					dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
+					dispatch(
+						setProficiencyChoiceOptionProficiency({ choiceIndex, optionIndex })
+					);
 				}
 
-				setFieldValue(`proficiencyChoices.${i}.options.${j}`, {}, false);
-			}
+				setOptionsSelectedProficiencyTypes(prev =>
+					prev.map((proficiencyTypes, i) =>
+						i === choiceIndex
+							? proficiencyTypes.map((proficiencyType, j) =>
+									j === optionIndex ? newValue : proficiencyType
+							  )
+							: proficiencyTypes
+					)
+				);
 
-			setOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypes, k) =>
-					k === i
-						? proficiencyTypes.map((proficiencyType, l) =>
-								l === j ? newValue : proficiencyType
-						  )
-						: proficiencyTypes
-				)
-			);
+				setFieldValue(
+					`${getOptionStr(choiceIndex, optionIndex)}.proficiency`,
+					undefined,
+					false
+				);
+			}
 		},
 		[
 			dispatch,
 			optionsSelectedProficiencyTypes,
 			setFieldValue,
-			shouldUseReduxStore,
-			values.proficiencyChoices
+			shouldUseReduxStore
 		]
 	);
 
-	const getOptionsProficiencyOptions = useCallback(
-		(i: number, j: number) =>
+	const getOptionProficiencyOptions = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
 			[{ label: '\u2014', value: 'blank' } as Option].concat(
 				proficiencies
 					.filter(
 						proficiency =>
-							proficiency.type === optionsSelectedProficiencyTypes[i][j] &&
+							proficiency.type ===
+								optionsSelectedProficiencyTypes[choiceIndex][optionIndex] &&
 							!values.proficiencies.some(
 								prof => prof.id === proficiency.index
 							) &&
@@ -402,13 +412,16 @@ const ProficiencyChoices = ({
 						value: proficiency.index
 					}))
 					.concat(
-						values.proficiencyChoices![i].options![j].name
+						values.proficiencyChoices![choiceIndex].options![optionIndex].name
 							? [
 									{
-										label: values.proficiencyChoices![i].options![
-											j
+										label: values.proficiencyChoices![choiceIndex].options![
+											optionIndex
 										].name?.replace(/Skill: /, ''),
-										value: values.proficiencyChoices![i].options![j].id
+										value:
+											values.proficiencyChoices![choiceIndex].options![
+												optionIndex
+											].id
 									} as Option
 							  ]
 							: []
@@ -422,80 +435,51 @@ const ProficiencyChoices = ({
 		]
 	);
 
-	const getOptionsProficiencyError = useCallback(
-		(i: number, j: number) =>
-			errors.proficiencyChoices
-				? (
-						errors.proficiencyChoices as unknown as FormikErrors<
-							ProficiencyChoice[]
-						>
-				  )[i]?.options
-					? (
-							(
-								errors.proficiencyChoices as unknown as FormikErrors<
-									ProficiencyChoice[]
-								>
-							)[i]?.options as unknown as FormikErrors<Item[]>
-					  )[j]?.name
-						? optionProficiencyErrorMessage
-						: undefined
-					: undefined
+	const getOptionProficiencyError = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionError<{ proficiency: Item }>(choiceIndex, optionIndex)
+				?.proficiency
+				? proficiencyErrorMessage
 				: undefined,
-		[errors.proficiencyChoices]
+		[getOptionError]
 	);
 
 	const getOptionsProficiencyTouched = useCallback(
-		(i: number, j: number) =>
-			touched.proficiencyChoices
-				? (
-						touched.proficiencyChoices as unknown as FormikTouched<
-							ProficiencyChoice[]
-						>
-				  )[i]?.options
-					? (
-							(
-								touched.proficiencyChoices as unknown as FormikTouched<
-									ProficiencyChoice[]
-								>
-							)[i]?.options as unknown as FormikTouched<Item[]>
-					  )[j]?.name
-					: undefined
-				: undefined,
-		[touched.proficiencyChoices]
+		(choiceIndex: number, optionIndex: number) =>
+			!!getOptionTouched<{ proficiency: Item }>(choiceIndex, optionIndex)
+				?.proficiency,
+		[getOptionTouched]
 	);
 
 	const getHandleOptionsProficiencyChange = useCallback(
-		(i: number, j: number) => (value: string | number) => {
+		(choiceIndex: number, optionIndex: number) => (value: string | number) => {
 			const foundProficiency = proficiencies.find(
 				({ index }) => index === value
 			);
-			const newProficiencyItem: Partial<Item> = foundProficiency
+			const newProficiencyItem: Item | undefined = foundProficiency
 				? ({ id: foundProficiency.index, name: foundProficiency.name } as Item)
-				: {};
+				: undefined;
 
 			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.map((option, k) =>
-						k === j ? newProficiencyItem : option
-					)
-				};
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
+				dispatch(
+					setProficiencyChoiceOptionProficiency({
+						choiceIndex,
+						optionIndex,
+						proficiency: newProficiencyItem
+					})
+				);
 			}
 
-			setFieldValue(
-				`proficiencyChoices.${i}.options.${j}`,
-				newProficiencyItem,
-				false
-			);
-			setFieldTouched(`proficiencyChoices.${i}.options.${j}.name`, true, false);
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.proficiency`;
+
+			setFieldValue(field, newProficiencyItem, false);
+			setFieldTouched(field, true, false);
 			setFieldError(
-				`proficiencyChoices.${i}.options.${j}.name`,
-				!foundProficiency ? optionProficiencyErrorMessage : undefined
+				field,
+				!newProficiencyItem ? proficiencyErrorMessage : undefined
 			);
 		},
 		[
-			values.proficiencyChoices,
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
@@ -506,50 +490,27 @@ const ProficiencyChoices = ({
 	);
 
 	const getOptionsChooseError = useCallback(
-		(i: number, j: number) =>
-			errors.proficiencyChoices
-				? (
-						errors.proficiencyChoices as unknown as FormikErrors<
-							ProficiencyChoice[]
-						>
-				  )[i]?.options
-					? (
-							(
-								errors.proficiencyChoices as unknown as FormikErrors<
-									ProficiencyChoice[]
-								>
-							)[i]?.options as unknown as FormikErrors<Choose[]>
-					  )[j]?.choose
-					: undefined
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionError<{ choose: number }>(choiceIndex, optionIndex)?.choose
+				? chooseErrorMessage
 				: undefined,
-		[errors.proficiencyChoices]
+		[getOptionError]
 	);
 
 	const getOptionsChooseTouched = useCallback(
-		(i: number, j: number) =>
-			touched.proficiencyChoices
-				? (
-						touched.proficiencyChoices as unknown as FormikTouched<
-							ProficiencyChoice[]
-						>
-				  )[i]?.options
-					? (
-							(
-								touched.proficiencyChoices as unknown as FormikTouched<
-									ProficiencyChoice[]
-								>
-							)[i]?.options as unknown as FormikTouched<Choose[]>
-					  )[j]?.choose
-					: undefined
-				: undefined,
-		[touched.proficiencyChoices]
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionTouched<{ choose: number }>(choiceIndex, optionIndex)?.choose,
+		[getOptionTouched]
 	);
 
 	const getHandleOptionsChooseChange = useCallback(
-		(i: number, j: number): ChangeEventHandler<HTMLInputElement> =>
+		(
+				choiceIndex: number,
+				optionIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
 			event => {
 				setFieldValue(
-					`proficiencyChoices.${i}.options.${j}.choose`,
+					`${getOptionStr(choiceIndex, optionIndex)}.choose`,
 					event.target.value,
 					false
 				);
@@ -558,7 +519,10 @@ const ProficiencyChoices = ({
 	);
 
 	const getHandleOptionsChooseChangeBlur = useCallback(
-		(i: number, j: number): FocusEventHandler<HTMLInputElement> =>
+		(
+				choiceIndex: number,
+				optionIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
 			event => {
 				const parsedValue = parseInt(event.target.value, 10);
 				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
@@ -568,33 +532,22 @@ const ProficiencyChoices = ({
 				}
 
 				if (shouldUseReduxStore) {
-					const proficiencyChoice: ProficiencyChoice = {
-						...values.proficiencyChoices![i],
-						options: values.proficiencyChoices![i].options?.map((option, k) =>
-							k === j ? { ...(option as Choose), choose: newValue } : option
-						)
-					};
-
-					dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
+					dispatch(
+						setProficiencyChoiceOptionChoose({
+							choiceIndex,
+							optionIndex,
+							choose: newValue
+						})
+					);
 				}
 
-				setFieldValue(
-					`proficiencyChoices.${i}.options.${j}.choose`,
-					newValue,
-					false
-				);
-				setFieldTouched(
-					`proficiencyChoices.${i}.options.${j}.choose`,
-					true,
-					false
-				);
-				setFieldError(
-					`proficiencyChoices.${i}.options.${j}.choose`,
-					!newValue ? 'Option choose is required' : undefined
-				);
+				const field = `${getOptionStr(choiceIndex, optionIndex)}.choose`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+				setFieldError(field, !newValue ? chooseErrorMessage : undefined);
 			},
 		[
-			values.proficiencyChoices,
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
@@ -603,147 +556,141 @@ const ProficiencyChoices = ({
 		]
 	);
 
-	const getHandleOptionsAddOption = useCallback(
-		(i: number, j: number) => () => {
+	const getHandleOptionAddSuboption = useCallback(
+		(choiceIndex: number, optionIndex: number) => () => {
 			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.map((option, k) =>
-						k === j
-							? {
-									...(option as Choose),
-									options: [...(option.options ?? []), {}]
-							  }
-							: option
-					)
-				};
-
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
-			}
-
-			setOptionsOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypeListList, l) =>
-					l === i
-						? proficiencyTypeListList.map((proficiencyTypeList, m) =>
-								m === j ? [...proficiencyTypeList, null] : proficiencyTypeList
-						  )
-						: proficiencyTypeListList
-				)
-			);
-
-			setFieldValue(
-				`proficiencyChoices.${i}.options.${j}.options`,
-				[...(values.proficiencyChoices![i].options![j].options ?? []), {}],
-				false
-			);
-		},
-		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
-	);
-
-	const getHandleOptionsRemoveOption = useCallback(
-		(i: number, j: number, k: number) => () => {
-			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.map((option, l) =>
-						l === j
-							? {
-									...(option as Choose),
-									options: option.options?.filter((op, m) => m !== k)
-							  }
-							: option
-					)
-				};
-
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
-			}
-
-			setOptionsOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypeListList, l) =>
-					l === i
-						? proficiencyTypeListList.map((proficiencyTypeList, m) =>
-								m === j
-									? proficiencyTypeList.filter((pt, n) => n !== k)
-									: proficiencyTypeList
-						  )
-						: proficiencyTypeListList
-				)
-			);
-
-			setFieldValue(
-				`proficiencyChoices.${i}.options.${j}.options`,
-				values.proficiencyChoices![i].options![j].options?.filter(
-					(op, l) => l !== k
-				),
-				false
-			);
-		},
-		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
-	);
-
-	const getHandleOptionsOptionsProficiencyTypeChange = useCallback(
-		(i: number, j: number, k: number) => (value: string | number) => {
-			const newValue = value !== 'blank' ? (value as ProficiencyType) : null;
-
-			if (optionsOptionsSelectedProficiencyTypes[i][j][k] !== newValue) {
-				const newOptions = values.proficiencyChoices![i].options![
-					j
-				].options?.map((option, l) => (l === k ? {} : option));
-				if (shouldUseReduxStore) {
-					const proficiencyChoice: ProficiencyChoice = {
-						...values.proficiencyChoices![i],
-						options: values.proficiencyChoices![i].options?.map((option, l) =>
-							l === j ? { ...(option as Choose), options: newOptions } : option
-						)
-					};
-
-					dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
-				}
-
-				setFieldValue(
-					`proficiencyChoices.${i}.options.${j}.options.${k}`,
-					{},
-					false
+				dispatch(
+					addProficiencyChoiceOptionSuboption({ choiceIndex, optionIndex })
 				);
 			}
 
 			setOptionsOptionsSelectedProficiencyTypes(prev =>
-				prev.map((proficiencyTypeListList, l) =>
-					l === i
-						? proficiencyTypeListList.map((proficiencyTypeList, m) =>
-								m === j
-									? proficiencyTypeList.map((pt, n) =>
-											n === k ? newValue : pt
-									  )
+				prev.map((proficiencyTypeListList, i) =>
+					i === choiceIndex
+						? proficiencyTypeListList.map((proficiencyTypeList, j) =>
+								j === optionIndex
+									? [...proficiencyTypeList, null]
 									: proficiencyTypeList
 						  )
 						: proficiencyTypeListList
 				)
 			);
+
+			setFieldValue(
+				`${getOptionStr(choiceIndex, optionIndex)}.options`,
+				[
+					...(values.proficiencyChoices![choiceIndex].options![optionIndex]
+						.options ?? []),
+					null
+				],
+				false
+			);
 		},
+		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
+	);
+
+	const getHandleOptionRemoveSuboption = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) => () => {
+			if (shouldUseReduxStore) {
+				dispatch(
+					removeProficiencyChoiceOptionSuboption({
+						choiceIndex,
+						optionIndex,
+						suboptionIndex
+					})
+				);
+			}
+
+			setOptionsOptionsSelectedProficiencyTypes(prev =>
+				prev.map((proficiencyTypeListList, i) =>
+					i === choiceIndex
+						? proficiencyTypeListList.map((proficiencyTypeList, j) =>
+								j === optionIndex
+									? proficiencyTypeList.filter((_, k) => k !== suboptionIndex)
+									: proficiencyTypeList
+						  )
+						: proficiencyTypeListList
+				)
+			);
+
+			setFieldValue(
+				`${getOptionStr(choiceIndex, optionIndex)}.options`,
+				values.proficiencyChoices![choiceIndex].options![
+					optionIndex
+				].options?.filter((_, i) => i !== suboptionIndex),
+				false
+			);
+		},
+		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
+	);
+
+	const getHandleOptionSuboptionProficiencyTypeChange = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			(value: string | number) => {
+				const newValue = value !== 'blank' ? (value as ProficiencyType) : null;
+
+				if (
+					optionsOptionsSelectedProficiencyTypes[choiceIndex][optionIndex][
+						suboptionIndex
+					] !== newValue
+				) {
+					if (shouldUseReduxStore) {
+						dispatch(
+							setProficiencyChoiceOptionSuboptionProficiency({
+								choiceIndex,
+								optionIndex,
+								suboptionIndex
+							})
+						);
+					}
+
+					setOptionsOptionsSelectedProficiencyTypes(prev =>
+						prev.map((proficiencyTypeListList, i) =>
+							i === choiceIndex
+								? proficiencyTypeListList.map((proficiencyTypeList, j) =>
+										j === optionIndex
+											? proficiencyTypeList.map((pt, k) =>
+													k === suboptionIndex ? newValue : pt
+											  )
+											: proficiencyTypeList
+								  )
+								: proficiencyTypeListList
+						)
+					);
+
+					setFieldValue(
+						`${getSuboptionStr(choiceIndex, optionIndex, suboptionIndex)}`,
+						null,
+						false
+					);
+				}
+			},
 		[
 			dispatch,
 			optionsOptionsSelectedProficiencyTypes,
 			shouldUseReduxStore,
-			values.proficiencyChoices,
 			setFieldValue
 		]
 	);
 
-	const getOptionsOptionsProficiencyOptions = useCallback(
-		(i: number, j: number, k: number) =>
+	const getOptionSuboptionsProficiencyOptions = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
 			[{ label: '\u2014', value: 'blank' } as Option].concat(
 				proficiencies
 					.filter(
 						proficiency =>
 							proficiency.type ===
-								optionsOptionsSelectedProficiencyTypes[i][j][k] &&
+								optionsOptionsSelectedProficiencyTypes[choiceIndex][
+									optionIndex
+								][suboptionIndex] &&
 							!values.proficiencies.some(
 								prof => prof.id === proficiency.index
 							) &&
 							!values.proficiencyChoices
 								?.flatMap(pc => pc.options)
-								.some(option => option?.id === proficiency.index) &&
+								.some(
+									option => option?.proficiency?.id === proficiency.index
+								) &&
 							!values.proficiencyChoices
 								?.flatMap(pc => pc.options)
 								.flatMap(option => option?.options)
@@ -754,14 +701,17 @@ const ProficiencyChoices = ({
 						value: proficiency.index
 					}))
 					.concat(
-						values.proficiencyChoices![i].options![j].options![k].name
+						values.proficiencyChoices![choiceIndex].options![optionIndex]
+							.options![suboptionIndex]
 							? [
 									{
-										label: values.proficiencyChoices![i].options![j].options![
-											k
-										].name?.replace(/Skill: /, ''),
+										label: values.proficiencyChoices![choiceIndex].options![
+											optionIndex
+										].options![suboptionIndex]!.name.replace(/Skill: /, ''),
 										value:
-											values.proficiencyChoices![i].options![j].options![k].id
+											values.proficiencyChoices![choiceIndex].options![
+												optionIndex
+											].options![suboptionIndex]!.id
 									} as Option
 							  ]
 							: []
@@ -775,114 +725,59 @@ const ProficiencyChoices = ({
 		]
 	);
 
-	const getOptionsOptionsProficiencyTouched = useCallback(
-		(i: number, j: number, k: number) =>
-			touched.proficiencyChoices
-				? (
-						touched.proficiencyChoices as unknown as FormikTouched<
-							ProficiencyChoice[]
-						>
-				  )[i]!.options
-					? (
-							(
-								touched.proficiencyChoices as unknown as FormikTouched<
-									ProficiencyChoice[]
-								>
-							)[i]!.options as unknown as FormikTouched<Choose[]>
-					  )[j]!.options
-						? (
-								(
-									(
-										touched.proficiencyChoices as unknown as FormikTouched<
-											ProficiencyChoice[]
-										>
-									)[i]!.options as unknown as FormikTouched<Choose[]>
-								)[j]!.options as unknown as FormikTouched<Item[]>
-						  )[k]?.name
-						: undefined
-					: undefined
+	const getOptionSuboptionProficiencyTouched = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)?.options
+				? !!getOptionTouched<{ options: Item[] }>(choiceIndex, optionIndex)!
+						.options![suboptionIndex]
 				: undefined,
-		[touched.proficiencyChoices]
+		[getOptionTouched]
 	);
 
-	const getOptionsOptionsProficiencyError = useCallback(
-		(i: number, j: number, k: number) =>
-			errors.proficiencyChoices
-				? (
-						errors.proficiencyChoices as unknown as FormikErrors<
-							ProficiencyChoice[]
-						>
-				  )[i]?.options
-					? (
-							(
-								errors.proficiencyChoices as unknown as FormikErrors<
-									ProficiencyChoice[]
-								>
-							)[i]?.options as unknown as FormikErrors<Choose[]>
-					  )[j]?.options
-						? (
-								(
-									(
-										errors.proficiencyChoices as unknown as FormikErrors<
-											ProficiencyChoice[]
-										>
-									)[i]!.options as unknown as FormikErrors<Choose[]>
-								)[j]!.options as unknown as FormikErrors<Item[]>
-						  )[k]?.name
-							? optionProficiencyErrorMessage
-							: undefined
-						: undefined
+	const getOptionSuboptionProficiencyError = useCallback(
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)?.options
+				? getOptionError<{ options: Item[] }>(choiceIndex, optionIndex)!
+						.options![suboptionIndex]
+					? proficiencyErrorMessage
 					: undefined
 				: undefined,
-		[errors.proficiencyChoices]
+		[getOptionError]
 	);
 
 	const getHandleOptionsOptionsProficiencyChange = useCallback(
-		(i: number, j: number, k: number) => (value: string | number) => {
-			const foundProficiency = proficiencies.find(
-				({ index }) => index === value
-			);
-			const newProficiency: Partial<Item> = foundProficiency
-				? { id: foundProficiency.index, name: foundProficiency.name }
-				: {};
+		(choiceIndex: number, optionIndex: number, suboptionIndex: number) =>
+			(value: string | number) => {
+				const foundProficiency = proficiencies.find(
+					({ index }) => index === value
+				);
+				const newProficiency: Item | undefined = foundProficiency
+					? { id: foundProficiency.index, name: foundProficiency.name }
+					: undefined;
 
-			if (shouldUseReduxStore) {
-				const proficiencyChoice: ProficiencyChoice = {
-					...values.proficiencyChoices![i],
-					options: values.proficiencyChoices![i].options?.map((option, l) =>
-						l === j
-							? {
-									...(option as Choose),
-									options: option.options?.map((op, m) =>
-										m === k ? newProficiency : op
-									)
-							  }
-							: option
-					)
-				};
+				if (shouldUseReduxStore) {
+					dispatch(
+						setProficiencyChoiceOptionSuboptionProficiency({
+							choiceIndex,
+							optionIndex,
+							suboptionIndex,
+							proficiency: newProficiency
+						})
+					);
+				}
 
-				dispatch(setProficiencyChoice({ index: i, proficiencyChoice }));
-			}
+				const field = getSuboptionStr(choiceIndex, optionIndex, suboptionIndex);
 
-			setFieldValue(
-				`proficiencyChoices.${i}.options.${j}.options.${k}`,
-				newProficiency,
-				false
-			);
-			setFieldTouched(
-				`proficiencyChoices.${i}.options.${j}.options.${k}.name`,
-				true,
-				false
-			);
-			setFieldError(
-				`proficiencyChoices.${i}.options.${j}.options.${k}.name`,
-				!foundProficiency ? optionProficiencyErrorMessage : undefined
-			);
-		},
+				setFieldValue(field, newProficiency, false);
+				setFieldTouched(field, true, false);
+				setFieldError(
+					field,
+					!foundProficiency ? proficiencyErrorMessage : undefined
+				);
+			},
 		[
 			dispatch,
 			shouldUseReduxStore,
-			values.proficiencyChoices,
 			setFieldError,
 			setFieldTouched,
 			setFieldValue,
@@ -893,210 +788,224 @@ const ProficiencyChoices = ({
 	return (
 		<section className={styles.container}>
 			<h2>Proficiency Choices</h2>
-			<div className={styles['choices-container']}>
-				{values.proficiencyChoices?.map(({ choose, options }, i) => (
-					<div key={i} className={styles.choice}>
-						<Button
-							size="small"
-							style={{
-								position: 'absolute',
-								top: 0,
-								right: 0,
-								display: 'flex',
-								alignItems: 'center',
-								marginRight: '-0.1rem',
-								marginTop: '-0.1rem',
-								borderTopRightRadius: '1rem'
-							}}
-							onClick={getHandleRemoveProficiencyChoice(i)}
-						>
-							<XMarkIcon className={styles['close-button-icon']} /> Remove
-						</Button>
-						<div className={styles['choose-container']}>
-							<NumberTextInput
-								id={`proficiencyChoices.${i}.choose`}
-								label="Choose"
-								error={getChooseError(i)}
-								touched={clickedSubmit || getChooseTouched(i)}
-								value={choose}
-								onChange={getHandleChooseChange(i)}
-								onBlur={getHandleChooseBlur(i)}
-							/>
-						</div>
-						<div className={styles['from-container']}>
-							<div className={styles['from-label']}>From</div>
-							<div className={styles['options-container']}>
-								{options?.map((option, j) => (
-									<div key={j} className={styles.option}>
-										<Button
-											size="small"
-											style={{
-												position: 'absolute',
-												top: 0,
-												right: 0,
-												display: 'flex',
-												alignItems: 'center',
-												marginRight: '-0.1rem',
-												marginTop: '-0.1rem',
-												borderTopRightRadius: '1rem'
-											}}
-											onClick={getHandleRemoveOption(i, j)}
-										>
-											<XMarkIcon className={styles['close-button-icon']} />{' '}
-											Remove
-										</Button>
-										<Select
-											options={optionTypeOptions}
-											id={`proficiencyChoices.${i}.options.${j}.optionType`}
-											label="Option Type"
-											value={optionTypes[i][j]}
-											onChange={getHandleOptionTypeChange(i, j)}
-										/>
-										{optionTypes[i][j] === 'item' ? (
-											<>
-												<Select
-													id={`proficiencyChoices.${i}.options.${j}.proficiencyType`}
-													options={proficiencyTypeOptions}
-													label="Proficiency Type"
-													value={
-														optionsSelectedProficiencyTypes[i][j] ?? 'blank'
-													}
-													onChange={getHandleOptionProficiencyTypeChange(i, j)}
-												/>
-												{optionsSelectedProficiencyTypes[i][j] && (
+			{(values.proficiencyChoices?.length ?? 0) > 0 && (
+				<div className={styles['choices-container']}>
+					{values.proficiencyChoices?.map(({ choose, options }, i) => (
+						<div key={i} className={styles.choice}>
+							<Button
+								size="small"
+								style={{
+									position: 'absolute',
+									top: 0,
+									right: 0,
+									display: 'flex',
+									alignItems: 'center',
+									marginRight: '-0.1rem',
+									marginTop: '-0.1rem',
+									borderTopRightRadius: '1rem'
+								}}
+								onClick={getHandleRemoveProficiencyChoice(i)}
+							>
+								<XMarkIcon className={styles['close-button-icon']} /> Remove
+							</Button>
+							<div className={styles['choose-container']}>
+								<NumberTextInput
+									id={`${getChoiceStr(i)}.choose`}
+									label="Choose"
+									error={getChooseError(i)}
+									touched={clickedSubmit || getChooseTouched(i)}
+									value={choose}
+									onChange={getHandleChooseChange(i)}
+									onBlur={getHandleChooseBlur(i)}
+								/>
+							</div>
+							<div className={styles['from-container']}>
+								<div className={styles['from-label']}>From</div>
+								<div className={styles['options-container']}>
+									{options?.map((option, j) => (
+										<div key={j} className={styles.option}>
+											<Button
+												size="small"
+												style={{
+													position: 'absolute',
+													top: 0,
+													right: 0,
+													display: 'flex',
+													alignItems: 'center',
+													marginRight: '-0.1rem',
+													marginTop: '-0.1rem',
+													borderTopRightRadius: '1rem'
+												}}
+												onClick={getHandleRemoveOption(i, j)}
+											>
+												<XMarkIcon className={styles['close-button-icon']} />{' '}
+												Remove
+											</Button>
+											<Select
+												options={optionTypeOptions}
+												id={`${getOptionStr(i, j)}.optionType`}
+												label="Option Type"
+												value={option.optionType}
+												onChange={getHandleOptionTypeChange(i, j)}
+											/>
+											{option.optionType === 'proficiency' && (
+												<>
 													<Select
-														id={`proficiencyChoices.${i}.options.${j}.proficiency`}
-														options={getOptionsProficiencyOptions(i, j)}
-														label="Proficiency"
-														error={getOptionsProficiencyError(i, j)}
-														touched={
-															clickedSubmit ||
-															getOptionsProficiencyTouched(i, j)
+														id={`${getOptionStr(i, j)}.proficiencyType`}
+														options={proficiencyTypeOptions}
+														label="Proficiency Type"
+														value={
+															optionsSelectedProficiencyTypes[i][j] ?? 'blank'
 														}
-														value={option.id ?? 'blank'}
-														onChange={getHandleOptionsProficiencyChange(i, j)}
+														onChange={getHandleOptionProficiencyTypeChange(
+															i,
+															j
+														)}
 													/>
-												)}
-											</>
-										) : (
-											<div className={styles['nested-choice-container']}>
-												<div className={styles['choose-container']}>
-													<NumberTextInput
-														id={`proficiencyChoices.${i}.options.${j}.choose`}
-														label="Choose"
-														error={getOptionsChooseError(i, j)}
-														touched={
-															clickedSubmit || getOptionsChooseTouched(i, j)
-														}
-														value={option.choose}
-														onChange={getHandleOptionsChooseChange(i, j)}
-														onBlur={getHandleOptionsChooseChangeBlur(i, j)}
-													/>
-												</div>
-												<div className={styles['from-container']}>
-													<div className={styles['option-from-label']}>
-														From
+													{optionsSelectedProficiencyTypes[i][j] && (
+														<Select
+															id={`${getOptionStr(i, j)}.proficiency`}
+															options={getOptionProficiencyOptions(i, j)}
+															label="Proficiency"
+															error={getOptionProficiencyError(i, j)}
+															touched={
+																clickedSubmit ||
+																getOptionsProficiencyTouched(i, j)
+															}
+															value={option.proficiency?.id ?? 'blank'}
+															onChange={getHandleOptionsProficiencyChange(i, j)}
+														/>
+													)}
+												</>
+											)}
+											{option.optionType === 'choice' && (
+												<div className={styles['nested-choice-container']}>
+													<div className={styles['choose-container']}>
+														<NumberTextInput
+															id={`${getOptionStr(i, j)}.choose`}
+															label="Choose"
+															error={getOptionsChooseError(i, j)}
+															touched={
+																clickedSubmit || getOptionsChooseTouched(i, j)
+															}
+															value={option.choose}
+															onChange={getHandleOptionsChooseChange(i, j)}
+															onBlur={getHandleOptionsChooseChangeBlur(i, j)}
+														/>
 													</div>
-													<div className={styles['options-container']}>
-														{option.options?.map((op, k) => (
-															<div key={k} className={styles['sub-option']}>
-																<Button
-																	size="small"
-																	style={{
-																		position: 'absolute',
-																		top: 0,
-																		right: 0,
-																		display: 'flex',
-																		alignItems: 'center',
-																		marginRight: '-0.1rem',
-																		marginTop: '-0.1rem',
-																		borderTopRightRadius: '1rem'
-																	}}
-																	onClick={getHandleOptionsRemoveOption(
-																		i,
-																		j,
-																		k
-																	)}
-																>
-																	<XMarkIcon
-																		className={styles['close-button-icon']}
-																	/>{' '}
-																	Remove
-																</Button>
-																<Select
-																	id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiencyType`}
-																	label="Proficiency Type"
-																	options={proficiencyTypeOptions}
-																	value={
-																		optionsOptionsSelectedProficiencyTypes[i][
-																			j
-																		][k] ?? 'blank'
-																	}
-																	onChange={getHandleOptionsOptionsProficiencyTypeChange(
-																		i,
-																		j,
-																		k
-																	)}
-																/>
-																{optionsOptionsSelectedProficiencyTypes[i][j][
-																	k
-																] && (
+													<div className={styles['from-container']}>
+														<div className={styles['option-from-label']}>
+															From
+														</div>
+														<div className={styles['options-container']}>
+															{option.options?.map((op, k) => (
+																<div key={k} className={styles['sub-option']}>
+																	<Button
+																		size="small"
+																		style={{
+																			position: 'absolute',
+																			top: 0,
+																			right: 0,
+																			display: 'flex',
+																			alignItems: 'center',
+																			marginRight: '-0.1rem',
+																			marginTop: '-0.1rem',
+																			borderTopRightRadius: '1rem'
+																		}}
+																		onClick={getHandleOptionRemoveSuboption(
+																			i,
+																			j,
+																			k
+																		)}
+																	>
+																		<XMarkIcon
+																			className={styles['close-button-icon']}
+																		/>{' '}
+																		Remove
+																	</Button>
 																	<Select
-																		id={`proficiencyChoices.${i}.options.${j}.options.${k}.proficiency`}
-																		value={op.id ?? 'blank'}
-																		options={getOptionsOptionsProficiencyOptions(
+																		id={`${getSuboptionStr(
 																			i,
 																			j,
 																			k
-																		)}
-																		label="Proficiency"
-																		touched={
-																			clickedSubmit ||
-																			getOptionsOptionsProficiencyTouched(
-																				i,
-																				j,
-																				k
-																			)
+																		)}.proficiencyType`}
+																		label="Proficiency Type"
+																		options={proficiencyTypeOptions}
+																		value={
+																			optionsOptionsSelectedProficiencyTypes[i][
+																				j
+																			][k] ?? 'blank'
 																		}
-																		error={getOptionsOptionsProficiencyError(
-																			i,
-																			j,
-																			k
-																		)}
-																		onChange={getHandleOptionsOptionsProficiencyChange(
+																		onChange={getHandleOptionSuboptionProficiencyTypeChange(
 																			i,
 																			j,
 																			k
 																		)}
 																	/>
-																)}
-															</div>
-														))}
+																	{optionsOptionsSelectedProficiencyTypes[i][j][
+																		k
+																	] && (
+																		<Select
+																			id={`${getSuboptionStr(
+																				i,
+																				j,
+																				k
+																			)}.proficiency`}
+																			value={op?.id ?? 'blank'}
+																			options={getOptionSuboptionsProficiencyOptions(
+																				i,
+																				j,
+																				k
+																			)}
+																			label="Proficiency"
+																			touched={
+																				clickedSubmit ||
+																				getOptionSuboptionProficiencyTouched(
+																					i,
+																					j,
+																					k
+																				)
+																			}
+																			error={getOptionSuboptionProficiencyError(
+																				i,
+																				j,
+																				k
+																			)}
+																			onChange={getHandleOptionsOptionsProficiencyChange(
+																				i,
+																				j,
+																				k
+																			)}
+																		/>
+																	)}
+																</div>
+															))}
+														</div>
+														{(option.options?.length ?? 0) < 5 && (
+															<Button
+																positive
+																size="small"
+																onClick={getHandleOptionAddSuboption(i, j)}
+															>
+																Add Option
+															</Button>
+														)}
 													</div>
-													{(option.options?.length ?? 0) < 20 && (
-														<Button
-															positive
-															size="small"
-															onClick={getHandleOptionsAddOption(i, j)}
-														>
-															Add Option
-														</Button>
-													)}
 												</div>
-											</div>
-										)}
-									</div>
-								))}
+											)}
+										</div>
+									))}
+								</div>
+								{(options?.length ?? 0) < 5 && (
+									<Button positive size="small" onClick={getHandleAddOption(i)}>
+										Add Option
+									</Button>
+								)}
 							</div>
-							{(options?.length ?? 0) < 20 && (
-								<Button positive size="small" onClick={getHandleAddOption(i)}>
-									Add Option
-								</Button>
-							)}
 						</div>
-					</div>
-				))}
-			</div>
+					))}
+				</div>
+			)}
 			{(values.proficiencyChoices?.length ?? 0) < 5 && (
 				<Button positive onClick={handleAddProficiencyChoice}>
 					Add Proficiciency Choice
