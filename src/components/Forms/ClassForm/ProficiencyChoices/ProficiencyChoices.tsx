@@ -8,7 +8,6 @@ import {
 	useState
 } from 'react';
 import {
-	Choose,
 	EditingClassState,
 	ProficiencyChoice,
 	ProficiencyOptionType,
@@ -18,7 +17,6 @@ import {
 	removeProficiencyChoice,
 	removeProficiencyChoiceOption,
 	removeProficiencyChoiceOptionSuboption,
-	setProficiencyChoice,
 	setProficiencyChoiceChoose,
 	setProficiencyChoiceOptionChoose,
 	setProficiencyChoiceOptionProficiency,
@@ -32,8 +30,8 @@ import Button from '../../../Button/Button';
 import { Item } from '../../../../types/db/item';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
 import Option from '../../../Select/Option';
+import RemoveButton from '../../../RemoveButton/RemoveButton';
 import Select from '../../../Select/Select/Select';
-import { XMarkIcon } from '@heroicons/react/20/solid';
 import { getProficiencyTypeName } from '../../../../services/proficiencyTypeService';
 import styles from './ProficiencyChoices.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
@@ -51,6 +49,7 @@ const optionTypeOptions: Option[] = [
 
 const chooseErrorMessage = 'Choose is required';
 const proficiencyErrorMessage = 'Proficiency is required';
+const optionsErrorMessage = 'Must have at least 1 option';
 
 const getChoiceStr = (index: number) => `proficiencyChoices.${index}`;
 const getOptionStr = (choiceIndex: number, optionIndex: number) =>
@@ -141,15 +140,17 @@ const ProficiencyChoices = ({
 			}
 
 			setOptionsSelectedProficiencyTypes(prev =>
-				prev.filter((pts, i) => i !== index)
+				prev.filter((_, i) => i !== index)
 			);
 			setOptionsOptionsSelectedProficiencyTypes(prev =>
-				prev.filter((pts, i) => i !== index)
+				prev.filter((_, i) => i !== index)
 			);
 
 			const newChoices = values.proficiencyChoices?.filter(
-				(val, i) => i !== index
+				(_, i) => i !== index
 			);
+
+			setFieldTouched(getChoiceStr(index), undefined, false);
 
 			setFieldValue(
 				'proficiencyChoices',
@@ -157,7 +158,13 @@ const ProficiencyChoices = ({
 				false
 			);
 		},
-		[shouldUseReduxStore, dispatch, setFieldValue, values.proficiencyChoices]
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.proficiencyChoices
+		]
 	);
 
 	const getChoiceError = useCallback(
@@ -278,16 +285,26 @@ const ProficiencyChoices = ({
 				)
 			);
 
+			const oldOptions = values.proficiencyChoices![index].options;
+			const field = `${getChoiceStr(index)}.options`;
+
 			setFieldValue(
-				`${getChoiceStr(index)}.options`,
-				[
-					...(values.proficiencyChoices![index].options ?? []),
-					{ optionType: 'proficiency' }
-				],
+				field,
+				[...oldOptions, { optionType: 'proficiency' }],
 				false
 			);
+
+			if (oldOptions.length === 0) {
+				setFieldError(field, undefined);
+			}
 		},
-		[shouldUseReduxStore, dispatch, setFieldValue, values.proficiencyChoices]
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			values.proficiencyChoices,
+			setFieldError
+		]
 	);
 
 	const getHandleRemoveOption = useCallback(
@@ -312,14 +329,42 @@ const ProficiencyChoices = ({
 				)
 			);
 
-			setFieldValue(
-				`${getChoiceStr(choiceIndex)}.options`,
-				values.proficiencyChoices![choiceIndex].options?.filter(
-					(_, i) => i !== optionIndex
-				)
+			const newOptions = values.proficiencyChoices![choiceIndex].options.filter(
+				(_, i) => i !== optionIndex
 			);
+
+			const field = `${getChoiceStr(choiceIndex)}.options`;
+
+			setFieldValue(field, newOptions, false);
+
+			if (newOptions.length === 0) {
+				setFieldTouched(field, true, false);
+				setFieldError(field, optionsErrorMessage);
+			}
 		},
-		[values.proficiencyChoices, dispatch, setFieldValue, shouldUseReduxStore]
+		[
+			values.proficiencyChoices,
+			dispatch,
+			setFieldValue,
+			shouldUseReduxStore,
+			setFieldTouched,
+			setFieldError
+		]
+	);
+
+	const getChoiceOptionsError = useCallback(
+		(index: number) =>
+			typeof getChoiceError(index)?.options === 'string'
+				? optionsErrorMessage
+				: undefined,
+		[getChoiceError]
+	);
+
+	const getChoiceOptionsTouched = useCallback(
+		(index: number) =>
+			getChoiceTouched(index)?.options &&
+			typeof getChoiceTouched(index)?.options === 'boolean',
+		[getChoiceTouched]
 	);
 
 	const getHandleOptionTypeChange = useCallback(
@@ -576,17 +621,24 @@ const ProficiencyChoices = ({
 				)
 			);
 
-			setFieldValue(
-				`${getOptionStr(choiceIndex, optionIndex)}.options`,
-				[
-					...(values.proficiencyChoices![choiceIndex].options![optionIndex]
-						.options ?? []),
-					null
-				],
-				false
-			);
+			const oldOptions =
+				values.proficiencyChoices![choiceIndex].options![optionIndex].options ??
+				[];
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.options`;
+
+			setFieldValue(field, [...oldOptions, null], false);
+
+			if (oldOptions.length === 0) {
+				setFieldError(field, undefined);
+			}
 		},
-		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			values.proficiencyChoices,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			setFieldError
+		]
 	);
 
 	const getHandleOptionRemoveSuboption = useCallback(
@@ -613,15 +665,44 @@ const ProficiencyChoices = ({
 				)
 			);
 
-			setFieldValue(
-				`${getOptionStr(choiceIndex, optionIndex)}.options`,
-				values.proficiencyChoices![choiceIndex].options![
-					optionIndex
-				].options?.filter((_, i) => i !== suboptionIndex),
-				false
-			);
+			const newOptions = values.proficiencyChoices![choiceIndex].options![
+				optionIndex
+			].options?.filter((_, i) => i !== suboptionIndex);
+			const field = `${getOptionStr(choiceIndex, optionIndex)}.options`;
+
+			setFieldValue(field, newOptions, false);
+
+			if ((newOptions?.length ?? 0) === 0) {
+				setFieldTouched(field, true, false);
+				setFieldError(field, optionsErrorMessage);
+			}
 		},
-		[values.proficiencyChoices, setFieldValue, dispatch, shouldUseReduxStore]
+		[
+			values.proficiencyChoices,
+			setFieldValue,
+			dispatch,
+			shouldUseReduxStore,
+			setFieldTouched,
+			setFieldError
+		]
+	);
+
+	const getOptionSuboptionsError = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			typeof getOptionError<{ options: object[] }>(choiceIndex, optionIndex)
+				?.options === 'string'
+				? optionsErrorMessage
+				: undefined,
+		[getOptionError]
+	);
+
+	const getOptionSuboptionsTouched = useCallback(
+		(choiceIndex: number, optionIndex: number) =>
+			getOptionTouched<{ options: object[] }>(choiceIndex, optionIndex)
+				?.options &&
+			typeof getOptionTouched<{ options: object[] }>(choiceIndex, optionIndex)
+				?.options === 'boolean',
+		[getOptionTouched]
 	);
 
 	const getHandleOptionSuboptionProficiencyTypeChange = useCallback(
@@ -792,22 +873,7 @@ const ProficiencyChoices = ({
 				<div className={styles['choices-container']}>
 					{values.proficiencyChoices?.map(({ choose, options }, i) => (
 						<div key={i} className={styles.choice}>
-							<Button
-								size="small"
-								style={{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-									display: 'flex',
-									alignItems: 'center',
-									marginRight: '-0.1rem',
-									marginTop: '-0.1rem',
-									borderTopRightRadius: '1rem'
-								}}
-								onClick={getHandleRemoveProficiencyChoice(i)}
-							>
-								<XMarkIcon className={styles['close-button-icon']} /> Remove
-							</Button>
+							<RemoveButton onClick={getHandleRemoveProficiencyChoice(i)} />
 							<div className={styles['choose-container']}>
 								<NumberTextInput
 									id={`${getChoiceStr(i)}.choose`}
@@ -820,27 +886,26 @@ const ProficiencyChoices = ({
 								/>
 							</div>
 							<div className={styles['from-container']}>
-								<div className={styles['from-label']}>From</div>
+								<div
+									className={`${styles['from-label-container']}${
+										(clickedSubmit || getChoiceOptionsTouched(i)) &&
+										getChoiceOptionsError(i)
+											? ` ${styles.error}`
+											: ''
+									}`}
+								>
+									<div className={styles['from-label']}>From</div>
+									{(clickedSubmit || getChoiceOptionsTouched(i)) &&
+										getChoiceOptionsError(i) && (
+											<div className={styles['error-message']}>
+												{getChoiceOptionsError(i)}
+											</div>
+										)}
+								</div>
 								<div className={styles['options-container']}>
 									{options?.map((option, j) => (
 										<div key={j} className={styles.option}>
-											<Button
-												size="small"
-												style={{
-													position: 'absolute',
-													top: 0,
-													right: 0,
-													display: 'flex',
-													alignItems: 'center',
-													marginRight: '-0.1rem',
-													marginTop: '-0.1rem',
-													borderTopRightRadius: '1rem'
-												}}
-												onClick={getHandleRemoveOption(i, j)}
-											>
-												<XMarkIcon className={styles['close-button-icon']} />{' '}
-												Remove
-											</Button>
+											<RemoveButton onClick={getHandleRemoveOption(i, j)} />
 											<Select
 												options={optionTypeOptions}
 												id={`${getOptionStr(i, j)}.optionType`}
@@ -894,35 +959,36 @@ const ProficiencyChoices = ({
 														/>
 													</div>
 													<div className={styles['from-container']}>
-														<div className={styles['option-from-label']}>
-															From
+														<div
+															className={`${styles['from-label-container']}${
+																(clickedSubmit ||
+																	getOptionSuboptionsTouched(i, j)) &&
+																getOptionSuboptionsError(i, j)
+																	? ` ${styles.error}`
+																	: ''
+															}`}
+														>
+															<div className={styles['option-from-label']}>
+																From
+															</div>
+															{(clickedSubmit ||
+																getOptionSuboptionsTouched(i, j)) &&
+																getOptionSuboptionsError(i, j) && (
+																	<div className={styles['error-message']}>
+																		{getOptionSuboptionsError(i, j)}
+																	</div>
+																)}
 														</div>
 														<div className={styles['options-container']}>
 															{option.options?.map((op, k) => (
 																<div key={k} className={styles['sub-option']}>
-																	<Button
-																		size="small"
-																		style={{
-																			position: 'absolute',
-																			top: 0,
-																			right: 0,
-																			display: 'flex',
-																			alignItems: 'center',
-																			marginRight: '-0.1rem',
-																			marginTop: '-0.1rem',
-																			borderTopRightRadius: '1rem'
-																		}}
+																	<RemoveButton
 																		onClick={getHandleOptionRemoveSuboption(
 																			i,
 																			j,
 																			k
 																		)}
-																	>
-																		<XMarkIcon
-																			className={styles['close-button-icon']}
-																		/>{' '}
-																		Remove
-																	</Button>
+																	/>
 																	<Select
 																		id={`${getSuboptionStr(
 																			i,

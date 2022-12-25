@@ -52,6 +52,7 @@
 
 .error-message {
     color: var(--wine-red);
+    font-size: 1rem;
 }
 
 .from-label {

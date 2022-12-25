@@ -17,7 +17,7 @@ import ProficiencyChoices from './ProficiencyChoices/ProficiencyChoices';
 import SavingThrows from './SavingThrows/SavingThrows';
 import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import Spellcasting from './Spellcasting/Spellcasting';
-import StartingEquipmentOptions from './StartingEquipmentOptions/StartingEquipmentOptions';
+import StartingEquipmentChoices from './StartingEquipmentChoices/StartingEquipmentChoices';
 import StartingEuipment from './StartingEquipment/StartingEquipment';
 import classSchema from '../../../yup-schemas/classSchema';
 import styles from './ClassForm.module.css';
@@ -91,7 +91,7 @@ const ClassForm = ({
 						shouldUseReduxStore={shouldUseReduxStore}
 						equipments={equipments}
 					/>
-					<StartingEquipmentOptions
+					<StartingEquipmentChoices
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 						equipments={equipments}

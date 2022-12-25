@@ -42,7 +42,7 @@ import Select from '../../../Select/Select/Select';
 import { ToastType } from '../../../../types/toast';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { getEquipmentCategoryWithEquipment } from '../../../../graphql/srdClientService';
-import styles from './StartingEquipmentOptions.module.css';
+import styles from './StartingEquipmentChoices.module.css';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 
 type StartingEquipmentOptionsProps = {
@@ -56,7 +56,7 @@ const chooseErrorMessage = 'Must have number of options to choose';
 const countErrorMessage = 'Count is required';
 const itemErrorMessage = 'Item is required';
 const equipmentCategoryErrorMessage = 'Equipment category is required';
-const optionsErrorMessage = 'There must be at least 1 option to choose from';
+const optionsErrorMessage = 'Must have at least 1 option';
 const itemsErrorMessage = 'Must have at least 1 item';
 
 const optionTypeOptions: Option[] = [
@@ -276,6 +276,8 @@ const StartingEquipmentOptions = ({
 				(_, i) => i !== index
 			);
 
+			setFieldTouched(getChoiceStr(index), undefined, false);
+
 			setFieldValue(
 				'startingEquipmentChoices',
 				newValues?.length === 0 ? undefined : newValues,
@@ -286,7 +288,8 @@ const StartingEquipmentOptions = ({
 			shouldUseReduxStore,
 			dispatch,
 			values.startingEquipmentChoices,
-			setFieldValue
+			setFieldValue,
+			setFieldTouched
 		]
 	);
 
