@@ -2,6 +2,7 @@ import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Item } from '../../types/db/item';
 import { XOR } from '../../types/helpers';
+import { v4 as uuidV4 } from 'uuid';
 
 export type ItemType = 'item' | 'category';
 export type StartingEquipmentOptionType = ItemType | 'multiple';
@@ -70,6 +71,13 @@ export type StartingEquipmentChoiceType = {
 
 export type SpellSlotStyle = 'half' | 'full' | 'warlock';
 
+export type FeatureState = {
+	uuid: string;
+	name: string;
+	description: string;
+	level?: number;
+};
+
 export type EditingClassState = {
 	name: string;
 	hitDie?: number;
@@ -87,6 +95,7 @@ export type EditingClassState = {
 		knowsCantrips: boolean;
 		levels: SpellcastingLevel[];
 	};
+	features: FeatureState[];
 	startingEquipment: CountedItem[];
 	startingEquipmentChoices?: StartingEquipmentChoiceType[];
 	subclassFlavor: string;
@@ -115,6 +124,7 @@ export const initialState: EditingClassState = {
 	abilityScoreBonusLevels: [],
 	savingThrows: [null, null],
 	startingEquipment: [],
+	features: [],
 	subclassFlavor: '',
 	multiclassing: {
 		prerequisiteOptions: [],
@@ -247,6 +257,12 @@ const prepStartingEquipmentChoiceOptionItem = (
 		state.startingEquipmentChoices![choiceIndex].options[
 			optionIndex
 		].items!.push({ itemType: 'item' });
+	}
+};
+
+const prepFeature = (state: Draft<EditingClassState>, index: number) => {
+	while (state.features.length <= index) {
+		state.features.push({ uuid: uuidV4(), name: '', description: '' });
 	}
 };
 
@@ -1031,6 +1047,42 @@ const editingClassSlice = createSlice({
 			state.startingEquipmentChoices![choiceIndex].options[optionIndex].items![
 				itemIndex
 			].equipmentCategory = equipmentCategory;
+		},
+		addFeature: state => {
+			state.features.push({ uuid: uuidV4(), name: '', description: '' });
+		},
+		removeFeature: (state, { payload }: PayloadAction<string>) => {
+			state.features = state.features.filter(({ uuid }) => uuid !== payload);
+		},
+		setFeatureName: (
+			state,
+			{
+				payload: { index, name }
+			}: PayloadAction<{ index: number; name: string }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].name = name;
+		},
+		setFeatureDescription: (
+			state,
+			{
+				payload: { index, description }
+			}: PayloadAction<{ index: number; description: string }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].description = description;
+		},
+		setFeatureLevel: (
+			state,
+			{
+				payload: { index, level }
+			}: PayloadAction<{ index: number; level?: number }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].level = level;
 		}
 	}
 });
@@ -1092,7 +1144,12 @@ export const {
 	setProficiencyChoiceOptionProficiencyType,
 	setProficiencyChoiceOptionSuboptionChoose,
 	setProficiencyChoiceOptionSuboptionProficiencyType,
-	setProficiencyChoiceOptionSuboptionType
+	setProficiencyChoiceOptionSuboptionType,
+	addFeature,
+	removeFeature,
+	setFeatureDescription,
+	setFeatureName,
+	setFeatureLevel
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

@@ -10,6 +10,7 @@ import Button, { ButtonType } from '../../Button/Button';
 import { Formik, FormikHelpers } from 'formik';
 
 import { EditingClassState } from '../../../redux/features/editingClass';
+import Features from './Features/Features';
 import Levels from './Levels/Levels';
 import NameAndHitDie from './NameAndHitDie/NameAndHitDie';
 import Proficiencies from './Proficiencies/Proficiencies';
@@ -101,6 +102,10 @@ const ClassForm = ({
 						equipments={equipments}
 						equipmentCategories={equipmentCategories}
 						magicItems={magicItems}
+					/>
+					<Features
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
 					/>
 					<Button
 						positive

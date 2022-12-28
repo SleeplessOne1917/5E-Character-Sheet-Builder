@@ -1,7 +1,7 @@
 import { array, boolean, number, object, string } from 'yup';
-import schema from '../graphql/server/schema';
 import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
+import featureSchema from './featureSchema';
 import getItemSchema from './getItemSchema';
 
 const startingEquipmentChoiceSchema = object({
@@ -427,6 +427,11 @@ const classSchema = object({
 		.max(5, 'Cannot have more than 5 starting equipment options')
 		.optional()
 		.default(undefined),
+	features: array()
+		.of(featureSchema)
+		.required('Features are required')
+		.min(1, 'Must have at least 1 feature')
+		.max(20, 'Cannot have more than 20 features'),
 	subclassFlavor: string().required('Subclass flavor text is required'),
 	multiclassing: object({
 		prerequisiteOptions: array().of(

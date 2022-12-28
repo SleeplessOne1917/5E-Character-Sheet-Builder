@@ -26,6 +26,7 @@
   --double-extra-large: 1536px;
   --triple-extra-large: 1792px;
   --focus-outline: 5px solid var(--highlight);
+  --standard-box-shadow: 5px 5px 5px var(--davy-light);
 }
 
 * {

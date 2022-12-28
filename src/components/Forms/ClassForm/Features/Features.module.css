@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.features {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.feature {
+    position: relative;
+    background-color: var(--heaven-light);
+    border: 5px solid var(--davy);
+    border-radius: 1rem;
+    width: fit-content;
+    max-width: 40rem;
+    padding: 1rem;
+    box-shadow: var(--standard-box-shadow);
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-rows: auto;
+    gap: 1.5rem;
+}
+
+.feature > * {
+    margin: 0 auto;
+}
