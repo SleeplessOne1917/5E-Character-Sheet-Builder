@@ -27,6 +27,7 @@ type SelectProps = {
 	label?: string;
 	labelFontSize?: string;
 	errorFontSize?: string;
+	hideLabel?: boolean;
 };
 
 const Select = ({
@@ -40,7 +41,8 @@ const Select = ({
 	id = 'select',
 	label,
 	labelFontSize = '1.5rem',
-	errorFontSize = '1.5rem'
+	errorFontSize = '1.5rem',
+	hideLabel = false
 }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -171,7 +173,7 @@ const Select = ({
 			data-testid={testId ?? 'select'}
 			className={classes['list-box-and-error-container']}
 		>
-			{label && (
+			{label && !hideLabel && (
 				<label id={`${id}-label`} style={{ fontSize: labelFontSize }}>
 					{label}
 				</label>
@@ -182,6 +184,7 @@ const Select = ({
 				}`}
 				ref={listBoxContainerRef as MutableRefObject<HTMLDivElement>}
 				aria-labelledby={`${id}-label`}
+				aria-label={label}
 				style={{ fontSize: fontSize ? fontSize : '1.2rem' }}
 			>
 				<button

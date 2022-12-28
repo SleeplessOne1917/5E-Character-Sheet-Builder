@@ -281,13 +281,17 @@ const classSchema = object({
 				'Spellcasting level must be 1 or 2',
 				value => !!value && (value === 1 || value === 2)
 			),
-		isHalfCaster: boolean().required('isHalfCaster is required'),
+		spellSlotStyle: string()
+			.required('Spell slot style is required')
+			.oneOf(
+				['half', 'full', 'warlock'],
+				'Spell slot style must be either "half", "full", or "warlock"'
+			),
 		handleSpells: string()
 			.required('Handle Spells is required')
-			.test(
-				'handle-spells-is-valid',
-				'Handle Spells must be either "prepare" or "spells-known"',
-				value => !!value && (value === 'prepare' || value === 'spells-known')
+			.oneOf(
+				['prepare', 'spells-known'],
+				'Handle Spells must be either "prepare" or "spells-known"'
 			),
 		knowsCantrips: boolean().required('Knows Cantrips is required'),
 		ability: abilitySchema
@@ -328,11 +332,16 @@ const classSchema = object({
 					{ checkedSpells: [], hasRepeat: false }
 				).hasRepeat;
 			}),
-		spellSlotsAndCantripsPerLevel: array()
+		levels: array()
 			.of(
 				object({
 					spellsKnown: number().min(1, 'Must know at least 1 spell').nullable(),
 					cantrips: number().min(1, 'Must have at least 1 cantrip').nullable(),
+					slotLevel: number()
+						.min(1, 'Slot level must be atl east 1')
+						.max(9, 'Slot level cannot be larger than 9')
+						.nullable(),
+					slots: number().min(1, 'Must have at least 1 spell slot').nullable(),
 					level1: number()
 						.min(1, 'Level 1 spell slot must be greater than or equal to 1')
 						.nullable(),
@@ -369,7 +378,7 @@ const classSchema = object({
 			)
 			.test(
 				'earlier-levels-not-larger-than-higher-levels',
-				'Cannot have more spells slots in a level lower than a level with fewer spell slots.',
+				'Values for levels must be less than or equal to the following level',
 				value => {
 					if (!value) {
 						return false;
@@ -379,6 +388,8 @@ const classSchema = object({
 						if (
 							(value[i].spellsKnown ?? 0) > (value[i + 1].spellsKnown ?? 0) ||
 							(value[i].cantrips ?? 0) > (value[i + 1].cantrips ?? 0) ||
+							(value[i].slotLevel ?? 0) > (value[i + 1].slotLevel ?? 0) ||
+							(value[i].slots ?? 0) > (value[i + 1].slots ?? 0) ||
 							(value[i].level1 ?? 0) > (value[i + 1].level1 ?? 0) ||
 							(value[i].level2 ?? 0) > (value[i + 1].level2 ?? 0) ||
 							(value[i].level3 ?? 0) > (value[i + 1].level3 ?? 0) ||

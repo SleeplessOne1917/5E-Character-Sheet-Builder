@@ -90,7 +90,7 @@ type BaseTraitProps = {
 	) => JSX.Element;
 };
 
-const levels = [...new Array(10).keys()];
+const levels = [...Array(10).keys()];
 
 const BaseTrait = ({
 	onRemove,

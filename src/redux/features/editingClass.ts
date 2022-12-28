@@ -43,9 +43,11 @@ type Multiple = {
 	items: (XOR<CountedItem, ChooseEquipmentCategory> & { itemType: ItemType })[];
 };
 
-export type SpellSlotsAndCantrips = {
+export type SpellcastingLevel = {
 	spellsKnown: number | null;
 	cantrips: number | null;
+	slotLevel: number | null;
+	slots: number | null;
 	level1: number | null;
 	level2: number | null;
 	level3: number | null;
@@ -66,6 +68,8 @@ export type StartingEquipmentChoiceType = {
 	})[];
 };
 
+export type SpellSlotStyle = 'half' | 'full' | 'warlock';
+
 export type EditingClassState = {
 	name: string;
 	hitDie?: number;
@@ -78,10 +82,10 @@ export type EditingClassState = {
 		level: number;
 		ability?: Item;
 		spells: Item[];
-		isHalfCaster: boolean;
+		spellSlotStyle: SpellSlotStyle;
 		handleSpells?: HandleSpellsType;
 		knowsCantrips: boolean;
-		spellSlotsAndCantripsPerLevel: SpellSlotsAndCantrips[];
+		levels: SpellcastingLevel[];
 	};
 	startingEquipment: CountedItem[];
 	startingEquipmentChoices?: StartingEquipmentChoiceType[];
@@ -124,12 +128,12 @@ const prepSpellcasting = (state: Draft<EditingClassState>) => {
 			level: 1,
 			spells: [],
 			knowsCantrips: true,
-			isHalfCaster: false,
-			spellSlotsAndCantripsPerLevel: [
-				...Array(20).keys()
-			].map<SpellSlotsAndCantrips>(() => ({
+			spellSlotStyle: 'full',
+			levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 				spellsKnown: null,
 				cantrips: null,
+				slotLevel: null,
+				slots: null,
 				level1: null,
 				level2: null,
 				level3: null,
@@ -482,12 +486,12 @@ const editingClassSlice = createSlice({
 				level: 1,
 				spells: [],
 				knowsCantrips: true,
-				isHalfCaster: false,
-				spellSlotsAndCantripsPerLevel: [
-					...Array(20).keys()
-				].map<SpellSlotsAndCantrips>(() => ({
+				spellSlotStyle: 'full',
+				levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 					spellsKnown: null,
 					cantrips: null,
+					slotLevel: null,
+					slots: null,
 					level1: null,
 					level2: null,
 					level3: null,
@@ -513,27 +517,9 @@ const editingClassSlice = createSlice({
 			state.spellcasting.ability = payload;
 		},
 		setSpellcastingLevel: (state, { payload }: PayloadAction<number>) => {
-			if (!state.spellcasting) {
-				state.spellcasting = {
-					spells: [],
-					spellSlotsAndCantripsPerLevel: [
-						...Array(20).keys()
-					].map<SpellSlotsAndCantrips>(() => ({
-						cantrips: 1,
-						level1: null,
-						level2: null,
-						level3: null,
-						level4: null,
-						level5: null,
-						level6: null,
-						level7: null,
-						level8: null,
-						level9: null
-					}))
-				};
-			}
+			prepSpellcasting(state);
 
-			state.spellcasting.level = payload;
+			state.spellcasting!.level = payload;
 		},
 		addSpellcastingSpell: (state, { payload }: PayloadAction<Item>) => {
 			prepSpellcasting(state);
@@ -560,24 +546,20 @@ const editingClassSlice = createSlice({
 			for (let i = classLevel - 1; i < 20; ++i) {
 				if (
 					i === classLevel - 1 ||
-					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i].spellsKnown ||
-					(state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown ??
-						0) < (spellsKnown ?? 0)
+					!state.spellcasting?.levels[i].spellsKnown ||
+					(state.spellcasting.levels[i].spellsKnown ?? 0) < (spellsKnown ?? 0)
 				) {
 					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown =
-						spellsKnown;
+					state.spellcasting.levels[i].spellsKnown = spellsKnown;
 				}
 			}
 
 			for (let i = classLevel - 2; i >= 0; --i) {
 				if (
-					(state.spellcasting?.spellSlotsAndCantripsPerLevel[i].spellsKnown ??
-						0) > (spellsKnown ?? 0)
+					(state.spellcasting?.levels[i].spellsKnown ?? 0) > (spellsKnown ?? 0)
 				) {
 					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i].spellsKnown =
-						spellsKnown;
+					state.spellcasting.levels[i].spellsKnown = spellsKnown;
 				}
 			}
 		},
@@ -592,24 +574,16 @@ const editingClassSlice = createSlice({
 			for (let i = classLevel - 1; i < 20; ++i) {
 				if (
 					i === classLevel - 1 ||
-					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ||
-					(state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips ?? 0) <
-						(cantrips ?? 0)
+					!state.spellcasting?.levels[i].cantrips ||
+					(state.spellcasting.levels[i].cantrips ?? 0) < (cantrips ?? 0)
 				) {
-					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips =
-						cantrips;
+					state.spellcasting!.levels[i].cantrips = cantrips;
 				}
 			}
 
 			for (let i = classLevel - 2; i >= 0; --i) {
-				if (
-					(state.spellcasting?.spellSlotsAndCantripsPerLevel[i].cantrips ?? 0) >
-					(cantrips ?? 0)
-				) {
-					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i].cantrips =
-						cantrips;
+				if ((state.spellcasting?.levels[i].cantrips ?? 0) > (cantrips ?? 0)) {
+					state.spellcasting!.levels[i].cantrips = cantrips;
 				}
 			}
 		},
@@ -629,40 +603,79 @@ const editingClassSlice = createSlice({
 				if (
 					i === classLevel - 1 ||
 					//@ts-ignore
-					!state.spellcasting?.spellSlotsAndCantripsPerLevel[i][
-						`level${spellLevel}`
-					] ||
+					!state.spellcasting?.levels[i][`level${spellLevel}`] ||
 					//@ts-ignore
-					(state.spellcasting.spellSlotsAndCantripsPerLevel[i][
-						`level${spellLevel}`
-					] ?? 0) < (slots ?? 0)
+					(state.spellcasting.levels[i][`level${spellLevel}`] ?? 0) <
+						(slots ?? 0)
 				) {
 					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i][
-						`level${spellLevel}`
-					] = slots;
+					state.spellcasting.levels[i][`level${spellLevel}`] = slots;
 				}
 			}
 
 			for (let i = classLevel - 2; i >= 0; --i) {
 				if (
 					//@ts-ignore
-					(state.spellcasting.spellSlotsAndCantripsPerLevel[i][
-						`level${spellLevel}`
-					] ?? 0) > (slots ?? 0)
+					(state.spellcasting.levels[i][`level${spellLevel}`] ?? 0) >
+					(slots ?? 0)
 				) {
 					//@ts-ignore
-					state.spellcasting.spellSlotsAndCantripsPerLevel[i][
-						`level${spellLevel}`
-					] = slots;
+					state.spellcasting.levels[i][`level${spellLevel}`] = slots;
 				}
 			}
 		},
-		setIsHalfCaster: (state, { payload }: PayloadAction<boolean>) => {
+		setSpellcastingSlotLevel: (
+			state,
+			{
+				payload: { classLevel, slotLevel }
+			}: PayloadAction<{ classLevel: number; slotLevel: number | null }>
+		) => {
 			prepSpellcasting(state);
 
-			//@ts-ignore
-			state.spellcasting.isHalfCaster = payload;
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					!state.spellcasting!.levels[i].slotLevel ||
+					(state.spellcasting!.levels[i].slotLevel ?? 0) < (slotLevel ?? 0)
+				) {
+					state.spellcasting!.levels[i].slotLevel = slotLevel;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if ((state.spellcasting!.levels[i].slotLevel ?? 0) > (slotLevel ?? 0)) {
+					state.spellcasting!.levels[i].slotLevel = slotLevel;
+				}
+			}
+		},
+		setSpellSlotStyle: (state, { payload }: PayloadAction<SpellSlotStyle>) => {
+			prepSpellcasting(state);
+
+			state.spellcasting!.spellSlotStyle = payload;
+		},
+		setSpellcastingNonLeveledSlots: (
+			state,
+			{
+				payload: { classLevel, slots }
+			}: PayloadAction<{ classLevel: number; slots: number | null }>
+		) => {
+			prepSpellcasting(state);
+
+			for (let i = classLevel - 1; i < 20; ++i) {
+				if (
+					i === classLevel - 1 ||
+					!state.spellcasting!.levels[i].slots ||
+					(state.spellcasting!.levels[i].slots ?? 0) < (slots ?? 0)
+				) {
+					state.spellcasting!.levels[i].slots = slots;
+				}
+			}
+
+			for (let i = classLevel - 2; i >= 0; --i) {
+				if ((state.spellcasting!.levels[i].slots ?? 0) > (slots ?? 0)) {
+					state.spellcasting!.levels[i].slots = slots;
+				}
+			}
 		},
 		setKnowsCantrips: (state, { payload }: PayloadAction<boolean>) => {
 			prepSpellcasting(state);
@@ -1039,9 +1052,11 @@ export const {
 	setSpellcastingSpellsKnown,
 	setSpellcastingCantripsKnown,
 	setSpellcastingSpellSlots,
-	setIsHalfCaster,
+	setSpellSlotStyle,
 	setKnowsCantrips,
 	setHandleSpells,
+	setSpellcastingSlotLevel,
+	setSpellcastingNonLeveledSlots,
 	setProficiencyBonus,
 	addAbilityScoreBonusLevel,
 	removeAbilityScoreBonusLevel,

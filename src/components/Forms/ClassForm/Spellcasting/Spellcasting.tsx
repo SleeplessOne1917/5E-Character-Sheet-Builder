@@ -3,17 +3,19 @@
 import {
 	EditingClassState,
 	HandleSpellsType,
-	SpellSlotsAndCantrips,
+	SpellSlotStyle,
+	SpellcastingLevel,
 	addSpellcasting,
 	addSpellcastingSpell,
 	removeSpellcasting,
 	removeSpellcastingSpell,
 	setHandleSpells,
-	setIsHalfCaster,
 	setKnowsCantrips,
+	setSpellSlotStyle,
 	setSpellcastingAbility,
 	setSpellcastingCantripsKnown,
 	setSpellcastingLevel,
+	setSpellcastingSlotLevel,
 	setSpellcastingSpellSlots,
 	setSpellcastingSpellsKnown
 } from '../../../../redux/features/editingClass';
@@ -42,6 +44,12 @@ const spellcastingLevelOptions = [...Array(2).keys()].map(level => ({
 	value: level + 1,
 	label: `${level + 1}`
 }));
+
+const spellSlotStyleOptions: Option[] = [
+	{ label: 'Full Caster', value: 'full' },
+	{ label: 'Half Caster', value: 'half' },
+	{ label: 'Warlock-Like', value: 'warlock' }
+];
 
 const spellsErrorMessage = 'Must have at least 1 spell';
 const spellcastingAbilityErrorMessage = 'Spellcasting ability required';
@@ -121,10 +129,12 @@ const SavingThrowsAndSpellcasting = ({
 
 	const spellLevels = useMemo(
 		() =>
-			[...new Array(!values.spellcasting?.isHalfCaster ? 10 : 6).keys()].filter(
-				level => (!values.spellcasting?.knowsCantrips ? level > 0 : true)
+			[
+				...Array(values.spellcasting?.spellSlotStyle !== 'half' ? 10 : 6).keys()
+			].filter(level =>
+				!values.spellcasting?.knowsCantrips ? level > 0 : true
 			),
-		[values.spellcasting?.isHalfCaster, values.spellcasting?.knowsCantrips]
+		[values.spellcasting?.spellSlotStyle, values.spellcasting?.knowsCantrips]
 	);
 
 	const selectedSpells = useMemo(
@@ -183,12 +193,12 @@ const SavingThrowsAndSpellcasting = ({
 				level: 1,
 				spells: [],
 				isHalfCaster: false,
-				knowsCantrips: true,
-				spellSlotsAndCantripsPerLevel: [
-					...Array(20).keys()
-				].map<SpellSlotsAndCantrips>(() => ({
+				spellSlotStyle: 'full',
+				levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 					spellsKnown: null,
 					cantrips: null,
+					slotLevel: null,
+					slots: null,
 					level1: null,
 					level2: null,
 					level3: null,
@@ -355,13 +365,18 @@ const SavingThrowsAndSpellcasting = ({
 		[spellLevels]
 	);
 
-	const handleIsHalfCasterChange = useCallback(
-		(value: boolean) => {
+	const handleSpellSlotStyleChange = useCallback(
+		(value: string | number) => {
+			const newValue = value as SpellSlotStyle;
+
 			if (shouldUseReduxStore) {
-				dispatch(setIsHalfCaster(value));
+				dispatch(setSpellSlotStyle(newValue));
 			}
 
-			if (value) {
+			if (
+				values.spellcasting?.spellSlotStyle === 'full' &&
+				newValue === 'half'
+			) {
 				const spellIdsToRemove = (values.spellcasting?.spells ?? [])
 					.filter(spell => spells.find(s => s.id === spell.id)!.level > 5)
 					.map(({ id }) => id);
@@ -394,23 +409,61 @@ const SavingThrowsAndSpellcasting = ({
 
 				for (let i = 0; i < 20; ++i) {
 					for (let j = 6; j < 10; ++j) {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.${i}.level${j}`,
-							null,
-							false
+						setFieldValue(`spellcasting.levels.${i}.level${j}`, null, false);
+					}
+				}
+			} else if (
+				newValue === 'warlock' &&
+				values.spellcasting?.spellSlotStyle !== newValue
+			) {
+				if (shouldUseReduxStore) {
+					for (let i = 1; i <= 20; ++i) {
+						for (let j = 1; j < 10; ++j) {
+							dispatch(
+								setSpellcastingSpellSlots({
+									classLevel: i,
+									spellLevel: j,
+									slots: null
+								})
+							);
+						}
+					}
+				}
+
+				for (let i = 0; i < 20; ++i) {
+					for (let j = 1; j < 10; ++j) {
+						setFieldValue(`spellcasting.levels.${i}.level${j}`, null, false);
+					}
+				}
+			} else if (
+				values.spellcasting?.spellSlotStyle === 'warlock' &&
+				newValue !== 'warlock'
+			) {
+				if (shouldUseReduxStore) {
+					for (let i = 1; i <= 20; ++i) {
+						dispatch(
+							setSpellcastingSlotLevel({
+								classLevel: i,
+								slotLevel: null
+							})
 						);
 					}
 				}
+
+				for (let i = 0; i < 20; ++i) {
+					setFieldValue(`spellcasting.levels.${i}.slotLevel`, null, false);
+				}
 			}
 
-			setFieldValue('spellcasting.isHalfCaster', value, false);
+			setFieldValue('spellcasting.spellSlotStyle', newValue, false);
 		},
 		[
 			shouldUseReduxStore,
 			dispatch,
 			setFieldValue,
 			spells,
-			values.spellcasting?.spells
+			values.spellcasting?.spells,
+			values.spellcasting?.spellSlotStyle
 		]
 	);
 
@@ -538,10 +591,12 @@ const SavingThrowsAndSpellcasting = ({
 							error={spellcastingLevelError}
 							onChange={handleSpellcastingLevelChange}
 						/>
-						<Checkbox
-							label="Half Caster"
-							checked={values.spellcasting.isHalfCaster}
-							onChange={handleIsHalfCasterChange}
+						<Select
+							id="spellcasting.spellSlotStyle"
+							label="Spell Slot Style"
+							value={values.spellcasting.spellSlotStyle}
+							options={spellSlotStyleOptions}
+							onChange={handleSpellSlotStyleChange}
 						/>
 						<Checkbox
 							label="Knows Cantrips"
