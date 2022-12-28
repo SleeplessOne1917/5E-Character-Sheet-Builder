@@ -69,11 +69,6 @@ const ProficiencyBonuses = ({
 	const isMedium = useMediaQuery('(min-width: 768px)');
 	const isSmall = useMediaQuery('(min-width: 512px)');
 
-	const includeLevel1 = useMemo(
-		() => values.spellcasting?.level === 1,
-		[values.spellcasting?.level]
-	);
-
 	const spellLevels = useMemo(
 		() =>
 			[
@@ -789,21 +784,17 @@ const ProficiencyBonuses = ({
 							</td>
 							{values.spellcasting?.handleSpells === 'spells-known' && (
 								<td>
-									{includeLevel1 || i > 0 ? (
-										<NumberTextInput
-											id={`spellcasting.levels.${i}.spellsKnown`}
-											label={`Level ${i + 1} Spells Known`}
-											error={getSpellsKnownError(i)}
-											touched={clickedSubmit || getSpellsKnownTouched(i)}
-											value={values.spellcasting.levels[i].spellsKnown}
-											onChange={getHandleSpellsKnownChange(i)}
-											onBlur={getHandleSpellsKnownBlur(i)}
-											hideLabel
-											errorStyle={{ fontSize: '0.7rem' }}
-										/>
-									) : (
-										' '
-									)}
+									<NumberTextInput
+										id={`spellcasting.levels.${i}.spellsKnown`}
+										label={`Level ${i + 1} Spells Known`}
+										error={getSpellsKnownError(i)}
+										touched={clickedSubmit || getSpellsKnownTouched(i)}
+										value={values.spellcasting.levels[i].spellsKnown}
+										onChange={getHandleSpellsKnownChange(i)}
+										onBlur={getHandleSpellsKnownBlur(i)}
+										hideLabel
+										errorStyle={{ fontSize: '0.7rem' }}
+									/>
 								</td>
 							)}
 							{values.spellcasting && (
@@ -811,33 +802,29 @@ const ProficiencyBonuses = ({
 									{values.spellcasting.spellSlotStyle !== 'warlock' &&
 										spellLevels.map(level => (
 											<td key={level}>
-												{includeLevel1 || i > 0 ? (
-													<NumberTextInput
-														id={`spellcasting.levels.${i}.${
-															level === 0 ? 'cantrips' : `level${level}`
-														}`}
-														label={`Level ${i + 1} ${
-															level === 0
-																? 'Cantrips Known'
-																: `${getOrdinal(level)} Level Spell Slots`
-														}`}
-														error={getSpellSlotSlotsError(i, level)}
-														touched={
-															clickedSubmit || getSpellSlotsTouched(i, level)
-														}
-														value={
-															level === 0
-																? values.spellcasting!.levels[i].cantrips //@ts-ignore
-																: values.spellcasting.levels[i][`level${level}`]
-														}
-														onChange={getHandleSpellSlotsChange(i, level)}
-														onBlur={getHandleSpellSlotsBlur(i, level)}
-														hideLabel
-														errorStyle={{ fontSize: '0.7rem' }}
-													/>
-												) : (
-													' '
-												)}
+												<NumberTextInput
+													id={`spellcasting.levels.${i}.${
+														level === 0 ? 'cantrips' : `level${level}`
+													}`}
+													label={`Level ${i + 1} ${
+														level === 0
+															? 'Cantrips Known'
+															: `${getOrdinal(level)} Level Spell Slots`
+													}`}
+													error={getSpellSlotSlotsError(i, level)}
+													touched={
+														clickedSubmit || getSpellSlotsTouched(i, level)
+													}
+													value={
+														level === 0
+															? values.spellcasting!.levels[i].cantrips //@ts-ignore
+															: values.spellcasting.levels[i][`level${level}`]
+													}
+													onChange={getHandleSpellSlotsChange(i, level)}
+													onBlur={getHandleSpellSlotsBlur(i, level)}
+													hideLabel
+													errorStyle={{ fontSize: '0.7rem' }}
+												/>
 											</td>
 										))}
 									{values.spellcasting.spellSlotStyle === 'warlock' && (

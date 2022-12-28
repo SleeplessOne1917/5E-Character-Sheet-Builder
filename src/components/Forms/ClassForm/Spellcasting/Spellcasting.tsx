@@ -14,7 +14,6 @@ import {
 	setSpellSlotStyle,
 	setSpellcastingAbility,
 	setSpellcastingCantripsKnown,
-	setSpellcastingLevel,
 	setSpellcastingSlotLevel,
 	setSpellcastingSpellSlots,
 	setSpellcastingSpellsKnown
@@ -39,11 +38,6 @@ type SpellcastingProps = {
 	abilities: AbilityItem[];
 	spells: SpellItem[];
 };
-
-const spellcastingLevelOptions = [...Array(2).keys()].map(level => ({
-	value: level + 1,
-	label: `${level + 1}`
-}));
 
 const spellSlotStyleOptions: Option[] = [
 	{ label: 'Full Caster', value: 'full' },
@@ -109,21 +103,6 @@ const SavingThrowsAndSpellcasting = ({
 				.ability
 				? spellcastingAbilityErrorMessage
 				: undefined,
-		[errors.spellcasting]
-	);
-
-	const spellcastingLevelTouched = useMemo(
-		() =>
-			touched.spellcasting &&
-			(touched.spellcasting as unknown as FormikTouched<{ level: number }>)
-				.level,
-		[touched.spellcasting]
-	);
-
-	const spellcastingLevelError = useMemo(
-		() =>
-			errors.spellcasting &&
-			(errors.spellcasting as unknown as FormikErrors<{ level: number }>).level,
 		[errors.spellcasting]
 	);
 
@@ -248,66 +227,6 @@ const SavingThrowsAndSpellcasting = ({
 			setFieldValue,
 			setFieldTouched
 		]
-	);
-
-	const handleSpellcastingLevelChange = useCallback(
-		(value: string | number) => {
-			if (shouldUseReduxStore) {
-				dispatch(setSpellcastingLevel(value as number));
-			}
-
-			if (value === 2) {
-				if (shouldUseReduxStore) {
-					dispatch(
-						setSpellcastingSpellsKnown({ classLevel: 1, spellsKnown: null })
-					);
-					for (let i = 0; i < 10; ++i) {
-						if (i === 0) {
-							dispatch(
-								setSpellcastingCantripsKnown({
-									classLevel: 1,
-									cantrips: null
-								})
-							);
-						} else {
-							dispatch(
-								setSpellcastingSpellSlots({
-									classLevel: 1,
-									spellLevel: i,
-									slots: null
-								})
-							);
-						}
-					}
-				}
-
-				setFieldValue(
-					'spellcasting.spellSlotsAndCantripsPerLevel.0.spellsKnown',
-					null,
-					false
-				);
-
-				for (let i = 0; i < 10; ++i) {
-					if (i === 0) {
-						setFieldValue(
-							'spellcasting.spellSlotsAndCantripsPerLevel.0.cantrips',
-							null,
-							false
-						);
-					} else {
-						setFieldValue(
-							`spellcasting.spellSlotsAndCantripsPerLevel.0.level${i}`,
-							null,
-							false
-						);
-					}
-				}
-			}
-
-			setFieldValue('spellcasting.level', value as number, false);
-			setFieldTouched('spellcasting.level', true, false);
-		},
-		[shouldUseReduxStore, dispatch, setFieldValue, setFieldTouched]
 	);
 
 	const handleAddSpellcastingSpell = useCallback(
@@ -581,15 +500,6 @@ const SavingThrowsAndSpellcasting = ({
 							touched={clickedSubmit || spellcastingAbilityTouched}
 							error={spellcastingAbilityError}
 							onChange={handleSpellcastingAbilityChange}
-						/>
-						<Select
-							id="spellcasting.level"
-							label="Start Level"
-							value={values.spellcasting.level ?? 'blank'}
-							options={spellcastingLevelOptions}
-							touched={clickedSubmit || spellcastingLevelTouched}
-							error={spellcastingLevelError}
-							onChange={handleSpellcastingLevelChange}
 						/>
 						<Select
 							id="spellcasting.spellSlotStyle"

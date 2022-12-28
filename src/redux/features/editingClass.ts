@@ -79,7 +79,6 @@ export type EditingClassState = {
 	abilityScoreBonusLevels: number[];
 	savingThrows: (Item | null)[];
 	spellcasting?: {
-		level: number;
 		ability?: Item;
 		spells: Item[];
 		spellSlotStyle: SpellSlotStyle;
@@ -125,7 +124,6 @@ export const initialState: EditingClassState = {
 const prepSpellcasting = (state: Draft<EditingClassState>) => {
 	if (!state.spellcasting) {
 		state.spellcasting = {
-			level: 1,
 			spells: [],
 			knowsCantrips: true,
 			spellSlotStyle: 'full',
@@ -483,7 +481,6 @@ const editingClassSlice = createSlice({
 		},
 		addSpellcasting: state => {
 			state.spellcasting = {
-				level: 1,
 				spells: [],
 				knowsCantrips: true,
 				spellSlotStyle: 'full',
@@ -515,11 +512,6 @@ const editingClassSlice = createSlice({
 
 			//@ts-ignore
 			state.spellcasting.ability = payload;
-		},
-		setSpellcastingLevel: (state, { payload }: PayloadAction<number>) => {
-			prepSpellcasting(state);
-
-			state.spellcasting!.level = payload;
 		},
 		addSpellcastingSpell: (state, { payload }: PayloadAction<Item>) => {
 			prepSpellcasting(state);
@@ -1046,7 +1038,6 @@ export const {
 	addSpellcasting,
 	removeSpellcasting,
 	setSpellcastingAbility,
-	setSpellcastingLevel,
 	addSpellcastingSpell,
 	removeSpellcastingSpell,
 	setSpellcastingSpellsKnown,

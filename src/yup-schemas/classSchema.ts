@@ -274,13 +274,6 @@ const classSchema = object({
 		.of(abilitySchema)
 		.length(2, 'Class must have 2 saving throws'),
 	spellcasting: object({
-		level: number()
-			.required('Spellcasting level required')
-			.test(
-				'valid-spellcasting-level',
-				'Spellcasting level must be 1 or 2',
-				value => !!value && (value === 1 || value === 2)
-			),
 		spellSlotStyle: string()
 			.required('Spell slot style is required')
 			.oneOf(
