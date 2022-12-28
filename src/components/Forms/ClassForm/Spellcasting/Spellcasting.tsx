@@ -16,7 +16,8 @@ import {
 	setSpellcastingCantripsKnown,
 	setSpellcastingSlotLevel,
 	setSpellcastingSpellSlots,
-	setSpellcastingSpellsKnown
+	setSpellcastingSpellsKnown,
+	setSpellcastingUsesSpellbook
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { useCallback, useMemo } from 'react';
@@ -49,9 +50,8 @@ const spellsErrorMessage = 'Must have at least 1 spell';
 const spellcastingAbilityErrorMessage = 'Spellcasting ability required';
 
 const spellcastingHandleSpellsOptions: Option[] = [
-	{ label: '\u2014', value: 'blank' },
-	{ label: 'Prepare Spells', value: 'prepare' },
-	{ label: 'Spells Known', value: 'spells-known' }
+	{ label: 'Spells Known', value: 'spells-known' },
+	{ label: 'Prepare Spells', value: 'prepare' }
 ];
 
 const SavingThrowsAndSpellcasting = ({
@@ -173,6 +173,7 @@ const SavingThrowsAndSpellcasting = ({
 				spells: [],
 				isHalfCaster: false,
 				spellSlotStyle: 'full',
+				handleSpells: 'spells-known',
 				levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 					spellsKnown: null,
 					cantrips: null,
@@ -439,14 +440,16 @@ const SavingThrowsAndSpellcasting = ({
 
 	const handleHandleSpellsChange = useCallback(
 		(value: string | number) => {
-			const newValue =
-				value !== 'blank' ? (value as HandleSpellsType) : undefined;
+			const newValue = value as HandleSpellsType;
 
 			if (shouldUseReduxStore) {
 				dispatch(setHandleSpells(newValue));
 			}
 
-			if (newValue !== 'spells-known') {
+			if (
+				values.spellcasting?.handleSpells === 'spells-known' &&
+				newValue === 'prepare'
+			) {
 				for (let i = 1; i <= 20; ++i) {
 					if (shouldUseReduxStore) {
 						dispatch(
@@ -460,6 +463,21 @@ const SavingThrowsAndSpellcasting = ({
 						false
 					);
 				}
+
+				if (shouldUseReduxStore) {
+					dispatch(setSpellcastingUsesSpellbook(false));
+				}
+
+				setFieldValue('spellcasting.usesSpellbook', false, false);
+			} else if (
+				values.spellcasting?.handleSpells === 'prepare' &&
+				newValue === 'spells-known'
+			) {
+				if (shouldUseReduxStore) {
+					dispatch(setSpellcastingUsesSpellbook(undefined));
+				}
+
+				setFieldValue('spellcasting.usesSpellbook', undefined, false);
 			}
 
 			setFieldValue('spellcasting.handleSpells', newValue, false);
@@ -474,8 +492,20 @@ const SavingThrowsAndSpellcasting = ({
 			dispatch,
 			setFieldError,
 			setFieldTouched,
-			setFieldValue
+			setFieldValue,
+			values.spellcasting?.handleSpells
 		]
+	);
+
+	const handleUsesSpellbookChange = useCallback(
+		(value: boolean) => {
+			if (shouldUseReduxStore) {
+				dispatch(setSpellcastingUsesSpellbook(value));
+			}
+
+			setFieldValue('spellcasting.usesSpellbook', value, false);
+		},
+		[setFieldValue, shouldUseReduxStore, dispatch]
 	);
 
 	return (
@@ -517,11 +547,16 @@ const SavingThrowsAndSpellcasting = ({
 							id="spellcasting.handleSpells"
 							label="Handle Spells"
 							options={spellcastingHandleSpellsOptions}
-							value={values.spellcasting.handleSpells ?? 'blank'}
-							touched={clickedSubmit || handleSpellsTouched}
-							error={handleSpellsError}
+							value={values.spellcasting.handleSpells}
 							onChange={handleHandleSpellsChange}
 						/>
+						{values.spellcasting.handleSpells === 'prepare' && (
+							<Checkbox
+								label="Uses Spellbook"
+								checked={values.spellcasting.usesSpellbook}
+								onChange={handleUsesSpellbookChange}
+							/>
+						)}
 					</div>
 					<div
 						className={`${styles.spells}${

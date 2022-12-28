@@ -1,4 +1,5 @@
 import { array, boolean, number, object, string } from 'yup';
+import schema from '../graphql/server/schema';
 import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
 import getItemSchema from './getItemSchema';
@@ -286,7 +287,12 @@ const classSchema = object({
 				['prepare', 'spells-known'],
 				'Handle Spells must be either "prepare" or "spells-known"'
 			),
-		knowsCantrips: boolean().required('Knows Cantrips is required'),
+		knowsCantrips: boolean().required('Knows cantrips is required'),
+		usesSpellbook: boolean().when('handleSpells', {
+			is: 'prepare',
+			then: schema => schema.required('Uses spellbook is required'),
+			otherwise: schema => schema.optional().default(undefined)
+		}),
 		ability: abilitySchema
 			.required('Spellcasting ability required')
 			.test(

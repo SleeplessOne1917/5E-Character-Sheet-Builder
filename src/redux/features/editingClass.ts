@@ -82,7 +82,8 @@ export type EditingClassState = {
 		ability?: Item;
 		spells: Item[];
 		spellSlotStyle: SpellSlotStyle;
-		handleSpells?: HandleSpellsType;
+		handleSpells: HandleSpellsType;
+		usesSpellbook?: boolean;
 		knowsCantrips: boolean;
 		levels: SpellcastingLevel[];
 	};
@@ -127,6 +128,7 @@ const prepSpellcasting = (state: Draft<EditingClassState>) => {
 			spells: [],
 			knowsCantrips: true,
 			spellSlotStyle: 'full',
+			handleSpells: 'spells-known',
 			levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 				spellsKnown: null,
 				cantrips: null,
@@ -484,6 +486,7 @@ const editingClassSlice = createSlice({
 				spells: [],
 				knowsCantrips: true,
 				spellSlotStyle: 'full',
+				handleSpells: 'spells-known',
 				levels: [...Array(20).keys()].map<SpellcastingLevel>(() => ({
 					spellsKnown: null,
 					cantrips: null,
@@ -675,14 +678,18 @@ const editingClassSlice = createSlice({
 			//@ts-ignore
 			state.spellcasting.knowsCantrips = payload;
 		},
-		setHandleSpells: (
+		setHandleSpells: (state, { payload }: PayloadAction<HandleSpellsType>) => {
+			prepSpellcasting(state);
+
+			state.spellcasting!.handleSpells = payload;
+		},
+		setSpellcastingUsesSpellbook: (
 			state,
-			{ payload }: PayloadAction<HandleSpellsType | undefined>
+			{ payload }: PayloadAction<boolean | undefined>
 		) => {
 			prepSpellcasting(state);
 
-			//@ts-ignore
-			state.spellcasting.handleSpells = payload;
+			state.spellcasting!.usesSpellbook = payload;
 		},
 		setProficiencyBonus: (
 			state,
@@ -1045,6 +1052,7 @@ export const {
 	setSpellcastingSpellSlots,
 	setSpellSlotStyle,
 	setKnowsCantrips,
+	setSpellcastingUsesSpellbook,
 	setHandleSpells,
 	setSpellcastingSlotLevel,
 	setSpellcastingNonLeveledSlots,
