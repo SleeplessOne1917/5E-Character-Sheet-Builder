@@ -431,7 +431,29 @@ const classSchema = object({
 		.of(featureSchema)
 		.required('Features are required')
 		.min(1, 'Must have at least 1 feature')
-		.max(20, 'Cannot have more than 20 features'),
+		.max(20, 'Cannot have more than 20 features')
+		.test(
+			'valid-per-levels',
+			'Cannot have more than 5 total per level infos',
+			value => {
+				if (!value) {
+					return false;
+				}
+
+				return (
+					value.reduce(
+						(acc, cur) =>
+							acc +
+							(cur.perLevelBonuses?.length ?? 0) +
+							(cur.perLevelDice?.length ?? 0) +
+							(cur.perLevelDistances?.length ?? 0) +
+							(cur.perLevelMultiDice?.length ?? 0) +
+							(cur.perLevelNumbers?.length ?? 0),
+						0
+					) <= 5
+				);
+			}
+		),
 	subclassFlavor: string().required('Subclass flavor text is required'),
 	multiclassing: object({
 		prerequisiteOptions: array().of(

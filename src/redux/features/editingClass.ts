@@ -76,6 +76,14 @@ export type FeatureState = {
 	name: string;
 	description: string;
 	level?: number;
+	perLevelNumbers?: { name: string; levels: (number | null)[] }[];
+	perLevelDice?: { name: string; levels: (number | null)[] }[];
+	perLevelMultiDice?: {
+		name: string;
+		levels: ({ count?: number; die?: number } | null)[];
+	}[];
+	perLevelBonuses?: { name: string; levels: (number | null)[] }[];
+	perLevelDistances?: { name: string; levels: (number | null)[] }[];
 };
 
 export type EditingClassState = {
@@ -263,6 +271,105 @@ const prepStartingEquipmentChoiceOptionItem = (
 const prepFeature = (state: Draft<EditingClassState>, index: number) => {
 	while (state.features.length <= index) {
 		state.features.push({ uuid: uuidV4(), name: '', description: '' });
+	}
+};
+
+const prepFeaturePerLevelNumber = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	numberIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].perLevelNumbers) {
+		state.features[featureIndex].perLevelNumbers = [];
+	}
+
+	while (state.features[featureIndex].perLevelNumbers!.length <= numberIndex) {
+		state.features[featureIndex].perLevelNumbers!.push({
+			name: '',
+			levels: Array(20).map(() => null)
+		});
+	}
+};
+
+const prepFeaturePerLevelDice = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	numberIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].perLevelDice) {
+		state.features[featureIndex].perLevelDice = [];
+	}
+
+	while (state.features[featureIndex].perLevelDice!.length <= numberIndex) {
+		state.features[featureIndex].perLevelDice!.push({
+			name: '',
+			levels: Array(20).map(() => null)
+		});
+	}
+};
+
+const prepFeaturePerLevelMultiDice = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	numberIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].perLevelMultiDice) {
+		state.features[featureIndex].perLevelMultiDice = [];
+	}
+
+	while (
+		state.features[featureIndex].perLevelMultiDice!.length <= numberIndex
+	) {
+		state.features[featureIndex].perLevelMultiDice!.push({
+			name: '',
+			levels: Array(20).map(() => null)
+		});
+	}
+};
+
+const prepFeaturePerLevelBonus = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	numberIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].perLevelBonuses) {
+		state.features[featureIndex].perLevelBonuses = [];
+	}
+
+	while (state.features[featureIndex].perLevelBonuses!.length <= numberIndex) {
+		state.features[featureIndex].perLevelBonuses!.push({
+			name: '',
+			levels: Array(20).map(() => null)
+		});
+	}
+};
+
+const prepFeaturePerLevelDistance = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	numberIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].perLevelDistances) {
+		state.features[featureIndex].perLevelDistances = [];
+	}
+
+	while (
+		state.features[featureIndex].perLevelDistances!.length <= numberIndex
+	) {
+		state.features[featureIndex].perLevelDistances!.push({
+			name: '',
+			levels: Array(20).map(() => null)
+		});
 	}
 };
 
@@ -1083,6 +1190,220 @@ const editingClassSlice = createSlice({
 			prepFeature(state, index);
 
 			state.features[index].level = level;
+		},
+		addFeaturePerLevelNumber: (state, { payload }: PayloadAction<number>) => {
+			prepFeature(state, payload);
+
+			if (!state.features[payload].perLevelNumbers) {
+				state.features[payload].perLevelNumbers = [];
+			}
+
+			state.features[payload].perLevelNumbers!.push({
+				name: '',
+				levels: Array(20).map(() => null)
+			});
+		},
+		removeFeaturePerLevelNumber: (
+			state,
+			{
+				payload: { featureIndex, numberIndex }
+			}: PayloadAction<{ featureIndex: number; numberIndex: number }>
+		) => {
+			prepFeaturePerLevelNumber(state, featureIndex, numberIndex);
+
+			state.features[featureIndex].perLevelNumbers = state.features[
+				featureIndex
+			].perLevelNumbers?.filter((_, i) => i !== numberIndex);
+
+			if (state.features[featureIndex].perLevelNumbers?.length === 0) {
+				delete state.features[featureIndex].perLevelNumbers;
+			}
+		},
+		setFeaturePerLevelNumberName: (
+			state,
+			{
+				payload: { featureIndex, numberIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				numberIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeaturePerLevelNumber(state, featureIndex, numberIndex);
+
+			state.features[featureIndex].perLevelNumbers![numberIndex].name = name;
+		},
+		addFeaturePerLevelDice: (state, { payload }: PayloadAction<number>) => {
+			prepFeature(state, payload);
+
+			if (!state.features[payload].perLevelDice) {
+				state.features[payload].perLevelDice = [];
+			}
+
+			state.features[payload].perLevelDice!.push({
+				name: '',
+				levels: Array(20).map(() => null)
+			});
+		},
+		removeFeaturePerLevelDice: (
+			state,
+			{
+				payload: { featureIndex, diceIndex }
+			}: PayloadAction<{ featureIndex: number; diceIndex: number }>
+		) => {
+			prepFeaturePerLevelDice(state, featureIndex, diceIndex);
+
+			state.features[featureIndex].perLevelDice = state.features[
+				featureIndex
+			].perLevelDice?.filter((_, i) => i !== diceIndex);
+
+			if (state.features[featureIndex].perLevelDice?.length === 0) {
+				delete state.features[featureIndex].perLevelDice;
+			}
+		},
+		setFeaturePerLevelDiceName: (
+			state,
+			{
+				payload: { featureIndex, diceIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				diceIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeaturePerLevelDice(state, featureIndex, diceIndex);
+
+			state.features[featureIndex].perLevelDice![diceIndex].name = name;
+		},
+		addFeaturePerLevelMultiDice: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			prepFeature(state, payload);
+
+			if (!state.features[payload].perLevelMultiDice) {
+				state.features[payload].perLevelMultiDice = [];
+			}
+
+			state.features[payload].perLevelMultiDice!.push({
+				name: '',
+				levels: Array(20).map(() => null)
+			});
+		},
+		removeFeaturePerLevelMultiDice: (
+			state,
+			{
+				payload: { featureIndex, diceIndex }
+			}: PayloadAction<{ featureIndex: number; diceIndex: number }>
+		) => {
+			prepFeaturePerLevelMultiDice(state, featureIndex, diceIndex);
+
+			state.features[featureIndex].perLevelMultiDice = state.features[
+				featureIndex
+			].perLevelMultiDice?.filter((_, i) => i !== diceIndex);
+
+			if (state.features[featureIndex].perLevelMultiDice?.length === 0) {
+				delete state.features[featureIndex].perLevelMultiDice;
+			}
+		},
+		setFeaturePerLevelMultiDiceName: (
+			state,
+			{
+				payload: { featureIndex, diceIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				diceIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeaturePerLevelMultiDice(state, featureIndex, diceIndex);
+
+			state.features[featureIndex].perLevelMultiDice![diceIndex].name = name;
+		},
+		addFeaturePerLevelBonus: (state, { payload }: PayloadAction<number>) => {
+			prepFeature(state, payload);
+
+			if (!state.features[payload].perLevelBonuses) {
+				state.features[payload].perLevelBonuses = [];
+			}
+
+			state.features[payload].perLevelBonuses!.push({
+				name: '',
+				levels: Array(20).map(() => null)
+			});
+		},
+		removeFeaturePerLevelBonus: (
+			state,
+			{
+				payload: { featureIndex, bonusIndex }
+			}: PayloadAction<{ featureIndex: number; bonusIndex: number }>
+		) => {
+			prepFeaturePerLevelBonus(state, featureIndex, bonusIndex);
+
+			state.features[featureIndex].perLevelBonuses = state.features[
+				featureIndex
+			].perLevelBonuses?.filter((_, i) => i !== bonusIndex);
+
+			if (state.features[featureIndex].perLevelBonuses?.length === 0) {
+				delete state.features[featureIndex].perLevelBonuses;
+			}
+		},
+		setFeaturePerLevelBonusName: (
+			state,
+			{
+				payload: { featureIndex, bonusIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				bonusIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeaturePerLevelBonus(state, featureIndex, bonusIndex);
+
+			state.features[featureIndex].perLevelBonuses![bonusIndex].name = name;
+		},
+		addFeaturePerLevelDistance: (state, { payload }: PayloadAction<number>) => {
+			prepFeature(state, payload);
+
+			if (!state.features[payload].perLevelDistances) {
+				state.features[payload].perLevelDistances = [];
+			}
+
+			state.features[payload].perLevelDistances!.push({
+				name: '',
+				levels: Array(20).map(() => null)
+			});
+		},
+		removeFeaturePerLevelDistance: (
+			state,
+			{
+				payload: { featureIndex, distanceIndex }
+			}: PayloadAction<{ featureIndex: number; distanceIndex: number }>
+		) => {
+			prepFeaturePerLevelDistance(state, featureIndex, distanceIndex);
+
+			state.features[featureIndex].perLevelDistances = state.features[
+				featureIndex
+			].perLevelDistances?.filter((_, i) => i !== distanceIndex);
+
+			if (state.features[featureIndex].perLevelDistances?.length === 0) {
+				delete state.features[featureIndex].perLevelDistances;
+			}
+		},
+		setFeaturePerLevelDistanceName: (
+			state,
+			{
+				payload: { featureIndex, distanceIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				distanceIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeaturePerLevelDistance(state, featureIndex, distanceIndex);
+
+			state.features[featureIndex].perLevelDistances![distanceIndex].name =
+				name;
 		}
 	}
 });
@@ -1149,7 +1470,22 @@ export const {
 	removeFeature,
 	setFeatureDescription,
 	setFeatureName,
-	setFeatureLevel
+	setFeatureLevel,
+	addFeaturePerLevelNumber,
+	removeFeaturePerLevelNumber,
+	setFeaturePerLevelNumberName,
+	addFeaturePerLevelDice,
+	removeFeaturePerLevelDice,
+	setFeaturePerLevelDiceName,
+	addFeaturePerLevelMultiDice,
+	removeFeaturePerLevelMultiDice,
+	setFeaturePerLevelMultiDiceName,
+	addFeaturePerLevelBonus,
+	removeFeaturePerLevelBonus,
+	setFeaturePerLevelBonusName,
+	addFeaturePerLevelDistance,
+	removeFeaturePerLevelDistance,
+	setFeaturePerLevelDistanceName
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
