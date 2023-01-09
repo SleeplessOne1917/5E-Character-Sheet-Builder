@@ -60,6 +60,15 @@ export type SpellcastingLevel = {
 	level9: number | null;
 };
 
+export type SubclassSpellcastingLevel = {
+	spellsKnown: number | null;
+	cantrips: number | null;
+	level1: number | null;
+	level2: number | null;
+	level3: number | null;
+	level4: number | null;
+};
+
 export type HandleSpellsType = 'prepare' | 'spells-known';
 
 export type StartingEquipmentChoiceType = {
@@ -107,6 +116,24 @@ export type EditingClassState = {
 	startingEquipment: CountedItem[];
 	startingEquipmentChoices?: StartingEquipmentChoiceType[];
 	subclassFlavor: string;
+	subclassLevels: number[];
+	subclass: {
+		name: string;
+		features: {
+			uuid: string;
+			name: string;
+			description: string;
+			level: number;
+		}[];
+		spellcasting?: {
+			cantrips?: Item[];
+			ability?: Item;
+			spellClass?: Item;
+			spellSchools: (Item | null)[];
+			levels: SubclassSpellcastingLevel[];
+		};
+		spellsByLevel?: { level?: number; spells: Item[] }[];
+	};
 	multiclassing: {
 		prerequisiteOptions: {
 			ability?: Item;
@@ -134,6 +161,11 @@ export const initialState: EditingClassState = {
 	startingEquipment: [],
 	features: [],
 	subclassFlavor: '',
+	subclassLevels: [],
+	subclass: {
+		name: '',
+		features: []
+	},
 	multiclassing: {
 		prerequisiteOptions: [],
 		proficiencies: []

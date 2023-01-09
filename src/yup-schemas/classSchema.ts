@@ -3,6 +3,7 @@ import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
 import featureSchema from './featureSchema';
 import getItemSchema from './getItemSchema';
+import subclassSchema from './subclassSchema';
 
 const startingEquipmentChoiceSchema = object({
 	choose: number()
@@ -240,6 +241,7 @@ const classSchema = object({
 	proficiencies: array()
 		.of(getItemSchema('Proficiency'))
 		.min(1, 'Must have at least 1 proficiency')
+		.max(20, 'Cannot have more than 20 proficiencies')
 		.optional(),
 	proficiencyChoices: array()
 		.of(proficiencyChoiceSchema)
@@ -455,6 +457,15 @@ const classSchema = object({
 			}
 		),
 	subclassFlavor: string().required('Subclass flavor text is required'),
+	subclassLevels: array()
+		.of(
+			number()
+				.min(1, 'Subclass level cannot be less than 1')
+				.max(20, 'Subclass level cannot be more than 20')
+		)
+		.required('Subclass levels are required')
+		.length(5, 'Must have 5 subclass levels'),
+	subclass: subclassSchema.optional().default(undefined),
 	multiclassing: object({
 		prerequisiteOptions: array().of(
 			object({
@@ -468,10 +479,12 @@ const classSchema = object({
 		proficiencies: array()
 			.of(getItemSchema('Proficiency'))
 			.required('Multiclassing proficiencies are required')
-			.min(1, 'Must have at least 1 multiclassing proficiency'),
+			.min(1, 'Must have at least 1 multiclassing proficiency')
+			.max(20, 'Cannot have more than 20 multiclassing proficiencies'),
 		proficiencyChoices: array()
 			.of(proficiencyChoiceSchema)
 			.min(1, 'Must have at least 1 multiclassing proficiency choice')
+			.max(5, 'Cannot have more than 20 multiclassing proficiency choices')
 			.optional()
 			.default(undefined)
 	}).required('Multiclassing is required')
