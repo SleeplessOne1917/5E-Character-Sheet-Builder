@@ -13,6 +13,12 @@ import {
 	SpellcastingLevel,
 	addAbilityScoreBonusLevel,
 	removeAbilityScoreBonusLevel,
+	setFeaturePerLevelBonusLevel,
+	setFeaturePerLevelDiceLevel,
+	setFeaturePerLevelDistanceLevel,
+	setFeaturePerLevelMultiDiceLevelCount,
+	setFeaturePerLevelMultiDiceLevelDie,
+	setFeaturePerLevelNumberLevel,
 	setProficiencyBonus,
 	setSpellcastingCantripsKnown,
 	setSpellcastingNonLeveledSlots,
@@ -44,6 +50,17 @@ const slotLevelOptions: Option[] = [
 		value: num + 1
 	}))
 );
+
+const diceOptions: Option[] = [
+	{ label: '\u2014', value: 'blank' },
+	{ label: 'd4', value: 4 },
+	{ label: 'd6', value: 6 },
+	{ label: 'd8', value: 8 },
+	{ label: 'd10', value: 10 },
+	{ label: 'd12', value: 12 }
+];
+
+const proficiencyBonusErrorMessage = 'Proficiency Bonus is required';
 
 const ProficiencyBonuses = ({
 	clickedSubmit,
@@ -77,6 +94,151 @@ const ProficiencyBonuses = ({
 				!values.spellcasting?.knowsCantrips ? level > 0 : true
 			),
 		[values.spellcasting?.spellSlotStyle, values.spellcasting?.knowsCantrips]
+	);
+
+	const perLevelNumbers = useMemo(
+		() =>
+			values.features.reduce<
+				{
+					level?: number;
+					featureIndex: number;
+					numberIndex: number;
+					name: string;
+					levels: (number | null)[];
+				}[]
+			>(
+				(acc, cur, i) =>
+					cur.perLevelNumbers
+						? [
+								...acc,
+								...cur.perLevelNumbers.map((pl, j) => ({
+									level: cur.level,
+									featureIndex: i,
+									numberIndex: j,
+									name: pl.name,
+									levels: pl.levels
+								}))
+						  ]
+						: acc,
+				[]
+			),
+		[values.features]
+	);
+
+	const perLevelDice = useMemo(
+		() =>
+			values.features.reduce<
+				{
+					level?: number;
+					featureIndex: number;
+					diceIndex: number;
+					name: string;
+					levels: (number | null)[];
+				}[]
+			>(
+				(acc, cur, i) =>
+					cur.perLevelDice
+						? [
+								...acc,
+								...cur.perLevelDice.map((pl, j) => ({
+									level: cur.level,
+									featureIndex: i,
+									diceIndex: j,
+									name: pl.name,
+									levels: pl.levels
+								}))
+						  ]
+						: acc,
+				[]
+			),
+		[values.features]
+	);
+
+	const perLevelMultiDice = useMemo(
+		() =>
+			values.features.reduce<
+				{
+					level?: number;
+					name: string;
+					featureIndex: number;
+					diceIndex: number;
+					levels: { count?: number; die?: number }[];
+				}[]
+			>(
+				(acc, cur, i) =>
+					cur.perLevelMultiDice
+						? [
+								...acc,
+								...cur.perLevelMultiDice.map((pl, j) => ({
+									level: cur.level,
+									featureIndex: i,
+									diceIndex: j,
+									name: pl.name,
+									levels: pl.levels
+								}))
+						  ]
+						: acc,
+				[]
+			),
+		[values.features]
+	);
+
+	const perLevelBonuses = useMemo(
+		() =>
+			values.features.reduce<
+				{
+					level?: number;
+					name: string;
+					featureIndex: number;
+					bonusIndex: number;
+					levels: (number | null)[];
+				}[]
+			>(
+				(acc, cur, i) =>
+					cur.perLevelBonuses
+						? [
+								...acc,
+								...cur.perLevelBonuses.map((pl, j) => ({
+									level: cur.level,
+									featureIndex: i,
+									bonusIndex: j,
+									name: pl.name,
+									levels: pl.levels
+								}))
+						  ]
+						: acc,
+				[]
+			),
+		[values.features]
+	);
+
+	const perLevelDistances = useMemo(
+		() =>
+			values.features.reduce<
+				{
+					level?: number;
+					name: string;
+					featureIndex: number;
+					distanceIndex: number;
+					levels: (number | null)[];
+				}[]
+			>(
+				(acc, cur, i) =>
+					cur.perLevelDistances
+						? [
+								...acc,
+								...cur.perLevelDistances.map((pl, j) => ({
+									level: cur.level,
+									featureIndex: i,
+									distanceIndex: j,
+									name: pl.name,
+									levels: pl.levels
+								}))
+						  ]
+						: acc,
+				[]
+			),
+		[values.features]
 	);
 
 	const numberOfColumns = useMemo(
@@ -138,7 +300,9 @@ const ProficiencyBonuses = ({
 	const getBonusError = useCallback(
 		(index: number) =>
 			errors.proficiencyBonuses &&
-			(errors.proficiencyBonuses as unknown as (string | undefined)[])[index],
+			(errors.proficiencyBonuses as unknown as (string | undefined)[])[index]
+				? proficiencyBonusErrorMessage
+				: undefined,
 		[errors.proficiencyBonuses]
 	);
 
@@ -725,6 +889,1071 @@ const ProficiencyBonuses = ({
 		]
 	);
 
+	const getHandlePerLevelNumberLevelChange = useCallback(
+		(
+				featureIndex: number,
+				numberIndex: number,
+				levelIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`features.${featureIndex}.perLevelNumbers.${numberIndex}.levels.${levelIndex}`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getPerLevelNumberLevelTouched = useCallback(
+		(featureIndex: number, numberIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelNumbers &&
+			(
+				touched.features[featureIndex]
+					.perLevelNumbers as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[numberIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelNumbers as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[numberIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelNumbers as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[numberIndex].levels as unknown as (boolean | undefined)[]
+			)[levelIndex],
+		[touched.features]
+	);
+
+	const getPerLevelNumberLevelError = useCallback(
+		(featureIndex: number, numberIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelNumbers: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelNumbers: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelNumbers
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelNumbers: { levels: (number | null)[] }[];
+									}>
+								).perLevelNumbers as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[numberIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelNumbers: { levels: (number | null)[] }[];
+										}>
+									).perLevelNumbers as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[numberIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelNumbers: { levels: (number | null)[] }[];
+												}>
+											).perLevelNumbers as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[numberIndex].levels as unknown as (string | undefined)[]
+								  )[levelIndex]
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelNumberLevelBlur = useCallback(
+		(
+				featureIndex: number,
+				numberIndex: number,
+				levelIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const fieldStart = `features.${featureIndex}.perLevelNumbers.${numberIndex}.levels`;
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : null;
+
+				if (newValue !== null && newValue < 1) {
+					newValue = 1;
+				}
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelNumbers![numberIndex].levels[
+							i
+						] ?? 0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelNumberLevel({
+									featureIndex,
+									numberIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelNumbers![numberIndex].levels[
+							i
+						] ?? 0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelNumberLevel({
+									featureIndex,
+									numberIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelNumberLevel({
+							featureIndex,
+							numberIndex,
+							levelIndex,
+							level: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
+	const getPerLevelDiceLevelTouched = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelDice &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDice as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[diceIndex].levels as unknown as (boolean | undefined)[]
+			)[levelIndex],
+		[touched.features]
+	);
+
+	const getPerLevelDiceLevelError = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelDice: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelDice: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelDice
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelDice: { levels: (number | null)[] }[];
+									}>
+								).perLevelDice as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[diceIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelDice: { levels: (number | null)[] }[];
+										}>
+									).perLevelDice as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[diceIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelDice: { levels: (number | null)[] }[];
+												}>
+											).perLevelDice as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[diceIndex].levels as unknown as (string | undefined)[]
+								  )[levelIndex]
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelDiceLevelChange = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			(value: string | number) => {
+				const newValue = value !== 'blank' ? (value as number) : null;
+				const fieldStart = `features.${featureIndex}.perLevelDice.${diceIndex}.levels`;
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelDice![diceIndex].levels[i] ??
+							0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelDiceLevel({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelDice![diceIndex].levels[i] ??
+							0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelDiceLevel({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelDiceLevel({
+							featureIndex,
+							diceIndex,
+							levelIndex,
+							level: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
+	const getHandlePerLevelMultiDiceLevelCountChange = useCallback(
+		(
+				featureIndex: number,
+				diceIndex: number,
+				levelIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`features.${featureIndex}.perLevelMultiDice.${diceIndex}.levels.${levelIndex}.count`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getPerLevelMultiDiceLevelCountTouched = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelDice &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDice as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[diceIndex].levels as unknown as FormikTouched<{ count: number }>[]
+			)[levelIndex] &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDice as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[diceIndex].levels as unknown as FormikTouched<{ count: number }>[]
+			)[levelIndex].count,
+		[touched.features]
+	);
+
+	const getPerLevelMultiDiceLevelCountError = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelDice: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelDice: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelDice
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelDice: { levels: (number | null)[] }[];
+									}>
+								).perLevelDice as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[diceIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelDice: { levels: (number | null)[] }[];
+										}>
+									).perLevelDice as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[diceIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelDice: { levels: (number | null)[] }[];
+												}>
+											).perLevelDice as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[diceIndex].levels as unknown as { count: number }[]
+								  )[levelIndex]
+									? (
+											(
+												(
+													errors.features[
+														featureIndex
+													] as unknown as FormikErrors<{
+														perLevelDice: { levels: (number | null)[] }[];
+													}>
+												).perLevelDice as unknown as FormikErrors<{
+													levels: (number | null)[];
+												}>[]
+											)[diceIndex].levels as unknown as FormikErrors<{
+												count: number;
+											}>[]
+									  )[levelIndex].count
+									: undefined
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelMultiDiceLevelCountBlur = useCallback(
+		(
+				featureIndex: number,
+				diceIndex: number,
+				levelIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+
+				if (newValue !== undefined && newValue < 1) {
+					newValue = 1;
+				}
+
+				const fieldStart = `features.${featureIndex}.perLevelMultiDice.${diceIndex}.levels`;
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelMultiDice![diceIndex].levels[
+							i
+						].count ?? 0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelMultiDiceLevelCount({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									count: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}.count`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}.count`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelMultiDice![diceIndex].levels[
+							i
+						].count ?? 0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelMultiDiceLevelCount({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									count: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}.count`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}.count`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelMultiDiceLevelCount({
+							featureIndex,
+							diceIndex,
+							levelIndex,
+							count: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}.count`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
+	const getPerLevelMultiDiceLevelDieTouched = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelDice &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelDice as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[diceIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDice as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[diceIndex].levels as unknown as FormikTouched<{ count: number }>[]
+			)[levelIndex] &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDice as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[diceIndex].levels as unknown as FormikTouched<{ die: number }>[]
+			)[levelIndex].die,
+		[touched.features]
+	);
+
+	const getPerLevelMultiDiceLevelDieError = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelDice: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelDice: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelDice
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelDice: { levels: (number | null)[] }[];
+									}>
+								).perLevelDice as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[diceIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelDice: { levels: (number | null)[] }[];
+										}>
+									).perLevelDice as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[diceIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelDice: { levels: (number | null)[] }[];
+												}>
+											).perLevelDice as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[diceIndex].levels as unknown as { count: number }[]
+								  )[levelIndex]
+									? (
+											(
+												(
+													errors.features[
+														featureIndex
+													] as unknown as FormikErrors<{
+														perLevelDice: { levels: (number | null)[] }[];
+													}>
+												).perLevelDice as unknown as FormikErrors<{
+													levels: (number | null)[];
+												}>[]
+											)[diceIndex].levels as unknown as FormikErrors<{
+												die: number;
+											}>[]
+									  )[levelIndex].die
+									: undefined
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelMultiDiceLevelDieChange = useCallback(
+		(featureIndex: number, diceIndex: number, levelIndex: number) =>
+			(value: string | number) => {
+				const newValue = value !== 'blank' ? (value as number) : undefined;
+				const fieldStart = `features.${featureIndex}.perLevelMultiDice.${diceIndex}.levels`;
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelMultiDice![diceIndex].levels[
+							i
+						].die ?? 0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelMultiDiceLevelDie({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									die: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}.die`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}.die`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelMultiDice![diceIndex].levels[
+							i
+						].die ?? 0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelMultiDiceLevelDie({
+									featureIndex,
+									diceIndex,
+									levelIndex: i,
+									die: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}.die`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}.die`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelMultiDiceLevelDie({
+							featureIndex,
+							diceIndex,
+							levelIndex,
+							die: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}.die`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
+	const getHandlePerLevelBonusLevelChange = useCallback(
+		(
+				featureIndex: number,
+				bonusIndex: number,
+				levelIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`features.${featureIndex}.perLevelBonuses.${bonusIndex}.levels.${levelIndex}`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getPerLevelBonusLevelTouched = useCallback(
+		(featureIndex: number, bonusIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelBonuses &&
+			(
+				touched.features[featureIndex]
+					.perLevelBonuses as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[bonusIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelBonuses as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[bonusIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelBonuses as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[bonusIndex].levels as unknown as (boolean | undefined)[]
+			)[levelIndex],
+		[touched.features]
+	);
+
+	const getPerLevelBonusLevelError = useCallback(
+		(featureIndex: number, bonusIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelBonuses: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelBonuses: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelBonuses
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelBonuses: { levels: (number | null)[] }[];
+									}>
+								).perLevelBonuses as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[bonusIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelBonuses: { levels: (number | null)[] }[];
+										}>
+									).perLevelBonuses as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[bonusIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelBonuses: { levels: (number | null)[] }[];
+												}>
+											).perLevelBonuses as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[bonusIndex].levels as unknown as (string | undefined)[]
+								  )[levelIndex]
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelBonusLevelBlur = useCallback(
+		(
+				featureIndex: number,
+				bonusIndex: number,
+				levelIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : null;
+
+				if (newValue !== null && newValue < 1) {
+					newValue = 1;
+				}
+
+				const fieldStart = `features.${featureIndex}.perLevelBonuses.${bonusIndex}.levels`;
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelBonuses![bonusIndex].levels[
+							i
+						] ?? 0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelBonusLevel({
+									featureIndex,
+									bonusIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelBonuses![bonusIndex].levels[
+							i
+						] ?? 0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelBonusLevel({
+									featureIndex,
+									bonusIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelBonusLevel({
+							featureIndex,
+							bonusIndex,
+							levelIndex,
+							level: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
+	const getHandlePerLevelDistanceLevelChange = useCallback(
+		(
+				featureIndex: number,
+				distanceIndex: number,
+				levelIndex: number
+			): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`features.${featureIndex}.perLevelDistances.${distanceIndex}.levels.${levelIndex}`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getPerLevelDistanceLevelTouched = useCallback(
+		(featureIndex: number, distanceIndex: number, levelIndex: number) =>
+			touched.features &&
+			touched.features[featureIndex] &&
+			touched.features[featureIndex].perLevelDistances &&
+			(
+				touched.features[featureIndex]
+					.perLevelDistances as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[distanceIndex] &&
+			(
+				touched.features[featureIndex]
+					.perLevelDistances as unknown as FormikTouched<{
+					levels: (number | null)[];
+				}>[]
+			)[distanceIndex].levels &&
+			(
+				(
+					touched.features[featureIndex]
+						.perLevelDistances as unknown as FormikTouched<{
+						levels: (number | null)[];
+					}>[]
+				)[distanceIndex].levels as unknown as (boolean | undefined)[]
+			)[levelIndex],
+		[touched.features]
+	);
+
+	const getPerLevelDistanceLevelError = useCallback(
+		(featureIndex: number, distanceIndex: number, levelIndex: number) =>
+			errors.features
+				? (errors.features[featureIndex] as unknown as FormikErrors<{
+						perLevelDistances: { levels: (number | null)[] }[];
+				  }>)
+					? (
+							errors.features[featureIndex] as unknown as FormikErrors<{
+								perLevelDistances: { levels: (number | null)[] }[];
+							}>
+					  ).perLevelDistances
+						? (
+								(
+									errors.features[featureIndex] as unknown as FormikErrors<{
+										perLevelDistances: { levels: (number | null)[] }[];
+									}>
+								).perLevelDistances as unknown as FormikErrors<{
+									levels: (number | null)[];
+								}>[]
+						  )[distanceIndex]
+							? (
+									(
+										errors.features[featureIndex] as unknown as FormikErrors<{
+											perLevelDistances: { levels: (number | null)[] }[];
+										}>
+									).perLevelDistances as unknown as FormikErrors<{
+										levels: (number | null)[];
+									}>[]
+							  )[distanceIndex].levels
+								? (
+										(
+											(
+												errors.features[
+													featureIndex
+												] as unknown as FormikErrors<{
+													perLevelDistances: { levels: (number | null)[] }[];
+												}>
+											).perLevelDistances as unknown as FormikErrors<{
+												levels: (number | null)[];
+											}>[]
+										)[distanceIndex].levels as unknown as (string | undefined)[]
+								  )[levelIndex]
+								: undefined
+							: undefined
+						: undefined
+					: undefined
+				: undefined,
+		[errors.features]
+	);
+
+	const getHandlePerLevelDistanceLevelBlur = useCallback(
+		(
+				featureIndex: number,
+				distanceIndex: number,
+				levelIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : null;
+
+				if (newValue !== null && newValue < 1) {
+					newValue = 1;
+				}
+
+				const fieldStart = `features.${featureIndex}.perLevelDistances.${distanceIndex}.levels`;
+
+				for (let i = levelIndex + 1; i < 20; ++i) {
+					if (
+						(values.features[featureIndex].perLevelDistances![distanceIndex]
+							.levels[i] ?? 0) < (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelDistanceLevel({
+									featureIndex,
+									distanceIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				for (let i = levelIndex - 1; i >= 0; --i) {
+					if (
+						(values.features[featureIndex].perLevelDistances![distanceIndex]
+							.levels[i] ?? 0) > (newValue ?? 0)
+					) {
+						if (shouldUseReduxStore) {
+							dispatch(
+								setFeaturePerLevelDistanceLevel({
+									featureIndex,
+									distanceIndex,
+									levelIndex: i,
+									level: newValue
+								})
+							);
+						}
+
+						setFieldValue(`${fieldStart}.${i}`, newValue, false);
+						setFieldTouched(`${fieldStart}.${i}`, true, false);
+					}
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeaturePerLevelDistanceLevel({
+							featureIndex,
+							distanceIndex,
+							levelIndex,
+							level: newValue
+						})
+					);
+				}
+
+				const field = `${fieldStart}.${levelIndex}`;
+
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			values.features
+		]
+	);
+
 	return (
 		<section className={styles.container}>
 			<h2>Levels</h2>
@@ -734,6 +1963,21 @@ const ProficiencyBonuses = ({
 						<th>Class Level</th>
 						<th>Proficiency Bonus</th>
 						<th>Ability Score Bonus</th>
+						{perLevelNumbers.map((pl, i) => (
+							<th key={`perLevelNumberHeader${i}`}>{pl.name}</th>
+						))}
+						{perLevelDice.map((pl, i) => (
+							<th key={`perLevelDiceHeader${i}`}>{pl.name}</th>
+						))}
+						{perLevelMultiDice.map((pl, i) => (
+							<th key={`perLevelMultiDiceHeader${i}`}>{pl.name}</th>
+						))}
+						{perLevelBonuses.map((pl, i) => (
+							<th key={`perLevelBonusHeader${i}`}>{pl.name}</th>
+						))}
+						{perLevelDistances.map((pl, i) => (
+							<th key={`perLevelDistanceHeader${i}`}>{pl.name}</th>
+						))}
 						{values.spellcasting?.handleSpells === 'spells-known' && (
 							<th>Spells Known</th>
 						)}
@@ -782,6 +2026,220 @@ const ProficiencyBonuses = ({
 									hideLabel
 								/>
 							</td>
+							{perLevelNumbers.map((pl, j) => (
+								<td key={`perLevelNumber${j}`}>
+									{i + 1 < (pl?.level ?? 0) || !pl.level ? (
+										'\u2014'
+									) : (
+										<NumberTextInput
+											id={`features.${pl.featureIndex}.perLevelNumbers.${pl.numberIndex}.levels.${i}`}
+											label={`Level ${i + 1} ${pl.name}`}
+											error={getPerLevelNumberLevelError(
+												pl.featureIndex,
+												pl.numberIndex,
+												i
+											)}
+											touched={
+												clickedSubmit ||
+												getPerLevelNumberLevelTouched(
+													pl.featureIndex,
+													pl.numberIndex,
+													i
+												)
+											}
+											value={pl.levels[i]}
+											onChange={getHandlePerLevelNumberLevelChange(
+												pl.featureIndex,
+												pl.numberIndex,
+												i
+											)}
+											onBlur={getHandlePerLevelNumberLevelBlur(
+												pl.featureIndex,
+												pl.numberIndex,
+												i
+											)}
+											hideLabel
+											errorStyle={{ fontSize: '0.7rem' }}
+										/>
+									)}
+								</td>
+							))}
+							{perLevelDice.map((pl, j) => (
+								<td key={`perLevelDice${j}`}>
+									{i + 1 < (pl.level ?? 0) || !pl.level ? (
+										'\u2014'
+									) : (
+										<Select
+											id={`features.${pl.featureIndex}.perLevelDice.${pl.diceIndex}.levels.${i}`}
+											label={`Level ${i + 1} ${pl.name}`}
+											error={getPerLevelDiceLevelError(
+												pl.featureIndex,
+												pl.diceIndex,
+												i
+											)}
+											options={diceOptions}
+											touched={
+												clickedSubmit ||
+												getPerLevelDiceLevelTouched(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)
+											}
+											value={pl.levels[i] ?? 'blank'}
+											onChange={getHandlePerLevelDiceLevelChange(
+												pl.featureIndex,
+												pl.diceIndex,
+												i
+											)}
+											hideLabel
+											errorFontSize="0.7rem"
+										/>
+									)}
+								</td>
+							))}
+							{perLevelMultiDice.map((pl, j) => (
+								<td key={`perLevelMultiDice${j}`}>
+									{i + 1 < (pl.level ?? 0) || !pl.level ? (
+										'\u2014'
+									) : (
+										<>
+											<NumberTextInput
+												id={`features.${pl.featureIndex}.perLevelMultiDice.${pl.diceIndex}.levels.${i}.count`}
+												label={`Level ${i + 1} ${pl.name} count`}
+												error={getPerLevelMultiDiceLevelCountError(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)}
+												touched={
+													clickedSubmit ||
+													getPerLevelMultiDiceLevelCountTouched(
+														pl.featureIndex,
+														pl.diceIndex,
+														i
+													)
+												}
+												value={pl.levels[i].count}
+												onChange={getHandlePerLevelMultiDiceLevelCountChange(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)}
+												onBlur={getHandlePerLevelMultiDiceLevelCountBlur(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)}
+												hideLabel
+												errorStyle={{ fontSize: '0.7rem' }}
+											/>
+											<Select
+												id={`features.${pl.featureIndex}.perLevelMultiDice.${pl.diceIndex}.levels.${i}.die`}
+												options={diceOptions}
+												label={`Level ${i + 1} ${pl.name} die`}
+												error={getPerLevelMultiDiceLevelDieError(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)}
+												touched={
+													clickedSubmit ||
+													getPerLevelMultiDiceLevelDieTouched(
+														pl.featureIndex,
+														pl.diceIndex,
+														i
+													)
+												}
+												onChange={getHandlePerLevelMultiDiceLevelDieChange(
+													pl.featureIndex,
+													pl.diceIndex,
+													i
+												)}
+												value={pl.levels[i].die ?? 'blank'}
+												hideLabel
+												errorFontSize="0.7rem"
+											/>
+										</>
+									)}
+								</td>
+							))}
+							{perLevelBonuses.map((pl, j) => (
+								<td key={`perLevelBonus${j}`}>
+									{i + 1 < (pl?.level ?? 0) || !pl.level ? (
+										'\u2014'
+									) : (
+										<NumberTextInput
+											id={`features.${pl.featureIndex}.perLevelBonuses.${pl.bonusIndex}.levels.${i}`}
+											label={`Level ${i + 1} ${pl.name}`}
+											error={getPerLevelBonusLevelError(
+												pl.featureIndex,
+												pl.bonusIndex,
+												i
+											)}
+											touched={
+												clickedSubmit ||
+												getPerLevelBonusLevelTouched(
+													pl.featureIndex,
+													pl.bonusIndex,
+													i
+												)
+											}
+											value={pl.levels[i]}
+											onChange={getHandlePerLevelBonusLevelChange(
+												pl.featureIndex,
+												pl.bonusIndex,
+												i
+											)}
+											onBlur={getHandlePerLevelBonusLevelBlur(
+												pl.featureIndex,
+												pl.bonusIndex,
+												i
+											)}
+											hideLabel
+											errorStyle={{ fontSize: '0.7rem' }}
+										/>
+									)}
+								</td>
+							))}
+							{perLevelDistances.map((pl, j) => (
+								<td key={`perLevelDistance${j}`}>
+									{i + 1 < (pl?.level ?? 0) || !pl.level ? (
+										'\u2014'
+									) : (
+										<NumberTextInput
+											id={`features.${pl.featureIndex}.perLevelDistances.${pl.distanceIndex}.levels.${i}`}
+											label={`Level ${i + 1} ${pl.name}`}
+											error={getPerLevelDistanceLevelError(
+												pl.featureIndex,
+												pl.distanceIndex,
+												i
+											)}
+											touched={
+												clickedSubmit ||
+												getPerLevelDistanceLevelTouched(
+													pl.featureIndex,
+													pl.distanceIndex,
+													i
+												)
+											}
+											value={pl.levels[i]}
+											onChange={getHandlePerLevelDistanceLevelChange(
+												pl.featureIndex,
+												pl.distanceIndex,
+												i
+											)}
+											onBlur={getHandlePerLevelDistanceLevelBlur(
+												pl.featureIndex,
+												pl.distanceIndex,
+												i
+											)}
+											hideLabel
+											errorStyle={{ fontSize: '0.7rem' }}
+										/>
+									)}
+								</td>
+							))}
 							{values.spellcasting?.handleSpells === 'spells-known' && (
 								<td>
 									<NumberTextInput

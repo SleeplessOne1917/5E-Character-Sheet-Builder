@@ -104,9 +104,14 @@ const featureSchema = object({
 								.oneOf(
 									[4, 6, 8, 10, 12],
 									'Die must be one of "4", "6", "8", "10", or "12"'
-								),
-							count: number().min(1, 'Count must be at least 1')
-						}).nullable()
+								)
+								.optional()
+								.default(undefined),
+							count: number()
+								.min(1, 'Count must be at least 1')
+								.optional()
+								.default(undefined)
+						})
 					)
 					.length(20, 'Must have a value for each level')
 					.test(
@@ -120,7 +125,9 @@ const featureSchema = object({
 							for (let i = 0; i < value.length - 1; ++i) {
 								if (
 									(value[i]?.count ?? 0) > (value[i + 1]?.count ?? 0) ||
-									(value[i]?.die ?? 0) > (value[i + 1]?.die ?? 0)
+									(value[i]?.die ?? 0) > (value[i + 1]?.die ?? 0) ||
+									(!((value[i]?.count ?? 0) > 0 && (value[i].die ?? 0) > 0) &&
+										((value[i]?.count ?? 0) > 0 || (value[i].die ?? 0) > 0))
 								) {
 									return false;
 								}

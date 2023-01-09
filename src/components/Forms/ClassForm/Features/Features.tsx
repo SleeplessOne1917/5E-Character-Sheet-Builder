@@ -24,10 +24,16 @@ import {
 	setFeatureDescription,
 	setFeatureLevel,
 	setFeatureName,
+	setFeaturePerLevelBonusLevel,
 	setFeaturePerLevelBonusName,
+	setFeaturePerLevelDiceLevel,
 	setFeaturePerLevelDiceName,
+	setFeaturePerLevelDistanceLevel,
 	setFeaturePerLevelDistanceName,
+	setFeaturePerLevelMultiDiceLevelCount,
+	setFeaturePerLevelMultiDiceLevelDie,
 	setFeaturePerLevelMultiDiceName,
+	setFeaturePerLevelNumberLevel,
 	setFeaturePerLevelNumberName
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
@@ -221,6 +227,140 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 					newValue = 20;
 				}
 
+				if (values.features[index].level !== newValue) {
+					for (
+						let i = 0;
+						i < (values.features[index].perLevelNumbers?.length ?? 0);
+						++i
+					) {
+						for (let j = 0; j < (newValue ?? 0) - 1; ++j) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									setFeaturePerLevelNumberLevel({
+										featureIndex: index,
+										numberIndex: i,
+										levelIndex: j,
+										level: null
+									})
+								);
+							}
+
+							setFieldValue(
+								`features.${index}.perLevelNumbers.${i}.levels.${j}`,
+								null,
+								false
+							);
+						}
+					}
+
+					for (
+						let i = 0;
+						i < (values.features[index].perLevelDice?.length ?? 0);
+						++i
+					) {
+						for (let j = 0; j < (newValue ?? 0) - 1; ++j) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									setFeaturePerLevelDiceLevel({
+										featureIndex: index,
+										diceIndex: i,
+										levelIndex: j,
+										level: null
+									})
+								);
+							}
+
+							setFieldValue(
+								`features.${index}.perLevelDice.${i}.levels.${j}`,
+								null,
+								false
+							);
+						}
+					}
+
+					for (
+						let i = 0;
+						i < (values.features[index].perLevelMultiDice?.length ?? 0);
+						++i
+					) {
+						for (let j = 0; j < (newValue ?? 0) - 1; ++j) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									setFeaturePerLevelMultiDiceLevelCount({
+										featureIndex: index,
+										diceIndex: i,
+										levelIndex: j
+									})
+								);
+
+								dispatch(
+									setFeaturePerLevelMultiDiceLevelDie({
+										featureIndex: index,
+										diceIndex: i,
+										levelIndex: j
+									})
+								);
+							}
+
+							setFieldValue(
+								`features.${index}.perLevelMultiDice.${i}.levels.${j}`,
+								{},
+								false
+							);
+						}
+					}
+
+					for (
+						let i = 0;
+						i < (values.features[index].perLevelBonuses?.length ?? 0);
+						++i
+					) {
+						for (let j = 0; j < (newValue ?? 0) - 1; ++j) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									setFeaturePerLevelBonusLevel({
+										featureIndex: index,
+										bonusIndex: i,
+										levelIndex: j,
+										level: null
+									})
+								);
+							}
+
+							setFieldValue(
+								`features.${index}.perLevelBonuses.${i}.levels.${j}`,
+								null,
+								false
+							);
+						}
+					}
+
+					for (
+						let i = 0;
+						i < (values.features[index].perLevelDistances?.length ?? 0);
+						++i
+					) {
+						for (let j = 0; j < (newValue ?? 0) - 1; ++j) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									setFeaturePerLevelDistanceLevel({
+										featureIndex: index,
+										distanceIndex: i,
+										levelIndex: j,
+										level: null
+									})
+								);
+							}
+
+							setFieldValue(
+								`features.${index}.perLevelDistances.${i}.levels.${j}`,
+								null,
+								false
+							);
+						}
+					}
+				}
+
 				if (shouldUseReduxStore) {
 					dispatch(setFeatureLevel({ index, level: newValue }));
 				}
@@ -235,7 +375,8 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 			dispatch,
 			setFieldError,
 			setFieldValue,
-			setFieldTouched
+			setFieldTouched,
+			values.features
 		]
 	);
 
@@ -249,7 +390,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				`${getFeatureStr(index)}.perLevelNumbers`,
 				[
 					...(values.features[index].perLevelNumbers ?? []),
-					{ name: '', levels: Array(20).map(() => null) }
+					{ name: '', levels: [...Array(20).keys()].map(() => null) }
 				],
 				false
 			);
@@ -330,7 +471,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				`${getFeatureStr(index)}.perLevelDice`,
 				[
 					...(values.features[index].perLevelDice ?? []),
-					{ name: '', levels: Array(20).map(() => null) }
+					{ name: '', levels: [...Array(20).keys()].map(() => null) }
 				],
 				false
 			);
@@ -411,7 +552,10 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				`${getFeatureStr(index)}.perLevelMultiDice`,
 				[
 					...(values.features[index].perLevelMultiDice ?? []),
-					{ name: '', levels: Array(20).map(() => null) }
+					{
+						name: '',
+						levels: [...Array(20).keys()].map(() => ({}))
+					}
 				],
 				false
 			);
@@ -492,7 +636,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				`${getFeatureStr(index)}.perLevelBonuses`,
 				[
 					...(values.features[index].perLevelBonuses ?? []),
-					{ name: '', levels: Array(20).map(() => null) }
+					{ name: '', levels: [...Array(20).keys()].map(() => null) }
 				],
 				false
 			);
@@ -573,7 +717,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				`${getFeatureStr(index)}.perLevelDistances`,
 				[
 					...(values.features[index].perLevelDistances ?? []),
-					{ name: '', levels: Array(20).map(() => null) }
+					{ name: '', levels: [...Array(20).keys()].map(() => null) }
 				],
 				false
 			);
