@@ -66,7 +66,7 @@ const Select = ({
 	);
 
 	const getDefaultIndex = useCallback(
-		() => (value ? getValueIndex(value) : selectedIndex),
+		() => (value !== undefined ? getValueIndex(value) : selectedIndex),
 		[value, getValueIndex, selectedIndex]
 	);
 

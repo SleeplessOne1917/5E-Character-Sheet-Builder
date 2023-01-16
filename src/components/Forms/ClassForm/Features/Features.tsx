@@ -9,18 +9,23 @@ import {
 import {
 	EditingClassState,
 	FeatureState,
+	SubfeatureChoiceType,
 	addFeature,
 	addFeaturePerLevelBonus,
 	addFeaturePerLevelDice,
 	addFeaturePerLevelDistance,
 	addFeaturePerLevelMultiDice,
 	addFeaturePerLevelNumber,
+	addFeatureSubfeatureOptions,
+	addFeatureSubfeatureOptionsOption,
 	removeFeature,
 	removeFeaturePerLevelBonus,
 	removeFeaturePerLevelDice,
 	removeFeaturePerLevelDistance,
 	removeFeaturePerLevelMultiDice,
 	removeFeaturePerLevelNumber,
+	removeFeatureSubfeatureOptions,
+	removeFeatureSubfeatureOptionsOption,
 	setFeatureDescription,
 	setFeatureLevel,
 	setFeatureName,
@@ -34,14 +39,21 @@ import {
 	setFeaturePerLevelMultiDiceLevelDie,
 	setFeaturePerLevelMultiDiceName,
 	setFeaturePerLevelNumberLevel,
-	setFeaturePerLevelNumberName
+	setFeaturePerLevelNumberName,
+	setFeatureSubfeatureOptionsChoiceType,
+	setFeatureSubfeatureOptionsChoose,
+	setFeatureSubfeatureOptionsOptionDescription,
+	setFeatureSubfeatureOptionsOptionName,
+	setFeatureSubfeatureOptionsPerLevelNumberIndex
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 
 import Button from '../../../Button/Button';
 import MarkdownTextArea from '../../../MarkdownTextArea/MarkdownTextArea';
 import NumberTextInput from '../../NumberTextInput/NumberTextInput';
+import Option from '../../../Select/Option';
 import RemoveButton from '../../../RemoveButton/RemoveButton';
+import Select from '../../../Select/Select/Select';
 import TextInput from '../../../TextInput/TextInput';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import styles from './Features.module.css';
@@ -53,7 +65,15 @@ type FeaturesProps = {
 	shouldUseReduxStore: boolean;
 };
 
+const choiceTypeOptions: Option[] = [
+	{ label: 'Once', value: 'once' },
+	{ label: 'Per Level', value: 'per-level' }
+];
+
 const getFeatureStr = (index: number) => `features.${index}`;
+const getSubfeatureStr = (featureIndex: number, optionIndex: number) =>
+	`${getFeatureStr(featureIndex)}.subFeatureOptions.options.${optionIndex}`;
+const chooseErrorMessage = 'Choose is required';
 
 const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 	const {
@@ -94,6 +114,53 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				? (errors.features[index] as FormikErrors<FeatureState> | undefined)
 				: undefined,
 		[errors.features]
+	);
+
+	const getSubfeatureOptionsTouched = useCallback(
+		function get<T>(index: number) {
+			return getFeatureTouched(index)?.subFeatureOptions as unknown as
+				| FormikTouched<T>
+				| undefined;
+		},
+		[getFeatureTouched]
+	);
+
+	const getSubfeatureOptionsError = useCallback(
+		function get<T>(index: number) {
+			return getFeatureError(index)
+				? getFeatureError(index)?.subFeatureOptions
+					? (getFeatureError(index)?.subFeatureOptions as FormikErrors<T>)
+					: undefined
+				: undefined;
+		},
+		[getFeatureError]
+	);
+
+	const getSubfeatureOptionsOptionTouched = useCallback(
+		function get<T>(featureIndex: number, optionIndex: number) {
+			return (
+				(getSubfeatureOptionsTouched<{ options: any[] }>(featureIndex)
+					?.options as FormikTouched<T>[] | undefined) &&
+				(
+					getSubfeatureOptionsTouched<{ options: any[] }>(featureIndex)!
+						.options as FormikTouched<T>[]
+				)[optionIndex]
+			);
+		},
+		[getSubfeatureOptionsTouched]
+	);
+
+	const getSubfeatureOptionsOptionError = useCallback(
+		function get<T>(featureIndex: number, optionIndex: number) {
+			return getSubfeatureOptionsError<{ options: any[] }>(featureIndex)
+				?.options
+				? (
+						getSubfeatureOptionsError<{ options: any[] }>(featureIndex)!
+							.options as FormikErrors<T>[]
+				  )[optionIndex]
+				: undefined;
+		},
+		[getSubfeatureOptionsError]
 	);
 
 	const handleAddFeature = useCallback(() => {
@@ -386,14 +453,12 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				dispatch(addFeaturePerLevelNumber(index));
 			}
 
-			setFieldValue(
-				`${getFeatureStr(index)}.perLevelNumbers`,
-				[
-					...(values.features[index].perLevelNumbers ?? []),
-					{ name: '', levels: [...Array(20).keys()].map(() => null) }
-				],
-				false
-			);
+			const newLNs = [
+				...(values.features[index].perLevelNumbers ?? []),
+				{ name: '', levels: [...Array(20).keys()].map(() => null) }
+			];
+
+			setFieldValue(`${getFeatureStr(index)}.perLevelNumbers`, newLNs, false);
 		},
 		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
 	);
@@ -451,6 +516,62 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 			const newLNs = values.features[featureIndex].perLevelNumbers?.filter(
 				(_, i) => i !== numberIndex
 			);
+
+			if (
+				(values.features[featureIndex].subFeatureOptions?.choiceType ===
+					'per-level' &&
+					(newLNs?.length ?? 0) === 1) ||
+				values.features[featureIndex].subFeatureOptions?.perLevelNumberIndex ===
+					numberIndex
+			) {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsPerLevelNumberIndex({
+							index: featureIndex,
+							perLevelNumberIndex: 0
+						})
+					);
+				}
+
+				setFieldValue(
+					`${getFeatureStr(
+						featureIndex
+					)}.subFeatureOptions.perLevelNumberIndex`,
+					0,
+					false
+				);
+			}
+
+			if ((newLNs?.length ?? 0) === 0) {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsPerLevelNumberIndex({
+							index: featureIndex
+						})
+					);
+
+					dispatch(
+						setFeatureSubfeatureOptionsChoiceType({
+							index: featureIndex,
+							choiceType: 'once'
+						})
+					);
+				}
+
+				setFieldValue(
+					`${getFeatureStr(
+						featureIndex
+					)}.subFeatureOptions.perLevelNumberIndex`,
+					undefined,
+					false
+				);
+
+				setFieldValue(
+					`${getFeatureStr(featureIndex)}.subFeatureOptions.choiceType`,
+					'once',
+					false
+				);
+			}
 
 			setFieldValue(
 				`${getFeatureStr(featureIndex)}.perLevelNumbers`,
@@ -790,6 +911,317 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
 	);
 
+	const getHandleAddSubfeatureOptions = useCallback(
+		(index: number) => () => {
+			if (shouldUseReduxStore) {
+				dispatch(addFeatureSubfeatureOptions(index));
+			}
+
+			setFieldValue(
+				`features.${index}.subFeatureOptions`,
+				{
+					choiceType: 'once',
+					options: []
+				},
+				false
+			);
+		},
+		[shouldUseReduxStore, dispatch, setFieldValue]
+	);
+
+	const getHandleRemoveSubfeatureOptions = useCallback(
+		(index: number) => () => {
+			if (shouldUseReduxStore) {
+				dispatch(removeFeatureSubfeatureOptions(index));
+			}
+
+			setFieldValue(`features.${index}.subFeatureOptions`, undefined, false);
+		},
+		[shouldUseReduxStore, dispatch, setFieldValue]
+	);
+
+	const getHandleSubfeatureOptionsChoiceTypeChange = useCallback(
+		(index: number) => (value: string | number) => {
+			const newValue = value as SubfeatureChoiceType;
+
+			if (newValue === 'per-level') {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsPerLevelNumberIndex({
+							index,
+							perLevelNumberIndex: 0
+						})
+					);
+
+					dispatch(setFeatureSubfeatureOptionsChoose({ index }));
+				}
+
+				setFieldValue(
+					`${getFeatureStr(index)}.subFeatureOptions.choose`,
+					undefined,
+					false
+				);
+
+				setFieldValue(
+					`${getFeatureStr(index)}.subFeatureOptions.perLevelNumberIndex`,
+					0,
+					false
+				);
+			} else {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsPerLevelNumberIndex({
+							index
+						})
+					);
+				}
+
+				setFieldValue(
+					`${getFeatureStr(index)}.subFeatureOptions.perLevelNumberIndex`,
+					undefined,
+					false
+				);
+			}
+
+			if (shouldUseReduxStore) {
+				dispatch(
+					setFeatureSubfeatureOptionsChoiceType({ index, choiceType: newValue })
+				);
+			}
+
+			setFieldValue(
+				`features.${index}.subFeatureOptions.choiceType`,
+				newValue,
+				false
+			);
+		},
+		[shouldUseReduxStore, dispatch, setFieldValue]
+	);
+
+	const getSubfeatureOptionsChooseTouched = useCallback(
+		(index: number) =>
+			getSubfeatureOptionsTouched<{ choose: number }>(index)?.choose,
+		[getSubfeatureOptionsTouched]
+	);
+
+	const getSubfeatureOptionsChooseError = useCallback(
+		(index: number) =>
+			getSubfeatureOptionsError<{ choose: number }>(index)?.choose
+				? chooseErrorMessage
+				: undefined,
+		[getSubfeatureOptionsError]
+	);
+
+	const getHandleSubfeatureOptionsChooseChange = useCallback(
+		(index: number): ChangeEventHandler<HTMLInputElement> =>
+			event => {
+				setFieldValue(
+					`${getFeatureStr(index)}.subFeatureOptions.choose`,
+					event.target.value,
+					false
+				);
+			},
+		[setFieldValue]
+	);
+
+	const getHandleSubfeatureOptionsChooseBlur = useCallback(
+		(index: number): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				const parsedValue = parseInt(event.target.value, 10);
+				let newValue = !isNaN(parsedValue) ? parsedValue : undefined;
+
+				if (newValue !== undefined && newValue < 1) {
+					newValue = 1;
+				}
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsChoose({ index, choose: newValue })
+					);
+				}
+
+				const field = `${getFeatureStr(index)}.subFeatureOptions.choose`;
+				setFieldValue(field, newValue, false);
+				setFieldTouched(field, true, false);
+				setFieldError(field, !newValue ? chooseErrorMessage : undefined);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldError,
+			setFieldTouched,
+			setFieldValue
+		]
+	);
+
+	const getHandleSubfeatureOptionsPerLevelNumberIndexChange = useCallback(
+		(index: number) => (value: string | number) => {
+			const newValue = value as number;
+
+			if (shouldUseReduxStore) {
+				dispatch(
+					setFeatureSubfeatureOptionsPerLevelNumberIndex({
+						index,
+						perLevelNumberIndex: newValue
+					})
+				);
+			}
+
+			setFieldValue(
+				`${getFeatureStr(index)}.subFeatureOptions.perLevelNumberIndex`,
+				newValue,
+				false
+			);
+		},
+		[dispatch, shouldUseReduxStore, setFieldValue]
+	);
+
+	const getHandleSubfeatureOptionsAddOption = useCallback(
+		(index: number) => () => {
+			if (shouldUseReduxStore) {
+				dispatch(addFeatureSubfeatureOptionsOption(index));
+			}
+
+			setFieldValue(
+				`${getFeatureStr(index)}.subFeatureOptions.options`,
+				[
+					...values.features[index].subFeatureOptions!.options,
+					{
+						uuid: uuidV4(),
+						name: '',
+						description: ''
+					}
+				],
+				false
+			);
+		},
+		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
+	);
+
+	const getHandleSubfeatureOptionsRemoveOption = useCallback(
+		(index: number, uuid: string) => () => {
+			if (shouldUseReduxStore) {
+				dispatch(removeFeatureSubfeatureOptionsOption({ index, uuid }));
+			}
+
+			setFieldValue(
+				`${getFeatureStr(index)}.subFeatureOptions.options`,
+				values.features[index].subFeatureOptions!.options.filter(
+					option => option.uuid !== uuid
+				),
+				false
+			);
+		},
+		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
+	);
+
+	const getSubfeatureOptionsOptionNameTouched = useCallback(
+		(featureIndex: number, optionIndex: number) =>
+			getSubfeatureOptionsOptionTouched<{ name: string }>(
+				featureIndex,
+				optionIndex
+			)?.name,
+		[getSubfeatureOptionsOptionTouched]
+	);
+
+	const getSubfeatureOptionsOptionNameError = useCallback(
+		(featureIndex: number, optionIndex: number) =>
+			getSubfeatureOptionsOptionError<{ name: string }>(
+				featureIndex,
+				optionIndex
+			)?.name,
+		[getSubfeatureOptionsOptionError]
+	);
+
+	const getHandleSubfeatureOptionsOptionNameBlur = useCallback(
+		(
+				featureIndex: number,
+				optionIndex: number
+			): FocusEventHandler<HTMLInputElement> =>
+			event => {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsOptionName({
+							featureIndex,
+							optionIndex,
+							name: event.target.value
+						})
+					);
+				}
+
+				handleBlur(event);
+			},
+		[shouldUseReduxStore, dispatch, handleBlur]
+	);
+
+	const getSubfeatureOptionsOptionDescriptionTouched = useCallback(
+		(featureIndex: number, optionIndex: number) =>
+			getSubfeatureOptionsOptionTouched<{ description: string }>(
+				featureIndex,
+				optionIndex
+			)?.description,
+		[getSubfeatureOptionsOptionTouched]
+	);
+
+	const getSubfeatureOptionsOptionDescriptionError = useCallback(
+		(featureIndex: number, optionIndex: number) =>
+			getSubfeatureOptionsOptionError<{ description: string }>(
+				featureIndex,
+				optionIndex
+			)?.description,
+		[getSubfeatureOptionsOptionError]
+	);
+
+	const getHandleSubfeatureOptionsOptionDescriptionChange = useCallback(
+		(featureIndex: number, optionIndex: number) => (value: string) => {
+			setFieldValue(
+				`${getSubfeatureStr(featureIndex, optionIndex)}.description`,
+				value,
+				false
+			);
+		},
+		[setFieldValue]
+	);
+
+	const getHandleSubfeatureOptionsOptionDescriptionBlur = useCallback(
+		(
+				featureIndex: number,
+				optionIndex: number
+			): FocusEventHandler<HTMLTextAreaElement> =>
+			event => {
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsOptionDescription({
+							featureIndex,
+							optionIndex,
+							description: event.target.value
+						})
+					);
+				}
+
+				const field = `${getSubfeatureStr(
+					featureIndex,
+					optionIndex
+				)}.description`;
+
+				setFieldValue(field, event.target.value, false);
+				setFieldTouched(field, true, false);
+				setFieldError(
+					field,
+					event.target.value.length === 0
+						? 'Description is required'
+						: undefined
+				);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldValue,
+			setFieldTouched,
+			setFieldError
+		]
+	);
+
 	return (
 		<section className={styles.container}>
 			<h2>Features</h2>
@@ -825,247 +1257,398 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 								onChange={getHandleDescriptionChange(i)}
 								onBlur={getHandleDescriptionBlur(i)}
 							/>
-							<div className={styles['per-level-container']}>
-								<div className={styles['per-levels-title']}>Per Level Info</div>
-								<p>
-									Use this section to add Info that changes every level, such as
-									the rogue class&apos;s sneak attack dice or the barbarian
-									class&apos;s rages.
-								</p>
-								<div className={styles['per-levels']}>
-									{(!hasReachedMaxPerLevels ||
-										(feature.perLevelNumbers?.length ?? 0) > 0) && (
-										<div className={styles['per-level']}>
-											{(feature.perLevelNumbers?.length ?? 0) > 0 && (
-												<>
-													<div className={styles['per-level-title']}>
-														Numbers
-													</div>
-													{feature.perLevelNumbers?.map((pl, j) => (
-														<div key={j} className={styles['input-container']}>
-															<TextInput
-																id={`${getFeatureStr(
-																	i
-																)}.perLevelNumbers.${j}.name`}
-																label="Name"
-																value={pl.name}
-																touched={
-																	clickedSubmit ||
-																	getPerLevelNumberNameTouched(i, j)
-																}
-																error={getPerLevelNumberNameError(i, j)}
-																onChange={handleChange}
-																onBlur={getHandlePerLevelNumberNameBlur(i, j)}
-															/>
-															<button
-																className={styles['remove-button']}
-																onClick={getHandleRemovePerLevelNumber(i, j)}
-																type="button"
+							{(!hasReachedMaxPerLevels ||
+								(feature.perLevelNumbers?.length ?? 0) > 0 ||
+								(feature.perLevelDice?.length ?? 0) > 0 ||
+								(feature.perLevelMultiDice?.length ?? 0) > 0 ||
+								(feature.perLevelBonuses?.length ?? 0) > 0 ||
+								(feature.perLevelDistances?.length ?? 0) > 0) && (
+								<div className={styles['per-level-container']}>
+									<div className={styles['per-levels-title']}>
+										Per Level Info
+									</div>
+									<p>
+										Use this section to add Info that changes every level, such
+										as the rogue class&apos;s sneak attack dice or the barbarian
+										class&apos;s rages.
+									</p>
+									<div className={styles['per-levels']}>
+										{(!hasReachedMaxPerLevels ||
+											(feature.perLevelNumbers?.length ?? 0) > 0) && (
+											<div className={styles['per-level']}>
+												{(feature.perLevelNumbers?.length ?? 0) > 0 && (
+													<>
+														<div className={styles['sub-title']}>Numbers</div>
+														{feature.perLevelNumbers?.map((pl, j) => (
+															<div
+																key={j}
+																className={styles['input-container']}
 															>
-																<XMarkIcon className={styles['remove-icon']} />
-															</button>
-														</div>
-													))}
-												</>
-											)}
-											{!hasReachedMaxPerLevels && (
-												<Button
-													positive
-													onClick={getHandleAddPerLevelNumber(i)}
-													style={{ margin: '0 auto' }}
-												>
-													Add Number
-												</Button>
-											)}
-										</div>
-									)}
-									{(!hasReachedMaxPerLevels ||
-										(feature.perLevelDice?.length ?? 0) > 0) && (
-										<div className={styles['per-level']}>
-											{(feature.perLevelDice?.length ?? 0) > 0 && (
-												<>
-													<div className={styles['per-level-title']}>Dice</div>
-													{feature.perLevelDice?.map((pl, j) => (
-														<div key={j} className={styles['input-container']}>
-															<TextInput
-																id={`${getFeatureStr(
-																	i
-																)}.perLevelDice.${j}.name`}
-																label="Name"
-																value={pl.name}
-																touched={
-																	clickedSubmit ||
-																	getPerLevelDiceNameTouched(i, j)
-																}
-																error={getPerLevelDiceNameError(i, j)}
-																onChange={handleChange}
-																onBlur={getHandlePerLevelDiceNameBlur(i, j)}
-															/>
-															<button
-																className={styles['remove-button']}
-																onClick={getHandleRemovePerLevelDice(i, j)}
-																type="button"
+																<TextInput
+																	id={`${getFeatureStr(
+																		i
+																	)}.perLevelNumbers.${j}.name`}
+																	label="Name"
+																	value={pl.name}
+																	touched={
+																		clickedSubmit ||
+																		getPerLevelNumberNameTouched(i, j)
+																	}
+																	error={getPerLevelNumberNameError(i, j)}
+																	onChange={handleChange}
+																	onBlur={getHandlePerLevelNumberNameBlur(i, j)}
+																/>
+																<button
+																	className={styles['remove-button']}
+																	onClick={getHandleRemovePerLevelNumber(i, j)}
+																	type="button"
+																>
+																	<XMarkIcon
+																		className={styles['remove-icon']}
+																	/>
+																</button>
+															</div>
+														))}
+													</>
+												)}
+												{!hasReachedMaxPerLevels && (
+													<Button
+														positive
+														onClick={getHandleAddPerLevelNumber(i)}
+														style={{ margin: '0 auto' }}
+													>
+														Add Number
+													</Button>
+												)}
+											</div>
+										)}
+										{(!hasReachedMaxPerLevels ||
+											(feature.perLevelDice?.length ?? 0) > 0) && (
+											<div className={styles['per-level']}>
+												{(feature.perLevelDice?.length ?? 0) > 0 && (
+													<>
+														<div className={styles['sub-title']}>Dice</div>
+														{feature.perLevelDice?.map((pl, j) => (
+															<div
+																key={j}
+																className={styles['input-container']}
 															>
-																<XMarkIcon className={styles['remove-icon']} />
-															</button>
+																<TextInput
+																	id={`${getFeatureStr(
+																		i
+																	)}.perLevelDice.${j}.name`}
+																	label="Name"
+																	value={pl.name}
+																	touched={
+																		clickedSubmit ||
+																		getPerLevelDiceNameTouched(i, j)
+																	}
+																	error={getPerLevelDiceNameError(i, j)}
+																	onChange={handleChange}
+																	onBlur={getHandlePerLevelDiceNameBlur(i, j)}
+																/>
+																<button
+																	className={styles['remove-button']}
+																	onClick={getHandleRemovePerLevelDice(i, j)}
+																	type="button"
+																>
+																	<XMarkIcon
+																		className={styles['remove-icon']}
+																	/>
+																</button>
+															</div>
+														))}
+													</>
+												)}
+												{!hasReachedMaxPerLevels && (
+													<Button
+														positive
+														onClick={getHandleAddPerLevelDice(i)}
+														style={{ margin: '0 auto' }}
+													>
+														Add Dice
+													</Button>
+												)}
+											</div>
+										)}
+										{(!hasReachedMaxPerLevels ||
+											(feature.perLevelMultiDice?.length ?? 0) > 0) && (
+											<div className={styles['per-level']}>
+												{(feature.perLevelMultiDice?.length ?? 0) > 0 && (
+													<>
+														<div className={styles['sub-title']}>
+															Multi Dice
 														</div>
-													))}
-												</>
-											)}
-											{!hasReachedMaxPerLevels && (
-												<Button
-													positive
-													onClick={getHandleAddPerLevelDice(i)}
-													style={{ margin: '0 auto' }}
-												>
-													Add Dice
-												</Button>
-											)}
-										</div>
-									)}
-									{(!hasReachedMaxPerLevels ||
-										(feature.perLevelMultiDice?.length ?? 0) > 0) && (
-										<div className={styles['per-level']}>
-											{(feature.perLevelMultiDice?.length ?? 0) > 0 && (
-												<>
-													<div className={styles['per-level-title']}>
-														Multi Dice
-													</div>
-													{feature.perLevelMultiDice?.map((pl, j) => (
-														<div key={j} className={styles['input-container']}>
-															<TextInput
-																id={`${getFeatureStr(
-																	i
-																)}.perLevelMultiDice.${j}.name`}
-																label="Name"
-																value={pl.name}
-																touched={
-																	clickedSubmit ||
-																	getPerLevelMultiDiceNameTouched(i, j)
-																}
-																error={getPerLevelMultiDiceNameError(i, j)}
-																onChange={handleChange}
-																onBlur={getHandlePerLevelMultiDiceNameBlur(
-																	i,
-																	j
-																)}
-															/>
-															<button
-																className={styles['remove-button']}
-																onClick={getHandleRemovePerLevelMultiDice(i, j)}
-																type="button"
+														{feature.perLevelMultiDice?.map((pl, j) => (
+															<div
+																key={j}
+																className={styles['input-container']}
 															>
-																<XMarkIcon className={styles['remove-icon']} />
-															</button>
-														</div>
-													))}
-												</>
-											)}
-											{!hasReachedMaxPerLevels && (
-												<Button
-													positive
-													onClick={getHandleAddPerLevelMultiDice(i)}
-													style={{ margin: '0 auto' }}
-												>
-													Add Multi Dice
-												</Button>
-											)}
-										</div>
-									)}
-									{(!hasReachedMaxPerLevels ||
-										(feature.perLevelBonuses?.length ?? 0) > 0) && (
-										<div className={styles['per-level']}>
-											{(feature.perLevelBonuses?.length ?? 0) > 0 && (
-												<>
-													<div className={styles['per-level-title']}>
-														Bonuses
-													</div>
-													{feature.perLevelBonuses?.map((pl, j) => (
-														<div key={j} className={styles['input-container']}>
-															<TextInput
-																id={`${getFeatureStr(
-																	i
-																)}.perLevelBonuses.${j}.name`}
-																label="Name"
-																value={pl.name}
-																touched={
-																	clickedSubmit ||
-																	getPerLevelBonusNameTouched(i, j)
-																}
-																error={getPerLevelBonusNameError(i, j)}
-																onChange={handleChange}
-																onBlur={getHandlePerLevelBonusNameBlur(i, j)}
-															/>
-															<button
-																className={styles['remove-button']}
-																onClick={getHandleRemovePerLevelBonus(i, j)}
-																type="button"
+																<TextInput
+																	id={`${getFeatureStr(
+																		i
+																	)}.perLevelMultiDice.${j}.name`}
+																	label="Name"
+																	value={pl.name}
+																	touched={
+																		clickedSubmit ||
+																		getPerLevelMultiDiceNameTouched(i, j)
+																	}
+																	error={getPerLevelMultiDiceNameError(i, j)}
+																	onChange={handleChange}
+																	onBlur={getHandlePerLevelMultiDiceNameBlur(
+																		i,
+																		j
+																	)}
+																/>
+																<button
+																	className={styles['remove-button']}
+																	onClick={getHandleRemovePerLevelMultiDice(
+																		i,
+																		j
+																	)}
+																	type="button"
+																>
+																	<XMarkIcon
+																		className={styles['remove-icon']}
+																	/>
+																</button>
+															</div>
+														))}
+													</>
+												)}
+												{!hasReachedMaxPerLevels && (
+													<Button
+														positive
+														onClick={getHandleAddPerLevelMultiDice(i)}
+														style={{ margin: '0 auto' }}
+													>
+														Add Multi Dice
+													</Button>
+												)}
+											</div>
+										)}
+										{(!hasReachedMaxPerLevels ||
+											(feature.perLevelBonuses?.length ?? 0) > 0) && (
+											<div className={styles['per-level']}>
+												{(feature.perLevelBonuses?.length ?? 0) > 0 && (
+													<>
+														<div className={styles['sub-title']}>Bonuses</div>
+														{feature.perLevelBonuses?.map((pl, j) => (
+															<div
+																key={j}
+																className={styles['input-container']}
 															>
-																<XMarkIcon className={styles['remove-icon']} />
-															</button>
-														</div>
-													))}
-												</>
-											)}
-											{!hasReachedMaxPerLevels && (
-												<Button
-													positive
-													onClick={getHandleAddPerLevelBonus(i)}
-													style={{ margin: '0 auto' }}
-												>
-													Add Bonus
-												</Button>
-											)}
-										</div>
-									)}
-									{(!hasReachedMaxPerLevels ||
-										(feature.perLevelDistances?.length ?? 0) > 0) && (
-										<div className={styles['per-level']}>
-											{(feature.perLevelDistances?.length ?? 0) > 0 && (
-												<>
-													<div className={styles['per-level-title']}>
-														Distances
-													</div>
-													{feature.perLevelDistances?.map((pl, j) => (
-														<div key={j} className={styles['input-container']}>
-															<TextInput
-																id={`${getFeatureStr(
-																	i
-																)}.perLevelDistances.${j}.name`}
-																label="Name"
-																value={pl.name}
-																touched={
-																	clickedSubmit ||
-																	getPerLevelDistanceNameTouched(i, j)
-																}
-																error={getPerLevelDistanceNameError(i, j)}
-																onChange={handleChange}
-																onBlur={getHandlePerLevelDistanceNameBlur(i, j)}
-															/>
-															<button
-																className={styles['remove-button']}
-																onClick={getHandleRemovePerLevelDistance(i, j)}
-																type="button"
+																<TextInput
+																	id={`${getFeatureStr(
+																		i
+																	)}.perLevelBonuses.${j}.name`}
+																	label="Name"
+																	value={pl.name}
+																	touched={
+																		clickedSubmit ||
+																		getPerLevelBonusNameTouched(i, j)
+																	}
+																	error={getPerLevelBonusNameError(i, j)}
+																	onChange={handleChange}
+																	onBlur={getHandlePerLevelBonusNameBlur(i, j)}
+																/>
+																<button
+																	className={styles['remove-button']}
+																	onClick={getHandleRemovePerLevelBonus(i, j)}
+																	type="button"
+																>
+																	<XMarkIcon
+																		className={styles['remove-icon']}
+																	/>
+																</button>
+															</div>
+														))}
+													</>
+												)}
+												{!hasReachedMaxPerLevels && (
+													<Button
+														positive
+														onClick={getHandleAddPerLevelBonus(i)}
+														style={{ margin: '0 auto' }}
+													>
+														Add Bonus
+													</Button>
+												)}
+											</div>
+										)}
+										{(!hasReachedMaxPerLevels ||
+											(feature.perLevelDistances?.length ?? 0) > 0) && (
+											<div className={styles['per-level']}>
+												{(feature.perLevelDistances?.length ?? 0) > 0 && (
+													<>
+														<div className={styles['sub-title']}>Distances</div>
+														{feature.perLevelDistances?.map((pl, j) => (
+															<div
+																key={j}
+																className={styles['input-container']}
 															>
-																<XMarkIcon className={styles['remove-icon']} />
-															</button>
-														</div>
-													))}
-												</>
-											)}
-											{!hasReachedMaxPerLevels && (
-												<Button
-													positive
-													onClick={getHandleAddPerLevelDistance(i)}
-													style={{ margin: '0 auto' }}
-												>
-													Add Distance
-												</Button>
-											)}
-										</div>
-									)}
+																<TextInput
+																	id={`${getFeatureStr(
+																		i
+																	)}.perLevelDistances.${j}.name`}
+																	label="Name"
+																	value={pl.name}
+																	touched={
+																		clickedSubmit ||
+																		getPerLevelDistanceNameTouched(i, j)
+																	}
+																	error={getPerLevelDistanceNameError(i, j)}
+																	onChange={handleChange}
+																	onBlur={getHandlePerLevelDistanceNameBlur(
+																		i,
+																		j
+																	)}
+																/>
+																<button
+																	className={styles['remove-button']}
+																	onClick={getHandleRemovePerLevelDistance(
+																		i,
+																		j
+																	)}
+																	type="button"
+																>
+																	<XMarkIcon
+																		className={styles['remove-icon']}
+																	/>
+																</button>
+															</div>
+														))}
+													</>
+												)}
+												{!hasReachedMaxPerLevels && (
+													<Button
+														positive
+														onClick={getHandleAddPerLevelDistance(i)}
+														style={{ margin: '0 auto' }}
+													>
+														Add Distance
+													</Button>
+												)}
+											</div>
+										)}
+									</div>
 								</div>
-							</div>
+							)}
+							{feature.subFeatureOptions && (
+								<div className={styles[`sub-features-container`]}>
+									<div className={styles['sub-features-choose']}>
+										{(feature.perLevelNumbers?.length ?? 0) > 0 && (
+											<Select
+												id={`${getFeatureStr(i)}.subFeatureOptions.choiceType`}
+												label="Choice Type"
+												value={feature.subFeatureOptions.choiceType}
+												options={choiceTypeOptions}
+												onChange={getHandleSubfeatureOptionsChoiceTypeChange(i)}
+											/>
+										)}
+										{feature.subFeatureOptions.choiceType === 'once' && (
+											<NumberTextInput
+												id={`${getFeatureStr(i)}.subFeatureOptions.choose`}
+												label="Choose"
+												value={feature.subFeatureOptions.choose}
+												touched={
+													clickedSubmit || getSubfeatureOptionsChooseTouched(i)
+												}
+												error={getSubfeatureOptionsChooseError(i)}
+												onChange={getHandleSubfeatureOptionsChooseChange(i)}
+												onBlur={getHandleSubfeatureOptionsChooseBlur(i)}
+											/>
+										)}
+										{feature.subFeatureOptions.choiceType === 'per-level' &&
+											(feature.perLevelNumbers?.length ?? 0) > 1 && (
+												<Select
+													id={`${getFeatureStr(i)}.subFeatureOptions.choose`}
+													label="Per Level Number"
+													options={feature.perLevelNumbers!.map<Option>(
+														(pl, j) => ({
+															label: pl.name.length > 0 ? pl.name : 'Unnamed',
+															value: j
+														})
+													)}
+													value={feature.subFeatureOptions.perLevelNumberIndex}
+													onChange={getHandleSubfeatureOptionsPerLevelNumberIndexChange(
+														i
+													)}
+												/>
+											)}
+									</div>
+									<div className={styles['sub-features-from']}>
+										<div className={styles['sub-title']}>From</div>
+										{feature.subFeatureOptions.options.map((option, j) => (
+											<div key={option.uuid} className={styles['sub-feature']}>
+												<RemoveButton
+													onClick={getHandleSubfeatureOptionsRemoveOption(
+														i,
+														option.uuid
+													)}
+												/>
+												<TextInput
+													id={`${getSubfeatureStr(i, j)}.name`}
+													label="Name"
+													touched={
+														clickedSubmit ||
+														getSubfeatureOptionsOptionNameTouched(i, j)
+													}
+													error={getSubfeatureOptionsOptionNameError(i, j)}
+													value={option.name}
+													onChange={handleChange}
+													onBlur={getHandleSubfeatureOptionsOptionNameBlur(
+														i,
+														j
+													)}
+												/>
+												<MarkdownTextArea
+													id={`${getSubfeatureStr(i, j)}.description`}
+													label="Description"
+													touched={
+														clickedSubmit ||
+														getSubfeatureOptionsOptionDescriptionTouched(i, j)
+													}
+													error={getSubfeatureOptionsOptionDescriptionError(
+														i,
+														j
+													)}
+													value={option.description}
+													onChange={getHandleSubfeatureOptionsOptionDescriptionChange(
+														i,
+														j
+													)}
+													onBlur={getHandleSubfeatureOptionsOptionDescriptionBlur(
+														i,
+														j
+													)}
+												/>
+											</div>
+										))}
+										{feature.subFeatureOptions.options.length < 20 && (
+											<Button
+												positive
+												onClick={getHandleSubfeatureOptionsAddOption(i)}
+											>
+												Add Subfeature
+											</Button>
+										)}
+									</div>
+									<Button onClick={getHandleRemoveSubfeatureOptions(i)}>
+										Remove Subfeatures
+									</Button>
+								</div>
+							)}
+							{!feature.subFeatureOptions && (
+								<Button
+									positive
+									style={{ width: 'fit-content', margin: '0 auto' }}
+									onClick={getHandleAddSubfeatureOptions(i)}
+								>
+									Add Subfeatures
+								</Button>
+							)}
 						</div>
 					))}
 				</div>

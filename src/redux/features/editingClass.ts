@@ -80,6 +80,10 @@ export type StartingEquipmentChoiceType = {
 
 export type SpellSlotStyle = 'half' | 'full' | 'warlock';
 
+export type SubfeatureChoiceType = 'once' | 'per-level';
+
+export type PrerequisiteType = 'level' | 'feature' | 'spell';
+
 export type FeatureState = {
 	uuid: string;
 	name: string;
@@ -93,6 +97,22 @@ export type FeatureState = {
 	}[];
 	perLevelBonuses?: { name: string; levels: (number | null)[] }[];
 	perLevelDistances?: { name: string; levels: (number | null)[] }[];
+	subFeatureOptions?: {
+		choiceType: SubfeatureChoiceType;
+		choose?: number;
+		perLevelNumberIndex?: number;
+		options: {
+			uuid: string;
+			name: string;
+			description: string;
+			prerequisites?: {
+				type: PrerequisiteType;
+				level?: number;
+				feature?: Item;
+				spell?: Item;
+			}[];
+		}[];
+	};
 };
 
 export type EditingClassState = {
@@ -401,6 +421,32 @@ const prepFeaturePerLevelDistance = (
 		state.features[featureIndex].perLevelDistances!.push({
 			name: '',
 			levels: [...Array(20).keys()].map(() => null)
+		});
+	}
+};
+
+const prepFeatureSubfeatureOptionsOptions = (
+	state: Draft<EditingClassState>,
+	featureIndex: number,
+	optionIndex: number
+) => {
+	prepFeature(state, featureIndex);
+
+	if (!state.features[featureIndex].subFeatureOptions) {
+		state.features[featureIndex].subFeatureOptions = {
+			choiceType: 'once',
+			options: []
+		};
+	}
+
+	while (
+		state.features[featureIndex].subFeatureOptions!.options.length <=
+		optionIndex
+	) {
+		state.features[featureIndex].subFeatureOptions!.options.push({
+			uuid: uuidV4(),
+			name: '',
+			description: ''
 		});
 	}
 };
@@ -1537,6 +1583,112 @@ const editingClassSlice = createSlice({
 			state.features[featureIndex].perLevelDistances![distanceIndex].levels[
 				levelIndex
 			] = level;
+		},
+		addFeatureSubfeatureOptions: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			prepFeature(state, payload);
+
+			state.features[payload].subFeatureOptions = {
+				choiceType: 'once',
+				options: []
+			};
+		},
+		removeFeatureSubfeatureOptions: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			prepFeature(state, payload);
+
+			delete state.features[payload].subFeatureOptions;
+		},
+		setFeatureSubfeatureOptionsChoiceType: (
+			state,
+			{
+				payload: { index, choiceType }
+			}: PayloadAction<{ index: number; choiceType: SubfeatureChoiceType }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].subFeatureOptions!.choiceType = choiceType;
+		},
+		setFeatureSubfeatureOptionsChoose: (
+			state,
+			{
+				payload: { index, choose }
+			}: PayloadAction<{ index: number; choose?: number }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].subFeatureOptions!.choose = choose;
+		},
+		setFeatureSubfeatureOptionsPerLevelNumberIndex: (
+			state,
+			{
+				payload: { index, perLevelNumberIndex }
+			}: PayloadAction<{ index: number; perLevelNumberIndex?: number }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].subFeatureOptions!.perLevelNumberIndex =
+				perLevelNumberIndex;
+		},
+		addFeatureSubfeatureOptionsOption: (
+			state,
+			{ payload }: PayloadAction<number>
+		) => {
+			prepFeature(state, payload);
+
+			state.features[payload].subFeatureOptions!.options.push({
+				uuid: uuidV4(),
+				name: '',
+				description: ''
+			});
+		},
+		removeFeatureSubfeatureOptionsOption: (
+			state,
+			{
+				payload: { index, uuid }
+			}: PayloadAction<{ index: number; uuid: string }>
+		) => {
+			prepFeature(state, index);
+
+			state.features[index].subFeatureOptions!.options = state.features[
+				index
+			].subFeatureOptions!.options.filter(op => op.uuid !== uuid);
+		},
+		setFeatureSubfeatureOptionsOptionName: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, name }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				name: string;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].name = name;
+		},
+		setFeatureSubfeatureOptionsOptionDescription: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, description }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				description: string;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].description = description;
 		}
 	}
 });
@@ -1624,7 +1776,16 @@ export const {
 	setFeaturePerLevelDistanceLevel,
 	setFeaturePerLevelMultiDiceLevelCount,
 	setFeaturePerLevelMultiDiceLevelDie,
-	setFeaturePerLevelNumberLevel
+	setFeaturePerLevelNumberLevel,
+	addFeatureSubfeatureOptions,
+	removeFeatureSubfeatureOptions,
+	setFeatureSubfeatureOptionsChoiceType,
+	setFeatureSubfeatureOptionsChoose,
+	setFeatureSubfeatureOptionsPerLevelNumberIndex,
+	addFeatureSubfeatureOptionsOption,
+	removeFeatureSubfeatureOptionsOption,
+	setFeatureSubfeatureOptionsOptionName,
+	setFeatureSubfeatureOptionsOptionDescription
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;
