@@ -16,6 +16,7 @@ exports[`renders correctly 1`] = `
       Select Terrain
     </label>
     <div
+      aria-label="Select Terrain"
       aria-labelledby="select-terrain-label"
       class="list-box-container"
       style="font-size: 1.2rem;"

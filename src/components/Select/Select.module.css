@@ -102,6 +102,31 @@
     background-color: var(--highlight-hover) !important;
 }
 
+.search-input {
+    padding: 0.3rem 0 0.3rem 1.6rem;
+    font-family: inherit;
+    background-color: var(--heaven-light);
+    border: 1px solid var(--davy);
+    border-radius: 0.5rem;
+    color: var(--davy);
+    width: 100%;
+}
+
+.search-input:focus-visible,
+.search-input:active {
+    outline: var(--focus-outline);
+}
+
+.search-icon {
+	position: absolute;
+	top: 0.5rem;
+	bottom: 0;
+	left: 0.7rem;
+	pointer-events: none;
+	height: 1.5rem;
+	color: var(--davy);
+}
+
 @media (hover: hover) {
     .item:hover {
         background-color: var(--highlight-light);

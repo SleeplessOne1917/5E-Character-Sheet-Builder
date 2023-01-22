@@ -53,6 +53,7 @@ exports[`renders correctly default 1`] = `
             School
           </label>
           <div
+            aria-label="School"
             aria-labelledby="school-select-label"
             class="list-box-container"
             style="font-size: 1.2rem;"
@@ -151,6 +152,7 @@ exports[`renders correctly default 1`] = `
       >
         <div
           aria-checked="false"
+          aria-label="Only Show Selected"
           class="checkbox"
           role="checkbox"
           tabindex="0"

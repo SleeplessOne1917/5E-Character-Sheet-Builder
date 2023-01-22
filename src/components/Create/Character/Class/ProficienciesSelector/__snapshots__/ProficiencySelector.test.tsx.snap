@@ -38,6 +38,7 @@ exports[`renders correctly when default 1`] = `
           Select Skill
         </label>
         <div
+          aria-label="Select Skill"
           aria-labelledby="select-proficiency-label"
           class="list-box-container"
           style="font-size: 1.2rem;"
@@ -153,6 +154,7 @@ exports[`renders correctly when default 1`] = `
           Select Skill
         </label>
         <div
+          aria-label="Select Skill"
           aria-labelledby="select-proficiency-label"
           class="list-box-container"
           style="font-size: 1.2rem;"

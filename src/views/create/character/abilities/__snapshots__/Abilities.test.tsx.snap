@@ -210,6 +210,7 @@ exports[`renders correctly 1`] = `
           Generation Method
         </label>
         <div
+          aria-label="Generation Method"
           aria-labelledby="generation-methods-label"
           class="list-box-container"
           style="font-size: 1.2rem;"

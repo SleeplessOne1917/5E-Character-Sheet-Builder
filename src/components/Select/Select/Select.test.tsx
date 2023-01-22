@@ -1,10 +1,13 @@
-import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
-import * as stories from './Select.stories';
-import { composeStories } from '@storybook/testing-react';
 
-const { Default, Error } = composeStories(stories);
+import * as stories from './Select.stories';
+
+import { render, screen } from '@testing-library/react';
+
+import { composeStories } from '@storybook/testing-react';
+import userEvent from '@testing-library/user-event';
+
+const { Default, Error, Searchable } = composeStories(stories);
 
 describe('renders correctly', () => {
 	it('by default', () => {
@@ -15,6 +18,12 @@ describe('renders correctly', () => {
 
 	it('with error state', () => {
 		render(<Error />);
+
+		expect(screen.getByTestId('select')).toMatchSnapshot();
+	});
+
+	it('with searchable state', () => {
+		render(<Searchable />);
 
 		expect(screen.getByTestId('select')).toMatchSnapshot();
 	});

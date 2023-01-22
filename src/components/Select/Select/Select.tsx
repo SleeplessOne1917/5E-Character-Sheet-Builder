@@ -2,6 +2,7 @@
 
 import {
 	CSSProperties,
+	ChangeEventHandler,
 	KeyboardEvent,
 	MutableRefObject,
 	useCallback,
@@ -11,6 +12,7 @@ import {
 } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import Option from '../Option';
 import classes from '../Select.module.css';
 import { handleKeyDownEvent } from '../../../services/handlerService';
@@ -28,6 +30,7 @@ type SelectProps = {
 	labelFontSize?: string;
 	errorFontSize?: string;
 	hideLabel?: boolean;
+	searchable?: boolean;
 };
 
 const Select = ({
@@ -42,7 +45,8 @@ const Select = ({
 	label,
 	labelFontSize = '1.5rem',
 	errorFontSize = '1.5rem',
-	hideLabel = false
+	hideLabel = false,
+	searchable = false
 }: SelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -52,7 +56,9 @@ const Select = ({
 	const listItemRefs = useRef<HTMLLIElement[]>([]);
 	const listBoxContainerRef = useRef<HTMLDivElement>();
 	const buttonRef = useRef<HTMLButtonElement>();
+	const searchRef = useRef<HTMLInputElement>();
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
+	const [search, setSearch] = useState('');
 
 	const getValueIndex = useCallback(
 		(value: string | number) => {
@@ -75,7 +81,8 @@ const Select = ({
 	const closeSelect = useCallback(() => {
 		setIsOpen(false);
 		setFocusIndex(getDefaultIndex());
-	}, [setIsOpen, setFocusIndex, getDefaultIndex]);
+		setSearch('');
+	}, [getDefaultIndex]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: Event) => {
@@ -168,6 +175,13 @@ const Select = ({
 		[setIsOpen, setFocusIndex, options, getDefaultIndex]
 	);
 
+	const handleSearchChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+		event => {
+			setSearch(event.target.value);
+		},
+		[]
+	);
+
 	return (
 		<div
 			data-testid={testId ?? 'select'}
@@ -206,40 +220,67 @@ const Select = ({
 				</button>
 				<ul
 					tabIndex={-1}
-					style={listStyle}
+					style={{ ...listStyle, ...(searchable ? { minWidth: '10rem' } : {}) }}
 					role="listbox"
 					aria-activedescendant={options[getDefaultIndex()].label}
 					className={classes.list}
 					onKeyDown={handleListKeyDown}
 					data-testid={testId ? `${testId}-list` : 'select-list'}
 				>
-					{options.map((option, index) => (
+					{searchable && (
 						<li
-							key={option.value}
-							tabIndex={0}
-							role="option"
-							aria-selected={getDefaultIndex() === index}
-							className={`${classes.item}${
-								getDefaultIndex() === index ? ` ${classes.selected}` : ''
-							}`}
-							onClick={() => handleChange(option.value)}
-							onKeyDown={event => handleItemKeyDown(event, option.value)}
-							ref={element => {
-								if (listItemRefs.current.length >= index + 1) {
-									listItemRefs.current[index] = element as HTMLLIElement;
-								} else {
-									listItemRefs.current.push(element as HTMLLIElement);
-								}
+							className={classes.item}
+							style={{
+								cursor: 'auto',
+								position: 'sticky',
+								backgroundColor: 'var(--highlight)',
+								top: 0
 							}}
-							data-testid={
-								testId
-									? `${testId}-data-${option.value}`
-									: `data-${option.value}`
-							}
+							tabIndex={-1}
 						>
-							{option.label}
+							<input
+								type="text"
+								className={classes['search-input']}
+								ref={searchRef as MutableRefObject<HTMLInputElement>}
+								onChange={handleSearchChange}
+								value={search}
+							/>
+							<MagnifyingGlassIcon className={classes['search-icon']} />
 						</li>
-					))}
+					)}
+					{options
+						.filter(
+							({ label }) =>
+								!searchable ||
+								label.toLowerCase().includes(search.toLowerCase())
+						)
+						.map((option, index) => (
+							<li
+								key={option.value}
+								tabIndex={0}
+								role="option"
+								aria-selected={getDefaultIndex() === index}
+								className={`${classes.item}${
+									getDefaultIndex() === index ? ` ${classes.selected}` : ''
+								}`}
+								onClick={() => handleChange(option.value)}
+								onKeyDown={event => handleItemKeyDown(event, option.value)}
+								ref={element => {
+									if (listItemRefs.current.length >= index + 1) {
+										listItemRefs.current[index] = element as HTMLLIElement;
+									} else {
+										listItemRefs.current.push(element as HTMLLIElement);
+									}
+								}}
+								data-testid={
+									testId
+										? `${testId}-data-${option.value}`
+										: `data-${option.value}`
+								}
+							>
+								{option.label}
+							</li>
+						))}
 				</ul>
 			</div>
 			{touched && error && (

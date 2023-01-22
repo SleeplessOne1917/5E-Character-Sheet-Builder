@@ -7,6 +7,7 @@ import {
 	SpellcastingLevel,
 	addSpellcasting,
 	addSpellcastingSpell,
+	removeFeatureSubfeatureOptionsOptionPrerequisite,
 	removeSpellcasting,
 	removeSpellcastingSpell,
 	setHandleSpells,
@@ -263,6 +264,38 @@ const SavingThrowsAndSpellcasting = ({
 			const newSpells =
 				values.spellcasting?.spells.filter(({ id }) => id !== spell.id) ?? [];
 
+			values.features.forEach((feature, i) => {
+				feature.subFeatureOptions?.options.forEach((option, j) =>
+					option.prerequisites?.forEach((prerequisite, k) => {
+						if (prerequisite.spell?.id === spell.id) {
+							if (shouldUseReduxStore) {
+								dispatch(
+									removeFeatureSubfeatureOptionsOptionPrerequisite({
+										featureIndex: i,
+										optionIndex: j,
+										prerequisiteIndex: k
+									})
+								);
+							}
+
+							const newPrerequisites = values.features[
+								i
+							].subFeatureOptions!.options[j].prerequisites?.filter(
+								(_, i) => i !== k
+							);
+
+							setFieldValue(
+								`features.${i}.subFeatureOptions.options.${j}.prerequisites`,
+								(newPrerequisites?.length ?? 0) === 0
+									? undefined
+									: newPrerequisites,
+								false
+							);
+						}
+					})
+				);
+			});
+
 			setFieldValue('spellcasting.spells', newSpells, false);
 			setFieldTouched('spellcasting.spells', true, false);
 			setFieldError(
@@ -276,7 +309,8 @@ const SavingThrowsAndSpellcasting = ({
 			setFieldValue,
 			setFieldTouched,
 			setFieldError,
-			values.spellcasting?.spells
+			values.spellcasting?.spells,
+			values.features
 		]
 	);
 

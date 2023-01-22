@@ -20,6 +20,7 @@ exports[`renders correctly 1`] = `
         Strength
       </label>
       <div
+        aria-label="Strength"
         aria-labelledby="str-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"
@@ -122,6 +123,7 @@ exports[`renders correctly 1`] = `
         Dexterity
       </label>
       <div
+        aria-label="Dexterity"
         aria-labelledby="dex-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"
@@ -215,6 +217,7 @@ exports[`renders correctly 1`] = `
         Constitution
       </label>
       <div
+        aria-label="Constitution"
         aria-labelledby="con-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"
@@ -317,6 +320,7 @@ exports[`renders correctly 1`] = `
         Intelligence
       </label>
       <div
+        aria-label="Intelligence"
         aria-labelledby="int-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"
@@ -419,6 +423,7 @@ exports[`renders correctly 1`] = `
         Wisdom
       </label>
       <div
+        aria-label="Wisdom"
         aria-labelledby="wis-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"
@@ -512,6 +517,7 @@ exports[`renders correctly 1`] = `
         Charisma
       </label>
       <div
+        aria-label="Charisma"
         aria-labelledby="cha-select-label"
         class="list-box-container"
         style="font-size: 1.5rem;"

@@ -19,6 +19,7 @@ exports[`renders correctly when default 1`] = `
         Select Monster Type
       </label>
       <div
+        aria-label="Select Monster Type"
         aria-labelledby="monster-type-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
@@ -214,6 +215,7 @@ exports[`renders correctly when humanoid 1`] = `
         Select Monster Type
       </label>
       <div
+        aria-label="Select Monster Type"
         aria-labelledby="monster-type-label"
         class="list-box-container"
         style="font-size: 1.2rem;"
@@ -404,6 +406,7 @@ exports[`renders correctly when humanoid 1`] = `
           Select Humanoid Type 1
         </label>
         <div
+          aria-label="Select Humanoid Type 1"
           aria-labelledby="humanoid-1-label"
           class="list-box-container"
           style="font-size: 1.3rem;"
@@ -564,6 +567,7 @@ exports[`renders correctly when humanoid 1`] = `
           Select Humanoid Type 2
         </label>
         <div
+          aria-label="Select Humanoid Type 2"
           aria-labelledby="humanoid-2-label"
           class="list-box-container"
           style="font-size: 1.2rem;"

@@ -8,6 +8,7 @@ export type ItemType = 'item' | 'category';
 export type StartingEquipmentOptionType = ItemType | 'multiple';
 export type ProficiencySuboptionType = 'proficiency' | 'type';
 export type ProficiencyOptionType = ProficiencySuboptionType | 'choice';
+export type PrerequisiteType = 'level' | 'feature' | 'spell';
 
 export type Choose = {
 	choose?: number;
@@ -81,8 +82,6 @@ export type StartingEquipmentChoiceType = {
 export type SpellSlotStyle = 'half' | 'full' | 'warlock';
 
 export type SubfeatureChoiceType = 'once' | 'per-level';
-
-export type PrerequisiteType = 'level' | 'feature' | 'spell';
 
 export type FeatureState = {
 	uuid: string;
@@ -1689,6 +1688,99 @@ const editingClassSlice = createSlice({
 			state.features[featureIndex].subFeatureOptions!.options[
 				optionIndex
 			].description = description;
+		},
+		addFeatureSubfeatureOptionsOptionPrerequisite: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, prerequisiteType }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				prerequisiteType: PrerequisiteType;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			if (
+				!state.features[featureIndex].subFeatureOptions!.options[optionIndex]
+					.prerequisites
+			) {
+				state.features[featureIndex].subFeatureOptions!.options[
+					optionIndex
+				].prerequisites = [];
+			}
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].prerequisites!.push({ type: prerequisiteType });
+		},
+		removeFeatureSubfeatureOptionsOptionPrerequisite: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, prerequisiteIndex }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				prerequisiteIndex: number;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			if (
+				(state.features[featureIndex].subFeatureOptions!.options[optionIndex]
+					.prerequisites?.length ?? 0) === 1
+			) {
+				delete state.features[featureIndex].subFeatureOptions!.options[
+					optionIndex
+				].prerequisites;
+			} else {
+				state.features[featureIndex].subFeatureOptions!.options[
+					optionIndex
+				].prerequisites = state.features[
+					featureIndex
+				].subFeatureOptions!.options[optionIndex].prerequisites?.filter(
+					(_, i) => i !== prerequisiteIndex
+				);
+			}
+		},
+		setFeatureSubfeatureOptionsOptionPrerequisiteType: (
+			state,
+			{
+				payload: {
+					featureIndex,
+					optionIndex,
+					prerequisiteIndex,
+					prerequisiteType
+				}
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				prerequisiteIndex: number;
+				prerequisiteType: PrerequisiteType;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].prerequisites![prerequisiteIndex].type = prerequisiteType;
+		},
+		setFeatureSubfeatureOptionsOptionPrerequisiteLevel: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, prerequisiteIndex, level }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				prerequisiteIndex: number;
+				level?: number;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].prerequisites![prerequisiteIndex].level = level;
 		}
 	}
 });
@@ -1785,7 +1877,11 @@ export const {
 	addFeatureSubfeatureOptionsOption,
 	removeFeatureSubfeatureOptionsOption,
 	setFeatureSubfeatureOptionsOptionName,
-	setFeatureSubfeatureOptionsOptionDescription
+	setFeatureSubfeatureOptionsOptionDescription,
+	addFeatureSubfeatureOptionsOptionPrerequisite,
+	removeFeatureSubfeatureOptionsOptionPrerequisite,
+	setFeatureSubfeatureOptionsOptionPrerequisiteType,
+	setFeatureSubfeatureOptionsOptionPrerequisiteLevel
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

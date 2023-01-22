@@ -16,6 +16,7 @@ exports[`renders correctly 1`] = `
       Select Land
     </label>
     <div
+      aria-label="Select Land"
       aria-labelledby="select-land-label"
       class="list-box-container"
       style="font-size: 1.2rem;"
