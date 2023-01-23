@@ -129,7 +129,6 @@
 .remove-button {
     width: fit-content;
     height: fit-content;
-    margin: auto;
     border: none;
     background: none;
     cursor: pointer;
