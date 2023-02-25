@@ -1798,6 +1798,23 @@ const editingClassSlice = createSlice({
 			state.features[featureIndex].subFeatureOptions!.options[
 				optionIndex
 			].prerequisites![prerequisiteIndex].feature = feature;
+		},
+		setFeatureSubfeatureOptionsOptionPrerequisiteSpell: (
+			state,
+			{
+				payload: { featureIndex, optionIndex, prerequisiteIndex, spell }
+			}: PayloadAction<{
+				featureIndex: number;
+				optionIndex: number;
+				prerequisiteIndex: number;
+				spell?: Item;
+			}>
+		) => {
+			prepFeatureSubfeatureOptionsOptions(state, featureIndex, optionIndex);
+
+			state.features[featureIndex].subFeatureOptions!.options[
+				optionIndex
+			].prerequisites![prerequisiteIndex].spell = spell;
 		}
 	}
 });
@@ -1899,7 +1916,8 @@ export const {
 	removeFeatureSubfeatureOptionsOptionPrerequisite,
 	setFeatureSubfeatureOptionsOptionPrerequisiteType,
 	setFeatureSubfeatureOptionsOptionPrerequisiteLevel,
-	setFeatureSubfeatureOptionsOptionPrerequisiteFeature
+	setFeatureSubfeatureOptionsOptionPrerequisiteFeature,
+	setFeatureSubfeatureOptionsOptionPrerequisiteSpell
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

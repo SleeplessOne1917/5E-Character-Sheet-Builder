@@ -49,6 +49,7 @@ import {
 	setFeatureSubfeatureOptionsOptionName,
 	setFeatureSubfeatureOptionsOptionPrerequisiteFeature,
 	setFeatureSubfeatureOptionsOptionPrerequisiteLevel,
+	setFeatureSubfeatureOptionsOptionPrerequisiteSpell,
 	setFeatureSubfeatureOptionsOptionPrerequisiteType,
 	setFeatureSubfeatureOptionsPerLevelNumberIndex
 } from '../../../../redux/features/editingClass';
@@ -93,6 +94,7 @@ const getPrerequisiteStr = (
 	)}.prerequisites.${prerequisiteIndex}`;
 const chooseErrorMessage = 'Choose is required';
 const featureErrorMessage = 'Feature is requred';
+const spellErorMessage = 'Spell is required';
 
 const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 	const {
@@ -120,6 +122,17 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				0
 			) >= 5,
 		[values.features]
+	);
+
+	const prerequisiteSpellOptions = useMemo(
+		() =>
+			[{ value: 'blank', label: '\u2014' } as Option].concat(
+				values.spellcasting?.spells.map(({ id, name }) => ({
+					value: id,
+					label: name
+				})) ?? []
+			),
+		[values.spellcasting]
 	);
 
 	const getPrerequisiteTypeOptions = useCallback(
@@ -629,12 +642,12 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				(_, i) => i !== numberIndex
 			);
 
+			const subFeatureOptions = values.features[featureIndex].subFeatureOptions;
+
 			if (
-				(values.features[featureIndex].subFeatureOptions?.choiceType ===
-					'per-level' &&
+				(subFeatureOptions?.choiceType === 'per-level' &&
 					(newLNs?.length ?? 0) === 1) ||
-				values.features[featureIndex].subFeatureOptions?.perLevelNumberIndex ===
-					numberIndex
+				subFeatureOptions?.perLevelNumberIndex === numberIndex
 			) {
 				if (shouldUseReduxStore) {
 					dispatch(
@@ -654,7 +667,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				);
 			}
 
-			if ((newLNs?.length ?? 0) === 0) {
+			if ((newLNs?.length ?? 0) === 0 && subFeatureOptions) {
 				if (shouldUseReduxStore) {
 					dispatch(
 						setFeatureSubfeatureOptionsPerLevelNumberIndex({
@@ -1056,7 +1069,10 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 		(index: number) => (value: string | number) => {
 			const newValue = value as SubfeatureChoiceType;
 
-			if (newValue === 'per-level') {
+			if (
+				newValue === 'per-level' &&
+				values.features[index].subFeatureOptions?.choiceType !== 'per-level'
+			) {
 				if (shouldUseReduxStore) {
 					dispatch(
 						setFeatureSubfeatureOptionsPerLevelNumberIndex({
@@ -1107,7 +1123,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				false
 			);
 		},
-		[shouldUseReduxStore, dispatch, setFieldValue]
+		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
 	);
 
 	const getSubfeatureOptionsChooseTouched = useCallback(
@@ -1273,7 +1289,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 						if (prerequisite.feature?.id === uuid) {
 							if (shouldUseReduxStore) {
 								dispatch(
-									setFeatureSubfeatureOptionsOptionPrerequisiteFeature({
+									removeFeatureSubfeatureOptionsOptionPrerequisite({
 										featureIndex: i,
 										optionIndex: j,
 										prerequisiteIndex: k
@@ -1281,9 +1297,17 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 								);
 							}
 
+							const newPrerequisites = values.features[
+								i
+							].subFeatureOptions!.options[j].prerequisites?.filter(
+								(_, i) => i !== k
+							);
+
 							setFieldValue(
-								`${getPrerequisiteStr(i, j, k)}.feature`,
-								undefined,
+								getPrerequisiteStr(i, j, k),
+								(newPrerequisites?.length ?? 0) === 0
+									? undefined
+									: newPrerequisites,
 								false
 							);
 						}
@@ -1632,6 +1656,71 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 			setFieldError,
 			setFieldValue,
 			getPrerequisiteFeatures
+		]
+	);
+
+	const getPrerequisiteSpellTouched = useCallback(
+		(featureIndex: number, optionIndex: number, prerequisiteIndex: number) =>
+			!!getPrerequisiteTouched<{ spell: any }>(
+				featureIndex,
+				optionIndex,
+				prerequisiteIndex
+			)?.spell,
+		[getPrerequisiteTouched]
+	);
+
+	const getPrerequisiteSpellError = useCallback(
+		(featureIndex: number, optionIndex: number, prerequisiteIndex: number) =>
+			!!getPrerequisiteError<{ spell: any }>(
+				featureIndex,
+				optionIndex,
+				prerequisiteIndex
+			)?.spell
+				? spellErorMessage
+				: undefined,
+		[getPrerequisiteError]
+	);
+
+	const getHandlePrerequisiteSpellChange = useCallback(
+		(featureIndex: number, optionIndex: number, prerequisiteIndex: number) =>
+			(value: string | number) => {
+				const newId = value !== 'blank' ? (value as string) : undefined;
+				const newSpell = newId
+					? values.spellcasting?.spells.find(spell => spell.id === newId) ??
+					  undefined
+					: undefined;
+				const newItem: Item | undefined = newSpell
+					? { id: newSpell.id, name: newSpell.name }
+					: undefined;
+
+				if (shouldUseReduxStore) {
+					dispatch(
+						setFeatureSubfeatureOptionsOptionPrerequisiteSpell({
+							featureIndex,
+							optionIndex,
+							prerequisiteIndex,
+							spell: newItem
+						})
+					);
+				}
+
+				const field = `${getPrerequisiteStr(
+					featureIndex,
+					optionIndex,
+					prerequisiteIndex
+				)}.spell`;
+
+				setFieldValue(field, newItem, false);
+				setFieldTouched(field, true, false);
+				setFieldError(field, !newItem ? spellErorMessage : undefined);
+			},
+		[
+			shouldUseReduxStore,
+			dispatch,
+			setFieldTouched,
+			setFieldError,
+			setFieldValue,
+			values.spellcasting
 		]
 	);
 
@@ -2148,6 +2237,39 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 																						searchable
 																					/>
 																				)}
+																				{prerequisite.type === 'spell' && (
+																					<Select
+																						id={`${getPrerequisiteStr(
+																							i,
+																							j,
+																							k
+																						)}.spell`}
+																						label="Spell"
+																						options={prerequisiteSpellOptions}
+																						touched={
+																							clickedSubmit ||
+																							getPrerequisiteSpellTouched(
+																								i,
+																								j,
+																								k
+																							)
+																						}
+																						error={getPrerequisiteSpellError(
+																							i,
+																							j,
+																							k
+																						)}
+																						onChange={getHandlePrerequisiteSpellChange(
+																							i,
+																							j,
+																							k
+																						)}
+																						value={
+																							prerequisite.spell?.id ?? 'blank'
+																						}
+																						searchable
+																					/>
+																				)}
 																				<button
 																					className={styles['remove-button']}
 																					onClick={getHandleRemoveSubfeatureOptionsOptionPrerequisite(
@@ -2167,23 +2289,23 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 																</div>
 															</div>
 														)}
-														{((option.prerequisites?.length ?? 0) < 3 ||
+														{(option.prerequisites?.length ?? 0) < 3 &&
 															!getPrerequisiteTypeOptions(i, j).every(
 																({ value }) =>
-																	option.prerequisites!.some(
+																	option.prerequisites?.some(
 																		prerequisite => prerequisite.type === value
 																	)
-															)) && (
-															<Button
-																positive
-																onClick={getHandleAddSubfeatureOptionsOptionPrerequisite(
-																	i,
-																	j
-																)}
-															>
-																Add Prerequisite
-															</Button>
-														)}
+															) && (
+																<Button
+																	positive
+																	onClick={getHandleAddSubfeatureOptionsOptionPrerequisite(
+																		i,
+																		j
+																	)}
+																>
+																	Add Prerequisite
+																</Button>
+															)}
 													</>
 												)}
 											</div>
