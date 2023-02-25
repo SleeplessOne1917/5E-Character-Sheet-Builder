@@ -647,7 +647,10 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 			if (
 				(subFeatureOptions?.choiceType === 'per-level' &&
 					(newLNs?.length ?? 0) === 1) ||
-				subFeatureOptions?.perLevelNumberIndex === numberIndex
+				subFeatureOptions?.perLevelNumberIndex === numberIndex ||
+				(subFeatureOptions &&
+					(subFeatureOptions?.perLevelNumberIndex ?? 0) >=
+						(newLNs?.length ?? 0))
 			) {
 				if (shouldUseReduxStore) {
 					dispatch(
@@ -1225,6 +1228,7 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 		},
 		[shouldUseReduxStore, dispatch, setFieldValue, values.features]
 	);
+
 	const getHandleRemoveSubfeatureOptionsOptionPrerequisite = useCallback(
 		(featureIndex: number, optionIndex: number, prerequisiteIndex: number) =>
 			() => {
@@ -1361,8 +1365,41 @@ const Features = ({ clickedSubmit, shouldUseReduxStore }: FeaturesProps) => {
 				}
 
 				handleBlur(event);
+
+				const id =
+					values.features[featureIndex].subFeatureOptions!.options[optionIndex]
+						.uuid;
+				values.features.forEach((feature, i) =>
+					feature.subFeatureOptions?.options.forEach((option, j) =>
+						option.prerequisites?.forEach((prereq, k) => {
+							if (
+								id === prereq.feature?.id &&
+								prereq.feature.name !== event.target.value
+							) {
+								const newFeature: Item = { id, name: event.target.value };
+
+								if (shouldUseReduxStore) {
+									dispatch(
+										setFeatureSubfeatureOptionsOptionPrerequisiteFeature({
+											featureIndex: i,
+											optionIndex: j,
+											prerequisiteIndex: k,
+											feature: newFeature
+										})
+									);
+								}
+
+								setFieldValue(
+									`${getPrerequisiteStr(i, j, k)}.feature`,
+									newFeature,
+									false
+								);
+							}
+						})
+					)
+				);
 			},
-		[shouldUseReduxStore, dispatch, handleBlur]
+		[shouldUseReduxStore, dispatch, handleBlur, setFieldValue, values.features]
 	);
 
 	const getSubfeatureOptionsOptionDescriptionTouched = useCallback(
