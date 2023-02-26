@@ -20,9 +20,11 @@ import { SpellItem } from '../../../types/characterSheetBuilderAPI';
 import Spellcasting from './Spellcasting/Spellcasting';
 import StartingEquipmentChoices from './StartingEquipmentChoices/StartingEquipmentChoices';
 import StartingEuipment from './StartingEquipment/StartingEquipment';
-import classSchema from '../../../yup-schemas/classSchema';
+import editingClassSchema from '../../../yup-schemas/editingClassSchema';
+import creatingClassSchema from '../../../yup-schemas/creatingClassSchema';
 import styles from './ClassForm.module.css';
 import { useState } from 'react';
+import Subclass from './Subclass/Subclass';
 
 type ClassForm = {
 	initialValues: EditingClassState;
@@ -55,7 +57,9 @@ const ClassForm = ({
 	return (
 		<Formik
 			initialValues={initialValues}
-			validationSchema={classSchema}
+			validationSchema={
+				shouldUseReduxStore ? creatingClassSchema : editingClassSchema
+			}
 			onSubmit={onSubmit}
 		>
 			{({ handleSubmit, isSubmitting }) => (
@@ -104,6 +108,10 @@ const ClassForm = ({
 						magicItems={magicItems}
 					/>
 					<Features
+						clickedSubmit={clickedSubmit}
+						shouldUseReduxStore={shouldUseReduxStore}
+					/>
+					<Subclass
 						clickedSubmit={clickedSubmit}
 						shouldUseReduxStore={shouldUseReduxStore}
 					/>

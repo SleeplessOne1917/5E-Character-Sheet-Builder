@@ -24,7 +24,9 @@ import {
 	setSpellcastingNonLeveledSlots,
 	setSpellcastingSlotLevel,
 	setSpellcastingSpellSlots,
-	setSpellcastingSpellsKnown
+	setSpellcastingSpellsKnown,
+	addSubclassLevel,
+	removeSubclassLevel
 } from '../../../../redux/features/editingClass';
 import { FormikErrors, FormikTouched, useFormikContext } from 'formik';
 
@@ -931,6 +933,33 @@ const ProficiencyBonuses = ({
 				)[numberIndex].levels as unknown as (boolean | undefined)[]
 			)[levelIndex],
 		[touched.features]
+	);
+
+	const getHandleSubclassLevelChange = useCallback(
+		(level: number) => (value: boolean) => {
+			if (value) {
+				if (shouldUseReduxStore) {
+					dispatch(addSubclassLevel(level));
+				}
+
+				setFieldValue(
+					'subclassLevels',
+					[...values.subclassLevels, level],
+					true
+				);
+			} else {
+				if (shouldUseReduxStore) {
+					dispatch(removeSubclassLevel(level));
+				}
+
+				setFieldValue(
+					'subclassLevels',
+					values.subclassLevels.filter(l => l !== level),
+					true
+				);
+			}
+		},
+		[dispatch, shouldUseReduxStore, setFieldValue, values.subclassLevels]
 	);
 
 	const getPerLevelNumberLevelError = useCallback(
@@ -1963,6 +1992,7 @@ const ProficiencyBonuses = ({
 						<th>Class Level</th>
 						<th>Proficiency Bonus</th>
 						<th>Ability Score Bonus</th>
+						<th>Subclass Feature</th>
 						{perLevelNumbers.map((pl, i) => (
 							<th key={`perLevelNumberHeader${i}`}>{pl.name}</th>
 						))}
@@ -2018,12 +2048,24 @@ const ProficiencyBonuses = ({
 									errorStyle={{ fontSize: '0.7rem' }}
 								/>
 							</td>
-							<td className={styles.bonus}>
+							<td>
 								<Checkbox
 									label={`Enable Ability Score Bonus for Level ${i + 1}`}
 									checked={values.abilityScoreBonusLevels.includes(i + 1)}
 									onChange={getHandleAbilityScoreBonusChange(i + 1)}
 									hideLabel
+								/>
+							</td>
+							<td>
+								<Checkbox
+									label={`Get Subclass Features for Level ${i + 1}`}
+									checked={values.subclassLevels.includes(i + 1)}
+									onChange={getHandleSubclassLevelChange(i + 1)}
+									hideLabel
+									disabled={
+										values.subclassLevels.length >= 5 &&
+										!values.subclassLevels.includes(i + 1)
+									}
 								/>
 							</td>
 							{perLevelNumbers.map((pl, j) => (

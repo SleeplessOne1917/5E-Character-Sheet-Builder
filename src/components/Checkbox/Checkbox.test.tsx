@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 import { composeStories } from '@storybook/testing-react';
 
-const { Checked, Default, Alternate } = composeStories(stories);
+const { Checked, Default, Alternate, Disabled } = composeStories(stories);
 
 describe('renders correctly', () => {
 	it('by default', () => {
@@ -24,4 +24,10 @@ describe('renders correctly', () => {
 
 		expect(screen.getByTestId('checkbox')).toMatchSnapshot();
 	});
+
+	it('when disabled', () => {
+		render(<Disabled />);
+
+		expect(screen.getByTestId('checkbox')).toMatchSnapshot();
+	})
 });

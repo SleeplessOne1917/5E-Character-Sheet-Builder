@@ -152,6 +152,7 @@ exports[`renders correctly default 1`] = `
       >
         <div
           aria-checked="false"
+          aria-disabled="false"
           aria-label="Only Show Selected"
           class="checkbox"
           role="checkbox"

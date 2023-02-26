@@ -3,7 +3,6 @@ import { Item } from '../types/db/item';
 import abilitySchema from './abilitySchema';
 import featureSchema from './featureSchema';
 import getItemSchema from './getItemSchema';
-import subclassSchema from './subclassSchema';
 
 const startingEquipmentChoiceSchema = object({
 	choose: number()
@@ -230,7 +229,7 @@ const proficiencyChoiceSchema = object({
 		.max(5, 'Cannot have more than 5 proficiency Options')
 });
 
-const classSchema = object({
+const editingClassSchema = object({
 	name: string()
 		.min(1, 'Name is required')
 		.max(50, 'Name must be 50 characters or less')
@@ -465,7 +464,6 @@ const classSchema = object({
 		)
 		.required('Subclass levels are required')
 		.length(5, 'Must have 5 subclass levels'),
-	subclass: subclassSchema.optional().default(undefined),
 	multiclassing: object({
 		prerequisiteOptions: array().of(
 			object({
@@ -490,4 +488,4 @@ const classSchema = object({
 	}).required('Multiclassing is required')
 });
 
-export default classSchema;
+export default editingClassSchema;

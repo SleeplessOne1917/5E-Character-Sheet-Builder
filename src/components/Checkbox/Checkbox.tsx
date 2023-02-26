@@ -12,6 +12,7 @@ type CheckboxProps = {
 	onChange: (value: boolean) => void;
 	useAlternateStyle?: boolean;
 	hideLabel?: boolean;
+	disabled?: boolean;
 };
 
 const Checkbox = ({
@@ -19,17 +20,16 @@ const Checkbox = ({
 	onChange,
 	label,
 	useAlternateStyle = false,
-	hideLabel = false
+	hideLabel = false,
+	disabled = false
 }: CheckboxProps) => {
 	const [isChecked, setIsChecked] = useState(checked ?? false);
 
 	const handleChange = useCallback(() => {
-		setIsChecked(prev => {
-			onChange(!prev);
+		onChange(!isChecked);
 
-			return !prev;
-		});
-	}, [onChange, setIsChecked]);
+		setIsChecked(prev => !prev);
+	}, [onChange, setIsChecked, isChecked]);
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>) => {
@@ -40,19 +40,22 @@ const Checkbox = ({
 
 	return (
 		<label
-			onClick={handleChange}
-			className={classes.label}
+			onClick={!disabled ? handleChange : () => {}}
+			className={`${classes.label}${disabled ? ` ${classes.disabled}` : ''}`}
 			data-testid="checkbox"
 		>
 			<div
 				className={`${classes.checkbox}${
 					checked || isChecked ? ` ${classes.checked}` : ''
-				}${useAlternateStyle ? ` ${classes.alternate}` : ''}`}
-				tabIndex={0}
+				}${useAlternateStyle ? ` ${classes.alternate}` : ''}${
+					disabled ? ` ${classes.disabled}` : ''
+				}`}
+				tabIndex={disabled ? -1 : 0}
 				role="checkbox"
+				aria-disabled={disabled}
 				aria-checked={isChecked}
 				aria-label={label}
-				onKeyDown={handleKeyDown}
+				onKeyDown={!disabled ? handleKeyDown : () => {}}
 			>
 				{(checked || isChecked) && <CheckIcon className={classes.check} />}
 			</div>

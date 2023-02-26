@@ -1815,6 +1815,17 @@ const editingClassSlice = createSlice({
 			state.features[featureIndex].subFeatureOptions!.options[
 				optionIndex
 			].prerequisites![prerequisiteIndex].spell = spell;
+		},
+		addSubclassLevel: (state, { payload }: PayloadAction<number>) => {
+			state.subclassLevels.push(payload);
+		},
+		removeSubclassLevel: (state, { payload }: PayloadAction<number>) => {
+			state.subclassLevels = state.subclassLevels.filter(
+				level => level !== payload
+			);
+		},
+		setSubclassFlavor: (state, { payload }: PayloadAction<string>) => {
+			state.subclassFlavor = payload;
 		}
 	}
 });
@@ -1917,7 +1928,10 @@ export const {
 	setFeatureSubfeatureOptionsOptionPrerequisiteType,
 	setFeatureSubfeatureOptionsOptionPrerequisiteLevel,
 	setFeatureSubfeatureOptionsOptionPrerequisiteFeature,
-	setFeatureSubfeatureOptionsOptionPrerequisiteSpell
+	setFeatureSubfeatureOptionsOptionPrerequisiteSpell,
+	addSubclassLevel,
+	removeSubclassLevel,
+	setSubclassFlavor
 } = editingClassSlice.actions;
 
 export default editingClassSlice.reducer;

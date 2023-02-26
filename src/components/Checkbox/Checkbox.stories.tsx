@@ -23,3 +23,8 @@ Alternate.args = {
 	checked: true,
 	useAlternateStyle: true
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+	disabled: true
+}

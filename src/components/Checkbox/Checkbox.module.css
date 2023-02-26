@@ -44,8 +44,18 @@
     outline: var(--focus-outline);
 }
 
+.disabled {
+    cursor: auto;
+    filter: grayscale(80%);
+    opacity: 90%;
+}
+
+div.disabled {
+    border: 2px solid var(--davy-shadow);
+}
+
 @media screen and (hover: hover) {
-    .checkbox:hover {
+    .checkbox:hover:not(.disabled) {
         background-color: var(--highlight-light);
     }
 }

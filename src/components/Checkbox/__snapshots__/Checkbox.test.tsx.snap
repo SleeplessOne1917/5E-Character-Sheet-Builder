@@ -7,6 +7,7 @@ exports[`renders correctly by default 1`] = `
 >
   <div
     aria-checked="false"
+    aria-disabled="false"
     class="checkbox"
     role="checkbox"
     tabindex="0"
@@ -21,6 +22,7 @@ exports[`renders correctly when alternate 1`] = `
 >
   <div
     aria-checked="true"
+    aria-disabled="false"
     class="checkbox checked alternate"
     role="checkbox"
     tabindex="0"
@@ -49,6 +51,7 @@ exports[`renders correctly when checked 1`] = `
 >
   <div
     aria-checked="true"
+    aria-disabled="false"
     class="checkbox checked"
     role="checkbox"
     tabindex="0"
@@ -67,5 +70,20 @@ exports[`renders correctly when checked 1`] = `
       />
     </svg>
   </div>
+</label>
+`;
+
+exports[`renders correctly when disabled 1`] = `
+<label
+  class="label disabled"
+  data-testid="checkbox"
+>
+  <div
+    aria-checked="false"
+    aria-disabled="true"
+    class="checkbox disabled"
+    role="checkbox"
+    tabindex="-1"
+  />
 </label>
 `;
