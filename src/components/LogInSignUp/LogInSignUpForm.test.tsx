@@ -4,7 +4,7 @@ import * as stories from './LogInSignUpForm.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 
 const { LogIn, SignUp } = composeStories(stories);

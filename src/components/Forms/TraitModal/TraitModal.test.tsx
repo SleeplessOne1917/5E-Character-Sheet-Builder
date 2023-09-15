@@ -2,7 +2,7 @@ import * as stories from './TraitModal.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { Include, Omit } = composeStories(stories);
 

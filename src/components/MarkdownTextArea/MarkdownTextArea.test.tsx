@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import * as stories from './MarkdownTextArea.stories';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { Default, Error } = composeStories(stories);
 

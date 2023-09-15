@@ -3,7 +3,7 @@ import * as stories from './Button.stories';
 import { render, screen } from '@testing-library/react';
 
 import { ButtonType } from './Button';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 
 const { Default, Disabled, Large, Positive, Small, Submit } =

@@ -6,7 +6,7 @@ import { render, screen } from '@testing-library/react';
 
 import AbilityCalculation from './AbilityCalculation';
 import { Provider } from 'react-redux';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { getTestStore } from '../../../../../redux/store';
 import userEvent from '@testing-library/user-event';
 

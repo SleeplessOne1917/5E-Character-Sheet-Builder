@@ -4,7 +4,7 @@ import * as stories from './PointBuy.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 
 const { Default, NoMorePoints, SomePointsSpent } = composeStories(stories);

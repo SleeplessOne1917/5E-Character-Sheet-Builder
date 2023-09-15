@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import * as stories from './MultiSelect.stories';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { Default, Error, LotsOfOptions } = composeStories(stories);
 

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import * as stories from './SummonActions.stories';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 

@@ -6,7 +6,7 @@ import RollGroup, { sumRolls } from './RollGroup';
 import { render, screen } from '@testing-library/react';
 
 import { Provider } from 'react-redux';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { getTestStore } from '../../../../../../redux/store';
 import { mockAbilities } from '../../MockAbilitiesStore';
 import userEvent from '@testing-library/user-event';

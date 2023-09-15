@@ -5,7 +5,7 @@ import * as stories from './MobileNav.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { Closed, LoggedIn, LoggedOut } = composeStories(stories);
 

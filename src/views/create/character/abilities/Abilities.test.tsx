@@ -7,7 +7,7 @@ import { render, screen } from '@testing-library/react';
 import Abilities from './Abilities';
 import AbilityScores from '../../../../types/abilityScores';
 import { Provider } from 'react-redux';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { getAbilityScoresTest } from '../../../../hooks/useGetAbilityScore';
 import { getTestStore } from '../../../../redux/store';
 import { mockAbilities } from '../../../../components/Create/Character/Abilities/MockAbilitiesStore';

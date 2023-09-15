@@ -2,7 +2,7 @@ import * as stories from './AbilityBonusSelector.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { NoneSelected, OneSelected, SameSelected, TwoSelected } =
 	composeStories(stories);

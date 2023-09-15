@@ -3,7 +3,7 @@ import * as stories from './404.stories';
 
 import { render, screen } from '@testing-library/react';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 
 const { Default } = composeStories(stories);
 

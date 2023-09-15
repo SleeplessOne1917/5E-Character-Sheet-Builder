@@ -3,7 +3,7 @@ import * as stories from './TextInput.stories';
 import { render, screen } from '@testing-library/react';
 
 import TextInput from './TextInput';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 
 const renderTestCases = Object.values(composeStories(stories));

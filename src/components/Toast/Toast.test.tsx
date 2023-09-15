@@ -7,7 +7,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import Toast from './Toast';
 import { ToastType } from '../../types/toast';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { getTestStore } from '../../redux/store';
 import { show } from '../../redux/features/toast';
 import userEvent from '@testing-library/user-event';
