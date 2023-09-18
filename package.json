@@ -39,7 +39,7 @@
     "remark-gfm": "^3.0.1",
     "urql": "^4.0.5",
     "uuid": "^9.0.1",
-    "yup": "^1.2.0"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^13.4.19",

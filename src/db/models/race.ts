@@ -33,9 +33,9 @@ export interface IRaceDocument extends IRace, Document {}
 const raceSchema = new Schema<IRace>({
 	userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 	name: { type: String, required: true, trim: true },
-	abilityBonuses: { type: [abilityBonusSchema], required: true },
+	abilityBonuses: [abilityBonusSchema],
 	abilityBonusOptions: abilityBonusOptionsSchema,
-	languages: { type: [itemSchema], required: true },
+	languages: [itemSchema],
 	numberOfLanguageOptions: Number,
 	size: { type: String, required: true, enum: SIZES },
 	speed: { type: Number, required: true },
